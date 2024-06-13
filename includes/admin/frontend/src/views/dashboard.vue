@@ -1,6 +1,102 @@
 <template>
   <main>
+    <div class="max-w-[935px] mb-6">
+      <div class="flex justify-between">
+        <div class="flex gap-2">
+          <div class="relative z-10 flex items-center gap-1 rounded-[14px] bg-white p-1 ">
+          <span :class="test_mode?'left-[54px] w-[76px] bg-amber-500/80':'left-[4px] w-[52px] bg-gray-button-border'"
+                class="absolute top-1 -z-10 h-9 rounded-[14px] duration-200 "></span>
+            <button @click="testMode(false)"
+                    class="flex gap-1 h-9 items-center justify-center rounded-[14px] px-1.5 text-xsmm font-medium duration-200 "
+                    :class="!test_mode?'text-dark-5 dark:text-dark':'text-gray-font hover:bg-gray-1 hover:text-dark '">
+              <div class="inline-flex">
+              <span
+                  class="stroke-0 animate-ping absolute inline-flex opacity-75 h-1.5 w-1.5 rounded-[14px]"
+                  :class="test_mode ? 'fill-gray bg-gray' : 'fill-tips-green-head bg-tips-green-head'"/>
+                <span
+                    class="stroke-0 relative inline-flex h-1.5 w-1.5 rounded-[14px]"
+                    :class="test_mode ? 'fill-gray bg-gray' : 'fill-tips-green-head bg-tips-green-head'"/>
+              </div>
+              Live
+            </button>
+            <button @click="testMode(true)"
+                    class="inline-flex h-9 items-center justify-center rounded-[14px] px-3 text-xsmm font-medium duration-200 text-nowrap "
+                    :class="test_mode?'text-dark-5 dark:text-dark text-white':'text-gray-font hover:bg-gray-1 hover:text-dark '">
+              Test Mode
+            </button>
+          </div>
+          <a :href="preview" target="_blank" :class="{disableBlock: !license_information.licensed_domain}">
+            <div @mouseover="preview_over = true"
+                 @mouseleave="preview_over = false"
+                 class="relative z-10 flex items-center gap-1 rounded-[14px] bg-white p-[11px] ">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M8.55156 11.9895C8.14883 12.3923 8.14883 13.0452 8.55156 13.448C8.95429 13.8507 9.60724 13.8507 10.01 13.448L17.187 6.27091V8.59375C17.187 9.16329 17.6487 9.625 18.2183 9.625C18.7878 9.625 19.2495 9.16329 19.2495 8.59375V3.78125C19.2495 3.21171 18.7878 2.75 18.2183 2.75H13.4058C12.8362 2.75 12.3745 3.21171 12.3745 3.78125C12.3745 4.35079 12.8362 4.8125 13.4058 4.8125H15.7286L8.55156 11.9895Z"
+                    fill="#757476"/>
+                <path
+                    d="M4.81201 9.28125C4.81201 8.33201 5.58152 7.5625 6.53076 7.5625H9.62451C10.1941 7.5625 10.6558 7.10079 10.6558 6.53125C10.6558 5.96171 10.1941 5.5 9.62451 5.5H6.53076C4.44244 5.5 2.74951 7.19292 2.74951 9.28125V15.4688C2.74951 17.5571 4.44244 19.25 6.53076 19.25H12.7183C14.8066 19.25 16.4995 17.5571 16.4995 15.4688V12.375C16.4995 11.8055 16.0378 11.3438 15.4683 11.3438C14.8987 11.3438 14.437 11.8055 14.437 12.375V15.4688C14.437 16.418 13.6675 17.1875 12.7183 17.1875H6.53076C5.58152 17.1875 4.81201 16.418 4.81201 15.4688V9.28125Z"
+                    fill="#757476"/>
+              </svg>
+              <svg :class="loading? 'block' : 'hidden'" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                   xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </div>
+          </a>
 
+          <div :class="preview_over ? 'rl-Show' : 'rl-Hide'" class="-mt-[30px] mr-6 px-2 absolute ml-[128px]">
+            <div
+                class="arrow-top-copied font-medium text-xsmm relative bg-purple-lite leading-arw-mbox text-center text-purple rounded-[7px] px-2">
+              Preview
+            </div>
+          </div>
+
+        </div>
+        <div class="flex gap-3">
+          <div class="relative z-10 flex items-center gap-1 rounded-[14px] bg-white p-[5px]">
+            <a :href="support" target="_blank" :class="{disableBlock: !license_information.licensed_domain}">
+              <button @click=""
+                      class="bg-white hover:bg-purple doc hover:doc-hover font-medium hover:text-white cursor-pointer h-[34px] items-center text-xsmm flex transition duration-300 py-1 px-3 rounded-[14px]">
+                2.0 Feedback
+              </button>
+            </a>
+          </div>
+          <div class="relative z-10 flex items-center gap-1 rounded-[14px] bg-white p-[5px]">
+            <a :href="docs" target="_blank" :class="{disableBlock: !license_information.licensed_domain}">
+              <button @click=""
+                      class="bg-white hover:bg-purple doc hover:doc-hover font-medium hover:text-white cursor-pointer h-[34px] items-center text-xsmm flex transition duration-300 py-1 px-3 rounded-[14px]">
+                Documentation
+              </button>
+            </a>
+          </div>
+
+          <RouterLink :class="{disableBlock: !license_information.licensed_domain}"
+                      to="/settings">
+            <div @mouseover="general_over = true"
+                 @mouseleave="general_over = false"
+                 class="relative z-10 flex items-center gap-1 rounded-[14px] bg-white p-[9px] mr-2">
+
+              <button>
+                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M14.9361 4.1222C14.4434 2.09257 11.5568 2.09257 11.0641 4.1222C10.7458 5.43332 9.24368 6.05552 8.09151 5.35349C6.30793 4.26674 4.26686 6.30781 5.35361 8.09139C6.05564 9.24356 5.43344 10.7457 4.12232 11.064C2.09269 11.5567 2.09269 14.4432 4.12232 14.936C5.43344 15.2543 6.05564 16.7564 5.35361 17.9086C4.26686 19.6921 6.30793 21.7332 8.09151 20.6465C9.24368 19.9444 10.7458 20.5666 11.0641 21.8778C11.5568 23.9074 14.4434 23.9074 14.9361 21.8778C15.2544 20.5666 16.7565 19.9444 17.9087 20.6465C19.6923 21.7332 21.7333 19.6921 20.6466 17.9086C19.9446 16.7564 20.5668 15.2543 21.8779 14.936C23.9075 14.4432 23.9075 11.5567 21.8779 11.064C20.5668 10.7457 19.9446 9.24356 20.6466 8.09139C21.7333 6.30781 19.6923 4.26674 17.9087 5.35349C16.7565 6.05552 15.2544 5.43332 14.9361 4.1222ZM13.0001 16.9C15.154 16.9 16.9001 15.1539 16.9001 13C16.9001 10.8461 15.154 9.09998 13.0001 9.09998C10.8462 9.09998 9.1001 10.8461 9.1001 13C9.1001 15.1539 10.8462 16.9 13.0001 16.9Z"
+                        fill="#757476"/>
+                </svg>
+              </button>
+
+            </div>
+          </RouterLink>
+          <div :class="general_over ? 'rl-Show' : 'rl-Hide'" class="-mt-[30px] mr-6 px-2 absolute ml-[172px]">
+            <div
+                class="arrow-top-copied font-medium text-xsmm relative bg-purple-lite leading-arw-mbox text-center text-purple rounded-[7px] px-2">
+              General Settings
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="flex">
 
@@ -74,41 +170,6 @@
 
 
 
-      <div class="-mt-[63px] -ml-[295px] flex">
-        <div class="mr-1">
-          <a :href="support" target="_blank" :class="{disableBlock: !license_information.licensed_domain}">
-            <button @click=""
-                    class="bg-white border border-gray-button-border hover:border-transparent hover:bg-purple doc hover:doc-hover text-gray-font hover:text-white cursor-pointer leading-[15px] ml-2 text-xsmm flex mb-1 transition duration-300 py-1 px-3 rounded-full">
-              2.0 Feedback
-            </button>
-          </a>
-        </div>
-        <div class="mr-2">
-          <a :href="docs" target="_blank" :class="{disableBlock: !license_information.licensed_domain}">
-            <button @click=""
-                    class="bg-white border border-gray-button-border hover:border-transparent hover:bg-purple doc hover:doc-hover text-gray-font hover:text-white cursor-pointer leading-[15px] ml-2 text-xsmm flex mb-1 transition duration-300 py-1 px-3 rounded-full">
-              Documentation
-            </button>
-          </a>
-
-        </div>
-        <div class="mr-2">
-          <RouterLink :class="{disableBlock: !license_information.licensed_domain}"
-                      to="/settings">
-            <button  @mouseover="general_hover = true"
-                     @mouseleave="general_hover = false">
-              <svg height="25" viewBox="0 0 512 512" width="25" xmlns="http://www.w3.org/2000/svg" fill="#7F54B3">
-                <path
-                    d="M262.29,192.31a64,64,0,1,0,57.4,57.4A64.13,64.13,0,0,0,262.29,192.31ZM416.39,256a154.34,154.34,0,0,1-1.53,20.79l45.21,35.46A10.81,10.81,0,0,1,462.52,326l-42.77,74a10.81,10.81,0,0,1-13.14,4.59l-44.9-18.08a16.11,16.11,0,0,0-15.17,1.75A164.48,164.48,0,0,1,325,400.8a15.94,15.94,0,0,0-8.82,12.14l-6.73,47.89A11.08,11.08,0,0,1,298.77,470H213.23a11.11,11.11,0,0,1-10.69-8.87l-6.72-47.82a16.07,16.07,0,0,0-9-12.22,155.3,155.3,0,0,1-21.46-12.57,16,16,0,0,0-15.11-1.71l-44.89,18.07a10.81,10.81,0,0,1-13.14-4.58l-42.77-74a10.8,10.8,0,0,1,2.45-13.75l38.21-30a16.05,16.05,0,0,0,6-14.08c-.36-4.17-.58-8.33-.58-12.5s.21-8.27.58-12.35a16,16,0,0,0-6.07-13.94l-38.19-30A10.81,10.81,0,0,1,49.48,186l42.77-74a10.81,10.81,0,0,1,13.14-4.59l44.9,18.08a16.11,16.11,0,0,0,15.17-1.75A164.48,164.48,0,0,1,187,111.2a15.94,15.94,0,0,0,8.82-12.14l6.73-47.89A11.08,11.08,0,0,1,213.23,42h85.54a11.11,11.11,0,0,1,10.69,8.87l6.72,47.82a16.07,16.07,0,0,0,9,12.22,155.3,155.3,0,0,1,21.46,12.57,16,16,0,0,0,15.11,1.71l44.89-18.07a10.81,10.81,0,0,1,13.14,4.58l42.77,74a10.8,10.8,0,0,1-2.45,13.75l-38.21,30a16.05,16.05,0,0,0-6.05,14.08C416.17,247.67,416.39,251.83,416.39,256Z"/>
-              </svg>
-            </button>
-          </RouterLink>
-          <div :class="general_hover ? 'rl-Show' : 'rl-Hide'" class="-mt-[4px] mr-6 px-2 absolute -ml-[48px]" >
-            <div class="arrow-top-copied font-medium text-xsmm relative bg-purple-lite leading-arw-mbox text-center text-purple rounded-[7px] px-2">
-              General Settings</div>
-          </div>
-        </div>
-      </div>
     </div>
 
 <!--    <optimization></optimization>-->
@@ -474,10 +535,19 @@ export default {
       });
     }
 
-
+    this.testMode('');
 
   },
   methods:{
+
+    testMode(mode) {
+      this.test_mode = mode;
+      axios.post(window.uucss_global?.ajax_url + '?action=rapidload_switch_test_mode&test_mode=' + this.test_mode + '&nonce=' + window.uucss_global?.nonce).then((response) => {
+        if (response.data?.data) {
+          this.test_mode = response.data?.data.status;
+        }
+      })
+    },
 
     gotoHome(){
 
@@ -701,6 +771,7 @@ export default {
       on_board_complete: window.uucss_global.on_board_complete,
       onboard_link: window.uucss_global.home_url+'/wp-admin/options-general.php?page=rapidload-on-board#/',
       home_url: window.uucss_global.home_url,
+      preview: window.uucss_global.home_url,
       popupModel: false,
       howtouse: false,
       welcomeModel: false,
@@ -717,7 +788,9 @@ export default {
       docs: ' https://docs.rapidload.io/',
       improvetips_count: 0,
       focus: null,
-      general_hover: false,
+      test_mode: false,
+      general_over: false,
+      preview_over: false,
       licenseReqCount:0,
       license_information:
           {
