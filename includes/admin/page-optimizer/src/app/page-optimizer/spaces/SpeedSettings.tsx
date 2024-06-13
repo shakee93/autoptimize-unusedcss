@@ -430,7 +430,7 @@ const SpeedSettings = ({}) => {
         <SettingsStraightLine/>
         <div className="pb-4">
             <h3 className="font-semibold text-lg">Performance Gears</h3>
-            <span className="font-normal text-sm">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
+            <span className="font-normal text-sm text-zinc-600">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
         </div>
 
         <div className="flex gap-4 inline-flex" data-tour="settings-gear">
@@ -491,7 +491,7 @@ const SpeedSettings = ({}) => {
                 <h3 className="font-semibold">{activeSettingsMode.charAt(0).toUpperCase() + activeSettingsMode.slice(1)}{activeSettingsMode === 'custom' ? ' Settings' : ''} Activated</h3>
             )}
             <span
-                className="font-normal text-sm">{settingsDescriptions[currentMode]}</span>
+                className="font-normal text-sm text-zinc-600">{settingsDescriptions[currentMode]}</span>
         </div>
 
         <div>

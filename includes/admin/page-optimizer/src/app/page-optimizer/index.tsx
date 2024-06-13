@@ -109,9 +109,9 @@ export default function PageOptimizer() {
                             {togglePerformance && (
                                 <aside className="col-span-12 lg:col-span-3">
                                     <div className="text-lg ml-5  flex items-center gap-2">
-                                        <Circle style={{
-                                            fill: progressbarColor
-                                        }} className='w-2 mt-0.5 stroke-0 transition-colors'/>
+                                        {/*<Circle style={{*/}
+                                        {/*    fill: progressbarColor*/}
+                                        {/*}} className='w-2 mt-0.5 stroke-0 transition-colors'/>*/}
                                         Page Insights {togglePerformance && <TogglePerformance/>} </div>
                                     <div   className="widgets pt-4 flex">
                                         <PageSpeedScore/>
