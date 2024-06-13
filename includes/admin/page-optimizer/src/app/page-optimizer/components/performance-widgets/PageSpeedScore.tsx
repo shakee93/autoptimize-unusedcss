@@ -25,7 +25,7 @@ import {getTestModeStatus} from "../../../../store/app/appActions";
 import {useToast} from "components/ui/use-toast";
 import {RootState} from "../../../../store/app/appTypes";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
-import {SettingsLine, SettingsStraightLine, TestModeLine} from "app/page-optimizer/components/icons/icon-svg";
+import {TestModeLine} from "app/page-optimizer/components/icons/line-icons";
 import { useTestModeUtils } from 'hooks/testModeUtils';
 
 // const Feedback = React.lazy(() =>

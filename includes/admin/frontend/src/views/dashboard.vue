@@ -771,7 +771,7 @@ export default {
       on_board_complete: window.uucss_global.on_board_complete,
       onboard_link: window.uucss_global.home_url+'/wp-admin/options-general.php?page=rapidload-on-board#/',
       home_url: window.uucss_global.home_url,
-      preview: window.uucss_global.home_url,
+      preview: window.uucss_global.home_url+'?rapidload_preview_optimization',
       popupModel: false,
       howtouse: false,
       welcomeModel: false,

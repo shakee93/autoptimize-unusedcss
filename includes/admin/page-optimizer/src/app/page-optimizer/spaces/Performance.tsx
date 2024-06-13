@@ -17,7 +17,7 @@ import {Cog6ToothIcon, InformationCircleIcon} from "@heroicons/react/20/solid";
 import SetupChecklist from "app/page-optimizer/components/SetupChecklist";
 import AuditList from "app/page-optimizer/components/AuditList";
 import SpeedSettings from "app/page-optimizer/spaces/SpeedSettings";
-import {AuditsLine, SettingsLine} from "app/page-optimizer/components/icons/icon-svg";
+import {AuditsLine, SettingsLine} from "app/page-optimizer/components/icons/line-icons";
 import {
     Dialog,
     DialogContent,

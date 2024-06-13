@@ -4,23 +4,31 @@ import React, {ReactNode, useCallback, useEffect, useMemo, useState, useRef, Mou
 import {CheckCircle2, Circle, LogOut} from "lucide-react";
 import Audit from "app/page-optimizer/components/audit/Audit";
 import {
+    Starter, Accelerate, TurboMax
+} from "app/page-optimizer/components/icons/gear-icons";
+
+import {
+    SettingsLine,
+    SettingsStraightLine,
+} from "app/page-optimizer/components/icons/line-icons";
+
+import {
+    PageCacheDuotone,
+    CloudDeliveryDuotone,
+    ImageDeliverySVGDuotone,
+    JavascriptDeliveryDuotone,
+    FontDeliveryDuotone, CSSDeliveryDuotone,
+} from "app/page-optimizer/components/icons/duno-icons";
+
+import {
     CloudDelivery,
     CSSDelivery,
     FontDelivery,
     ImageDeliverySVG,
     JavascriptDelivery,
     PageCache,
-    AuditsLine,
-    SettingsLine,
-    SettingsStraightLine,
-    PageCacheDuotone,
-    CloudDeliveryDuotone,
-    ImageDeliverySVGDuotone,
-    JavascriptDeliveryDuotone,
-    FontDeliveryDuotone, CSSDeliveryDuotone,
-    Starter, Accelerate, TurboMax
+} from "app/page-optimizer/components/icons/category-icons";
 
-} from "app/page-optimizer/components/icons/icon-svg";
 import BetaSpeedSetting from "app/page-optimizer/components/audit/BetaSpeedSetting";
 import {cn} from "lib/utils";
 import {setCommonState} from "../../../store/common/commonActions";
