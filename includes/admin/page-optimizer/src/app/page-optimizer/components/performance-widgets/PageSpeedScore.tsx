@@ -67,7 +67,6 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const {testMode} = useSelector((state: RootState) => state.app);
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
     const [localSwitchState, setLocalSwitchState] = useState<boolean>(testMode?.status || false);
-    const [previewButton, setPreviewButton]= useState<boolean>(false);
     const [loadingStatus, setLoadingStatus] = useState(false);
 
     const { handleTestModeSwitchChange } = useTestModeUtils();
@@ -76,8 +75,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
     useEffect(() => {
         if (testMode) {
-            setLocalSwitchState(testMode.status || false);
-            setPreviewButton(true);
+            dispatch(setCommonState('testModeStatus', testMode.status || false));
         }
 
     }, [testMode]);
@@ -157,7 +155,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
             <div className='flex gap-2 justify-center'>
                 <div className='w-fit'>
                     <div data-tour='test-mode'
-                         className='select-none relative flex dark:bg-brand-800 py-0.5 px-0.5 rounded-2xl cursor-pointer bg-brand-0'>
+                         className='select-none relative flex dark:bg-brand-800 py-0.5 px-1.5 rounded-2xl cursor-pointer bg-brand-0'>
                         <div className={cn(
                             'absolute translate-x-0 left-0.5 w-[70px] rounded-[14px] -z-1 duration-300 h-[44px] text-sm flex flex-col gap-2 px-3 py-2.5 font-medium dark:bg-brand-950 bg-brand-200/80',
                             localSwitchState && 'w-[118px] -translate-x-1 left-[40%] bg-amber-500/80'
@@ -166,7 +164,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
 
                         <div
                             onClick={async () => {
-                                if (!localSwitchState) {
+                                if (localSwitchState) {
                                     await handleSwitchChange(false);
                                 }
                             }}
@@ -185,7 +183,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                                     await handleSwitchChange(true);
                                 }
                             }}
-                            className={`relative justify-center items-center z-1 text-sm flex pl-8 pr-6 py-2.5 whitespace-nowrap font-medium rounded-2xl ${localSwitchState ? 'text-brand-0' : 'text-brand-500'}`}
+                            className={`relative justify-center items-center z-1 text-sm flex pl-8 pr-5 py-2.5 whitespace-nowrap font-medium rounded-2xl ${localSwitchState ? 'text-brand-0' : 'text-brand-500'}`}
                         >
                             Test Mode
                         </div>

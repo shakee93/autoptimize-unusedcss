@@ -74,7 +74,7 @@ const SpeedSettings = ({}) => {
     const {settings, data, activeReport, touched, fresh} = useSelector(optimizerData);
     const [activeCategory,  setActiveCategory]= useState<SettingsCategory>('css')
     const [groupedSettings, setGroupedSettings] = useState<GroupedSettings>({});
-    const {dispatch, openCategory, activeTab, settingsMode, auditsReturn} = useCommonDispatch()
+    const {dispatch, openCategory, activeTab, settingsMode, auditsReturn, testModeStatus} = useCommonDispatch()
     const categoryOrder: SettingsCategory[] = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
     const [sortedStatus, setSortedStatus] = useState(true)
     const modes = ['starter', 'accelerate', 'turboMax'];
@@ -254,7 +254,6 @@ const SpeedSettings = ({}) => {
     const [tempMode, setTempMode] = useState('');
 
     const settingsModeOnChange = (mode: string, activate?: boolean) => {
-
         handleTestModeSettingsChange(mode);
 
         if(activeSettingsMode === 'custom' && !activate ){
@@ -298,9 +297,9 @@ const SpeedSettings = ({}) => {
 
     };
 
-    const handleTestModeSettingsChange = async (gearSettingsMode: string,) => {
+    const handleTestModeSettingsChange = (gearSettingsMode: string,) => {
         let toastInstance: ReturnType<typeof toast> | undefined;
-        if( gearSettingsMode==="turboMax" && !testMode){
+        if( gearSettingsMode==="turboMax" && !testMode?.status){
             toastInstance = toast({
                 description: (
                     <>
