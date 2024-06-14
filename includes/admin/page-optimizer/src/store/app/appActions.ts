@@ -62,7 +62,7 @@ const transformData = (data: any) => {
         ...metric,
         potentialGain: metric.refs ? (metric.refs?.weight - (metric.refs?.weight / 100) * metric.score) : 0
     }))
-    
+
     let audits : Audit[] = data.data.page_speed.audits
         .sort((a: Audit, b: Audit) => a.score - b.score)
         .map( (a: Audit) => transformAudit(a, metrics))
@@ -88,7 +88,7 @@ const transformData = (data: any) => {
 
         return 0;
     }
-    
+
     let _data = {
         data: {
             performance:  data.data.page_speed.performance ? parseFloat(data.data?.page_speed?.performance.toFixed(0)) : 0,
@@ -111,6 +111,7 @@ const transformData = (data: any) => {
         individual_file_actions: data.data['individual-file-actions'],
         state: data.state
     };
+
 
     return _data
 }
@@ -225,11 +226,13 @@ export const fetchData = (options: WordPressOptions, url : string, reload: boole
                 activeReport,
                 reload,
             );
-            
+
+
             dispatch({ type: FETCH_DATA_SUCCESS, payload: {
                 activeReport,
                 data: transformData(response)
             }});
+
 
         } catch (error) {
             if (error instanceof Error) {

@@ -7,7 +7,7 @@ import {
     FontDelivery,
     CloudDelivery,
     PageCache,
-} from '../icons/icon-svg';
+} from '../icons/category-icons';
 import ReactDOM from 'react-dom';
 // import { Dialog, Transition } from '@headlessui/react';
 // import { X } from "lucide-react";

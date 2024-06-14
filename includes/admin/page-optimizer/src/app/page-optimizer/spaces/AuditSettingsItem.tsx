@@ -6,7 +6,7 @@ import { cn } from 'lib/utils';
 import BetaSpeedSetting from 'app/page-optimizer/components/audit/BetaSpeedSetting';
 import {
     AuditsLine
-} from "app/page-optimizer/components/icons/icon-svg";
+} from "app/page-optimizer/components/icons/line-icons";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import { m, AnimatePresence  } from 'framer-motion';
 

@@ -12,7 +12,7 @@ import useCommonDispatch from "hooks/useCommonDispatch";
 import {setCommonRootState, setCommonState} from "../../../../store/common/commonActions";
 import {
     Circle, GraduationCapIcon,
-    Hash, History, Monitor,
+    Hash, History, Loader, Monitor,
 } from "lucide-react";
 import SideBarActions from "app/page-optimizer/components/performance-widgets/SideBarActions";
 import xusePerformanceColors from "hooks/usePerformanceColors";
@@ -25,12 +25,11 @@ import {getTestModeStatus} from "../../../../store/app/appActions";
 import {useToast} from "components/ui/use-toast";
 import {RootState} from "../../../../store/app/appTypes";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
-import {SettingsStraightLine} from "app/page-optimizer/components/icons/icon-svg";
+import {TestModeLine} from "app/page-optimizer/components/icons/line-icons";
+import { useTestModeUtils } from 'hooks/testModeUtils';
 
 // const Feedback = React.lazy(() =>
 //     import('app/page-optimizer/components/performance-widgets/Feedback'))
-
-
 
 interface PageSpeedScoreProps {
     pagespeed?: any;
@@ -63,112 +62,34 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const { dispatch, hoveredMetric, activeMetric} = useCommonDispatch()
 
     //Test Mode
-    const {options,} = useAppContext();
-    const {settingsMode} = useCommonDispatch();
+    const {options} = useAppContext();
+    const {settingsMode, testModeStatus, testModeLoading} = useCommonDispatch();
     const {testMode} = useSelector((state: RootState) => state.app);
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
-    const [localSwitchState, setLocalSwitchState] = useState<boolean>(true);
-    const [previewButton, setPreviewButton]= useState<boolean>(false);
-    const [testModeLoading, setTestModeLoading]= useState<boolean>(false);
-    const { toast } = useToast();
+    const [localSwitchState, setLocalSwitchState] = useState<boolean>(testMode?.status || false);
+    const [loadingStatus, setLoadingStatus] = useState(false);
+
+    const { handleTestModeSwitchChange } = useTestModeUtils();
 
     let url = options?.optimizer_url;
 
     useEffect(() => {
-        dispatch(getTestModeStatus(options, url));
-    }, [dispatch]);
-
-    useEffect(() => {
-        let toastInstance: ReturnType<typeof toast> | undefined;
-        if(settingsMode==='turboMax' && !localSwitchState){
-            toastInstance = toast({
-                description: (
-                    <>
-                        <div className='flex w-full gap-2 text-center items-center'>
-                            <InformationCircleIcon className='w-5 text-orange-600'/>
-                            Do you want to turn on test mode?
-                            <AppButton onClick={e => {
-                                handleSwitchChange(true);
-                            }} variant='outline'>
-                                Yes
-                            </AppButton>
-                            <AppButton onClick={e => {
-                                // Dismiss the toast immediately
-                                if (toastInstance) {
-                                    toastInstance.dismiss();
-                                }
-                            }} variant='outline'>
-                                No
-                            </AppButton>
-                        </div>
-                    </>
-                ),
-            }, 50000);
-
-        }else if(settingsMode!='turboMax'){
-            console.log(settingsMode)
-            if (toastInstance) {
-                console.log("test")
-                toastInstance.dismiss();
-            }
-        } else if(!testMode){
-           // setLocalSwitchState(false);
-        }
-    }, [settingsMode]);
-
-    useEffect(() => {
         if (testMode) {
-            setLocalSwitchState(testMode.status || false);
-            setPreviewButton(true);
+            dispatch(setCommonState('testModeStatus', testMode.status || false));
         }
+
     }, [testMode]);
 
 
 
     const handleSwitchChange = async (isChecked: boolean) => {
-
-        setLocalSwitchState(isChecked);
-        setTestModeLoading(true);
-
-        if (timeoutId) {
-            clearTimeout(timeoutId);
-        }
-
-        const newTimeoutId = setTimeout(async () => {
-            const result = await dispatch(getTestModeStatus(options, url, String(isChecked)));
-            if (result.success) {
-                setTestModeLoading(false);
-                toast({
-                    description: (
-                        <>
-                            <div className='flex w-full gap-2 text-center'>
-                                Test Mode turned {localSwitchState ? 'off' : 'on'} successfully
-                                <CheckCircleIcon className='w-5 text-green-600'/>
-                            </div>
-                            <div className='flex w-full gap-2 text-center'>
-                                <InformationCircleIcon className='w-5 text-green-600'/>
-                                Test Mode changes are on live
-                            </div>
-                        </>
-                    ),
-                });
-            } else {
-                toast({
-                    description: (
-                        <div className='flex w-full gap-2 text-center'>
-                            Failed to turn on Test mode: {result.error}
-                            <XCircleIcon className='w-5 text-red-600' />
-                        </div>
-                    ),
-                });
-                setLocalSwitchState(false);
-                setTestModeLoading(false);
-            }
-        }, 200);
-        setTimeoutId(newTimeoutId);
-
+       await handleTestModeSwitchChange( isChecked);
     };
 
+    useEffect(() => {
+        setLocalSwitchState(testModeStatus);
+        setLoadingStatus(testModeLoading);
+    }, [testModeStatus, testModeLoading]);
 
     const handleCoreWebClick = useCallback(() => {
         setCoreWebIsClicked(!isCoreWebClicked);
@@ -217,16 +138,24 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
         setKey(prevKey => prevKey + 1);
     }, []);
 
+    useEffect(() => {
+
+        if (!expanded) {
+            dispatch(setCommonState('activeMetric', null));
+        }
+
+    }, [expanded])
 
 
     return <>
         {/*min-w-[310px]*/}
 
         <div className='w-full flex flex-col gap-4'>
+            <div>
             <div className='flex gap-2 justify-center'>
                 <div className='w-fit'>
                     <div data-tour='test-mode'
-                         className='select-none relative flex dark:bg-brand-800 py-0.5 px-0.5 rounded-2xl cursor-pointer bg-brand-0'>
+                         className='select-none relative flex dark:bg-brand-800 py-0.5 px-1.5 rounded-2xl cursor-pointer bg-brand-0'>
                         <div className={cn(
                             'absolute translate-x-0 left-0.5 w-[70px] rounded-[14px] -z-1 duration-300 h-[44px] text-sm flex flex-col gap-2 px-3 py-2.5 font-medium dark:bg-brand-950 bg-brand-200/80',
                             localSwitchState && 'w-[118px] -translate-x-1 left-[40%] bg-amber-500/80'
@@ -234,38 +163,49 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         </div>
 
                         <div
-                            onClick={() => setLocalSwitchState(false)}
+                            onClick={async () => {
+                                if (localSwitchState) {
+                                    await handleSwitchChange(false);
+                                }
+                            }}
                             className={`relative z-1 items-center text-sm flex gap-2 px-3 py-2.5 font-medium rounded-2xl ${localSwitchState ? 'text-brand-500' : ''}`}
                         >
                             <Circle
-                                className={cn(`w-1.5 stroke-0 ${localSwitchState ? '' : 'fill-green-600'} animate-ping absolute inline-flex opacity-75`)}/>
+                                className={cn(`w-1.5 stroke-0 ${localSwitchState ? 'fill-brand-300' : 'fill-green-600'} animate-ping absolute inline-flex opacity-75`)}/>
                             <Circle
-                                className={cn(`w-1.5 stroke-0 ${localSwitchState ? '' : 'fill-green-600'} relative inline-flex`)}/>
+                                className={cn(`w-1.5 stroke-0 ${localSwitchState ? 'fill-brand-300' : 'fill-green-600'} relative inline-flex`)}/>
                             Live
                         </div>
 
                         <div
-                            onClick={() => setLocalSwitchState(true)}
-                            className={`relative justify-center items-center z-1 text-sm flex pl-8 pr-6 py-2.5 whitespace-nowrap font-medium rounded-2xl ${localSwitchState ? 'text-brand-0' : ''}`}
+                            onClick={async () => {
+                                if (!localSwitchState) {
+                                    await handleSwitchChange(true);
+                                }
+                            }}
+                            className={`relative justify-center items-center z-1 text-sm flex pl-8 pr-5 py-2.5 whitespace-nowrap font-medium rounded-2xl ${localSwitchState ? 'text-brand-0' : 'text-brand-500'}`}
                         >
                             Test Mode
                         </div>
                     </div>
                 </div>
-                <TooltipText text="Preview">
-                <button
-                    onClick={() => {
-                        window.open(options.optimizer_url + '?rapidload_preview_optimization', '_blank');
-                    }}
-                    className={`flex gap-2 items-center text-sm h-12 rounded-[14px] bg-brand-0 dark:bg-primary dark:hover:bg-primary/90 px-4 py-2 pr-3.5 ${
-                        revisions.length > 0
-                            ? '' : ''}`} data-tour="preview-button">
+                <TooltipText text={loadingStatus ? "loading" : "Preview"} >
+                    <div
+                        onClick={() => {
+                            {!loadingStatus && window.open(options.optimizer_url + '?rapidload_preview_optimization', '_blank');}
+                        }}
+                        className={`flex gap-2 items-center text-sm h-12 rounded-[14px] bg-brand-0 dark:bg-primary dark:hover:bg-primary/90 px-4 py-2 ${
+                            revisions.length > 0
+                                ? '' : ''}`} data-tour="preview-button">
 
-                    <ArrowTopRightOnSquareIcon className='w-5 text-gray-500'/>
-                </button>
+                        { loadingStatus ? <Loader className='w-5 animate-spin'/>    :  <ArrowTopRightOnSquareIcon className='w-5 text-gray-500'/>}
+                    </div>
                 </TooltipText>
             </div>
-            <SettingsStraightLine/>
+            <div className="relative mt-4 -mb-2 rotate-180 ">
+                <TestModeLine width={localSwitchState? 110: 200} />
+            </div>
+            </div>
             <Card data-tour='speed-insights'
                   className={cn(
                       'overflow-hidden border border-transparent flex flex-col sm:flex-row lg:flex-col justify-around',
@@ -323,34 +263,39 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                     </div>
                 </div>
 
-                <AppButton
-                    onClick={e => setExpanded(p => !p)}
-                    variant='outline'
-                    className='select-none border-none bg-transparent hover:bg-transparent text-center text-xs text-brand-600 py-2'
-                    data-tour="expand-metrics">
-                    {expanded ? 'Collapse' : 'Expand'} Metrics
-                </AppButton>
+                <div className='border-t'>
+                    <AppButton
+                        onClick={e => setExpanded(p => !p)}
+                        variant='outline'
+                        className={cn(
+                            'select-none border-b border-l-0 border-t-0 border-r-0 rounded-none bg-transparent hover:bg-transparent text-center text-xs text-brand-600 py-2',
+                            expanded && 'border-b-0'
+                        )}
+                        data-tour="expand-metrics">
+                        {expanded ? 'Collapse' : 'Expand'} Metrics
+                    </AppButton>
 
-                {(data?.metrics && !expanded) && (
-                    <>
-                        <div className='flex justify-around mb-3 px-2'
-                             onMouseLeave={() => dispatch(setCommonState('hoveredMetric', null))}
-                        >
-                            {data.metrics.map(metric => (
-                                <div key={metric.id}
-                                     onMouseEnter={() => dispatch(setCommonState('hoveredMetric', metric))}
+                    {(data?.metrics && !expanded) && (
+                        <>
+                            <div className='flex justify-around my-2  px-2'
+                                 onMouseLeave={() => dispatch(setCommonState('hoveredMetric', null))}
+                            >
+                                {data.metrics.map(metric => (
+                                    <div key={metric.id}
+                                         onMouseEnter={() => dispatch(setCommonState('hoveredMetric', metric))}
 
-                                     className='text-xs border text-center flex flex-col
-                             gap-0.5 px-3 py-2 bg-brand-100/20 hover:bg-brand-100 cursor-default rounded-[14px]'>
-                                    <div className='font-medium tracking-wider '>{metric.refs.acronym}</div>
-                                    <MetricValue metric={metric}/>
-                                </div>
-                            ))}
-                        </div>
+                                         className='text-xs text-center flex flex-col
+                             gap-0.5 px-2 py-2 bg-brand-100/20 hover:bg-brand-100 cursor-default rounded-[14px]'>
+                                        <div className='font-medium tracking-wider '>{metric.refs.acronym}</div>
+                                        <MetricValue metric={metric}/>
+                                    </div>
+                                ))}
+                            </div>
 
-                    </>
-                )}
+                        </>
+                    )}
 
+                </div>
 
                 {(data?.metrics && expanded) && (
                     <div className={cn(

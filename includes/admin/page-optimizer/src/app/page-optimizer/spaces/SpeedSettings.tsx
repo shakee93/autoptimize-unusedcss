@@ -4,23 +4,31 @@ import React, {ReactNode, useCallback, useEffect, useMemo, useState, useRef, Mou
 import {CheckCircle2, Circle, LogOut} from "lucide-react";
 import Audit from "app/page-optimizer/components/audit/Audit";
 import {
+    Starter, Accelerate, TurboMax
+} from "app/page-optimizer/components/icons/gear-icons";
+
+import {
+    SettingsLine,
+    SettingsStraightLine,
+} from "app/page-optimizer/components/icons/line-icons";
+
+import {
+    PageCacheDuotone,
+    CloudDeliveryDuotone,
+    ImageDeliverySVGDuotone,
+    JavascriptDeliveryDuotone,
+    FontDeliveryDuotone, CSSDeliveryDuotone,
+} from "app/page-optimizer/components/icons/duno-icons";
+
+import {
     CloudDelivery,
     CSSDelivery,
     FontDelivery,
     ImageDeliverySVG,
     JavascriptDelivery,
     PageCache,
-    AuditsLine,
-    SettingsLine,
-    SettingsStraightLine,
-    PageCacheDuotone,
-    CloudDeliveryDuotone,
-    ImageDeliverySVGDuotone,
-    JavascriptDeliveryDuotone,
-    FontDeliveryDuotone, CSSDeliveryDuotone,
-    Starter, Accelerate, TurboMax
+} from "app/page-optimizer/components/icons/category-icons";
 
-} from "app/page-optimizer/components/icons/icon-svg";
 import BetaSpeedSetting from "app/page-optimizer/components/audit/BetaSpeedSetting";
 import {cn} from "lib/utils";
 import {setCommonState} from "../../../store/common/commonActions";
@@ -45,7 +53,11 @@ import {Cog6ToothIcon} from "@heroicons/react/20/solid";
 import Fields from "app/page-optimizer/components/audit/additional-inputs";
 import AppButton from "components/ui/app-button";
 import Mode from "app/page-optimizer/components/Mode";
-import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes"; // Import the new component
+import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
+import {InformationCircleIcon} from "@heroicons/react/24/outline";
+import {useToast} from "components/ui/use-toast";
+import {RootState} from "../../../store/app/appTypes"; // Import the new component
+import { useTestModeUtils } from 'hooks/testModeUtils';
 
 const capitalizeCategory = (category: string) => {
     if (category === 'css' || category === 'cdn') {
@@ -62,14 +74,17 @@ const SpeedSettings = ({}) => {
     const {settings, data, activeReport, touched, fresh} = useSelector(optimizerData);
     const [activeCategory,  setActiveCategory]= useState<SettingsCategory>('css')
     const [groupedSettings, setGroupedSettings] = useState<GroupedSettings>({});
-    const {dispatch, openCategory, activeTab, settingsMode, auditsReturn} = useCommonDispatch()
+    const {dispatch, openCategory, activeTab, settingsMode, auditsReturn, testModeStatus} = useCommonDispatch()
     const categoryOrder: SettingsCategory[] = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
     const [sortedStatus, setSortedStatus] = useState(true)
     const modes = ['starter', 'accelerate', 'turboMax'];
     const [customMode, setCustomMode] = useState(false);
     const [activeSettingsMode, setActiveSettingsMode] = useState(data?.settingsMode || 'starter');
     const [mouseOnSettingsGear, setMouseOnSettingsGear] = useState('');
-
+    const { toast } = useToast();
+    const {testMode} = useSelector((state: RootState) => state.app);
+    const { handleTestModeSwitchChange } = useTestModeUtils();
+    const {options} = useAppContext()
 
     const icons :  {
         [key in SettingsCategory]: React.ReactElement;
@@ -239,8 +254,8 @@ const SpeedSettings = ({}) => {
     const [tempMode, setTempMode] = useState('');
 
     const settingsModeOnChange = (mode: string, activate?: boolean) => {
+        handleTestModeSettingsChange(mode);
 
-        //&& initiateCustomMessage
         if(activeSettingsMode === 'custom' && !activate ){
             customUnsavedChanges.current?.click();
         }else{
@@ -281,6 +296,46 @@ const SpeedSettings = ({}) => {
         }
 
     };
+
+    const handleTestModeSettingsChange = (gearSettingsMode: string,) => {
+        let toastInstance: ReturnType<typeof toast> | undefined;
+        if( gearSettingsMode==="turboMax" && !testMode?.status){
+            toastInstance = toast({
+                description: (
+                    <>
+                        <div className='flex w-full gap-2 text-center items-center'>
+                            <InformationCircleIcon className='w-5 text-orange-600'/>
+                            Do you want to turn on test mode?
+
+                            <AppButton onClick={async e => {
+                                if (toastInstance) {
+                                    toastInstance.dismiss();
+                                }
+                                await handleTestModeSwitchChange( true)
+                            }} variant='outline'>
+                                Yes
+                            </AppButton>
+                            <AppButton onClick={e => {
+                                // Dismiss the toast immediately
+                                if (toastInstance) {
+                                    toastInstance.dismiss();
+                                }
+                            }} variant='outline'>
+                                No
+                            </AppButton>
+
+                        </div>
+                    </>
+                ),
+            },99999999);
+
+        }
+        if (toastInstance) {
+         //   console.log('condition: ',toastInstance)
+          //  toastInstance.dismiss();
+        }
+       // console.log(toastInstance)
+    }
 
     useEffect(() => {
 
@@ -323,9 +378,9 @@ const SpeedSettings = ({}) => {
     },[settings]);
 
     const settingsDescriptions: { [key in settingsMode]: string } = {
-        starter: "Optimizes foundational aspects for faster load speeds by removing unused CSS, generating critical CSS, minifying CSS and JavaScript, caching pages, and self-hosting Google Fonts.",
+        starter: "Optimizes foundational aspects for faster load speeds by removing unused CSS, minifying CSS and JavaScript, caching pages, and self-hosting Google Fonts.",
         accelerate: "Starter mode + RapidLoad CDN, serving next-gen images, and enhancing image handling with lazy loading, while also deferring JavaScript and adding crucial image attributes.",
-        turboMax: "Unlock peak performance potential including Accelerator mode + advanced JavaScript handling methods, such as delaying execution for improved speed and efficiency.",
+        turboMax: "Unlock peak performance potential including Accelerator mode + generating critical CSS, advanced JavaScript handling methods, such as delaying execution for improved speed and efficiency.",
         custom: "Tailor your optimization strategy to your needs, combining features like Accelerator mode and advanced JavaScript handling for personalized performance."
     };
 
@@ -340,7 +395,7 @@ const SpeedSettings = ({}) => {
 
     const [categoryStates, setCategoryStates] = useState<Record<string, boolean>>({});
     const [passedAuditsCollapsStatus, setPassedAuditsCollapsStatus] = useState(false);
-    const {options} = useAppContext()
+
 
     useEffect(() => {
 
@@ -382,7 +437,7 @@ const SpeedSettings = ({}) => {
         <SettingsStraightLine/>
         <div className="pb-4">
             <h3 className="font-semibold text-lg">Performance Gears</h3>
-            <span className="font-normal text-sm">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
+            <span className="font-normal text-sm text-zinc-600">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
         </div>
 
         <div className="flex gap-4 inline-flex" data-tour="settings-gear">
@@ -443,7 +498,7 @@ const SpeedSettings = ({}) => {
                 <h3 className="font-semibold">{activeSettingsMode.charAt(0).toUpperCase() + activeSettingsMode.slice(1)}{activeSettingsMode === 'custom' ? ' Settings' : ''} Activated</h3>
             )}
             <span
-                className="font-normal text-sm">{settingsDescriptions[currentMode]}</span>
+                className="font-normal text-sm text-zinc-600">{settingsDescriptions[currentMode]}</span>
         </div>
 
         <div>

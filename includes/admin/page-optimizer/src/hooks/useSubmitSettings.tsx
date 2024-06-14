@@ -40,8 +40,8 @@ const useSubmitSettings = () => {
     } =
         useSelector(optimizerData)
 
-    //omit grouped, metrics from data and updateData
-    const { grouped, metrics, ...restData } = data || {};
+    //omit grouped from data and updateData
+    const { grouped, ...restData } = data || {};
     const updatedData = {
         ...restData,
         settingsMode: settingsMode,
