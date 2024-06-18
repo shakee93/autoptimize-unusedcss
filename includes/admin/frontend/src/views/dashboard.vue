@@ -4,10 +4,10 @@
       <div class="flex justify-between">
         <div class="flex gap-2">
           <div class="relative z-10 flex items-center gap-1 rounded-[14px] bg-white p-1 ">
-          <span :class="test_mode?'left-[54px] w-[76px] bg-amber-500/80':'left-[4px] w-[52px] bg-gray-button-border'"
+          <span :class="test_mode?'left-[66px] w-[76px] bg-amber-500/80':'left-[4px] w-[60px] bg-slate-200'"
                 class="absolute top-1 -z-10 h-9 rounded-[14px] duration-200 "></span>
             <button @click="testMode(false)"
-                    class="flex gap-1 h-9 items-center justify-center rounded-[14px] px-1.5 text-xsmm font-medium duration-200 "
+                    class="flex gap-1 h-9 items-center w-14 justify-center rounded-[14px] px-1.5 text-xsmm font-medium duration-200 "
                     :class="!test_mode?'text-dark-5 dark:text-dark':'text-gray-font hover:bg-gray-1 hover:text-dark '">
               <div class="inline-flex">
               <span
