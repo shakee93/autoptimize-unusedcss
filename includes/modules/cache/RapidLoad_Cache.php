@@ -2,6 +2,7 @@
 
 class RapidLoad_Cache
 {
+    use RapidLoad_Utils;
 
     public static $options = [];
 
@@ -72,6 +73,23 @@ class RapidLoad_Cache
         add_action('init', function (){
             self::process_clear_cache_request();
         });
+
+        $this->display_admin_notice_for_directory_permission_issue();
+    }
+
+    public function display_admin_notice_for_directory_permission_issue(){
+        $cache_dir = RapidLoad_Cache_Store::get_cache_dir(site_url());
+
+        if(!is_writable($cache_dir)){
+            $message = 'writing permission error for the path : ' . $cache_dir;
+            $type = "error";
+
+            add_action('admin_notices', function () use ($message, $type) {
+                echo "<div class=\"notice notice-$type is-dismissible rapidload-cache-notice\">
+                    <p>$message</p>
+                 </div>";
+            });
+        }
     }
 
     public function add_notification($notifications)
