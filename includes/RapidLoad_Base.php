@@ -378,7 +378,8 @@ class RapidLoad_Base
                 'onboard_activation_url' => self::onboard_activation_url('authorize' ),
                 'app_url' => defined('UUCSS_APP_URL') ? trailingslashit(UUCSS_APP_URL) : 'https://app.rapidload.io/',
                 //'total_jobs' => RapidLoad_DB::get_total_job_count(),
-                'db_tobe_updated' => RapidLoad_DB::$current_version < 1.6
+                'db_tobe_updated' => RapidLoad_DB::$current_version < 1.6,
+                "test_mode" => isset(self::$options['rapidload_test_mode']) && self::$options['rapidload_test_mode'] == "1"
             );
             wp_localize_script( 'uucss_global_admin_script', 'uucss_global', $data );
             wp_enqueue_script( 'uucss_global_admin_script' );
