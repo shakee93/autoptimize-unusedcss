@@ -6,7 +6,7 @@
         <div class="flex-initial w-28 pl-8">
           <RouterLink :to="back">
             <button id="rp-back"
-                class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
+                    class="bg-white transition duration-300 hover:bg-purple-lite hover:text-white rounded-full px-3 py-3 text-center inline-flex items-center">
               <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M21.5833 14H7M7 14L14 7M7 14L14 21" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
@@ -37,68 +37,68 @@
         <div class="p-4 pl-32 pr-72">
 
 
-            <div class="mb-5">
-              <div class="flex">
-                <div class="pr-1">
-                  <div class="flex items-center mr-4 mt-3">
-                    <div @click="onData.minify_js = !onData.minify_js" :class="onData.minify_js? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="onData.minify_js" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
-                           class="transform scale-125">
-                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-                      </svg>
-                    </div>
+          <div class="mb-5">
+            <div class="flex">
+              <div class="pr-1">
+                <div class="flex items-center mr-4 mt-3">
+                  <div @click="onData.minify_js = !onData.minify_js" :class="onData.minify_js? 'bg-purple':''"
+                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
+                    <svg v-if="onData.minify_js" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                         class="transform scale-125">
+                      <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                    </svg>
                   </div>
                 </div>
-                <div>
-                  <h1 @click="onData.minify_js = !onData.minify_js" class="font-normal text-base text-black-font cursor-pointer">Minify</h1>
-                  <p class="text-sm text-gray-font">Remove unnecessary spaces, lines and comments from JS files.</p>
-                </div>
               </div>
+              <div>
+                <h1 @click="onData.minify_js = !onData.minify_js" class="font-normal text-base text-black-font cursor-pointer">Minify</h1>
+                <p class="text-sm text-gray-font">Remove unnecessary spaces, lines and comments from JS files.</p>
+              </div>
+            </div>
 
-              <div :class="!onData.minify_js? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
+            <div :class="!onData.minify_js? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
 
-                <div class="mt-5">
-                  <h1 class="font-normal text-base text-black-font">Exclude Javascript from Minify</h1>
-                  <p class="text-sm pb-3 text-gray-font">These JS files will be excluded from being minified.</p>
+              <div class="mt-5">
+                <h1 class="font-normal text-base text-black-font">Exclude Javascript from Minify</h1>
+                <p class="text-sm pb-3 text-gray-font">These JS files will be excluded from being minified.</p>
 
-                  <div class="grid mb-5">
+                <div class="grid mb-5">
                 <textarea
                     v-model="onData.uucss_exclude_files_from_minify_js"
                     @focus="focus='exclude'" @blur="focus = null"
                     class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                     id="force-include" type="text" placeholder=""></textarea>
-                    <div :class="focus==='exclude'? 'bg-purple-lite':'bg-gray-lite-background'"
-                         class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                      <p class="text-sm text-dark-gray-font">JS files to be excluded one JS file per line.</p>
-                    </div>
+                  <div :class="focus==='exclude'? 'bg-purple-lite':'bg-gray-lite-background'"
+                       class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
+                    <p class="text-sm text-dark-gray-font">JS files to be excluded one JS file per line.</p>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
 
 
-<!--          <div class="grid">-->
-<!--            <div class="mb-5">-->
-<!--              <div class="flex">-->
-<!--                <div class="pr-1">-->
-<!--                  <div class="flex items-center mr-4 mt-3">-->
-<!--                    <div @click="onData.preload_internal_links = !onData.preload_internal_links" :class="onData.preload_internal_links? 'bg-purple':''"-->
-<!--                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">-->
-<!--                      <svg v-if="onData.preload_internal_links" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"-->
-<!--                           class="transform scale-125">-->
-<!--                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>-->
-<!--                      </svg>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                  <h1 @click="onData.preload_internal_links = !onData.preload_internal_links" class="font-normal text-base text-black-font cursor-pointer">Preload Links</h1>-->
-<!--                  <p class="text-sm text-gray-font">Preload Links</p>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
+          <!--          <div class="grid">-->
+          <!--            <div class="mb-5">-->
+          <!--              <div class="flex">-->
+          <!--                <div class="pr-1">-->
+          <!--                  <div class="flex items-center mr-4 mt-3">-->
+          <!--                    <div @click="onData.preload_internal_links = !onData.preload_internal_links" :class="onData.preload_internal_links? 'bg-purple':''"-->
+          <!--                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">-->
+          <!--                      <svg v-if="onData.preload_internal_links" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"-->
+          <!--                           class="transform scale-125">-->
+          <!--                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>-->
+          <!--                      </svg>-->
+          <!--                    </div>-->
+          <!--                  </div>-->
+          <!--                </div>-->
+          <!--                <div>-->
+          <!--                  <h1 @click="onData.preload_internal_links = !onData.preload_internal_links" class="font-normal text-base text-black-font cursor-pointer">Preload Links</h1>-->
+          <!--                  <p class="text-sm text-gray-font">Preload Links</p>-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--            </div>-->
+          <!--          </div>-->
 
 
           <div class="mb-5">
@@ -163,7 +163,28 @@
               </div>
             </div>
             <div :class="!onData.delay_javascript? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border mt-5">
-              <div>
+              <div class="flex items-center mr-4 mt-3 gap-2 pb-3">
+                <div @click="delay_js_files_radio = 'all-files'" :class="onData.uucss_load_js_method.status? '':''"
+                     class="border-purple border-2 rounded-full p-0.5 w-5 h-5 transition-all duration-200 cursor-pointer">
+                  <svg v-if="delay_js_files_radio === 'all-files'" width="12" height="12" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="6.5" cy="6.5" r="6.5" fill="#7F54B3"/>
+                  </svg>
+                </div>
+                <div>
+                  <h1 class="font-normal text-base text-black-font">All Files</h1>
+                </div>
+                <div @click="delay_js_files_radio = 'selected-files'" :class="onData.uucss_load_js_method.status? '':''"
+                     class="border-purple border-2 rounded-full p-0.5 w-5 h-5 transition-all duration-200 cursor-pointer">
+
+                  <svg v-if="delay_js_files_radio === 'selected-files'" width="12" height="12" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="6.5" cy="6.5" r="6.5" fill="#7F54B3"/>
+                  </svg>
+                </div>
+                <div>
+                  <h1 class="font-normal text-base text-black-font">Selected Files</h1>
+                </div>
+              </div>
+              <div v-if="delay_js_files_radio === 'all-files'">
                 <h1 class="font-normal text-base text-black-font">Exclude Javascript from Delaying</h1>
                 <p class="text-sm pb-3 text-gray-font">These JS files will be excluded from delaying.</p>
 
@@ -171,45 +192,31 @@
                 <textarea
                     v-model="onData.uucss_exclude_files_from_delay_js"
                     @focus="focus='delay'" @blur="focus = null"
-                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg min-w-[515px] w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                     id="force-include" type="text" placeholder=""></textarea>
                   <div :class="focus==='delay'? 'bg-purple-lite':'bg-gray-lite-background'"
                        class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
                     <p class="text-sm text-dark-gray-font">JS files to be excluded from delay. Enter each file in new line.</p>
                   </div>
                 </div>
-                <div v-if="isInputEmpty !== true "  class="grid pb-5">
-                  <h1 class="font-normal text-base text-black-font pt-5">Delaying only selected Javascript (Legacy)</h1>
-                  <div class="mb-5 mt-3 bg-yellow-50 border border-yellow-300 rounded-lg px-4 py-3 shadow-md" role="alert">
-                    <div class="flex">
-                      <div class="py-1 pr-2">
-                        <svg fill="#FFCC00" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30px" height="30px" viewBox="0 0 554.2 554.199" xml:space="preserve" stroke="#FFCC00">
-                          <g id="SVGRepo_bgCarrier" stroke-width="0"/>
-                          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
-                          <g id="SVGRepo_iconCarrier"> <g> <path d="M538.5,386.199L356.5,70.8c-16.4-28.4-46.7-45.9-79.501-45.9c-32.8,0-63.1,17.5-79.5,45.9L12.3,391.6 c-16.4,28.4-16.4,63.4,0,91.8C28.7,511.8,59,529.3,91.8,529.3H462.2c0.101,0,0.2,0,0.2,0c50.7,0,91.8-41.101,91.8-91.8 C554.2,418.5,548.4,400.8,538.5,386.199z M316.3,416.899c0,21.7-16.7,38.3-39.2,38.3s-39.2-16.6-39.2-38.3V416 c0-21.601,16.7-38.301,39.2-38.301S316.3,394.3,316.3,416V416.899z M317.2,158.7L297.8,328.1c-1.3,12.2-9.4,19.8-20.7,19.8 s-19.4-7.7-20.7-19.8L237,158.6c-1.3-13.1,5.801-23,18-23H299.1C311.3,135.7,318.5,145.6,317.2,158.7z"/> </g> </g>
-                      </svg>
-                      </div>
-                      <div>
-                        <p class="pt-2 font-semibold text-sm text-yellow-600 leading-5">This option is deprecated from version 2.2. </p>
-                      </div>
-                    </div>
-                  </div>
+              </div >
+              <div v-if="delay_js_files_radio === 'selected-files'" class="grid pb-5">
+                <h1 class="font-normal text-base text-black-font">Delaying only selected Javascript (Legacy)</h1>
+                <p class="text-sm pb-3 text-gray-font">These JS files will be excluded from delaying.</p>
 
-                  <textarea
+                <div class="grid">
+                <textarea
                     v-model="onData.uucss_load_scripts_on_user_interaction"
                     @focus="focus='delay'" @blur="handleEmptyInput"
                     class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
                     id="force-include" type="text" placeholder=""></textarea>
-                  <div :class="focus==='delay'? 'bg-purple-lite':'bg-gray-lite-background'"
-                       class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                    <p class="text-sm text-dark-gray-font">Delayed JS files will load on user interaction. Enter each file in new line.</p>
-                  </div>
+                <div :class="focus==='delay'? 'bg-purple-lite':'bg-gray-lite-background'"
+                     class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
+                  <p class="text-sm text-dark-gray-font">Delayed JS files will load on user interaction. Enter each file in new line.</p>
                 </div>
-
-
-
+                </div>
               </div>
-              <div class="pt-3">
+              <div v-if="delay_js_files_radio === 'all-files'" class="pt-3">
                 <h1 class="font-normal text-base text-black-font">Callback Script</h1>
                 <p class="text-sm pb-3 text-gray-font">These scripts will be executed after delayed JS files are loaded.</p>
 
@@ -224,9 +231,6 @@
                     <p class="text-sm text-dark-gray-font">Inline scripts to be executed.</p>
                   </div>
                 </div>
-
-
-
               </div>
             </div>
 
@@ -234,15 +238,15 @@
           <div class="grid mb-5">
             <h1 class="font-normal text-base text-black-font">Exclude Javascript</h1>
             <p class="text-sm pb-3 text-gray-font">These JS files will be excluded from all optimizations.</p>
-                <textarea
-                    v-model="onData.uucss_excluded_js_files"
-                    @focus="focus='exclude-js'" @blur="focus = null"
-                    class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
-                    id="force-include" type="text" placeholder=""></textarea>
-              <div :class="focus==='exclude-js'? 'bg-purple-lite':'bg-gray-lite-background'"
-                   class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
-                <p class="text-sm text-dark-gray-font">Exclude JS from RapidLoad optimization enter each file in new line.</p>
-              </div>
+            <textarea
+                v-model="onData.uucss_excluded_js_files"
+                @focus="focus='exclude-js'" @blur="focus = null"
+                class="resize-none z-10 appearance-none border border-gray-button-border rounded-lg w-full py-2 px-3 h-20 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple focus:border-transparent"
+                id="force-include" type="text" placeholder=""></textarea>
+            <div :class="focus==='exclude-js'? 'bg-purple-lite':'bg-gray-lite-background'"
+                 class="-mt-3  rounded-lg px-4 py-4 pb-2" role="alert">
+              <p class="text-sm text-dark-gray-font">Exclude JS from RapidLoad optimization enter each file in new line.</p>
+            </div>
           </div>
 
           <button @click="saveSettings" :disabled="loading" :class="saved? 'pointer-events-none': ''"
@@ -302,7 +306,7 @@ export default {
       Object.keys(this.javascript).map((key) => {
         if (this.id === this.javascript[key].id) {
           const options = this.javascript[key].options;
-         // console.log(options);
+          // console.log(options);
           this.onData.uucss_load_js_method.defer_inline_js = options.defer_inline_js
           this.onData.minify_js = options.minify_js
           this.onData.preload_internal_links = options.preload_internal_links
@@ -329,7 +333,7 @@ export default {
     handleEmptyInput() {
       this.focus = null;
       if (this.onData.uucss_load_scripts_on_user_interaction === "" ) {
-       this.legacyPopup = true;
+        this.legacyPopup = true;
       }
     },
     handleConfirm(model) {
@@ -441,7 +445,7 @@ export default {
       focus: null,
       back: '/',
       loading: false,
-
+      delay_js_files_radio: 'all-files',
       onData: {
         js_optimization: false,
         minify_js: false,
