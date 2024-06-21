@@ -51,7 +51,7 @@ class RapidLoad_Font
                 'job_type' => 'fonts',
                 'clear' => true,
             ) ), 'uucss_nonce', 'nonce' ),
-            'meta'  => array( 'class' => 'rapidload-clear-all', 'title' => 'RapidLoad will clear all the cached files' ),
+            'meta'  => array( 'class' => 'rapidload-clear-all', 'title' => 'RapidLoad will clear cached font files' ),
             'parent' => 'rapidload'
         ));
     }
