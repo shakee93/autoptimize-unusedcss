@@ -22,22 +22,15 @@ import Card from "components/ui/card";
 import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
 import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {useAppContext} from "../../../../context/app";
-import ApiService from "../../../../services/api";
-import {fetchData} from "../../../../store/app/appActions";
 import {useDispatch, useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, FETCH_DATA_REQUEST, RootState} from "../../../../store/app/appTypes";
 import {useToast} from "components/ui/use-toast";
 import {cn} from "lib/utils";
-import {CSSDelivery} from "app/page-optimizer/components/icons/icon-svg";
-import {Status} from "app/page-optimizer/components/audit/Setting";
-import Accordion from "components/accordion";
 import useSubmitSettings from "hooks/useSubmitSettings";
 import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
 import TooltipText from "components/ui/tooltip-text";
-import Loading from "components/loading";
-import {setCommonState} from "../../../../store/common/commonActions";
 
 const SaveChanges = () => {
 
@@ -175,8 +168,8 @@ const SaveChanges = () => {
             action_text: "Apply Optimization"
         },
         {
-            text: 'Save this for Entire Site',
-            title: 'Save these settings as entire site?',
+            text: 'Apply for Entire Site',
+            title: 'Apply these settings as entire site?',
             description: "You have made changes to your settings. Click 'Save Changes' to override entire site settings or 'Discard' to revert to the previous state.",
             onClick : () => {
                 submitSettings(false, true)

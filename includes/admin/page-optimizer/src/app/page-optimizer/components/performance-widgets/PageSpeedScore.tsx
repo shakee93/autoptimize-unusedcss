@@ -183,7 +183,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                                     await handleSwitchChange(true);
                                 }
                             }}
-                            className={`relative justify-center items-center z-1 text-sm flex pl-8 pr-5 py-2.5 whitespace-nowrap font-medium rounded-2xl ${localSwitchState ? 'text-brand-0' : 'text-brand-500'}`}
+                            className={`relative justify-center items-center z-1 text-sm flex pl-6 pr-5 py-2.5 whitespace-nowrap font-medium rounded-2xl ${localSwitchState ? 'text-brand-0' : 'text-brand-500'}`}
                         >
                             Test Mode
                         </div>

@@ -10,7 +10,7 @@ import {cn} from "lib/utils";
 import Audit from "app/page-optimizer/components/audit/Audit";
 import Footer from "app/page-optimizer/components/Footer";
 import Loading from "components/loading";
-import OptimizerInprogress from "components/Optimizer-Inprogress";
+import OptimizerInProgress from "components/optimizer-in-progress";
 import {optimizerData} from "../../store/app/appSelector";
 import {ArrowLeftToLine, ArrowRightToLine, Circle, Loader, ThumbsUp} from "lucide-react";
 import TooltipText from "components/ui/tooltip-text";
@@ -83,7 +83,7 @@ export default function PageOptimizer() {
                 savingData && 'relative overflow-hidden'
             )}>
 
-                {!loading && !showInprogress? (
+                {!loading && showInprogress? (
                     <section
                         ref={optimizerContainer}
                         className={cn(
@@ -134,8 +134,8 @@ export default function PageOptimizer() {
                             </article>
                         </>}
                     </section>
-                ) : showInprogress && !savingData ?(
-                    <OptimizerInprogress />
+                ) : !showInprogress ?(
+                    <OptimizerInProgress />
                 ) : (
                     <Loading url={url}/>
                 )}
