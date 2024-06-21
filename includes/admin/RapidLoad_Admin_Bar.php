@@ -196,6 +196,8 @@ class RapidLoad_Admin_Bar {
                     'meta'  => array( 'class' => '' ),
                 ));
 
+                do_action('rapidload/admin-bar-actions', $wp_admin_bar);
+
                 $wp_admin_bar->add_node( array(
                     'id'    => 'rapidload-clear-cache',
                     'title' => '<span class="ab-label">' . __( 'Clear CSS/JS/Font Optimizations', 'clear_optimization' ) . '</span>',

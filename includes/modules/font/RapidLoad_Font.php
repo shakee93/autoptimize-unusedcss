@@ -34,7 +34,26 @@ class RapidLoad_Font
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
+        add_action('rapidload/vanish/font', [ $this, 'vanish' ]);
+
         add_filter('rapidload/webfont/handle', [$this, 'handle_web_font_js'], 10, 2);
+
+        add_action('rapidload/admin-bar-actions', [$this, 'add_admin_clear_action']);
+    }
+
+    public function add_admin_clear_action($wp_admin_bar){
+        $wp_admin_bar->add_node( array(
+            'id'    => 'rapidload-clear-font-cache',
+            'title' => '<span class="ab-label">' . __( 'Clear Font Optimizations', 'clear_optimization' ) . '</span>',
+            //'href'  => admin_url( 'admin.php?page=rapidload&action=rapidload_purge_all' ),
+            'href'   => wp_nonce_url( add_query_arg( array(
+                '_action' => 'rapidload_purge_all',
+                'job_type' => 'fonts',
+                'clear' => true,
+            ) ), 'uucss_nonce', 'nonce' ),
+            'meta'  => array( 'class' => 'rapidload-clear-all', 'title' => 'RapidLoad will clear all the cached files' ),
+            'parent' => 'rapidload'
+        ));
     }
 
     public function handle_web_font_js($handle, $link){

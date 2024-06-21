@@ -599,6 +599,8 @@ class RapidLoad_Admin_Frontend
                         'rule' => $rule,
                         'regex' => $regex
                     ]);
+                }elseif ($job_type === "font"){
+                    do_action('rapidload/vanish/font');
                 }elseif ($url){
                     RapidLoad_DB::clear_job_data($job_type, [
                         'url' => $url
