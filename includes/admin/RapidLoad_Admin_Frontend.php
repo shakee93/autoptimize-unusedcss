@@ -599,6 +599,8 @@ class RapidLoad_Admin_Frontend
                         'rule' => $rule,
                         'regex' => $regex
                     ]);
+                }elseif ($job_type === "css"){
+                    do_action('rapidload/vanish/css');
                 }elseif ($job_type === "js"){
                     do_action('rapidload/vanish/js');
                 }elseif ($job_type === "font"){
