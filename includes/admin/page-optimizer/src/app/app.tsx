@@ -6,7 +6,7 @@ import {useAppContext} from "../context/app";
 import {ThunkDispatch} from "redux-thunk";
 import {useDispatch, useSelector} from "react-redux";
 import {AppAction, AppState, RootState} from "../store/app/appTypes";
-import {fetchData} from "../store/app/appActions";
+import {fetchData, getTestModeStatus} from "../store/app/appActions";
 import {Toaster} from "components/ui/toaster";
 import {AnimatePresence} from "framer-motion";
 import {useRootContext} from "../context/root";
@@ -54,7 +54,8 @@ const App = ({popup, _showOptimizer = false}: {
 
     useEffect(() => {
         // load initial data
-        dispatch(fetchData(options, options.optimizer_url, false))
+        dispatch(fetchData(options, options.optimizer_url, false));
+        dispatch(getTestModeStatus(options, options.optimizer_url));
         //dispatch(setCommonState('inProgress', false))
         setShowInprogress(false);
     }, [dispatch, activeReport]);

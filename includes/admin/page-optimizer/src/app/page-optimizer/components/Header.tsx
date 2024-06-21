@@ -63,8 +63,12 @@ const Header = ({ url }: { url: string}) => {
     } = useCommonDispatch()
 
     const {testMode} = useSelector((state: RootState) => state.app);
-
+    const [testModeStatus, setTestModeStatus] = useState<boolean>(false);
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
+
+    useEffect(() => {
+        setTestModeStatus(testMode?.status || false)
+    }, [testMode]);
 
 
     return (
@@ -172,16 +176,25 @@ const Header = ({ url }: { url: string}) => {
                 </UnsavedChanges>
             </div>
         </header>
-            {!loading && !showInprogress && testMode &&
-                <motion.div  initial={{ opacity: 0, y: -10 }}
-                         animate={{ opacity: 1, y: 0 }}
-                         exit={{ opacity: 0, y: -10 }}
-                         transition={{
-                             ease: 'easeInOut',
-                             duration: 0.5,
-                         }}
-                         className="z-[100000] w-full text-[13px] bg-[#D9CAEB] items-center text-center py-0.5 top-[74px] absolute"><span className="font-semibold text-purple-900">Test Mode turned on,</span> optimizations are safely previewed without affecting your live website. Perfect for experimentation and fine-tuning.</motion.div>
-            }
+            {!loading && !showInprogress && (
+                <AnimatePresence>
+                    {testModeStatus && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{
+                                ease: 'easeInOut',
+                                duration: 0.5,
+                            }}
+                            className="z-[100000] w-full text-[13px] bg-[#D9CAEB] items-center text-center py-0.5 top-[74px] absolute"
+                        >
+                            <span className="font-semibold text-purple-900">Test Mode turned on,</span>
+                            optimizations are safely previewed without affecting your live website. Perfect for experimentation and fine-tuning.
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            )}
         </>
     )
 }
