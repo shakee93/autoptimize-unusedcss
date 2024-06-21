@@ -507,7 +507,7 @@ class RapidLoad_Optimizer
 
         $titan_gear = get_option('rapidload_titan_gear');
 
-        if(isset($titan_gear) && isset($result) && !isset($result->settingsMode)){
+        if(isset($titan_gear) && $result && !isset($result->settingsMode)){
             $result->settingsMode = $titan_gear;
         }
 
@@ -561,7 +561,7 @@ class RapidLoad_Optimizer
 
         $titan_gear = get_option('rapidload_titan_gear');
 
-        if(isset($titan_gear) && isset($result) && !isset($result->settingsMode)){
+        if(isset($titan_gear) && $result && !isset($result->settingsMode)){
             $result->settingsMode = $titan_gear;
         }
 
