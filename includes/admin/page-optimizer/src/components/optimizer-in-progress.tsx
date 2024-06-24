@@ -148,7 +148,8 @@ const OptimizerInProgress = () => {
                 duration: 0.5,
             }}>
 
-            <div className='py-20 flex pt-32'>
+            <div className='py-20 pt-32'>
+                <h2 className='px-32 mb-8 font-medium text-xl text-brand-700'>Optimization Summary and Actions</h2>
                 <div className='flex gap-8 px-24'>
                     <div
                         className="mb-3.5 rounded-[40px] min-w-[500px] dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-brand-400/60 ">
