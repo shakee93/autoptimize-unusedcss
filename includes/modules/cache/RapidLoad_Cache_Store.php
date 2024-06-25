@@ -575,7 +575,11 @@ class RapidLoad_Cache_Store
         return true;
     }
 
-    private static function get_cache_dir( $url = null ) {
+    public static function get_cache_dir( $url = null ) {
+
+        if(!RapidLoad_Cache_Engine::$request_headers){
+            return RAPIDLOAD_CACHE_DIR;
+        }
 
         if ( empty ( $url ) ) {
             $url = 'http://' . RapidLoad_Cache_Engine::$request_headers['Host'] . RapidLoad_Cache_Engine::sanitize_server_input( $_SERVER['REQUEST_URI'], false );

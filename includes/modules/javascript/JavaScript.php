@@ -41,6 +41,7 @@ class JavaScript
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
+        add_action('rapidload/vanish/js', [ $this, 'vanish' ]);
 
         add_filter('rapidload/js/excluded-files', function ($list){
             if(defined('RAPIDLOAD_PAGE_OPTIMIZER_ENABLED') && RAPIDLOAD_PAGE_OPTIMIZER_ENABLED){
@@ -48,6 +49,23 @@ class JavaScript
             }
             return $list;
         }, 10);
+
+        add_action('rapidload/admin-bar-actions', [$this, 'add_admin_clear_action']);
+    }
+
+    public function add_admin_clear_action($wp_admin_bar){
+        $wp_admin_bar->add_node( array(
+            'id'    => 'rapidload-clear-js-cache',
+            'title' => '<span class="ab-label">' . __( 'Clear JS Optimizations', 'clear_optimization' ) . '</span>',
+            //'href'  => admin_url( 'admin.php?page=rapidload&action=rapidload_purge_all' ),
+            'href'   => wp_nonce_url( add_query_arg( array(
+                '_action' => 'rapidload_purge_all',
+                'job_type' => 'js',
+                'clear' => true,
+            ) ), 'uucss_nonce', 'nonce' ),
+            'meta'  => array( 'class' => 'rapidload-clear-all', 'title' => 'RapidLoad will clear cached JS files' ),
+            'parent' => 'rapidload'
+        ));
     }
 
     public function vanish() {

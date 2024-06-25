@@ -76,7 +76,7 @@ class RapidLoad_Base
 
         add_action('plugins_loaded', function (){
 
-            if (isset($_REQUEST['rapidload_preview_optimization'])) {
+            if (isset($_REQUEST['rapidload_preview'])) {
                 add_filter('determine_current_user', function (){
                     return 0;
                 }, 99);
