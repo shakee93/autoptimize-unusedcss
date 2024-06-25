@@ -3,7 +3,7 @@
     <div :class="{disableBlock: !license_information.licensed_domain}" class="max-w-[935px] mb-6">
       <div class="flex justify-between">
         <div class="flex gap-2">
-          <div class="relative z-10 flex items-center gap-1 rounded-[14px] bg-white p-1 ">
+          <div class="relative flex items-center gap-1 rounded-[14px] bg-white p-1 ">
           <span :class="test_mode?'left-[66px] w-[76px] bg-amber-500/80':'left-[4px] w-[60px] bg-slate-200'"
                 class="absolute top-1 -z-10 h-9 rounded-[14px] duration-200 "></span>
             <button @click="testMode(false)"
@@ -28,7 +28,7 @@
           <a :href="preview" target="_blank" :class="{disableBlock: !license_information.licensed_domain}">
             <div @mouseover="preview_over = true"
                  @mouseleave="preview_over = false"
-                 class="relative z-10 flex items-center gap-1 rounded-[14px] bg-white p-[11px] ">
+                 class="relative flex items-center gap-1 rounded-[14px] bg-white p-[11px] ">
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M8.55156 11.9895C8.14883 12.3923 8.14883 13.0452 8.55156 13.448C8.95429 13.8507 9.60724 13.8507 10.01 13.448L17.187 6.27091V8.59375C17.187 9.16329 17.6487 9.625 18.2183 9.625C18.7878 9.625 19.2495 9.16329 19.2495 8.59375V3.78125C19.2495 3.21171 18.7878 2.75 18.2183 2.75H13.4058C12.8362 2.75 12.3745 3.21171 12.3745 3.78125C12.3745 4.35079 12.8362 4.8125 13.4058 4.8125H15.7286L8.55156 11.9895Z"
@@ -55,7 +55,7 @@
 
         </div>
         <div class="flex gap-3">
-          <div class="relative z-10 flex items-center gap-1 rounded-[14px] bg-white p-[5px]">
+          <div class="relative flex items-center gap-1 rounded-[14px] bg-white p-[5px]">
             <a :href="support" target="_blank" :class="{disableBlock: !license_information.licensed_domain}">
               <button @click=""
                       class="bg-white hover:bg-purple doc hover:doc-hover font-medium hover:text-white cursor-pointer h-[34px] items-center text-xsmm flex transition duration-300 py-1 px-3 rounded-[14px]">
@@ -63,7 +63,7 @@
               </button>
             </a>
           </div>
-          <div class="relative z-10 flex items-center gap-1 rounded-[14px] bg-white p-[5px]">
+          <div class="relative flex items-center gap-1 rounded-[14px] bg-white p-[5px]">
             <a :href="docs" target="_blank" :class="{disableBlock: !license_information.licensed_domain}">
               <button @click=""
                       class="bg-white hover:bg-purple doc hover:doc-hover font-medium hover:text-white cursor-pointer h-[34px] items-center text-xsmm flex transition duration-300 py-1 px-3 rounded-[14px]">
@@ -76,7 +76,7 @@
                       to="/settings">
             <div @mouseover="general_over = true"
                  @mouseleave="general_over = false"
-                 class="relative z-10 flex items-center gap-1 rounded-[14px] bg-white p-[9px] mr-2">
+                 class="relative flex items-center gap-1 rounded-[14px] bg-white p-[9px] mr-2">
 
               <button>
                 <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
