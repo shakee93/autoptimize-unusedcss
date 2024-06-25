@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="max-w-[935px] mb-6">
+    <div :class="{disableBlock: !license_information.licensed_domain}" class="max-w-[935px] mb-6">
       <div class="flex justify-between">
         <div class="flex gap-2">
           <div class="relative z-10 flex items-center gap-1 rounded-[14px] bg-white p-1 ">
@@ -535,7 +535,7 @@ export default {
       });
     }
 
-    this.testMode('');
+    this.test_mode = window.uucss_global?.test_mode === "1";
 
   },
   methods:{

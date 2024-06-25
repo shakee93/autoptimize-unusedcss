@@ -27,7 +27,7 @@ import {RootState} from "../../../../store/app/appTypes";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import {TestModeLine} from "app/page-optimizer/components/icons/line-icons";
 import { useTestModeUtils } from 'hooks/testModeUtils';
-
+import { motion } from "framer-motion";
 // const Feedback = React.lazy(() =>
 //     import('app/page-optimizer/components/performance-widgets/Feedback'))
 
@@ -155,12 +155,24 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
             <div className='flex gap-2 justify-center'>
                 <div className='w-fit'>
                     <div data-tour='test-mode'
-                         className='select-none relative flex dark:bg-brand-800 py-0.5 px-1.5 rounded-2xl cursor-pointer bg-brand-0'>
-                        <div className={cn(
-                            'absolute translate-x-0 left-0.5 w-[70px] rounded-[14px] -z-1 duration-300 h-[44px] text-sm flex flex-col gap-2 px-3 py-2.5 font-medium dark:bg-brand-950 bg-brand-200/80',
-                            localSwitchState && 'w-[118px] -translate-x-1 left-[40%] bg-amber-500/80'
-                        )}>
-                        </div>
+                         className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[4px] rounded-2xl cursor-pointer bg-brand-0'>
+                        {/*<div className={cn(*/}
+                        {/*    'absolute translate-x-0 left-0.5 w-[70px] rounded-[14px] -z-1 duration-300 h-[44px] text-sm flex flex-col gap-2 px-3 py-2.5 font-medium dark:bg-brand-950 bg-brand-200/80',*/}
+                        {/*    localSwitchState && 'w-[118px] -translate-x-1 left-[40%] bg-amber-500/80'*/}
+                        {/*)}>*/}
+                        {/*</div>*/}
+
+                            <motion.span
+                                layoutId="bubble"
+                                className={cn(
+                                    'absolute w-[78px] rounded-[14px] -z-1 h-[44px] text-sm flex flex-col gap-2 px-3 py-2.5 font-medium dark:bg-brand-950 bg-brand-200/80',
+                                    localSwitchState && 'w-[110px] left-[40%] bg-amber-500/80'
+                                )}
+                                style={{borderRadius: 14}}
+                                transition={{type: "spring", bounce: 0, duration: 0.6}}
+                            />
+
+
 
                         <div
                             onClick={async () => {
@@ -189,10 +201,11 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         </div>
                     </div>
                 </div>
-                <TooltipText text={loadingStatus ? "loading" : "Preview"} >
+                <TooltipText text={loadingStatus ? "loading" : "Preview"}>
                     <div
                         onClick={() => {
-                            {!loadingStatus && window.open(options.optimizer_url + '?rapidload_preview_optimization', '_blank');}
+                            {
+                                !loadingStatus && window.open(options.optimizer_url + '?rapidload_preview_optimization', '_blank');}
                         }}
                         className={`flex gap-2 items-center text-sm h-12 rounded-[14px] bg-brand-0 dark:bg-primary dark:hover:bg-primary/90 px-4 py-2 ${
                             revisions.length > 0
