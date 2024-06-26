@@ -5,7 +5,7 @@ import { RouterLink, RouterView } from 'vue-router'
 <template>
   <div class="rapidload-wrapper mt-12 ml-8 rapidload">
 
-<!--    <header class="pb-8">-->
+    <header class="pb-8">
 <!--      <RouterLink to="/">-->
 <!--        <img alt="RapidLoad Logo" class="logo ml-4" src="@/assets/logo.svg" width="200" />-->
 <!--      </RouterLink>-->
