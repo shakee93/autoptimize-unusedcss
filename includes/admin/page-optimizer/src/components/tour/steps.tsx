@@ -14,7 +14,6 @@ const TourAuditOpen = ({audit}: { audit: Audit }) => {
     const {dispatch, openAudits, activeTab} = useCommonDispatch()
 
     useEffect(() => {
-        console.log("test")
         const isAuditOpen = openAudits.includes(audit.id);
 
         if (!isAuditOpen) {
@@ -72,20 +71,7 @@ export const AuditSteps = (audit: Audit): StepType[] => {
                     `[data-tour="audit-${key}"] .audit-content`,
                 ],
         },
-        // ...((audit.settings.length > 0 && remainingSettings.length > 0) ? [
-        //     {
-        //         selector: `[data-tour="${key}-recommended-settings"]`,
-        //         content: {
-        //             // @ts-ignore
-        //             header: `Tailored Recommendations`,
-        //             body: <>
-        //                 Discover our suggestions for features. Toggle them on or off to fit your preferences seamlessly.
-        //             </>
-        //         },
-        //         position: "top",
-        //     },
-        //
-        // ] : []),
+
         ...(audit.files.items.length > 0 ? [
             {
                 selector: `[data-tour="${key}-group-0"]`,
@@ -102,20 +88,7 @@ export const AuditSteps = (audit: Audit): StepType[] => {
             },
 
         ] : []),
-        // ...((audit.settings.length > 0 && remainingSettings.length === 0) ? [
-        //     {
-        //         selector: `[data-tour="${key}-group-0-settings"]`,
-        //         content: {
-        //             // @ts-ignore
-        //             header: `Tailored Recommendations`,
-        //             body: <>
-        //                 Discover our suggestions for features. Toggle them on or off to fit your preferences
-        //                 seamlessly.
-        //             </>
-        //         },
-        //         position: "top",
-        //     },
-        // ] : []),
+
         ...[
             {
                 selector: `[data-tour="${key}-group-0-table"]`,
@@ -130,23 +103,7 @@ export const AuditSteps = (audit: Audit): StepType[] => {
                 position: "top",
             }
         ],
-        // ...(hasControls ? [
-        //     {
-        //         selector: `[data-tour="${key}-file-action-0"]`,
-        //         content: {
-        //             // @ts-ignore
-        //             header: `Adjusting File Actions`,
-        //             body: <>
-        //                 <MousePointerClick className='mb-2'/>
-        //                 Click on the actions dropdown to change how each file behave.
-        //                 Adjust as needed to fine-tune your page's performance.
-        //             </>
-        //         },
-        //         position: "top",
-        //         resizeObservables: [`[data-radix-popper-content-wrapper]`, `[data-tour="${key}-file-action-0"]`],
-        //         highlightedSelectors: [`[data-radix-popper-content-wrapper]`, `[data-tour="${key}-file-action-0"]`],
-        //     },
-        // ] : [])
+
     ];
 
 }
@@ -248,29 +205,7 @@ const Steps: StepType[] = [
         },
         position: "right"
     },
-    // {
-    //     selector: '[data-tour="metrics"]',
-    //     content: {
-    //         // @ts-ignore
-    //         header: `Dive Deeper into Metrics`,
-    //         body: <> <MousePointerClick className='mb-2'/>
-    //             Click on individual metrics to uncover insights and get recommendations for enhancement.
-    //         </>
-    //     },
-    //     position: "right"
-    // },
-    // {
-    //     selector: '[data-tour="audits"]',
-    //     content: {
-    //         // @ts-ignore
-    //         header: `Performance Audits & Actions`,
-    //         body: <>
-    //             Discover the top audits needing attention and follow our recommended actions to enhance your page's
-    //             performance.
-    //         </>
-    //     },
-    //     position: "left"
-    // },
+
     {
         selector: '[data-tour="audit-groups"]',
         content: {
