@@ -1,4 +1,4 @@
-name: Build Titan
+name: Build Titan App
 
 on:
   push:
