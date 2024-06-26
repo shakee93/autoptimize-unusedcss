@@ -11,10 +11,10 @@ Fixes # (issue)
 - [ ] Improvement
 - [ ] Documentation update
 
-### Checklist for Dashboard
+### Dashboard
 - [ ] Build version updated 
 
-### Checklist for Optimizer
+### Optimizer
 - [ ] Build version updated
 
 ### Additional Information
