@@ -1,0 +1,33 @@
+name: Build Dashboard App
+
+on:
+  push:
+    branches:
+      - workflows-to-build-internal-apps
+  pull_request:
+    branches:
+      - workflows-to-build-internal-apps
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: |
+          cd includes/admin/frontend
+          npm install
+
+      - name: Build project
+        run: |
+          cd includes/admin/frontend
+          npm run build
+
