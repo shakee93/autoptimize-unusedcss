@@ -12,7 +12,7 @@ Fixes # (issue)
 - [ ] Documentation update
 
 ### Dashboard
-- [ ] Build version updated 
+- [ ] Build version updated
 
 ### Optimizer
 - [ ] Build version updated
