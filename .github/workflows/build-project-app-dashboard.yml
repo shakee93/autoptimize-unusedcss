@@ -1,6 +1,9 @@
 name: Build Dashboard App
 
 on:
+  push:
+    branches:
+      - workflows-to-build-internal-apps
   pull_request:
     branches:
       - workflows-to-build-internal-apps
