@@ -33,7 +33,7 @@ import BetaSpeedSetting from "app/page-optimizer/components/audit/BetaSpeedSetti
 import {cn} from "lib/utils";
 import {setCommonState} from "../../../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
-import {BoltIcon, CheckCircleIcon, ChevronRightIcon, ChevronDownIcon,  ChevronUpIcon  } from "@heroicons/react/24/solid";
+import {BoltIcon, CheckCircleIcon, ChevronRightIcon, ChevronDownIcon,  ChevronUpIcon, CheckIcon, XMarkIcon  } from "@heroicons/react/24/solid";
 import {updateSettings} from "../../../store/app/appActions";
 import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
 import { m, AnimatePresence  } from 'framer-motion';
@@ -303,24 +303,26 @@ const SpeedSettings = ({}) => {
             toastInstance = toast({
                 description: (
                     <>
-                        <div className='flex w-full gap-2 text-center items-center'>
+                        <div className='flex font-semibold w-full gap-2 text-center items-center'>
                             <InformationCircleIcon className='w-5 text-orange-600'/>
                             Do you want to turn on test mode?
 
-                            <AppButton onClick={async e => {
+                            <AppButton className="px-2" onClick={async e => {
                                 if (toastInstance) {
                                     toastInstance.dismiss();
                                 }
                                 await handleTestModeSwitchChange( true)
                             }} variant='outline'>
+                                <CheckIcon className="h-5 w-5 text-gray-500" />
                                 Yes
                             </AppButton>
-                            <AppButton onClick={e => {
+                            <AppButton className="px-2" onClick={e => {
                                 // Dismiss the toast immediately
                                 if (toastInstance) {
                                     toastInstance.dismiss();
                                 }
                             }} variant='outline'>
+                                <XMarkIcon  className="h-5 w-5 text-gray-500" />
                                 No
                             </AppButton>
 

@@ -38,7 +38,7 @@ export const useTestModeUtils = () => {
                                     <div className="flex flex-col">
                                         <span
                                             className="font-semibold">Test Mode turned {isChecked ? 'on' : 'off'} successfully</span>
-                                        <span className="font-normal text-xs text-zinc-600">Test mode changes are on live now</span>
+                                        <span className="font-normal text-xs text-zinc-600">{isChecked ? 'Changes will not affect the live site.' : 'All changes will be applied to the live site.'}</span>
                                     </div>
                                 </div>
                             ),

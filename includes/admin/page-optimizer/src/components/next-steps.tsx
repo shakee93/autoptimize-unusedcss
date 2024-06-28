@@ -3,8 +3,25 @@ import {Anchor, Circle, CircleDot} from "lucide-react";
 import {OpenInNewWindowIcon} from "@radix-ui/react-icons";
 import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
 import {Button} from "components/ui/button";
+import {useAppContext} from "../context/app";
+import { useTestModeUtils } from 'hooks/testModeUtils';
+import {ThunkDispatch} from "redux-thunk";
+import {AppAction, RootState} from "../store/app/appTypes";
+import {useDispatch} from "react-redux";
+import {setCommonState} from "../store/common/commonActions";
+import {fetchData} from "../store/app/appActions";
 
 const NextSteps = () => {
+    const {options, setShowInprogress} = useAppContext();
+    const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
+    const { handleTestModeSwitchChange } = useTestModeUtils();
+
+    const handleTestMode = async (isChecked: boolean) => {
+        await handleTestModeSwitchChange( isChecked);
+    };
+
+    const url = options?.optimizer_url;
+
     return (
         <div className="p-6 pt-4 max-w-md mx-auto">
             <h2 className="text-lg font-medium mb-1">Next Steps</h2>
@@ -19,7 +36,13 @@ const NextSteps = () => {
                     <div className='ml-8'>
                         <p className="text-gray-600 mb-3 text-sm">Identify and resolve any potential conflicts or layout issues before going live.</p>
 
-                        <Button className='gap-2'>
+                        <Button className='gap-2'
+                                onClick={() => {
+                                    {
+                                        window.open(options.optimizer_url + '?rapidload_preview_optimization', '_blank');
+                                    }
+                                }}
+                        >
                             <ArrowTopRightOnSquareIcon className='w-4'/>
                             Preview
                         </Button>
@@ -34,7 +57,14 @@ const NextSteps = () => {
                         <p className="text-gray-600 mb-3 text-sm">If your page functions well and everything looks good, it's time to go live!</p>
 
                        <div className='flex gap-2'>
-                           <Button variant='outline' className='gap-2'>
+                           <Button variant='outline' className='gap-2'
+                                   onClick={async () => {
+                                       dispatch(fetchData(options, url, true))
+                                       dispatch(setCommonState('inProgress', false))
+                                       setShowInprogress(false);
+                                       await handleTestMode(false);
+                                   }}
+                           >
                                <Circle className='w-2.5 fill-green-600 text-green-600'/>
                                Go Live
                            </Button>

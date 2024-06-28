@@ -148,7 +148,7 @@ const OptimizerInProgress = () => {
                 duration: 0.5,
             }}>
 
-            <div className='py-20 pt-32'>
+            <div className='py-20 pt-32 grid justify-center	'>
                 <h2 className='px-32 mb-8 font-medium text-xl text-brand-700'>Optimization Summary and Actions</h2>
                 <div className='flex gap-8 px-24'>
                     <div
@@ -177,7 +177,7 @@ const OptimizerInProgress = () => {
                         <div className="flex flex-col gap-3 px-10 pb-8 pt-5">
 
                             {filteredSettings?.map((setting, index: number) => (
-                                <AnimatePresence>
+                                <AnimatePresence key={index}>
                                     {index <= currentIndex && (
                                         <motion.div
                                             initial={{opacity: 0, y: 20}}

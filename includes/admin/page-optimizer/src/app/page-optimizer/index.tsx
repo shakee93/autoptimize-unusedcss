@@ -83,7 +83,7 @@ export default function PageOptimizer() {
                 savingData && 'relative overflow-hidden'
             )}>
 
-                {!loading && showInprogress? (
+                {!loading && !showInprogress? (
                     <section
                         ref={optimizerContainer}
                         className={cn(
@@ -134,7 +134,7 @@ export default function PageOptimizer() {
                             </article>
                         </>}
                     </section>
-                ) : !showInprogress ?(
+                ) : showInprogress && !savingData ?(
                     <OptimizerInProgress />
                 ) : (
                     <Loading url={url}/>
