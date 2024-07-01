@@ -131,12 +131,22 @@ const OptimizerInProgress = () => {
         return includesStatusSettings(name, ['Critical CSS']) && cssStatus?.cpcss?.status !== 'success' || includesStatusSettings(name, ['Unused CSS']) && cssStatus?.uucss?.status !== 'success'
     };
 
-    function unserialize(serializedString: any) {
 
-        const serializedData = serializedString.match(/a:\d+:{.*?}/)[0];
-        const unescapedData = serializedData.replace(/\\"/g, '"');
-        return eval("(" + unescapedData + ")");
-    }
+    const extractErrorMessage = (errorMessage: any)=> {
+        const unserializeData: any = {};
+        // Regular expression to match PHP serialized data format
+        const regex = /s:\d+:"([^"]+)";s:(\d+):"([^"]+)";/g;
+
+        let match;
+        while ((match = regex.exec(errorMessage)) !== null) {
+            const key = match[1];
+            const value = match[3];
+            unserializeData[key] = value;
+        }
+
+        return unserializeData.message;
+    };
+
 
     return (
         <m.div
@@ -200,15 +210,32 @@ const OptimizerInProgress = () => {
 
                                                 </div>
                                                 <h1 className="text-base">{setting.name.includes('Cache') ? 'Generating ' : setting.name.includes('Critical CSS') ? 'Generating above-the-fold' : (setting.name.includes('Unused CSS') ? 'Stripping off' : 'Optimizing')} {setting.name}</h1>
+
                                             </div>
+                                            {setting.name.includes('Critical CSS') && cssStatus?.cpcss?.status === 'failed'  || setting.name.includes('Unused CSS') && cssStatus?.uucss?.status === 'failed' &&
+                                                <div
+                                                    className="relative grid font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-white border border-red-300 w-fit rounded-xl items-center py-1.5 px-1.5 ml-9">
+                                                    {setting.name.includes('Critical CSS') && cssStatus?.cpcss?.status === 'failed' ? (
+                                                        <>
+                                                            <span>Failed to optimize</span>
+                                                            <span>Error: {extractErrorMessage(cssStatus?.cpcss?.error)}</span>
+                                                        </>
+                                                    ) : (setting.name.includes('Unused CSS') && cssStatus?.uucss?.status === 'failed' && (
+                                                        <>
+                                                            <span>Failed to optimize</span>
+                                                            <span>Error: {extractErrorMessage(cssStatus?.uucss?.error)}</span>
+                                                        </>
+                                                    ))}
+
+                                                </div>
+                                            }
+
                                         </motion.div>
                                     )}
 
                                 </AnimatePresence>
                             ))}
                         </div>
-
-
 
 
                     </div>
