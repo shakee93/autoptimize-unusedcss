@@ -9,7 +9,7 @@ export default defineConfig((configEnv) => {
     const generateSourceMaps = process.env.GENERATE_SOURCE_MAPS === 'true';
     const outDir = generateSourceMaps ? 'dist-debug' : 'dist';
     return {
-        base: process.env.NODE_ENV === "development" ? "/" : "/__dynamic_base__/",
+        base: "/",
         plugins: [
             react(),
             dynamicBase({
