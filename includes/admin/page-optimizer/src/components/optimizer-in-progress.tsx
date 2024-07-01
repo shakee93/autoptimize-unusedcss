@@ -16,7 +16,7 @@ import {m, AnimatePresence, motion} from "framer-motion";
 import {Button} from "components/ui/button";
 import {cn} from "lib/utils";
 import NextSteps from "components/next-steps";
-
+import Confetti from 'react-confetti'
 
 const OptimizerInProgress = () => {
 
@@ -31,6 +31,7 @@ const OptimizerInProgress = () => {
     const intervalRef = useRef<NodeJS.Timer | null>(null);
 
     const [checkCircleCount, setCheckCircleCount] = useState(0);
+    const [confettiStatus, setConfettiStatus] = useState(false);
 
     const filteredSettings = settings?.filter(setting => {
         return setting.inputs.some(input => input.control_type === "checkbox" && input.value === true);
@@ -113,16 +114,21 @@ const OptimizerInProgress = () => {
             }
         }
         setCheckCircleCount(count);
+
+
     }, [filteredSettings, currentIndex]);
 
 
     useEffect(() => {
         if (checkCircleCount == filteredSettings?.length) {
+            setConfettiStatus(true)
+
             const timer = setTimeout(() => {
+                setConfettiStatus(false);
                 // setShowInprogress(false);
                 // dispatch(setCommonState('inProgress', false))
                 // dispatch(fetchData(options, url, true));
-            }, 3000);
+            }, 5000);
             return () => clearTimeout(timer);
         }
     }, [checkCircleCount]);
@@ -149,11 +155,18 @@ const OptimizerInProgress = () => {
             }}>
 
             <div className='py-20 pt-32 grid justify-center	'>
-                <h2 className='px-32 mb-8 font-medium text-xl text-brand-700'>Optimization Summary and Actions</h2>
+                <h2 className='px-32 mb-8 font-medium text-xl text-brand-700'> {(checkCircleCount == filteredSettings?.length) ? "🎉 Congratulations, Optimization Completed!" : "Optimization Summary and Actions"}   </h2>
                 <div className='flex gap-8 px-24'>
                     <div
                         className="mb-3.5 rounded-[40px] min-w-[500px] dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-brand-400/60 ">
 
+                        {(checkCircleCount == filteredSettings?.length) &&
+                            <Confetti
+                                numberOfPieces={150}
+                                tweenDuration={3000}
+                                recycle={confettiStatus}
+                            />
+                        }
 
                         <div className="inline-block border-b w-full">
                             <div className="space-y-5 px-10 py-6">
@@ -161,7 +174,7 @@ const OptimizerInProgress = () => {
                         <span
                             className="inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50">
                             {checkCircleCount == filteredSettings?.length ?
-                                (<CheckCircleIcon className="w-7 h-7 fill-green-600"/>) : (
+                                <><CheckCircleIcon className="w-7 h-7 fill-green-600"/></> : (
                                     <Loader className='w-5 animate-spin'/>
                                 )}
                         </span>
@@ -214,7 +227,7 @@ const OptimizerInProgress = () => {
                     </div>
                     <div className='flex flex-col justify-start items-start '>
 
-                        <NextSteps/>
+                        <NextSteps status={checkCircleCount == filteredSettings?.length}/>
 
                         {/*<div>*/}
                         {/*    <Loading className={'py-4 text-brand-500'} customMessage={"Analyzing in"} url={url}*/}
