@@ -14,7 +14,7 @@ export default defineConfig((configEnv) => {
         plugins: [
             react(),
             dynamicBase({
-                publicPath: 'window.rapidload_optimizer ? window.rapidload_optimizer.page_optimizer_package_base | "/"',
+                publicPath: '/',
                 transformIndexHtml:  false
             })
         ],
