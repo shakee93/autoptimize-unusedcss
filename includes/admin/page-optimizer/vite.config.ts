@@ -8,13 +8,12 @@ export default defineConfig((configEnv) => {
     const isDevelopment = configEnv.mode === "development";
     const generateSourceMaps = process.env.GENERATE_SOURCE_MAPS === 'true';
     const outDir = generateSourceMaps ? 'dist-debug' : 'dist';
-    const base = process.env.BASE_PATH || "/";
     return {
-        base: process.env.NODE_ENV === "production" ? "/__dynamic_base__/" : "/",
+        base: process.env.NODE_ENV === "development" ? "/" : "/__dynamic_base__/",
         plugins: [
             react(),
             dynamicBase({
-                publicPath: '',
+                publicPath: 'window.rapidload_optimizer.page_optimizer_package_base',
                 transformIndexHtml:  false
             })
         ],
