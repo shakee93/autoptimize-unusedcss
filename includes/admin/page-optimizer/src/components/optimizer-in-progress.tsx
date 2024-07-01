@@ -225,23 +225,31 @@ const OptimizerInProgress = () => {
                                                 <h1 className="text-base">{setting.name.includes('Cache') ? 'Generating ' : setting.name.includes('Critical CSS') ? 'Generating above-the-fold' : (setting.name.includes('Unused CSS') ? 'Stripping off' : 'Optimizing')} {setting.name}</h1>
 
                                             </div>
-                                            {setting.name.includes('Critical CSS') && cssStatus?.cpcss?.status === 'failed'  || setting.name.includes('Unused CSS') && cssStatus?.uucss?.status === 'failed' &&
+                                            {(setting.name.includes('Critical CSS') && cssStatus?.cpcss?.status === 'failed') ||
+                                            (setting.name.includes('Unused CSS') && cssStatus?.uucss?.status === 'failed') ? (
                                                 <div
-                                                    className="relative grid font-medium text-sm hover:bg-brand-100 dark:bg-brand-900 bg-white border border-red-300 w-fit rounded-xl items-center py-1.5 px-1.5 ml-9">
+                                                    className="relative grid font-medium text-sm dark:bg-brand-900 bg-red-400/10 border-2 border-red-500 w-fit rounded-xl items-center py-1.5 px-1.5 ml-9"
+                                                >
                                                     {setting.name.includes('Critical CSS') && cssStatus?.cpcss?.status === 'failed' ? (
                                                         <>
-                                                            <span>Failed to optimize</span>
-                                                            <span>Error: {extractErrorMessage(cssStatus?.cpcss?.error)}</span>
+                                                            <span className="flex items-center gap-1">
+                                                                <FaceFrownIcon className="h-6 w-6 text-red-500 " />
+                                                                Failed to Optimize</span>
+                                                            <span className="text-gray-500 ml-7">Error: {extractErrorMessage(cssStatus?.cpcss?.error)}</span>
                                                         </>
-                                                    ) : (setting.name.includes('Unused CSS') && cssStatus?.uucss?.status === 'failed' && (
-                                                        <>
-                                                            <span>Failed to optimize</span>
-                                                            <span>Error: {extractErrorMessage(cssStatus?.uucss?.error)}</span>
-                                                        </>
-                                                    ))}
-
+                                                    ) : (
+                                                        setting.name.includes('Unused CSS') &&
+                                                        cssStatus?.uucss?.status === 'failed' && (
+                                                            <>
+                                                                <span className="flex items-center gap-1">
+                                                                <FaceFrownIcon className="h-6 w-6 text-red-500" />
+                                                                    Failed to Optimize</span>
+                                                                <span className="text-gray-500 ml-7">Error: {extractErrorMessage(cssStatus?.uucss?.error)}</span>
+                                                            </>
+                                                        )
+                                                    )}
                                                 </div>
-                                            }
+                                            ) : null}
 
                                         </motion.div>
                                     )}
