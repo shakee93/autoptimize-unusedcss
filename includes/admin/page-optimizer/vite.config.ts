@@ -14,7 +14,7 @@ export default defineConfig((configEnv) => {
         plugins: [
             react(),
             dynamicBase({
-                publicPath: '/',
+                publicPath: '"/"',
                 transformIndexHtml:  false
             })
         ],
