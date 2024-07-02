@@ -10,11 +10,11 @@
     <script>
       if(!window.rapidload_optimizer){
         window.rapidload_optimizer = {
-          page_optimizer_package_base : "https://autoptimize-unusedcss.vercel.app"
+          page_optimizer_package_base : window.location.href.toString().replace(/\/+$/, '')
         }
       }
       if(window.rapidload_optimizer && !window.rapidload_optimizer.page_optimizer_package_base){
-        window.rapidload_optimizer.page_optimizer_package_base = "https://autoptimize-unusedcss.vercel.app"
+        window.rapidload_optimizer.page_optimizer_package_base =  window.location.href.toString().replace(/\/+$/, '')
       }
      // window.rapidload_optimizer = {
      //   "load_optimizer": "1",
