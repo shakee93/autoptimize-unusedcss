@@ -3,19 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="manifest" href="/__dynamic_base__/manifest.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RapidLoad Page Optimizer</title>
 
     <script>
-      if(!window.rapidload_optimizer){
-        window.rapidload_optimizer = {
-          page_optimizer_package_base : "/"
-        }
-      }
-      if(window.rapidload_optimizer && !window.rapidload_optimizer.page_optimizer_package_base){
-        window.rapidload_optimizer.page_optimizer_package_base = "/"
-      }
+      window.rapidload_optimizer.page_optimizer_package_base = "/"
      // window.rapidload_optimizer = {
      //   "load_optimizer": "1",
      //         "page_optimizer_package_base": "http://rapidload.local/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer/dist",
@@ -110,6 +103,11 @@
       }
 
     </style>
+    <script type="module" crossorigin src="/__dynamic_base__/assets/index.js"></script>
+    <link rel="modulepreload" crossorigin href="/__dynamic_base__/assets/core-vendor.js">
+    <link rel="modulepreload" crossorigin href="/__dynamic_base__/assets/vendor.js">
+    <link rel="modulepreload" crossorigin href="/__dynamic_base__/assets/animations.js">
+    <link rel="stylesheet" href="/__dynamic_base__/assets/index.css">
   </head>
   <body>
 
@@ -117,7 +115,7 @@
     <div id='popup'>
       hover me to show popup
     </div>
-    <script type="module" src="/src/main.tsx"></script>
+    
     <script>
 
       document.addEventListener('DOMContentLoaded', () => {
