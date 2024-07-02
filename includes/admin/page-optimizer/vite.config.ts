@@ -13,7 +13,7 @@ export default defineConfig((configEnv) => {
         plugins: [
             react(),
             dynamicBase({
-                publicPath: 'window.rapidload_optimizer.page_optimizer_package_base',
+                publicPath: process.env.VITE_PUBLIC_PATH || '/',
                 transformIndexHtml:  false
             })
         ],
