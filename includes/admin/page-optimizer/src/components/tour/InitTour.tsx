@@ -82,7 +82,12 @@ const InitTour = ({ mode }: {
         if (activeMetric) {
             commonDispatch(setCommonState('activeMetric', null))
         }
-
+        if(currentStep === 6){
+            commonDispatch(setCommonState('activeTab', 'configurations'))
+        }
+        if(currentStep === 10){
+            commonDispatch(setCommonState('activeTab', 'opportunities'))
+        }
     }, [currentStep])
 
 
