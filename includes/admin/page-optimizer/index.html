@@ -122,7 +122,6 @@
       function loadRL() {
         let container = document.getElementById('rapidload-page-optimizer')
         let popup = document.getElementById('popup')
-        console.log(window.RapidLoadOptimizer)
         new window.RapidLoadOptimizer({
           container,
           popup,
@@ -136,6 +135,6 @@
         });
       }
     </script>
-    <script type="module" onload="() => { loadRL() }" src="/src/main.tsx"></script>
+    <script type="module" onload="loadRL()" src="/src/main.tsx"></script>
   </body>
 </html>
