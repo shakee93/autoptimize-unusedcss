@@ -30,9 +30,10 @@
     "yarn": ">=1.22.5"
   },
   "scripts": {
-    "start": "vite",
-    "build": "node build.js",
+    "dev": "vite",
+    "build": "vite build",
     "test": "jest",
+    "preview": "vite preview",
     "prepare": "tw-patch",
     "version": "npm run build",
     "release:beta": "npm version prerelease --preid=beta",

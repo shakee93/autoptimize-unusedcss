@@ -1029,3 +1029,7 @@ a.toplevel_page_rapidload img{
     font-weight: 400;
     color: #656565;
 }
+
+#wp-admin-bar-rapidload .rl-icon img{
+    width: 16px;
+}

@@ -44,6 +44,8 @@ class CriticalCSS
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
+        add_action('rapidload/vanish/css', [ $this, 'vanish' ]);
+
         add_action('rapidload/job/purge', [$this, 'cache_cpcss'], 10, 2);
 
         add_action('rapidload/job/handle', [$this, 'cache_cpcss'], 10, 2);
