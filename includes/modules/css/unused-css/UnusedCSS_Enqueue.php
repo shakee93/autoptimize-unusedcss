@@ -163,11 +163,11 @@ class UnusedCSS_Enqueue
 
                         $search_link = apply_filters('uucss/enqueue/path-based-search/link', $url_parts['path']);
 
-                        $file_missing_error .= (":" . $search_link);
-
                         $result = preg_grep('~' . $search_link . '~', array_column( $this->files, 'original' ));
 
                         $key = isset($result) && !empty($result) ? key($result) : null;
+
+                        $file_missing_error .= (":" . $search_link . " - key - " . $key);
 
                     }
 
