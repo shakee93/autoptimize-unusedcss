@@ -117,27 +117,25 @@
     <div id='popup'>
       hover me to show popup
     </div>
-    <script type="module" src="/src/main.tsx"></script>
-    <script>
 
-      document.addEventListener('DOMContentLoaded', () => {
+    <script>
+      function loadRL() {
         let container = document.getElementById('rapidload-page-optimizer')
         let popup = document.getElementById('popup')
         console.log(window.RapidLoadOptimizer)
-        setTimeout(()=>{
-          new window.RapidLoadOptimizer({
-            container,
-            popup,
-            showOptimizer: false,
-            // global: true,
-            // mode: 'onboard',
-            modeData: {
-              connect_url: 'http://localhost:5173/',
-              target: '_blank'
-            },
-          });
-        },1000)
-      })
+        new window.RapidLoadOptimizer({
+          container,
+          popup,
+          showOptimizer: false,
+          // global: true,
+          // mode: 'onboard',
+          modeData: {
+            connect_url: 'http://localhost:5173/',
+            target: '_blank'
+          },
+        });
+      }
     </script>
+    <script type="module" onload="loadRL" src="/src/main.tsx"></script>
   </body>
 </html>
