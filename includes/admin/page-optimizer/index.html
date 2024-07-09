@@ -8,14 +8,6 @@
     <title>RapidLoad Page Optimizer</title>
 
     <script>
-      if(!window.rapidload_optimizer){
-        window.rapidload_optimizer = {
-          page_optimizer_package_base : window.location.href.toString().replace(/\/+$/, '')
-        }
-      }
-      if(window.rapidload_optimizer && !window.rapidload_optimizer.page_optimizer_package_base){
-        window.rapidload_optimizer.page_optimizer_package_base =  window.location.href.toString().replace(/\/+$/, '')
-      }
      // window.rapidload_optimizer = {
      //   "load_optimizer": "1",
      //         "page_optimizer_package_base": "http://rapidload.local/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer/dist",
@@ -123,20 +115,17 @@
       document.addEventListener('DOMContentLoaded', () => {
         let container = document.getElementById('rapidload-page-optimizer')
         let popup = document.getElementById('popup')
-        console.log(window.RapidLoadOptimizer)
-        setTimeout(()=>{
-          new window.RapidLoadOptimizer({
-            container,
-            popup,
-            showOptimizer: false,
-            // global: true,
-            // mode: 'onboard',
-            modeData: {
-              connect_url: 'http://localhost:5173/',
-              target: '_blank'
-            },
-          });
-        },10000)
+        new window.RapidLoadOptimizer({
+          container,
+          popup,
+          showOptimizer: false,
+          // global: true,
+          // mode: 'onboard',
+          modeData: {
+            connect_url: 'http://localhost:5173/',
+            target: '_blank'
+          },
+        });
       })
     </script>
   </body>
