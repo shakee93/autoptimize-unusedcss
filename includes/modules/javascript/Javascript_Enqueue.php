@@ -403,6 +403,10 @@ class Javascript_Enqueue
                 return;
             }
 
+            if(isset($link->id) && $this->str_contains($link->id,"rapidload-")){
+                return;
+            }
+
             if(!empty($this->default_inline_js_exclusion_pattern) && preg_match( "/({$this->default_inline_js_exclusion_pattern})/msi", $inner_text )){
                 return;
             }
