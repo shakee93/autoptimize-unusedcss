@@ -96,26 +96,26 @@ export class RapidLoadOptimizer {
                 }: initRapidLoadOptimizerProps) {
         const optimizer = createRoot(container);
         optimizer.render(
-               <ApplicationErrorBoundary fallback={<ApplicationCrashed/>} onError={logError}>
+            <ApplicationErrorBoundary fallback={<ApplicationCrashed/>} onError={logError}>
 
-                   <Providers
-                       mode={mode}
-                       modeData={modeData}
-                       popup={popup}
-                       global={global}
-                       showOptimizer={showOptimizer} >
-                       {popup && (
-                           <ShadowRoot node={popup} styles={stylesUrl}>
-                               <SpeedPopover/>
-                           </ShadowRoot>
-                       )}
+                <Providers
+                    mode={mode}
+                    modeData={modeData}
+                    popup={popup}
+                    global={global}
+                    showOptimizer={showOptimizer} >
+                    {popup && (
+                        <ShadowRoot node={popup} styles={stylesUrl}>
+                            <SpeedPopover/>
+                        </ShadowRoot>
+                    )}
 
-                       <ShadowRoot styles={stylesUrl}>
-                           <App _showOptimizer={showOptimizer} popup={popup}/>
-                       </ShadowRoot>
-                   </Providers>
+                    <ShadowRoot styles={stylesUrl}>
+                        <App _showOptimizer={showOptimizer} popup={popup}/>
+                    </ShadowRoot>
+                </Providers>
 
-               </ApplicationErrorBoundary>
+            </ApplicationErrorBoundary>
         );
     }
 
@@ -178,4 +178,3 @@ function replaceParentWithDiv(childElement: HTMLElement) {
 
     return newDiv
 }
-

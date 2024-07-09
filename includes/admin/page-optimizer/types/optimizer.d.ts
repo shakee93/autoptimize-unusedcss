@@ -208,7 +208,10 @@ type ReportType = 'mobile' | 'desktop'
 
 interface CSSJobStatus {
     status: string;
-    error: string;
+    error: {
+        code: number;
+        message: string;
+    };
 }
 
 interface CSSStatusResponse {

@@ -153,6 +153,31 @@ const OptimizerInProgress = () => {
         return unserializeData.message;
     };
 
+    const settingsMap = {
+        'Unused CSS': 'Stripping off Unused CSS',
+        'Delay Javascript': 'Delaying JavaScript files',
+        'Lazy Load Iframes': 'Lazy-loading Iframes',
+        'Serve next-gen Images': 'Serving Images in Next-Gen formats(AVIF, WEBP)',
+        'RapidLoad CDN': 'Initializing RapidLoad CDN',
+        'Critical CSS': 'Generating Critical CSS',
+        'Self Host Google Fonts': 'Self-Hosting Google Fonts',
+        'Defer Javascript': 'Deferring JavaScript files',
+        'Lazy Load Images': 'Lazy-Loading Images',
+        'Minify CSS': 'Minifying CSS',
+        'Minify Javascript': 'Minifying JavaScript',
+        'Page Cache': 'Generating Page Cache',
+        'Exclude Above-the-fold Images from Lazy Load': 'Excluding Above-the-Fold Images from Lazy Load',
+        'Add Width and Height Attributes': 'Adding Width and Height attributes for Images',
+    };
+
+    const getSettings = (name: any) => {
+        for (const [key, value] of Object.entries(settingsMap)) {
+            if (name.includes(key)) {
+                return value;
+            }
+        }
+        return null;
+    };
 
     return (
         <m.div
@@ -222,8 +247,10 @@ const OptimizerInProgress = () => {
                                                     </React.Fragment>
 
                                                 </div>
-                                                <h1 className="text-base">{setting.name.includes('Cache') ? 'Generating ' : setting.name.includes('Critical CSS') ? 'Generating above-the-fold' : (setting.name.includes('Unused CSS') ? 'Stripping off' : 'Optimizing')} {setting.name}</h1>
 
+                                                <h1 className="text-base">
+                                                    {getSettings(setting.name)}
+                                                </h1>
                                             </div>
                                             {(setting.name.includes('Critical CSS') && cssStatus?.cpcss?.status === 'failed') ||
                                             (setting.name.includes('Unused CSS') && cssStatus?.uucss?.status === 'failed') ? (
@@ -235,7 +262,7 @@ const OptimizerInProgress = () => {
                                                             <span className="flex items-center gap-1">
                                                                 <FaceFrownIcon className="h-6 w-6 text-red-500 " />
                                                                 Failed to Optimize</span>
-                                                            <span className="text-gray-500 ml-7">Error: {extractErrorMessage(cssStatus?.cpcss?.error)}</span>
+                                                            <span className="text-gray-500 ml-7">Code: {cssStatus?.cpcss?.error?.code} {cssStatus?.cpcss?.error?.message}</span>
                                                         </>
                                                     ) : (
                                                         setting.name.includes('Unused CSS') &&
@@ -244,7 +271,7 @@ const OptimizerInProgress = () => {
                                                                 <span className="flex items-center gap-1">
                                                                 <FaceFrownIcon className="h-6 w-6 text-red-500" />
                                                                     Failed to Optimize</span>
-                                                                <span className="text-gray-500 ml-7">Error: {extractErrorMessage(cssStatus?.uucss?.error)}</span>
+                                                                <span className="text-gray-500 ml-7">Code: {cssStatus?.uucss?.error?.code} {cssStatus?.uucss?.error?.message}</span>
                                                             </>
                                                         )
                                                     )}
