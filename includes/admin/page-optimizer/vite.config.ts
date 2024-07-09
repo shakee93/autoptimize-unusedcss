@@ -14,7 +14,7 @@ export default defineConfig((configEnv) => {
             react(),
             dynamicBase({
                 publicPath: 'window.rapidload_optimizer.page_optimizer_package_base',
-                transformIndexHtml:  true
+                transformIndexHtml:  false
             })
         ],
         define: {
