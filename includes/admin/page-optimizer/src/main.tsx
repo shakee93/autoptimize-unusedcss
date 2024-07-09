@@ -138,10 +138,6 @@ window.RapidLoadOptimizer = RapidLoadOptimizer
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    if(!window?.rapidload_optimizer?.page_optimizer_package_base){
-        window.rapidload_optimizer.page_optimizer_package_base = "/"
-    }
-
     if (window?.rapidload_optimizer?.load_optimizer) {
 
         // page optimizer container
