@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useCallback, useRef} from 'react';
-import {CheckCircleIcon} from "@heroicons/react/24/solid";
+import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import {Loader, Monitor, RefreshCw} from "lucide-react";
 import {FaceSmileIcon, FaceFrownIcon, QueueListIcon, ArrowPathRoundedSquareIcon} from "@heroicons/react/24/outline";
 import {useAppContext} from "../context/app";
@@ -17,6 +17,9 @@ import {Button} from "components/ui/button";
 import {cn} from "lib/utils";
 import NextSteps from "components/next-steps";
 import Confetti from 'react-confetti'
+import ApiService from "../services/api";
+import {toast} from "./ui/use-toast";
+import {Label} from "./ui/label";
 
 const OptimizerInProgress = () => {
 
@@ -29,6 +32,7 @@ const OptimizerInProgress = () => {
     const {inProgress, settingsMode} = useCommonDispatch()
     const loadingStatuses = ['failed', 'queued', 'processing'];
     const intervalRef = useRef<NodeJS.Timer | null>(null);
+    const [loadingRegen, setLoadingRegen] = useState(false)
 
     const [checkCircleCount, setCheckCircleCount] = useState(0);
     const [confettiStatus, setConfettiStatus] = useState(false);
@@ -179,6 +183,46 @@ const OptimizerInProgress = () => {
         return null;
     };
 
+
+    const buttonSubmit = async (regen : any) => {
+
+        setLoadingRegen(true)
+
+            const query = 'action='+ regen +'&job_type=url&clear=false&immediate=true&url='+ url
+            try {
+
+                const api = new ApiService(options, query)
+                await api.post()
+
+                toast({
+                    description: <div className='flex w-full gap-2 text-center'>Your action is successful <CheckCircleIcon className='w-5 text-green-600'/></div>,
+                })
+
+            } catch (error: any) {
+
+                toast({
+                    description: <div className='flex w-full gap-2 text-center'>{error.message} <XCircleIcon className='w-5 text-red-600'/></div>,
+                })
+            }
+        setLoadingRegen(false)
+
+    }
+
+    const cssErrors = {
+        'Critical CSS': {
+            status: cssStatus?.cpcss?.status,
+            error: cssStatus?.cpcss?.error,
+            regenAction: 'cpcss_purge_url',
+            buttonText: 'Regenerate Critical CSS',
+        },
+        'Unused CSS': {
+            status: cssStatus?.uucss?.status,
+            error: cssStatus?.uucss?.error,
+            regenAction: 'rapidload_purge_all',
+            buttonText: 'Regenerate Unused CSS',
+        },
+    };
+
     return (
         <m.div
             initial={{opacity: 0}}
@@ -193,7 +237,7 @@ const OptimizerInProgress = () => {
                 <h2 className='px-32 mb-8 font-medium text-xl text-brand-700'> {(checkCircleCount == filteredSettings?.length) ? "🎉 Congratulations, Optimization Completed!" : "Optimization Summary and Actions"}   </h2>
                 <div className='flex gap-8 px-24'>
                     <div
-                        className="mb-3.5 rounded-[40px] min-w-[500px] dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-brand-400/60 ">
+                        className="mb-3.5 rounded-[40px] min-w-[580px] dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-brand-400/60 ">
 
                         {(checkCircleCount == filteredSettings?.length) &&
                             <Confetti
@@ -236,7 +280,15 @@ const OptimizerInProgress = () => {
                                                     className="inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50">
                                                     <React.Fragment key={index}>
                                                         {checkStatusCondition(setting.name) ? (
-                                                            <Loader className='w-5 animate-spin'/>
+                                                            // <Loader className='w-5 animate-spin'/>
+                                                            (['Critical CSS', 'Unused CSS'] as CssErrorKeys[]).some((key) =>
+                                                                setting.name.includes(key) && cssErrors[key].status === 'failed'
+                                                            ) ? (
+                                                                <XCircleIcon className='w-7 h-7 fill-red-600'/>
+                                                            ) : (
+                                                                <Loader className='w-5 animate-spin'/>
+                                                            )
+                                                            
                                                         ) : (
                                                             index <= currentIndex ? (
                                                                 <CheckCircleIcon className="w-7 h-7 fill-green-600"/>
@@ -252,31 +304,61 @@ const OptimizerInProgress = () => {
                                                     {getSettings(setting.name)}
                                                 </h1>
                                             </div>
-                                            {(setting.name.includes('Critical CSS') && cssStatus?.cpcss?.status === 'failed') ||
-                                            (setting.name.includes('Unused CSS') && cssStatus?.uucss?.status === 'failed') ? (
-                                                <div
-                                                    className="relative grid font-medium text-sm dark:bg-brand-900 bg-red-400/10 border-2 border-red-500 w-fit rounded-xl items-center py-1.5 px-1.5 ml-9"
-                                                >
-                                                    {setting.name.includes('Critical CSS') && cssStatus?.cpcss?.status === 'failed' ? (
-                                                        <>
-                                                            <span className="flex items-center gap-1">
-                                                                <FaceFrownIcon className="h-6 w-6 text-red-500 " />
-                                                                Failed to Optimize</span>
-                                                            <span className="text-gray-500 ml-7">Code: {cssStatus?.cpcss?.error?.code} {cssStatus?.cpcss?.error?.message}</span>
-                                                        </>
-                                                    ) : (
-                                                        setting.name.includes('Unused CSS') &&
-                                                        cssStatus?.uucss?.status === 'failed' && (
-                                                            <>
-                                                                <span className="flex items-center gap-1">
-                                                                <FaceFrownIcon className="h-6 w-6 text-red-500" />
-                                                                    Failed to Optimize</span>
-                                                                <span className="text-gray-500 ml-7">Code: {cssStatus?.uucss?.error?.code} {cssStatus?.uucss?.error?.message}</span>
-                                                            </>
-                                                        )
-                                                    )}
-                                                </div>
-                                            ) : null}
+                                            {(['Critical CSS', 'Unused CSS'] as CssErrorKeys[]).map((key) => (
+                                                setting.name.includes(key) && cssErrors[key].status === 'failed' && (
+                                                    <div
+                                                        className="relative grid font-medium text-sm dark:bg-brand-900 bg-red-400/10 border-2 border-red-500 w-fit rounded-xl items-center py-1.5 px-1.5 ml-9"
+                                                        key={key}
+                                                    >
+                                                    <span className="flex items-center gap-1">
+                                                        <FaceFrownIcon className="h-6 w-6 text-red-500"/>
+                                                        Failed to generate {key.toLowerCase()}
+                                                    </span>
+                                                        <span className="text-gray-500 ml-7">
+                                                            {cssErrors[key].error?.code} {cssErrors[key].error?.message} errors when crawling your webpage
+                                                        </span>
+                                                        <div className='flex justify-end text-left w-full mt-1 gap-2'>
+                                                            {/*{cssErrors[key].error?.code === 403 && (*/}
+                                                            {/*        <Button*/}
+                                                            {/*            disabled={loadingRegen}*/}
+                                                            {/*            className='flex gap-2 rounded-xl h-7 text-gray-500 text-xs'*/}
+                                                            {/*            onClick={e => buttonSubmit(cssErrors[key].regenAction)}*/}
+                                                            {/*            variant='outline'*/}
+                                                            {/*        >*/}
+                                                            {/*            {loadingRegen &&*/}
+                                                            {/*                <Loader className='w-4 animate-spin -ml-1'/>}*/}
+                                                            {/*            Learn more*/}
+                                                            {/*        </Button>*/}
+                                                            {/*)}*/}
+
+                                                                <Button
+                                                                    disabled={loadingRegen}
+                                                                    className='flex gap-2 rounded-xl h-7 text-gray-500 text-xs'
+                                                                    onClick={e => window.open('https://docs.rapidload.io/', '_blank')}
+                                                                    variant='outline'
+                                                                >
+                                                                    {loadingRegen &&
+                                                                        <Loader className='w-4 animate-spin -ml-1'/>}
+                                                                    Learn more
+                                                                </Button>
+
+                                                            {cssErrors[key].error?.code === 408 && (
+                                                                    <Button
+                                                                        disabled={loadingRegen}
+                                                                        className='flex gap-2 rounded-xl h-7 text-gray-500 text-xs'
+                                                                        onClick={e => buttonSubmit(cssErrors[key].regenAction)}
+                                                                        variant='outline'
+                                                                    >
+                                                                        {loadingRegen &&
+                                                                            <Loader className='w-4 animate-spin -ml-1'/>}
+                                                                        {cssErrors[key].buttonText}
+                                                                    </Button>
+                                                            )}
+                                                        </div>
+
+                                                    </div>
+                                                )
+                                            ))}
 
                                         </motion.div>
                                     )}

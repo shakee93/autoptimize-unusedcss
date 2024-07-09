@@ -254,4 +254,4 @@ interface RapidLoadSetOptimizerEvent extends Event {
     };
 }
 
-
+type CssErrorKeys = 'Critical CSS' | 'Unused CSS';
