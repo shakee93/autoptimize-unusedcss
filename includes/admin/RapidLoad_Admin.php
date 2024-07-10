@@ -513,6 +513,12 @@ class RapidLoad_Admin
 
         }
 
+        if(isset($_REQUEST['uucss_exclude_files_from_minify_js'])){
+
+            $options['uucss_exclude_files_from_minify_js'] = $_REQUEST['uucss_exclude_files_from_minify_js'];
+
+        }
+
         // update general settings
 
         if(isset($_REQUEST['uucss_query_string'])){
