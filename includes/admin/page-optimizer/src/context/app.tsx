@@ -52,7 +52,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
     const [mounted, setMounted] = useState<boolean>(false);
     const [sheetsHidden, setSheetsHidden]= useState(false)
     const [openAudits, setOpenAudits] = useState<string[]>([]);
-    const [options, setOptions] = useState(window?.rapidload_optimizer ? window.rapidload_optimizer : {
+    const [options, setOptions] = useState((window?.rapidload_optimizer?.rapidload_version) ? window.rapidload_optimizer : {
         optimizer_url: 'https://rapidload.io/',
         ajax_url: '',
         page_optimizer_base: '',

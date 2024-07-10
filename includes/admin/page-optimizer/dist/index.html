@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" >
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" >
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/__dynamic_base__/manifest.webmanifest" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RapidLoad Page Optimizer</title>
 
     <script>
-      window.rapidload_page_optimizer_package_base = window.location.origin ;
+      window.rapidload_optimizer = {
+        page_optimizer_package_base: window.location.origin + "/__dynamic_base__"
+      };
+
      // window.rapidload_optimizer = {
      //   "load_optimizer": "1",
      //         "page_optimizer_package_base": "http://rapidload.local/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer/dist",
@@ -103,42 +106,19 @@
       }
 
     </style>
-    
-    
-    
-    
-    
-    <script>
-(function(){
-var preloads = [{"parentTagName":"head","tagName":"link","attrs":{"rel":"manifest","href":"/manifest.webmanifest"}},{"parentTagName":"head","tagName":"script","attrs":{"type":"module","crossorigin":"","src":"/assets/index.js"}},{"parentTagName":"head","tagName":"link","attrs":{"rel":"modulepreload","crossorigin":"","href":"/assets/core-vendor.js"}},{"parentTagName":"head","tagName":"link","attrs":{"rel":"modulepreload","crossorigin":"","href":"/assets/vendor.js"}},{"parentTagName":"head","tagName":"link","attrs":{"rel":"modulepreload","crossorigin":"","href":"/assets/animations.js"}},{"parentTagName":"head","tagName":"link","attrs":{"rel":"stylesheet","href":"/assets/index.css"}}];
-function setAttribute(target, attrs) {
-for (var key in attrs) {
-  target.setAttribute(key, attrs[key]);
-}
-return target;
-};
-for(var i = 0; i < preloads.length; i++){
-var item = preloads[i]
-var childNode = document.createElement(item.tagName);
-setAttribute(childNode, item.attrs)
-if( window.rapidload_page_optimizer_package_base) {
-  if(item.tagName == 'link') {
-    setAttribute(childNode, { href:  window.rapidload_page_optimizer_package_base + item.attrs.href })
-  } else if (item.tagName == 'script') {
-    setAttribute(childNode, { src:  window.rapidload_page_optimizer_package_base + item.attrs.src })
-  }
-}
-document.getElementsByTagName(item.parentTagName)[0].appendChild(childNode);
-}
-})();
-</script>
-</head>
-
+    <script type="module" crossorigin src="/__dynamic_base__/assets/index.js"></script>
+    <link rel="modulepreload" crossorigin href="/__dynamic_base__/assets/core-vendor.js">
+    <link rel="modulepreload" crossorigin href="/__dynamic_base__/assets/vendor.js">
+    <link rel="modulepreload" crossorigin href="/__dynamic_base__/assets/animations.js">
+    <link rel="stylesheet" href="/__dynamic_base__/assets/index.css">
+  </head>
   <body>
 
     <div id="rapidload-page-optimizer"></div>
     <div id='popup'>
       hover me to show popup
+      <br>
+      <button onclick="loadRL()">load ui</button>
     </div>
 
     <script>
