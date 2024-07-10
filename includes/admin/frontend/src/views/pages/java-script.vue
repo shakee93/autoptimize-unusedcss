@@ -270,7 +270,7 @@
       </div>
     </div>
     <popup v-if="popupVisible" ref="popup" @dontsave="handleDontSave('save')" @confirm="handleConfirm('save')" @cancel="handleCancel('save')"></popup>
-    <legacyPopup v-if="legacyPopup" ref="popup" @dontsave="handleDontSave('legacy')" @confirm="handleConfirm('legacy')" @cancel="handleCancel('legacy')"></legacyPopup>
+<!--    <legacyPopup v-if="legacyPopup" ref="popup" @dontsave="handleDontSave('legacy')" @confirm="handleConfirm('legacy')" @cancel="handleCancel('legacy')"></legacyPopup>-->
 
   </main>
 
