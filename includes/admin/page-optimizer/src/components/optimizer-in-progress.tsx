@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useCallback, useRef} from 'react';
-import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
+import {CheckCircleIcon, XCircleIcon as SolidXCircleIcon} from "@heroicons/react/24/solid";
 import {Loader, Monitor, RefreshCw} from "lucide-react";
-import {FaceSmileIcon, FaceFrownIcon, QueueListIcon, ArrowPathRoundedSquareIcon} from "@heroicons/react/24/outline";
+import {FaceSmileIcon, FaceFrownIcon, QueueListIcon, ArrowPathIcon,Bars3BottomLeftIcon , ArrowPathRoundedSquareIcon, XCircleIcon as OutlineXCircleIcon} from "@heroicons/react/24/outline";
 import {useAppContext} from "../context/app";
 import {optimizerData} from "../store/app/appSelector";
 import CountdownTimer from './ui/CountdownTimer';
@@ -32,7 +32,7 @@ const OptimizerInProgress = () => {
     const {inProgress, settingsMode} = useCommonDispatch()
     const loadingStatuses = ['failed', 'queued', 'processing'];
     const intervalRef = useRef<NodeJS.Timer | null>(null);
-    const [loadingRegen, setLoadingRegen] = useState(false)
+    const [loadingRegen, setLoadingRegen] = useState('')
 
     const [checkCircleCount, setCheckCircleCount] = useState(0);
     const [confettiStatus, setConfettiStatus] = useState(false);
@@ -186,7 +186,7 @@ const OptimizerInProgress = () => {
 
     const buttonSubmit = async (regen : any) => {
 
-        setLoadingRegen(true)
+        setLoadingRegen(regen)
 
             const query = 'action='+ regen +'&job_type=url&clear=false&immediate=true&url='+ url
             try {
@@ -201,10 +201,10 @@ const OptimizerInProgress = () => {
             } catch (error: any) {
 
                 toast({
-                    description: <div className='flex w-full gap-2 text-center'>{error.message} <XCircleIcon className='w-5 text-red-600'/></div>,
+                    description: <div className='flex w-full gap-2 text-center'>{error.message} <SolidXCircleIcon className='w-5 text-red-600'/></div>,
                 })
             }
-        setLoadingRegen(false)
+        setLoadingRegen('')
 
     }
 
@@ -222,6 +222,8 @@ const OptimizerInProgress = () => {
             buttonText: 'Regenerate Unused CSS',
         },
     };
+
+
 
     return (
         <m.div
@@ -284,11 +286,11 @@ const OptimizerInProgress = () => {
                                                             (['Critical CSS', 'Unused CSS'] as CssErrorKeys[]).some((key) =>
                                                                 setting.name.includes(key) && cssErrors[key].status === 'failed'
                                                             ) ? (
-                                                                <XCircleIcon className='w-7 h-7 fill-red-600'/>
+                                                                <SolidXCircleIcon className='w-7 h-7 fill-red-600'/>
                                                             ) : (
                                                                 <Loader className='w-5 animate-spin'/>
                                                             )
-                                                            
+
                                                         ) : (
                                                             index <= currentIndex ? (
                                                                 <CheckCircleIcon className="w-7 h-7 fill-green-600"/>
@@ -306,18 +308,34 @@ const OptimizerInProgress = () => {
                                             </div>
                                             {(['Critical CSS', 'Unused CSS'] as CssErrorKeys[]).map((key) => (
                                                 setting.name.includes(key) && cssErrors[key].status === 'failed' && (
+                                                    <>
                                                     <div
-                                                        className="relative grid font-medium text-sm dark:bg-brand-900 bg-red-400/10 border-2 border-red-500 w-fit rounded-xl items-center py-1.5 px-1.5 ml-9"
+                                                        className="relative grid font-medium text-sm dark:bg-brand-900 border-2 border-red-500 w-fit rounded-xl items-center py-1.5 px-1.5 ml-9"
                                                         key={key}
                                                     >
-                                                    <span className="flex items-center gap-1">
-                                                        <FaceFrownIcon className="h-6 w-6 text-red-500"/>
-                                                        Failed to generate {key.toLowerCase()}
-                                                    </span>
+                                                        <div className="flex justify-between">
+                                                              <span className="flex items-center gap-1">
+                                                                <OutlineXCircleIcon className='w-6 h-6 text-red-600'/>
+                                                                Failed to generate {key.toLowerCase()}
+                                                              </span>
+                                                            <Button
+                                                                className='flex gap-2 border-0 rounded-xl h-7 text-blue-400 text-xs hover:bg-inherit hover:text-blue-4000'
+                                                                onClick={e => window.open('https://docs.rapidload.io/', '_blank')}
+                                                                variant='outline'
+                                                            >
+                                                                <Bars3BottomLeftIcon className='w-5 h-5 text-blue-400'/>
+                                                                Learn more
+                                                            </Button>
+                                                        </div>
+
                                                         <span className="text-gray-500 ml-7">
                                                             {cssErrors[key].error?.code} {cssErrors[key].error?.message} errors when crawling your webpage
                                                         </span>
-                                                        <div className='flex justify-end text-left w-full mt-1 gap-2'>
+
+
+                                                    </div>
+
+                                                        <div className='flex text-left w-full mt-2 gap-2 ml-9 items-center'>
                                                             {/*{cssErrors[key].error?.code === 403 && (*/}
                                                             {/*        <Button*/}
                                                             {/*            disabled={loadingRegen}*/}
@@ -331,32 +349,28 @@ const OptimizerInProgress = () => {
                                                             {/*        </Button>*/}
                                                             {/*)}*/}
 
+                                                            <span className="text-gray-500 text-xs">
+                                                                Quick Actions:
+                                                            </span>
+
+                                                            {cssErrors[key].error?.code === 403 && (
                                                                 <Button
-                                                                    disabled={loadingRegen}
-                                                                    className='flex gap-2 rounded-xl h-7 text-gray-500 text-xs'
-                                                                    onClick={e => window.open('https://docs.rapidload.io/', '_blank')}
+                                                                    disabled={loadingRegen == cssErrors[key].regenAction}
+                                                                    className='flex gap-1 text-gray-500 h-8 text-xs px-2.5 bg-brand-200/50 border-0'
+                                                                    onClick={e => buttonSubmit(cssErrors[key].regenAction)}
                                                                     variant='outline'
                                                                 >
-                                                                    {loadingRegen &&
-                                                                        <Loader className='w-4 animate-spin -ml-1'/>}
-                                                                    Learn more
-                                                                </Button>
+                                                                    {loadingRegen == cssErrors[key].regenAction ? (
+                                                                        <ArrowPathIcon className="h-4 w-4 text-gray-500 -ml-1 animate-spin" />
+                                                                    ) : (
+                                                                        <ArrowPathIcon className="h-4 w-4 text-gray-500 -ml-1" />
+                                                                    )}
 
-                                                            {cssErrors[key].error?.code === 408 && (
-                                                                    <Button
-                                                                        disabled={loadingRegen}
-                                                                        className='flex gap-2 rounded-xl h-7 text-gray-500 text-xs'
-                                                                        onClick={e => buttonSubmit(cssErrors[key].regenAction)}
-                                                                        variant='outline'
-                                                                    >
-                                                                        {loadingRegen &&
-                                                                            <Loader className='w-4 animate-spin -ml-1'/>}
-                                                                        {cssErrors[key].buttonText}
-                                                                    </Button>
+                                                                    {cssErrors[key].buttonText}
+                                                                </Button>
                                                             )}
                                                         </div>
-
-                                                    </div>
+                                                    </>
                                                 )
                                             ))}
 
@@ -364,43 +378,44 @@ const OptimizerInProgress = () => {
                                     )}
 
                                 </AnimatePresence>
-                            ))}
-                        </div>
-
-
+                        ))}
                     </div>
-                    <div className='flex flex-col justify-start items-start '>
-
-                        <NextSteps status={checkCircleCount == filteredSettings?.length}/>
-
-                        {/*<div>*/}
-                        {/*    <Loading className={'py-4 text-brand-500'} customMessage={"Analyzing in"} url={url}*/}
-                        {/*             countDown={true}/>*/}
-                        {/*    <div className='flex justify-start'>*/}
-                        {/*        <Button*/}
-                        {/*            onClick={() => {*/}
-                        {/*                dispatch(fetchData(options, url, true))*/}
-                        {/*                dispatch(setCommonState('inProgress', false))*/}
-                        {/*                setShowInprogress(false);*/}
-                        {/*            }}*/}
-                        {/*            className={`flex overflow-hidden select-none relative text-sm h-12 rounded-[14px] gap-2 items-center px-4 h-full`}>*/}
-                        {/*            <RefreshCw className={cn(*/}
-                        {/*                'w-4',*/}
-                        {/*                loading && 'animate-spin'*/}
-                        {/*            )}/>*/}
-                        {/*            Analyze*/}
-                        {/*        </Button>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
 
 
-                    </div>
+                </div>
+                <div className='flex flex-col justify-start items-start '>
+
+                    <NextSteps status={checkCircleCount == filteredSettings?.length}/>
+
+                    {/*<div>*/}
+                    {/*    <Loading className={'py-4 text-brand-500'} customMessage={"Analyzing in"} url={url}*/}
+                    {/*             countDown={true}/>*/}
+                    {/*    <div className='flex justify-start'>*/}
+                    {/*        <Button*/}
+                    {/*            onClick={() => {*/}
+                    {/*                dispatch(fetchData(options, url, true))*/}
+                    {/*                dispatch(setCommonState('inProgress', false))*/}
+                    {/*                setShowInprogress(false);*/}
+                    {/*            }}*/}
+                    {/*            className={`flex overflow-hidden select-none relative text-sm h-12 rounded-[14px] gap-2 items-center px-4 h-full`}>*/}
+                    {/*            <RefreshCw className={cn(*/}
+                    {/*                'w-4',*/}
+                    {/*                loading && 'animate-spin'*/}
+                    {/*            )}/>*/}
+                    {/*            Analyze*/}
+                    {/*        </Button>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
+
+
                 </div>
             </div>
+        </div>
 
-        </m.div>
+</m.div>
 
-    );
+)
+    ;
 }
 
 export default OptimizerInProgress;
