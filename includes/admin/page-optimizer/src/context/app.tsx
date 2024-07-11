@@ -55,7 +55,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
     const [options, setOptions] = useState((
         {
             optimizer_url: 'https://rapidload.io/',
-            ajax_url: '',
+            ajax_url: "http://rapidload.local/wp-admin/admin-ajax.php",
             page_optimizer_base: '',
             page_optimizer_package_base: '',
             plugin_url: '',
