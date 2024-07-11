@@ -52,19 +52,24 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
     const [mounted, setMounted] = useState<boolean>(false);
     const [sheetsHidden, setSheetsHidden]= useState(false)
     const [openAudits, setOpenAudits] = useState<string[]>([]);
-    const [options, setOptions] = useState(window?.rapidload_optimizer ? window.rapidload_optimizer : {
-        optimizer_url: 'https://rapidload.io/',
-        ajax_url: '',
-        page_optimizer_base: '',
-        page_optimizer_package_base: '',
-        plugin_url: '',
-        nonce: '',
-        timezone: 'UTC',
-        actions: [],
-        load_optimizer: false,
-        rapidload_version: '2.2.0',
-        rest_url: 'https://rapidload.local/wp-json/rapidload/v1'
-    } )
+    const [options, setOptions] = useState((
+        {
+            optimizer_url: 'https://rapidload.io/',
+            ajax_url: "http://rapidload.local/wp-admin/admin-ajax.php",
+            page_optimizer_base: '',
+            page_optimizer_package_base: '',
+            plugin_url: '',
+            nonce: '',
+            timezone: 'UTC',
+            actions: [],
+            load_optimizer: false,
+            rapidload_version: '2.2.0',
+            rest_url: 'https://rapidload.local/wp-json/rapidload/v1',
+            ...(
+                window.rapidload_optimizer ? window.rapidload_optimizer : {}
+            ),
+        }
+    ))
     const [type, setType] = useState<ReportType>('desktop');
     const [savingData, setSavingData] = useState<boolean>(false)
     const [togglePerformance, setTogglePerformance] = useState(true);
