@@ -9,12 +9,12 @@ export default defineConfig((configEnv) => {
     const generateSourceMaps = process.env.GENERATE_SOURCE_MAPS === 'true';
     const outDir = generateSourceMaps ? 'dist-debug' : 'dist';
     return {
-        base: process.env.NODE_ENV === "production" ? "/__dynamic_base__/" : "/",
+        base: (process.env.NODE_ENV === "production") ? "/__dynamic_base__/" : "/",
         plugins: [
             react(),
             dynamicBase({
                 publicPath: 'window.rapidload_optimizer.page_optimizer_package_base',
-                transformIndexHtml:  false
+                transformIndexHtml:  true // BUILD + PREVIEW in local breaks when true
             })
         ],
         define: {
