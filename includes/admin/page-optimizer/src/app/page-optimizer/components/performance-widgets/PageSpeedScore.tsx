@@ -199,7 +199,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         </div>
                     </div>
                 </div>
-                <TooltipText text={loadingStatus ? "loading" : "Preview"}>
+                <TooltipText text={loadingStatus ? "loading" : "Preview"} className="dark:bg-brand-930/90">
                     <div
                         onClick={() => {
 
@@ -208,7 +208,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                             }
 
                         }}
-                        className={`flex gap-2 items-center text-sm h-12 rounded-[14px] bg-brand-0 dark:bg-primary dark:hover:bg-primary/90 px-4 py-2 ${
+                        className={`flex gap-2 items-center text-sm h-12 rounded-[14px] bg-brand-0 dark:bg-brand-930/90 px-4 py-2 ${
                             revisions.length > 0
                                 ? '' : ''}`} data-tour="preview-button">
 

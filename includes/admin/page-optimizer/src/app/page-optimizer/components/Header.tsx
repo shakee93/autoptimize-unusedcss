@@ -209,9 +209,9 @@ const Header = ({ url }: { url: string}) => {
                                 ease: 'easeInOut',
                                 duration: 0.5,
                             }}
-                            className="z-[100000] w-full text-[13px] bg-[#D9CAEB] items-center text-center py-0.5 top-[74px] absolute"
+                            className="z-[100000] w-full text-[13px] bg-[#D9CAEB] items-center text-center py-0.5 top-[74px] absolute dark:bg-brand-950"
                         >
-                            <span className="font-semibold text-purple-900">Test Mode turned on,</span>
+                            <span className="font-semibold text-purple-900 dark:text-brand-300">Test Mode turned on,</span>
                             optimizations are safely previewed without affecting your live website. Perfect for experimentation and fine-tuning.
                         </motion.div>
                     )}

@@ -439,7 +439,7 @@ const SpeedSettings = ({}) => {
         <SettingsStraightLine/>
         <div className="pb-4">
             <h3 className="font-semibold text-lg">Performance Gears</h3>
-            <span className="font-normal text-sm text-zinc-600">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
+            <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
         </div>
 
         <div className="flex gap-4 inline-flex" data-tour="settings-gear">
@@ -493,14 +493,14 @@ const SpeedSettings = ({}) => {
         </UnsavedChanges>
 
 
-        <div className="py-4">
+        <div className="py-4 ">
             {mouseOnSettingsGear ? (
-                <h3 className="font-semibold">{mouseOnSettingsGear.charAt(0).toUpperCase() + mouseOnSettingsGear.slice(1)}{mouseOnSettingsGear === 'custom' ? ' Settings' : ''} {activeSettingsMode === mouseOnSettingsGear && 'Activated' }</h3>
+                <h3 className="font-semibold dark:text-brand-300">{mouseOnSettingsGear.charAt(0).toUpperCase() + mouseOnSettingsGear.slice(1)}{mouseOnSettingsGear === 'custom' ? ' Settings' : ''} {activeSettingsMode === mouseOnSettingsGear && 'Activated' }</h3>
             ) : (
-                <h3 className="font-semibold">{activeSettingsMode.charAt(0).toUpperCase() + activeSettingsMode.slice(1)}{activeSettingsMode === 'custom' ? ' Settings' : ''} Activated</h3>
+                <h3 className="font-semibold dark:text-brand-300">{activeSettingsMode.charAt(0).toUpperCase() + activeSettingsMode.slice(1)}{activeSettingsMode === 'custom' ? ' Settings' : ''} Activated</h3>
             )}
             <span
-                className="font-normal text-sm text-zinc-600">{settingsDescriptions[currentMode]}</span>
+                className="font-normal text-sm text-zinc-600 dark:text-brand-300">{settingsDescriptions[currentMode]}</span>
         </div>
 
         <div>
