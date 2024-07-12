@@ -155,6 +155,10 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.2.17 - 21/05/2024 =
+ * feat: enable optimization gears in Titan
+ * fix: known bugs
+
 = 2.2.16 - 08/05/2024 =
  * fix: known bugs
 

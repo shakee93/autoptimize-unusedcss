@@ -7,7 +7,7 @@
     }
 
     window.addEventListener('load', function (){
-        if (getQueryParam('rapidload_preview_optimization')) {
+        if (getQueryParam('rapidload_preview')) {
             const rapidload_cache_status_div_content = document.querySelector('#rapidload-cache-status');
 
             if (rapidload_cache_status_div_content) {

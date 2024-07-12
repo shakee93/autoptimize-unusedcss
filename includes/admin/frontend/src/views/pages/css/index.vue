@@ -190,7 +190,8 @@
             <div :class="!onData.remove_unused_css? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
               <div class="mt-5">
                 <RouterLink :to="unused_css_settings_link">
-                  <button
+                  <button @click="uucss_settings_btn=true"
+                          id="uucss-settings"
                       class="bg-transparent mb-3 mt-2 text-black-font transition duration-300 hover:bg-purple font-semibold hover:text-white py-2 px-4 border border-gray-button-border hover:border-transparent rounded-lg">
                     Settings
                   </button>
@@ -356,8 +357,14 @@ export default {
     handleDontSave(){
       this.confirmStatus = true;
       this.popupVisible= false;
-      const back = document.getElementById('rp-back');
-      back.click();
+      if(this.uucss_settings_btn){
+        const button = document.getElementById('uucss-settings');
+        button.click();
+      }else{
+        const back = document.getElementById('rp-back');
+        back.click();
+      }
+
     },
     handleCancel() {
       this.popupVisible= false;
@@ -465,7 +472,7 @@ export default {
       unused_css_settings_link: '/css/unused-css',
       devmode: false,
       uucss_url: '',
-
+      uucss_settings_btn: false,
       onData:{
       rapidload_aggregate_css: false,
       uucss_inline_css: false,

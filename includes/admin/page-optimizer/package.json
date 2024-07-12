@@ -1,6 +1,6 @@
 {
   "name": "@rapidload/page-optimizer",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Helps you get better page speed scores by analyzing and providing optimal actions (for Wordpress)",
   "homepage": "https://rapidload.io/",
   "repository": {
@@ -30,9 +30,10 @@
     "yarn": ">=1.22.5"
   },
   "scripts": {
-    "start": "vite",
-    "build": "node build.js",
+    "dev": "vite",
+    "build": "vite build",
     "test": "jest",
+    "preview": "vite preview",
     "prepare": "tw-patch",
     "version": "npm run build",
     "release:beta": "npm version prerelease --preid=beta",
@@ -67,7 +68,9 @@
     "compare-versions": "^6.1.0",
     "date-fns": "^2.30.0",
     "dompurify": "^3.0.5",
+    "dotenv": "^16.4.5",
     "fast-deep-equal": "^3.1.3",
+    "focus-lock": "^1.3.5",
     "fontfaceobserver": "^2.3.0",
     "framer-motion": "^10.16.0",
     "html2canvas": "^1.4.1",
@@ -79,6 +82,7 @@
     "prism-react-renderer": "^2.0.6",
     "react": "18.2.0",
     "react-circular-progressbar": "^2.1.0",
+    "react-confetti": "^6.1.0",
     "react-dom": "18.2.0",
     "react-error-boundary": "^4.0.11",
     "react-focus-lock": "^2.9.6",
@@ -128,7 +132,7 @@
     "jest": "29.3.1",
     "jest-environment-jsdom": "29.3.1",
     "lint-staged": "13.1.0",
-    "postcss": "8.4.21",
+    "postcss": "8.4.31",
     "prettier": "2.8.2",
     "tailwindcss": "^3.3.3",
     "tailwindcss-patch": "^2.0.2",

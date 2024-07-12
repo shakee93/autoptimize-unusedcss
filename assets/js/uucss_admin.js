@@ -915,7 +915,7 @@
                             switch (action) {
                                 case 'preview':{
                                     let dynamicUrl = $(this).attr('href').toString();
-                                    let additionalParam = "rapidload_preview_optimization";
+                                    let additionalParam = "rapidload_preview";
                                     window.open(dynamicUrl + (dynamicUrl.includes("?") ? "&" : "?") + additionalParam, "_blank");
                                     break;
                                 }
@@ -1564,7 +1564,7 @@
                             switch (action) {
                                 case 'preview':{
                                     let dynamicUrl = $(this).attr('href').toString();
-                                    let additionalParam = "rapidload_preview_optimization";
+                                    let additionalParam = "rapidload_preview";
                                     window.open(dynamicUrl + (dynamicUrl.includes("?") ? "&" : "?") + additionalParam, "_blank");
                                     break;
                                 }

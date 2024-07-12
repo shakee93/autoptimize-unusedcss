@@ -57,7 +57,7 @@ class RapidLoad_Admin_Frontend
 
             }
 
-            if(isset($_REQUEST['rapidload_preview_optimization'])){
+            if(isset($_REQUEST['rapidload_preview'])){
                 //$this->load_preview_scripts();
             }
         });
@@ -599,6 +599,12 @@ class RapidLoad_Admin_Frontend
                         'rule' => $rule,
                         'regex' => $regex
                     ]);
+                }elseif ($job_type === "css"){
+                    do_action('rapidload/vanish/css');
+                }elseif ($job_type === "js"){
+                    do_action('rapidload/vanish/js');
+                }elseif ($job_type === "font"){
+                    do_action('rapidload/vanish/font');
                 }elseif ($url){
                     RapidLoad_DB::clear_job_data($job_type, [
                         'url' => $url
