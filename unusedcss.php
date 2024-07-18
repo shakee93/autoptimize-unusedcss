@@ -52,5 +52,13 @@ global $rapidload;
 
 $rapidload = RapidLoad_Base::get();
 
+if(is_admin()){
+
+    register_activation_hook( UUCSS_PLUGIN_FILE, 'RapidLoad_Cache::on_activation' );
+
+    register_deactivation_hook( UUCSS_PLUGIN_FILE, 'RapidLoad_Cache::on_deactivation' );
+
+}
+
 
 
