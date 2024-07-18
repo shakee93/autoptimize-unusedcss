@@ -37,8 +37,8 @@ export const useTestModeUtils = () => {
 
                                     <div className="flex flex-col">
                                         <span
-                                            className="font-semibold">Test Mode turned {isChecked ? 'on' : 'off'} successfully</span>
-                                        <span className="font-normal text-xs text-zinc-600">{isChecked ? 'Changes will not affect the live site.' : 'All changes will be applied to the live site.'}</span>
+                                            className="font-semibold dark:text-brand-300">Test Mode turned {isChecked ? 'on' : 'off'} successfully</span>
+                                        <span className="font-normal text-xs text-zinc-600 dark:text-brand-400">{isChecked ? 'Changes will not affect the live site.' : 'All changes will be applied to the live site.'}</span>
                                     </div>
                                 </div>
                             ),
@@ -54,8 +54,8 @@ export const useTestModeUtils = () => {
 
                                     <div className="flex flex-col">
                                         <span
-                                            className="font-semibold">Failed to turn on Test Mode</span>
-                                        <span className="font-normal text-xs text-zinc-600">{result.error}</span>
+                                            className="font-semibold dark:text-brand-300">Failed to turn on Test Mode</span>
+                                        <span className="font-normal text-xs text-zinc-600 dark:text-brand-400">{result.error}</span>
                                     </div>
                                 </div>
                             ),
