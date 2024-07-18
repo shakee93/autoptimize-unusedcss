@@ -33,7 +33,7 @@ import BetaSpeedSetting from "app/page-optimizer/components/audit/BetaSpeedSetti
 import {cn} from "lib/utils";
 import {setCommonState} from "../../../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
-import {BoltIcon, CheckCircleIcon, ChevronRightIcon, ChevronDownIcon,  ChevronUpIcon  } from "@heroicons/react/24/solid";
+import {BoltIcon, CheckCircleIcon, ChevronRightIcon, ChevronDownIcon,  ChevronUpIcon, CheckIcon, XMarkIcon  } from "@heroicons/react/24/solid";
 import {updateSettings} from "../../../store/app/appActions";
 import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
 import { m, AnimatePresence  } from 'framer-motion';
@@ -303,24 +303,26 @@ const SpeedSettings = ({}) => {
             toastInstance = toast({
                 description: (
                     <>
-                        <div className='flex w-full gap-2 text-center items-center'>
+                        <div className='flex font-semibold w-full gap-2 text-center items-center'>
                             <InformationCircleIcon className='w-5 text-orange-600'/>
                             Do you want to turn on test mode?
 
-                            <AppButton onClick={async e => {
+                            <AppButton className="px-2" onClick={async e => {
                                 if (toastInstance) {
                                     toastInstance.dismiss();
                                 }
                                 await handleTestModeSwitchChange( true)
                             }} variant='outline'>
+                                <CheckIcon className="h-5 w-5 text-gray-500" />
                                 Yes
                             </AppButton>
-                            <AppButton onClick={e => {
+                            <AppButton className="px-2" onClick={e => {
                                 // Dismiss the toast immediately
                                 if (toastInstance) {
                                     toastInstance.dismiss();
                                 }
                             }} variant='outline'>
+                                <XMarkIcon  className="h-5 w-5 text-gray-500" />
                                 No
                             </AppButton>
 
@@ -437,7 +439,7 @@ const SpeedSettings = ({}) => {
         <SettingsStraightLine/>
         <div className="pb-4">
             <h3 className="font-semibold text-lg">Performance Gears</h3>
-            <span className="font-normal text-sm text-zinc-600">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
+            <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
         </div>
 
         <div className="flex gap-4 inline-flex" data-tour="settings-gear">
@@ -491,14 +493,14 @@ const SpeedSettings = ({}) => {
         </UnsavedChanges>
 
 
-        <div className="py-4">
+        <div className="py-4 ">
             {mouseOnSettingsGear ? (
-                <h3 className="font-semibold">{mouseOnSettingsGear.charAt(0).toUpperCase() + mouseOnSettingsGear.slice(1)}{mouseOnSettingsGear === 'custom' ? ' Settings' : ''} {activeSettingsMode === mouseOnSettingsGear && 'Activated' }</h3>
+                <h3 className="font-semibold dark:text-brand-300">{mouseOnSettingsGear.charAt(0).toUpperCase() + mouseOnSettingsGear.slice(1)}{mouseOnSettingsGear === 'custom' ? ' Settings' : ''} {activeSettingsMode === mouseOnSettingsGear && 'Activated' }</h3>
             ) : (
-                <h3 className="font-semibold">{activeSettingsMode.charAt(0).toUpperCase() + activeSettingsMode.slice(1)}{activeSettingsMode === 'custom' ? ' Settings' : ''} Activated</h3>
+                <h3 className="font-semibold dark:text-brand-300">{activeSettingsMode.charAt(0).toUpperCase() + activeSettingsMode.slice(1)}{activeSettingsMode === 'custom' ? ' Settings' : ''} Activated</h3>
             )}
             <span
-                className="font-normal text-sm text-zinc-600">{settingsDescriptions[currentMode]}</span>
+                className="font-normal text-sm text-zinc-600 dark:text-brand-300">{settingsDescriptions[currentMode]}</span>
         </div>
 
         <div>
