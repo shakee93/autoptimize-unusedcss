@@ -8,6 +8,14 @@
     <title>RapidLoad Page Optimizer</title>
 
     <script>
+
+      window.rapidload_optimizer = {
+        page_optimizer_package_base: window.location.origin,
+        optimizer_url : '%VITE_OPTIMIZER_URL%',
+        ajax_url : '%VITE_SERVER_ROOT%wp-admin/admin-ajax.php',
+      };
+
+
      // window.rapidload_optimizer = {
      //   "load_optimizer": "1",
      //         "page_optimizer_package_base": "http://rapidload.local/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer/dist",
@@ -108,25 +116,30 @@
     <div id="rapidload-page-optimizer"></div>
     <div id='popup'>
       hover me to show popup
+      <br>
+      <button onclick="loadRL()">load ui</button>
     </div>
-    <script type="module" src="/src/main.tsx"></script>
-    <script>
 
-      document.addEventListener('DOMContentLoaded', () => {
+    <script>
+      function loadRL() {
         let container = document.getElementById('rapidload-page-optimizer')
         let popup = document.getElementById('popup')
         new window.RapidLoadOptimizer({
           container,
           popup,
           showOptimizer: false,
+
+          shadowRoot:false,
           // global: true,
           // mode: 'onboard',
           modeData: {
-            connect_url: 'http://localhost:5173/',
+            connect_url: 'http://localhost:5174/',
             target: '_blank'
           },
         });
-      })
+      }
+
     </script>
+    <script type="module" onload="loadRL()" src="/src/main.tsx"></script>
   </body>
 </html>

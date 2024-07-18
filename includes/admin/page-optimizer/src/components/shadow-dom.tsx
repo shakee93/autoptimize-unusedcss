@@ -7,21 +7,21 @@ import {setCommonRootState} from "../store/common/commonActions";
 
 interface ShadowDomProps {
     children: React.ReactNode;
+    disabled?: boolean;
     styles: string;
     node?: HTMLElement | null
 }
 
-const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
+const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles, disabled = true }) => {
     const hostRef = useRef<HTMLDivElement>(node as HTMLDivElement);
     const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);
     const { theme, setIsDark } = useRootContext();
     const darkModeClass = 'rapidload-dark';
     const { optimizerRoot, dispatch} = useCommonDispatch()
-    const [forDev, setForDev] = useState(true)
 
     useEffect(() => {
 
-        if (isDev && forDev) {
+        if (disabled) {
             setPortalContainer(document.body as HTMLDivElement)
         }
 
@@ -46,7 +46,7 @@ const ShadowRoot: React.FC<ShadowDomProps> = ({ children, node, styles }) => {
 
     }, [theme, portalContainer, node]);
     //
-    if(isDev && forDev) {
+    if(disabled) {
         return <>{children}</>
     }
 
