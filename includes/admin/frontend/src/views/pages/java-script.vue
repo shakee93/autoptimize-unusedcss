@@ -201,7 +201,7 @@
                 </div>
               </div >
               <div v-if="delay_js_files_radio === 'selected-files'" class="grid pb-5">
-                <h1 class="font-normal text-base text-black-font">Delaying only selected Javascript (Legacy)</h1>
+                <h1 class="font-normal text-base text-black-font">Delaying only selected Javascript</h1>
                 <p class="text-sm pb-3 text-gray-font">These JS files will be excluded from delaying.</p>
 
                 <div class="grid">
@@ -270,7 +270,7 @@
       </div>
     </div>
     <popup v-if="popupVisible" ref="popup" @dontsave="handleDontSave('save')" @confirm="handleConfirm('save')" @cancel="handleCancel('save')"></popup>
-    <legacyPopup v-if="legacyPopup" ref="popup" @dontsave="handleDontSave('legacy')" @confirm="handleConfirm('legacy')" @cancel="handleCancel('legacy')"></legacyPopup>
+<!--    <legacyPopup v-if="legacyPopup" ref="popup" @dontsave="handleDontSave('legacy')" @confirm="handleConfirm('legacy')" @cancel="handleCancel('legacy')"></legacyPopup>-->
 
   </main>
 
@@ -324,10 +324,15 @@ export default {
 
       this.beforeSave = this.onData;
       this.originalData = JSON.parse(JSON.stringify(this.beforeSave));
+      if(this.onData.uucss_load_scripts_on_user_interaction.length > 0){
+        this.delay_js_files_radio = 'selected-files';
+      }
     }
     if (this.onData.uucss_load_scripts_on_user_interaction === "" || this.onData.uucss_load_scripts_on_user_interaction == null) {
       this.isInputEmpty = true;
     }
+
+
   },
   methods: {
     handleEmptyInput() {

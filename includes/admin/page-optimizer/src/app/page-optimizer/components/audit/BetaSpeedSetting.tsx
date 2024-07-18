@@ -73,7 +73,7 @@ export const Status = React.memo(({ status } : { status: AuditSetting['status']}
     if (status.status === 'failed') {
         return (
         <>
-            <div className='flex gap-2 items-center text-xs	border border-rose-600 w-fit rounded-lg '>
+            <div className='flex gap-1 items-center text-xs	border border-rose-600 w-fit rounded-lg px-1 py-py'>
                 <Indicator className='fill-rose-600'>
                     <div className='flex flex-col gap-0.5'>
                         <span className='flex gap-2 items-center'>

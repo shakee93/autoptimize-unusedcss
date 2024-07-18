@@ -158,21 +158,19 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                          className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[4px] rounded-2xl cursor-pointer bg-brand-0'>
                         {/*<div className={cn(*/}
                         {/*    'absolute translate-x-0 left-0.5 w-[70px] rounded-[14px] -z-1 duration-300 h-[44px] text-sm flex flex-col gap-2 px-3 py-2.5 font-medium dark:bg-brand-950 bg-brand-200/80',*/}
-                        {/*    localSwitchState && 'w-[118px] -translate-x-1 left-[40%] bg-amber-500/80'*/}
+
+                        {/*    localSwitchState && 'w-[118px] -translate-x-1 right-0.5 bg-amber-500/80'*/}
                         {/*)}>*/}
                         {/*</div>*/}
-
-                            <motion.span
-                                layoutId="bubble"
-                                className={cn(
-                                    'absolute w-[78px] rounded-[14px] -z-1 h-[44px] text-sm flex flex-col gap-2 px-3 py-2.5 font-medium dark:bg-brand-950 bg-brand-200/80',
-                                    localSwitchState && 'w-[110px] left-[40%] bg-amber-500/80'
-                                )}
-                                style={{borderRadius: 14}}
-                                transition={{type: "spring", bounce: 0, duration: 0.6}}
-                            />
-
-
+                        <motion.span
+                            layoutId="bubble"
+                            className={cn(
+                                'absolute w-[78px] rounded-[14px] -z-1 h-[44px] text-sm flex flex-col gap-2 px-3 py-2.5 font-medium dark:bg-brand-950 bg-brand-200/80',
+                                localSwitchState && 'w-[110px] right-0.5 bg-amber-500/80'
+                            )}
+                            style={{borderRadius: 14}}
+                            transition={{type: "spring", bounce: 0, duration: 0.6}}
+                        />
 
                         <div
                             onClick={async () => {
@@ -195,18 +193,22 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                                     await handleSwitchChange(true);
                                 }
                             }}
-                            className={`relative justify-center items-center z-1 text-sm flex pl-8 pr-5 py-2.5 whitespace-nowrap font-medium rounded-2xl ${localSwitchState ? 'text-brand-0' : 'text-brand-500'}`}
+                            className={`relative justify-center items-center z-1 text-sm flex pl-6 pr-5 py-2.5 whitespace-nowrap font-medium rounded-2xl ${localSwitchState ? 'text-brand-0' : 'text-brand-500'}`}
                         >
                             Test Mode
                         </div>
                     </div>
                 </div>
-                <TooltipText text={loadingStatus ? "loading" : "Preview"}>
+                <TooltipText text={loadingStatus ? "loading" : "Preview"} className="dark:bg-brand-930/90">
                     <div
                         onClick={() => {
-                            {!loadingStatus && window.open(options.optimizer_url + '?rapidload_preview', '_blank');}
+
+                            {
+                                !loadingStatus && window.open(options.optimizer_url + '?rapidload_preview_optimization', '_blank');
+                            }
+
                         }}
-                        className={`flex gap-2 items-center text-sm h-12 rounded-[14px] bg-brand-0 dark:bg-primary dark:hover:bg-primary/90 px-4 py-2 ${
+                        className={`flex gap-2 items-center text-sm h-12 rounded-[14px] bg-brand-0 dark:bg-brand-930/90 px-4 py-2 ${
                             revisions.length > 0
                                 ? '' : ''}`} data-tour="preview-button">
 
