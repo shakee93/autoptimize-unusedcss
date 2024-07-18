@@ -34,6 +34,7 @@ import equal from 'fast-deep-equal/es6/react'
 import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
 import UrlPreview from "app/page-optimizer/components/footer/url-preview";
 import SaveChanges from "app/page-optimizer/components/footer/save-changes";
+import {useRootContext} from "../../../context/root";
 
 // const Header = ({ url }: { url: string}) => {
 const Header = ({ url }: { url: string}) => {
@@ -67,7 +68,7 @@ const Header = ({ url }: { url: string}) => {
     const {testMode} = useSelector((state: RootState) => state.app);
     const [testModeStatus, setTestModeStatus] = useState<boolean>(false);
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
-
+    const { isDark } = useRootContext();
     useEffect(() => {
         setTestModeStatus(testMode?.status || false)
     }, [testMode]);
@@ -80,9 +81,18 @@ const Header = ({ url }: { url: string}) => {
                 className='z-[110000] w-full px-6 py-3 flex gap-3 justify-between border-b backdrop-blur-sm dark:bg-brand-930/80 bg-brand-50/75 '>
                 <div className='flex gap-12 items-center'>
                     <div className='relative'>
-                        <img className='w-36'
-                             src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'}
-                             alt='RapidLoad - #1 to unlock breakneck page speed'/>
+                        <img
+                            className='w-36'
+                            src={isDark
+                                ? options?.page_optimizer_base
+                                    ? `${options?.page_optimizer_base}/dark-logo.svg`
+                                    : '/dark-logo.svg'
+                                : options?.page_optimizer_base
+                                    ? `${options?.page_optimizer_base}/logo.svg`
+                                    : '/logo.svg'
+                            }
+                            alt='RapidLoad - #1 to unlock breakneck page speed'
+                        />
                         {version && (
                             <span
                                 className='absolute text-xxs w-[200px] left-[72px] top-[1px] dark:text-brand-500 text-brand-400'>TITAN v{version}</span>
