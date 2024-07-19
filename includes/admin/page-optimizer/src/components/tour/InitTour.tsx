@@ -19,32 +19,32 @@ const InitTour = ({ mode }: {
 
     useEffect(() => {
 
-        let hasActions = true
+        let hasActions = true;
 
-        let tourAudit = data?.grouped.opportunities.find(audit => {
-            return audit.settings.length > 0 && audit.files.items.length > 0;
-        })
+        let tourAudit = data?.grouped?.opportunities?.find(audit => {
+            return audit?.settings?.length > 0 && audit?.files?.items?.length > 0;
+        });
 
         if (!tourAudit) {
-            tourAudit = data?.grouped.diagnostics.find(audit => {
-                return audit.settings.length > 0 && audit.files.items.length > 0;
-            })
+            tourAudit = data?.grouped?.diagnostics?.find(audit => {
+                return audit?.settings?.length > 0 && audit?.files?.items?.length > 0;
+            });
         }
 
         if (!tourAudit && data?.grouped?.opportunities?.length && data?.grouped?.opportunities?.length > 0) {
-            tourAudit = data?.grouped.opportunities[0]
-            hasActions = false
+            tourAudit = data.grouped.opportunities[0];
+            hasActions = false;
         }
 
-        if(!tourAudit && data?.grouped?.diagnostics?.length && data?.grouped?.diagnostics?.length > 0) {
-            tourAudit = data?.grouped.diagnostics[0]
-            hasActions = false
+        if (!tourAudit && data?.grouped?.diagnostics?.length && data?.grouped?.diagnostics?.length > 0) {
+            tourAudit = data.grouped.diagnostics[0];
+            hasActions = false;
         }
 
         setSteps && setSteps(p => {
 
             let selector =
-                document.getElementById('rapidload-optimizer-shadow-dom')
+                document.getElementById('rapidload-optimizer-shadow-dom');
 
             let steps = [
                 ...Steps,
@@ -58,14 +58,14 @@ const InitTour = ({ mode }: {
                     // @ts-ignore
                     step.selector = selector.shadowRoot?.querySelector(step.shadowSelector);
                 }
-                return step
-            })
+                return step;
+            });
 
-            return steps
+            return steps;
         });
 
+    }, [activeReport, currentStep]);
 
-    }, [activeReport, currentStep])
 
 
 
