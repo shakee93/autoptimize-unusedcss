@@ -93,12 +93,15 @@ const Performance = () => {
     },[]);
 
     const [isCheckedPopup, setIsCheckedPopup] = useState(false);
-    const saveNewTitanModelPopup = () => {
+    const saveNewTitanModelPopup = (open: boolean) => {
 
         if (isCheckedPopup) {
             localStorage.setItem(welcomePopupKey, 'true');
         }
-        setOpen(false);
+        if(!open){
+            setOpen(false);
+        }
+        
     };
 
     return (
@@ -261,11 +264,12 @@ const Performance = () => {
                             <DialogFooter className='px-6 py-3 border-t'>
                                 <label className="flex py-2 absolute items-center left-6">
                                     <Checkbox  onCheckedChange={(c: boolean) =>{
-                                        setIsCheckedPopup(c)
+                                        setIsCheckedPopup(c);
+                                        localStorage.setItem(welcomePopupKey, 'true');
                                     }}/>
                                     <span className="text-muted-foreground select-none">Don't show this again</span>
                                 </label>
-                                <AppButton onClick={e => saveNewTitanModelPopup()} className='text-sm'>Explore Now</AppButton>
+                                <AppButton onClick={e => saveNewTitanModelPopup(false)} className='text-sm'>Explore Now</AppButton>
                                 <AppButton onClick={e => setOpen(false)} variant='outline' className='text-sm'>Close</AppButton>
                             </DialogFooter>
 
