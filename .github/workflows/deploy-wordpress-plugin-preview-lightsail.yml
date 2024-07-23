@@ -30,7 +30,7 @@ jobs:
           echo "WORDPRESS_PORT=$((3000 + ${{ github.event.number }}))" >> $GITHUB_ENV
 
       - name: Create dynamic docker-compose file
-        if: ${{ github.event.action == 'opened' }}
+        #if: ${{ github.event.action == 'opened' }}
         run: |
           INSTANCE_ID=${{ github.event.number }}
           WORDPRESS_PORT=$((3000 + INSTANCE_ID))
@@ -42,7 +42,7 @@ jobs:
           scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa docker-compose.yml bitnami@${{ secrets.SSH_HOST }}:/home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
 
       - name: Create dynamic Nginx config
-        if: ${{ github.event.action == 'opened' }}
+        #if: ${{ github.event.action == 'opened' }}
         run: |
           INSTANCE_ID=${{ github.event.number }}
           WORDPRESS_PORT=$((3000 + INSTANCE_ID))
@@ -74,7 +74,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} "sudo mv ${REMOTE_CONFIG_FILE_PATH} ${TARGET_CONFIG_FILE_PATH}"
 
       - name: Add DNS A Record to Cloudflare
-        if: ${{ github.event.action == 'opened' }}
+        #if: ${{ github.event.action == 'opened' }}
         run: |
           CF_API_TOKEN=${{ secrets.CF_API_TOKEN }}
           ZONE_ID=${{ secrets.CF_ZONE_ID }}
@@ -181,7 +181,7 @@ jobs:
 
 
       - name: Comment on PR
-        if: ${{ github.event.action == 'opened' }}
+        #if: ${{ github.event.action == 'opened' }}
         run: |
           curl -X POST -H "Authorization: token ${{ secrets.SSH_GITHUB_TOKEN }}" \
             -d "{\"body\": \"WordPress instance for this PR is available at https://pr-${{ github.event.number }}.rapidload.live\"}" \
