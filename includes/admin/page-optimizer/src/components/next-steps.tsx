@@ -11,11 +11,13 @@ import {useDispatch} from "react-redux";
 import {setCommonState} from "../store/common/commonActions";
 import {fetchData} from "../store/app/appActions";
 import Loading from "components/loading";
+import useCommonDispatch from "hooks/useCommonDispatch";
 
 const NextSteps = ({status} : { status: boolean}) => {
     const {options, setShowInprogress} = useAppContext();
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const { handleTestModeSwitchChange } = useTestModeUtils();
+    const { testModeStatus} = useCommonDispatch();
 
     const handleTestMode = async (isChecked: boolean) => {
         await handleTestModeSwitchChange( isChecked);
@@ -65,7 +67,8 @@ const NextSteps = ({status} : { status: boolean}) => {
                                             dispatch(fetchData(options, url, true))
                                             dispatch(setCommonState('inProgress', false))
                                             setShowInprogress(false);
-                                            await handleTestMode(false);
+                                            testModeStatus && await handleTestMode(false);
+
                                         }}
                                 >
                                     <Circle className='w-2.5 fill-green-600 text-green-600'/>
