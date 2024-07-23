@@ -241,7 +241,7 @@ const Performance = () => {
                                 </div>
 
                                 <div className='relative py-4'>
-                                    <img className='w-[480px] rounded-lg' src={ options?.page_optimizer_package_base ? (options?.page_optimizer_package_base + `/gear-screen-flow.gif`) : '/gear-screen-flow.gif'} alt='Welcome to Titan'/>
+                                    <img className='w-[480px] rounded-lg' src={ options?.page_optimizer_package_base ? (options?.page_optimizer_package_base + `/gear-record-flow.gif`) : '/gear-record-flow.gif'} alt='Welcome to Titan'/>
                                 </div>
                                 <DialogDescription >
                                     {/*The update makes the design sleek and modern for better navigation. There's a new <span className="font-semibold">Speed Settings</span> tab for quick access to recommended settings. The interface is now simpler to understand metrics.*/}
