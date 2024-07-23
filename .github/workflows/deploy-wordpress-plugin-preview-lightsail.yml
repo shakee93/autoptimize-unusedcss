@@ -40,6 +40,7 @@ jobs:
           sed -i "s/\${INSTANCE_ID}/${INSTANCE_ID}/g" docker-compose.yml
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} "mkdir -p wp-${INSTANCE_ID}"
           scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa docker-compose.yml bitnami@${{ secrets.SSH_HOST }}:/home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa Dockerfile.wordpress bitnami@${{ secrets.SSH_HOST }}:/home/bitnami/wp-${INSTANCE_ID}/Dockerfile.wordpress
 
       - name: Create dynamic Nginx config
         #if: ${{ github.event.action == 'opened' }}
