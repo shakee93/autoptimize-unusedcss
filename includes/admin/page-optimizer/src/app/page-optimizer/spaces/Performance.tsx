@@ -241,20 +241,16 @@ const Performance = () => {
                                 </div>
 
                                 <div className='relative py-4'>
-                                    <img className='w-[480px] rounded-lg' src={ options?.page_optimizer_package_base ? (options?.page_optimizer_package_base + `/screenflow.gif`) : '/screenflow.gif'} alt='Welcome to Titan'/>
+                                    <img className='w-[480px] rounded-lg' src={ options?.page_optimizer_package_base ? (options?.page_optimizer_package_base + `/gear-screen-flow.gif`) : '/gear-screen-flow.gif'} alt='Welcome to Titan'/>
                                 </div>
                                 <DialogDescription >
                                     {/*The update makes the design sleek and modern for better navigation. There's a new <span className="font-semibold">Speed Settings</span> tab for quick access to recommended settings. The interface is now simpler to understand metrics.*/}
+                                    <h3>RapidLoad has introduced <span className='font-semibold'>three gear modes</span> for more efficient configuration:</h3>
                                     <ul className="list-disc px-6">
-                                        <li>
-                                            Newly introduced <span className='font-semibold'>Speed Settings tab</span> which helps you find recommended settings quickly.
-                                        </li>
-                                        <li><span className="font-semibold">Simplified view</span> of metrics for easier
-                                            comprehension.
-                                        </li>
-                                        <li>Recommend settings for Audits that impact your site.</li>
-                                        <li>Resolved Audits are kept under <span className="font-semibold">additional settings</span>.
-                                        </li>
+                                        <li>Starter Mode</li>
+                                        <li>Accelerator Mode</li>
+                                        <li>Turbo Mode</li>
+                                        <li>Along with a Custom Mode for personalized optimization.</li>
                                     </ul>
                                 </DialogDescription>
 
