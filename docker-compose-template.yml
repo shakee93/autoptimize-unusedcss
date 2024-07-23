@@ -2,9 +2,7 @@ version: '3.8'
 
 services:
   wordpress:
-    build:
-      context: .
-      dockerfile: Dockerfile.wordpress
+    image: bitnami/wordpress:latest
     container_name: wordpress_${INSTANCE_ID}
     ports:
       - '${WORDPRESS_PORT}:8080'
