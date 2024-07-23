@@ -124,10 +124,13 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} 'sudo /opt/bitnami/ctlscript.sh restart nginx'
 
+      - name: Copy Plugin to Remote Instance
+        run: |
+          scp -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./autoptimize-unusedcss bitnami@${{ secrets.SSH_HOST }}:/home/bitnami/autoptimize-unusedcss
+
       - name: Copy Plugin to Docker Container
         run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./autoptimize-unusedcss bitnami@${{ secrets.SSH_HOST }}:/home/bitnami/autoptimize-unusedcss
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
             # Debugging steps
             echo "List of running containers:"
@@ -142,7 +145,6 @@ jobs:
             else
               echo "Failed to copy plugin autoptimize-unusedcss to ${WP_CONTAINER}"
             fi
-            sleep 30 # wait for the file copy
             sudo docker exec -i ${WP_CONTAINER} sh -c "ls /bitnami/wordpress/wp-content/plugins"
           EOF
 
