@@ -153,7 +153,7 @@ jobs:
             sudo docker cp /home/bitnami/autoptimize-unusedcss.zip ${WP_CONTAINER}:/bitnami/wordpress/wp-content/plugins/
             if [ $? -eq 0 ]; then
               echo "Plugin autoptimize-unusedcss.zip copied successfully to ${WP_CONTAINER}"
-              sudo docker exec -u root -i ${WP_CONTAINER} sh -c "cd /bitnami/wordpress/wp-content/plugins && rm -r autoptimize-unusedcss && unzip -o autoptimize-unusedcss.zip -d /bitnami/wordpress/wp-content/plugins && rm autoptimize-unusedcss.zip"
+              sudo docker exec -u root -i ${WP_CONTAINER} sh -c "cd /bitnami/wordpress/wp-content/plugins && unzip -o autoptimize-unusedcss.zip -d /bitnami/wordpress/wp-content/plugins && rm autoptimize-unusedcss.zip"
               if [ $? -eq 0 ]; then
                 echo "Plugin autoptimize-unusedcss unzipped and overwritten successfully in ${WP_CONTAINER}"
               else
