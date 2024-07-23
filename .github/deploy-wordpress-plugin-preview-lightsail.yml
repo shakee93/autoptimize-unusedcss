@@ -124,7 +124,11 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} 'sudo /opt/bitnami/ctlscript.sh restart nginx'
 
-      - name: Clone Plugin from Git Repository into Docker Container
+      - name: Copy Plugin to Remote Instance
+        run: |
+          scp -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./autoptimize-unusedcss bitnami@${{ secrets.SSH_HOST }}:/home/bitnami/autoptimize-unusedcss
+
+      - name: Copy Plugin to Docker Container
         run: |
           ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
@@ -135,11 +139,11 @@ jobs:
             sudo docker volume ls
             WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
             echo "Container ID: ${WP_CONTAINER}"
-            sudo docker exec -i ${WP_CONTAINER} sh -c "git clone -b ${{ github.head_ref }} --single-branch https://github.com/shakee93/autoptimize-unusedcss.git /bitnami/wordpress/wp-content/plugins/unusedcss"
+            sudo docker cp /home/bitnami/autoptimize-unusedcss/autoptimize-unusedcss ${WP_CONTAINER}:/bitnami/wordpress/wp-content/plugins/unusedcss
             if [ $? -eq 0 ]; then
-              echo "Plugin autoptimize-unusedcss cloned successfully to ${WP_CONTAINER}"
+              echo "Plugin autoptimize-unusedcss copied successfully to ${WP_CONTAINER}"
             else
-              echo "Failed to clone plugin autoptimize-unusedcss to ${WP_CONTAINER}"
+              echo "Failed to copy plugin autoptimize-unusedcss to ${WP_CONTAINER}"
             fi
             sudo docker exec -i ${WP_CONTAINER} sh -c "ls /bitnami/wordpress/wp-content/plugins"
           EOF
