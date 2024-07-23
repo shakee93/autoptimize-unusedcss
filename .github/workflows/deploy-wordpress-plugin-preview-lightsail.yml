@@ -30,7 +30,7 @@ jobs:
           echo "WORDPRESS_PORT=$((3000 + ${{ github.event.number }}))" >> $GITHUB_ENV
 
       - name: Create dynamic docker-compose file
-        #if: ${{ github.event.action == 'opened' }}
+        if: ${{ github.event.action == 'opened' }}
         run: |
           INSTANCE_ID=${{ github.event.number }}
           WORDPRESS_PORT=$((3000 + INSTANCE_ID))
@@ -42,7 +42,7 @@ jobs:
           scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa docker-compose.yml bitnami@${{ secrets.SSH_HOST }}:/home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
 
       - name: Create dynamic Nginx config
-        #if: ${{ github.event.action == 'opened' }}
+        if: ${{ github.event.action == 'opened' }}
         run: |
           INSTANCE_ID=${{ github.event.number }}
           WORDPRESS_PORT=$((3000 + INSTANCE_ID))
@@ -74,7 +74,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} "sudo mv ${REMOTE_CONFIG_FILE_PATH} ${TARGET_CONFIG_FILE_PATH}"
 
       - name: Add DNS A Record to Cloudflare
-        #if: ${{ github.event.action == 'opened' }}
+        if: ${{ github.event.action == 'opened' }}
         run: |
           CF_API_TOKEN=${{ secrets.CF_API_TOKEN }}
           ZONE_ID=${{ secrets.CF_ZONE_ID }}
@@ -92,6 +92,7 @@ jobs:
             }'
 
       - name: Deploy WordPress
+        if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
@@ -117,6 +118,7 @@ jobs:
           EOF
 
       - name: Restart Nginx
+        if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} 'sudo /opt/bitnami/ctlscript.sh restart nginx'
 
@@ -143,7 +145,7 @@ jobs:
             sudo docker cp /home/bitnami/autoptimize-unusedcss.zip ${WP_CONTAINER}:/bitnami/wordpress/wp-content/plugins/unusedcss.zip
             if [ $? -eq 0 ]; then
               echo "Plugin zip autoptimize-unusedcss.zip copied successfully to ${WP_CONTAINER}"
-              sudo docker exec -i ${WP_CONTAINER} sh -c "apt-get update && apt-get install -y unzip && cd /bitnami/wordpress/wp-content/plugins && unzip -o autoptimize-unusedcss.zip && rm autoptimize-unusedcss.zip"
+              sudo docker exec -i ${WP_CONTAINER} sh -c "apt-get update && apt-get install -y unzip && cd /bitnami/wordpress/wp-content/plugins && unzip -o autoptimize-unusedcss.zip -d /bitnami/wordpress/wp-content/plugins && rm autoptimize-unusedcss.zip"
               if [ $? -eq 0 ]; then
                 echo "Plugin autoptimize-unusedcss unzipped successfully in ${WP_CONTAINER}"
               else
