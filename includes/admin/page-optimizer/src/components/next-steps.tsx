@@ -11,11 +11,13 @@ import {useDispatch} from "react-redux";
 import {setCommonState} from "../store/common/commonActions";
 import {fetchData} from "../store/app/appActions";
 import Loading from "components/loading";
+import useCommonDispatch from "hooks/useCommonDispatch";
 
 const NextSteps = ({status} : { status: boolean}) => {
     const {options, setShowInprogress} = useAppContext();
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const { handleTestModeSwitchChange } = useTestModeUtils();
+    const { testModeStatus} = useCommonDispatch();
 
     const handleTestMode = async (isChecked: boolean) => {
         await handleTestModeSwitchChange( isChecked);
@@ -65,13 +67,18 @@ const NextSteps = ({status} : { status: boolean}) => {
                                             dispatch(fetchData(options, url, true))
                                             dispatch(setCommonState('inProgress', false))
                                             setShowInprogress(false);
-                                            await handleTestMode(false);
+                                            testModeStatus && await handleTestMode(false);
+
                                         }}
                                 >
                                     <Circle className='w-2.5 fill-green-600 text-green-600'/>
                                     Go Live
                                 </Button>
-                                <Button variant='outline' className='gap-2'>
+                                <Button variant='outline' className='gap-2'
+                                        onClick={ () => {
+                                            window.open('https://rapidload.zendesk.com/hc/en-us/requests/new', '_blank');
+                                        }}
+                                >
                                     <ArrowTopRightOnSquareIcon className='w-4'/>
                                     I have a problem
                                 </Button>
