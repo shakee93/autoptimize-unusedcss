@@ -71,7 +71,11 @@ const NextSteps = ({status} : { status: boolean}) => {
                                     <Circle className='w-2.5 fill-green-600 text-green-600'/>
                                     Go Live
                                 </Button>
-                                <Button variant='outline' className='gap-2'>
+                                <Button variant='outline' className='gap-2'
+                                        onClick={ () => {
+                                            window.open('https://rapidload.zendesk.com/hc/en-us/requests/new', '_blank');
+                                        }}
+                                >
                                     <ArrowTopRightOnSquareIcon className='w-4'/>
                                     I have a problem
                                 </Button>
