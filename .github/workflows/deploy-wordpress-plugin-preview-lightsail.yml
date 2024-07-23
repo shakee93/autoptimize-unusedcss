@@ -131,6 +131,15 @@ jobs:
         run: |
           scp -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ./autoptimize-unusedcss.zip bitnami@${{ secrets.SSH_HOST }}:/home/bitnami/autoptimize-unusedcss.zip
 
+      - name: Ensure unzip is available in Docker Container
+        run: |
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
+            INSTANCE_ID=${{ github.event.number }}
+            WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
+            echo "Container ID: ${WP_CONTAINER}"
+            sudo docker cp /usr/bin/unzip ${WP_CONTAINER}:/usr/bin/unzip || echo "unzip already available in container"
+          EOF
+
       - name: Copy and Unzip Plugin in Docker Container
         run: |
           ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
@@ -142,19 +151,19 @@ jobs:
             sudo docker volume ls
             WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
             echo "Container ID: ${WP_CONTAINER}"
-            sudo docker cp /home/bitnami/autoptimize-unusedcss.zip ${WP_CONTAINER}:/bitnami/wordpress/wp-content/plugins/unusedcss.zip
+            sudo docker cp /home/bitnami/autoptimize-unusedcss.zip ${WP_CONTAINER}:/bitnami/wordpress/wp-content/plugins/
             if [ $? -eq 0 ]; then
-              echo "Plugin zip autoptimize-unusedcss.zip copied successfully to ${WP_CONTAINER}"
-              sudo docker exec -i ${WP_CONTAINER} sh -c "mkdir -p /var/lib/apt/lists/partial && apt-get update && apt-get install -y unzip && cd /bitnami/wordpress/wp-content/plugins && unzip -o autoptimize-unusedcss.zip -d /bitnami/wordpress/wp-content/plugins && rm autoptimize-unusedcss.zip"
+              echo "Plugin autoptimize-unusedcss.zip copied successfully to ${WP_CONTAINER}"
+              sudo docker exec -i ${WP_CONTAINER} sh -c "cd /bitnami/wordpress/wp-content/plugins && /usr/bin/unzip -o autoptimize-unusedcss.zip -d /bitnami/wordpress/wp-content/plugins && rm autoptimize-unusedcss.zip"
               if [ $? -eq 0 ]; then
-                echo "Plugin autoptimize-unusedcss unzipped successfully in ${WP_CONTAINER}"
+                echo "Plugin autoptimize-unusedcss unzipped and overwritten successfully in ${WP_CONTAINER}"
               else
-                echo "Failed to unzip plugin autoptimize-unusedcss in ${WP_CONTAINER}"
+                echo "Failed to unzip and overwrite plugin autoptimize-unusedcss in ${WP_CONTAINER}"
               fi
+              sudo docker exec -i ${WP_CONTAINER} sh -c "ls /bitnami/wordpress/wp-content/plugins"
             else
-              echo "Failed to copy plugin zip autoptimize-unusedcss.zip to ${WP_CONTAINER}"
+              echo "Failed to copy plugin autoptimize-unusedcss.zip to ${WP_CONTAINER}"
             fi
-            sudo docker exec -i ${WP_CONTAINER} sh -c "ls /bitnami/wordpress/wp-content/plugins"
           EOF
 
       - name: Activate Plugin in Docker Container
