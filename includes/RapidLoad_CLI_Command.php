@@ -26,6 +26,11 @@ if (defined('WP_CLI') && WP_CLI) {
             WP_CLI::success("License Key connected , $license_key!");
         }
 
+        public function update_db(){
+            RapidLoad_DB::update_db();
+            WP_CLI::success("Database updated");
+        }
+
     }
 
     WP_CLI::add_command('rapidload', 'RapidLoad_CLI_Command');
