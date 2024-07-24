@@ -125,7 +125,7 @@ jobs:
           EOF
 
       - name: Update wp-config.php in Docker container
-        if: ${{ github.event.action == 'opened' }}
+        #if: ${{ github.event.action == 'opened' }}
         run: |
           INSTANCE_ID=${{ github.event.number }}
           DOMAIN="pr-${INSTANCE_ID}.rapidload.live"
