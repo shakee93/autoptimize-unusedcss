@@ -34,12 +34,19 @@ jobs:
         run: |
           INSTANCE_ID=${{ github.event.number }}
           WORDPRESS_PORT=$((3000 + INSTANCE_ID))
-          sed "s/wordpress_data:/wordpress_data_${INSTANCE_ID}:/g" docker-compose-template.yml > docker-compose.yml
-          sed -i "s/mariadb_data:/mariadb_data_${INSTANCE_ID}:/g" docker-compose.yml
-          sed -i "s/\${WORDPRESS_PORT}/${WORDPRESS_PORT}/g" docker-compose.yml
-          sed -i "s/\${INSTANCE_ID}/${INSTANCE_ID}/g" docker-compose.yml
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} "mkdir -p wp-${INSTANCE_ID}"
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa docker-compose.yml bitnami@${{ secrets.SSH_HOST }}:/home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
+            INSTANCE_ID=${INSTANCE_ID}
+            WORDPRESS_PORT=${WORDPRESS_PORT}
+            # Create instance directory
+            mkdir -p /home/bitnami/wp-${INSTANCE_ID}
+            # Copy the template to the instance directory
+            cp /home/bitnami/docker-compose-template.yml /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            # Modify the copied template file
+            sed -i "s/wordpress_data:/wordpress_data_${INSTANCE_ID}:/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/mariadb_data:/mariadb_data_${INSTANCE_ID}:/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/\${WORDPRESS_PORT}/${WORDPRESS_PORT}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/\${INSTANCE_ID}/${INSTANCE_ID}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+          EOF
 
       - name: Create dynamic Nginx config
         if: ${{ github.event.action == 'opened' }}
