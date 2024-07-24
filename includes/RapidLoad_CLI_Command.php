@@ -13,11 +13,12 @@ if (defined('WP_CLI') && WP_CLI) {
 
             $uucss_api         = new RapidLoad_Api();
             $uucss_api->apiKey = $license_key;
-            $results           = $uucss_api->post( 'connect', [ 'url' => $this->transform_url(get_site_url()), 'type' => 'wordpress' ] );
+            $url = $this->transform_url(get_site_url());
+            $results           = $uucss_api->post( 'connect', [ 'url' => $url, 'type' => 'wordpress' ] );
 
             if ( $uucss_api->is_error( $results ) ) {
                 if(isset($results->errors) && isset($results->errors[0])){
-                    WP_CLI::error("License Key," . $results->errors[0]->detail . "!");
+                    WP_CLI::error("License Key," . $results->errors[0]->detail . "! - " . get_site_url());
                 }else{
                     WP_CLI::error("License Key verification fail");
                 }
