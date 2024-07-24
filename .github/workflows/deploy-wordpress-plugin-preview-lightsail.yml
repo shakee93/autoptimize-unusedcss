@@ -37,6 +37,8 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${INSTANCE_ID}
             WORDPRESS_PORT=${WORDPRESS_PORT}
+            WP_USERNAME=${{ secrets.WP_USERNAME }}
+            WP_PASSWORD=${{ secrets.WP_PASSWORD }}
             # Create instance directory
             mkdir -p /home/bitnami/wp-${INSTANCE_ID}
             # Copy the template to the instance directory
@@ -46,6 +48,8 @@ jobs:
             sed -i "s/mariadb_data:/mariadb_data_${INSTANCE_ID}:/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
             sed -i "s/\${WORDPRESS_PORT}/${WORDPRESS_PORT}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
             sed -i "s/\${INSTANCE_ID}/${INSTANCE_ID}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/\${WP_USERNAME}/${WP_USERNAME}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/\${WP_PASSWORD}/${WP_PASSWORD}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
           EOF
 
       - name: Create dynamic Nginx config
