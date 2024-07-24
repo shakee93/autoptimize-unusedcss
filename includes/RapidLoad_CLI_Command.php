@@ -23,6 +23,11 @@ if (defined('WP_CLI') && WP_CLI) {
                 }
             }
 
+            $options = RapidLoad_Base::get_option( 'autoptimize_uucss_settings' , []);
+            $options['uucss_api_key_verified'] = 1;
+            $options['uucss_api_key']          = $license_key;
+            RapidLoad_Base::update_option( 'autoptimize_uucss_settings', $options );
+
             WP_CLI::success("License Key connected , $license_key!");
         }
 
