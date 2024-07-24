@@ -124,6 +124,15 @@ jobs:
             sudo docker-compose -f /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml logs wordpress
           EOF
 
+      - name: Update wp-config.php in Docker container
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          INSTANCE_ID=${{ github.event.number }}
+          DOMAIN="pr-${INSTANCE_ID}.rapidload.live"
+          CONTAINER_ID=$(docker ps -qf "name=your_container_name")  # Replace 'your_container_name' with the actual name or ID of the container
+
+          docker exec -u root -i $CONTAINER_ID sh -c "sed -i 's/127.0.0.1/${DOMAIN}/g' /bitnami/wordpress/wp-config.php"
+
       - name: Restart Nginx
         if: ${{ github.event.action == 'opened' }}
         run: |
