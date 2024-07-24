@@ -211,6 +211,17 @@ jobs:
             fi
           EOF
 
+      - name: Disable plugin upload capability
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
+            INSTANCE_ID=${{ github.event.number }}
+            WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
+
+            # Remove the 'upload_plugins' capability from the 'administrator' role
+            sudo docker exec -u root -i ${WP_CONTAINER} wp cap remove administrator upload_plugins
+          EOF
+
       - name: Clean up old Docker containers and volumes
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
