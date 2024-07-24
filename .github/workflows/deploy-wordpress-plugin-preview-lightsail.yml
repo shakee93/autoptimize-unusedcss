@@ -179,7 +179,7 @@ jobs:
               fi
 
               sudo docker exec -i ${WP_CONTAINER} sh -c "wp rapidload update_db"
-              sudo docker exec -i ${WP_CONTAINER} sh -c "wp rapidload connect_license ${{ secrets.RAPIDLOAD_LISENCE_KEY }}"
+              sudo docker exec -i ${WP_CONTAINER} sh -c "wp rapidload connect_license ${{ secrets.RAPIDLOAD_LICENSE_KEY }}"
 
             else
               echo "No container found with name wordpress_${INSTANCE_ID}"
