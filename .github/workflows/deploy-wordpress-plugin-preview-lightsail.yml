@@ -30,7 +30,7 @@ jobs:
           echo "WORDPRESS_PORT=$((3000 + ${{ github.event.number }}))" >> $GITHUB_ENV
 
       - name: Create dynamic docker-compose file
-        if: ${{ github.event.action == 'opened' }}
+        #if: ${{ github.event.action == 'opened' }}
         run: |
           INSTANCE_ID=${{ github.event.number }}
           WORDPRESS_PORT=$((3000 + INSTANCE_ID))
