@@ -156,7 +156,7 @@ jobs:
           EOF
 
       - name: Update wp-config.php in Docker container
-        #if: ${{ github.event.action == 'opened' }}
+        if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
