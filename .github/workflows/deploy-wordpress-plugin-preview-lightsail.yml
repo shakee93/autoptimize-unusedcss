@@ -59,7 +59,6 @@ jobs:
             sed -i "s/wordpress_port/${WORDPRESS_PORT}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
             sed -i "s/wp_username/${WP_USERNAME}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
             sed -i "s/wp_password/${WP_PASSWORD}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
-            cat /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
           EOF
 
       - name: Create dynamic Nginx config
