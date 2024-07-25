@@ -56,10 +56,10 @@ jobs:
             sed -i "s/mariadb_data_instance_id/mariadb_data_${INSTANCE_ID}:/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
             sed -i "s/mariadb_data:/mariadb_data_${INSTANCE_ID}:/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
             sed -i "s/mariadb_instance_id/mariadb_${INSTANCE_ID}:/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
-            sed -i "s/\${WORDPRESS_PORT}/${WORDPRESS_PORT}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/wordpress_port/${WORDPRESS_PORT}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
             sed -i "s/\${INSTANCE_ID}/${INSTANCE_ID}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
-            sed -i "s/\${WP_USERNAME}/${WP_USERNAME}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
-            sed -i "s/\${WP_PASSWORD}/${WP_PASSWORD}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/wp_username/${WP_USERNAME}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/wp_password/${WP_PASSWORD}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
             cat /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
           EOF
 
