@@ -121,6 +121,9 @@ jobs:
             WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
             DB_CONTAINER=$(sudo docker ps -q --filter "name=mariadb_${INSTANCE_ID}")
 
+            echo "WP_CONTAINER ID: ${WP_CONTAINER}"
+            echo "DB_CONTAINER ID: ${DB_CONTAINER}"
+
             # Stop and remove any existing Docker services using the same ports
             sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}" | grep -q . && sudo docker stop $(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
             sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}" | grep -q . && sudo docker rm $(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
@@ -132,15 +135,11 @@ jobs:
 
             # Remove existing volumes
 
-            echo "WP_CONTAINER ID: ${WP_CONTAINER}"
-
             # Stop and remove any existing Docker services using the same ports
             if [ ! -z "$WP_CONTAINER" ]; then
               sudo docker stop ${WP_CONTAINER}
               sudo docker rm ${WP_CONTAINER}
             fi
-
-          echo "DB_CONTAINER ID: ${DB_CONTAINER}"
 
             if [ ! -z "$DB_CONTAINER" ]; then
               sudo docker stop ${DB_CONTAINER}
