@@ -163,7 +163,7 @@ jobs:
           scp -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ./autoptimize-unusedcss.zip bitnami@${{ secrets.SSH_HOST }}:/home/bitnami/autoptimize-unusedcss.zip
 
       - name: Ensure unzip is available in Docker Container
-        if: ${{ github.event.action == 'opened' }}
+        #if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
