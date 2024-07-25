@@ -132,11 +132,15 @@ jobs:
 
             # Remove existing volumes
 
+            echo "WP_CONTAINER ID: ${WP_CONTAINER}"
+
             # Stop and remove any existing Docker services using the same ports
             if [ ! -z "$WP_CONTAINER" ]; then
               sudo docker stop ${WP_CONTAINER}
               sudo docker rm ${WP_CONTAINER}
             fi
+
+          echo "DB_CONTAINER ID: ${DB_CONTAINER}"
 
             if [ ! -z "$DB_CONTAINER" ]; then
               sudo docker stop ${DB_CONTAINER}
