@@ -56,7 +56,7 @@ jobs:
             sed -i "s/\${INSTANCE_ID}/${INSTANCE_ID}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
             sed -i "s/\${WP_USERNAME}/${WP_USERNAME}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
             sed -i "s/\${WP_PASSWORD}/${WP_PASSWORD}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
-      EOF
+          EOF
 
       - name: Create dynamic Nginx config
         if: ${{ github.event.action == 'opened' }}
