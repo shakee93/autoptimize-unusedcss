@@ -50,8 +50,12 @@ jobs:
             cp /home/bitnami/docker-compose-template.yml /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
 
             # Modify the copied template file
+            sed -i "s/wordpress_data_instance_id/wordpress_data_${INSTANCE_ID}:/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
             sed -i "s/wordpress_data:/wordpress_data_${INSTANCE_ID}:/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/wordpress_instance_id/wordpress_${INSTANCE_ID}:/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/mariadb_data_instance_id/mariadb_data_${INSTANCE_ID}:/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
             sed -i "s/mariadb_data:/mariadb_data_${INSTANCE_ID}:/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/mariadb_instance_id/mariadb_${INSTANCE_ID}:/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
             sed -i "s/\${WORDPRESS_PORT}/${WORDPRESS_PORT}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
             sed -i "s/\${INSTANCE_ID}/${INSTANCE_ID}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
             sed -i "s/\${WP_USERNAME}/${WP_USERNAME}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
