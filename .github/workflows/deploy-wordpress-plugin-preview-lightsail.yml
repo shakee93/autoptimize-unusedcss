@@ -48,7 +48,6 @@ jobs:
 
             # Copy the template to the instance directory
             cp /home/bitnami/docker-compose-template.yml /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
-            cd /home/bitnami/wp-${INSTANCE_ID} && ls
 
             # Modify the copied template file
             sed -i "s/wordpress_data:/wordpress_data_${INSTANCE_ID}:/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
@@ -57,6 +56,7 @@ jobs:
             sed -i "s/\${INSTANCE_ID}/${INSTANCE_ID}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
             sed -i "s/\${WP_USERNAME}/${WP_USERNAME}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
             sed -i "s/\${WP_PASSWORD}/${WP_PASSWORD}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            cat /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
           EOF
 
       - name: Create dynamic Nginx config
