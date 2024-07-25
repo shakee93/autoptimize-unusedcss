@@ -155,11 +155,12 @@ class RapidLoad_Optimizer
 
         foreach ($actions as $action => $method) {
             add_action("wp_ajax_$action", [$this, $method]);
-            add_action("wp_ajax_nopriv_$action", [$this, $method]);
         }
     }
 
     public function rapidload_css_job_status(){
+
+        self::verify_nonce();
 
         $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
 
@@ -220,6 +221,7 @@ class RapidLoad_Optimizer
     public function titan_reset_to_default(){
 
         //$this->pre_optimizer_function();
+        self::verify_nonce();
 
         if(isset(self::$strategy)){
             if(self::$strategy == "mobile"){

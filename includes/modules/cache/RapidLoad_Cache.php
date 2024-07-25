@@ -78,7 +78,8 @@ class RapidLoad_Cache
     }
 
     public function display_admin_notice_for_directory_permission_issue(){
-        $cache_dir = RapidLoad_Cache_Store::get_cache_dir(site_url());
+
+        $cache_dir = dirname(RapidLoad_Cache_Store::get_cache_dir(site_url()));
 
         if(!is_writable($cache_dir)){
             $message = 'writing permission error for the path : ' . $cache_dir;
