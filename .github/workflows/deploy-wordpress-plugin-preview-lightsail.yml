@@ -30,7 +30,7 @@ jobs:
           echo "WORDPRESS_PORT=$((3000 + ${{ github.event.number }}))" >> $GITHUB_ENV
 
       - name: Create dynamic docker-compose file
-        if: ${{ github.event.action == 'opened' }}
+        #if: ${{ github.event.action == 'opened' }}
         run: |
           INSTANCE_ID=${{ github.event.number }}
           WORDPRESS_PORT=$((3000 + INSTANCE_ID))
@@ -138,14 +138,14 @@ jobs:
           EOF
 
       - name: Update wp-config.php in Docker container
-        if: ${{ github.event.action == 'opened' }}
+        #if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
             DOMAIN="pr-${INSTANCE_ID}.rapidload.live"
             WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
 
-            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i 's/127.0.0.1/${DOMAIN}/g' /bitnami/wordpress/wp-config.php"
+            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i 's/127.0.0.1/${DOMAIN}/g; s|http://|https://|g' /bitnami/wordpress/wp-config.php"
           EOF
 
       - name: Restart Nginx
@@ -221,7 +221,7 @@ jobs:
           EOF
 
       - name: Disable plugin upload capability
-        if: ${{ github.event.action == 'opened' }}
+        #if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
@@ -232,6 +232,7 @@ jobs:
           EOF
 
       - name: Clean up old Docker containers and volumes
+        if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             # Remove Docker containers older than 30 days
