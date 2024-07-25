@@ -43,6 +43,7 @@ jobs:
             mkdir -p /home/bitnami/wp-${INSTANCE_ID}
             # Copy the template to the instance directory
             cp /home/bitnami/docker-compose-template.yml /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            cd /home/bitnami/wp-${INSTANCE_ID} && ls
             # Modify the copied template file
             sed -i "s/wordpress_data:/wordpress_data_${INSTANCE_ID}:/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
             sed -i "s/mariadb_data:/mariadb_data_${INSTANCE_ID}:/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
