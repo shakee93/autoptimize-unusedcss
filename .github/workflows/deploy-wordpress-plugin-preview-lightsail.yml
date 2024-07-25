@@ -35,12 +35,13 @@ jobs:
           WORDPRESS_PORT=$((3000 + INSTANCE_ID))
           WP_USERNAME=${{ secrets.WP_USERNAME }}
           WP_PASSWORD=${{ secrets.WP_PASSWORD }}
+          SSH_HOST=${{ secrets.SSH_HOST }}
 
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} <<EOF
-            INSTANCE_ID=${INSTANCE_ID}
-            WORDPRESS_PORT=${WORDPRESS_PORT}
-            WP_USERNAME=${WP_USERNAME}
-            WP_PASSWORD=${WP_PASSWORD}
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${SSH_HOST} <<EOF
+            export INSTANCE_ID=${INSTANCE_ID}
+            export WORDPRESS_PORT=${WORDPRESS_PORT}
+            export WP_USERNAME=${WP_USERNAME}
+            export WP_PASSWORD=${WP_PASSWORD}
 
             # Create instance directory
             mkdir -p /home/bitnami/wp-${INSTANCE_ID}
