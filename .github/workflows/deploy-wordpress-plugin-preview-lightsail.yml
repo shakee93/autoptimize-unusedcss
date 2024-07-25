@@ -34,7 +34,7 @@ jobs:
         run: |
           INSTANCE_ID=${{ github.event.number }}
           WORDPRESS_PORT=$((3000 + INSTANCE_ID))
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << EOF
             INSTANCE_ID=${INSTANCE_ID}
             WORDPRESS_PORT=${WORDPRESS_PORT}
             WP_USERNAME=${{ secrets.WP_USERNAME }}
