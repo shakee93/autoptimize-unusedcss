@@ -109,6 +109,8 @@ jobs:
             INSTANCE_ID=${{ github.event.number }}
             WORDPRESS_PORT=$((3000 + INSTANCE_ID))
             export INSTANCE_ID WORDPRESS_PORT
+            WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
+            DB_CONTAINER=$(sudo docker ps -q --filter "name=mariadb_${INSTANCE_ID}")
 
             # Stop and remove any existing Docker services using the same ports
             sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}" | grep -q . && sudo docker stop $(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
@@ -120,6 +122,13 @@ jobs:
             #sudo fuser -k ${WORDPRESS_PORT}/tcp
 
             # Remove existing volumes
+
+            sudo docker stop ${WP_CONTAINER}
+            sudo docker stop ${DB_CONTAINER}
+
+            sudo docker rm ${WP_CONTAINER}
+            sudo docker rm ${DB_CONTAINER}
+
             sudo docker volume rm -f $(sudo docker volume ls -q --filter name=wordpress_data_${INSTANCE_ID})
             sudo docker volume rm -f $(sudo docker volume ls -q --filter name=mariadb_data_${INSTANCE_ID})
 
