@@ -124,11 +124,16 @@ jobs:
 
             # Remove existing volumes
 
-            sudo docker stop ${WP_CONTAINER}
-            sudo docker stop ${DB_CONTAINER}
+            # Stop and remove any existing Docker services using the same ports
+            if [ ! -z "$WP_CONTAINER" ]; then
+              sudo docker stop ${WP_CONTAINER}
+              sudo docker rm ${WP_CONTAINER}
+            fi
 
-            sudo docker rm ${WP_CONTAINER}
-            sudo docker rm ${DB_CONTAINER}
+            if [ ! -z "$DB_CONTAINER" ]; then
+              sudo docker stop ${DB_CONTAINER}
+              sudo docker rm ${DB_CONTAINER}
+            fi
 
             sudo docker volume rm -f $(sudo docker volume ls -q --filter name=wordpress_data_${INSTANCE_ID})
             sudo docker volume rm -f $(sudo docker volume ls -q --filter name=mariadb_data_${INSTANCE_ID})
