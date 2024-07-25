@@ -30,6 +30,7 @@ jobs:
           echo "WORDPRESS_PORT=$((3000 + ${{ github.event.number }}))" >> $GITHUB_ENV
 
       - name: Create dynamic docker-compose file
+        if: ${{ github.event.action == 'opened' }}
         run: |
           INSTANCE_ID=${{ github.event.number }}
           WORDPRESS_PORT=$((3000 + INSTANCE_ID))
@@ -112,6 +113,7 @@ jobs:
             }'
 
       - name: Deploy WordPress
+        if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << EOF
             INSTANCE_ID=${{ github.event.number }}
@@ -127,24 +129,24 @@ jobs:
 
             # Stop and remove any existing Docker services using the same ports
             if [ ! -z "\$WP_CONTAINER" ]; then
-              sudo docker stop \${WP_CONTAINER}
-              sudo docker rm \${WP_CONTAINER}
+              #sudo docker stop \${WP_CONTAINER}
+              #sudo docker rm \${WP_CONTAINER}
             fi
 
             if [ ! -z "\$DB_CONTAINER" ]; then
-              sudo docker stop \${DB_CONTAINER}
-              sudo docker rm \${DB_CONTAINER}
+              #sudo docker stop \${DB_CONTAINER}
+              #sudo docker rm \${DB_CONTAINER}
             fi
 
             # Remove existing volumes
             WP_VOLUME=\$(sudo docker volume ls -q --filter name=wordpress_data_\${INSTANCE_ID})
             if [ ! -z "\$WP_VOLUME" ]; then
-              sudo docker volume rm -f \${WP_VOLUME}
+              #sudo docker volume rm -f \${WP_VOLUME}
             fi
 
             DB_VOLUME=\$(sudo docker volume ls -q --filter name=mariadb_data_\${INSTANCE_ID})
             if [ ! -z "\$DB_VOLUME" ]; then
-              sudo docker volume rm -f \${DB_VOLUME}
+              #sudo docker volume rm -f \${DB_VOLUME}
             fi
 
             # Start the new services
@@ -181,7 +183,7 @@ jobs:
           scp -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ./autoptimize-unusedcss.zip bitnami@${{ secrets.SSH_HOST }}:/home/bitnami/autoptimize-unusedcss.zip
 
       - name: Ensure unzip is available in Docker Container
-        #if: ${{ github.event.action == 'opened' }}
+        if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
@@ -216,6 +218,7 @@ jobs:
           EOF
 
       - name: Activate Plugin in Docker Container
+        if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
@@ -240,7 +243,7 @@ jobs:
           EOF
 
       - name: Disable plugin upload capability
-        #if: ${{ github.event.action == 'opened' }}
+        if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
