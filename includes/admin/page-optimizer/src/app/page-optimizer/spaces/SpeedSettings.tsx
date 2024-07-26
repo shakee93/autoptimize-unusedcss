@@ -79,7 +79,7 @@ const SpeedSettings = ({}) => {
     const [sortedStatus, setSortedStatus] = useState(true)
     const modes = ['starter', 'accelerate', 'turboMax'];
     const [customMode, setCustomMode] = useState(false);
-    const [activeSettingsMode, setActiveSettingsMode] = useState(data?.settingsMode || 'starter');
+    const [activeSettingsMode, setActiveSettingsMode] = useState(data?.settingsMode || 'custom');
     const [mouseOnSettingsGear, setMouseOnSettingsGear] = useState('');
     const { toast } = useToast();
     const {testMode} = useSelector((state: RootState) => state.app);
