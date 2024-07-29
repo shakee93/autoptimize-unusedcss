@@ -1,6 +1,0 @@
-# Dockerfile for WordPress
-FROM bitnami/wordpress:latest
-
-# Install Git
-USER root
-RUN install_packages git
