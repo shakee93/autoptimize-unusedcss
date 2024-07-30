@@ -128,26 +128,26 @@ jobs:
             echo "DB_CONTAINER ID: \${DB_CONTAINER}"
 
             # Stop and remove any existing Docker services using the same ports
-            if [ ! -z "\$WP_CONTAINER" ]; then
+            #if [ ! -z "\$WP_CONTAINER" ]; then
               #sudo docker stop \${WP_CONTAINER}
               #sudo docker rm \${WP_CONTAINER}
-            fi
+            #fi
 
-            if [ ! -z "\$DB_CONTAINER" ]; then
+            #if [ ! -z "\$DB_CONTAINER" ]; then
               #sudo docker stop \${DB_CONTAINER}
               #sudo docker rm \${DB_CONTAINER}
-            fi
+            #fi
 
             # Remove existing volumes
-            WP_VOLUME=\$(sudo docker volume ls -q --filter name=wordpress_data_\${INSTANCE_ID})
-            if [ ! -z "\$WP_VOLUME" ]; then
+            #WP_VOLUME=\$(sudo docker volume ls -q --filter name=wordpress_data_\${INSTANCE_ID})
+            #if [ ! -z "\$WP_VOLUME" ]; then
               #sudo docker volume rm -f \${WP_VOLUME}
-            fi
+            #fi
 
-            DB_VOLUME=\$(sudo docker volume ls -q --filter name=mariadb_data_\${INSTANCE_ID})
-            if [ ! -z "\$DB_VOLUME" ]; then
+            #DB_VOLUME=\$(sudo docker volume ls -q --filter name=mariadb_data_\${INSTANCE_ID})
+            #if [ ! -z "\$DB_VOLUME" ]; then
               #sudo docker volume rm -f \${DB_VOLUME}
-            fi
+            #fi
 
             # Start the new services
             sudo docker-compose -f /home/bitnami/wp-\${INSTANCE_ID}/docker-compose.yml up -d
