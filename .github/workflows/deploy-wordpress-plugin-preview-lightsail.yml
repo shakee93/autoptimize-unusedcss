@@ -75,6 +75,18 @@ jobs:
           # Create the Nginx config file locally
           cat <<EOF > ${LOCAL_CONFIG_FILE_PATH}
           server {
+              listen 443;
+              server_name pr-${INSTANCE_ID}.rapidload.live;
+
+              location / {
+                  proxy_pass http://localhost:${WORDPRESS_PORT};
+                  proxy_set_header Host $host;
+                  proxy_set_header X-Real-IP $remote_addr;
+                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto $scheme;
+              }
+          }
+          server {
               listen 80;
               server_name pr-${INSTANCE_ID}.rapidload.live;
 
@@ -173,47 +185,37 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} 'sudo /opt/bitnami/ctlscript.sh restart nginx'
 
-      - name: Clone WordPress Plugin Repository
-        run: |
-          git clone -b ${{ github.head_ref }} --single-branch https://github.com/shakee93/autoptimize-unusedcss.git ./autoptimize-unusedcss
-          zip -r autoptimize-unusedcss.zip ./autoptimize-unusedcss
-
-      - name: Copy Plugin Zip to Remote Instance
-        run: |
-          scp -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ./autoptimize-unusedcss.zip bitnami@${{ secrets.SSH_HOST }}:/home/bitnami/autoptimize-unusedcss.zip
-
-      - name: Ensure unzip is available in Docker Container
-        #if: ${{ github.event.action == 'opened' }}
+      - name: Install git in docker container
         run: |
           ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
             WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
             echo "Container ID: ${WP_CONTAINER}"
-            sudo docker cp /usr/bin/unzip ${WP_CONTAINER}:/usr/bin/unzip || echo "unzip already available in container"
+            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "apt-get update && apt-get install -y git"
           EOF
 
-      - name: Copy and Unzip Plugin in Docker Container
+      - name: Clone or Update WordPress Plugin Repository in Docker Container
         run: |
           ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
-            echo "List of running containers:"
-            sudo docker ps -a
-            echo "List of Docker volumes:"
-            sudo docker volume ls
             WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
-            echo "Container ID: ${WP_CONTAINER}"
-            sudo docker cp /home/bitnami/autoptimize-unusedcss.zip ${WP_CONTAINER}:/bitnami/wordpress/wp-content/plugins/
-            if [ $? -eq 0 ]; then
-              echo "Plugin autoptimize-unusedcss.zip copied successfully to ${WP_CONTAINER}"
-              sudo docker exec -u root -i ${WP_CONTAINER} sh -c "cd /bitnami/wordpress/wp-content/plugins && unzip -o autoptimize-unusedcss.zip -d /bitnami/wordpress/wp-content/plugins && rm autoptimize-unusedcss.zip"
-              if [ $? -eq 0 ]; then
-                echo "Plugin autoptimize-unusedcss unzipped and overwritten successfully in ${WP_CONTAINER}"
+            PLUGIN_PATH=/bitnami/wordpress/wp-content/plugins/autoptimize-unusedcss
+            PLUGIN_DIR=/bitnami/wordpress/wp-content/plugins
+            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "
+              if [ -d ${PLUGIN_PATH} ]; then
+                echo 'Plugin directory exists. Running git pull...'
+                cd ${PLUGIN_PATH}
+                git pull origin ${{ github.head_ref }}
               else
-                echo "Failed to unzip and overwrite plugin autoptimize-unusedcss in ${WP_CONTAINER}"
+                cd ${PLUGIN_DIR}
+                echo 'Cloning plugin repository...'
+                git clone -b ${{ github.head_ref }} --single-branch https://github.com/shakee93/autoptimize-unusedcss.git ${PLUGIN_PATH}
               fi
-              sudo docker exec -i ${WP_CONTAINER} sh -c "ls /bitnami/wordpress/wp-content/plugins"
+            "
+            if [ $? -eq 0 ]; then
+              echo "Plugin repository updated successfully in ${WP_CONTAINER}"
             else
-              echo "Failed to copy plugin autoptimize-unusedcss.zip to ${WP_CONTAINER}"
+              echo "Failed to update plugin repository in ${WP_CONTAINER}"
             fi
           EOF
 
