@@ -24,6 +24,10 @@ define('UUCSS_PLUGIN_URL', plugin_dir_url( __FILE__ ));
 define('UUCSS_ABSPATH', str_replace(wp_basename(WP_CONTENT_DIR), '', WP_CONTENT_DIR));
 define('RAPIDLOAD_BASE',  ( function_exists( 'wp_normalize_path' ) ) ? plugin_basename( __DIR__ . '/' . basename(__FILE__) ) : null);
 
+if (file_exists(dirname(__FILE__) . '/includes/RapidLoad_CLI_Command.php')) {
+    require_once dirname(__FILE__) . '/includes/RapidLoad_CLI_Command.php';
+}
+
 if ( is_multisite() ) {
     $blog_id = get_current_blog_id();
     define('UUCSS_LOG_DIR', wp_get_upload_dir()['basedir'] . '/rapidload/' . date('Ymd') . '/' . $blog_id . '/');

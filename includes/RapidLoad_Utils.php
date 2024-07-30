@@ -711,4 +711,8 @@ trait RapidLoad_Utils {
 
         return $relativeUrl;
     }
+
+    static function is_wp_cli() {
+        return defined('WP_CLI') && WP_CLI;
+    }
 }
