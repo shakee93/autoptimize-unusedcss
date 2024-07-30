@@ -173,15 +173,6 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} 'sudo /opt/bitnami/ctlscript.sh restart nginx'
 
-      - name: Install git in docker container
-        run: |
-          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
-            INSTANCE_ID=${{ github.event.number }}
-            WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
-            echo "Container ID: ${WP_CONTAINER}"
-            sudo docker exec -u root -it ${WP_CONTAINER} /bin/sh "apt update && apt install git"
-          EOF
-
       - name: Clone WordPress Plugin Repository
         run: |
           git clone -b ${{ github.head_ref }} --single-branch https://github.com/shakee93/autoptimize-unusedcss.git ./autoptimize-unusedcss
