@@ -1,8 +1,13 @@
 name: Deploy to WordPress.org
 on:
   push:
+    branches:
+      - master
     tags-ignore:
       - "*beta"
+  pull_request:
+    branches:
+      - master
 jobs:
   tag:
     name: New Release
