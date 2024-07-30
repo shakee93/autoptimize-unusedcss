@@ -1214,4 +1214,30 @@ class RapidLoad_Cache
 
         return $cache_size;
     }
+
+    public static function on_activation( $network_wide ) {
+
+        self::$options = RapidLoad_Base::fetch_options();
+
+        if(!isset(self::$options['uucss_enable_cache']) || self::$options['uucss_enable_cache'] != "1" ){
+            return;
+        }
+
+        self::each_site( $network_wide, self::class . '::update_backend' );
+
+        RapidLoad_Cache_Store::setup();
+    }
+
+    public static function on_deactivation( $network_wide ) {
+
+        self::$options = RapidLoad_Base::fetch_options();
+
+        if(!isset(self::$options['uucss_enable_cache']) || self::$options['uucss_enable_cache'] != "1" ){
+            return;
+        }
+
+        self::each_site( $network_wide, 'RapidLoad_Cache_Store::clean' );
+        self::each_site( $network_wide, self::class . '::clear_site_cache', array(), true );
+        self::each_site( $network_wide, self::class . '::unschedule_events' );
+    }
 }

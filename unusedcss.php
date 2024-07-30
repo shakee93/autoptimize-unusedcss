@@ -42,6 +42,10 @@ if(is_admin()){
 
     register_uninstall_hook(UUCSS_PLUGIN_FILE, 'RapidLoad_DB::drop');
 
+    register_activation_hook( UUCSS_PLUGIN_FILE, 'RapidLoad_Cache::on_activation' );
+
+    register_deactivation_hook( UUCSS_PLUGIN_FILE, 'RapidLoad_Cache::on_deactivation' );
+
 }
 
 /**
