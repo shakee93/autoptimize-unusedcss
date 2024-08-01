@@ -29,38 +29,12 @@ jobs:
           echo "INSTANCE_ID=${{ github.event.number }}" >> $GITHUB_ENV
           echo "WORDPRESS_PORT=$((3000 + ${{ github.event.number }}))" >> $GITHUB_ENV
 
-      - name: Create dynamic docker-compose file
-        #if: ${{ github.event.action == 'opened' }}
+      - name: Comment on PR
+        if: ${{ github.event.action == 'opened' }}
         run: |
-          INSTANCE_ID=${{ github.event.number }}
-          WORDPRESS_PORT=$((3000 + INSTANCE_ID))
-          WP_USERNAME=${{ secrets.WP_USERNAME }}
-          WP_PASSWORD=${{ secrets.WP_PASSWORD }}
-          SSH_HOST=${{ secrets.SSH_HOST }}
-
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${SSH_HOST} <<EOF
-            export INSTANCE_ID=${INSTANCE_ID}
-            export WORDPRESS_PORT=${WORDPRESS_PORT}
-            export WP_USERNAME=${WP_USERNAME}
-            export WP_PASSWORD=${WP_PASSWORD}
-
-            # Create instance directory
-            mkdir -p /home/bitnami/wp-${INSTANCE_ID}
-
-            # Copy the template to the instance directory
-            cp /home/bitnami/docker-compose-template.yml /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
-
-            # Modify the copied template file
-            sed -i "s/wordpress_data_instance_id/wordpress_data_${INSTANCE_ID}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
-            sed -i "s/wordpress_data:/wordpress_data_${INSTANCE_ID}:/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
-            sed -i "s/wordpress_instance_id/wordpress_${INSTANCE_ID}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
-            sed -i "s/mariadb_data_instance_id/mariadb_data_${INSTANCE_ID}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
-            sed -i "s/mariadb_data:/mariadb_data_${INSTANCE_ID}:/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
-            sed -i "s/mariadb_instance_id/mariadb_${INSTANCE_ID}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
-            sed -i "s/wordpress_port/${WORDPRESS_PORT}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
-            sed -i "s/wp_username/${WP_USERNAME}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
-            sed -i "s/wp_password/${WP_PASSWORD}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
-          EOF
+          curl -X POST -H "Authorization: token ${{ secrets.SSH_GITHUB_TOKEN }}" \
+            -d "{\"body\": \"WordPress instance for this PR is available at https://pr-${{ github.event.number }}.rapidload.live\"}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments"
 
       - name: Create dynamic Nginx config
         #if: ${{ github.event.action == 'opened' }}
@@ -108,6 +82,11 @@ jobs:
           # Move the config file to the target directory using sudo
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} "sudo mv ${REMOTE_CONFIG_FILE_PATH} ${TARGET_CONFIG_FILE_PATH}"
 
+      - name: Restart Nginx
+        #if: ${{ github.event.action == 'opened' }}
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} 'sudo /opt/bitnami/ctlscript.sh restart nginx'
+
       - name: Add DNS A Record to Cloudflare
         #if: ${{ github.event.action == 'opened' }}
         run: |
@@ -125,6 +104,39 @@ jobs:
               "ttl": 1,
               "proxied": true
             }'
+
+      - name: Create dynamic docker-compose file
+        #if: ${{ github.event.action == 'opened' }}
+        run: |
+          INSTANCE_ID=${{ github.event.number }}
+          WORDPRESS_PORT=$((3000 + INSTANCE_ID))
+          WP_USERNAME=${{ secrets.WP_USERNAME }}
+          WP_PASSWORD=${{ secrets.WP_PASSWORD }}
+          SSH_HOST=${{ secrets.SSH_HOST }}
+
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${SSH_HOST} <<EOF
+            export INSTANCE_ID=${INSTANCE_ID}
+            export WORDPRESS_PORT=${WORDPRESS_PORT}
+            export WP_USERNAME=${WP_USERNAME}
+            export WP_PASSWORD=${WP_PASSWORD}
+
+            # Create instance directory
+            mkdir -p /home/bitnami/wp-${INSTANCE_ID}
+
+            # Copy the template to the instance directory
+            cp /home/bitnami/docker-compose-template.yml /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+
+            # Modify the copied template file
+            sed -i "s/wordpress_data_instance_id/wordpress_data_${INSTANCE_ID}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/wordpress_data:/wordpress_data_${INSTANCE_ID}:/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/wordpress_instance_id/wordpress_${INSTANCE_ID}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/mariadb_data_instance_id/mariadb_data_${INSTANCE_ID}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/mariadb_data:/mariadb_data_${INSTANCE_ID}:/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/mariadb_instance_id/mariadb_${INSTANCE_ID}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/wordpress_port/${WORDPRESS_PORT}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/wp_username/${WP_USERNAME}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/wp_password/${WP_PASSWORD}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
+          EOF
 
       - name: Deploy WordPress
         #if: ${{ github.event.action == 'opened' }}
@@ -181,11 +193,6 @@ jobs:
             sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i 's/127.0.0.1/${DOMAIN}/g; s|http://|https://|g' /bitnami/wordpress/wp-config.php"
             #sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i 's/127.0.0.1/${DOMAIN}/g' /bitnami/wordpress/wp-config.php"
           EOF
-
-      - name: Restart Nginx
-        #if: ${{ github.event.action == 'opened' }}
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} 'sudo /opt/bitnami/ctlscript.sh restart nginx'
 
       - name: Install git in docker container
         run: |
@@ -288,11 +295,4 @@ jobs:
               echo "No old volumes found."
             fi
           EOF
-
-      - name: Comment on PR
-        #if: ${{ github.event.action == 'opened' }}
-        run: |
-          curl -X POST -H "Authorization: token ${{ secrets.SSH_GITHUB_TOKEN }}" \
-            -d "{\"body\": \"WordPress instance for this PR is available at https://pr-${{ github.event.number }}.rapidload.live\"}" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments"
 
