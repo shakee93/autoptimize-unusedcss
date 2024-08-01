@@ -37,7 +37,7 @@ jobs:
             "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments"
 
       - name: Create dynamic Nginx config
-        #if: ${{ github.event.action == 'opened' }}
+        if: ${{ github.event.action == 'opened' }}
         run: |
           INSTANCE_ID=${{ github.event.number }}
           WORDPRESS_PORT=$((3000 + INSTANCE_ID))
@@ -83,12 +83,12 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} "sudo mv ${REMOTE_CONFIG_FILE_PATH} ${TARGET_CONFIG_FILE_PATH}"
 
       - name: Restart Nginx
-        #if: ${{ github.event.action == 'opened' }}
+        if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} 'sudo /opt/bitnami/ctlscript.sh restart nginx'
 
       - name: Add DNS A Record to Cloudflare
-        #if: ${{ github.event.action == 'opened' }}
+        if: ${{ github.event.action == 'opened' }}
         run: |
           CF_API_TOKEN=${{ secrets.CF_API_TOKEN }}
           ZONE_ID=${{ secrets.CF_ZONE_ID }}
@@ -106,7 +106,7 @@ jobs:
             }'
 
       - name: Create dynamic docker-compose file
-        #if: ${{ github.event.action == 'opened' }}
+        if: ${{ github.event.action == 'opened' }}
         run: |
           INSTANCE_ID=${{ github.event.number }}
           WORDPRESS_PORT=$((3000 + INSTANCE_ID))
@@ -139,7 +139,7 @@ jobs:
           EOF
 
       - name: Deploy WordPress
-        #if: ${{ github.event.action == 'opened' }}
+        if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << EOF
             INSTANCE_ID=${{ github.event.number }}
@@ -182,7 +182,7 @@ jobs:
           EOF
 
       - name: Update wp-config.php in Docker container
-        #if: ${{ github.event.action == 'opened' }}
+        if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
@@ -195,6 +195,7 @@ jobs:
           EOF
 
       - name: Install git in docker container
+        if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
@@ -229,7 +230,7 @@ jobs:
           EOF
 
       - name: Activate Plugin in Docker Container
-        #if: ${{ github.event.action == 'opened' }}
+        if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
@@ -254,7 +255,7 @@ jobs:
           EOF
 
       - name: Disable plugin upload capability
-        #if: ${{ github.event.action == 'opened' }}
+        if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
