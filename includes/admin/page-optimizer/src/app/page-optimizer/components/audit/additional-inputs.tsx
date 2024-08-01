@@ -194,7 +194,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                </div>
                <div className='flex flex-wrap gap-2 overflow-y-auto scrollbar-stable max-h-[300px] w-full bg-white dark:border-brand-900 rounded-md rounded-tl-none px-4 py-4 dark:bg-brand-900 '>
 
-                   {activeCategory == 'third_party'  && groupedData[activeCategory] && Array.isArray(groupedData[activeCategory]) && (
+                   {activeCategory == 'third_party' && (
                        <>
                            {groupedData[activeCategory].map((item, index: number) => (
                                <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>
@@ -208,21 +208,21 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                            ))}
                        </>
                    )}
-                   {activeCategory == 'plugins' && groupedData[activeCategory] && Array.isArray(groupedData[activeCategory]) && (
+                   {activeCategory == 'plugins' && (
                        <>
                            {groupedData[activeCategory].map((item, index: number) => (
-                               <div key={index} className='flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>
+                               <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>
                                    {item?.name}
                                    <Switch
                                        checked={item?.isSelected}
                                        onCheckedChange={(checked) => handleSwitchChange(checked, item.id)}
                                    />
+
                                </div>
                            ))}
                        </>
                    )}
-
-                   {activeCategory == 'theme'  && groupedData[activeCategory] && Array.isArray(groupedData[activeCategory]) && (
+                   {activeCategory == 'theme' && (
                        <>
                            {groupedData[activeCategory].map((item, index: number) => (
                                <div key={index} className=' flex gap-2 cursor-pointer font-medium text-sm bg-purple-50/60 dark:text-brand-300 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-950 w-fit rounded-xl items-center py-1.5 px-2'>
