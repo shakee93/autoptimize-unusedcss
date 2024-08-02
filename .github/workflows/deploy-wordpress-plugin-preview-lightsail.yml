@@ -194,6 +194,17 @@ jobs:
             #sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i 's/127.0.0.1/${DOMAIN}/g' /bitnami/wordpress/wp-config.php"
           EOF
 
+      - name: Update robots.txt in Docker container
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
+            INSTANCE_ID=${{ github.event.number }}
+            WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
+
+            # Create or update robots.txt to prevent Google indexing
+            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "echo -e 'User-agent: *\nDisallow: /' > /bitnami/wordpress/robots.txt"
+          EOF
+
       - name: Install git in docker container
         if: ${{ github.event.action == 'opened' }}
         run: |
