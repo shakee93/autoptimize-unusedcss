@@ -237,7 +237,7 @@ const Performance = () => {
                                         <TitanLogo/>
                                     </div>
 
-                                    <DialogTitle>Welcome to Titan’s New Look! (v1.1.0)</DialogTitle>
+                                    <DialogTitle>Welcome to Titan’s New Look! (v1.1.6)</DialogTitle>
                                 </div>
 
                                 <div className='relative py-4'>
