@@ -193,7 +193,6 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
                </div>
                <div className='flex flex-wrap gap-2 overflow-y-auto scrollbar-stable max-h-[300px] w-full bg-white dark:border-brand-900 rounded-md rounded-tl-none px-4 py-4 dark:bg-brand-900 '>
-
                    {Array.isArray(groupedData[activeCategory]) && groupedData[activeCategory] && (
                        activeCategory == 'third_party' && (
                            <>
