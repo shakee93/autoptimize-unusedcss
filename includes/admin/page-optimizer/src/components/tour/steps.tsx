@@ -263,10 +263,10 @@ export const FinalSteps: StepType[] = [
                 return [Number(rect.x + rect.width) - postionsProps.width , rect.y - postionsProps.height - 25 ];
             }
 
-            return "top"
+            return "bottom"
         },
         padding: {
-            popover: [100, 25]
+            popover: [20, 0]
         },
     },
 ]
