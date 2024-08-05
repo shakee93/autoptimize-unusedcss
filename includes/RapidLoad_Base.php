@@ -593,6 +593,7 @@ class RapidLoad_Base
             'uucss_fontface' => "1",
             'uucss_keyframes' => "1",
             'uucss_variables' => "1",
+            'uucss_enable_uucss' => "1",
             'uucss_enable_cpcss' => "1",
             'uucss_enable_cpcss_mobile' => "1",
             'uucss_minify' => "1",
