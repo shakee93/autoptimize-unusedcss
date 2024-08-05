@@ -29,6 +29,82 @@ jobs:
           echo "INSTANCE_ID=${{ github.event.number }}" >> $GITHUB_ENV
           echo "WORDPRESS_PORT=$((3000 + ${{ github.event.number }}))" >> $GITHUB_ENV
 
+      - name: Comment on PR
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          curl -X POST -H "Authorization: token ${{ secrets.SSH_GITHUB_TOKEN }}" \
+            -d "{\"body\": \"WordPress instance for this PR is available at https://pr-${{ github.event.number }}.rapidload.live\"}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments"
+
+      - name: Create dynamic Nginx config
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          INSTANCE_ID=${{ github.event.number }}
+          WORDPRESS_PORT=$((3000 + INSTANCE_ID))
+          CONFIG_FILE_NAME="pr-${INSTANCE_ID}.rapidload.live.conf"
+          LOCAL_CONFIG_FILE_PATH="./${CONFIG_FILE_NAME}"
+          REMOTE_CONFIG_FILE_PATH="/home/bitnami/${CONFIG_FILE_NAME}"
+          TARGET_CONFIG_FILE_PATH="/opt/bitnami/nginx/conf/vhosts/${CONFIG_FILE_NAME}"
+
+          # Create the Nginx config file locally
+          cat <<EOF > ${LOCAL_CONFIG_FILE_PATH}
+
+          server {
+              listen 443;
+              server_name pr-${INSTANCE_ID}.rapidload.live;
+
+              location / {
+                  proxy_pass http://localhost:${WORDPRESS_PORT};
+                  proxy_set_header Host \$host;
+                  proxy_set_header X-Real-IP \$remote_addr;
+                  proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto \$scheme;
+              }
+          }
+
+          server {
+              listen 80;
+              server_name pr-${INSTANCE_ID}.rapidload.live;
+
+              location / {
+                  proxy_pass http://localhost:${WORDPRESS_PORT};
+                  proxy_set_header Host \$host;
+                  proxy_set_header X-Real-IP \$remote_addr;
+                  proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto \$scheme;
+              }
+          }
+          EOF
+
+          # Copy the config file to the remote server's home directory
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${LOCAL_CONFIG_FILE_PATH} bitnami@${{ secrets.SSH_HOST }}:${REMOTE_CONFIG_FILE_PATH}
+
+          # Move the config file to the target directory using sudo
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} "sudo mv ${REMOTE_CONFIG_FILE_PATH} ${TARGET_CONFIG_FILE_PATH}"
+
+      - name: Restart Nginx
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} 'sudo /opt/bitnami/ctlscript.sh restart nginx'
+
+      - name: Add DNS A Record to Cloudflare
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          CF_API_TOKEN=${{ secrets.CF_API_TOKEN }}
+          ZONE_ID=${{ secrets.CF_ZONE_ID }}
+          RECORD_NAME=pr-${{ github.event.number }}
+          RECORD_CONTENT=${{ secrets.SSH_HOST }}
+          curl -X POST "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records" \
+            -H "Authorization: Bearer ${CF_API_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data '{
+              "type": "A",
+              "name": "'"${RECORD_NAME}"'",
+              "content": "'"${RECORD_CONTENT}"'",
+              "ttl": 1,
+              "proxied": true
+            }'
+
       - name: Create dynamic docker-compose file
         if: ${{ github.event.action == 'opened' }}
         run: |
@@ -62,56 +138,6 @@ jobs:
             sed -i "s/wp_password/${WP_PASSWORD}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
           EOF
 
-      - name: Create dynamic Nginx config
-        if: ${{ github.event.action == 'opened' }}
-        run: |
-          INSTANCE_ID=${{ github.event.number }}
-          WORDPRESS_PORT=$((3000 + INSTANCE_ID))
-          CONFIG_FILE_NAME="pr-${INSTANCE_ID}.rapidload.live.conf"
-          LOCAL_CONFIG_FILE_PATH="./${CONFIG_FILE_NAME}"
-          REMOTE_CONFIG_FILE_PATH="/home/bitnami/${CONFIG_FILE_NAME}"
-          TARGET_CONFIG_FILE_PATH="/opt/bitnami/nginx/conf/vhosts/${CONFIG_FILE_NAME}"
-
-          # Create the Nginx config file locally
-          cat <<EOF > ${LOCAL_CONFIG_FILE_PATH}
-          server {
-              listen 80;
-              server_name pr-${INSTANCE_ID}.rapidload.live;
-
-              location / {
-                  proxy_pass http://localhost:${WORDPRESS_PORT};
-                  proxy_set_header Host \$host;
-                  proxy_set_header X-Real-IP \$remote_addr;
-                  proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-                  proxy_set_header X-Forwarded-Proto \$scheme;
-              }
-          }
-          EOF
-
-          # Copy the config file to the remote server's home directory
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${LOCAL_CONFIG_FILE_PATH} bitnami@${{ secrets.SSH_HOST }}:${REMOTE_CONFIG_FILE_PATH}
-
-          # Move the config file to the target directory using sudo
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} "sudo mv ${REMOTE_CONFIG_FILE_PATH} ${TARGET_CONFIG_FILE_PATH}"
-
-      - name: Add DNS A Record to Cloudflare
-        if: ${{ github.event.action == 'opened' }}
-        run: |
-          CF_API_TOKEN=${{ secrets.CF_API_TOKEN }}
-          ZONE_ID=${{ secrets.CF_ZONE_ID }}
-          RECORD_NAME=pr-${{ github.event.number }}
-          RECORD_CONTENT=${{ secrets.SSH_HOST }}
-          curl -X POST "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records" \
-            -H "Authorization: Bearer ${CF_API_TOKEN}" \
-            -H "Content-Type: application/json" \
-            --data '{
-              "type": "A",
-              "name": "'"${RECORD_NAME}"'",
-              "content": "'"${RECORD_CONTENT}"'",
-              "ttl": 1,
-              "proxied": true
-            }'
-
       - name: Deploy WordPress
         if: ${{ github.event.action == 'opened' }}
         run: |
@@ -128,26 +154,26 @@ jobs:
             echo "DB_CONTAINER ID: \${DB_CONTAINER}"
 
             # Stop and remove any existing Docker services using the same ports
-            if [ ! -z "\$WP_CONTAINER" ]; then
+            #if [ ! -z "\$WP_CONTAINER" ]; then
               #sudo docker stop \${WP_CONTAINER}
               #sudo docker rm \${WP_CONTAINER}
-            fi
+            #fi
 
-            if [ ! -z "\$DB_CONTAINER" ]; then
+            #if [ ! -z "\$DB_CONTAINER" ]; then
               #sudo docker stop \${DB_CONTAINER}
               #sudo docker rm \${DB_CONTAINER}
-            fi
+            #fi
 
             # Remove existing volumes
-            WP_VOLUME=\$(sudo docker volume ls -q --filter name=wordpress_data_\${INSTANCE_ID})
-            if [ ! -z "\$WP_VOLUME" ]; then
+            #WP_VOLUME=\$(sudo docker volume ls -q --filter name=wordpress_data_\${INSTANCE_ID})
+            #if [ ! -z "\$WP_VOLUME" ]; then
               #sudo docker volume rm -f \${WP_VOLUME}
-            fi
+            #fi
 
-            DB_VOLUME=\$(sudo docker volume ls -q --filter name=mariadb_data_\${INSTANCE_ID})
-            if [ ! -z "\$DB_VOLUME" ]; then
+            #DB_VOLUME=\$(sudo docker volume ls -q --filter name=mariadb_data_\${INSTANCE_ID})
+            #if [ ! -z "\$DB_VOLUME" ]; then
               #sudo docker volume rm -f \${DB_VOLUME}
-            fi
+            #fi
 
             # Start the new services
             sudo docker-compose -f /home/bitnami/wp-\${INSTANCE_ID}/docker-compose.yml up -d
@@ -164,56 +190,42 @@ jobs:
             WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
 
             #sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i 's/127.0.0.1/\${DOMAIN}/g' /bitnami/wordpress/wp-config.php && sed -i '/define( *'\''WP_HOME'\''/ s/^/\/\//' /bitnami/wordpress/wp-config.php"
-            #sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i 's/127.0.0.1/${DOMAIN}/g; s|http://|https://|g' /bitnami/wordpress/wp-config.php"
-            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i 's/127.0.0.1/${DOMAIN}/g' /bitnami/wordpress/wp-config.php"
+            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i 's/127.0.0.1/${DOMAIN}/g; s|http://|https://|g' /bitnami/wordpress/wp-config.php"
+            #sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i 's/127.0.0.1/${DOMAIN}/g' /bitnami/wordpress/wp-config.php"
           EOF
 
-      - name: Restart Nginx
-        if: ${{ github.event.action == 'opened' }}
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} 'sudo /opt/bitnami/ctlscript.sh restart nginx'
-
-      - name: Clone WordPress Plugin Repository
-        run: |
-          git clone -b ${{ github.head_ref }} --single-branch https://github.com/shakee93/autoptimize-unusedcss.git ./autoptimize-unusedcss
-          zip -r autoptimize-unusedcss.zip ./autoptimize-unusedcss
-
-      - name: Copy Plugin Zip to Remote Instance
-        run: |
-          scp -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ./autoptimize-unusedcss.zip bitnami@${{ secrets.SSH_HOST }}:/home/bitnami/autoptimize-unusedcss.zip
-
-      - name: Ensure unzip is available in Docker Container
+      - name: Install git in docker container
         if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
             WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
             echo "Container ID: ${WP_CONTAINER}"
-            sudo docker cp /usr/bin/unzip ${WP_CONTAINER}:/usr/bin/unzip || echo "unzip already available in container"
+            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "apt-get update && apt-get install -y git"
           EOF
 
-      - name: Copy and Unzip Plugin in Docker Container
+      - name: Clone or Update WordPress Plugin Repository in Docker Container
         run: |
           ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
-            echo "List of running containers:"
-            sudo docker ps -a
-            echo "List of Docker volumes:"
-            sudo docker volume ls
             WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
-            echo "Container ID: ${WP_CONTAINER}"
-            sudo docker cp /home/bitnami/autoptimize-unusedcss.zip ${WP_CONTAINER}:/bitnami/wordpress/wp-content/plugins/
-            if [ $? -eq 0 ]; then
-              echo "Plugin autoptimize-unusedcss.zip copied successfully to ${WP_CONTAINER}"
-              sudo docker exec -u root -i ${WP_CONTAINER} sh -c "cd /bitnami/wordpress/wp-content/plugins && unzip -o autoptimize-unusedcss.zip -d /bitnami/wordpress/wp-content/plugins && rm autoptimize-unusedcss.zip"
-              if [ $? -eq 0 ]; then
-                echo "Plugin autoptimize-unusedcss unzipped and overwritten successfully in ${WP_CONTAINER}"
+            PLUGIN_PATH=/bitnami/wordpress/wp-content/plugins/autoptimize-unusedcss
+            PLUGIN_DIR=/bitnami/wordpress/wp-content/plugins
+            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "
+              if [ -d ${PLUGIN_PATH} ]; then
+                echo 'Plugin directory exists. Running git pull...'
+                cd ${PLUGIN_PATH}
+                git pull origin ${{ github.head_ref }}
               else
-                echo "Failed to unzip and overwrite plugin autoptimize-unusedcss in ${WP_CONTAINER}"
+                cd ${PLUGIN_DIR}
+                echo 'Cloning plugin repository...'
+                git clone -b ${{ github.head_ref }} --single-branch https://github.com/shakee93/autoptimize-unusedcss.git ${PLUGIN_PATH}
               fi
-              sudo docker exec -i ${WP_CONTAINER} sh -c "ls /bitnami/wordpress/wp-content/plugins"
+            "
+            if [ $? -eq 0 ]; then
+              echo "Plugin repository updated successfully in ${WP_CONTAINER}"
             else
-              echo "Failed to copy plugin autoptimize-unusedcss.zip to ${WP_CONTAINER}"
+              echo "Failed to update plugin repository in ${WP_CONTAINER}"
             fi
           EOF
 
@@ -254,7 +266,7 @@ jobs:
           EOF
 
       - name: Clean up old Docker containers and volumes
-        if: ${{ github.event.action == 'opened' }}
+        #if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             # Remove Docker containers older than 30 days
@@ -284,11 +296,4 @@ jobs:
               echo "No old volumes found."
             fi
           EOF
-
-      - name: Comment on PR
-        if: ${{ github.event.action == 'opened' }}
-        run: |
-          curl -X POST -H "Authorization: token ${{ secrets.SSH_GITHUB_TOKEN }}" \
-            -d "{\"body\": \"WordPress instance for this PR is available at https://pr-${{ github.event.number }}.rapidload.live\"}" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments"
 

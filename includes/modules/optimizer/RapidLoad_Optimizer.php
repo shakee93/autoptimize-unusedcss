@@ -155,6 +155,7 @@ class RapidLoad_Optimizer
 
         foreach ($actions as $action => $method) {
             add_action("wp_ajax_$action", [$this, $method]);
+           // add_action("wp_ajax_nopriv_$action", [$this, $method]);
         }
     }
 
