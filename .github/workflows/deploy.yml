@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - master
+    tags:
+      - "*"
     tags-ignore:
       - "*beta"
   pull_request:
@@ -10,7 +12,6 @@ on:
       - master
 jobs:
   tag:
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
     name: New Release
     runs-on: ubuntu-latest
     steps:
