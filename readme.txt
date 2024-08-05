@@ -155,7 +155,7 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
-= 2.2.18 - 30/07/2024 =
+= 2.2.18 - 05/08/2024 =
  * feat: boost optimization by adding speed gears in titan
  * feat: enable users to delay only selected js files
  * fix: known bugs
