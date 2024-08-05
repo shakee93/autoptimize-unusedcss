@@ -204,7 +204,7 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
                         onClick={() => {
 
                             {
-                                !loadingStatus && window.open(options.optimizer_url + '?rapidload_preview_optimization', '_blank');
+                                !loadingStatus && window.open(options.optimizer_url + '?rapidload_preview', '_blank');
                             }
 
                         }}
