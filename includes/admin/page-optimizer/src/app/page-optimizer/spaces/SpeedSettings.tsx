@@ -79,7 +79,7 @@ const SpeedSettings = ({}) => {
     const [sortedStatus, setSortedStatus] = useState(true)
     const modes = ['starter', 'accelerate', 'turboMax'];
     const [customMode, setCustomMode] = useState(false);
-    const [activeSettingsMode, setActiveSettingsMode] = useState(data?.settingsMode || 'custom');
+    const [activeSettingsMode, setActiveSettingsMode] = useState(data?.settingsMode || settingsMode);
     const [mouseOnSettingsGear, setMouseOnSettingsGear] = useState('');
     const { toast } = useToast();
     const {testMode} = useSelector((state: RootState) => state.app);
@@ -154,6 +154,7 @@ const SpeedSettings = ({}) => {
 
     useEffect(() => {
         setSortedStatus(true);
+        setActiveSettingsMode(settingsMode)
     }, [activeReport]);
 
     const updateValue = useCallback( (setting: AuditSetting, value: any, key: string) => {
@@ -193,7 +194,6 @@ const SpeedSettings = ({}) => {
     useEffect(() => {
 
         if(activeSettingsMode === 'custom'){
-            dispatch(setCommonState('settingsMode', 'custom'));
             setInitiateCustomMessage(true);
         }else{
             setInitiateCustomMessage(false);

@@ -38,9 +38,9 @@ import {
 
 const welcomePopupKey = 'new-titan-prompt'
 const Performance = () => {
-    const {data, loading, error} = useSelector(optimizerData);
+    const {data, loading, error, activeReport} = useSelector(optimizerData);
 
-    const { dispatch ,  activeTab, openAudits, storePassedAudits} = useCommonDispatch()
+    const { dispatch ,  activeTab, openAudits, storePassedAudits, settingsMode} = useCommonDispatch()
     const [isSticky, setIsSticky] = useState(false);
     const navbarRef = useRef(null);
     const [open, setOpen] = React.useState(false);
@@ -103,6 +103,12 @@ const Performance = () => {
         }
         
     };
+
+    useEffect(() =>{
+
+       console.log(activeTab, ' : ', settingsMode)
+
+    },[activeReport]);
 
     return (
 
