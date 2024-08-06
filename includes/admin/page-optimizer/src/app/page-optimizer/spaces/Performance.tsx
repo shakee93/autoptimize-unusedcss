@@ -104,11 +104,6 @@ const Performance = () => {
         
     };
 
-    useEffect(() =>{
-
-       console.log(activeTab, ' : ', settingsMode)
-
-    },[activeReport]);
 
     return (
 
