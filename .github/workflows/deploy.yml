@@ -1,6 +1,8 @@
 name: Deploy to WordPress.org
 on:
   push:
+    branches:
+      - master
     tags-ignore:
       - "*beta"
 jobs:
