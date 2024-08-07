@@ -1,4 +1,4 @@
-=== RapidLoad 2.2 - Speed Monster in One Plugin ===
+=== RapidLoad – Auto Analyze & Optimize Page Speed (Instant Results) ===
 Contributors: shakee93, futtta
 Donate link:
 Tags: unusedcss, criticalcss, rapidload, image optimization, minify js
@@ -13,7 +13,7 @@ Makes your site even faster and lighter by automatically removing Unused CSS fro
 
 == Description ==
 
-**Automated site speed optimization for WordPress [PAID PREMIUM PLUGIN]**
+**Auto-optimize images, CDN, remove Unused CSS, generate Critical CSS, and optimize JS. Auto Adaptive Optimization for instant results!**
 
 RapidLoad is a tool that can greatly improve your website's performance and user experience. It offers easy installation and onboarding, optimizing various elements like CSS, JavaScript, and images. With a global content delivery network(CDN) with Page Caching techniques, your site will load quickly for users worldwide. Plus, it includes the TITAN OPTIMIZER feature for page speed optimization.
 
