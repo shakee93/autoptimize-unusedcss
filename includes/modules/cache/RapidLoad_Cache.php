@@ -20,6 +20,7 @@ class RapidLoad_Cache
         add_action( 'uucss/cache_cleared', [$this, 'clear_cache'], 10, 2 );
 
         if(!isset(self::$options['uucss_enable_cache']) || self::$options['uucss_enable_cache'] != "1" ){
+            error_log("rapidload_cache disabled");
             return;
         }
 
