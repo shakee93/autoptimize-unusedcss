@@ -49,7 +49,7 @@ class RapidLoad_Cache_Engine
     }
 
     public static function start( $force = false ) {
-
+        header('RapidLoad_Cache_start', $force);
         if ( $force || self::should_start() ) {
             new self();
         }
