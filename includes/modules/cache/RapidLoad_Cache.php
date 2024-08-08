@@ -74,7 +74,7 @@ class RapidLoad_Cache
             self::process_clear_cache_request();
         });
 
-        $this->display_admin_notice_for_directory_permission_issue();
+        //$this->display_admin_notice_for_directory_permission_issue();
     }
 
     public function display_admin_notice_for_directory_permission_issue(){
