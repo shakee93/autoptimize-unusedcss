@@ -48,6 +48,7 @@ class RapidLoad_Cache_Store
         }
 
         if ( ! is_writable( $wp_config_file ) ) {
+            error_log($wp_config_file . ' is not writable');
             return false;
         }
 
