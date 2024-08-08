@@ -96,7 +96,7 @@ class RapidLoad_Cache
 
     public function add_notification($notifications)
     {
-        if(defined('WP_CACHE') && !WP_CACHE){
+        if(defined('WP_CACHE') && !WP_CACHE || !defined('WP_CACHE')){
             $notifications[] = [
                 "title" => "WP_CACHE Constant",
                 "message" => "Please set the value to true of the WP_CACHE constant in WP-Config.php file",
