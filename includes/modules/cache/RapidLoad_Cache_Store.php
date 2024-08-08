@@ -36,6 +36,8 @@ class RapidLoad_Cache_Store
 
     public static function set_wp_cache_constant( $set = true ) {
 
+        error_log(ABSPATH . 'wp-config.php' . ' is path');
+
         if ( file_exists( ABSPATH . 'wp-config.php' ) ) {
             // The config file resides in ABSPATH.
             $wp_config_file = ABSPATH . 'wp-config.php';
