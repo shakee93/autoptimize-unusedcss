@@ -8,12 +8,17 @@ if (defined('WP_CLI') && WP_CLI) {
     {
         use RapidLoad_Utils;
 
-        public function connect_license($args, $assoc_args) {
+        public function connect($args, $assoc_args) {
             list($license_key) = $args;
 
             $uucss_api         = new RapidLoad_Api();
             $uucss_api->apiKey = $license_key;
             $url = $this->transform_url(get_site_url());
+
+            if (isset($assoc_args['url'])) {
+                $url = $assoc_args['url'];
+            }
+
             $results           = $uucss_api->post( 'connect', [ 'url' => $url, 'type' => 'wordpress' ] );
 
             if ( $uucss_api->is_error( $results ) ) {
