@@ -13,7 +13,7 @@ if (defined('WP_CLI') && WP_CLI) {
 
             $uucss_api         = new RapidLoad_Api();
             $uucss_api->apiKey = $license_key;
-            $url = $this->transform_url(get_site_url());
+            $url = $this->transform_url(home_url());
 
             if (isset($assoc_args['url'])) {
                 $url = $assoc_args['url'];
