@@ -602,7 +602,8 @@ class RapidLoad_Base
             'uucss_self_host_google_fonts' => "1",
             'uucss_image_optimize_level' => "lossless",
             'uucss_exclude_above_the_fold_image_count' => 3,
-            'uucss_enable_page_optimizer' => "1"
+            'uucss_enable_page_optimizer' => "1",
+            'rapidload_test_mode' => "1"
         ];
     }
 
