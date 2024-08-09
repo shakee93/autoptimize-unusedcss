@@ -15,15 +15,19 @@ if (defined('WP_CLI') && WP_CLI) {
             $uucss_api->apiKey = $license_key;
             $url = $this->transform_url(home_url());
 
+            $message = "";
+
             if (isset($assoc_args['url'])) {
                 $url = $assoc_args['url'];
+            }else{
+                $message = "not set";
             }
 
             $results           = $uucss_api->post( 'connect', [ 'url' => $url, 'type' => 'wordpress' ] );
 
             if ( $uucss_api->is_error( $results ) ) {
                 if(isset($results->errors) && isset($results->errors[0])){
-                    WP_CLI::error("License Key," . $results->errors[0]->detail . "! - " . get_site_url() . ' - ' . home_url() . ' - ' . $url);
+                    WP_CLI::error("License Key," . $results->errors[0]->detail . "! - " . get_site_url() . ' - ' . home_url() . ' - ' . $url . ' - ' . $message);
                 }else{
                     WP_CLI::error("License Key verification fail");
                 }
