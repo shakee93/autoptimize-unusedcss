@@ -274,6 +274,7 @@ jobs:
               sudo docker exec -i ${WP_CONTAINER} sh -c "wp rapidload update_db"
               #sudo docker exec -i ${WP_CONTAINER} sh -c "wp option update siteurl 'https://pr-${{ github.event.number }}.rapidload.live' --allow-root"
               #sudo docker exec -i ${WP_CONTAINER} sh -c "wp option update home 'https://pr-${{ github.event.number }}.rapidload.live' --allow-root"
+              sudo docker exec -i ${WP_CONTAINER} sh -c "wp search-replace 'http://127.0.0.1' 'https://pr-${{ github.event.number }}.rapidload.live' --all-tables"
               sudo docker exec -i ${WP_CONTAINER} sh -c "wp rapidload connect '${{ secrets.RAPIDLOAD_LICENSE_KEY }}' --uucss=1 --cpcss=1 --url='https://pr-${{ github.event.number }}.rapidload.live'"
 
             else
