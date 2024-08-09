@@ -23,7 +23,7 @@ if (defined('WP_CLI') && WP_CLI) {
 
             if ( $uucss_api->is_error( $results ) ) {
                 if(isset($results->errors) && isset($results->errors[0])){
-                    WP_CLI::error("License Key," . $results->errors[0]->detail . "! - " . get_site_url() . ' - ' . home_url());
+                    WP_CLI::error("License Key," . $results->errors[0]->detail . "! - " . get_site_url() . ' - ' . home_url() . ' - ' . $url);
                 }else{
                     WP_CLI::error("License Key verification fail");
                 }
