@@ -44,7 +44,7 @@ const NextSteps = ({status} : { status: boolean}) => {
                             <Button className='gap-2'
                                     onClick={() => {
                                         {
-                                            window.open(options.optimizer_url + '?rapidload_preview_optimization', '_blank');
+                                            window.open(options.optimizer_url + '?rapidload_preview', '_blank');
                                         }
                                     }}
                             >

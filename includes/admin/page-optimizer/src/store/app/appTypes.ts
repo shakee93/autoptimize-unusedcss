@@ -10,7 +10,7 @@ export interface AppState {
     cssStatus: CSSStatusResponse | null;
     testMode: TestMode | null;
     mobile: {
-        // settingsMode: settingsMode,
+        defaultSettingsMode: settingsMode | null,
         data?: OptimizerResults | null;
         original?: OptimizerResults | null;
         error?: string | null;
@@ -27,7 +27,7 @@ export interface AppState {
 
     },
     desktop: {
-        // settingsMode: settingsMode,
+        defaultSettingsMode: settingsMode | null,
         data?: OptimizerResults | null;
         original?: OptimizerResults | null;
         error?: string | null;

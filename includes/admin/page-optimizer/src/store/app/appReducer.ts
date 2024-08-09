@@ -24,7 +24,8 @@ const initialState: AppState = {
         settings: [],
         originalSettings: [],
         revisions: [],
-        state: {}
+        state: {},
+        defaultSettingsMode: null
     },
     desktop: {
         original: null,
@@ -37,7 +38,8 @@ const initialState: AppState = {
         settings: [],
         originalSettings: [],
         revisions: [],
-        state: {}
+        state: {},
+        defaultSettingsMode: null
     }
 };
 
@@ -74,7 +76,8 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                     loading: false,
                     settings: action.payload.data.settings,
                     originalSettings: JSON.parse(JSON.stringify(action.payload.data.settings)),
-                    revisions: action.payload.data.revisions
+                    revisions: action.payload.data.revisions,
+                    defaultSettingsMode: action.payload.data.data.settingsMode
                 }
             };
         case FETCH_DATA_FAILURE:
