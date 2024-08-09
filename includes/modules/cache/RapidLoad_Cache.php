@@ -19,10 +19,9 @@ class RapidLoad_Cache
 
         add_action( 'uucss/cache_cleared', [$this, 'clear_cache'], 10, 2 );
 
-        $cache_enabled = get_option("rapidload_module_cache", "0");
+        $cache_module_enabled = RapidLoad_Base::get_option('rapidload_module_cache');
 
-        if(!isset($cache_enabled) || $cache_enabled != "1" ){
-            error_log(self::$options['uucss_enable_cache'] . " rapidload_cache disabled");
+        if(!isset($cache_module_enabled) || $cache_module_enabled != "1" ){
             return;
         }
 
@@ -98,7 +97,7 @@ class RapidLoad_Cache
 
     public function add_notification($notifications)
     {
-        if(defined('WP_CACHE') && !WP_CACHE || !defined('WP_CACHE')){
+        if(defined('WP_CACHE') && !WP_CACHE){
             $notifications[] = [
                 "title" => "WP_CACHE Constant",
                 "message" => "Please set the value to true of the WP_CACHE constant in WP-Config.php file",
