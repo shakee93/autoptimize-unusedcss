@@ -258,7 +258,7 @@ jobs:
           EOF
 
       - name: Activate Plugin in Docker Container
-        if: ${{ github.event.action == 'opened' }}
+        #if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
@@ -273,9 +273,9 @@ jobs:
 
               sudo docker exec -i ${WP_CONTAINER} sh -c "wp rapidload update_db"
               sleep 30
-              sudo docker exec -i ${WP_CONTAINER} sh -c "wp option update siteurl 'https://pr-${{ github.event.number }}.rapidload.live' --allow-root"
-              sudo docker exec -i ${WP_CONTAINER} sh -c "wp option update home 'https://pr-${{ github.event.number }}.rapidload.live' --allow-root"
-              sudo docker exec -i ${WP_CONTAINER} sh -c "wp rapidload connect ${{ secrets.RAPIDLOAD_LICENSE_KEY }} --uucss=1 --cpcss=1 --url=https://pr-${{ github.event.number }}.rapidload.live"
+              #sudo docker exec -i ${WP_CONTAINER} sh -c "wp option update siteurl 'https://pr-${{ github.event.number }}.rapidload.live' --allow-root"
+              #sudo docker exec -i ${WP_CONTAINER} sh -c "wp option update home 'https://pr-${{ github.event.number }}.rapidload.live' --allow-root"
+              sudo docker exec -i ${WP_CONTAINER} sh -c "wp rapidload connect '${{ secrets.RAPIDLOAD_LICENSE_KEY }}' --uucss=1 --cpcss=1 --url=https://pr-${{ github.event.number }}.rapidload.live"
 
             else
               echo "No container found with name wordpress_${INSTANCE_ID}"
