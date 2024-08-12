@@ -30,17 +30,20 @@ jobs:
 
       - name: Delete Nginx config
         run: |
-          INSTANCE_ID=${{ github.event.number }}
-          CONFIG_FILE_NAME="pr-${INSTANCE_ID}.rapidload.live.conf"
-          TARGET_CONFIG_FILE_PATH="/opt/bitnami/nginx/conf/vhosts/${CONFIG_FILE_NAME}"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << EOF
+            INSTANCE_ID=${{ github.event.number }}
+            CONFIG_FILE_NAME="pr-${INSTANCE_ID}.rapidload.live.conf"
+            TARGET_CONFIG_FILE_PATH="/opt/bitnami/nginx/conf/vhosts/${CONFIG_FILE_NAME}"
 
-          # Check if the file exists and delete it
-          if [ -f "$TARGET_CONFIG_FILE_PATH" ]; then
-            echo "Deleting $TARGET_CONFIG_FILE_PATH"
-            sudo rm "$TARGET_CONFIG_FILE_PATH"
-          else
-            echo "File $TARGET_CONFIG_FILE_PATH does not exist"
-          fi
+            # Check if the file exists and delete it
+            if [ -f "$TARGET_CONFIG_FILE_PATH" ]; then
+              echo "Deleting $TARGET_CONFIG_FILE_PATH"
+              sudo rm "$TARGET_CONFIG_FILE_PATH"
+            else
+              echo "File $TARGET_CONFIG_FILE_PATH does not exist"
+            fi
+
+          EOF
 
       - name: Restart Nginx
         run: |
