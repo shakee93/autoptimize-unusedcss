@@ -49,26 +49,26 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} 'sudo /opt/bitnami/ctlscript.sh restart nginx'
 
-      - name: Delete DNS A Record from Cloudflare
-        run: |
-          CF_API_TOKEN=${{ secrets.CF_API_TOKEN }}
-          ZONE_ID=${{ secrets.CF_ZONE_ID }}
-          RECORD_NAME=pr-${{ github.event.number }}
+      #- name: Delete DNS A Record from Cloudflare
+        #run: |
+          #CF_API_TOKEN=${{ secrets.CF_API_TOKEN }}
+          #ZONE_ID=${{ secrets.CF_ZONE_ID }}
+          #RECORD_NAME=pr-${{ github.event.number }}
 
           # Fetch the DNS record ID
-          RECORD_ID=$(curl -X GET "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records?type=A&name=${RECORD_NAME}" \
-            -H "Authorization: Bearer ${CF_API_TOKEN}" \
-            -H "Content-Type: application/json" | jq -r '.result[0].id')
+          #RECORD_ID=$(curl -X GET "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records?type=A&name=${RECORD_NAME}" \
+            #-H "Authorization: Bearer ${CF_API_TOKEN}" \
+            #-H "Content-Type: application/json" | jq -r '.result[0].id')
 
           # Check if the RECORD_ID is not null
-          if [ -n "$RECORD_ID" ]; then
-            echo "Deleting DNS record with ID $RECORD_ID"
-            curl -X DELETE "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records/${RECORD_ID}" \
-              -H "Authorization: Bearer ${CF_API_TOKEN}" \
-              -H "Content-Type: application/json"
-          else
-            echo "DNS record not found"
-          fi
+          #if [ -n "$RECORD_ID" ]; then
+            #echo "Deleting DNS record with ID $RECORD_ID"
+            #curl -X DELETE "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records/${RECORD_ID}" \
+              #-H "Authorization: Bearer ${CF_API_TOKEN}" \
+              #-H "Content-Type: application/json"
+          #else
+            #echo "DNS record not found"
+          #fi
 
       - name: Clean Docker WordPress
         run: |
