@@ -8,13 +8,15 @@ const initialState: CommonState = {
         activeTab: 'configurations',
         openAudits: [],
         hoveredMetric: null,
-        activeMetric: null
+        activeMetric: null,
+        settingsMode: null
     },
     desktop: {
         activeTab: 'configurations',
         openAudits: [],
         hoveredMetric: null,
-        activeMetric: null
+        activeMetric: null,
+        settingsMode: null
     }
 };
 

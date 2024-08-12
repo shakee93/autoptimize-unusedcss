@@ -1,8 +1,6 @@
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
 import React, {ReactNode, useCallback, useEffect, useMemo, useState, useRef, MouseEventHandler } from "react";
-import {CheckCircle2, Circle, LogOut} from "lucide-react";
-import Audit from "app/page-optimizer/components/audit/Audit";
 import {
     Starter, Accelerate, TurboMax
 } from "app/page-optimizer/components/icons/gear-icons";
@@ -28,31 +26,15 @@ import {
     JavascriptDelivery,
     PageCache,
 } from "app/page-optimizer/components/icons/category-icons";
-
-import BetaSpeedSetting from "app/page-optimizer/components/audit/BetaSpeedSetting";
 import {cn} from "lib/utils";
 import {setCommonState} from "../../../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {BoltIcon, CheckCircleIcon, ChevronRightIcon, ChevronDownIcon,  ChevronUpIcon, CheckIcon, XMarkIcon  } from "@heroicons/react/24/solid";
 import {updateSettings} from "../../../store/app/appActions";
-import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
 import { m, AnimatePresence  } from 'framer-motion';
 import AuditSettingsItem from './AuditSettingsItem';
 import {useAppContext} from "../../../context/app";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
-} from "components/ui/dialog";
-import TooltipText from "components/ui/tooltip-text";
-import {Cog6ToothIcon} from "@heroicons/react/20/solid";
-import Fields from "app/page-optimizer/components/audit/additional-inputs";
 import AppButton from "components/ui/app-button";
-import Mode from "app/page-optimizer/components/Mode";
 import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
 import {InformationCircleIcon} from "@heroicons/react/24/outline";
 import {useToast} from "components/ui/use-toast";
@@ -71,7 +53,7 @@ type GroupedSettings = Record<string, AuditSetting[]>;
 
 const SpeedSettings = ({}) => {
 
-    const {settings, data, activeReport, touched, fresh} = useSelector(optimizerData);
+    const {settings, data, activeReport, touched, fresh, defaultSettingsMode, revisions} = useSelector(optimizerData);
     const [activeCategory,  setActiveCategory]= useState<SettingsCategory>('css')
     const [groupedSettings, setGroupedSettings] = useState<GroupedSettings>({});
     const {dispatch, openCategory, activeTab, settingsMode, auditsReturn, testModeStatus} = useCommonDispatch()
@@ -79,7 +61,7 @@ const SpeedSettings = ({}) => {
     const [sortedStatus, setSortedStatus] = useState(true)
     const modes = ['starter', 'accelerate', 'turboMax'];
     const [customMode, setCustomMode] = useState(false);
-    const [activeSettingsMode, setActiveSettingsMode] = useState(data?.settingsMode || 'custom');
+    const [activeSettingsMode, setActiveSettingsMode] = useState(defaultSettingsMode || 'custom');
     const [mouseOnSettingsGear, setMouseOnSettingsGear] = useState('');
     const { toast } = useToast();
     const {testMode} = useSelector((state: RootState) => state.app);
@@ -151,11 +133,6 @@ const SpeedSettings = ({}) => {
 
     }, [data, settings]);
 
-
-    useEffect(() => {
-        setSortedStatus(true);
-    }, [activeReport]);
-
     const updateValue = useCallback( (setting: AuditSetting, value: any, key: string) => {
         dispatch(updateSettings(
             setting.audits[0],
@@ -187,19 +164,6 @@ const SpeedSettings = ({}) => {
     const [passedAudits, setPassedAudits] = useState<AuditSetting[]>([]);
     const [notPassedAudits, setNotPassedAudits] = useState<AuditSetting[]>([]);
     const isInitialRender = useRef(true);
-
-    const [initiateCustomMessage, setInitiateCustomMessage] = useState(false);
-
-    useEffect(() => {
-
-        if(activeSettingsMode === 'custom'){
-            dispatch(setCommonState('settingsMode', 'custom'));
-            setInitiateCustomMessage(true);
-        }else{
-            setInitiateCustomMessage(false);
-        }
-    }, [settings]);
-
 
 
     useEffect(() => {
@@ -332,52 +296,28 @@ const SpeedSettings = ({}) => {
             },99999999);
 
         }
-        if (toastInstance) {
-         //   console.log('condition: ',toastInstance)
-          //  toastInstance.dismiss();
-        }
-       // console.log(toastInstance)
     }
 
     useEffect(() => {
+        setSortedStatus(true);
+    }, [activeReport]);
 
-        const starterLabels = ['Remove Unused CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
-        const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
-        const turboMaxLabels = [...accelerateLabels, 'Delay Javascript', 'Enable Critical CSS'];
-        const allAudits = passedAudits.concat(notPassedAudits);
-
-        const trueControlLabels: any[] = [];
-        const falseControlLabels: any[] = [];
-
-        // notPassedAudits.forEach(settings => {
-            allAudits.forEach(settings => {
-                const [mainInput] = settings.inputs
-
-                if (mainInput.value) {
-                    trueControlLabels.push(mainInput.control_label);
-
-                }
-                if(!mainInput.value){
-                    falseControlLabels.push(mainInput.control_label);
-                }
-
-            });
-
-        const filterOutSetupPolicies = (labels: string[]) => labels.filter(label => label !== 'Setup Policies');
-
-        if (filterOutSetupPolicies(trueControlLabels).every(label => starterLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => starterLabels.includes(label))) {
-          //  setActiveSettingsMode('starter')
-        } else if (filterOutSetupPolicies(trueControlLabels).every(label => accelerateLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => accelerateLabels.includes(label))) {
-          //  setActiveSettingsMode('accelerate')
-        } else if (filterOutSetupPolicies(trueControlLabels).every(label => turboMaxLabels.includes(label)) && !filterOutSetupPolicies(falseControlLabels).some(label => turboMaxLabels.includes(label))) {
-          //  setActiveSettingsMode('turboMax')
-        } else {
-            setActiveSettingsMode('custom')
-            dispatch(setCommonState('settingsMode', 'custom'));
+    useEffect(() => {
+        if(!settingsMode){
+            defaultSettingsMode && dispatch(setCommonState('settingsMode', defaultSettingsMode));
+        }else{
+            setActiveSettingsMode(settingsMode || 'custom');
         }
 
+    }, [settings]);
 
-    },[settings]);
+    useEffect(() => {
+        if(revisions.length == 0){
+            dispatch(setCommonState('settingsMode', 'accelerator'));
+            setActiveSettingsMode('accelerate');
+        }
+    },[])
+
 
     const settingsDescriptions: { [key in settingsMode]: string } = {
         starter: "Optimizes foundational aspects for faster load speeds by removing unused CSS, minifying CSS and JavaScript, caching pages, and self-hosting Google Fonts.",

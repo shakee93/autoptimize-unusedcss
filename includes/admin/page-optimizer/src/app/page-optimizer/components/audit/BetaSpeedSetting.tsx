@@ -255,7 +255,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                               onCheckedChange={(c: boolean) =>{
                                                   setCheckboxState(c);
                                                   updateValue(settings, c, mainInput.key);
-
+                                                  dispatch(setCommonState('settingsMode', 'custom'));
                                               }}/>
 
                                 </>
