@@ -43,7 +43,6 @@ jobs:
           fi
 
       - name: Restart Nginx
-        if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} 'sudo /opt/bitnami/ctlscript.sh restart nginx'
 
