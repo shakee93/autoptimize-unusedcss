@@ -19,7 +19,9 @@ class RapidLoad_Cache
 
         add_action( 'uucss/cache_cleared', [$this, 'clear_cache'], 10, 2 );
 
-        if(!isset(self::$options['uucss_enable_cache']) || self::$options['uucss_enable_cache'] != "1" ){
+        $cache_module_enabled = RapidLoad_Base::get_option('rapidload_module_cache');
+
+        if(!isset($cache_module_enabled) || $cache_module_enabled != "1" ){
             return;
         }
 
@@ -74,7 +76,7 @@ class RapidLoad_Cache
             self::process_clear_cache_request();
         });
 
-        $this->display_admin_notice_for_directory_permission_issue();
+        //$this->display_admin_notice_for_directory_permission_issue();
     }
 
     public function display_admin_notice_for_directory_permission_issue(){
