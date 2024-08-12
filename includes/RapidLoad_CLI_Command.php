@@ -8,17 +8,26 @@ if (defined('WP_CLI') && WP_CLI) {
     {
         use RapidLoad_Utils;
 
-        public function connect_license($args, $assoc_args) {
+        public function connect($args, $assoc_args) {
             list($license_key) = $args;
 
             $uucss_api         = new RapidLoad_Api();
             $uucss_api->apiKey = $license_key;
-            $url = $this->transform_url(get_site_url());
+            $url = $this->transform_url(home_url());
+
+            $message = "";
+
+            if (isset($assoc_args['url'])) {
+                $url = $assoc_args['url'];
+            }else{
+                $message = "not set";
+            }
+
             $results           = $uucss_api->post( 'connect', [ 'url' => $url, 'type' => 'wordpress' ] );
 
             if ( $uucss_api->is_error( $results ) ) {
                 if(isset($results->errors) && isset($results->errors[0])){
-                    WP_CLI::error("License Key," . $results->errors[0]->detail . "! - " . get_site_url());
+                    WP_CLI::error("License Key," . $results->errors[0]->detail . "! - " . get_site_url() . ' - ' . home_url() . ' - ' . $url . ' - ' . $message);
                 }else{
                     WP_CLI::error("License Key verification fail");
                 }
