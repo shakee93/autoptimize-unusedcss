@@ -180,6 +180,10 @@ class RapidLoad_Base
 
         $this->url = $this->transform_url($this->url);
 
+        if(RapidLoad_DB::$current_version != RapidLoad_DB::$db_version){
+            return $option;
+        }
+
         RapidLoad_Enqueue::$job = new RapidLoad_Job(['url' => $this->url]);
 
         if(isset(RapidLoad_Enqueue::$job->id)){
