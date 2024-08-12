@@ -34,6 +34,7 @@ jobs:
             INSTANCE_ID=${{ github.event.number }}
             CONFIG_FILE_NAME="pr-${INSTANCE_ID}.rapidload.live.conf"
             TARGET_CONFIG_FILE_PATH="/opt/bitnami/nginx/conf/vhosts/${CONFIG_FILE_NAME}"
+            export INSTANCE_ID CONFIG_FILE_NAME TARGET_CONFIG_FILE_PATH
 
             # Check if the file exists and delete it
             if [ -f "$TARGET_CONFIG_FILE_PATH" ]; then
@@ -42,7 +43,6 @@ jobs:
             else
               echo "File $TARGET_CONFIG_FILE_PATH does not exist"
             fi
-
           EOF
 
       - name: Restart Nginx
