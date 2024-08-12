@@ -30,20 +30,17 @@ jobs:
 
       - name: Delete Nginx config
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << EOF
-            INSTANCE_ID=${{ github.event.number }}
-            CONFIG_FILE_NAME="pr-${INSTANCE_ID}.rapidload.live.conf"
-            TARGET_CONFIG_FILE_PATH="/opt/bitnami/nginx/conf/vhosts/${CONFIG_FILE_NAME}"
-            export INSTANCE_ID CONFIG_FILE_NAME TARGET_CONFIG_FILE_PATH
+          INSTANCE_ID=${{ github.event.number }}
+          CONFIG_FILE_NAME="pr-${INSTANCE_ID}.rapidload.live.conf"
+          TARGET_CONFIG_FILE_PATH="/opt/bitnami/nginx/conf/vhosts/${CONFIG_FILE_NAME}"
 
-            # Check if the file exists and delete it
-            if [ -f "$TARGET_CONFIG_FILE_PATH" ]; then
-              echo "Deleting $TARGET_CONFIG_FILE_PATH"
-              sudo rm "$TARGET_CONFIG_FILE_PATH"
-            else
-              echo "File $TARGET_CONFIG_FILE_PATH does not exist"
-            fi
-          EOF
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} \
+            "if [ -f '$TARGET_CONFIG_FILE_PATH' ]; then \
+               echo 'Deleting $TARGET_CONFIG_FILE_PATH'; \
+               sudo rm '$TARGET_CONFIG_FILE_PATH'; \
+             else \
+               echo 'File $TARGET_CONFIG_FILE_PATH does not exist'; \
+             fi"
 
       - name: Restart Nginx
         run: |
