@@ -76,6 +76,8 @@ class RapidLoad_Base
 
         add_action('plugins_loaded', function (){
 
+            RapidLoad_DB::update_db_version();
+
             if (isset($_REQUEST['rapidload_preview'])) {
                 add_filter('determine_current_user', function (){
                     return 0;
@@ -90,8 +92,6 @@ class RapidLoad_Base
             }
 
             self::get_merged_options();
-
-            RapidLoad_DB::update_db_version();
 
             self::activateByLicenseKey();
             self::activate();
