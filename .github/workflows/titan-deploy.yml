@@ -1,0 +1,29 @@
+name: Publish to NPM
+
+on:
+  push:
+    branches:
+      - feat/titan-npm-publish  # Change this to your main branch name
+    paths:
+      - 'includes/admin/page-optimizer/**'  # Trigger only if changes happen in the app directory
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Specify the Node.js version required
+
+      - name: Install Dependencies
+        run: npm install
+
+      #- name: Publish to NPM
+        #env:
+          #NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+        #run: npm publish
