@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - feat/titan-npm-publish  # Change this to your main branch name
-    paths:
-      - 'includes/admin/page-optimizer/**'  # Trigger only if changes happen in the app directory
+    #paths:
+      #- 'includes/admin/page-optimizer/**'  # Trigger only if changes happen in the app directory
 
 jobs:
   publish:
@@ -24,7 +24,7 @@ jobs:
         run: cd includes/admin/page-optimizer
 
       - name: Install Dependencies
-        run: npm install
+        run: ls
 
       #- name: Publish to NPM
         #env:
