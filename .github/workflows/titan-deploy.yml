@@ -3,9 +3,7 @@ name: Publish to NPM
 on:
   push:
     branches:
-      - feat/titan-npm-publish  # Change this to your main branch name
-    #paths:
-      #- 'includes/admin/page-optimizer/**'  # Trigger only if changes happen in the app directory
+      - feat/titan-npm-publish
 
 jobs:
   publish:
@@ -18,11 +16,19 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'  # Specify the Node.js version required
+          node-version: '16'
+
+      - name: Install Dependencies
+        working-directory: includes/admin/page-optimizer
+        run: npm install
 
       - name: Update Version
         working-directory: includes/admin/page-optimizer
         run: npm version patch
+
+      - name: Build Project
+        working-directory: includes/admin/page-optimizer
+        run: npm run build
 
       - name: Publish to NPM
         working-directory: includes/admin/page-optimizer
