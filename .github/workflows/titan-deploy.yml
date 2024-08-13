@@ -1,22 +1,39 @@
-name: Publish Package to npmjs
+name: Publish to NPM
+
 on:
   push:
     branches:
       - feat/titan-npm-publish
+
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
+
     steps:
-      - uses: actions/checkout@v4
-      # Setup .npmrc file to publish to npm
-      - uses: actions/setup-node@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: '20.x'
-          registry-url: 'https://registry.npmjs.org'
-      - run: npm ci
-      - run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+          node-version: '16'
+
+      - name: Install Dependencies
+        working-directory: includes/admin/page-optimizer
+        run: npm install
+
+      - name: Authenticate with NPM
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NODE_AUTH_TOKEN }}" > ~/.npmrc
+
+      - name: Update Version
+        working-directory: includes/admin/page-optimizer
+        run: npm version patch
+
+      - name: Build Project
+        working-directory: includes/admin/page-optimizer
+        run: npm run build
+
+      - name: Publish to NPM
+        working-directory: includes/admin/page-optimizer
+        run: npm publish
