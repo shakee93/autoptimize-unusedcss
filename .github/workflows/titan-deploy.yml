@@ -26,10 +26,6 @@ jobs:
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NODE_AUTH_TOKEN }}" > ~/.npmrc
 
-      - name: Update Version
-        working-directory: includes/admin/page-optimizer
-        run: npm version patch
-
       - name: Build Project
         working-directory: includes/admin/page-optimizer
         run: npm run build
