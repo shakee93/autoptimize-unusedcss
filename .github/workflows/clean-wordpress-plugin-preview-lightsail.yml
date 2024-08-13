@@ -1,0 +1,119 @@
+name: Clean Lightsail on Pull Request close
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  pr-closed:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get the branch name
+        run: |
+          echo "Branch name: ${{ github.head_ref }}"
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} 'echo SSH successfully configured'
+
+      - name: Set environment variables
+        run: |
+          echo "INSTANCE_ID=${{ github.event.number }}" >> $GITHUB_ENV
+
+      - name: Delete Nginx config
+        run: |
+          INSTANCE_ID=${{ github.event.number }}
+          CONFIG_FILE_NAME="pr-${INSTANCE_ID}.rapidload.live.conf"
+          TARGET_CONFIG_FILE_PATH="/opt/bitnami/nginx/conf/vhosts/${CONFIG_FILE_NAME}"
+
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} \
+            "if [ -f '$TARGET_CONFIG_FILE_PATH' ]; then \
+               echo 'Deleting $TARGET_CONFIG_FILE_PATH'; \
+               sudo rm '$TARGET_CONFIG_FILE_PATH'; \
+             else \
+               echo 'File $TARGET_CONFIG_FILE_PATH does not exist'; \
+             fi"
+
+      - name: Restart Nginx
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} 'sudo /opt/bitnami/ctlscript.sh restart nginx'
+
+      #- name: Delete DNS A Record from Cloudflare
+        #run: |
+          #CF_API_TOKEN=${{ secrets.CF_API_TOKEN }}
+          #ZONE_ID=${{ secrets.CF_ZONE_ID }}
+          #RECORD_NAME=pr-${{ github.event.number }}
+
+          # Fetch the DNS record ID
+          #RECORD_ID=$(curl -X GET "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records?type=A&name=${RECORD_NAME}" \
+            #-H "Authorization: Bearer ${CF_API_TOKEN}" \
+            #-H "Content-Type: application/json" | jq -r '.result[0].id')
+
+          # Check if the RECORD_ID is not null
+          #if [ -n "$RECORD_ID" ]; then
+            #echo "Deleting DNS record with ID $RECORD_ID"
+            #curl -X DELETE "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records/${RECORD_ID}" \
+              #-H "Authorization: Bearer ${CF_API_TOKEN}" \
+              #-H "Content-Type: application/json"
+          #else
+            #echo "DNS record not found"
+          #fi
+
+      - name: Clean Docker WordPress
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << EOF
+            INSTANCE_ID=${{ github.event.number }}
+            WORDPRESS_PORT=$((3000 + INSTANCE_ID))
+            export INSTANCE_ID WORDPRESS_PORT
+
+            # Get the container IDs
+            WP_CONTAINER=\$(sudo docker ps -q --filter "name=wordpress_\${INSTANCE_ID}")
+            DB_CONTAINER=\$(sudo docker ps -q --filter "name=mariadb_\${INSTANCE_ID}")
+
+            echo "WP_CONTAINER ID: \${WP_CONTAINER}"
+            echo "DB_CONTAINER ID: \${DB_CONTAINER}"
+
+            # Stop and remove any existing Docker services using the same ports
+            if [ ! -z "\$WP_CONTAINER" ]; then
+              sudo docker stop \${WP_CONTAINER}
+              sudo docker rm \${WP_CONTAINER}
+            fi
+
+            if [ ! -z "\$DB_CONTAINER" ]; then
+              sudo docker stop \${DB_CONTAINER}
+              sudo docker rm \${DB_CONTAINER}
+            fi
+
+            # Remove existing volumes
+            WP_VOLUME=\$(sudo docker volume ls -q --filter name=wordpress_data_\${INSTANCE_ID})
+            if [ ! -z "\$WP_VOLUME" ]; then
+              sudo docker volume rm -f \${WP_VOLUME}
+            fi
+
+            DB_VOLUME=\$(sudo docker volume ls -q --filter name=mariadb_data_\${INSTANCE_ID})
+            if [ ! -z "\$DB_VOLUME" ]; then
+              sudo docker volume rm -f \${DB_VOLUME}
+            fi
+
+          EOF
+
+      - name: Delete docker-compose file
+        run: |
+          INSTANCE_ID=${{ github.event.number }}
+          SSH_HOST=${{ secrets.SSH_HOST }}
+
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${SSH_HOST} <<EOF
+            export INSTANCE_ID=${INSTANCE_ID}
+
+            # Delete instance directory
+            rm -r /home/bitnami/wp-${INSTANCE_ID}
+
+          EOF
