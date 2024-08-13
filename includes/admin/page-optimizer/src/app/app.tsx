@@ -47,7 +47,7 @@ const App = ({popup, _showOptimizer = false}: {
 
         setTimeout(() => {
             setMounted(true)
-        }, 50)
+        }, 50);
     }, [])
 
 
