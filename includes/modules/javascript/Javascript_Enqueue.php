@@ -247,6 +247,10 @@ class Javascript_Enqueue
 
         }else if(self::is_inline_script($link)){
 
+            if(isset($link->id) && $this->str_contains($link->id,"rapidload-")){
+                return;
+            }
+
             if(self::is_file_excluded($link->innertext()) || self::is_file_excluded($link->innertext(),'uucss_exclude_files_from_delay_js')){
                 return;
             }
