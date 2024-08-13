@@ -17,7 +17,6 @@ const AppTour = React.lazy(() => import( 'components/tour'))
 const InitTour = React.lazy(() => import('components/tour/InitTour'))
 
 
-
 const App = ({popup, _showOptimizer = false}: {
     popup?: HTMLElement | null,
     _showOptimizer?: boolean
