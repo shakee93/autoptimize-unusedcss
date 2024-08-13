@@ -20,6 +20,9 @@ jobs:
         with:
           node-version: '16'  # Specify the Node.js version required
 
+      - name: Got Project Dir
+        run: cd includes/admin/page-optimizer
+
       - name: Install Dependencies
         run: npm install
 
