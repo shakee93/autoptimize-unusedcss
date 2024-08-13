@@ -3,7 +3,7 @@ name: Publish to NPM
 on:
   push:
     branches:
-      - feat/titan-npm-publish
+      - master
 
 jobs:
   publish:
