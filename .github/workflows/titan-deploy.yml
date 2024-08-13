@@ -1,7 +1,8 @@
 name: Publish Package to npmjs
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - feat/titan-npm-publish
 jobs:
   build:
     runs-on: ubuntu-latest
