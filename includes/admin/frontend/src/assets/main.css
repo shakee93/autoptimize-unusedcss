@@ -434,3 +434,7 @@ body .rapidload {
 .heading-margin{
     margin-top: 8px !important;
 }
+
+.hidden-important{
+    display: none !important;
+}
