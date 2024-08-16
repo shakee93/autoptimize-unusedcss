@@ -153,6 +153,12 @@ jobs:
             sed -i "s/wp_password/${WP_PASSWORD}/g" /home/bitnami/wp-${INSTANCE_ID}/docker-compose.yml
           EOF
 
+      - name: Clean up unused Docker networks
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << EOF
+            sudo docker network prune -f
+          EOF
+
       - name: Deploy WordPress
         if: ${{ github.event.action == 'opened' }}
         run: |
