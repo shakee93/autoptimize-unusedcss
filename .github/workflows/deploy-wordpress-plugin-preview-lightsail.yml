@@ -207,8 +207,8 @@ jobs:
             #sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i 's/127.0.0.1/\${DOMAIN}/g' /bitnami/wordpress/wp-config.php && sed -i '/define( *'\''WP_HOME'\''/ s/^/\/\//' /bitnami/wordpress/wp-config.php"
             sudo docker exec -u root -i ${WP_CONTAINER} sh -c "chmod 666 /bitnami/wordpress/wp-config.php"
             sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i 's/127.0.0.1/${DOMAIN}/g; s|http://|https://|g' /bitnami/wordpress/wp-config.php"
-            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i "/^\/\*\* Sets up WordPress vars and included files. \*\//i if ( ! defined( 'RAPIDLOAD_DEV_MODE' ) ) { define( 'RAPIDLOAD_DEV_MODE', true ); }" wp-config.php"
-            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i "/^\/\*\* Sets up WordPress vars and included files. \*\//i if ( ! defined( 'WP_CACHE' ) ) { define( 'WP_CACHE', true ); }" wp-config.php"
+            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i \"/^\/\*\* Sets up WordPress vars and included files. \*\//i if ( ! defined( 'RAPIDLOAD_DEV_MODE' ) ) { define( 'RAPIDLOAD_DEV_MODE', true ); }\" /bitnami/wordpress/wp-config.php"
+            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i \"/^\/\*\* Sets up WordPress vars and included files. \*\//i if ( ! defined( 'WP_CACHE' ) ) { define( 'WP_CACHE', true ); }\" /bitnami/wordpress/wp-config.php"
             #sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i 's/127.0.0.1/${DOMAIN}/g' /bitnami/wordpress/wp-config.php"
           EOF
 
