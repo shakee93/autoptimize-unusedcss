@@ -198,12 +198,11 @@ export const fetchData = (options: WordPressOptions, url : string, reload: boole
 
     const api = new ApiService(options);
 
-
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
         try {
             const currentState = getState(); // Access the current state
             const activeReport = currentState.app.activeReport;
-            const activeReportData = currentState.app[activeReport]
+            const activeReportData = currentState.app.report[activeReport]
 
             // TODO: don't let people bam on keyboard while waiting to laod the page speed
             // if(activeReportData.loading && activeReportData.data ) {

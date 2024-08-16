@@ -32,12 +32,12 @@ export interface AppState {
     },
     settings: {
         mobile: {
-            original: AuditSetting[],
-            state: AuditSetting[]
+            original?: AuditSetting[],
+            state?: AuditSetting[]
         },
         desktop: {
-            original: AuditSetting[],
-            state: AuditSetting[]
+            original?: AuditSetting[],
+            state?: AuditSetting[]
         }
     },
     mobile: Report,

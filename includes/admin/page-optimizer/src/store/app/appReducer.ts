@@ -9,38 +9,41 @@ import {
     GET_CSS_STATUS_SUCCESS, UPDATE_TEST_MODE
 } from "./appTypes";
 
+const blankReport =  {
+    original: null,
+    changes: {
+        files: []
+    },
+    data: null,
+    error: null,
+    loading: false,
+    settings: [],
+    originalSettings: [],
+    revisions: [],
+    state: {},
+    defaultSettingsMode: null
+}
+
 const initialState: AppState = {
     activeReport: 'desktop',
     cssStatus: null,
     testMode: null,
-    mobile: {
-        original: null,
-        changes: {
-            files: []
-        },
-        data: null,
-        error: null,
-        loading: false,
-        settings: [],
-        originalSettings: [],
-        revisions: [],
-        state: {},
-        defaultSettingsMode: null
+    report: {
+        mobile: blankReport,
+        desktop: blankReport,
     },
-    desktop: {
-        original: null,
-        changes: {
-            files: []
+    settings: {
+        mobile: {
+            original: [],
+            state: []
         },
-        data: null,
-        error: null,
-        loading: false,
-        settings: [],
-        originalSettings: [],
-        revisions: [],
-        state: {},
-        defaultSettingsMode: null
-    }
+        desktop: {
+            original: [],
+            state: []
+        }
+    },
+    mobile: blankReport ,
+    desktop: blankReport
 };
 
 const appReducer = (state = initialState, action: AppAction): AppState => {
