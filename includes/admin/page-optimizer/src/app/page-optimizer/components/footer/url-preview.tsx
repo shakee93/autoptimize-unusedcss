@@ -27,6 +27,7 @@ const UrlPreview = () => {
             <div
                 className='text-sm items-center cursor-default text-ellipsis truncate md:max-w-sm lg:max-w-xl'>
                 {data?.loadingExperience?.initial_url ? decodeURIComponent(data.loadingExperience.initial_url) : url}
+                {/*<ArrowTopRightOnSquareIcon className="h-4 w-4" />*/}
             </div>
 
             {!error &&
