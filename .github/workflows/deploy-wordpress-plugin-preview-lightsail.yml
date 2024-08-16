@@ -204,12 +204,13 @@ jobs:
             DOMAIN="pr-${INSTANCE_ID}.rapidload.live"
             WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
 
-            #sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i 's/127.0.0.1/\${DOMAIN}/g' /bitnami/wordpress/wp-config.php && sed -i '/define( *'\''WP_HOME'\''/ s/^/\/\//' /bitnami/wordpress/wp-config.php"
             sudo docker exec -u root -i ${WP_CONTAINER} sh -c "chmod 666 /bitnami/wordpress/wp-config.php"
-            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i 's/127.0.0.1/${DOMAIN}/g; s|http://|https://|g' /bitnami/wordpress/wp-config.php"
-            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i \"/\\/\\*\\* Sets up WordPress vars and included files\\. \\*\\//i \\/** Enables page caching for RapidLoad. *\\/\\nif ( ! defined( 'WP_CACHE' ) ) {\\n    define( 'WP_CACHE', true );\\n}\" /bitnami/wordpress/wp-config.php"
-            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i \"/\\/\\*\\* Sets up WordPress vars and included files\\. \\*\\//i \\/** Enables development mode for RapidLoad. *\\/\\nif ( ! defined( 'RAPIDLOAD_DEV_MODE' ) ) {\\n    define( 'RAPIDLOAD_DEV_MODE', true );\\n}\" /bitnami/wordpress/wp-config.php"
-            #sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i 's/127.0.0.1/${DOMAIN}/g' /bitnami/wordpress/wp-config.php"
+            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "
+              sed -i 's/127.0.0.1/${DOMAIN}/g; s|http://|https://|g' /bitnami/wordpress/wp-config.php
+              sed -i \"/\\/\\*\\* Sets up WordPress vars and included files\\. \\*\\//i \\
+              /** Enables page caching for RapidLoad. *\\/\\nif ( ! defined( 'WP_CACHE' ) ) {\\n    define( 'WP_CACHE', true );\\n}\\n\\
+              /** Enables development mode for RapidLoad. *\\/\\nif ( ! defined( 'RAPIDLOAD_DEV_MODE' ) ) {\\n    define( 'RAPIDLOAD_DEV_MODE', true );\\n}\" /bitnami/wordpress/wp-config.php
+            "
           EOF
 
       - name: Update robots.txt in Docker container
