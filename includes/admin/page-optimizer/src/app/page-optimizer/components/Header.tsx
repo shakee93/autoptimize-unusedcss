@@ -167,26 +167,26 @@ const Header = ({ url }: { url: string}) => {
 
 
                 <div className='flex relative gap-4 items-center'>
-                    {!loading && !showInprogress ? (
+                    {!showInprogress ? (
                         <>
                             {!error && (
                                 <>
                                     <SaveChanges/>
-                                    <UnsavedChanges
-                                        onCancel={() => {
-                                            setShowOptimizer(false)
-                                        }}
-                                        cancel='Discard & Leave'
-                                        onClick={() => {
-                                            setShowOptimizer(false);
-                                            setShowInprogress(false);
-                                        }}>
-                                        <TooltipText text='Close Optimizer'>
-                                            <LogOut className={cn(
-                                                'h-5 w-5 dark:text-brand-300 text-brand-600 transition-opacity',
-                                            )}/>
-                                        </TooltipText>
-                                    </UnsavedChanges>
+                                    {/*<UnsavedChanges*/}
+                                    {/*    onCancel={() => {*/}
+                                    {/*        setShowOptimizer(false)*/}
+                                    {/*    }}*/}
+                                    {/*    cancel='Discard & Leave'*/}
+                                    {/*    onClick={() => {*/}
+                                    {/*        setShowOptimizer(false);*/}
+                                    {/*        setShowInprogress(false);*/}
+                                    {/*    }}>*/}
+                                    {/*    <TooltipText text='Close Optimizer'>*/}
+                                    {/*        <LogOut className={cn(*/}
+                                    {/*            'h-5 w-5 dark:text-brand-300 text-brand-600 transition-opacity',*/}
+                                    {/*        )}/>*/}
+                                    {/*    </TooltipText>*/}
+                                    {/*</UnsavedChanges>*/}
                                 </>
                             )}
                         </>

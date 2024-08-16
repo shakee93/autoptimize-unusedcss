@@ -227,6 +227,11 @@ const SaveChanges = () => {
 
                         </Button>
 
+                        {/*<div className='flex gap-2 items-center text-sm text-brand-400'>*/}
+                        {/*    <Loader className='w-5 animate-spin'/>*/}
+                        {/*    Syncing Changes...*/}
+                        {/*</div>*/}
+
                         <UnsavedChanges
                             onCancel={() => { setShowOptimizer(false) }}
                             cancel='Discard & Leave'

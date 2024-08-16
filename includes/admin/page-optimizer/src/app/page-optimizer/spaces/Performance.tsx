@@ -56,8 +56,14 @@ const Performance = () => {
         version
     } = useAppContext()
 
-    const tabs: Tab[] = [
+    const loadingTab: Tab = {
+        key: "passed_audits",
+        name: "Passed Audits",
+        color: 'border-zinc-600',
+        activeColor: 'bg-green-600'
+    }
 
+    const tabs: Tab[] = [
         {
             key: "opportunities",
             name: "Opportunities",
@@ -146,19 +152,21 @@ const Performance = () => {
                                    key={tab.key}
                                >
                                    {tab.name}
-                                   {(tab.key !== 'configurations' && data && data?.audits.length > 0) && (
+                                   {(tab.key !== 'configurations') && (
                                        <div className={
                                            cn(
-                                               'flex text-xxs items-center justify-center rounded-full w-6 h-6 border-2',
+                                               'flex  text-xxs items-center justify-center rounded-full w-6 h-6 border-2',
                                                isSticky && 'w-5 h-5 border',
-                                               tab.color,
-                                               (activeTab === tab.key) && tab.activeColor,
+                                               loading ? 'bg-zinc-200 border-zinc-300/30 text-zinc-300/30' : cn(
+                                                   tab.color,
+                                                   (activeTab === tab.key) && tab.activeColor,
+                                               )
                                            )}>
-                            <span className={cn(
-                                activeTab === tab.key && ' text-white dark:text-brand-900'
-                            )}>
-                                {data?.grouped[`${tab.key}`].length}
-                            </span>
+                                           <div className={cn(
+                                               activeTab === tab.key && ' text-white dark:text-brand-900'
+                                           )}>
+                                               {data?.grouped[`${tab.key}`].length || '-'}
+                                           </div>
                                        </div>
                                    )}
 
@@ -186,7 +194,7 @@ const Performance = () => {
                 </Card>
             </div>
 
-            <div className="audits pt-4 flex mb-24">
+            <div className="audits pt-6 flex mb-24">
                 <div className='w-full'>
 
                     <AnimatePresence initial={false}>
