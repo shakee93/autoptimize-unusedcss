@@ -194,7 +194,7 @@ export const getTestModeStatus = (options: WordPressOptions, url: string, mode?:
     }
 }
 
-export const fetchData = (options: WordPressOptions, url : string, reload: boolean = false, inprogress: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
+export const fetchReport = (options: WordPressOptions, url : string, reload: boolean = false, inprogress: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
@@ -231,6 +231,55 @@ export const fetchData = (options: WordPressOptions, url : string, reload: boole
                 activeReport,
                 data: transformData(response)
             }});
+
+
+        } catch (error) {
+            if (error instanceof Error) {
+                dispatch({ type: FETCH_DATA_FAILURE, error: error.message });
+            } else {
+                dispatch({ type: FETCH_DATA_FAILURE, error: 'Unknown error occurred' });
+            }
+        }
+    };
+};
+
+export const fetchSettings = (options: WordPressOptions, url : string, reload: boolean = false, inprogress: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
+        try {
+            const currentState = getState(); // Access the current state
+            const activeReport = currentState.app.activeReport;
+            const activeReportData = currentState.app.report[activeReport]
+
+            // TODO: don't let people bam on keyboard while waiting to laod the page speed
+            // if(activeReportData.loading && activeReportData.data ) {
+            //     console.log('don\'t bam the mouse! we are loading your page speed details 😉');
+            //     return;
+            // }
+
+            if (activeReportData.loading) {
+                return;
+            }
+
+            if (activeReportData.data && !reload && !inprogress) {
+                return;
+            }
+
+            dispatch({ type: FETCH_DATA_REQUEST, activeReport });
+
+            const response = await api.fetchPageSpeed(
+                url,
+                activeReport,
+                reload,
+            );
+
+
+            dispatch({ type: FETCH_DATA_SUCCESS, payload: {
+                    activeReport,
+                    data: transformData(response)
+                }});
 
 
         } catch (error) {

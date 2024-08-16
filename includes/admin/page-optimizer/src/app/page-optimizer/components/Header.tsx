@@ -12,7 +12,7 @@ import TooltipText from "components/ui/tooltip-text";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, AppState, RootState} from "../../../store/app/appTypes";
 import {useDispatch, useSelector} from "react-redux";
-import {changeReport, fetchData, getCSSStatus} from "../../../store/app/appActions";
+import {changeReport, fetchReport, getCSSStatus} from "../../../store/app/appActions";
 import {optimizerData} from "../../../store/app/appSelector";
 import {Button} from "components/ui/button";
 import AppButton from "components/ui/app-button";
@@ -129,13 +129,13 @@ const Header = ({ url }: { url: string}) => {
                                 action='Apply Optimization'
                                 cancel='Discard & Analyze'
                                 onCancel={() => {
-                                    dispatch(fetchData(options, url, true))
+                                    dispatch(fetchReport(options, url, true))
                                     commonDispatch(setCommonState('openAudits', []))
                                 }}
                                 onClick={() => {
 
                                     if (!inProgress || !loading) {
-                                        dispatch(fetchData(options, url, true))
+                                        dispatch(fetchReport(options, url, true))
                                         dispatch(setCommonState('inProgress', false))
                                         setShowInprogress(false);
                                     }
