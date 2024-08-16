@@ -4,7 +4,7 @@ import {
     CHANGE_REPORT_TYPE,
     FETCH_REPORT_FAILURE,
     FETCH_REPORT_REQUEST,
-    FETCH_REPORT_SUCCESS,
+    FETCH_REPORT_SUCCESS, FETCH_SETTING_FAILURE,
     FETCH_SETTING_REQUEST,
     FETCH_SETTING_SUCCESS,
     GET_CSS_STATUS_SUCCESS,
@@ -83,20 +83,20 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
         case FETCH_REPORT_SUCCESS:
             return {
                 ...state,
-                report: {
-                    ...state.report,
-                    [action.payload.activeReport] : {
-                        ...state.report[action.payload.activeReport],
-                        original: JSON.parse(JSON.stringify(action.payload.data.data)),
-                        data: action.payload.data.data,
-                        error: null,
-                        loading: false,
-                        settings: action.payload.data.settings,
-                        originalSettings: JSON.parse(JSON.stringify(action.payload.data.settings)),
-                        revisions: action.payload.data.revisions,
-                        defaultSettingsMode: action.payload.data.data.settingsMode
-                    }
-                }
+                // report: {
+                //     ...state.report,
+                //     [action.payload.activeReport] : {
+                //         ...state.report[action.payload.activeReport],
+                //         original: JSON.parse(JSON.stringify(action.payload.data.data)),
+                //         data: action.payload.data.data,
+                //         error: null,
+                //         loading: false,
+                //         settings: action.payload.data.settings,
+                //         originalSettings: JSON.parse(JSON.stringify(action.payload.data.settings)),
+                //         revisions: action.payload.data.revisions,
+                //         defaultSettingsMode: action.payload.data.data.settingsMode
+                //     }
+                // }
             };
         case FETCH_REPORT_FAILURE:
             return {
@@ -132,6 +132,17 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                         state: action.payload.data.data,
                         error: null,
                         loading: false,
+                    }
+                }
+            };
+        case FETCH_SETTING_FAILURE:
+            return {
+                ...state,
+                settings: {
+                    ...state.settings,
+                    [state.activeReport] : {
+                        error: action.error,
+                        loading: false
                     }
                 }
             };

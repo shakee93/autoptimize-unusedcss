@@ -18,6 +18,8 @@ import {
 import ApiService from "../../services/api";
 import Audit from "app/page-optimizer/components/audit/Audit";
 
+import SampleSettings from '../../lib/sample-settings'
+
 
 const transformAudit = (audit: Audit, metrics : Metric[]) => {
 
@@ -120,7 +122,27 @@ const transformReport = (data: any) => {
 }
 
 const transformSettings = (data: any) => {
-    return data
+
+    const settings = SampleSettings;
+
+    const flattenedSettings = settings.flat();
+
+    const uniqueSettings = Array.from(new Set(flattenedSettings.map((setting: any) => JSON.stringify(setting)))).map((str: any) => JSON.parse(str));
+
+    return {
+        data: uniqueSettings.map((s: AuditSetting) => ({
+            ...s,
+            inputs: s.inputs.map(input => ({
+                ...input,
+                ...(
+                    input.control_type === 'checkbox' &&
+                    {
+                        value: input.value === '1' || input.value === true
+                    }
+                )
+            }))
+        }))
+    }
 }
 
 // this grabs the data and populates a settings object with values
@@ -131,7 +153,6 @@ const initiateSettings = (audits: Audit[]) => {
     const flattenedSettings = settings.flat();
 
     const uniqueSettings = Array.from(new Set(flattenedSettings.map((setting: any) => JSON.stringify(setting)))).map((str: any) => JSON.parse(str));
-
 
     // convert 1's to true and false in checkbox
     return uniqueSettings.map((s: AuditSetting) => ({

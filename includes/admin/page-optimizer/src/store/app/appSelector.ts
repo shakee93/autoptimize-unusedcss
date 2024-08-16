@@ -44,6 +44,7 @@ export const optimizerData = createSelector(
         return {
             ...state.report[state.activeReport],
             activeReport: state.activeReport,
+            settings: state.settings[state.activeReport].state,
             touched: !equal(state.report[state.activeReport].originalSettings, state.report[state.activeReport].settings) || !!optimizeChangesFiles(state[state.activeReport].changes).find(i => i?.changed),
             fresh : state[state.activeReport]?.state?.fresh
         }

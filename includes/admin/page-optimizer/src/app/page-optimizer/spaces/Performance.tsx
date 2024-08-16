@@ -13,32 +13,14 @@ import {CopyMinus, FoldVertical, Layers, SplitSquareVertical} from "lucide-react
 import TooltipText from "components/ui/tooltip-text";
 import ScaleUp from "components/animation/ScaleUp";
 import {BoltIcon, MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
-import {Cog6ToothIcon, InformationCircleIcon} from "@heroicons/react/20/solid";
-import SetupChecklist from "app/page-optimizer/components/SetupChecklist";
 import AuditList from "app/page-optimizer/components/AuditList";
 import SpeedSettings from "app/page-optimizer/spaces/SpeedSettings";
-import {AuditsLine, SettingsLine} from "app/page-optimizer/components/icons/line-icons";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
-} from "components/ui/dialog";
-import Fields from "app/page-optimizer/components/audit/additional-inputs";
-import AppButton from "components/ui/app-button";
-import Mode from "app/page-optimizer/components/Mode";
-import { Checkbox } from "components/ui/checkbox";
-import {
-    TitanLogo
-} from "app/page-optimizer/components/icons/icon-svg";
+
 
 
 const welcomePopupKey = 'new-titan-prompt'
 const Performance = () => {
-    const {data, loading, error} = useSelector(optimizerData);
+    const {data, loading, settings, error} = useSelector(optimizerData);
 
     const { dispatch ,  activeTab, openAudits, storePassedAudits, settingsMode} = useCommonDispatch()
     const [isSticky, setIsSticky] = useState(false);

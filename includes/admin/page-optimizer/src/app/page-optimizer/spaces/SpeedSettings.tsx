@@ -131,6 +131,7 @@ const SpeedSettings = ({}) => {
     useEffect(() => {
 
         const grouped = groupByCategory(settings || []);
+        
         const sortedCategories = Object.keys(grouped).sort((a, b) => {
             const indexA = categoryOrder.indexOf(a as SettingsCategory);
             const indexB = categoryOrder.indexOf(b as SettingsCategory);
@@ -141,6 +142,7 @@ const SpeedSettings = ({}) => {
         sortedCategories.forEach((category) => {
             sortedGroupedSettings[category] = grouped[category as keyof typeof grouped];
         });
+
 
         setGroupedSettings(sortedGroupedSettings);
 
@@ -176,6 +178,9 @@ const SpeedSettings = ({}) => {
 
         if (groupedSettings && sortedStatus ) {
 
+
+            console.log(groupedSettings);
+
             const allPassedAudits: any[] = [];
             const allNotPassedAudits: any[] = [];
 
@@ -206,6 +211,9 @@ const SpeedSettings = ({}) => {
                     allNotPassedAudits.push(...notPassed);
                 }
             });
+
+            console.log(allNotPassedAudits);
+
 
             setPassedAudits(allPassedAudits);
             setNotPassedAudits(allNotPassedAudits);
@@ -507,11 +515,12 @@ const SpeedSettings = ({}) => {
             ))}
         </ul>
 
-        <div className='min-h-[380px]'>
+        <div className={cn(
+            data ? 'min-h-[380px]' : 'min-h-[280px]'
+        )}>
             <ul>
 
-                {notPassedAudits
-                    .filter((item) => item.category === activeCategory)
+                {groupedSettings[activeCategory]
                     .map((item: AuditSetting, itemIndex) => (
                         <li key={`${item.category}-${itemIndex}`}>
                             <m.div initial={{opacity: 0, y: -10}}
@@ -525,9 +534,7 @@ const SpeedSettings = ({}) => {
                         </li>
                     ))}
 
-                {(notPassedAudits
-                        .filter((item) => item.category === activeCategory).length <= 2
-                  && filteredAudits.length === 0 ) &&  <m.div
+                {(groupedSettings[activeCategory].length <= 2 ) &&  <m.div
                         initial={{opacity: 0, y: 10}}
                         animate={{opacity: 1, y: 0}}
                         exit={{opacity: 0, y: -20}}
@@ -541,64 +548,64 @@ const SpeedSettings = ({}) => {
                 }
             </ul>
 
-            <ul>
-
-
-                {filteredAudits.length > 0 && (
-                    <m.button
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        key={activeCategory}
-                        onClick={() => setShowHideState(activeCategory)}
-                        className={cn(
-                            `select-none w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
+            {data &&
+                <ul>
+                    {filteredAudits.length > 0 && (
+                        <m.button
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            key={activeCategory}
+                            onClick={() => setShowHideState(activeCategory)}
+                            className={cn(
+                                `select-none w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
           flex items-center gap-2 px-5 py-1.5 pb-2 text-sm font-medium `,
-                            notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-10"
-                        )}
-                    >
-                        Show Additional Settings{" "} <ChevronDownIcon className={cn(
-                            'w-4 rounded-[15px] transition-transform',
-                        categoryStates[activeCategory] && '-rotate-180'
-                    )} />
-
-                    </m.button>
-                )}
-
-                { (categoryStates[activeCategory]) && (
-                    <>
-                    <div className={cn('font-normal text-sm ml-0.5 -mt-2 mb-3 px-5',
-                        notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-[42px]"
-                    )}>The audits associated with these settings are already optimized</div>
-
-                    {passedAudits.filter(item => item.category === activeCategory).map((item: AuditSetting, itemIndex) => (
-
-                    <li key={itemIndex}>
-                        <m.div initial={{ opacity: 0}}
-                               animate={{ opacity: 1}}
-                               transition={{ duration: 0.3 }}
+                                notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-10"
+                            )}
                         >
-                            <AuditSettingsItem key={`${item.category}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={false} />
-                        </m.div>
-                    </li>
+                            Show Additional Settings{" "} <ChevronDownIcon className={cn(
+                            'w-4 rounded-[15px] transition-transform',
+                            categoryStates[activeCategory] && '-rotate-180'
+                        )} />
 
-                    ))}
-                    </>
-                )}
+                        </m.button>
+                    )}
 
-                {(filteredAudits.length > 0 && !notPassedAudits.some(item => item.category === activeCategory)) &&
-                    <m.div
-                        initial={{opacity: 0, y: 10}}
-                        animate={{opacity: 1, y: 0}}
-                        exit={{opacity: 0, y: -20}}
-                        className='flex flex-col gap-2 items-center px-2 pt-2 w-full mb-6'>
-                        <div>
-                            <img alt='Good Job!' className='w-64' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>
-                        </div>
-                        <span className='flex gap-2'>Brilliantly done! It's clear you've mastered this.</span>
-                    </m.div>
-                }
-            </ul>
+                    { (categoryStates[activeCategory]) && (
+                        <>
+                            <div className={cn('font-normal text-sm ml-0.5 -mt-2 mb-3 px-5',
+                                notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-[42px]"
+                            )}>The audits associated with these settings are already optimized</div>
+
+                            {passedAudits.filter(item => item.category === activeCategory).map((item: AuditSetting, itemIndex) => (
+
+                                <li key={itemIndex}>
+                                    <m.div initial={{ opacity: 0}}
+                                           animate={{ opacity: 1}}
+                                           transition={{ duration: 0.3 }}
+                                    >
+                                        <AuditSettingsItem key={`${item.category}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={false} />
+                                    </m.div>
+                                </li>
+
+                            ))}
+                        </>
+                    )}
+
+                    {/*{(filteredAudits.length > 0 && !notPassedAudits.some(item => item.category === activeCategory)) &&*/}
+                    {/*    <m.div*/}
+                    {/*        initial={{opacity: 0, y: 10}}*/}
+                    {/*        animate={{opacity: 1, y: 0}}*/}
+                    {/*        exit={{opacity: 0, y: -20}}*/}
+                    {/*        className='flex flex-col gap-2 items-center px-2 pt-2 w-full mb-6'>*/}
+                    {/*        <div>*/}
+                    {/*            <img alt='Good Job!' className='w-64' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>*/}
+                    {/*        </div>*/}
+                    {/*        <span className='flex gap-2'>Brilliantly done! It's clear you've mastered this.</span>*/}
+                    {/*    </m.div>*/}
+                    {/*}*/}
+                </ul>
+            }
         </div>
             </>
         }
