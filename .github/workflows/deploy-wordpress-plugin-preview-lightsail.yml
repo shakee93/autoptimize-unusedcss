@@ -215,8 +215,8 @@ jobs:
             # Add WP_CACHE and RAPIDLOAD_DEV_MODE constants
             sudo docker exec -u root -i ${WP_CONTAINER} sh -c "sed -i \"/\\/\\*\\* Sets up WordPress vars and included files\\. \\*\\//a \\
             \\
-            /** Enables page caching for RapidLoad. *\\/\\nif ( ! defined( 'WP_CACHE' ) ) {\\n    define( 'WP_CACHE', true );\\n}\\n\\
-            /** Enables development mode for RapidLoad. *\\/\\nif ( ! defined( 'RAPIDLOAD_DEV_MODE' ) ) {\\n    define( 'RAPIDLOAD_DEV_MODE', true );\\n}\" /bitnami/wordpress/wp-config.php"
+            /** Enables page caching for RapidLoad. */\\nif ( ! defined( 'WP_CACHE' ) ) {\\n    define( 'WP_CACHE', true );\\n}\\n\\
+            /** Enables development mode for RapidLoad. */\\nif ( ! defined( 'RAPIDLOAD_DEV_MODE' ) ) {\\n    define( 'RAPIDLOAD_DEV_MODE', true );\\n}\" /bitnami/wordpress/wp-config.php"
           EOF
 
       - name: Update robots.txt in Docker container
