@@ -59,33 +59,42 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
         case FETCH_DATA_REQUEST:
             return {
                 ...state,
-                [state.activeReport] : {
-                    ...state[state.activeReport],
-                    loading: true,
-                    error: null
+                report: {
+                    ...state.report,
+                    [state.activeReport] : {
+                        ...state[state.activeReport],
+                        loading: true,
+                        error: null
+                    }
                 }
             };
         case FETCH_DATA_SUCCESS:
             return {
                 ...state,
-                [action.payload.activeReport] : {
-                    ...state[action.payload.activeReport],
-                    original: JSON.parse(JSON.stringify(action.payload.data.data)),
-                    data: action.payload.data.data,
-                    error: null,
-                    loading: false,
-                    settings: action.payload.data.settings,
-                    originalSettings: JSON.parse(JSON.stringify(action.payload.data.settings)),
-                    revisions: action.payload.data.revisions,
-                    defaultSettingsMode: action.payload.data.data.settingsMode
+                report: {
+                    ...state.report,
+                    [action.payload.activeReport] : {
+                        ...state[action.payload.activeReport],
+                        original: JSON.parse(JSON.stringify(action.payload.data.data)),
+                        data: action.payload.data.data,
+                        error: null,
+                        loading: false,
+                        settings: action.payload.data.settings,
+                        originalSettings: JSON.parse(JSON.stringify(action.payload.data.settings)),
+                        revisions: action.payload.data.revisions,
+                        defaultSettingsMode: action.payload.data.data.settingsMode
+                    }
                 }
             };
         case FETCH_DATA_FAILURE:
             return {
                 ...state,
-                [state.activeReport] : {
-                    error: action.error,
-                    loading: false
+                report: {
+                    ...state.report,
+                    [state.activeReport] : {
+                        error: action.error,
+                        loading: false
+                    }
                 }
             };
         case UPDATE_SETTINGS:
@@ -105,7 +114,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
         case UPDATE_FILE_ACTION:
 
             const { payload } = action;
-            const activeReport = state[state.activeReport];
+            const activeReport = state.report[state.activeReport];
             let changes = activeReport.changes.files.filter(f => f.file === payload.file)
 
             if (changes.length == 0) {

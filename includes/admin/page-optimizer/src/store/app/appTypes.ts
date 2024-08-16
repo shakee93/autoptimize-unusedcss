@@ -5,43 +5,43 @@ export interface RootState {
     common: CommonState
 }
 
+interface Report {
+    defaultSettingsMode: settingsMode | null,
+    data?: OptimizerResults | null;
+    original?: OptimizerResults | null;
+    error?: string | null;
+    loading: boolean
+    settings?: AuditSetting[],
+    originalSettings?: AuditSetting[],
+    revisions: Revision[],
+    changes: {
+        files: Array<any>
+    },
+    state: {
+        fresh?: boolean
+    }
+}
+
 export interface AppState {
     activeReport: ReportType,
     cssStatus: CSSStatusResponse | null;
     testMode: TestMode | null;
-    mobile: {
-        defaultSettingsMode: settingsMode | null,
-        data?: OptimizerResults | null;
-        original?: OptimizerResults | null;
-        error?: string | null;
-        loading: boolean
-        settings?: AuditSetting[],
-        originalSettings?: AuditSetting[],
-        revisions: Revision[],
-        changes: {
-            files: Array<any>
-        },
-        state: {
-            fresh?: boolean
-        }
-
+    report: {
+        mobile: Report,
+        desktop: Report,
     },
-    desktop: {
-        defaultSettingsMode: settingsMode | null,
-        data?: OptimizerResults | null;
-        original?: OptimizerResults | null;
-        error?: string | null;
-        loading: boolean
-        settings?: AuditSetting[]
-        originalSettings?: AuditSetting[],
-        revisions: Revision[],
-        changes: {
-            files: Array<any>
+    settings: {
+        mobile: {
+            original: AuditSetting[],
+            state: AuditSetting[]
         },
-        state: {
-            fresh?: boolean
+        desktop: {
+            original: AuditSetting[],
+            state: AuditSetting[]
         }
-    }
+    },
+    mobile: Report,
+    desktop: Report
 }
 
 export const FETCH_DATA_REQUEST = 'FETCH_DATA_REQUEST';

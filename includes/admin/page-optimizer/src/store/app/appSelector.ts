@@ -42,9 +42,9 @@ export const optimizerData = createSelector(
     state, // Input selector
     (state) => {
         return {
-            ...state[state.activeReport],
+            ...state.report[state.activeReport],
             activeReport: state.activeReport,
-            touched: !equal(state[state.activeReport].originalSettings, state[state.activeReport].settings) || !!optimizeChangesFiles(state[state.activeReport].changes).find(i => i?.changed),
+            touched: !equal(state.report[state.activeReport].originalSettings, state.report[state.activeReport].settings) || !!optimizeChangesFiles(state[state.activeReport].changes).find(i => i?.changed),
             fresh : state[state.activeReport]?.state?.fresh
         }
     }
