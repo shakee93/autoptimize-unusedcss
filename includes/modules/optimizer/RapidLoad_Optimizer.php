@@ -151,6 +151,7 @@ class RapidLoad_Optimizer
             'latest_page_speed' => 'latest_page_speed',
             'preload_page' => 'preload_page',
             'rapidload_css_job_status' => 'rapidload_css_job_status',
+            'fetch_titan_settings' => 'fetch_titan_settings',
         ];
 
         foreach ($actions as $action => $method) {
@@ -241,6 +242,31 @@ class RapidLoad_Optimizer
         self::$job->save();
 
         wp_send_json_success(self::$global_options);
+    }
+
+    public function fetch_titan_settings(){
+
+        self::verify_nonce();
+
+        if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])){
+            wp_send_json_error('url required');
+        }
+
+        $url = $_REQUEST['url'];
+
+        if(filter_var($url, FILTER_VALIDATE_URL) == false){
+            wp_send_json_error('url not valid');
+        }
+
+        $strategy = isset($_REQUEST['strategy']) ? $_REQUEST['strategy'] : 'mobile';
+
+        $this->pre_optimizer_function($url, $strategy, null);
+
+        if(isset(self::$merged_options['uucss_api_key'])){
+            unset(self::$merged_options['uucss_api_key']);
+        }
+
+        wp_send_json_success(self::$merged_options);
     }
 
     public function  pre_optimizer_function($url, $strategy, $global){
