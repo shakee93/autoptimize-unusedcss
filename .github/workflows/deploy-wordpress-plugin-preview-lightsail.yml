@@ -197,6 +197,7 @@ jobs:
           EOF
 
       - name: Set up environment and grant permissions
+        if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << EOF
             set -x
@@ -209,6 +210,7 @@ jobs:
           EOF
 
       - name: Update RAPIDLOAD_DEV_MODE in wp-config.php
+        if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << EOF
             set -x
@@ -221,6 +223,7 @@ jobs:
           EOF
 
       - name: Update WP_CACHE in wp-config.php
+        if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << EOF
             set -x
