@@ -25,7 +25,7 @@ import {useAppContext} from "../../../../context/app";
 import {useDispatch, useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
 import {ThunkDispatch} from "redux-thunk";
-import {AppAction, FETCH_DATA_REQUEST, RootState} from "../../../../store/app/appTypes";
+import {AppAction, FETCH_REPORT_REQUEST, RootState} from "../../../../store/app/appTypes";
 import {useToast} from "components/ui/use-toast";
 import {cn} from "lib/utils";
 import useSubmitSettings from "hooks/useSubmitSettings";

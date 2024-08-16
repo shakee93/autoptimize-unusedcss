@@ -3,13 +3,16 @@ import {AnyAction} from 'redux';
 import {
     AppAction,
     CHANGE_REPORT_TYPE,
-    FETCH_DATA_FAILURE,
-    FETCH_DATA_REQUEST,
-    FETCH_DATA_SUCCESS,
+    FETCH_REPORT_FAILURE,
+    FETCH_REPORT_REQUEST,
+    FETCH_REPORT_SUCCESS,
+    FETCH_SETTING_FAILURE,
+    FETCH_SETTING_REQUEST,
+    FETCH_SETTING_SUCCESS,
+    GET_CSS_STATUS_SUCCESS,
     RootState,
     UPDATE_FILE_ACTION,
     UPDATE_SETTINGS,
-    GET_CSS_STATUS_SUCCESS,
     UPDATE_TEST_MODE
 } from "./appTypes";
 import ApiService from "../../services/api";
@@ -56,7 +59,7 @@ const transformAudit = (audit: Audit, metrics : Metric[]) => {
     return audit
 }
 
-const transformData = (data: any) => {
+const transformReport = (data: any) => {
 
     let metrics = data.data?.page_speed?.metrics.map((metric: Metric) => ({
         ...metric,
@@ -116,6 +119,9 @@ const transformData = (data: any) => {
     return _data
 }
 
+const transformSettings = (data: any) => {
+    return data
+}
 
 // this grabs the data and populates a settings object with values
 const initiateSettings = (audits: Audit[]) => {
@@ -218,7 +224,7 @@ export const fetchReport = (options: WordPressOptions, url : string, reload: boo
                 return;
             }
 
-            dispatch({ type: FETCH_DATA_REQUEST, activeReport });
+            dispatch({ type: FETCH_REPORT_REQUEST, activeReport });
 
             const response = await api.fetchPageSpeed(
                 url,
@@ -227,17 +233,17 @@ export const fetchReport = (options: WordPressOptions, url : string, reload: boo
             );
 
 
-            dispatch({ type: FETCH_DATA_SUCCESS, payload: {
+            dispatch({ type: FETCH_REPORT_SUCCESS, payload: {
                 activeReport,
-                data: transformData(response)
+                data: transformReport(response)
             }});
 
 
         } catch (error) {
             if (error instanceof Error) {
-                dispatch({ type: FETCH_DATA_FAILURE, error: error.message });
+                dispatch({ type: FETCH_REPORT_FAILURE, error: error.message });
             } else {
-                dispatch({ type: FETCH_DATA_FAILURE, error: 'Unknown error occurred' });
+                dispatch({ type: FETCH_REPORT_FAILURE, error: 'Unknown error occurred' });
             }
         }
     };
@@ -251,7 +257,7 @@ export const fetchSettings = (options: WordPressOptions, url : string, reload: b
         try {
             const currentState = getState(); // Access the current state
             const activeReport = currentState.app.activeReport;
-            const activeReportData = currentState.app.report[activeReport]
+            const activeReportData = currentState.app.settings[activeReport]
 
             // TODO: don't let people bam on keyboard while waiting to laod the page speed
             // if(activeReportData.loading && activeReportData.data ) {
@@ -263,30 +269,26 @@ export const fetchSettings = (options: WordPressOptions, url : string, reload: b
                 return;
             }
 
-            if (activeReportData.data && !reload && !inprogress) {
-                return;
-            }
+            dispatch({ type: FETCH_SETTING_REQUEST, activeReport });
 
-            dispatch({ type: FETCH_DATA_REQUEST, activeReport });
-
-            const response = await api.fetchPageSpeed(
+            const response = await api.fetchSettings(
                 url,
                 activeReport,
                 reload,
             );
 
 
-            dispatch({ type: FETCH_DATA_SUCCESS, payload: {
+            dispatch({ type: FETCH_SETTING_SUCCESS, payload: {
                     activeReport,
-                    data: transformData(response)
+                    data: transformSettings(response)
                 }});
 
 
         } catch (error) {
             if (error instanceof Error) {
-                dispatch({ type: FETCH_DATA_FAILURE, error: error.message });
+                dispatch({ type: FETCH_SETTING_FAILURE, error: error.message });
             } else {
-                dispatch({ type: FETCH_DATA_FAILURE, error: 'Unknown error occurred' });
+                dispatch({ type: FETCH_SETTING_FAILURE, error: 'Unknown error occurred' });
             }
         }
     };

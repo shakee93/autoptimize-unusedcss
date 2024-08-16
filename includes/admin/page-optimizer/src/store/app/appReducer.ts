@@ -2,11 +2,15 @@ import {
     AppAction,
     AppState,
     CHANGE_REPORT_TYPE,
-    FETCH_DATA_FAILURE,
-    FETCH_DATA_REQUEST,
-    FETCH_DATA_SUCCESS, UPDATE_FILE_ACTION,
+    FETCH_REPORT_FAILURE,
+    FETCH_REPORT_REQUEST,
+    FETCH_REPORT_SUCCESS,
+    FETCH_SETTING_REQUEST,
+    FETCH_SETTING_SUCCESS,
+    GET_CSS_STATUS_SUCCESS,
+    UPDATE_FILE_ACTION,
     UPDATE_SETTINGS,
-    GET_CSS_STATUS_SUCCESS, UPDATE_TEST_MODE
+    UPDATE_TEST_MODE
 } from "./appTypes";
 
 const blankReport =  {
@@ -35,11 +39,15 @@ const initialState: AppState = {
     settings: {
         mobile: {
             original: [],
-            state: []
+            state: [],
+            error: null,
+            loading: false,
         },
         desktop: {
             original: [],
-            state: []
+            state: [],
+            error: null,
+            loading: false,
         }
     },
     mobile: blankReport ,
@@ -59,25 +67,26 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 ...state,
                 testMode: action.payload
             };
-        case FETCH_DATA_REQUEST:
+        case FETCH_REPORT_REQUEST:
             return {
                 ...state,
                 report: {
                     ...state.report,
                     [state.activeReport] : {
-                        ...state[state.activeReport],
+                        ...state.report[state.activeReport],
                         loading: true,
                         error: null
                     }
                 }
             };
-        case FETCH_DATA_SUCCESS:
+
+        case FETCH_REPORT_SUCCESS:
             return {
                 ...state,
                 report: {
                     ...state.report,
                     [action.payload.activeReport] : {
-                        ...state[action.payload.activeReport],
+                        ...state.report[action.payload.activeReport],
                         original: JSON.parse(JSON.stringify(action.payload.data.data)),
                         data: action.payload.data.data,
                         error: null,
@@ -89,7 +98,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                     }
                 }
             };
-        case FETCH_DATA_FAILURE:
+        case FETCH_REPORT_FAILURE:
             return {
                 ...state,
                 report: {
@@ -97,6 +106,32 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                     [state.activeReport] : {
                         error: action.error,
                         loading: false
+                    }
+                }
+            };
+        case FETCH_SETTING_REQUEST:
+            return {
+                ...state,
+                settings: {
+                    ...state.settings,
+                    [state.activeReport] : {
+                        ...state.settings[state.activeReport],
+                        loading: true,
+                        error: null
+                    }
+                },
+            };
+        case FETCH_SETTING_SUCCESS:
+            return {
+                ...state,
+                settings: {
+                    ...state.settings,
+                    [action.payload.activeReport] : {
+                        ...state.settings[action.payload.activeReport],
+                        original: JSON.parse(JSON.stringify(action.payload.data.data)),
+                        state: action.payload.data.data,
+                        error: null,
+                        loading: false,
                     }
                 }
             };
