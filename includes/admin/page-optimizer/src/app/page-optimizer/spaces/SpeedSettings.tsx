@@ -453,7 +453,7 @@ const SpeedSettings = ({}) => {
                 onMouseEnter={() => setMouseOnSettingsGear('custom')}
                 onMouseLeave={() => setMouseOnSettingsGear('')}
                 className={cn(
-                    `select-non w-fit transition-all rounded-2xl cursor-pointer  
+                    `select-none w-fit transition-all rounded-2xl cursor-pointer  
           flex items-center gap-2 px-4 py-2 -ml-1 text-sm font-medium dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px] dark:hover:bg-brand-950 bg-brand-0 dark:bg-brand-950 `,
                     activeSettingsMode === 'custom' && 'border-purple-700'
                 )}
@@ -535,7 +535,7 @@ const SpeedSettings = ({}) => {
                         key={activeCategory}
                         onClick={() => setShowHideState(activeCategory)}
                         className={cn(
-                            `select-non w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
+                            `select-none w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
           flex items-center gap-2 px-5 py-1.5 pb-2 text-sm font-medium `,
                             notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-10"
                         )}
