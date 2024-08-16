@@ -49,7 +49,7 @@ const UrlPreview = () => {
                                 <>
                                     <Dot className='w-6 text-brand-400'/>
                                     <div className='flex gap-1 items-center'>
-                                        {desktop?.data?.performance} Desktop
+                                        {Number(desktop?.data?.performance).toFixed(0)} Desktop
                                     </div>
                                 </>
                             }
@@ -59,7 +59,7 @@ const UrlPreview = () => {
                                 <>
                                     <Dot className='w-6 text-brand-400'/>
                                     <div className='flex gap-1 items-center'>
-                                        {mobile?.data?.performance}  Mobile
+                                        {Number(mobile?.data?.performance).toFixed(0)}  Mobile
                                     </div>
                                 </>
                             }

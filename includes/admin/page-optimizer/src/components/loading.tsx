@@ -15,7 +15,7 @@ const Loading: React.FC<LoadingProps> = ({ url, countDown , customMessage, custo
 
     const {showInprogress} = useAppContext()
     const {inProgress } = useCommonDispatch()
-    const [seconds, setSeconds] = useState(39);
+    const [seconds, setSeconds] = useState(29);
     const [messageBelow, setMessageBelow] = useState(customMessage? customMessage: 'Arriving in');
     const [message, setMessage] = useState(0)
     const [messages, setMessages] = useState([
