@@ -55,7 +55,8 @@ const Header = ({ url }: { url: string}) => {
         loading, error,
         settings,
         data,
-        revisions
+        revisions,
+        reanalyze
     } = useSelector(optimizerData);
     const {inProgress } = useCommonDispatch()
     const {
@@ -167,6 +168,7 @@ const Header = ({ url }: { url: string}) => {
 
 
                 <div className='flex relative gap-4 items-center'>
+
                     {!showInprogress ? (
                         <>
                             {!error && (

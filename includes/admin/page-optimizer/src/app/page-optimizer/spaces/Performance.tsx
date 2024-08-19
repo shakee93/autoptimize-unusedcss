@@ -20,7 +20,7 @@ import SpeedSettings from "app/page-optimizer/spaces/SpeedSettings";
 
 const welcomePopupKey = 'new-titan-prompt'
 const Performance = () => {
-    const {data, loading, settings, error} = useSelector(optimizerData);
+    const {data, loading, reanalyze, settings, error} = useSelector(optimizerData);
 
     const { dispatch ,  activeTab, openAudits, storePassedAudits, settingsMode} = useCommonDispatch()
     const [isSticky, setIsSticky] = useState(false);
@@ -139,7 +139,7 @@ const Performance = () => {
                                            cn(
                                                'flex  text-xxs items-center justify-center rounded-full w-6 h-6 border-2',
                                                isSticky && 'w-5 h-5 border',
-                                               loading ? 'bg-zinc-200 border-zinc-300/30 text-zinc-300/30' : cn(
+                                               (loading && !reanalyze) ? 'bg-zinc-200 border-zinc-300/30 text-zinc-300/30' : cn(
                                                    tab.color,
                                                    (activeTab === tab.key) && tab.activeColor,
                                                )

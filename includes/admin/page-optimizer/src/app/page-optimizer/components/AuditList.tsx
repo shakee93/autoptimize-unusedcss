@@ -12,13 +12,13 @@ interface Props {
 }
 
 const AuditList =({ activeTab }: Props) => {
-    const {data, loading, error} = useSelector(optimizerData);
+    const {data, loading, reanalyze, error} = useSelector(optimizerData);
 
 
     const activeData = useMemo(() => {
         // return data?.grouped[activeTab] || []
 
-        if (loading || !data) {
+        if (!data) {
             return []
         }
 
@@ -28,7 +28,7 @@ const AuditList =({ activeTab }: Props) => {
 
     return <AnimatePresence initial={false}>
 
-        {loading ? new Array(5).fill(null).map((s, i) =>
+        {(loading && !reanalyze) ? new Array(5).fill(null).map((s, i) =>
                 <m.div
                     key={`${i}-${activeTab}`}
                     initial={{ opacity: 0, y: -10 }}
