@@ -213,7 +213,7 @@ const Performance = () => {
                             )}
                         </div>
 
-                        {(reanalyze) &&
+                        {reanalyze &&
                             <m.div
                                 key='loading-notification'
                                 initial={{opacity: 0, y: 10}}
