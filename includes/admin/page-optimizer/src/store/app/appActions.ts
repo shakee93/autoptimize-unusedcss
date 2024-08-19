@@ -328,25 +328,19 @@ export const updateSettings = (
         const deviceType = currentState?.app?.activeReport;
 
         // @ts-ignore
-        let newOptions : AuditSetting[] = currentState?.app?.settings[deviceType]?.state?.map((s: AuditSetting) => {
-
-            if (s.name === setting.name) {
-
-                s.inputs = s.inputs.map(input => {
-
-                    if (input.key === key) {
-                        input.value = payload
-                    }
-
-                    return input;
-                })
-
+        const newOptions: AuditSetting[] = currentState?.app?.settings[deviceType]?.state?.map((s: AuditSetting) => {
+            if (s.name !== setting.name) {
+                return s; // Early return if the setting name doesn't match
             }
-            return s;
-        });
-        
-        console.log(newOptions);
 
+            return {
+                ...s,
+                inputs: s.inputs.map(input =>
+                    input.key === key ? { ...input, value: payload } : input
+                )
+            };
+        }) || [];
+        
         dispatch({ type: UPDATE_SETTINGS , payload : {
                 settings: newOptions
         } });
