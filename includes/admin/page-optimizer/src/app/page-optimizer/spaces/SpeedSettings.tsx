@@ -308,7 +308,6 @@ const SpeedSettings = ({}) => {
         }else{
             setActiveSettingsMode(settingsMode || 'custom');
         }
-        //console.log(settings)
     }, [settings]);
 
     useEffect(() => {
