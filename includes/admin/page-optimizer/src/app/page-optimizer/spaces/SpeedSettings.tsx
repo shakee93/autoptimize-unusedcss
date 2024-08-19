@@ -180,8 +180,6 @@ const SpeedSettings = ({}) => {
         if (groupedSettings && sortedStatus ) {
 
 
-            console.log(groupedSettings);
-
             const allPassedAudits: any[] = [];
             const allNotPassedAudits: any[] = [];
 
@@ -212,9 +210,6 @@ const SpeedSettings = ({}) => {
                     allNotPassedAudits.push(...notPassed);
                 }
             });
-
-            console.log(allNotPassedAudits);
-
 
             setPassedAudits(allPassedAudits);
             setNotPassedAudits(allNotPassedAudits);
