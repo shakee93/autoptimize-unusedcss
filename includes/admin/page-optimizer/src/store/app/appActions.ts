@@ -370,19 +370,14 @@ export const changeGear = (
         } = {starter, accelerate, turboMax}
 
         // @ts-ignore
-        let newOptions : AuditSetting[] = currentState?.app?.settings[deviceType]?.state?.map((s: AuditSetting) => {
+        const newOptions: AuditSetting[] = currentState?.app?.settings[deviceType]?.state?.map((s: AuditSetting) => ({
+            ...s,
+            inputs: s.inputs.map((input, index) => ({
+                ...input,
+                value: index === 0 ? modes[mode]?.includes(s.name) : input.value
+            }))
+        })) || [];
 
-            s.inputs = s.inputs.map((input, index) => {
-
-                if (index === 0) {
-                    input.value = modes[mode].includes(s.name);
-                }
-
-                return input;
-            })
-
-            return s;
-        });
 
         dispatch({
             type: UPDATE_SETTINGS, payload: {
