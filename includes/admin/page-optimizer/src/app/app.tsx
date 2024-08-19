@@ -12,6 +12,7 @@ import {AnimatePresence} from "framer-motion";
 import {useRootContext} from "../context/root";
 import {setCommonState} from "../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
+import {toBoolean} from "lib/utils";
 
 const AppTour = React.lazy(() => import( 'components/tour'))
 const InitTour = React.lazy(() => import('components/tour/InitTour'))
@@ -31,7 +32,7 @@ const App = ({popup, _showOptimizer = false}: {
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
     const {isDark } = useRootContext()
-
+    const initialTestMode = window.rapidload_optimizer ? toBoolean(window.rapidload_optimizer.test_mode) : false;
 
     useEffect(() => {
 
@@ -55,7 +56,7 @@ const App = ({popup, _showOptimizer = false}: {
     useEffect(() => {
         // load initial data
         dispatch(fetchData(options, options.optimizer_url, false));
-        dispatch(getTestModeStatus(options, options.optimizer_url));
+        dispatch(setCommonState('testModeStatus', initialTestMode));
         //dispatch(setCommonState('inProgress', false))
         setShowInprogress(false);
     }, [dispatch, activeReport]);
