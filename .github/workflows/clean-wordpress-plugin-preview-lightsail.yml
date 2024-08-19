@@ -113,7 +113,10 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${SSH_HOST} <<EOF
             export INSTANCE_ID=${INSTANCE_ID}
 
-            # Delete instance directory
-            rm -r /home/bitnami/wp-${INSTANCE_ID}
-
+            if [ -d "/home/bitnami/wp-${INSTANCE_ID}" ]; then
+              echo "Directory exists. Deleting /home/bitnami/wp-${INSTANCE_ID}..."
+              rm -r /home/bitnami/wp-${INSTANCE_ID}
+            else
+              echo "Directory /home/bitnami/wp-${INSTANCE_ID} does not exist. Skipping deletion."
+            fi
           EOF
