@@ -117,7 +117,7 @@ class RapidLoad_Admin_Bar {
             'enable_entire_site' => RapidLoad_DB::get_optimization_count() < 2,
             'rest_url' => RapidLoadRestApi::rest_url(),
             'license_key' => RapidLoad_Base::get_license_key(),
-            'test_mode' => isset($options['rapidload_test_mode']) && $options['rapidload_test_mode'] == "1"
+            'test_mode' => boolval(isset($options['rapidload_test_mode']) && $options['rapidload_test_mode'] == "1")
         );
 
         wp_localize_script( 'rapidload_page_optimizer', 'rapidload_optimizer', $data );
