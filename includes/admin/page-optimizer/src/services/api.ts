@@ -89,7 +89,7 @@ class ApiService {
             const query = new URLSearchParams();
 
             this.baseURL.searchParams.append('action', 'fetch_page_speed')
-            this.baseURL.searchParams.append('url', encodeURI(url))
+            this.baseURL.searchParams.append('url', url)
             this.baseURL.searchParams.append('strategy', activeReport)
             this.baseURL.searchParams.append('new', reload as unknown as string)
             this.baseURL.searchParams.append('is_dev', isDev as unknown as string)
@@ -135,7 +135,7 @@ class ApiService {
            const api_root = this.options?.api_root || 'https://api.rapidload.io/api/v1';
            const pageSpeedURL = new URL(`${api_root}/page-speed`);
 
-           pageSpeedURL.searchParams.append('url', encodeURI(url))
+           pageSpeedURL.searchParams.append('url', url)
            pageSpeedURL.searchParams.append('strategy', state.app.activeReport)
            pageSpeedURL.searchParams.append('plugin_version', this.options.rapidload_version)
            pageSpeedURL.searchParams.append('titan_version', __OPTIMIZER_VERSION__)
