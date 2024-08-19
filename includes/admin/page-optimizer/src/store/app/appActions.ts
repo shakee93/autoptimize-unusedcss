@@ -328,7 +328,7 @@ export const updateSettings = (
         const deviceType = currentState?.app?.activeReport;
 
         // @ts-ignore
-        let newOptions : AuditSetting[] = currentState?.app?.[deviceType]?.settings?.map((s: AuditSetting) => {
+        let newOptions : AuditSetting[] = currentState?.app?.settings[deviceType]?.state?.map((s: AuditSetting) => {
 
             if (s.name === setting.name) {
 
@@ -344,37 +344,11 @@ export const updateSettings = (
             }
             return s;
         });
-
-        let newData = currentState.app?.[deviceType].data
-
-        if (!newData) {
-            console.error('RapidLoad: an error occurred while saving the settings')
-            return;
-        }
-
-        newData.audits = newData.audits.map((a: Audit) => {
-
-           a.settings = a.settings.map(s => {
-
-               s.inputs = s.inputs.map(input => {
-
-                   if (input.key === key) {
-                       input.value = payload
-                   }
-
-                   return input;
-               })
-
-                return s;
-            })
-
-            return a;
-        });
-
+        
+        console.log(newOptions);
 
         dispatch({ type: UPDATE_SETTINGS , payload : {
-                settings: newOptions,
-                data: newData
+                settings: newOptions
         } });
     }
 }

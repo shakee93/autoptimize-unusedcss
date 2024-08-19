@@ -31,13 +31,7 @@ export interface AppState {
         desktop: Report,
     },
     settings: {
-        mobile: {
-            original?: AuditSetting[],
-            state?: AuditSetting[],
-            error?: string | null;
-            loading: boolean
-        },
-        desktop: {
+        [key in ReportType]: {
             original?: AuditSetting[],
             state?: AuditSetting[],
             error?: string | null;
@@ -113,7 +107,6 @@ interface UpdateSettingsAction {
     type: typeof UPDATE_SETTINGS;
     payload : {
         settings : AuditSetting[];
-        data: any
     },
 }
 

@@ -520,8 +520,7 @@ const SpeedSettings = ({}) => {
         )}>
             <ul>
 
-                {groupedSettings[activeCategory]
-                    .map((item: AuditSetting, itemIndex) => (
+                {groupedSettings[activeCategory]?.map((item: AuditSetting, itemIndex) => (
                         <li key={`${item.category}-${itemIndex}`}>
                             <m.div initial={{opacity: 0, y: -10}}
                                    animate={{opacity: 1, y: 0}}
@@ -534,7 +533,7 @@ const SpeedSettings = ({}) => {
                         </li>
                     ))}
 
-                {(groupedSettings[activeCategory].length <= 2 ) &&  <m.div
+                {(groupedSettings[activeCategory]?.length <= 2 ) &&  <m.div
                         initial={{opacity: 0, y: 10}}
                         animate={{opacity: 1, y: 0}}
                         exit={{opacity: 0, y: -20}}

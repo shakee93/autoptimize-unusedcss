@@ -83,20 +83,20 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
         case FETCH_REPORT_SUCCESS:
             return {
                 ...state,
-                // report: {
-                //     ...state.report,
-                //     [action.payload.activeReport] : {
-                //         ...state.report[action.payload.activeReport],
-                //         original: JSON.parse(JSON.stringify(action.payload.data.data)),
-                //         data: action.payload.data.data,
-                //         error: null,
-                //         loading: false,
-                //         settings: action.payload.data.settings,
-                //         originalSettings: JSON.parse(JSON.stringify(action.payload.data.settings)),
-                //         revisions: action.payload.data.revisions,
-                //         defaultSettingsMode: action.payload.data.data.settingsMode
-                //     }
-                // }
+                report: {
+                    ...state.report,
+                    [action.payload.activeReport] : {
+                        ...state.report[action.payload.activeReport],
+                        original: JSON.parse(JSON.stringify(action.payload.data.data)),
+                        data: action.payload.data.data,
+                        error: null,
+                        loading: false,
+                        settings: action.payload.data.settings,
+                        originalSettings: JSON.parse(JSON.stringify(action.payload.data.settings)),
+                        revisions: action.payload.data.revisions,
+                        defaultSettingsMode: action.payload.data.data.settingsMode
+                    }
+                }
             };
         case FETCH_REPORT_FAILURE:
             return {
@@ -149,10 +149,12 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
         case UPDATE_SETTINGS:
             return {
                 ...state,
-                [state.activeReport] : {
-                    ...state[state.activeReport],
-                    settings: action.payload.settings,
-                    data: action.payload.data
+                settings: {
+                    ...state.settings,
+                    [state.activeReport] : {
+                        ...state.settings[state.activeReport],
+                        state: action.payload.settings,
+                    }
                 }
             };
         case CHANGE_REPORT_TYPE:
