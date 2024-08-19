@@ -35,7 +35,7 @@ const UrlPreview = () => {
             {!error &&
                 <div
                     className='flex h-4 items-center text-xxs leading-relaxed text-brand-500 cursor-default'>
-                    {loading ?
+                    {!data ?
                         <div
                             className='w-64 bg-brand-300 dark:bg-brand-600 animate-pulse h-2.5 rounded-sm mt-1'></div> :
                         <>

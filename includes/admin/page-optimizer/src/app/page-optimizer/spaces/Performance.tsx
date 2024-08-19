@@ -9,7 +9,7 @@ import {cn} from "lib/utils";
 import TogglePerformance from "components/toggle-performance";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {setCommonState} from "../../../store/common/commonActions";
-import {CopyMinus, FoldVertical, Layers, SplitSquareVertical} from "lucide-react";
+import {CopyMinus, FoldVertical, Layers, Loader, SplitSquareVertical} from "lucide-react";
 import TooltipText from "components/ui/tooltip-text";
 import ScaleUp from "components/animation/ScaleUp";
 import {BoltIcon, MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
@@ -177,7 +177,7 @@ const Performance = () => {
             </div>
 
             <div className="audits pt-6 flex mb-24">
-                <div className='w-full'>
+                <div className='w-full flex flex-col gap-2.5'>
 
                     <AnimatePresence initial={false}>
                         <div key='performance' className='grid grid-cols-12 gap-6 w-full relative '>
@@ -211,6 +211,27 @@ const Performance = () => {
                                 </m.div>
 
                             )}
+                        </div>
+
+                        {(reanalyze) &&
+                            <m.div
+                                key='loading-notification'
+                                initial={{opacity: 0, y: 10}}
+                                animate={{opacity: 1, y: 0}}
+                                exit={{opacity: 0, y: -10}}
+                                className='dark:bg-brand-800/40 bg-brand-200 px-8 py-5 rounded-3xl'>
+
+                                <div className='flex items-center gap-3'>
+                                    <Loader className='w-5 animate-spin text-brand-700'/>
+                                    <div className='text-sm text-brand-700'>
+                                        Analyzing your page with Google Page Speed Insights...
+                                    </div>
+                                </div>
+
+                            </m.div>
+                        }
+                        <div>
+
                         </div>
                     </AnimatePresence>
                 </div>
