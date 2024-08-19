@@ -43,13 +43,14 @@ jobs:
         run: |
           CURRENT_VERSION=$(node -p "require('./package.json').version")
           if [ "$LATEST_VERSION" == "$CURRENT_VERSION" ]; then
+            echo "titan_version_changed=false" >> $GITHUB_ENV
             echo "No version change detected."
-            exit 1
           else
+            echo "titan_version_changed=true" >> $GITHUB_ENV
             echo "Version change detected."
           fi
 
       - name: Publish to NPM
-        if: success()
+        if: ${{ env.titan_version_changed == 'true' }}
         working-directory: includes/admin/page-optimizer
         run: npm publish
