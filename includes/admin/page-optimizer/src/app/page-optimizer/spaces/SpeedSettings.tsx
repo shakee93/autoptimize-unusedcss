@@ -30,7 +30,7 @@ import {cn} from "lib/utils";
 import {setCommonState} from "../../../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {BoltIcon, CheckCircleIcon, ChevronRightIcon, ChevronDownIcon,  ChevronUpIcon, CheckIcon, XMarkIcon  } from "@heroicons/react/24/solid";
-import {updateSettings} from "../../../store/app/appActions";
+import {changeGear, updateSettings} from "../../../store/app/appActions";
 import { m, AnimatePresence  } from 'framer-motion';
 import AuditSettingsItem from './AuditSettingsItem';
 import {useAppContext} from "../../../context/app";
@@ -78,7 +78,8 @@ const SpeedSettings = ({}) => {
     const {dispatch, openCategory, activeTab, settingsMode, auditsReturn, testModeStatus} = useCommonDispatch()
     const categoryOrder: SettingsCategory[] = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
     const [sortedStatus, setSortedStatus] = useState(true)
-    const modes = ['starter', 'accelerate', 'turboMax'];
+    const modes: PerformanceGear[] = ['starter', 'accelerate', 'turboMax'];
+
     const [customMode, setCustomMode] = useState(false);
     const [activeSettingsMode, setActiveSettingsMode] = useState(defaultSettingsMode || 'custom');
     const [mouseOnSettingsGear, setMouseOnSettingsGear] = useState('');
@@ -224,49 +225,27 @@ const SpeedSettings = ({}) => {
     }, [ groupedSettings]);
 
     const customUnsavedChanges = useRef<HTMLDivElement>(null);
-    const [tempMode, setTempMode] = useState('');
+    const [tempMode, setTempMode] = useState<PerformanceGear>('custom');
 
-    const settingsModeOnChange = (mode: string, activate?: boolean) => {
+    const settingsModeOnChange = (mode: PerformanceGear, activate?: boolean) => {
         handleTestModeSettingsChange(mode);
 
-        if(activeSettingsMode === 'custom' && !activate ){
+        if (activeSettingsMode === 'custom' && !activate) {
             customUnsavedChanges.current?.click();
-        }else{
-        setActiveSettingsMode(mode as settingsMode);
-        dispatch(setCommonState('settingsMode', mode));
+        } else {
+            setActiveSettingsMode(mode as PerformanceGear);
+            dispatch(setCommonState('settingsMode', mode));
 
-        if (!notPassedAudits) {
-            return;
+            if (!notPassedAudits) {
+                return;
+            }
+
+            dispatch(changeGear(
+                mode as BasePerformanceGear
+            ))
+
         }
 
-        const allAudits = passedAudits.concat(notPassedAudits);
-
-        const starterLabels = ['Remove Unused CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
-        const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
-        const turboMaxLabels = [...accelerateLabels, 'Delay Javascript', 'Enable Critical CSS'];
-
-
-        // notPassedAudits.forEach(settings => {
-        allAudits.forEach(settings => {
-            const [mainInput] = settings.inputs
-
-            let settingsToReturn;
-
-            if (mode === 'starter' && starterLabels.includes(mainInput.control_label)) {
-                settingsToReturn = settings;
-            } else if (mode === 'accelerate' && accelerateLabels.includes(mainInput.control_label)) {
-                settingsToReturn = settings;
-            } else if (mode === 'turboMax' && turboMaxLabels.includes(mainInput.control_label)) {
-                settingsToReturn = settings;
-
-            }
-            if (settingsToReturn) {
-                updateValue(settingsToReturn, true, mainInput.key);
-            }else{
-                updateValue(settings, false, mainInput.key);
-            }
-        });
-        }
 
     };
 
@@ -328,14 +307,14 @@ const SpeedSettings = ({}) => {
     },[])
 
 
-    const settingsDescriptions: { [key in settingsMode]: string } = {
+    const settingsDescriptions: { [key in PerformanceGear]: string } = {
         starter: "Optimizes foundational aspects for faster load speeds by removing unused CSS, minifying CSS and JavaScript, caching pages, and self-hosting Google Fonts.",
         accelerate: "Starter mode + RapidLoad CDN, serving next-gen images, and enhancing image handling with lazy loading, while also deferring JavaScript and adding crucial image attributes.",
         turboMax: "Unlock peak performance potential including Accelerator mode + generating critical CSS, advanced JavaScript handling methods, such as delaying execution for improved speed and efficiency.",
         custom: "Tailor your optimization strategy to your needs, combining features like Accelerator mode and advanced JavaScript handling for personalized performance."
     };
 
-    const currentMode: settingsMode = (mouseOnSettingsGear || activeSettingsMode) as settingsMode;
+    const currentMode: PerformanceGear = (mouseOnSettingsGear || activeSettingsMode) as PerformanceGear;
 
 
     const actionRequired = (item: AuditSetting): boolean => {

@@ -353,6 +353,45 @@ export const updateSettings = (
     }
 }
 
+export const changeGear = (
+    mode: BasePerformanceGear,
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+
+    const starter = ['Remove Unused CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
+    const accelerate = [...starter, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
+    const turboMax = [...accelerate, 'Delay Javascript', 'Critical CSS'];
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState)  => {
+        const currentState = getState(); // Access the current state
+        const deviceType = currentState?.app?.activeReport;
+
+        const modes : {
+            [key in BasePerformanceGear] : string[]
+        } = {starter, accelerate, turboMax}
+
+        // @ts-ignore
+        let newOptions : AuditSetting[] = currentState?.app?.settings[deviceType]?.state?.map((s: AuditSetting) => {
+
+            s.inputs = s.inputs.map((input, index) => {
+
+                if (index === 0) {
+                    input.value = modes[mode].includes(s.name);
+                }
+
+                return input;
+            })
+
+            return s;
+        });
+
+        dispatch({
+            type: UPDATE_SETTINGS, payload: {
+                settings: newOptions
+            }
+        });
+    }
+}
+
 export const changeReport = (
     type: ReportType
 ):  ThunkAction<void, RootState, unknown, AnyAction> => {
