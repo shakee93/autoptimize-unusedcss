@@ -89,7 +89,7 @@ class ApiService {
             const query = new URLSearchParams();
 
             this.baseURL.searchParams.append('action', 'fetch_page_speed')
-            this.baseURL.searchParams.append('url', url)
+            this.baseURL.searchParams.append('url', encodeURI(url))
             this.baseURL.searchParams.append('strategy', activeReport)
             this.baseURL.searchParams.append('new', reload as unknown as string)
             this.baseURL.searchParams.append('is_dev', isDev as unknown as string)
