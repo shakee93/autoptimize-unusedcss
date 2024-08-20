@@ -50,7 +50,7 @@ class RapidLoad_Optimizer
 
         if(isset($state['dom']) && isset($_REQUEST['rapidload_preview'])){
 
-            /*$head = $state['dom']->find('head', 0);
+            $head = $state['dom']->find('head', 0);
 
             // get the file content from /includes/modules/optimizer/scripts/optimizer-stat.js
             $content = "//!injected by RapidLoad \n
@@ -70,7 +70,7 @@ class RapidLoad_Optimizer
 
             $script = '<script id="rapidload-optimizer-status-script"> window.rapidload_preview_stats = ' . json_encode($front_end_data) . ';' . $content . '</script>';
             $first_child = $head->first_child();
-            $first_child->__set('outertext', $script . $first_child->outertext);*/
+            $first_child->__set('outertext', $script . $first_child->outertext);
 
             $body = $state['dom']->find('body', 0);
 

@@ -38,6 +38,19 @@ class RapidLoad_CDN_Enqueue
             $this->strategy = $state['strategy'];
         }
 
+        if(!$this->is_cdn_enabled()){
+            return $state;
+        }
+
+        add_filter('rapidload/optimizer/frontend/data', function ($data){
+            return array_merge($data,['cdn' => [
+                'status' => 'enabled',
+                'cdn_url' => $this->options['uucss_cdn_url'],
+                'cdn_dns_id' => $this->options['uucss_cdn_dns_id'],
+                'cdn_zone_id' => $this->options['uucss_cdn_zone_id'],
+            ]]);
+        });
+
         $links = $this->dom->find( 'link' );
 
         foreach ($links as $link){

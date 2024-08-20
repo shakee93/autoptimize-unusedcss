@@ -123,7 +123,7 @@ class MinifyCSS_Enqueue
 
         $link->href = $minified_url;
 
-        $_frontend_data['new_href'] = $link->href;
+        $_frontend_data['minified_href'] = $link->href;
 
         if(!empty($_frontend_data)){
             $this->frontend_data['minify_css'][] = $_frontend_data;

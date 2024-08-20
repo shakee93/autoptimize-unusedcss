@@ -177,6 +177,7 @@ class RapidLoad_Font_Enqueue
                     $inline_style_content = sprintf('<style id="google-font-%s">%s</style>', $version, $content);
                     $title_content = $this->dom->find( 'title' )[0]->outertext;
                     $this->dom->find( 'title' )[0]->outertext = $title_content . $inline_style_content;
+                    $_frontend_data['new_href'] = "google-font-" . $version;
                 }else{
                     $google_font->href = $file_url;
                     $_frontend_data['new_href'] = $file_url;
