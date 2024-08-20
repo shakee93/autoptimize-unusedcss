@@ -3,17 +3,22 @@ import {AnyAction} from 'redux';
 import {
     AppAction,
     CHANGE_REPORT_TYPE,
-    FETCH_DATA_FAILURE,
-    FETCH_DATA_REQUEST,
-    FETCH_DATA_SUCCESS,
+    FETCH_REPORT_FAILURE,
+    FETCH_REPORT_REQUEST,
+    FETCH_REPORT_SUCCESS,
+    FETCH_SETTING_FAILURE,
+    FETCH_SETTING_REQUEST,
+    FETCH_SETTING_SUCCESS,
+    GET_CSS_STATUS_SUCCESS,
     RootState,
     UPDATE_FILE_ACTION,
     UPDATE_SETTINGS,
-    GET_CSS_STATUS_SUCCESS,
-    UPDATE_TEST_MODE, GET_LICENSE
+    UPDATE_TEST_MODE
 } from "./appTypes";
 import ApiService from "../../services/api";
 import Audit from "app/page-optimizer/components/audit/Audit";
+
+import SampleSettings from '../../lib/sample-settings'
 
 
 const transformAudit = (audit: Audit, metrics : Metric[]) => {
@@ -56,13 +61,13 @@ const transformAudit = (audit: Audit, metrics : Metric[]) => {
     return audit
 }
 
-const transformData = (data: any) => {
+const transformReport = (data: any) => {
 
     let metrics = data.data?.page_speed?.metrics.map((metric: Metric) => ({
         ...metric,
         potentialGain: metric.refs ? (metric.refs?.weight - (metric.refs?.weight / 100) * metric.score) : 0
     }))
-    
+
     let audits : Audit[] = data.data.page_speed.audits
         .sort((a: Audit, b: Audit) => a.score - b.score)
         .map( (a: Audit) => transformAudit(a, metrics))
@@ -88,7 +93,7 @@ const transformData = (data: any) => {
 
         return 0;
     }
-    
+
     let _data = {
         data: {
             performance:  data.data.page_speed.performance ? parseFloat(data.data?.page_speed?.performance.toFixed(0)) : 0,
@@ -112,9 +117,33 @@ const transformData = (data: any) => {
         state: data.state
     };
 
+
     return _data
 }
 
+const transformSettings = (data: any) => {
+
+    const settings = SampleSettings;
+
+    const flattenedSettings = settings.flat();
+
+    const uniqueSettings = Array.from(new Set(flattenedSettings.map((setting: any) => JSON.stringify(setting)))).map((str: any) => JSON.parse(str));
+
+    return {
+        data: uniqueSettings.map((s: AuditSetting) => ({
+            ...s,
+            inputs: s.inputs.map(input => ({
+                ...input,
+                ...(
+                    input.control_type === 'checkbox' &&
+                    {
+                        value: input.value === '1' || input.value === true
+                    }
+                )
+            }))
+        }))
+    }
+}
 
 // this grabs the data and populates a settings object with values
 const initiateSettings = (audits: Audit[]) => {
@@ -124,7 +153,6 @@ const initiateSettings = (audits: Audit[]) => {
     const flattenedSettings = settings.flat();
 
     const uniqueSettings = Array.from(new Set(flattenedSettings.map((setting: any) => JSON.stringify(setting)))).map((str: any) => JSON.parse(str));
-
 
     // convert 1's to true and false in checkbox
     return uniqueSettings.map((s: AuditSetting) => ({
@@ -161,12 +189,13 @@ export const getCSSStatus = (options: WordPressOptions, url: string, types: stri
 
     }
 }
+// : ThunkAction<void, RootState, unknown, AnyAction> =>
 
-export const getTestModeStatus = (options: WordPressOptions, url: string, mode?: string): ThunkAction<void, RootState, unknown, AnyAction> => {
+export const getTestModeStatus = (options: WordPressOptions, url: string, mode?: string): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
-    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string }> => {
 
         try {
             const fetchTestModeData = await api.getTestMode(url, mode || '');
@@ -174,68 +203,33 @@ export const getTestModeStatus = (options: WordPressOptions, url: string, mode?:
                 type: UPDATE_TEST_MODE,
                 payload : fetchTestModeData?.data
             })
-
-        } catch (error) {
+            return { success: true };
+        } catch (error: any) {
             console.error('Error on Test Mode:', error);
+            let errorMessage: string;
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            } else {
+                errorMessage = 'An unknown error occurred';
+            }
+            return { success: false, error: errorMessage };
         }
 
 
     }
 }
 
-export const updateLicense = (options: WordPressOptions): ThunkAction<void, RootState, unknown, AnyAction> => {
+export const fetchReport = (options: WordPressOptions, url : string, reload: boolean = false, inprogress: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
-
-    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
-
-        try {
-            const fetchLicense = await api.getLicense();
-            dispatch({
-                type: GET_LICENSE,
-                payload : fetchLicense?.data
-            })
-
-        } catch (error) {
-            console.error('Error on License:', error);
-        }
-
-
-    }
-}
-
-
-export const saveGeneralSettings = (options: WordPressOptions, url: string, mode?: string): ThunkAction<void, RootState, unknown, AnyAction> => {
-
-    const api = new ApiService(options);
-
-    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
-
-        try {
-            const fetchTestModeData = await api.updateGeneralSettings(url, mode || '');
-            dispatch({
-                type: UPDATE_TEST_MODE,
-                payload : fetchTestModeData?.data
-            })
-
-        } catch (error) {
-            console.error('Error on Test Mode:', error);
-        }
-
-
-    }
-}
-
-export const fetchData = (options: WordPressOptions, url : string, reload: boolean = false, inprogress: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
-
-    const api = new ApiService(options);
-
 
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
         try {
             const currentState = getState(); // Access the current state
             const activeReport = currentState.app.activeReport;
-            const activeReportData = currentState.app[activeReport]
+            const activeReportData = currentState.app.report[activeReport]
 
             // TODO: don't let people bam on keyboard while waiting to laod the page speed
             // if(activeReportData.loading && activeReportData.data ) {
@@ -251,24 +245,71 @@ export const fetchData = (options: WordPressOptions, url : string, reload: boole
                 return;
             }
 
-            dispatch({ type: FETCH_DATA_REQUEST, activeReport });
+            dispatch({ type: FETCH_REPORT_REQUEST, activeReport });
 
             const response = await api.fetchPageSpeed(
                 url,
                 activeReport,
                 reload,
             );
-            
-            dispatch({ type: FETCH_DATA_SUCCESS, payload: {
+
+
+            dispatch({ type: FETCH_REPORT_SUCCESS, payload: {
                 activeReport,
-                data: transformData(response)
+                data: transformReport(response)
             }});
+
 
         } catch (error) {
             if (error instanceof Error) {
-                dispatch({ type: FETCH_DATA_FAILURE, error: error.message });
+                dispatch({ type: FETCH_REPORT_FAILURE, error: error.message });
             } else {
-                dispatch({ type: FETCH_DATA_FAILURE, error: 'Unknown error occurred' });
+                dispatch({ type: FETCH_REPORT_FAILURE, error: 'Unknown error occurred' });
+            }
+        }
+    };
+};
+
+export const fetchSettings = (options: WordPressOptions, url : string, reload: boolean = false, inprogress: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
+        try {
+            const currentState = getState(); // Access the current state
+            const activeReport = currentState.app.activeReport;
+            const activeReportData = currentState.app.settings[activeReport]
+
+            // TODO: don't let people bam on keyboard while waiting to laod the page speed
+            // if(activeReportData.loading && activeReportData.data ) {
+            //     console.log('don\'t bam the mouse! we are loading your page speed details 😉');
+            //     return;
+            // }
+
+            if (activeReportData.loading) {
+                return;
+            }
+
+            dispatch({ type: FETCH_SETTING_REQUEST, activeReport });
+
+            const response = await api.fetchSettings(
+                url,
+                activeReport,
+                reload,
+            );
+
+
+            dispatch({ type: FETCH_SETTING_SUCCESS, payload: {
+                    activeReport,
+                    data: transformSettings(response)
+                }});
+
+
+        } catch (error) {
+            if (error instanceof Error) {
+                dispatch({ type: FETCH_SETTING_FAILURE, error: error.message });
+            } else {
+                dispatch({ type: FETCH_SETTING_FAILURE, error: 'Unknown error occurred' });
             }
         }
     };
@@ -287,54 +328,56 @@ export const updateSettings = (
         const deviceType = currentState?.app?.activeReport;
 
         // @ts-ignore
-        let newOptions : AuditSetting[] = currentState?.app?.[deviceType]?.settings?.map((s: AuditSetting) => {
-
-            if (s.name === setting.name) {
-
-                s.inputs = s.inputs.map(input => {
-
-                    if (input.key === key) {
-                        input.value = payload
-                    }
-
-                    return input;
-                })
-
+        const newOptions: AuditSetting[] = currentState?.app?.settings[deviceType]?.state?.map((s: AuditSetting) => {
+            if (s.name !== setting.name) {
+                return s; // Early return if the setting name doesn't match
             }
-            return s;
-        });
 
-        let newData = currentState.app?.[deviceType].data
-
-        if (!newData) {
-            console.error('RapidLoad: an error occurred while saving the settings')
-            return;
-        }
-
-        newData.audits = newData.audits.map((a: Audit) => {
-
-           a.settings = a.settings.map(s => {
-
-               s.inputs = s.inputs.map(input => {
-
-                   if (input.key === key) {
-                       input.value = payload
-                   }
-
-                   return input;
-               })
-
-                return s;
-            })
-
-            return a;
-        });
-
-
+            return {
+                ...s,
+                inputs: s.inputs.map(input =>
+                    input.key === key ? { ...input, value: payload } : input
+                )
+            };
+        }) || [];
+        
         dispatch({ type: UPDATE_SETTINGS , payload : {
-                settings: newOptions,
-                data: newData
+                settings: newOptions
         } });
+    }
+}
+
+export const changeGear = (
+    mode: BasePerformanceGear,
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+
+    const starter = ['Remove Unused CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
+    const accelerate = [...starter, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
+    const turboMax = [...accelerate, 'Delay Javascript', 'Critical CSS'];
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState)  => {
+        const currentState = getState(); // Access the current state
+        const deviceType = currentState?.app?.activeReport;
+
+        const modes : {
+            [key in BasePerformanceGear] : string[]
+        } = {starter, accelerate, turboMax}
+
+        // @ts-ignore
+        const newOptions: AuditSetting[] = currentState?.app?.settings[deviceType]?.state?.map((s: AuditSetting) => ({
+            ...s,
+            inputs: s.inputs.map((input, index) => ({
+                ...input,
+                value: index === 0 ? modes[mode]?.includes(s.name) : input.value
+            }))
+        })) || [];
+
+
+        dispatch({
+            type: UPDATE_SETTINGS, payload: {
+                settings: newOptions
+            }
+        });
     }
 }
 

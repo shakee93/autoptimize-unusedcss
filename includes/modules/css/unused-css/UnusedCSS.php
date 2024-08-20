@@ -42,6 +42,8 @@ class UnusedCSS
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
+        add_action('rapidload/vanish/css', [ $this, 'vanish' ]);
+
         add_action('rapidload/job/handle', [$this, 'cache_uucss'], 10, 2);
 
         add_action('rapidload/job/handle', [$this, 'enqueue_uucss'], 20, 2);
@@ -62,6 +64,23 @@ class UnusedCSS
             add_action( 'add_meta_boxes', [$this, 'add_meta_boxes'] );
             add_action( 'save_post', [$this, 'save_meta_box_options'] , 10, 2);
         }
+
+        add_action('rapidload/admin-bar-actions', [$this, 'add_admin_clear_action']);
+    }
+
+    public function add_admin_clear_action($wp_admin_bar){
+        $wp_admin_bar->add_node( array(
+            'id'    => 'rapidload-clear-css-cache',
+            'title' => '<span class="ab-label">' . __( 'Clear CSS Optimizations', 'clear_optimization' ) . '</span>',
+            //'href'  => admin_url( 'admin.php?page=rapidload&action=rapidload_purge_all' ),
+            'href'   => wp_nonce_url( add_query_arg( array(
+                '_action' => 'rapidload_purge_all',
+                'job_type' => 'css',
+                'clear' => true,
+            ) ), 'uucss_nonce', 'nonce' ),
+            'meta'  => array( 'class' => 'rapidload-clear-all', 'title' => 'RapidLoad will clear cached css files' ),
+            'parent' => 'rapidload'
+        ));
     }
 
     public function add_meta_boxes()

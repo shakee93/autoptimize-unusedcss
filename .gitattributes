@@ -1,0 +1,2 @@
+./includes/admin/page-optimizer/dist/* merge=ours
+./includes/admin/page-optimizer/dist-debug/* merge=ours

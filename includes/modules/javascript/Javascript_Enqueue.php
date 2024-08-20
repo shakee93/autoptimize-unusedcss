@@ -247,6 +247,10 @@ class Javascript_Enqueue
 
         }else if(self::is_inline_script($link)){
 
+            if(isset($link->id) && $this->str_contains($link->id,"rapidload-")){
+                return;
+            }
+
             if(self::is_file_excluded($link->innertext()) || self::is_file_excluded($link->innertext(),'uucss_exclude_files_from_delay_js')){
                 return;
             }
@@ -347,7 +351,7 @@ class Javascript_Enqueue
         $js_to_be_defer = isset($this->options['uucss_load_js_method']) &&
             ($this->options['uucss_load_js_method'] == "defer" || $this->options['uucss_load_js_method'] == "1");
 
-        $js_to_be_delay = isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1";
+        $js_to_be_delay = isset($this->options['delay_javascript']) && $this->options['delay_javascript'] == "1" && (!isset($this->options['uucss_load_scripts_on_user_interaction']) || empty($this->options['uucss_load_scripts_on_user_interaction']));
 
         if(self::is_js($link)){
 
@@ -400,6 +404,10 @@ class Javascript_Enqueue
             }
 
             if ($link->norapidload) {
+                return;
+            }
+
+            if(isset($link->id) && $this->str_contains($link->id,"rapidload-")){
                 return;
             }
 

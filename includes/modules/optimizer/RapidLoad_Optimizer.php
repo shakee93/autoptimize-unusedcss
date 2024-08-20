@@ -48,13 +48,13 @@ class RapidLoad_Optimizer
 
     public function update_content($state){
 
-        if(isset($state['dom']) && isset($_REQUEST['rapidload_preview_optimization'])){
+        if(isset($state['dom']) && isset($_REQUEST['rapidload_preview'])){
 
-            $head = $state['dom']->find('head', 0);
+            /*$head = $state['dom']->find('head', 0);
 
             // get the file content from /includes/modules/optimizer/scripts/optimizer-stat.js
             $content = "//!injected by RapidLoad \n
-            !(function(){function getQueryParam(param){const urlParams=new URLSearchParams(window.location.search);console.log(urlParams.get(param));return urlParams.get(param)}window.addEventListener('load',function(){if(getQueryParam('rapidload_preview_optimization')){const rapidload_cache_status_div_content=document.querySelector('#rapidload-cache-status');if(rapidload_cache_status_div_content){rapidload_cache_status_div_content.style.display='block'}}})})();";
+            !(function(){function getQueryParam(param){const urlParams=new URLSearchParams(window.location.search);console.log(urlParams.get(param));return urlParams.get(param)}window.addEventListener('load',function(){if(getQueryParam('rapidload_preview')){const rapidload_cache_status_div_content=document.querySelector('#rapidload-cache-status');if(rapidload_cache_status_div_content){rapidload_cache_status_div_content.style.display='block'}}})})();";
 
             if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG === true || defined('RAPIDLOAD_DEV_MODE') && RAPIDLOAD_DEV_MODE === true) {
                 $filePath = RAPIDLOAD_PLUGIN_DIR . '/includes/modules/optimizer/scripts/optimizer-stat.min.js';
@@ -70,11 +70,11 @@ class RapidLoad_Optimizer
 
             $script = '<script id="rapidload-optimizer-status-script"> window.rapidload_preview_stats = ' . json_encode($front_end_data) . ';' . $content . '</script>';
             $first_child = $head->first_child();
-            $first_child->__set('outertext', $script . $first_child->outertext);
+            $first_child->__set('outertext', $script . $first_child->outertext);*/
 
             $body = $state['dom']->find('body', 0);
 
-            $frontend_data_content = '<div id="rapidload-optimizer-stat-container" style="display: none;padding: 1px 20px;background-color: #a080c6;color: white;"><ul><li>Critical CSS : <span id="rapidload-cpcss-stat">N/A</span></li><li>Unused CSS : <span id="rapidload-uucss-stat">N/A</span></li><li>Minify CSS : <span id="rapidload-minify-css-stat">N/A</span></li><li>Font Optimization : <span id="rapidload-font-stat">N/A</span></li><li>JS Optimization : <span id="rapidload-js-stat">N/A</span></li><li>Image Optimization : <span id="rapidload-image-stat">N/A</span></li><li>CDN Service : <span id="rapidload-cdn-stat">N/A</span></li></ul></div>';
+            $frontend_data_content = '<div id="rapidload-preview-container"></div>';
 
             $last_child = $body->last_child();
 
@@ -151,15 +151,22 @@ class RapidLoad_Optimizer
             'latest_page_speed' => 'latest_page_speed',
             'preload_page' => 'preload_page',
             'rapidload_css_job_status' => 'rapidload_css_job_status',
+            'fetch_titan_settings' => 'fetch_titan_settings',
+            'update_titan_settings' => 'update_titan_settings',
         ];
 
         foreach ($actions as $action => $method) {
             add_action("wp_ajax_$action", [$this, $method]);
-            add_action("wp_ajax_nopriv_$action", [$this, $method]);
+
+            if (defined('RAPIDLOAD_DEV_MODE')) {
+                add_action("wp_ajax_nopriv_$action", [$this, $method]);
+            }
         }
     }
 
     public function rapidload_css_job_status(){
+
+        self::verify_nonce();
 
         $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
 
@@ -177,15 +184,15 @@ class RapidLoad_Optimizer
         wp_send_json_success([
             'uucss' => [
                 'status' => $job_data_uucss->status,
-                'error' => $job_data_uucss->error,
-                'warnings' => $job_data_uucss->warnings,
-                'stats' => $job_data_uucss->stats
+                'error' => isset($job_data_uucss->error) ? unserialize($job_data_uucss->error) : null,
+                'warnings' => isset($job_data_uucss->warnings) ? unserialize($job_data_uucss->warnings) : null,
+                'stats' => isset($job_data_uucss->stats) ? unserialize($job_data_uucss->stats) : null
             ],
             'cpcss' => [
                 'status' => $job_data_cpcss->status,
-                'error' => $job_data_cpcss->error,
-                'warnings' => $job_data_cpcss->warnings,
-                'stats' => $job_data_cpcss->stats
+                'error' => isset($job_data_cpcss->error) ? unserialize($job_data_cpcss->error) : null,
+                'warnings' => isset($job_data_cpcss->warnings) ? unserialize($job_data_cpcss->warnings) : null,
+                'stats' => isset($job_data_cpcss->stats) ? unserialize($job_data_cpcss->stats) : null
             ],
             'cache' => [
                 'status' => @file_exists($cache_file),
@@ -220,6 +227,7 @@ class RapidLoad_Optimizer
     public function titan_reset_to_default(){
 
         //$this->pre_optimizer_function();
+        self::verify_nonce();
 
         if(isset(self::$strategy)){
             if(self::$strategy == "mobile"){
@@ -235,6 +243,58 @@ class RapidLoad_Optimizer
         self::$job->save();
 
         wp_send_json_success(self::$global_options);
+    }
+
+    public function fetch_titan_settings(){
+
+        self::verify_nonce();
+
+        if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])){
+            wp_send_json_error('url required');
+        }
+
+        $url = $_REQUEST['url'];
+
+        if(filter_var($url, FILTER_VALIDATE_URL) == false){
+            wp_send_json_error('url not valid');
+        }
+
+        $strategy = isset($_REQUEST['strategy']) ? $_REQUEST['strategy'] : 'mobile';
+
+        $this->pre_optimizer_function($url, $strategy, null);
+
+        if(isset(self::$merged_options['uucss_api_key'])){
+            unset(self::$merged_options['uucss_api_key']);
+        }
+
+        wp_send_json_success(self::$merged_options);
+    }
+
+    public function update_titan_settings()
+    {
+
+        self::verify_nonce();
+
+        if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])){
+            wp_send_json_error('url required');
+        }
+
+        $url = $_REQUEST['url'];
+
+        if(filter_var($url, FILTER_VALIDATE_URL) == false){
+            wp_send_json_error('url not valid');
+        }
+
+        $strategy = isset($_REQUEST['strategy']) ? $_REQUEST['strategy'] : 'mobile';
+
+        $this->pre_optimizer_function($url, $strategy, null);
+
+        if(isset(self::$merged_options['uucss_api_key'])){
+            unset(self::$merged_options['uucss_api_key']);
+        }
+
+        wp_send_json_success(self::$merged_options);
+
     }
 
     public function  pre_optimizer_function($url, $strategy, $global){
@@ -507,7 +567,7 @@ class RapidLoad_Optimizer
 
         $titan_gear = get_option('rapidload_titan_gear');
 
-        if(isset($titan_gear) && !isset($result->settingsMode)){
+        if(isset($titan_gear) && $result && !isset($result->settingsMode)){
             $result->settingsMode = $titan_gear;
         }
 
@@ -561,7 +621,7 @@ class RapidLoad_Optimizer
 
         $titan_gear = get_option('rapidload_titan_gear');
 
-        if(isset($titan_gear) && !isset($result->settingsMode)){
+        if(isset($titan_gear) && $result && !isset($result->settingsMode)){
             $result->settingsMode = $titan_gear;
         }
 
@@ -1093,7 +1153,7 @@ class RapidLoad_Optimizer
         $url = $_REQUEST['url'];
 
         if(self::$global_options['rapidload_test_mode'] && self::$global_options['rapidload_test_mode'] == "1"){
-            $url = add_query_arg('rapidload_preview_optimization', 'true', $url);
+            $url = add_query_arg('rapidload_preview', 'true', $url);
         }
 
         $agent = isset($_REQUEST['user_agent']) ? $_REQUEST['user_agent'] : null;

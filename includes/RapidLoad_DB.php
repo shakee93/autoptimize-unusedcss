@@ -228,7 +228,9 @@ abstract class RapidLoad_DB
 
     static function update_db(){
 
-        self::verify_nonce();
+        if(!self::is_wp_cli()){
+            self::verify_nonce();
+        }
 
         if ( self::$current_version < self::$db_version ) {
 
@@ -775,6 +777,8 @@ abstract class RapidLoad_DB
         $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_module_js'");
         $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_module_image'");
         $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_module_titan'");
+        $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_titan_gear'");
+        $wpdb->query("DELETE FROM $option_table WHERE option_name = 'rapidload_cache'");
 
 
     }

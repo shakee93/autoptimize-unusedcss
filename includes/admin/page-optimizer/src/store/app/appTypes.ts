@@ -5,67 +5,54 @@ export interface RootState {
     common: CommonState
 }
 
+interface Report {
+    defaultSettingsMode: settingsMode | null,
+    data?: OptimizerResults | null;
+    original?: OptimizerResults | null;
+    error?: string | null;
+    loading: boolean
+    settings?: AuditSetting[],
+    originalSettings?: AuditSetting[],
+    revisions: Revision[],
+    changes: {
+        files: Array<any>
+    },
+    state: {
+        fresh?: boolean
+    }
+}
+
 export interface AppState {
     activeReport: ReportType,
     cssStatus: CSSStatusResponse | null;
     testMode: TestMode | null;
-    license: License | null;
-    generalSettings: GeneralSettings | null;
-    mobile: {
-        settingsMode: settingsMode,
-        data?: OptimizerResults | null;
-        original?: OptimizerResults | null;
-        error?: string | null;
-        loading: boolean
-        settings?: AuditSetting[],
-        originalSettings?: AuditSetting[],
-        revisions: Revision[],
-        changes: {
-            files: Array<any>
-        },
-        state: {
-            fresh?: boolean
-        }
-
+    report: {
+        mobile: Report,
+        desktop: Report,
     },
-    desktop: {
-        settingsMode: settingsMode,
-        data?: OptimizerResults | null;
-        original?: OptimizerResults | null;
-        error?: string | null;
-        loading: boolean
-        settings?: AuditSetting[]
-        originalSettings?: AuditSetting[],
-        revisions: Revision[],
-        changes: {
-            files: Array<any>
-        },
-        state: {
-            fresh?: boolean
+    settings: {
+        [key in ReportType]: {
+            original?: AuditSetting[],
+            state?: AuditSetting[],
+            error?: string | null;
+            loading: boolean
         }
-    }
+    },
+    mobile: Report,
+    desktop: Report
 }
 
-export const FETCH_DATA_REQUEST = 'FETCH_DATA_REQUEST';
-export const FETCH_DATA_SUCCESS = 'FETCH_DATA_SUCCESS';
-export const FETCH_DATA_FAILURE = 'FETCH_DATA_FAILURE';
+export const FETCH_REPORT_REQUEST = 'FETCH_REPORT_REQUEST';
+export const FETCH_REPORT_SUCCESS = 'FETCH_REPORT_SUCCESS';
+export const FETCH_REPORT_FAILURE = 'FETCH_REPORT_FAILURE';
+export const FETCH_SETTING_REQUEST = 'FETCH_SETTING_REQUEST';
+export const FETCH_SETTING_SUCCESS = 'FETCH_SETTING_SUCCESS';
+export const FETCH_SETTING_FAILURE = 'FETCH_SETTING_FAILURE';
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';
 export const CHANGE_REPORT_TYPE = 'CHANGE_REPORT_TYPE';
 export const UPDATE_FILE_ACTION = 'UPDATE_FILE_ACTION';
 export const GET_CSS_STATUS_SUCCESS = 'GET_CSS_STATUS_SUCCESS';
 export const UPDATE_TEST_MODE = 'UPDATE_TEST_MODE';
-export const UPDATE_DASHBOARD_GENERALSETTINGS = 'UPDATE_DASHBOARD_GENERALSETTINGS';
-export const GET_LICENSE = 'GET_LICENSE';
-
-interface GetLicense {
-    type: typeof GET_LICENSE,
-    payload : License,
-}
-
-interface UpdateGeneralSettings {
-    type: typeof UPDATE_DASHBOARD_GENERALSETTINGS,
-    payload : GeneralSettings,
-}
 
 interface GetCSSStatusSuccess {
     type: typeof GET_CSS_STATUS_SUCCESS,
@@ -80,13 +67,13 @@ interface UpdateTestMode {
 }
 
 interface FetchDataRequestAction {
-    type: typeof FETCH_DATA_REQUEST;
+    type: typeof FETCH_REPORT_REQUEST;
     activeReport: ReportType
 }
 
 // Define action interfaces
 interface FetchDataSuccessAction {
-    type: typeof FETCH_DATA_SUCCESS;
+    type: typeof FETCH_REPORT_SUCCESS;
     payload: {
         data: any
         activeReport: ReportType
@@ -94,15 +81,32 @@ interface FetchDataSuccessAction {
 }
 
 interface FetchDataFailureAction {
-    type: typeof FETCH_DATA_FAILURE;
+    type: typeof FETCH_REPORT_FAILURE;
     error: string;
 }
 
+interface FetchSettingsRequestAction {
+    type: typeof FETCH_SETTING_REQUEST;
+    activeReport: ReportType
+}
+
+// Define action interfaces
+interface FetchSettingsSuccessAction {
+    type: typeof FETCH_SETTING_SUCCESS;
+    payload: {
+        data: any
+        activeReport: ReportType
+    }
+}
+
+interface FetchSettingsFailureAction {
+    type: typeof FETCH_SETTING_FAILURE;
+    error: string;
+}
 interface UpdateSettingsAction {
     type: typeof UPDATE_SETTINGS;
     payload : {
         settings : AuditSetting[];
-        data: any
     },
 }
 
@@ -122,8 +126,8 @@ interface UpdateFileActionAction {
 }
 
 
-
-
 // Define the combined action type
-export type AppAction = FetchDataRequestAction | FetchDataSuccessAction | FetchDataFailureAction | UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode | UpdateGeneralSettings | GetLicense;
+export type AppAction = FetchDataRequestAction | FetchDataSuccessAction | FetchDataFailureAction |
+    FetchSettingsRequestAction | FetchSettingsSuccessAction | FetchSettingsFailureAction |
+    UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode;
 

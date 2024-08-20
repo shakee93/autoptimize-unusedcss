@@ -36,6 +36,8 @@ class MinifyCSS
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
+        add_action('rapidload/vanish/css', [ $this, 'vanish' ]);
+
         add_action('cron_rapidload_minify_css_storage_clean', [$this, 'clean_minify_file_storage']);
 
         /*if (!wp_next_scheduled('cron_rapidload_minify_css_storage_clean')) {

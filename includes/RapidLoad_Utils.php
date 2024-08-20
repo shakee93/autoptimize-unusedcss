@@ -396,6 +396,7 @@ trait RapidLoad_Utils {
         $files = isset( $options['uucss_excluded_files'] ) && !empty($options['uucss_excluded_files']) ? explode( ',', $options['uucss_excluded_files'] ) : [];
 
         $files[] = "fonts.googleapis.com";
+        $files[] = "admin/rapidload-preview/dist";
 
         $files = apply_filters('uucss/excluded-files', $files);
 
@@ -709,5 +710,9 @@ trait RapidLoad_Utils {
         }
 
         return $relativeUrl;
+    }
+
+    static function is_wp_cli() {
+        return defined('WP_CLI') && WP_CLI;
     }
 }

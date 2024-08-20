@@ -66,7 +66,6 @@ class ApiService {
 
     async fetchPageSpeed(url: string, activeReport: string, reload: boolean): Promise<any>  {
 
-
         try {
             let fresh = reload
             let data = null
@@ -119,6 +118,51 @@ class ApiService {
                 return await this.fetchPageSpeed(url, activeReport, true);
             }
 
+            return responseData
+
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async fetchSettings(url: string, activeReport: string, reload: boolean): Promise<any>  {
+
+        try {
+            let fresh = reload
+            let data = null
+
+            const query = new URLSearchParams();
+
+            this.baseURL.searchParams.append('action', 'fetch_titan_settings')
+            this.baseURL.searchParams.append('url', url)
+            this.baseURL.searchParams.append('strategy', activeReport)
+            this.baseURL.searchParams.append('new', reload as unknown as string)
+            this.baseURL.searchParams.append('is_dev', isDev as unknown as string)
+            // this.baseURL.searchParams.append('settingsMode', settingsMode || '')
+
+            const response = await fetch(this.baseURL, {
+                method: data ? "POST": "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                ...(
+                    data ? {
+                        body : JSON.stringify( {
+                            page_speed: data
+                        })
+                    } : {}
+                )
+            });
+
+
+            let responseData = await this.throwIfError(response, {
+                fresh: reload
+            });
+
+            if (responseData?.reload) {
+                return await this.fetchPageSpeed(url, activeReport, true);
+            }
 
             return responseData
 

@@ -2,6 +2,7 @@
 
 class RapidLoad_Cache
 {
+    use RapidLoad_Utils;
 
     public static $options = [];
 
@@ -18,7 +19,9 @@ class RapidLoad_Cache
 
         add_action( 'uucss/cache_cleared', [$this, 'clear_cache'], 10, 2 );
 
-        if(!isset(self::$options['uucss_enable_cache']) || self::$options['uucss_enable_cache'] != "1" ){
+        $cache_module_enabled = RapidLoad_Base::get_option('rapidload_module_cache');
+
+        if(!isset($cache_module_enabled) || $cache_module_enabled != "1" ){
             return;
         }
 
@@ -72,6 +75,24 @@ class RapidLoad_Cache
         add_action('init', function (){
             self::process_clear_cache_request();
         });
+
+        //$this->display_admin_notice_for_directory_permission_issue();
+    }
+
+    public function display_admin_notice_for_directory_permission_issue(){
+
+        $cache_dir = dirname(RapidLoad_Cache_Store::get_cache_dir(site_url()));
+
+        if(!is_writable($cache_dir)){
+            $message = 'writing permission error for the path : ' . $cache_dir;
+            $type = "error";
+
+            add_action('admin_notices', function () use ($message, $type) {
+                echo "<div class=\"notice notice-$type is-dismissible rapidload-cache-notice\">
+                    <p>$message</p>
+                 </div>";
+            });
+        }
     }
 
     public function add_notification($notifications)
@@ -1194,5 +1215,31 @@ class RapidLoad_Cache
         }
 
         return $cache_size;
+    }
+
+    public static function on_activation( $network_wide ) {
+
+        self::$options = RapidLoad_Base::fetch_options();
+
+        if(!isset(self::$options['uucss_enable_cache']) || self::$options['uucss_enable_cache'] != "1" ){
+            return;
+        }
+
+        self::each_site( $network_wide, self::class . '::update_backend' );
+
+        RapidLoad_Cache_Store::setup();
+    }
+
+    public static function on_deactivation( $network_wide ) {
+
+        self::$options = RapidLoad_Base::fetch_options();
+
+        if(!isset(self::$options['uucss_enable_cache']) || self::$options['uucss_enable_cache'] != "1" ){
+            return;
+        }
+
+        self::each_site( $network_wide, 'RapidLoad_Cache_Store::clean' );
+        self::each_site( $network_wide, self::class . '::clear_site_cache', array(), true );
+        self::each_site( $network_wide, self::class . '::unschedule_events' );
     }
 }

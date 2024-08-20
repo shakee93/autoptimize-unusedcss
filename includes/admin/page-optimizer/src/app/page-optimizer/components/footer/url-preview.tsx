@@ -35,7 +35,7 @@ const UrlPreview = () => {
             {!error &&
                 <div
                     className='flex h-4 items-center text-xxs leading-relaxed text-brand-500 cursor-default'>
-                    {loading ?
+                    {!data ?
                         <div
                             className='w-64 bg-brand-300 dark:bg-brand-600 animate-pulse h-2.5 rounded-sm mt-1'></div> :
                         <>
@@ -49,7 +49,7 @@ const UrlPreview = () => {
                                 <>
                                     <Dot className='w-6 text-brand-400'/>
                                     <div className='flex gap-1 items-center'>
-                                        {desktop?.data?.performance} Desktop
+                                        {Number(desktop?.data?.performance).toFixed(0)} Desktop
                                     </div>
                                 </>
                             }
@@ -59,7 +59,7 @@ const UrlPreview = () => {
                                 <>
                                     <Dot className='w-6 text-brand-400'/>
                                     <div className='flex gap-1 items-center'>
-                                        {mobile?.data?.performance}  Mobile
+                                        {Number(mobile?.data?.performance).toFixed(0)}  Mobile
                                     </div>
                                 </>
                             }

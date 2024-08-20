@@ -2,56 +2,61 @@ import {
     AppAction,
     AppState,
     CHANGE_REPORT_TYPE,
-    FETCH_DATA_FAILURE,
-    FETCH_DATA_REQUEST,
-    FETCH_DATA_SUCCESS, UPDATE_FILE_ACTION,
+    FETCH_REPORT_FAILURE,
+    FETCH_REPORT_REQUEST,
+    FETCH_REPORT_SUCCESS, FETCH_SETTING_FAILURE,
+    FETCH_SETTING_REQUEST,
+    FETCH_SETTING_SUCCESS,
+    GET_CSS_STATUS_SUCCESS,
+    UPDATE_FILE_ACTION,
     UPDATE_SETTINGS,
-    GET_CSS_STATUS_SUCCESS, UPDATE_TEST_MODE,
-    GET_LICENSE
+    UPDATE_TEST_MODE
 } from "./appTypes";
+
+const blankReport =  {
+    original: null,
+    changes: {
+        files: []
+    },
+    data: null,
+    error: null,
+    loading: false,
+    settings: [],
+    originalSettings: [],
+    revisions: [],
+    state: {},
+    defaultSettingsMode: null
+}
 
 const initialState: AppState = {
     activeReport: 'desktop',
     cssStatus: null,
     testMode: null,
-    license: null,
-    generalSettings: null,
-    mobile: {
-        original: null,
-        changes: {
-            files: []
-        },
-        data: null,
-        error: null,
-        loading: false,
-        settings: [],
-        originalSettings: [],
-        revisions: [],
-        state: {}
+    report: {
+        mobile: blankReport,
+        desktop: blankReport,
     },
-    desktop: {
-        original: null,
-        changes: {
-            files: []
+    settings: {
+        mobile: {
+            original: [],
+            state: [],
+            error: null,
+            loading: false,
         },
-        data: null,
-        error: null,
-        loading: false,
-        settings: [],
-        originalSettings: [],
-        revisions: [],
-        state: {}
-    }
+        desktop: {
+            original: [],
+            state: [],
+            error: null,
+            loading: false,
+        }
+    },
+    mobile: blankReport ,
+    desktop: blankReport
 };
 
 const appReducer = (state = initialState, action: AppAction): AppState => {
 
     switch (action.type) {
-        case GET_LICENSE:
-            return {
-                ...state,
-                license: action.payload
-            };
         case GET_CSS_STATUS_SUCCESS:
             return {
                 ...state,
@@ -62,44 +67,94 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 ...state,
                 testMode: action.payload
             };
-        case FETCH_DATA_REQUEST:
+        case FETCH_REPORT_REQUEST:
             return {
                 ...state,
-                [state.activeReport] : {
-                    ...state[state.activeReport],
-                    loading: true,
-                    error: null
+                report: {
+                    ...state.report,
+                    [state.activeReport] : {
+                        ...state.report[state.activeReport],
+                        loading: true,
+                        error: null
+                    }
                 }
             };
-        case FETCH_DATA_SUCCESS:
+
+        case FETCH_REPORT_SUCCESS:
             return {
                 ...state,
-                [action.payload.activeReport] : {
-                    ...state[action.payload.activeReport],
-                    original: JSON.parse(JSON.stringify(action.payload.data.data)),
-                    data: action.payload.data.data,
-                    error: null,
-                    loading: false,
-                    settings: action.payload.data.settings,
-                    originalSettings: JSON.parse(JSON.stringify(action.payload.data.settings)),
-                    revisions: action.payload.data.revisions
+                report: {
+                    ...state.report,
+                    [action.payload.activeReport] : {
+                        ...state.report[action.payload.activeReport],
+                        original: JSON.parse(JSON.stringify(action.payload.data.data)),
+                        data: action.payload.data.data,
+                        error: null,
+                        loading: false,
+                        settings: action.payload.data.settings,
+                        originalSettings: JSON.parse(JSON.stringify(action.payload.data.settings)),
+                        revisions: action.payload.data.revisions,
+                        defaultSettingsMode: action.payload.data.data.settingsMode
+                    }
                 }
             };
-        case FETCH_DATA_FAILURE:
+        case FETCH_REPORT_FAILURE:
             return {
                 ...state,
-                [state.activeReport] : {
-                    error: action.error,
-                    loading: false
+                report: {
+                    ...state.report,
+                    [state.activeReport] : {
+                        error: action.error,
+                        loading: false
+                    }
+                }
+            };
+        case FETCH_SETTING_REQUEST:
+            return {
+                ...state,
+                settings: {
+                    ...state.settings,
+                    [state.activeReport] : {
+                        ...state.settings[state.activeReport],
+                        loading: true,
+                        error: null
+                    }
+                },
+            };
+        case FETCH_SETTING_SUCCESS:
+            return {
+                ...state,
+                settings: {
+                    ...state.settings,
+                    [action.payload.activeReport] : {
+                        ...state.settings[action.payload.activeReport],
+                        original: JSON.parse(JSON.stringify(action.payload.data.data)),
+                        state: action.payload.data.data,
+                        error: null,
+                        loading: false,
+                    }
+                }
+            };
+        case FETCH_SETTING_FAILURE:
+            return {
+                ...state,
+                settings: {
+                    ...state.settings,
+                    [state.activeReport] : {
+                        error: action.error,
+                        loading: false
+                    }
                 }
             };
         case UPDATE_SETTINGS:
             return {
                 ...state,
-                [state.activeReport] : {
-                    ...state[state.activeReport],
-                    settings: action.payload.settings,
-                    data: action.payload.data
+                settings: {
+                    ...state.settings,
+                    [state.activeReport] : {
+                        ...state.settings[state.activeReport],
+                        state: action.payload.settings,
+                    }
                 }
             };
         case CHANGE_REPORT_TYPE:
@@ -110,7 +165,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
         case UPDATE_FILE_ACTION:
 
             const { payload } = action;
-            const activeReport = state[state.activeReport];
+            const activeReport = state.report[state.activeReport];
             let changes = activeReport.changes.files.filter(f => f.file === payload.file)
 
             if (changes.length == 0) {

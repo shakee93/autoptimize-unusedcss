@@ -2,24 +2,26 @@ import React, {ReactNode, Suspense} from "react";
 import "./index.css";
 import stylesUrl from './index.css?url';
 import App from "app/app";
-import domReady from '@wordpress/dom-ready';
-import {LazyMotion, domAnimation} from "framer-motion"
 import 'react-circular-progressbar/dist/styles.css';
 
 import "@fontsource-variable/inter";
 
 import {createRoot} from 'react-dom/client';
-import {AppProvider, useAppContext} from "./context/app";
-import {Provider} from "react-redux";
-import store from "./store";
-import {TooltipProvider} from "components/ui/tooltip";
-import ShadowDom from "components/shadow-dom";
-import RootProvider from "./context/root";
 import ShadowRoot from "components/shadow-dom";
 import SpeedPopover from "app/speed-popover";
-import {ErrorBoundary} from "react-error-boundary";
 import {isDev} from "lib/utils";
 import Providers from "./Providers";
+
+import Bugsnag from '@bugsnag/js'
+import BugsnagPluginReact, {BugsnagPluginReactResult} from '@bugsnag/plugin-react'
+
+Bugsnag.start({
+    apiKey: '005f0d45718ad741e38cf9280457d034',
+    plugins: [new BugsnagPluginReact()]
+})
+
+const plugin = Bugsnag.getPlugin("react") as BugsnagPluginReactResult
+export const ErrorBoundary = plugin.createErrorBoundary(React)
 
 interface initRapidLoadOptimizerProps {
     container: HTMLDivElement
@@ -28,6 +30,7 @@ interface initRapidLoadOptimizerProps {
     mode?: RapidLoadOptimizerModes,
     modeData?: RapidLoadOptimizerModeData
     global?: boolean
+    shadowRoot?: boolean
 }
 
 const logError = (error: Error, info: { componentStack: string }) => {
@@ -82,7 +85,7 @@ const ApplicationErrorBoundary = ({fallback, onError, children}: ApplicationErro
         return <div>{children}</div>
     }
 
-    return <ErrorBoundary fallback={<ApplicationCrashed/>} onError={logError}>{children}</ErrorBoundary>
+    return ErrorBoundary ? <ErrorBoundary FallbackComponent={ApplicationCrashed} >{children}</ErrorBoundary> : children
 }
 
 export class RapidLoadOptimizer {
@@ -92,7 +95,8 @@ export class RapidLoadOptimizer {
                     showOptimizer = false,
                     popup = null,
                     modeData,
-                    global = false
+                    global = false,
+                    shadowRoot = true,
                 }: initRapidLoadOptimizerProps) {
         const optimizer = createRoot(container);
         optimizer.render(
@@ -105,12 +109,12 @@ export class RapidLoadOptimizer {
                        global={global}
                        showOptimizer={showOptimizer} >
                        {popup && (
-                           <ShadowRoot node={popup} styles={stylesUrl}>
+                           <ShadowRoot disabled={!shadowRoot} node={popup} styles={stylesUrl}>
                                <SpeedPopover/>
                            </ShadowRoot>
                        )}
 
-                       <ShadowRoot styles={stylesUrl}>
+                       <ShadowRoot disabled={!shadowRoot} styles={stylesUrl}>
                            <App _showOptimizer={showOptimizer} popup={popup}/>
                        </ShadowRoot>
                    </Providers>

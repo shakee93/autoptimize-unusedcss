@@ -183,9 +183,11 @@ class RapidLoad_Admin_Bar {
 
             if ( current_user_can( 'manage_options' ) ) {
 
+                do_action('rapidload/admin-bar-actions', $wp_admin_bar);
+
                 $wp_admin_bar->add_node( array(
                     'id'    => 'rapidload',
-                    'title' => '<div id="rl-node-wrapper" class="rl-node-wrapper"><span class="rl-icon"><img src="'. UUCSS_PLUGIN_URL .'/assets/images/logo-icon-light.svg" alt=""></span><span class="rl-label">'.__( 'RapidLoad', 'rapidload' ) . '</span></div>',
+                    'title' => '<div id="rl-node-wrapper" class="rl-node-wrapper"><span class="rl-icon"><img src="'. UUCSS_PLUGIN_URL .'/assets/images/logo-icon-light.svg" alt="" style="max-width: 100%"></span><span class="rl-label">'.__( 'RapidLoad', 'rapidload' ) . '</span></div>',
                     'href'  => admin_url( 'admin.php?page=rapidload' ),
                     'meta'  => array( 'class' => '' ),
                 ));

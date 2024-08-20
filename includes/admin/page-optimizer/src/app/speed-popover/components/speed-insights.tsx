@@ -3,17 +3,11 @@ import React, {ReactNode, useEffect, useRef, useState} from "react";
 import {ArchiveBoxIcon, BoltIcon, CheckCircleIcon, DocumentMinusIcon} from "@heroicons/react/24/solid";
 import SpeedInsightGroup from "./group";
 import AppButton from "components/ui/app-button";
-import {buildStyles, CircularProgressbarWithChildren} from 'react-circular-progressbar';
 import {useAppContext} from "../../../context/app";
 import {useDispatch, useSelector} from "react-redux";
 import {Skeleton} from "components/ui/skeleton"
 import {optimizerData} from "../../../store/app/appSelector";
 import TooltipText from "components/ui/tooltip-text";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover"
 
 import {
     HoverCard,

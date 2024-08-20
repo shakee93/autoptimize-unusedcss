@@ -33,10 +33,7 @@ const UnsavedChanges = ({children , onClick, title, description, action = 'Save 
 
     const { touched, fresh } = useSelector(optimizerData)
     const { submitSettings } = useSubmitSettings()
-    const {inProgress } = useCommonDispatch()
     const {showInprogress} = useAppContext()
-    // console.log(fresh, touched);
-    // return <>{children}</>;
 
     if(!performanceGear){
         if (!(fresh ? true : touched) || showInprogress) {
@@ -54,9 +51,6 @@ const UnsavedChanges = ({children , onClick, title, description, action = 'Save 
             await submitSettings(false);
         }
         onClick();
-        // setTimeout(() => {
-        //     onClick();
-        // }, 10);
 
     }
 

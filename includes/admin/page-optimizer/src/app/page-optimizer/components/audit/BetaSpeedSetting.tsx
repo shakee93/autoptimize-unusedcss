@@ -7,7 +7,7 @@ import {
     FontDelivery,
     CloudDelivery,
     PageCache,
-} from '../icons/icon-svg';
+} from '../icons/category-icons';
 import ReactDOM from 'react-dom';
 // import { Dialog, Transition } from '@headlessui/react';
 // import { X } from "lucide-react";
@@ -73,7 +73,7 @@ export const Status = React.memo(({ status } : { status: AuditSetting['status']}
     if (status.status === 'failed') {
         return (
         <>
-            <div className='flex gap-2 items-center text-xs	border border-rose-600 w-fit rounded-lg '>
+            <div className='flex gap-1 items-center text-xs	border border-rose-600 w-fit rounded-lg px-1 py-py'>
                 <Indicator className='fill-rose-600'>
                     <div className='flex flex-col gap-0.5'>
                         <span className='flex gap-2 items-center'>
@@ -228,8 +228,6 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
         if(settings.status && mainInput.value){
             setShowStatus(true)
         }
-
-      //  console.log(settings, ' : ', settings.status ,' : ' ,mainInput.value);
     },[]);
 
 
@@ -250,14 +248,6 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                         <>
                             {mainInput.control_type === 'checkbox' && (
                                 <>
-                                {/*{!actionRequired &&*/}
-                                {/*    <div className="absolute">*/}
-                                {/*        <TooltipText text={<>No Action Required</>}>*/}
-                                {/*            <Ban className='w-6 cursor-not-allowed absolute opacity-0 z-50 ml-1.5'/>*/}
-                                {/*        </TooltipText>*/}
-                                {/*    </div>*/}
-
-                                {/*}*/}
 
                                     <Checkbox disabled={['onboard', 'preview'].includes(mode)}
                                               className={actionRequired ? '' : 'border-dashed'}
@@ -265,17 +255,8 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                               onCheckedChange={(c: boolean) =>{
                                                   setCheckboxState(c);
                                                   updateValue(settings, c, mainInput.key);
-
+                                                  dispatch(setCommonState('settingsMode', 'custom'));
                                               }}/>
-
-                                {/*<Checkbox disabled={!actionRequired || ['onboard', 'preview'].includes(mode)}*/}
-                                {/*          className={actionRequired ? '' : 'border-dashed'}*/}
-                                {/*          checked={mainInput.value}*/}
-                                {/*          onCheckedChange={(c: boolean) =>{*/}
-                                {/*              setCheckboxState(c);*/}
-                                {/*              updateValue(settings, c, mainInput.key);*/}
-
-                                {/*          }}/>*/}
 
                                 </>
                             )}
@@ -302,8 +283,6 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                             <Mode>
                                 {showPopover && (
                                     <Dialog open={open} onOpenChange={setOpen}>
-                                        {/*<DialogTrigger disabled asChild className={`${!mainInput.value || !actionRequired? 'cursor-not-allowed opacity-50 pointer-events-none': '' }`}>*/}
-                                        {/*action required is removed from the line below after !checkboxstate || !actionRequired*/}
                                         <DialogTrigger disabled asChild className={`${!mainInput.value ? 'cursor-not-allowed opacity-50 pointer-events-none': '' }`}>
                                             <div >
                                                 <TooltipText text={`${settings.name} Settings`}>

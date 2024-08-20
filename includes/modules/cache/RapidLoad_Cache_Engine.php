@@ -124,7 +124,7 @@ class RapidLoad_Cache_Engine
 
             $query_string = parse_url( $_SERVER['REQUEST_URI'], PHP_URL_QUERY );
 
-            if ( preg_match( "/rapidload_preview_optimization/", $query_string ) ) {
+            if ( preg_match( "/rapidload_preview/", $query_string ) ) {
                 return false;
             }
 

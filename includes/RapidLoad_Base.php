@@ -76,7 +76,9 @@ class RapidLoad_Base
 
         add_action('plugins_loaded', function (){
 
-            if (isset($_REQUEST['rapidload_preview_optimization'])) {
+            RapidLoad_DB::update_db_version();
+
+            if (isset($_REQUEST['rapidload_preview'])) {
                 add_filter('determine_current_user', function (){
                     return 0;
                 }, 99);
@@ -90,8 +92,6 @@ class RapidLoad_Base
             }
 
             self::get_merged_options();
-
-            RapidLoad_DB::update_db_version();
 
             self::activateByLicenseKey();
             self::activate();
@@ -179,6 +179,10 @@ class RapidLoad_Base
         $this->url = $this->get_current_url();
 
         $this->url = $this->transform_url($this->url);
+
+        if(RapidLoad_DB::$current_version != RapidLoad_DB::$db_version){
+            return $option;
+        }
 
         RapidLoad_Enqueue::$job = new RapidLoad_Job(['url' => $this->url]);
 
@@ -378,7 +382,8 @@ class RapidLoad_Base
                 'onboard_activation_url' => self::onboard_activation_url('authorize' ),
                 'app_url' => defined('UUCSS_APP_URL') ? trailingslashit(UUCSS_APP_URL) : 'https://app.rapidload.io/',
                 //'total_jobs' => RapidLoad_DB::get_total_job_count(),
-                'db_tobe_updated' => RapidLoad_DB::$current_version < 1.6
+                'db_tobe_updated' => RapidLoad_DB::$current_version < 1.6,
+                "test_mode" => isset(self::$options['rapidload_test_mode']) && self::$options['rapidload_test_mode'] == "1"
             );
             wp_localize_script( 'uucss_global_admin_script', 'uucss_global', $data );
             wp_enqueue_script( 'uucss_global_admin_script' );
@@ -593,13 +598,16 @@ class RapidLoad_Base
             'uucss_keyframes' => "1",
             'uucss_variables' => "1",
             'uucss_enable_uucss' => "1",
+            'uucss_enable_cpcss' => "1",
+            'uucss_enable_cpcss_mobile' => "1",
             'uucss_minify' => "1",
             'uucss_support_next_gen_formats' => "1",
             'uucss_set_width_and_height' => "1",
             'uucss_self_host_google_fonts' => "1",
             'uucss_image_optimize_level' => "lossless",
             'uucss_exclude_above_the_fold_image_count' => 3,
-            'uucss_enable_page_optimizer' => "1"
+            'uucss_enable_page_optimizer' => "1",
+            'rapidload_test_mode' => "1"
         ];
     }
 

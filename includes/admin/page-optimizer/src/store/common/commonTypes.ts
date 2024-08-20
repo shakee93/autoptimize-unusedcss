@@ -12,7 +12,9 @@ export type CommonState = {
         openCategory?: SettingsCategory | '';
         storePassedAudits?:string[];
         inProgress: boolean;
-        settingsMode: settingsMode;
+        settingsMode: settingsMode | null;
+        testModeStatus: boolean;
+        testModeLoading: boolean;
         auditsReturn: boolean;
     }
     desktop : {
@@ -23,7 +25,9 @@ export type CommonState = {
         openCategory?: SettingsCategory | '';
         storePassedAudits?:string[];
         inProgress: boolean;
-        settingsMode: settingsMode;
+        settingsMode: settingsMode | null;
+        testModeStatus: boolean;
+        testModeLoading: boolean;
         auditsReturn: boolean;
     }
 

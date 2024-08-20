@@ -5,7 +5,7 @@ interface OptimizerResults  {
     job_id?: string;
     audits: Audit[]
     metrics: Metric[],
-    settingsMode: settingsMode,
+    settingsMode: PerformanceGear,
     loadingExperience?: LoadingExperience
     originLoadingExperience?: LoadingExperience
     grouped: {
@@ -208,7 +208,10 @@ type ReportType = 'mobile' | 'desktop'
 
 interface CSSJobStatus {
     status: string;
-    error: string;
+    error: {
+        code: number;
+        message: string;
+    };
 }
 
 interface CSSStatusResponse {
@@ -272,4 +275,8 @@ interface RapidLoadSetOptimizerEvent extends Event {
     };
 }
 
+type CssErrorKeys = 'Critical CSS' | 'Unused CSS';
 
+
+type BasePerformanceGear = 'starter' | 'accelerate' | 'turboMax';
+type PerformanceGear = BasePerformanceGear | 'custom' ;

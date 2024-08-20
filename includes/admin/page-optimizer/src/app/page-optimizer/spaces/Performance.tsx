@@ -9,38 +9,20 @@ import {cn} from "lib/utils";
 import TogglePerformance from "components/toggle-performance";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {setCommonState} from "../../../store/common/commonActions";
-import {CopyMinus, FoldVertical, Layers, SplitSquareVertical} from "lucide-react";
+import {CopyMinus, FoldVertical, Layers, Loader, SplitSquareVertical} from "lucide-react";
 import TooltipText from "components/ui/tooltip-text";
 import ScaleUp from "components/animation/ScaleUp";
 import {BoltIcon, MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
-import {Cog6ToothIcon, InformationCircleIcon} from "@heroicons/react/20/solid";
-import SetupChecklist from "app/page-optimizer/components/SetupChecklist";
 import AuditList from "app/page-optimizer/components/AuditList";
 import SpeedSettings from "app/page-optimizer/spaces/SpeedSettings";
-import {AuditsLine, SettingsLine} from "app/page-optimizer/components/icons/icon-svg";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
-} from "components/ui/dialog";
-import Fields from "app/page-optimizer/components/audit/additional-inputs";
-import AppButton from "components/ui/app-button";
-import Mode from "app/page-optimizer/components/Mode";
-import { Checkbox } from "components/ui/checkbox";
-import {
-    TitanLogo
-} from "app/page-optimizer/components/icons/icon-svg";
+
 
 
 const welcomePopupKey = 'new-titan-prompt'
 const Performance = () => {
-    const {data, loading, error} = useSelector(optimizerData);
+    const {data, loading, reanalyze, settings, error} = useSelector(optimizerData);
 
-    const { dispatch ,  activeTab, openAudits, storePassedAudits} = useCommonDispatch()
+    const { dispatch ,  activeTab, openAudits, storePassedAudits, settingsMode} = useCommonDispatch()
     const [isSticky, setIsSticky] = useState(false);
     const navbarRef = useRef(null);
     const [open, setOpen] = React.useState(false);
@@ -56,8 +38,14 @@ const Performance = () => {
         version
     } = useAppContext()
 
-    const tabs: Tab[] = [
+    const loadingTab: Tab = {
+        key: "passed_audits",
+        name: "Passed Audits",
+        color: 'border-zinc-600',
+        activeColor: 'bg-green-600'
+    }
 
+    const tabs: Tab[] = [
         {
             key: "opportunities",
             name: "Opportunities",
@@ -93,39 +81,19 @@ const Performance = () => {
     },[]);
 
     const [isCheckedPopup, setIsCheckedPopup] = useState(false);
-    const saveNewTitanModelPopup = () => {
+    const saveNewTitanModelPopup = (open: boolean) => {
 
         if (isCheckedPopup) {
             localStorage.setItem(welcomePopupKey, 'true');
         }
-        setOpen(false);
+        if(!open){
+            setOpen(false);
+        }
+        
     };
-    // useEffect(() => {
-    //
-    //     const observer = new IntersectionObserver(
-    //         ([entry]) => {
-    //             // If the sentinel (a small element before the navbar) is not in viewport, navbar is sticky
-    //             setIsSticky(!entry.isIntersecting);
-    //
-    //         },
-    //         { threshold: [1] }
-    //     );
-    //
-    //     if (navbarRef.current) {
-    //         observer.observe(navbarRef.current);
-    //     }
-    //
-    //     return () => {
-    //         if (navbarRef.current) {
-    //             observer.unobserve(navbarRef.current);
-    //         }
-    //     };
-    //
-    //
-    // }, [activeTab]);
+
 
     return (
-
 
         <div data-tour='audits'>
             <h2 className="text-lg ml-5 mb-4 flex gap-2 font-normal items-center">
@@ -139,10 +107,12 @@ const Performance = () => {
 
                     onClick={() => dispatch(setCommonState('activeTab', 'configurations'))}
                     className={cn(
-                        `dark:bg-brand-930/90 bg-brand-0 border-2 border-transparent rounded-[20px] cursor-pointer w-[200px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+
+                        `whitespace-nowrap dark:bg-brand-930/90 bg-brand-0 border-2 border-transparent rounded-[20px] cursor-pointer w-[200px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+
                         activeTab === 'configurations' ? "font-medium " : "text-brand-500 dark:hover:text-brand-300"
                     )}
-                > <BoltIcon className='w-4 rounded-[15px]'/>  Speed Settings</div>
+                    data-tour="speed-settings"> <BoltIcon className='w-4 rounded-[15px]'/>  Speed Settings</div>
 
                 <Card data-tour='audit-groups'
                       className={cn(
@@ -164,19 +134,21 @@ const Performance = () => {
                                    key={tab.key}
                                >
                                    {tab.name}
-                                   {(tab.key !== 'configurations' && data && data?.audits.length > 0) && (
+                                   {(tab.key !== 'configurations') && (
                                        <div className={
                                            cn(
-                                               'flex text-xxs items-center justify-center rounded-full w-6 h-6 border-2',
+                                               'flex  text-xxs items-center justify-center rounded-full w-6 h-6 border-2',
                                                isSticky && 'w-5 h-5 border',
-                                               tab.color,
-                                               (activeTab === tab.key) && tab.activeColor,
+                                               (loading && !reanalyze) ? 'bg-zinc-200 border-zinc-300/30 text-zinc-300/30' : cn(
+                                                   tab.color,
+                                                   (activeTab === tab.key) && tab.activeColor,
+                                               )
                                            )}>
-                            <span className={cn(
-                                activeTab === tab.key && ' text-white dark:text-brand-900'
-                            )}>
-                                {data?.grouped[`${tab.key}`].length}
-                            </span>
+                                           <div className={cn(
+                                               activeTab === tab.key && ' text-white dark:text-brand-900'
+                                           )}>
+                                               {data?.grouped[`${tab.key}`].length || '-'}
+                                           </div>
                                        </div>
                                    )}
 
@@ -204,8 +176,8 @@ const Performance = () => {
                 </Card>
             </div>
 
-            <div className="audits pt-4 flex mb-24">
-                <div className='w-full'>
+            <div className="audits pt-6 flex mb-24">
+                <div className='w-full flex flex-col gap-2.5'>
 
                     <AnimatePresence initial={false}>
                         <div key='performance' className='grid grid-cols-12 gap-6 w-full relative '>
@@ -217,9 +189,7 @@ const Performance = () => {
                                    </>
                                     :
                                     <AuditList activeTab={activeTab}/>
-
                                 }
-
                             </div>
                         </div>
                         <div key='audit-blank'>
@@ -242,65 +212,31 @@ const Performance = () => {
 
                             )}
                         </div>
+
+                        {/*{reanalyze &&*/}
+                        {/*    <m.div*/}
+                        {/*        key='loading-notification'*/}
+                        {/*        initial={{opacity: 0, y: 10}}*/}
+                        {/*        animate={{opacity: 1, y: 0}}*/}
+                        {/*        exit={{opacity: 0, y: -10}}*/}
+                        {/*        className='dark:bg-brand-800/40 bg-brand-200 px-8 py-5 rounded-3xl'>*/}
+
+                        {/*        <div className='flex items-center gap-3'>*/}
+                        {/*            <Loader className='w-5 animate-spin text-brand-700'/>*/}
+                        {/*            <div className='text-sm text-brand-700'>*/}
+                        {/*                Analyzing your page with Google Page Speed Insights...*/}
+                        {/*            </div>*/}
+                        {/*        </div>*/}
+
+                        {/*    </m.div>*/}
+                        {/*}*/}
+                        <div>
+
+                        </div>
                     </AnimatePresence>
                 </div>
             </div>
 
-            <Mode>
-                {showNewTitanModelPopup  && (
-                    <Dialog open={open} onOpenChange={setOpen}>
-                        <DialogContent asChild className="sm:max-w-[530px] cursor-auto">
-
-                            <DialogHeader className='px-6 pt-6 pb-1'>
-                                <div className='flex gap-2 items-center'>
-                                    <div className='relative'>
-                                        {/*<img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>*/}
-                                        <TitanLogo/>
-                                    </div>
-
-                                    <DialogTitle>Welcome to Titan’s New Look! (v1.1.0)</DialogTitle>
-                                </div>
-
-                                <div className='relative py-4'>
-                                    <img className='w-[480px] rounded-lg' src={ options?.page_optimizer_package_base ? (options?.page_optimizer_package_base + `/screenflow.gif`) : '/screenflow.gif'} alt='Welcome to Titan'/>
-                                </div>
-                                <DialogDescription >
-                                    {/*The update makes the design sleek and modern for better navigation. There's a new <span className="font-semibold">Speed Settings</span> tab for quick access to recommended settings. The interface is now simpler to understand metrics.*/}
-                                    <ul className="list-disc px-6">
-                                        <li>
-                                            Newly introduced <span className='font-semibold'>Speed Settings tab</span> which helps you find recommended settings quickly.
-                                        </li>
-                                        <li><span className="font-semibold">Simplified view</span> of metrics for easier
-                                            comprehension.
-                                        </li>
-                                        <li>Recommend settings for Audits that impact your site.</li>
-                                        <li>Resolved Audits are kept under <span className="font-semibold">additional settings</span>.
-                                        </li>
-                                    </ul>
-                                </DialogDescription>
-
-
-                            </DialogHeader>
-
-                            <DialogFooter className='px-6 py-3 border-t'>
-                                <label className="flex py-2 absolute items-center left-6">
-                                    <Checkbox  onCheckedChange={(c: boolean) =>{
-                                        setIsCheckedPopup(c)
-                                    }}/>
-                                    <span className="text-muted-foreground select-none">Don't show this again</span>
-                                </label>
-                                <AppButton onClick={e => saveNewTitanModelPopup()} className='text-sm'>Explore Now</AppButton>
-                                <AppButton onClick={e => setOpen(false)} variant='outline' className='text-sm'>Close</AppButton>
-                            </DialogFooter>
-
-                        </DialogContent>
-                    </Dialog>
-
-
-                )}
-
-
-            </Mode>
         </div>
 
     )

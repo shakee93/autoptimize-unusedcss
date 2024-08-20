@@ -149,6 +149,10 @@ class RapidLoad_Font_Enqueue
 
         foreach ($google_fonts as $google_font) {
 
+            if ($google_font->parentNode() && $google_font->parentNode()->tag == 'noscript') {
+                continue;
+            }
+
             $_frontend_data = [];
 
             $_frontend_data['href'] =  $google_font->href;

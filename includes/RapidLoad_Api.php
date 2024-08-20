@@ -94,6 +94,14 @@ class RapidLoad_Api
 	}
 
     public function extract_error( $result ) {
+
+        if(!isset($result)){
+            return [
+                'code'    => 524,
+                'message' => 'Request timed out'
+            ];
+        }
+
         if ( gettype( $result ) === 'string' ) {
             return [
                 'code'    => 500,
