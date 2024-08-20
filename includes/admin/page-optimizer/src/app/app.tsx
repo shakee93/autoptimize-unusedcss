@@ -1,7 +1,7 @@
 import React, {Suspense, useEffect, useState} from "react";
 import ReactDOM from "react-dom";
 import PageOptimizer from "app/page-optimizer";
-import Dashbaord from "app/dashbaord";
+import dashboard from "app/dashboard";
 import SpeedPopover from "app/speed-popover";
 import {useAppContext} from "../context/app";
 import {ThunkDispatch} from "redux-thunk";
@@ -15,6 +15,7 @@ import Header from "app/page-optimizer/components/Header";
 import {cn} from "lib/utils";
 import {setCommonState} from "../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
+import Dashboard from "app/dashboard";
 
 const AppTour = React.lazy(() => import( 'components/tour'))
 const InitTour = React.lazy(() => import('components/tour/InitTour'))
@@ -70,12 +71,12 @@ const App = ({popup, _showOptimizer = false}: {
         {
             title: "Dashboard",
             id: "/",
-            component: <Dashbaord/>
+            component: <Dashboard />
         },
         {
             title: "Optimize",
             id: "/optimize",
-            component: <PageOptimizer/>
+            component: <PageOptimizer fullscreen={false}/>
         }
     ])
 

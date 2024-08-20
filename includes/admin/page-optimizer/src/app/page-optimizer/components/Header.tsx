@@ -48,7 +48,8 @@ const Header = ({ url }: { url: string}) => {
         mode,
         showInprogress,
         setShowInprogress,
-        savingData
+        savingData,
+        dashboard
     } = useAppContext()
 
     const { activeReport,
@@ -78,27 +79,51 @@ const Header = ({ url }: { url: string}) => {
     return (
         <>
 
+            {!loading && !showInprogress && (
+                <AnimatePresence>
+                    {testModeStatus && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{
+                                ease: 'easeInOut',
+                                duration: 0.5,
+                            }}
+                            className="w-full text-[13px] bg-[#D9CAEB] items-center text-center py-0.5 top-[74px] dark:bg-brand-950"
+                        >
+                            <span className="font-semibold text-purple-900 dark:text-brand-300">Test Mode turned on,</span>
+                            optimizations are safely previewed without affecting your live website. Perfect for experimentation and fine-tuning.
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            )}
+
             <header
                 className='z-[110000] w-full px-6 py-3 flex gap-3 justify-between border-b backdrop-blur-sm dark:bg-brand-930/80 bg-brand-50/75 '>
                 <div className='flex gap-12 items-center'>
-                    <div className='relative'>
-                        <img
-                            className='w-36'
-                            src={isDark
-                                ? options?.page_optimizer_base
-                                    ? `${options?.page_optimizer_base}/dark-logo.svg`
-                                    : '/dark-logo.svg'
-                                : options?.page_optimizer_base
-                                    ? `${options?.page_optimizer_base}/logo.svg`
-                                    : '/logo.svg'
-                            }
-                            alt='RapidLoad - #1 to unlock breakneck page speed'
-                        />
-                        {version && (
-                            <span
-                                className='absolute text-xxs w-[200px] left-[72px] top-[1px] dark:text-brand-500 text-brand-400'>TITAN v{version}</span>
-                        )}
-                    </div>
+                    {!dashboard &&
+                        <div className='relative'>
+                            <img
+                                className='w-36'
+                                src={isDark
+                                    ? options?.page_optimizer_base
+                                        ? `${options?.page_optimizer_base}/dark-logo.svg`
+                                        : '/dark-logo.svg'
+                                    : options?.page_optimizer_base
+                                        ? `${options?.page_optimizer_base}/logo.svg`
+                                        : '/logo.svg'
+                                }
+                                alt='RapidLoad - #1 to unlock breakneck page speed'
+                            />
+                            {version && (
+                                <span
+                                    className='absolute text-xxs w-[200px] left-[72px] top-[1px] dark:text-brand-500 text-brand-400'>TITAN v{version}</span>
+                            )}
+                        </div>
+                    }
+
+
                     <div className='flex flex-column items-center gap-3'>
                         <div data-tour='switch-report-strategy'
                              className='select-none relative  flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>
@@ -210,25 +235,7 @@ const Header = ({ url }: { url: string}) => {
 
                 </div>
             </header>
-            {!loading && !showInprogress && (
-                <AnimatePresence>
-                    {testModeStatus && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{
-                                ease: 'easeInOut',
-                                duration: 0.5,
-                            }}
-                            className="z-[100000] w-full text-[13px] bg-[#D9CAEB] items-center text-center py-0.5 top-[74px] absolute dark:bg-brand-950"
-                        >
-                            <span className="font-semibold text-purple-900 dark:text-brand-300">Test Mode turned on,</span>
-                            optimizations are safely previewed without affecting your live website. Perfect for experimentation and fine-tuning.
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            )}
+
         </>
     )
 }

@@ -27,6 +27,7 @@ const Providers = ({children, mode, modeData, showOptimizer, global, popup}: Pro
         <Provider store={store}>
             <RootProvider>
                 <AppProvider global={global}
+                             dashboard={true}
                              initShowOptimizerValue={showOptimizer}
                              mode={mode}
                              modeData={modeData}>

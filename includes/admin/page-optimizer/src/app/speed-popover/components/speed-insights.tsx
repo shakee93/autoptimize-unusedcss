@@ -27,7 +27,7 @@ import PerformanceProgressBar from "components/performance-progress-bar";
 import {ExclamationCircleIcon} from "@heroicons/react/20/solid";
 import ErrorFetch from "components/ErrorFetch";
 import {cn} from "lib/utils";
-import PageSpeedWidget from "app/dashbaord/components/performance-widgets/PageSpeedWidget";
+import PageSpeedWidget from "app/dashboard/components/performance-widgets/PageSpeedWidget";
 
 const Content = ({  dashboard = false }: { dashboard?: boolean }) => {
 

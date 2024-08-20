@@ -32,17 +32,19 @@ interface OptimizerContextProps {
     setInvalidatingCache: Dispatch<SetStateAction<boolean>>;
     showInprogress: boolean;
     setShowInprogress: Dispatch<SetStateAction<boolean>>;
+    dashboard: boolean
 }
 
 export const AppContext = createContext<OptimizerContextProps | null>(null)
 
 
-export const AppProvider = ({ children, initShowOptimizerValue, global, mode, modeData } : {
+export const AppProvider = ({ children, initShowOptimizerValue, global, mode, modeData, dashboard = false } : {
     children: ReactNode
     mode: RapidLoadOptimizerModes
     modeData?: RapidLoadOptimizerModeData
     initShowOptimizerValue?: boolean,
-    global: boolean
+    global: boolean,
+    dashboard?: boolean
 }) => {
     const isAdminBar = document.getElementById('wpadminbar');
 
@@ -52,6 +54,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
     const [mounted, setMounted] = useState<boolean>(false);
     const [sheetsHidden, setSheetsHidden]= useState(false)
     const [openAudits, setOpenAudits] = useState<string[]>([]);
+
     const [options, setOptions] = useState((
         {
             optimizer_url: 'https://rapidload.io/',
@@ -87,7 +90,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
         };
 
         window.addEventListener('rapidLoad:set-optimizer', updateData);
-        
+
         setMounted(true)
 
         if (mode) {
@@ -115,7 +118,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
         } else {
             document.documentElement.classList.remove('rapidload-optimizer-open')
         }
-        
+
     }, [showOptimizer])
 
     const _setShowOptimizer = (value: SetStateAction<boolean>) => {
@@ -150,7 +153,8 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
             invalidatingCache,
             setInvalidatingCache,
             showInprogress,
-            setShowInprogress
+            setShowInprogress,
+            dashboard
         }}>
             {children}
         </AppContext.Provider>

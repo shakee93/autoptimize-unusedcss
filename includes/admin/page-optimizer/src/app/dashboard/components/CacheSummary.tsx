@@ -2,7 +2,7 @@ import React, {Suspense, useState, useEffect, useRef} from 'react';
 import Card from "components/ui/card";
 import {cn} from "lib/utils";
 import { InformationCircleIcon  } from "@heroicons/react/24/outline";
-import DoughnutChart from "app/dashbaord/components/charts/doughnut";
+import DoughnutChart from "app/dashboard/components/charts/doughnut";
 
 const CacheSummary = () => {
 

@@ -27,7 +27,7 @@ export default function PageOptimizer() {
     const {data, loading, error} = useSelector(optimizerData);
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(data?.performance);
     const { dispatch, activeMetric } = useCommonDispatch()
-    const { showInprogress } = useAppContext();
+    const { showInprogress, dashboard } = useAppContext();
 
     const {
         options,
@@ -62,9 +62,10 @@ export default function PageOptimizer() {
             id='rapidload-page-optimizer-wrapper'
             translate="no"
             className={cn(
-                " bg-white font-sans overflow-hidden fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center ",
+                " bg-white font-sans   flex min-h-screen flex-col text-base items-center ",
                 "dark:text-brand-300 text-brand-800",
-                "notranslate"
+                "notranslate",
+                !dashboard ? 'fixed z-[100000] top-0 left-0 w-screen h-screen overflow-hidden': ''
             )}>
 
             <Header url={url}/>

@@ -1,11 +1,11 @@
 import React, {Dispatch, SetStateAction, useEffect, useRef, useState, lazy} from "react";
-import PageSpeedWidget from "app/dashbaord/components/performance-widgets/PageSpeedWidget";
-import LicenseWidget from "app/dashbaord/components/LicenseWidget";
-import UnusedCSSSummary from "app/dashbaord/components/UnusedCSSSummary";
-import CacheSummary from "app/dashbaord/components/CacheSummary";
-import CDNSummary from "app/dashbaord/components/CDNSummary";
-import OptimizerPagesTable from "app/dashbaord/components/OptimizerPagesTable";
-import GeneralSettings from "app/dashbaord/components/GeneralSettings";
+import PageSpeedWidget from "app/dashboard/components/performance-widgets/PageSpeedWidget";
+import LicenseWidget from "app/dashboard/components/LicenseWidget";
+import UnusedCSSSummary from "app/dashboard/components/UnusedCSSSummary";
+import CacheSummary from "app/dashboard/components/CacheSummary";
+import CDNSummary from "app/dashboard/components/CDNSummary";
+import OptimizerPagesTable from "app/dashboard/components/OptimizerPagesTable";
+import GeneralSettings from "app/dashboard/components/GeneralSettings";
 import Header from "app/page-optimizer/components/Header";
 
 import {useSelector} from "react-redux";
@@ -35,7 +35,7 @@ export interface AuditComponentRef {
     notifyHeightChange: () => void;
 }
 
-export default function Dashbaord() {
+export default function Dashboard() {
     const {data, loading, error} = useSelector(optimizerData);
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(data?.performance);
     const { dispatch, activeMetric } = useCommonDispatch()

@@ -3,7 +3,7 @@ import Card from "components/ui/card";
 import { cn } from "lib/utils";
 import { InformationCircleIcon, LinkIcon, CalendarIcon, EllipsisHorizontalCircleIcon,PencilSquareIcon, TrashIcon,ArrowTrendingUpIcon,ArrowTrendingDownIcon } from "@heroicons/react/24/outline";
 import PerformanceProgressBar from "components/performance-progress-bar";
-import { ScoreIcon} from "app/dashbaord/components/icons/icon-svg";
+import { ScoreIcon} from "app/dashboard/components/icons/icon-svg";
 
 interface Settings {
     title: string;

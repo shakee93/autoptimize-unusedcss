@@ -114,12 +114,6 @@
   <body>
 
     <div id="rapidload-page-optimizer"></div>
-    <div id='popup'>
-      hover me to show popup
-      <br>
-      <button onclick="loadRL()">load ui</button>
-    </div>
-
     <script>
       function loadRL() {
         let container = document.getElementById('rapidload-page-optimizer')
@@ -127,7 +121,7 @@
         new window.RapidLoadOptimizer({
           container,
           popup,
-          showOptimizer: false,
+          showOptimizer: true,
 
           shadowRoot:false,
           // global: true,
