@@ -213,23 +213,23 @@ const Performance = () => {
                             )}
                         </div>
 
-                        {reanalyze &&
-                            <m.div
-                                key='loading-notification'
-                                initial={{opacity: 0, y: 10}}
-                                animate={{opacity: 1, y: 0}}
-                                exit={{opacity: 0, y: -10}}
-                                className='dark:bg-brand-800/40 bg-brand-200 px-8 py-5 rounded-3xl'>
+                        {/*{reanalyze &&*/}
+                        {/*    <m.div*/}
+                        {/*        key='loading-notification'*/}
+                        {/*        initial={{opacity: 0, y: 10}}*/}
+                        {/*        animate={{opacity: 1, y: 0}}*/}
+                        {/*        exit={{opacity: 0, y: -10}}*/}
+                        {/*        className='dark:bg-brand-800/40 bg-brand-200 px-8 py-5 rounded-3xl'>*/}
 
-                                <div className='flex items-center gap-3'>
-                                    <Loader className='w-5 animate-spin text-brand-700'/>
-                                    <div className='text-sm text-brand-700'>
-                                        Analyzing your page with Google Page Speed Insights...
-                                    </div>
-                                </div>
+                        {/*        <div className='flex items-center gap-3'>*/}
+                        {/*            <Loader className='w-5 animate-spin text-brand-700'/>*/}
+                        {/*            <div className='text-sm text-brand-700'>*/}
+                        {/*                Analyzing your page with Google Page Speed Insights...*/}
+                        {/*            </div>*/}
+                        {/*        </div>*/}
 
-                            </m.div>
-                        }
+                        {/*    </m.div>*/}
+                        {/*}*/}
                         <div>
 
                         </div>
