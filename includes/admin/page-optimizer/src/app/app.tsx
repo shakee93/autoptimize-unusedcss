@@ -16,6 +16,7 @@ import {cn} from "lib/utils";
 import {setCommonState} from "../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import Dashboard from "app/dashboard";
+import TestModeSwitcher from "app/page-optimizer/components/TestModeSwitcher";
 
 const AppTour = React.lazy(() => import( 'components/tour'))
 const InitTour = React.lazy(() => import('components/tour/InitTour'))
@@ -76,7 +77,7 @@ const App = ({popup, _showOptimizer = false}: {
         {
             title: "Optimize",
             id: "/optimize",
-            component: <PageOptimizer fullscreen={false}/>
+            component: <PageOptimizer/>
         }
     ])
 
@@ -107,29 +108,35 @@ const App = ({popup, _showOptimizer = false}: {
 
 
                     <div className=' z-[1000000] dark:bg-brand-930 bg-brand-50'>
-                        <header className='flex gap-8 h-16 items-center border-b'>
-                            <div className='relative px-4'>
-                                <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>
-                                {version && (
-                                    <span className='absolute text-xxs w-[200px] left-[90px] top-[1px] dark:text-brand-500 text-brand-400'>v{version}</span>
-                                )}
+                        <header className='flex gap-8 h-16 items-center justify-between border-b'>
+                            <div className='flex items-center'>
+                                <div className='relative px-4'>
+                                    <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>
+                                    {version && (
+                                        <span className='absolute text-xxs w-[200px] left-[90px] top-[1px] dark:text-brand-500 text-brand-400'>v{version}</span>
+                                    )}
+                                </div>
+
+                                <div className='flex'>
+
+                                    {routes.map((route, i) => (
+                                        <button key={i}
+                                                onClick={e => setActiveRoute(route.id)}
+                                                className={cn(
+                                                    'px-6 flex-1 h-16 border-l text-sm tracking-wider border-b-2 border-b-transparent',
+                                                    activeRoute === route.id && 'dark:bg-brand-700 bg-brand-200 dark:border-b-brand-400 border-b-purple-950'
+                                                )}>
+                                            {route.title}
+                                        </button>
+                                    ))}
+
+                                </div>
                             </div>
 
-                            <div className='flex'>
 
-                                {routes.map((route, i) => (
-                                    <button key={i}
-                                        onClick={e => setActiveRoute(route.id)}
-                                        className={cn(
-                                        'px-6 flex-1 h-16 border-l text-sm tracking-wider border-b-2 border-b-transparent',
-                                        activeRoute === route.id && 'dark:bg-brand-700 bg-brand-200 dark:border-b-brand-400 border-b-purple-950'
-                                    )}>
-                                        {route.title}
-                                    </button>
-                                ))}
-
+                            <div>
+                                <TestModeSwitcher/>
                             </div>
-
                         </header>
 
                     </div>
