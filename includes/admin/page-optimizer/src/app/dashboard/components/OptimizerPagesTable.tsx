@@ -7,11 +7,13 @@ import { ScoreIcon} from "app/dashboard/components/icons/icon-svg";
 
 interface Settings {
     title: string;
+    total_jobs: number
     data: {
         urls: string;
         pageScore: string;
         updateDate: string;
         actions: string;
+
     }[];
 }
 

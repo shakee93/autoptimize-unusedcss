@@ -2,7 +2,7 @@ import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import {ArcElement, Chart as ChartJS, Legend, Tooltip} from "chart.js";
 
-const DoughnutChart = ({ data, options }) => {
+const DoughnutChart = ({ data, options }: any) => {
     ChartJS.register(ArcElement, Tooltip, Legend);
 
     ChartJS.register({

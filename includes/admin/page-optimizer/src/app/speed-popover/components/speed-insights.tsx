@@ -29,9 +29,9 @@ import ErrorFetch from "components/ErrorFetch";
 import {cn} from "lib/utils";
 import PageSpeedWidget from "app/dashboard/components/performance-widgets/PageSpeedWidget";
 
-const Content = ({  dashboard = false }: { dashboard?: boolean }) => {
+const Content = () => {
 
-    const {setShowOptimizer, options, version} = useAppContext()
+    const {dashboard, options, version} = useAppContext()
     const {data, error, loading, activeReport} = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
     const { toast } = useToast()
@@ -299,20 +299,19 @@ const Content = ({  dashboard = false }: { dashboard?: boolean }) => {
     )
 }
 
-const SpeedInsights = ({children, dashboardMode = false}: {
-    children: ReactNode,
-    dashboardMode?: boolean,
+const SpeedInsights = ({children }: {
+    children?: ReactNode,
 }) => {
 
-    const {options} = useAppContext()
+    const {options, dashboard} = useAppContext()
     const [open, setOpen] = useState<boolean>(false)
 
     const root = options?.plugin_url
 
     return (
         <>
-        {dashboardMode ?(
-                <Content dashboard={true}/>
+        {dashboard ?(
+                <Content/>
             ):(
                 <HoverCard
                     // open={true}
@@ -320,7 +319,7 @@ const SpeedInsights = ({children, dashboardMode = false}: {
                     <a href={options?.dashboard_url ? options?.dashboard_url : '#'}>
                         <HoverCardTrigger asChild>
                             <div className={`${!root ? 'bg-gray-900 dark:bg-brand-900 py-1 cursor-pointer' : 'flex gap-1 items-center cursor-pointer text-white'}`}>
-                                {children}
+                                {children && children}
                             </div>
                         </HoverCardTrigger>
                     </a>
