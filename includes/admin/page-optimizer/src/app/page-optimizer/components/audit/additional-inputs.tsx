@@ -181,6 +181,32 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
        }
 
+        {input.control_type === 'number' &&
+
+            <Label htmlFor="name" className="flex items-center gap-4 ml-4 text-left w-full">
+                <span>{input.control_label}</span>
+                <Select value={value}  onValueChange={v => update(v, input.key)}>
+                    <SelectTrigger className="w-[65px]">
+                        <SelectValue placeholder="Select action"/>
+                    </SelectTrigger>
+                    <SelectContent className="z-[100002] min-w-[65px]">
+                        <SelectGroup>
+                            {(input?.control_values as string[])?.map((value: string, index: number) => (
+                                <SelectItem
+                                    className="capitalize cursor-pointer"
+                                    key={index}
+                                    value={value}
+                                >
+                                    {value}
+                                </SelectItem>
+                            ))}
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+            </Label>
+
+        }
+
        {input.control_type === 'button' && input.control_label === 'Exclude Files' &&
            <div className="w-full">
                <div className='flex bg-brand-100/60 w-fit rounded-t-lg'>

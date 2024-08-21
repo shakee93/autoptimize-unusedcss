@@ -309,7 +309,6 @@ const SpeedSettings = ({}) => {
         }else{
             setActiveSettingsMode(settingsMode || 'custom');
         }
-
     }, [settings]);
 
     useEffect(() => {

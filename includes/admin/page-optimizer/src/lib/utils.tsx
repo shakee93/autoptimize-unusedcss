@@ -129,3 +129,7 @@ export function timeAgo(timestamp: number) {
     return `${yearsAgo} years ago`;
   }
 }
+
+export function toBoolean(value: any): boolean {
+  return value === true || value === 1 || value === '1' || value === 'true';
+}
