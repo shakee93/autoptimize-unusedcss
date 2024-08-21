@@ -155,6 +155,11 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.2.26 - 21/08/2024 =
+ * fix: showing unused css optimization table when remove unused css option disabled
+ * fix: titan crashes with Google Translate
+ * fix: known bugs
+
 = 2.2.25 - 13/08/2024 =
  * fix: known bugs
 
