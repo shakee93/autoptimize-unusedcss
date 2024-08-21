@@ -1120,6 +1120,11 @@ class RapidLoad_Optimizer
 
         foreach ($audits as $audit) {
             foreach ($settings_map as $setting) {
+
+                if(isset($settings[$setting['name']])){
+                    continue;
+                }
+
                 if (in_array($audit, $setting['keys'])) {
 
                     $_setting = [
@@ -1130,12 +1135,12 @@ class RapidLoad_Optimizer
 
                     $_setting = $this->get_settings_with_inputs($url, $setting['inputs'], $_setting, $options);
 
-                    array_push($settings, $_setting);
+                    $settings[$setting['name']] = $_setting;
                 }
             }
         }
 
-        return $settings;
+        return array_values($settings);
     }
 
     public function handle_ajax_optimizer_update_settings(){
