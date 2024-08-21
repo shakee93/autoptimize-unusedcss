@@ -123,7 +123,12 @@ const transformReport = (data: any) => {
 
 const transformSettings = (data: any) => {
 
-    const settings = SampleSettings;
+
+    if (!data.success) {
+        return data
+    }
+
+    const settings = data.data;
 
     const flattenedSettings = settings.flat();
 
