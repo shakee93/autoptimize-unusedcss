@@ -196,26 +196,7 @@ const Header = ({ url }: { url: string}) => {
 
                     {!showInprogress ? (
                         <>
-                            {!error && (
-                                <>
-                                    <SaveChanges/>
-                                    <UnsavedChanges
-                                        onCancel={() => {
-                                            setShowOptimizer(false)
-                                        }}
-                                        cancel='Discard & Leave'
-                                        onClick={() => {
-                                            setShowOptimizer(false);
-                                            setShowInprogress(false);
-                                        }}>
-                                        <TooltipText text='Close Optimizer'>
-                                            <LogOut className={cn(
-                                                'h-5 w-5 dark:text-brand-300 text-brand-600 transition-opacity',
-                                            )}/>
-                                        </TooltipText>
-                                    </UnsavedChanges>
-                                </>
-                            )}
+                            {!error && <SaveChanges/>}
                         </>
                     ): ( showInprogress && !savingData &&
                         <Button
