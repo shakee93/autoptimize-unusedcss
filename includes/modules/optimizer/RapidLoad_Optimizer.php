@@ -328,48 +328,6 @@ class RapidLoad_Optimizer
 
         foreach (self::$options as $key => $option){
 
-            if($key == "individual-file-actions"){
-
-                foreach (self::$options['individual-file-actions'] as $tag_key => $tag){
-
-                    foreach (self::$options['individual-file-actions'][$tag_key] as $file_action_keys => $file_action){
-
-                        if(isset($file_action)){
-                            if(!isset($file_action->action)){
-                                unset(self::$options['individual-file-actions'][$tag_key][$file_action_keys]);
-                                continue;
-                            }
-                            else if(isset($file_action->action) && isset($file_action->action->value) && $file_action->action->value == "none"){
-                                unset(self::$options['individual-file-actions'][$tag_key][$file_action_keys]);
-                                continue;
-                            }
-                            switch ($file_action->url_object->file_type->value){
-                                case 'css':{
-                                    self::$options['uucss_enable_css'] = "1";
-                                    break;
-                                }
-                                case 'js':{
-                                    self::$options['uucss_enable_javascript'] = "1";
-                                    break;
-                                }
-                                case 'image':{
-                                    self::$options['uucss_enable_image_delivery'] = "1";
-                                    break;
-                                }
-                                case 'font':{
-                                    self::$options['uucss_enable_font_optimization'] = "1";
-                                    break;
-                                }
-                            }
-                        }
-
-
-                    }
-
-                }
-
-            }
-
             if(isset(self::$options[$key]) && (self::$options[$key] != "" && self::$options[$key] && !empty(self::$options[$key]))){
                 switch ($key){
                     case 'uucss_enable_uucss':
@@ -661,7 +619,7 @@ class RapidLoad_Optimizer
 
         }
 
-        foreach ($result->audits as $audit){
+        /*foreach ($result->audits as $audit){
 
             if(isset($audit->settings)){
                 foreach ($audit->settings as $settings){
@@ -764,10 +722,10 @@ class RapidLoad_Optimizer
                             self::$merged_options['individual-file-actions'][$audit->id][] = [];
                         }
 
-                        /*$item->action = (object)[
-                            "control_type" => "dropdown",
-                            "value"         => "none"
-                        ];*/
+                        //$item->action = (object)[
+                            //"control_type" => "dropdown",
+                           // "value"         => "none"
+                        //];
 
                         if(isset(self::$merged_options['individual-file-actions'][$audit->id]) && is_array(self::$merged_options['individual-file-actions'][$audit->id]) && !empty(self::$merged_options['individual-file-actions'][$audit->id])){
 
@@ -846,7 +804,7 @@ class RapidLoad_Optimizer
             }
 
 
-        }
+        }*/
 
         self::post_optimizer_function($result);
 
@@ -860,7 +818,7 @@ class RapidLoad_Optimizer
             'individual-file-actions' => isset(self::$merged_options['individual-file-actions']) ? self::$merged_options['individual-file-actions'] : [],
             'options' => self::$options,
             'merged_options' => self::$merged_options,
-            'settings' => $this->transform_options_to_settings(self::$merged_options)
+            'settings' => $this->transform_options_to_settings($url, self::$merged_options)
         ];
 
     }
@@ -876,7 +834,7 @@ class RapidLoad_Optimizer
         ];
     }
 
-    function get_setting_inputs($keys, $options = array()) {
+    function get_settings_with_inputs($url , $keys, $settings, $options = array()) {
         $input_map = array(
             'uucss_support_next_gen_formats' => array(
                 'control_type' => 'checkbox',
@@ -941,7 +899,7 @@ class RapidLoad_Optimizer
             'rapidload_purge_all' => array(
                 'control_type' => 'button',
                 'control_label' => 'Regenerate Unused CSS',
-                'action' => 'rapidload_purge_all',
+                'action' => 'action=rapidload_purge_all&job_type=url&clear=false&immediate=true&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' ),
                 'description' => ''
             ),
             'uucss_enable_cpcss' => array(
@@ -1016,7 +974,7 @@ class RapidLoad_Optimizer
             'cpcss_purge_url' => array(
                 'control_type' => 'button',
                 'control_label' => 'Regenerate Critical CSS',
-                'action' => 'cpcss_purge_url',
+                'action' => 'action=cpcss_purge_url&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' ),
                 'description' => ''
             ),
             'uucss_load_js_method' => array(
@@ -1076,6 +1034,7 @@ class RapidLoad_Optimizer
             'update_htaccess_file' => array(
                 'control_type' => 'button',
                 'control_label' => 'Setup Policies',
+                'action' => 'action=update_htaccess&nonce=' . wp_create_nonce( 'uucss_nonce' ),
                 'default' => ''
             ),
             'uucss_exclude_files_from_delay_js' => array(
@@ -1091,15 +1050,54 @@ class RapidLoad_Optimizer
             if (isset($input_map[$key])) {
                 $input = $input_map[$key];
                 $input['key'] = $key;
-                $input['value'] = isset($options[$key]) ? $options[$key] : $input['default'];
+                if($input['key'] == "uucss_exclude_files_from_delay_js"){
+                    if(isset($options['uucss_dynamic_js_exclusion_list']) && !empty($options['uucss_dynamic_js_exclusion_list'])){
+                        $input['value'] = explode("\n", $options['uucss_dynamic_js_exclusion_list']);
+                    }else{
+                        $input['value'] = [];
+                    }
+                }else if($input['key'] == "uucss_load_js_method" && isset($options[$input['key']])){
+                    $input['value'] = $options[$input['key']] == "defer" || $options[$input['key']] == "1";
+                }else if($input['key'] == "uucss_enable_uucss"){
+                    $data = new RapidLoad_Job_Data(self::$job, 'uucss');
+                    if(!$data->exist()){
+                        $data->save();
+                    }
+                    $settings['status'] = [
+                        'status' => $data->status,
+                        'stats' => $data->get_stats(),
+                        'warnings' => $data->get_warnings(),
+                        'error' => $data->get_error()
+                    ];
+                }else if($input['key'] == "uucss_enable_cpcss"){
+                    $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
+                    if(!$data->exist()){
+                        $data->save();
+                    }
+                    $settings['status'] = [
+                        'status' => $data->status,
+                        'error' => $data->get_error()
+                    ];
+                }else if($input['key'] == "uucss_enable_cache"){
+                    $cache_file = RapidLoad_Cache_Store::get_cache_file($url);
+                    $settings['status'] = [
+                        'status' => @file_exists($cache_file),
+                        'file' => $cache_file,
+                        'size' => @file_exists($cache_file) ? $this->formatSize(@filesize($cache_file)) : null,
+                    ];
+                }else{
+                    $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : $input['default'];
+                }
                 $inputs[] = $input;
             }
         }
 
-        return $inputs;
+        $settings['inputs'] = $inputs;
+
+        return $settings;
     }
 
-    public function transform_options_to_settings($options) {
+    public function transform_options_to_settings($url, $options) {
         $audits = $this->get_google_audits();
         $settings = [];
 
@@ -1123,19 +1121,22 @@ class RapidLoad_Optimizer
         foreach ($audits as $audit) {
             foreach ($settings_map as $setting) {
                 if (in_array($audit, $setting['keys'])) {
-                    array_push($settings, [
+
+                    $_setting = [
                         'name' => $setting['name'],
                         'description' => $setting['description'],
                         'category' => $setting['category'],
-                        'inputs' => $this->get_setting_inputs($setting['inputs'], $options),
-                    ]);
+                    ];
+
+                    $_setting = $this->get_settings_with_inputs($url, $setting['inputs'], $_setting, $options);
+
+                    array_push($settings, $_setting);
                 }
             }
         }
 
         return $settings;
     }
-
 
     public function handle_ajax_optimizer_update_settings(){
 
