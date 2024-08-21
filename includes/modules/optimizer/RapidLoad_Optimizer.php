@@ -267,7 +267,7 @@ class RapidLoad_Optimizer
             unset(self::$merged_options['uucss_api_key']);
         }
 
-        wp_send_json_success(self::$merged_options);
+        wp_send_json_success($this->transform_options_to_settings($url, self::$merged_options));
     }
 
     public function update_titan_settings()
