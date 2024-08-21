@@ -128,14 +128,10 @@ const transformSettings = (data: any) => {
         return data
     }
 
-    const settings = data.data;
-
-    const flattenedSettings = settings.flat();
-
-    const uniqueSettings = Array.from(new Set(flattenedSettings.map((setting: any) => JSON.stringify(setting)))).map((str: any) => JSON.parse(str));
+    const settings = data?.data || [];
 
     return {
-        data: uniqueSettings.map((s: AuditSetting) => ({
+        data: settings.map((s: AuditSetting) => ({
             ...s,
             inputs: s.inputs.map(input => ({
                 ...input,

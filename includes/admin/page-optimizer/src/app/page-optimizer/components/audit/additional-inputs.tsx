@@ -94,7 +94,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
             return acc;
         }, {})
 
-    }, [input]);
+    }, [input, updates]);
 
 
     const handleSwitchChange = (isChecked: boolean, itemId: string) => {
