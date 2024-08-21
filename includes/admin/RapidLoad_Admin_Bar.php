@@ -49,11 +49,12 @@ class RapidLoad_Admin_Bar {
 
         $tag = apply_filters('rapidload/titan/tag', 'latest');
 
-        $package = "https://unpkg.com/@rapidload/page-optimizer@{$tag}/dist";
+        //$package = "https://unpkg.com/@rapidload/page-optimizer@{$tag}/dist";
+        $package = UUCSS_PLUGIN_URL . 'includes/admin/page-optimizer/dist';
 
-        if (defined('RAPIDLOAD_DEV_MODE')) {
+        /*if (defined('RAPIDLOAD_DEV_MODE')) {
             $package = UUCSS_PLUGIN_URL . 'includes/admin/page-optimizer/dist';
-        }
+        }*/
 
         $debug_titan = apply_filters('rapidload/titan/debug', false);
 

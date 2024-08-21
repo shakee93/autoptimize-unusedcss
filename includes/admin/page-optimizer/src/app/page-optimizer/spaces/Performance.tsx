@@ -226,58 +226,6 @@ const Performance = () => {
                 </div>
             </div>
 
-            <Mode>
-                {showNewTitanModelPopup  && (
-                    <Dialog open={open} onOpenChange={setOpen}>
-                        <DialogContent asChild className="sm:max-w-[530px] cursor-auto">
-
-                            <DialogHeader className='px-6 pt-6 pb-1'>
-                                <div className='flex gap-2 items-center'>
-                                    <div className='relative'>
-                                        {/*<img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>*/}
-                                        <TitanLogo/>
-                                    </div>
-
-                                    <DialogTitle>Welcome to Titan’s New Look! (v1.1.6)</DialogTitle>
-                                </div>
-
-                                <div className='relative py-4'>
-                                    <img className='w-[480px] rounded-lg' src={ options?.page_optimizer_package_base ? (options?.page_optimizer_package_base + `/gear-record-flow.gif`) : '/gear-record-flow.gif'} alt='Welcome to Titan'/>
-                                </div>
-                                <DialogDescription >
-                                    {/*The update makes the design sleek and modern for better navigation. There's a new <span className="font-semibold">Speed Settings</span> tab for quick access to recommended settings. The interface is now simpler to understand metrics.*/}
-                                    <h3>RapidLoad has introduced <span className='font-semibold'>three gear modes</span> for more efficient configuration:</h3>
-                                    <ul className="list-disc px-6">
-                                        <li>Starter Mode</li>
-                                        <li>Accelerator Mode</li>
-                                        <li>Turbo Mode</li>
-                                        <li>Along with a Custom Mode for personalized optimization.</li>
-                                    </ul>
-                                </DialogDescription>
-
-
-                            </DialogHeader>
-
-                            <DialogFooter className='px-6 py-3 border-t'>
-                                <label className="flex py-2 absolute items-center left-6">
-                                    <Checkbox  onCheckedChange={(c: boolean) =>{
-                                        setIsCheckedPopup(c);
-                                        localStorage.setItem(welcomePopupKey, 'true');
-                                    }}/>
-                                    <span className="text-muted-foreground select-none">Don't show this again</span>
-                                </label>
-                                <AppButton onClick={e => saveNewTitanModelPopup(false)} className='text-sm'>Explore Now</AppButton>
-                                <AppButton onClick={e => setOpen(false)} variant='outline' className='text-sm'>Close</AppButton>
-                            </DialogFooter>
-
-                        </DialogContent>
-                    </Dialog>
-
-
-                )}
-
-
-            </Mode>
         </div>
 
     )
