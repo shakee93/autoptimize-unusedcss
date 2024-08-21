@@ -1,0 +1,56 @@
+name: Publish to NPM
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install Dependencies
+        working-directory: includes/admin/page-optimizer
+        run: npm install
+
+      - name: Authenticate with NPM
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NODE_AUTH_TOKEN }}" > ~/.npmrc
+
+      - name: Build Project
+        working-directory: includes/admin/page-optimizer
+        run: npm run build
+
+      - name: Get Latest Version from NPM
+        id: get_latest_version
+        working-directory: includes/admin/page-optimizer
+        run: |
+          LATEST_VERSION=$(npm show $(node -p "require('./package.json').name") version)
+          echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
+
+      - name: Check for Version Change
+        id: version_check
+        working-directory: includes/admin/page-optimizer
+        run: |
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          if [ "$LATEST_VERSION" == "$CURRENT_VERSION" ]; then
+            echo "titan_version_changed=false" >> $GITHUB_ENV
+            echo "No version change detected."
+          else
+            echo "titan_version_changed=true" >> $GITHUB_ENV
+            echo "Version change detected."
+          fi
+
+      - name: Publish to NPM
+        if: ${{ env.titan_version_changed == 'true' }}
+        working-directory: includes/admin/page-optimizer
+        run: npm publish
