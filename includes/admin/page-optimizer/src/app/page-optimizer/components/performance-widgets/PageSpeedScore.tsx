@@ -4,7 +4,7 @@ import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
 import {useAppContext} from "../../../../context/app";
 import {Skeleton} from "components/ui/skeleton"
-import {cn, timeAgo} from "lib/utils";
+import {cn, timeAgo, toBoolean} from "lib/utils";
 import Card from "components/ui/card";
 import PerformanceProgressBar from "components/performance-progress-bar";
 import Metrics from "app/page-optimizer/components/performance-widgets/Metrics";
@@ -66,21 +66,12 @@ const PageSpeedScore = ({pagespeed, priority = true }: PageSpeedScoreProps) => {
     const {settingsMode, testModeStatus, testModeLoading} = useCommonDispatch();
     const {testMode} = useSelector((state: RootState) => state.app);
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
-    const [localSwitchState, setLocalSwitchState] = useState<boolean>(testMode?.status || false);
+    const [localSwitchState, setLocalSwitchState] = useState<boolean>(testModeStatus);
     const [loadingStatus, setLoadingStatus] = useState(false);
 
     const { handleTestModeSwitchChange } = useTestModeUtils();
 
     let url = options?.optimizer_url;
-
-    useEffect(() => {
-        if (testMode) {
-            dispatch(setCommonState('testModeStatus', testMode.status || false));
-        }
-
-    }, [testMode]);
-
-
 
     const handleSwitchChange = async (isChecked: boolean) => {
        await handleTestModeSwitchChange( isChecked);

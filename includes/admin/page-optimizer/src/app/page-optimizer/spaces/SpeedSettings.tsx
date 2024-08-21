@@ -309,11 +309,10 @@ const SpeedSettings = ({}) => {
         }else{
             setActiveSettingsMode(settingsMode || 'custom');
         }
-
     }, [settings]);
 
     useEffect(() => {
-        if(revisions.length == 0){
+        if(revisions.length == 0 && !settingsMode ){
             dispatch(setCommonState('settingsMode', 'accelerator'));
             setActiveSettingsMode('accelerate');
         }
