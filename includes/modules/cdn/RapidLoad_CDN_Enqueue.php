@@ -46,7 +46,7 @@ class RapidLoad_CDN_Enqueue
                 continue;
             }
 
-            $cdn_excluded = apply_filters('rapidload/cdn/exclude', $link);
+            $cdn_excluded = apply_filters('rapidload/cdn/exclude', false, $link);
 
             if($cdn_excluded){
                 continue;

@@ -306,12 +306,17 @@
         $('.rapidload-clear-all').click(function (e) {
             e.preventDefault();
 
-            wp.ajax.post('rapidload_purge_all', {
-                clear: true,
-                nonce: uucss_global.nonce,
-                url: null,
-                job_type: 'url'
-            }).done(function (d) {
+            var href = $(this).find('a').attr('href');
+
+            var urlParams = new URLSearchParams(href.split('?')[1]);
+
+            var params = {};
+
+            urlParams.forEach((value, key) => {
+                params[key] = value;
+            });
+
+            wp.ajax.post('rapidload_purge_all', params).done(function (d) {
                 window.location.reload();
             })
 
