@@ -1092,7 +1092,6 @@ class RapidLoad_Optimizer
                 $input = $input_map[$key];
                 $input['key'] = $key;
                 $input['value'] = isset($options[$key]) ? $options[$key] : $input['default'];
-                unset($input['default']);
                 $inputs[] = $input;
             }
         }
@@ -1128,7 +1127,7 @@ class RapidLoad_Optimizer
                         'name' => $setting['name'],
                         'description' => $setting['description'],
                         'category' => $setting['category'],
-                        'inputs' => $this->get_setting_inputs($setting['inputs']),
+                        'inputs' => $this->get_setting_inputs($setting['inputs'], $options),
                     ]);
                 }
             }
