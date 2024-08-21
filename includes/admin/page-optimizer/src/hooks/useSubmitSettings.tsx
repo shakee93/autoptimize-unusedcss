@@ -64,10 +64,11 @@ const useSubmitSettings = () => {
 
             setSavingData(true);
 
+
             const res = await api.updateSettings(
                 url,
                 activeReport,
-                updatedData,
+                settings,
                 global,
                 analyze,
             );

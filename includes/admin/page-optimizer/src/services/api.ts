@@ -261,7 +261,7 @@ class ApiService {
                 this.baseURL.searchParams.delete('action')
             }
 
-            this.baseURL.searchParams.append('action', 'optimizer_update_settings');
+            this.baseURL.searchParams.append('action', 'update_titan_settings');
 
             if(global) this.baseURL.searchParams.append('global', 'true')
             if(analyze) this.baseURL.searchParams.append('analyze', 'true')

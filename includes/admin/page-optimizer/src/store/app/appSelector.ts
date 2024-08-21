@@ -41,13 +41,18 @@ function optimizeChangesFiles(changes : any ) {
 export const optimizerData = createSelector(
     state, // Input selector
     (state) => {
+
+        const report = state.report[state.activeReport];
+        const settings = state.settings[state.activeReport];
+
         return {
-            ...state.report[state.activeReport],
+            ...report,
             activeReport: state.activeReport,
-            settings: state.settings[state.activeReport].state,
-            touched: !equal(state.report[state.activeReport].originalSettings, state.report[state.activeReport].settings) || !!optimizeChangesFiles(state[state.activeReport].changes).find(i => i?.changed),
-            fresh : state.report[state.activeReport]?.state?.fresh,
-            reanalyze: state.report[state.activeReport].data !== null && state.report[state.activeReport].loading
+            settings: settings.state,
+            activeGear: settings.state?.find(s => s.category === 'gear'),
+            touched: !equal(settings.original, settings.state) || !!optimizeChangesFiles(report.changes).find(i => i?.changed),
+            fresh : report?.state?.fresh,
+            reanalyze: report.data !== null && report.loading
         }
     }
 );

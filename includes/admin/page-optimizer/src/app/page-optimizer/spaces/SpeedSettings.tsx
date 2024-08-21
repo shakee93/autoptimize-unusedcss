@@ -240,8 +240,6 @@ const SpeedSettings = ({}) => {
             ))
 
         }
-
-
     };
 
     const handleTestModeSettingsChange = (gearSettingsMode: string,) => {

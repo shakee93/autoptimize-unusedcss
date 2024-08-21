@@ -364,12 +364,16 @@ export const changeGear = (
             [key in BasePerformanceGear] : string[]
         } = {starter, accelerate, turboMax}
 
+        // excluding perf gear from updates.
         // @ts-ignore
-        const newOptions: AuditSetting[] = currentState?.app?.settings[deviceType]?.state?.map((s: AuditSetting) => ({
+        const newOptions: AuditSetting[] = currentState?.app?.settings[deviceType]?.state
+            ?.map((s: AuditSetting) => ({
             ...s,
             inputs: s.inputs.map((input, index) => ({
                 ...input,
-                value: index === 0 ? modes[mode]?.includes(s.name) : input.value
+                value: index === 0 ? (
+                    s.category === 'gear' ? mode : modes[mode]?.includes(s.name)
+                ) : input.value
             }))
         })) || [];
 
