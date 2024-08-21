@@ -155,7 +155,10 @@ class RapidLoad_Optimizer
 
         foreach ($actions as $action => $method) {
             add_action("wp_ajax_$action", [$this, $method]);
-           // add_action("wp_ajax_nopriv_$action", [$this, $method]);
+
+            if (defined('RAPIDLOAD_DEV_MODE')) {
+                add_action("wp_ajax_nopriv_$action", [$this, $method]);
+            }
         }
     }
 
@@ -179,15 +182,15 @@ class RapidLoad_Optimizer
         wp_send_json_success([
             'uucss' => [
                 'status' => $job_data_uucss->status,
-                'error' => unserialize($job_data_uucss->error),
-                'warnings' => unserialize($job_data_uucss->warnings),
-                'stats' => unserialize($job_data_uucss->stats)
+                'error' => isset($job_data_uucss->error) ? unserialize($job_data_uucss->error) : null,
+                'warnings' => isset($job_data_uucss->warnings) ? unserialize($job_data_uucss->warnings) : null,
+                'stats' => isset($job_data_uucss->stats) ? unserialize($job_data_uucss->stats) : null
             ],
             'cpcss' => [
                 'status' => $job_data_cpcss->status,
-                'error' => unserialize($job_data_cpcss->error),
-                'warnings' => unserialize($job_data_cpcss->warnings),
-                'stats' => unserialize($job_data_cpcss->stats)
+                'error' => isset($job_data_cpcss->error) ? unserialize($job_data_cpcss->error) : null,
+                'warnings' => isset($job_data_cpcss->warnings) ? unserialize($job_data_cpcss->warnings) : null,
+                'stats' => isset($job_data_cpcss->stats) ? unserialize($job_data_cpcss->stats) : null
             ],
             'cache' => [
                 'status' => @file_exists($cache_file),

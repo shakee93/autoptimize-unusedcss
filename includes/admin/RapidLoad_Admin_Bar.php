@@ -45,15 +45,18 @@ class RapidLoad_Admin_Bar {
 
     public function load_optimizer_scripts()
     {
+        $options = RapidLoad_Base::fetch_options();
+
         $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
 
         $tag = apply_filters('rapidload/titan/tag', 'latest');
 
-        $package = "https://unpkg.com/@rapidload/page-optimizer@{$tag}/dist";
+        //$package = "https://unpkg.com/@rapidload/page-optimizer@{$tag}/dist";
+        $package = UUCSS_PLUGIN_URL . 'includes/admin/page-optimizer/dist';
 
-        if (defined('RAPIDLOAD_DEV_MODE')) {
+        /*if (defined('RAPIDLOAD_DEV_MODE')) {
             $package = UUCSS_PLUGIN_URL . 'includes/admin/page-optimizer/dist';
-        }
+        }*/
 
         $debug_titan = apply_filters('rapidload/titan/debug', false);
 
@@ -114,7 +117,8 @@ class RapidLoad_Admin_Bar {
             'api_root' => defined('UUCSS_API_URL') ? UUCSS_API_URL : 'https://api.rapidload.io/api/v1',
             'enable_entire_site' => RapidLoad_DB::get_optimization_count() < 2,
             'rest_url' => RapidLoadRestApi::rest_url(),
-            'license_key' => RapidLoad_Base::get_license_key()
+            'license_key' => RapidLoad_Base::get_license_key(),
+            'test_mode' => boolval(isset($options['rapidload_test_mode']) && $options['rapidload_test_mode'] == "1")
         );
 
         wp_localize_script( 'rapidload_page_optimizer', 'rapidload_optimizer', $data );

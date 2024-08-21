@@ -52,7 +52,7 @@ const PerformanceProgressBar = ({
                 strokeWidth={stroke}
                 background={background}
                 className={cn(
-                    'max-h-[176px] relative',
+                    'max-h-[176px] relative w-full align-middle',
                     className
                 )}
 

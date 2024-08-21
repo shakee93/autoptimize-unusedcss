@@ -149,7 +149,7 @@ class RapidLoad_Font_Enqueue
 
         foreach ($google_fonts as $google_font) {
 
-            if ($google_font->parentNode()->tag == 'noscript') {
+            if ($google_font->parentNode() && $google_font->parentNode()->tag == 'noscript') {
                 continue;
             }
 

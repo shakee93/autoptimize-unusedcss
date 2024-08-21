@@ -37,7 +37,7 @@
                     d="M4.81201 9.28125C4.81201 8.33201 5.58152 7.5625 6.53076 7.5625H9.62451C10.1941 7.5625 10.6558 7.10079 10.6558 6.53125C10.6558 5.96171 10.1941 5.5 9.62451 5.5H6.53076C4.44244 5.5 2.74951 7.19292 2.74951 9.28125V15.4688C2.74951 17.5571 4.44244 19.25 6.53076 19.25H12.7183C14.8066 19.25 16.4995 17.5571 16.4995 15.4688V12.375C16.4995 11.8055 16.0378 11.3438 15.4683 11.3438C14.8987 11.3438 14.437 11.8055 14.437 12.375V15.4688C14.437 16.418 13.6675 17.1875 12.7183 17.1875H6.53076C5.58152 17.1875 4.81201 16.418 4.81201 15.4688V9.28125Z"
                     fill="#757476"/>
               </svg>
-              <svg :class="loading? 'block' : 'hidden'" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+              <svg :class="loading? 'block' : 'hidden-important'" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor"

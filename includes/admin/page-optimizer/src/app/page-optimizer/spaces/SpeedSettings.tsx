@@ -49,6 +49,25 @@ const capitalizeCategory = (category: string) => {
     }
 };
 
+const getWidthForCategory = (category: SettingsCategory) => {
+    switch (category) {
+        case 'cdn':
+            return 625;
+        case 'font':
+            return 515;
+        case 'css':
+            return 130;
+        case 'javascript':
+            return 255;
+        case 'image':
+            return 395;
+        case 'cache':
+            return 740;
+        default:
+            return 395;
+    }
+};
+
 type GroupedSettings = Record<string, AuditSetting[]>;
 
 const SpeedSettings = ({}) => {
@@ -92,7 +111,7 @@ const SpeedSettings = ({}) => {
         css : <CSSDeliveryDuotone/>,
     }), [])
 
-    const groupByCategory = (settings: AuditSetting[]) => {
+    const groupByCategory = useCallback((settings: AuditSetting[]) => {
 
         const grouped = {} as GroupedSettings;
         settings.forEach((setting) => {
@@ -107,7 +126,7 @@ const SpeedSettings = ({}) => {
             });
         });
         return grouped;
-    };
+    }, [settings]);
 
     useEffect(() => {
 
@@ -131,7 +150,7 @@ const SpeedSettings = ({}) => {
             dispatch(setCommonState('openCategory', 'css'));
         }
 
-    }, [data, settings]);
+    }, [settings]);
 
     const updateValue = useCallback( (setting: AuditSetting, value: any, key: string) => {
         dispatch(updateSettings(
@@ -140,26 +159,8 @@ const SpeedSettings = ({}) => {
             key,
             value
         ));
-    }, [dispatch]);
+    }, []);
 
-    const getWidthForCategory = (category: SettingsCategory) => {
-        switch (category) {
-            case 'cdn':
-                return 625;
-            case 'font':
-                return 515;
-            case 'css':
-                return 130;
-            case 'javascript':
-                return 255;
-            case 'image':
-                return 395;
-            case 'cache':
-                return 740;
-            default:
-                return 395;
-        }
-    };
 
     const [passedAudits, setPassedAudits] = useState<AuditSetting[]>([]);
     const [notPassedAudits, setNotPassedAudits] = useState<AuditSetting[]>([]);
@@ -308,11 +309,10 @@ const SpeedSettings = ({}) => {
         }else{
             setActiveSettingsMode(settingsMode || 'custom');
         }
-
     }, [settings]);
 
     useEffect(() => {
-        if(revisions.length == 0){
+        if(revisions.length == 0 && !settingsMode ){
             dispatch(setCommonState('settingsMode', 'accelerator'));
             setActiveSettingsMode('accelerate');
         }
@@ -382,7 +382,7 @@ const SpeedSettings = ({}) => {
             <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
         </div>
 
-        <div className="flex gap-4 inline-flex" data-tour="settings-gear">
+        <div className="flex gap-4" data-tour="settings-gear">
             {modes.map((mode, index) => (
                 <div
                     key={index}
@@ -445,7 +445,6 @@ const SpeedSettings = ({}) => {
 
         <div>
             <div
-                key={activeCategory}
                 onClick={() => {
                     setTempMode('custom');
                     setCustomMode(prevMode => !prevMode);
@@ -453,7 +452,7 @@ const SpeedSettings = ({}) => {
                 onMouseEnter={() => setMouseOnSettingsGear('custom')}
                 onMouseLeave={() => setMouseOnSettingsGear('')}
                 className={cn(
-                    `select-non w-fit transition-all rounded-2xl cursor-pointer  
+                    `select-none w-fit transition-all rounded-2xl cursor-pointer  
           flex items-center gap-2 px-4 py-2 -ml-1 text-sm font-medium dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px] dark:hover:bg-brand-950 bg-brand-0 dark:bg-brand-950 `,
                     activeSettingsMode === 'custom' && 'border-purple-700'
                 )}
@@ -465,7 +464,7 @@ const SpeedSettings = ({}) => {
                     </div>
                 }
 
-                Customize Settings {" "} <ChevronDownIcon className={cn(
+                Customize Settings <ChevronDownIcon className={cn(
                 'w-4 rounded-[15px] transition-transform',
                 customMode && '-rotate-180'
             )}/>
@@ -492,7 +491,7 @@ const SpeedSettings = ({}) => {
                         transition={{ duration: 0.5 }} className={cn(
                         'cursor-pointer select-none flex gap-2 transition-all items-center border border-transparent py-[6px] pr-3 pl-[7px] rounded-2xl w-fit mb-4 hover:bg-brand-50' +
                         ' dark:bg-brand-950/60 dark:hover:bg-brand-950 bg-brand-0 hover:shadow-md',
-                        activeCategory === category ? 'dark:bg-brand-950 shadow-md transition-all' : '' && ''
+                        activeCategory === category && 'dark:bg-brand-950 shadow-md transition-all'
                     )}>
                         <div>
                             {activeCategory === category ?  <>{icons[category]}</> : <>{iconsDuotone[category]}</>}
@@ -505,23 +504,40 @@ const SpeedSettings = ({}) => {
 
                 </li>
             ))}
-
-
         </ul>
 
-        <div>
+        <div className='min-h-[380px]'>
             <ul>
 
-                {notPassedAudits.map((item: AuditSetting, itemIndex) => (
-                    <li key={itemIndex}>{ item.category === activeCategory && (
-                        <m.div initial={{ opacity: 0}}
-                               animate={{ opacity: 1}}
-                               transition={{ duration: 0.3 }}
-                        >
-                        <AuditSettingsItem key={`${activeCategory}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={true}/>
-                        </m.div>
-                        )}</li>
-                ))}
+                {notPassedAudits
+                    .filter((item) => item.category === activeCategory)
+                    .map((item: AuditSetting, itemIndex) => (
+                        <li key={`${item.category}-${itemIndex}`}>
+                            <m.div initial={{opacity: 0, y: -10}}
+                                   animate={{opacity: 1, y: 0}}
+                                   transition={{duration: 0.3, delay: itemIndex ? 0.05 * itemIndex : 0}}
+                            >
+                                <AuditSettingsItem key={`${item.category}-${itemIndex}`} item={item}
+                                                   itemIndex={itemIndex} updateValue={updateValue}
+                                                   actionRequired={true}/>
+                            </m.div>
+                        </li>
+                    ))}
+
+                {(notPassedAudits
+                        .filter((item) => item.category === activeCategory).length <= 2
+                  && filteredAudits.length === 0 ) &&  <m.div
+                        initial={{opacity: 0, y: 10}}
+                        animate={{opacity: 1, y: 0}}
+                        exit={{opacity: 0, y: -20}}
+                        className='flex flex-col gap-2 items-center px-2 mt-12 w-full mb-6'>
+                        <div>
+                            <img alt='Good Job!' className='w-60 -ml-6'
+                                 src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>
+                        </div>
+                        <span className='flex text-sm mt-4 gap-2'>You're so close to perfection! One more fix and it's flawless!"</span>
+                    </m.div>
+                }
             </ul>
 
             <ul>
@@ -535,7 +551,7 @@ const SpeedSettings = ({}) => {
                         key={activeCategory}
                         onClick={() => setShowHideState(activeCategory)}
                         className={cn(
-                            `select-non w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
+                            `select-none w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
           flex items-center gap-2 px-5 py-1.5 pb-2 text-sm font-medium `,
                             notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-10"
                         )}
@@ -554,17 +570,15 @@ const SpeedSettings = ({}) => {
                         notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-[42px]"
                     )}>The audits associated with these settings are already optimized</div>
 
-                    {passedAudits.map((item: AuditSetting, itemIndex) => (
+                    {passedAudits.filter(item => item.category === activeCategory).map((item: AuditSetting, itemIndex) => (
 
-                    <li key={itemIndex}>{ item.category === activeCategory && (
+                    <li key={itemIndex}>
                         <m.div initial={{ opacity: 0}}
                                animate={{ opacity: 1}}
                                transition={{ duration: 0.3 }}
                         >
-
-                        <AuditSettingsItem key={`${activeCategory}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={false} />
+                            <AuditSettingsItem key={`${item.category}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={false} />
                         </m.div>
-                        )}
                     </li>
 
                     ))}
