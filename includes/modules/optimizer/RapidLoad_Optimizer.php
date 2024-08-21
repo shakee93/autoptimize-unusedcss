@@ -1140,6 +1140,25 @@ class RapidLoad_Optimizer
             }
         }
 
+        $settings["Performance Gears"] = [
+            'name' => "Performance Gears",
+            "description" => "Include width and height attributes for these images.",
+            "category" => "gear",
+            "inputs"=> [
+                [
+                    "control_type" => "gear",
+                    "control_label" => "Select performance gear",
+                    "control_values" => [
+                        "starter",
+                        "accelerate",
+                        "turbo-max"
+                    ],
+                    "value" => get_option('rapidload_titan_gear', false),
+                    "key" => "active_gear"
+                ]
+            ]
+        ];
+
         return array_values($settings);
     }
 
