@@ -2,29 +2,21 @@ import React, {Dispatch, SetStateAction, useEffect, useRef, useState, lazy} from
 
 import Header from "app/page-optimizer/components/Header";
 import PageSpeedScore from "app/page-optimizer/components/performance-widgets/PageSpeedScore";
-import {ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon} from "@heroicons/react/24/outline";
-import Card from "components/ui/card";
 import {useSelector} from "react-redux";
 import {useAppContext} from "../../context/app";
 import {cn} from "lib/utils";
-import Audit from "app/page-optimizer/components/audit/Audit";
-import Footer from "app/page-optimizer/components/Footer";
 import Loading from "components/loading";
 import OptimizerInProgress from "components/optimizer-in-progress";
 import {optimizerData} from "../../store/app/appSelector";
-import {ArrowLeftToLine, ArrowRightToLine, Circle, Loader, ThumbsUp} from "lucide-react";
-import TooltipText from "components/ui/tooltip-text";
+import { Loader } from "lucide-react";
 import {m, AnimatePresence} from "framer-motion";
-import {ExclamationCircleIcon} from "@heroicons/react/20/solid";
 import {Toaster} from "components/ui/toaster";
 import usePerformanceColors from "hooks/usePerformanceColors";
-import Indicator from "components/indicator";
 import Performance from "app/page-optimizer/spaces/Performance";
 import SpeedIndex from "app/page-optimizer/spaces/Metrics";
 import TogglePerformance from "components/toggle-performance";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import SlideUp from "components/animation/SlideUp";
-import {JsonView} from "react-json-view-lite";
 import ErrorFetch from "components/ErrorFetch";
 
 export interface AuditComponentRef {
@@ -68,9 +60,11 @@ export default function PageOptimizer() {
                 duration: 0.04,
         }}
             id='rapidload-page-optimizer-wrapper'
+            translate="no"
             className={cn(
-                "bg-white font-sans overflow-hidden fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center ",
-                "dark:text-brand-300 text-brand-800"
+                " bg-white font-sans overflow-hidden fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center ",
+                "dark:text-brand-300 text-brand-800",
+                "notranslate"
             )}>
 
             <Header url={url}/>

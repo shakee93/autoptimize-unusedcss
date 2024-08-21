@@ -153,10 +153,10 @@ class ApiService {
                },
                body: JSON.stringify({
                    settings: data.settings?.
-                   flatMap(t =>
+                   flatMap((t:any) =>
                        t.inputs
-                           .filter(({ value }) => value != null)
-                           .map(({ key, value }) => ({ key, value, status: t.status  })))
+                           .filter(({ value }:any) => value != null)
+                           .map(({ key, value }:any) => ({ key, value, status: t.status  })))
                        || []
                })
            });

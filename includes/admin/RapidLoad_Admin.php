@@ -42,6 +42,7 @@ class RapidLoad_Admin
             add_action('wp_ajax_rapidload_switch_test_mode', [$this, 'rapidload_switch_test_mode']);
 
             if (defined('RAPIDLOAD_DEV_MODE')) {
+                add_action('wp_ajax_nopriv_rapidload_switch_test_mode', [$this, 'rapidload_switch_test_mode']);
                 add_action('wp_ajax_nopriv_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
                 add_action('wp_ajax_nopriv_clear_page_cache', [$this, 'clear_page_cache']);
                 add_action('wp_ajax_nopriv_titan_checklist_cron', [$this, 'titan_checklist_cron']);
