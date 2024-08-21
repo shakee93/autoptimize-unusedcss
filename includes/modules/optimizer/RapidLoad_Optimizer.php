@@ -1051,6 +1051,7 @@ class RapidLoad_Optimizer
                 $input = $input_map[$key];
                 $input['key'] = $key;
                 if($input['key'] == "uucss_exclude_files_from_delay_js"){
+                    $input['control_values'] = JavaScript::get_dynamic_exclusion_list();
                     if(isset($options['uucss_dynamic_js_exclusion_list']) && !empty($options['uucss_dynamic_js_exclusion_list'])){
                         $input['value'] = explode("\n", $options['uucss_dynamic_js_exclusion_list']);
                     }else{
