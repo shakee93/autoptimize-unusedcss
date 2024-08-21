@@ -11,7 +11,10 @@ function SpeedPopover() {
 
 
     return (
-        <div id='rl-react-popup-wrapper' className={`font-sans ${!options ? 'flex flex-col justify-center text-center ' : ''}`}>
+        <div id='rl-react-popup-wrapper'
+             translate="no"
+             className={`notranslate
+              font-sans ${!options ? 'flex flex-col justify-center text-center ' : ''}`}>
             <SpeedInsights>
                 {(options && options.plugin_url) && (
                     <span className="rl-icon">

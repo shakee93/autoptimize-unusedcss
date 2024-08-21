@@ -1,4 +1,4 @@
-name: Deploy WordPress on Pull Request
+name: Deploy WordPress Test Environment on Pull Request
 
 on:
   pull_request:
@@ -291,7 +291,8 @@ jobs:
               else
                 cd ${PLUGIN_DIR}
                 echo 'Cloning plugin repository...'
-                git clone -b ${{ github.head_ref }} --single-branch https://github.com/shakee93/autoptimize-unusedcss.git ${PLUGIN_PATH}
+                git config --global http.postBuffer 524288000
+                git clone --depth 1 -b ${{ github.head_ref }} --single-branch https://github.com/shakee93/autoptimize-unusedcss.git ${PLUGIN_PATH}
               fi
             "
             if [ $? -eq 0 ]; then
