@@ -111,7 +111,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                             <SelectContent className="z-[100001]">
                                 <SelectGroup>
                                     <SelectLabel>Actions</SelectLabel>
-                                    {input?.control_values?.map((value: string, index: number) => (
+                                    {input?.control_values?.map((value: any, index: number) => (
                                         <SelectItem
                                             className="capitalize cursor-pointer"
                                             key={index}
