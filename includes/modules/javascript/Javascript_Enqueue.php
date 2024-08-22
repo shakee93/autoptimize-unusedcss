@@ -407,7 +407,8 @@ class Javascript_Enqueue
                 return;
             }
 
-            if(isset($link->id) && $this->str_contains($link->id,"rapidload-")){
+            if(isset($link->id) && in_array($link->id, ["rapidload-js-extra"])){
+                $link->norapidload = true;
                 return;
             }
 
