@@ -13,6 +13,7 @@ import {useRootContext} from "../context/root";
 import {setCommonState} from "../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {toBoolean} from "lib/utils";
+import Bugsnag from "@bugsnag/js";
 
 const AppTour = React.lazy(() => import( 'components/tour'))
 const InitTour = React.lazy(() => import('components/tour/InitTour'))
@@ -49,7 +50,20 @@ const App = ({popup, _showOptimizer = false}: {
         setTimeout(() => {
             setMounted(true)
         }, 50);
+
+        Bugsnag.leaveBreadcrumb('Titan Loaded')
+
     }, []);
+
+    useEffect(() => {
+
+        if (showOptimizer) {
+            Bugsnag.leaveBreadcrumb('Titan Opened');
+        } else {
+            Bugsnag.leaveBreadcrumb('Titan Closed');
+        }
+
+    }, [showOptimizer])
 
 
     useEffect(() => {
