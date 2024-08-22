@@ -81,9 +81,16 @@ class Javascript_Enqueue
             $this->strategy = $state['strategy'];
         }
 
+        $remove_js_files = apply_filters('rapidload/js/remove-js-files', []);
+
         $links = $this->dom->find( 'script' );
 
         foreach ( $links as $link ) {
+
+            if(isset($link->id) && in_array($link->id, $remove_js_files)){
+                $link->outertext = '';
+                continue;
+            }
 
             $original_src = self::is_js($link) ? $link->src : null;
 
