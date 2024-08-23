@@ -112,9 +112,9 @@ const transformReport = (data: any) => {
 
         success: data.success,
         // settings: initiateSettings(audits),
-        revisions: data.data.revisions.map(({created_at, timestamp, data, job_id }: any) => {
+        revisions: data.data.revisions.map(({created_at, timestamp, data, id }: any) => {
             return {
-                id: job_id,
+                id,
                 created_at,
                 timestamp,
                 data: {
