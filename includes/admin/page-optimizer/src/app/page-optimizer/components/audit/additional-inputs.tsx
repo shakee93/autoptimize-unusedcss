@@ -176,7 +176,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
        }
 
-        {input.control_type === 'number' &&
+        {input.control_type === 'number-range' &&
 
             <Label htmlFor="name" className="flex items-center gap-4 ml-4 text-left w-full">
                 <span>{input.control_label}</span>
