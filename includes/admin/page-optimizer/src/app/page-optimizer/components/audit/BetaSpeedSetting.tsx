@@ -292,7 +292,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                         </DialogTrigger>
                                         <DialogContent asChild className={`${settings.name==="Delay Javascript"? 'sm:max-w-[650px] bg-brand-100':'sm:max-w-[450px]'} cursor-auto`}>
 
-                                            <DialogHeader className='border-b px-6 py-8'>
+                                            <DialogHeader className='border-b px-6 py-8 mt-1'>
                                                 <DialogTitle>{settings.name} Settings</DialogTitle>
                                                 <DialogDescription>
                                                     Make changes to your <span className='lowercase'>{settings.name}</span> settings here. Click save when you're done.
