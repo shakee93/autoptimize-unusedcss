@@ -156,7 +156,8 @@ const initiateSettings = (audits: Audit[]) => {
     const uniqueSettings = Array.from(new Set(flattenedSettings.map((setting: any) => JSON.stringify(setting)))).map((str: any) => JSON.parse(str));
 
     // convert 1's to true and false in checkbox
-    return uniqueSettings.map((s: AuditSetting) => ({
+    return uniqueSettings
+        .map((s: AuditSetting) => ({
         ...s,
         inputs: s.inputs.map(input => ({
             ...input,
@@ -164,6 +165,12 @@ const initiateSettings = (audits: Audit[]) => {
                 input.control_type === 'checkbox' &&
                 {
                     value: input.value === '1' || input.value === true
+                }
+            ),
+            ...(
+                input.control_type === 'gear' &&
+                {
+                    value: input.value === 'turbo-max' ? 'turboMax' : input.value
                 }
             )
         }))
@@ -349,7 +356,7 @@ export const updateSettings = (
 }
 
 export const changeGear = (
-    mode: BasePerformanceGear,
+    mode: BasePerformanceGear | PerformanceGear,
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const starter = ['Remove Unused CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
@@ -359,24 +366,33 @@ export const changeGear = (
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState)  => {
         const currentState = getState(); // Access the current state
         const deviceType = currentState?.app?.activeReport;
+        const settings = currentState?.app?.settings[deviceType]?.state;
+        const activeGear = settings?.find(s => s.category === 'gear')?.inputs[0].value
+
+        // don't update if the mode is sam
+        if (activeGear === mode) {
+            return;
+        }
 
         const modes : {
             [key in BasePerformanceGear] : string[]
-        } = {starter, accelerate, turboMax}
+        } = {starter, accelerate, turboMax};
 
         // excluding perf gear from updates.
         // @ts-ignore
-        const newOptions: AuditSetting[] = currentState?.app?.settings[deviceType]?.state
+        const newOptions: AuditSetting[] = settings
             ?.map((s: AuditSetting) => ({
             ...s,
             inputs: s.inputs.map((input, index) => ({
                 ...input,
                 value: index === 0 ? (
-                    s.category === 'gear' ? mode : modes[mode]?.includes(s.name)
+                    s.category === 'gear' ? mode :
+                        // update values only if it is not custom.
+                        (mode === 'custom' ? input.value : modes[mode]?.includes(s.name))
+                    // return input value for all the other sub-options
                 ) : input.value
             }))
         })) || [];
-
 
         dispatch({
             type: UPDATE_SETTINGS, payload: {

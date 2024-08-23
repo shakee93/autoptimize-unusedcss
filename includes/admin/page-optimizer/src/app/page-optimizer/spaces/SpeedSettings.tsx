@@ -72,16 +72,21 @@ type GroupedSettings = Record<string, AuditSetting[]>;
 
 const SpeedSettings = ({}) => {
 
-    const {settings, data, activeReport, touched, fresh, defaultSettingsMode, revisions} = useSelector(optimizerData);
+    const {settings, data, activeReport, touched, fresh, activeGear, revisions} = useSelector(optimizerData);
     const [activeCategory,  setActiveCategory]= useState<SettingsCategory>('css')
     const [groupedSettings, setGroupedSettings] = useState<GroupedSettings>({});
-    const {dispatch, openCategory, activeTab, settingsMode, auditsReturn, testModeStatus} = useCommonDispatch()
+    const {dispatch, openCategory,
+        activeTab, auditsReturn, testModeStatus, settingsMode} = useCommonDispatch()
     const categoryOrder: SettingsCategory[] = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
     const [sortedStatus, setSortedStatus] = useState(true)
     const modes: PerformanceGear[] = ['starter', 'accelerate', 'turboMax'];
 
+    const customUnsavedChanges = useRef<HTMLDivElement>(null);
+    const [tempMode, setTempMode] = useState<PerformanceGear>('custom');
     const [customMode, setCustomMode] = useState(false);
-    const [activeSettingsMode, setActiveSettingsMode] = useState(defaultSettingsMode || 'custom');
+
+    const [activeSettingsMode, setActiveSettingsMode] = useState(activeGear || 'custom');
+
     const [mouseOnSettingsGear, setMouseOnSettingsGear] = useState('');
     const { toast } = useToast();
     const {testMode} = useSelector((state: RootState) => state.app);
@@ -219,9 +224,6 @@ const SpeedSettings = ({}) => {
 
     }, [ groupedSettings]);
 
-    const customUnsavedChanges = useRef<HTMLDivElement>(null);
-    const [tempMode, setTempMode] = useState<PerformanceGear>('custom');
-
     const settingsModeOnChange = (mode: PerformanceGear, activate?: boolean) => {
         handleTestModeSettingsChange(mode);
 
@@ -229,16 +231,14 @@ const SpeedSettings = ({}) => {
             customUnsavedChanges.current?.click();
         } else {
             setActiveSettingsMode(mode as PerformanceGear);
-            dispatch(setCommonState('settingsMode', mode));
-
-            if (!notPassedAudits) {
-                return;
-            }
 
             dispatch(changeGear(
                 mode as BasePerformanceGear
             ))
 
+            if (!notPassedAudits) {
+                return;
+            }
         }
     };
 
@@ -284,17 +284,17 @@ const SpeedSettings = ({}) => {
     }, [activeReport]);
 
     useEffect(() => {
-        if(!settingsMode){
-            defaultSettingsMode && dispatch(setCommonState('settingsMode', defaultSettingsMode));
+        if(!activeGear){
+            activeGear && dispatch(changeGear(activeGear));
         }else{
-            setActiveSettingsMode(settingsMode || 'custom');
+            setActiveSettingsMode(activeGear || 'custom');
         }
 
     }, [settings]);
 
     useEffect(() => {
         if(revisions.length == 0){
-            dispatch(setCommonState('settingsMode', 'accelerator'));
+            dispatch(changeGear('accelerate'));
             setActiveSettingsMode('accelerate');
         }
     },[])
@@ -416,9 +416,9 @@ const SpeedSettings = ({}) => {
 
         <div className="py-4 ">
             {mouseOnSettingsGear ? (
-                <h3 className="font-semibold dark:text-brand-300">{mouseOnSettingsGear.charAt(0).toUpperCase() + mouseOnSettingsGear.slice(1)}{mouseOnSettingsGear === 'custom' ? ' Settings' : ''} {activeSettingsMode === mouseOnSettingsGear && 'Activated' }</h3>
+                <h3 className="font-semibold dark:text-brand-300">{mouseOnSettingsGear?.charAt(0).toUpperCase() + mouseOnSettingsGear.slice(1)}{mouseOnSettingsGear === 'custom' ? ' Settings' : ''} {activeSettingsMode === mouseOnSettingsGear && 'Activated' }</h3>
             ) : (
-                <h3 className="font-semibold dark:text-brand-300">{activeSettingsMode.charAt(0).toUpperCase() + activeSettingsMode.slice(1)}{activeSettingsMode === 'custom' ? ' Settings' : ''} Activated</h3>
+                <h3 className="font-semibold dark:text-brand-300">{activeSettingsMode?.charAt(0).toUpperCase() + activeSettingsMode.slice(1)}{activeSettingsMode === 'custom' ? ' Settings' : ''} Activated</h3>
             )}
             <span
                 className="font-normal text-sm text-zinc-600 dark:text-brand-300">{settingsDescriptions[currentMode]}</span>

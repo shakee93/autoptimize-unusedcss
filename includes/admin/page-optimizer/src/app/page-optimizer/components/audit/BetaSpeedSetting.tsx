@@ -17,7 +17,7 @@ import { Checkbox } from "components/ui/checkbox";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction, AppState, RootState} from "../../../../store/app/appTypes";
 import {useDispatch, useSelector} from "react-redux";
-import {updateSettings} from "../../../../store/app/appActions";
+import {changeGear, updateSettings} from "../../../../store/app/appActions";
 
 import AppButton from "components/ui/app-button"
 
@@ -255,7 +255,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                               onCheckedChange={(c: boolean) =>{
                                                   setCheckboxState(c);
                                                   updateValue(settings, c, mainInput.key);
-                                                  dispatch(setCommonState('settingsMode', 'custom'));
+                                                  dispatch(changeGear('custom'));
                                               }}/>
 
                                 </>

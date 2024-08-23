@@ -6,7 +6,6 @@ export interface RootState {
 }
 
 interface Report {
-    defaultSettingsMode: settingsMode | null,
     data?: OptimizerResults | null;
     original?: OptimizerResults | null;
     error?: string | null;

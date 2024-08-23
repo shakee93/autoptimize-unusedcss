@@ -24,8 +24,7 @@ const blankReport =  {
     settings: [],
     originalSettings: [],
     revisions: [],
-    state: {},
-    defaultSettingsMode: null
+    state: {}
 }
 
 const initialState: AppState = {
