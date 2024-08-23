@@ -798,6 +798,7 @@ class RapidLoad_Optimizer
                         'warnings' => $data->get_warnings(),
                         'error' => $data->get_error()
                     ];
+                    $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }else if($input['key'] == "uucss_enable_cpcss"){
                     $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
                     if(!$data->exist()){
@@ -807,6 +808,7 @@ class RapidLoad_Optimizer
                         'status' => $data->status,
                         'error' => $data->get_error()
                     ];
+                    $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }else if($input['key'] == "uucss_enable_cache"){
                     $cache_file = RapidLoad_Cache_Store::get_cache_file($url);
                     $settings['status'] = [
