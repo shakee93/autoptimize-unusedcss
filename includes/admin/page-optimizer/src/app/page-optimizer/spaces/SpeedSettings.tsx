@@ -85,8 +85,6 @@ const SpeedSettings = ({}) => {
     const [tempMode, setTempMode] = useState<PerformanceGear>('custom');
     const [customMode, setCustomMode] = useState(false);
 
-    const [activeSettingsMode, setActiveSettingsMode] = useState(activeGear || 'custom');
-
     const [mouseOnSettingsGear, setMouseOnSettingsGear] = useState('');
     const { toast } = useToast();
     const {testMode} = useSelector((state: RootState) => state.app);
@@ -139,7 +137,7 @@ const SpeedSettings = ({}) => {
             });
         });
         return grouped;
-    }, [settings]);
+    }, [settings, data?.grouped, activeReport]);
 
     useEffect(() => {
 
@@ -234,10 +232,9 @@ const SpeedSettings = ({}) => {
     const settingsModeOnChange = (mode: PerformanceGear, activate?: boolean) => {
         handleTestModeSettingsChange(mode);
 
-        if (activeSettingsMode === 'custom' && !activate) {
+        if (activeGear === 'custom' && !activate) {
             customUnsavedChanges.current?.click();
         } else {
-            setActiveSettingsMode(mode as PerformanceGear);
 
             dispatch(changeGear(
                 mode as BasePerformanceGear
@@ -291,18 +288,12 @@ const SpeedSettings = ({}) => {
     }, [activeReport]);
 
     useEffect(() => {
-        if(!activeGear){
-            activeGear && dispatch(changeGear(activeGear));
-        }else{
-            setActiveSettingsMode(activeGear || 'custom');
-        }
 
     }, [settings]);
 
     useEffect(() => {
         if(revisions.length == 0){
             dispatch(changeGear('accelerate'));
-            setActiveSettingsMode('accelerate');
         }
     },[])
 
@@ -314,7 +305,7 @@ const SpeedSettings = ({}) => {
         custom: "Tailor your optimization strategy to your needs, combining features like Accelerator mode and advanced JavaScript handling for personalized performance."
     };
 
-    const currentMode: PerformanceGear = (mouseOnSettingsGear || activeSettingsMode) as PerformanceGear;
+    const currentMode: PerformanceGear = (mouseOnSettingsGear || activeGear) as PerformanceGear;
 
 
     const actionRequired = (item: AuditSetting): boolean => {
@@ -374,7 +365,7 @@ const SpeedSettings = ({}) => {
             {modes.map((mode, index) => (
                 <div
                     key={index}
-                    className={`cursor-pointer transition-all flex px-4 py-4 min-w-[166px] min-h-[166px] items-center justify-center w-fit rounded-3xl dark:bg-brand-950 bg-brand-0 dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px]  ${mode === activeSettingsMode ? ' border-purple-700 dark:border-purple-700' : ''}`}
+                    className={`cursor-pointer transition-all flex px-4 py-4 min-w-[166px] min-h-[166px] items-center justify-center w-fit rounded-3xl dark:bg-brand-950 bg-brand-0 dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px]  ${mode === activeGear ? ' border-purple-700 dark:border-purple-700' : ''}`}
                     onClick={e => {
                         setTempMode(mode);
                         settingsModeOnChange(mode);
@@ -386,7 +377,7 @@ const SpeedSettings = ({}) => {
 
                     <div className={`flex flex-col gap-1 items-center text-center ${mode === 'turboMax' ? ' pt-1.5' : ''}`}>
 
-                        {['starter', 'accelerate', 'turboMax'].includes(mode) && activeSettingsMode === mode && (
+                        {['starter', 'accelerate', 'turboMax'].includes(mode) && activeGear === mode && (
                             <div className="absolute ml-28 -mt-4">
                                 <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
                             </div>
@@ -423,9 +414,9 @@ const SpeedSettings = ({}) => {
 
         <div className="py-4 ">
             {mouseOnSettingsGear ? (
-                <h3 className="font-semibold dark:text-brand-300">{mouseOnSettingsGear?.charAt(0).toUpperCase() + mouseOnSettingsGear.slice(1)}{mouseOnSettingsGear === 'custom' ? ' Settings' : ''} {activeSettingsMode === mouseOnSettingsGear && 'Activated' }</h3>
+                <h3 className="font-semibold dark:text-brand-300 capitalize">{mouseOnSettingsGear} {activeGear === mouseOnSettingsGear && 'Activated' }</h3>
             ) : (
-                <h3 className="font-semibold dark:text-brand-300">{activeSettingsMode?.charAt(0).toUpperCase() + activeSettingsMode.slice(1)}{activeSettingsMode === 'custom' ? ' Settings' : ''} Activated</h3>
+                <h3 className="font-semibold dark:text-brand-300 capitalize">{activeGear} Activated</h3>
             )}
             <span
                 className="font-normal text-sm text-zinc-600 dark:text-brand-300">{settingsDescriptions[currentMode]}</span>
@@ -442,11 +433,11 @@ const SpeedSettings = ({}) => {
                 className={cn(
                     `select-none w-fit transition-all rounded-2xl cursor-pointer  
           flex items-center gap-2 px-4 py-2 -ml-1 text-sm font-medium dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px] dark:hover:bg-brand-950 bg-brand-0 dark:bg-brand-950 `,
-                    activeSettingsMode === 'custom' && 'border-purple-700'
+                    activeGear === 'custom' && 'border-purple-700'
                 )}
                 data-tour="customize-settings"
             >
-                {activeSettingsMode === 'custom' &&
+                {activeGear === 'custom' &&
                     <div className="">
                         <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
                     </div>
