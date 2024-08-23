@@ -86,14 +86,13 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                     ...state.report,
                     [action.payload.activeReport] : {
                         ...state.report[action.payload.activeReport],
-                        original: JSON.parse(JSON.stringify(action.payload.data.data)),
+                        // original: JSON.parse(JSON.stringify(action.payload.data.data)),
                         data: action.payload.data.data,
                         error: null,
                         loading: false,
-                        settings: action.payload.data.settings,
-                        originalSettings: JSON.parse(JSON.stringify(action.payload.data.settings)),
+                        // settings: action.payload.data.settings,
+                        // originalSettings: JSON.parse(JSON.stringify(action.payload.data.settings)),
                         revisions: action.payload.data.revisions,
-                        defaultSettingsMode: action.payload.data.data.settingsMode
                     }
                 }
             };

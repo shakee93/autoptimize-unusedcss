@@ -112,12 +112,22 @@ const transformReport = (data: any) => {
 
         success: data.success,
         settings: initiateSettings(audits),
-        revisions: data.data.revisions,
+        revisions: data.data.revisions.map(({created_at, timestamp, data, job_id }: any) => {
+            return {
+                id: job_id,
+                created_at,
+                timestamp,
+                data: {
+                    performance: data.performance
+                }
+            }
+        }),
         individual_file_actions: data.data['individual-file-actions'],
         state: data.state
     };
 
 
+    // delete _data.data.audits
     return _data
 }
 
