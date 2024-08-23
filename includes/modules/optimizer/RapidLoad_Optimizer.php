@@ -742,7 +742,7 @@ class RapidLoad_Optimizer
                 'default' => '0'
             ),
             'uucss_exclude_above_the_fold_image_count' => array(
-                'control_type' => 'number',
+                'control_type' => 'number-range',
                 'control_label' => 'Exclude Above-the-fold Images from Lazy Load',
                 'control_values' => array('1','2', '3','4', '5'),
                 'default' => '5'
@@ -915,6 +915,7 @@ class RapidLoad_Optimizer
                     case 'text' :
                     case 'options' :
                     case 'textarea' :
+                    case 'number-range' :
                     case 'number' :{
                         if(isset($input->value) && isset($input->key)){
                             self::$options[$input->key] = $input->value;
