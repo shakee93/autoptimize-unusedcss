@@ -37,8 +37,6 @@ export interface AppState {
             loading: boolean
         }
     },
-    mobile: Report,
-    desktop: Report
 }
 
 export const FETCH_REPORT_REQUEST = 'FETCH_REPORT_REQUEST';

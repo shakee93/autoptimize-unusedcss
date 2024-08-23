@@ -46,8 +46,6 @@ const Header = ({ url }: { url: string}) => {
         options,
         version,
         mode,
-        showInprogress,
-        setShowInprogress,
         savingData
     } = useAppContext()
 
@@ -137,8 +135,6 @@ const Header = ({ url }: { url: string}) => {
 
                                     if (!inProgress || !loading) {
                                         dispatch(fetchReport(options, url, true))
-                                        dispatch(setCommonState('inProgress', false))
-                                        setShowInprogress(false);
                                     }
                                     commonDispatch(setCommonState('openAudits', []))
 
@@ -169,48 +165,29 @@ const Header = ({ url }: { url: string}) => {
 
                 <div className='flex relative gap-4 items-center'>
 
-                    {!showInprogress ? (
+                    {!error && (
                         <>
-                            {!error && (
-                                <>
-                                    <SaveChanges/>
-                                    <UnsavedChanges
-                                        onCancel={() => {
-                                            setShowOptimizer(false)
-                                        }}
-                                        cancel='Discard & Leave'
-                                        onClick={() => {
-                                            setShowOptimizer(false);
-                                            setShowInprogress(false);
-                                        }}>
-                                        <TooltipText text='Close Optimizer'>
-                                            <LogOut className={cn(
-                                                'h-5 w-5 dark:text-brand-300 text-brand-600 transition-opacity',
-                                            )}/>
-                                        </TooltipText>
-                                    </UnsavedChanges>
-                                </>
-                            )}
+                            <SaveChanges/>
+                            <UnsavedChanges
+                                onCancel={() => {
+                                    setShowOptimizer(false)
+                                }}
+                                cancel='Discard & Leave'
+                                onClick={() => {
+                                    setShowOptimizer(false);
+                                }}>
+                                <TooltipText text='Close Optimizer'>
+                                    <LogOut className={cn(
+                                        'h-5 w-5 dark:text-brand-300 text-brand-600 transition-opacity',
+                                    )}/>
+                                </TooltipText>
+                            </UnsavedChanges>
                         </>
-                    ): ( showInprogress && !savingData &&
-                        <Button
-                            className={cn(
-                                'flex overflow-hidden justify-between select-none relative text-sm gap-2 h-12 rounded-[14px] px-4 pr-6'
-                            )}
-                            onClick={() => {
-                                dispatch(setCommonState('inProgress', false))
-                                setShowInprogress(false);
-                            }}
-                        >
-                            <ArrowLeft className='w-5 mr-0.5'/>
-                            Back
-                        </Button>
                     )}
-
 
                 </div>
             </header>
-            {!loading && !showInprogress && (
+            {!loading && (
                 <AnimatePresence>
                     {testModeStatus && (
                         <motion.div

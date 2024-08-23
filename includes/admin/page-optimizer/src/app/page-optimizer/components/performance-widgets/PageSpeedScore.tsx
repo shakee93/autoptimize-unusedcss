@@ -227,22 +227,24 @@ const PageSpeedScore = ({pagespeed, priority = true}: PageSpeedScoreProps) => {
 
                 <div className="content flex w-full sm:w-1/2 lg:w-full flex-col justify-center items-center gap-3 px-4 lg:px-4 lg:pb-0 xl:px-8 py-2.5">
 
-                    <div className='flex gap-6'>
+                    <div className='flex relative gap-6'>
+                        <AnimatePresence>
+                            {reanalyze &&
+                                <m.div
+                                    initial={{opacity: 0, x: -10}}
+                                    animate={{opacity: 1, x: 0}}
+                                    exit={{opacity: 0, x: -10}}
+                                    className='absolute border px-2 rounded-full -left-2.5 flex bg-brand-100 items-center gap-1.5'>
+                                    <Loader className='w-4 animate-spin text-brand-700'/>
+                                    <div className='text-xs text-brand-700'>
+                                        Analyzing..
+                                    </div>
+                                </m.div>
+                            }
+                        </AnimatePresence>
+
                         <div className='relative flex flex-col gap-3 px-4 items-center'>
-                            <AnimatePresence>
-                                {reanalyze &&
-                                    <m.div
-                                        initial={{opacity: 0, x: -10}}
-                                        animate={{opacity: 1, x: 0}}
-                                        exit={{opacity: 0, x: -10}}
-                                        className='absolute border px-2 rounded-full -left-5 flex bg-brand-100 items-center gap-1.5'>
-                                        <Loader className='w-4 animate-spin text-brand-700'/>
-                                        <div className='text-xs text-brand-700'>
-                                            Analyzing..
-                                        </div>
-                                    </m.div>
-                                }
-                            </AnimatePresence>
+
                             <div className='mt-6'>
                                 {!data || on ? (
                                     <Skeleton className="w-44 h-44 rounded-full"/>

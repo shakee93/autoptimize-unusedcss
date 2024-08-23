@@ -13,7 +13,8 @@ const UrlPreview = () => {
 
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
     const {data, loading, error, activeReport} = useSelector(optimizerData);
-    const {mobile, desktop} = useSelector((state: RootState) => state.app);
+    const { report} = useSelector((state: RootState) => state.app);
+    const { mobile, desktop } = report
 
     const {
         togglePerformance,

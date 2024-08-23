@@ -23,12 +23,12 @@ const App = ({popup, _showOptimizer = false}: {
 }) => {
 
     const [popupNode, setPopupNode] = useState<HTMLElement | null>(null);
-    const {showOptimizer, setShowOptimizer, mode, options, setShowInprogress} = useAppContext()
+    const {showOptimizer, setShowOptimizer, mode, options} = useAppContext()
     const [shadowRoot, setShadowRoot] = useState<ShadowRoot | null>(null);
     const [mounted, setMounted] = useState(false)
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
-    const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
+    const {activeReport} = useSelector((state: RootState) => state.app);
     const {isDark } = useRootContext()
 
 
@@ -55,9 +55,6 @@ const App = ({popup, _showOptimizer = false}: {
         // load initial data
         dispatch(fetchSettings(options, options.optimizer_url, false));
         dispatch(fetchReport(options, options.optimizer_url, false));
-        // dispatch(getTestModeStatus(options, options.optimizer_url));
-        //dispatch(setCommonState('inProgress', false))
-        setShowInprogress(false);
     }, [dispatch, activeReport]);
 
 

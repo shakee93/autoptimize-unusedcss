@@ -48,9 +48,7 @@ const initialState: AppState = {
             error: null,
             loading: false,
         }
-    },
-    mobile: blankReport ,
-    desktop: blankReport
+    }
 };
 
 const appReducer = (state = initialState, action: AppAction): AppState => {

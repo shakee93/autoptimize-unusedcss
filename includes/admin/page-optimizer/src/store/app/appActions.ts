@@ -111,7 +111,7 @@ const transformReport = (data: any) => {
         },
 
         success: data.success,
-        settings: initiateSettings(audits),
+        // settings: initiateSettings(audits),
         revisions: data.data.revisions.map(({created_at, timestamp, data, job_id }: any) => {
             return {
                 id: job_id,
@@ -127,7 +127,7 @@ const transformReport = (data: any) => {
     };
 
 
-    // delete _data.data.audits
+    delete _data.data.audits
     return _data
 }
 
@@ -156,36 +156,6 @@ const transformSettings = (data: any) => {
     }
 }
 
-// this grabs the data and populates a settings object with values
-const initiateSettings = (audits: Audit[]) => {
-
-    let settings = audits.map((a: { settings: any; }) => a.settings).filter((i: string | any[]) => i.length)
-
-    const flattenedSettings = settings.flat();
-
-    const uniqueSettings = Array.from(new Set(flattenedSettings.map((setting: any) => JSON.stringify(setting)))).map((str: any) => JSON.parse(str));
-
-    // convert 1's to true and false in checkbox
-    return uniqueSettings
-        .map((s: AuditSetting) => ({
-        ...s,
-        inputs: s.inputs.map(input => ({
-            ...input,
-            ...(
-                input.control_type === 'checkbox' &&
-                {
-                    value: input.value === '1' || input.value === true
-                }
-            ),
-            ...(
-                input.control_type === 'gear' &&
-                {
-                    value: input.value === 'turbo-max' ? 'turboMax' : input.value
-                }
-            )
-        }))
-    }))
-}
 
 export const getCSSStatus = (options: WordPressOptions, url: string, types: string[]): ThunkAction<void, RootState, unknown, AnyAction> => {
 

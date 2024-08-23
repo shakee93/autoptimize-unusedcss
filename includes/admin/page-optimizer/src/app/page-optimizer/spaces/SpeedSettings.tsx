@@ -120,14 +120,21 @@ const SpeedSettings = ({}) => {
     const groupByCategory = useCallback((settings: AuditSetting[]) => {
 
         const grouped = {} as GroupedSettings;
+
+        const audits = [
+            ...data?.grouped?.passed_audits || [],
+            ...data?.grouped?.diagnostics || [],
+            ...data?.grouped?.opportunities || [],
+        ]
+
         settings.forEach((setting) => {
             if (!grouped[setting.category]) {
                 grouped[setting.category] = [];
             }
+
             grouped[setting.category].push({
                 ...setting,
-                // audits: data.audits.filter(audit => audit.settings.find(s => s.name === setting.name))
-                audits: (data?.audits || []).filter(audit => audit.settings.find(s => s.name === setting.name))
+                audits: (audits || []).filter(audit => audit.settings.find(s => s.name === setting.name))
 
             });
         });
