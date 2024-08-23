@@ -292,7 +292,7 @@ class RapidLoad_Optimizer
         }
     }
 
-    public static function post_optimizer_function($data, $force = false){
+    public static function post_optimizer_function($data){
 
         foreach (self::$options as $key => $option){
 
@@ -399,22 +399,6 @@ class RapidLoad_Optimizer
             self::$job->set_desktop_options(self::$options);
         }else{
             self::$job->set_mobile_options(self::$options);
-        }
-
-        $hash = self::$job->get_last_optimization_revision_hash(self::$strategy);
-        $new_hash = hash('md5', json_encode($data));
-        $revision_count = self::$job->get_revision_count(self::$strategy);
-
-        if(($hash != $new_hash && $force) || $revision_count == 0){
-
-
-            if($revision_count > (self::$revision_limit - 1)){
-                self::$job->delete_old_revision(self::$strategy, self::$revision_limit);
-            }
-
-            $optimization = new RapidLoad_Job_Optimization(self::$job, self::$strategy);
-            $optimization->set_data($data);
-            $optimization->save();
         }
 
         self::$job->save(!self::$job->exist());
@@ -540,6 +524,21 @@ class RapidLoad_Optimizer
         self::post_optimizer_function($result);
 
         $result->job_id = isset(self::$job) ? self::$job->id : null;
+
+        $hash = self::$job->get_last_optimization_revision_hash(self::$strategy);
+        $new_hash = hash('md5', json_encode($result));
+        $revision_count = self::$job->get_revision_count(self::$strategy);
+
+        if(($hash != $new_hash) || $revision_count == 0){
+
+            if($revision_count > (self::$revision_limit - 1)){
+                self::$job->delete_old_revision(self::$strategy, self::$revision_limit);
+            }
+
+            $optimization = new RapidLoad_Job_Optimization(self::$job, self::$strategy);
+            $optimization->set_data($result);
+            $optimization->save();
+        }
 
         return[
             'success' => true,
@@ -894,8 +893,6 @@ class RapidLoad_Optimizer
 
     public function optimizer_update_settings($result){
 
-        $preload_images = [];
-
         foreach ($result as $settings){
             foreach ($settings->inputs as $input){
                 switch($input->control_type ){
@@ -947,77 +944,6 @@ class RapidLoad_Optimizer
 
             }
         }
-
-        //if(isset($result->audits) && is_array($result->audits)){
-
-            //foreach ($result->audits as $audit){
-
-                /*if($audit->id == "prioritize-lcp-image"){
-
-                    if(isset($audit->files) && isset($audit->files->debugData) && !empty($audit->files->debugData->initiatorPath)){
-
-                        foreach ($audit->files->debugData->initiatorPath as $path){
-
-                            if(isset($path->url)){
-
-                                if (preg_match('/\.(jpg|jpeg|jpg|png|gif)$/i', $path->url)) {
-                                    $preload_images[] = $path->url;
-                                }
-
-                            }
-
-                        }
-
-                    }
-
-                }*/
-
-                /*if(isset($audit->files) && isset($audit->files->items) && !empty($audit->files->items)){
-
-                    if(!isset(self::$options['individual-file-actions-headings'][$audit->id])){
-                        if(isset($audit->files->headings)){
-                            self::$options['individual-file-actions-headings'][$audit->id] = json_encode($audit->files->headings);
-                        }
-                    }
-
-                    foreach ($audit->files->items as $item){
-
-                        if(isset($item->url) && isset($item->url->url)){
-
-                            if(!isset($item->url->regex)){
-                                $item->url->regex = self::$job->generateUrlRegex($item->url->url);
-                            }
-
-                            if(!isset(self::$options['individual-file-actions'][$audit->id])){
-                                self::$options['individual-file-actions'][$audit->id] = [];
-                            }
-
-                            $key = array_search($item->url->url, array_column(self::$options['individual-file-actions'][$audit->id], 'url'));
-
-                            if(isset($key) && is_numeric($key)){
-
-                                self::$options['individual-file-actions'][$audit->id] = array_values(self::$options['individual-file-actions'][$audit->id]);
-
-                                if(isset(self::$options['individual-file-actions'][$audit->id][$key])){
-                                    self::$options['individual-file-actions'][$audit->id][$key]->action = isset($item->action) ? $item->action : (object)[];
-                                }
-
-                            }else{
-                                self::$options['individual-file-actions'][$audit->id][] = (object)[
-                                    'url' => $item->url->url,
-                                    'action' => isset($item->action) ? $item->action : null,
-                                    'url_object' => $item->url,
-                                    'meta' => json_encode($item)
-                                ];
-                            }
-
-                        }
-                    }
-                }*/
-
-            //}
-
-        //}
 
         if((isset(self::$options['uucss_lazy_load_images']) && self::$options['uucss_lazy_load_images'] == "1") || (isset(self::$options['uucss_support_next_gen_formats']) && self::$options['uucss_support_next_gen_formats'] == "1" ) || (isset(self::$options['uucss_lazy_load_iframes']) && self::$options['uucss_lazy_load_iframes'] == "1") ){
             self::$options['uucss_enable_image_delivery'] = "1";
@@ -1071,7 +997,7 @@ class RapidLoad_Optimizer
 
         $this->associate_domain(false);
 
-        self::post_optimizer_function($result, true);
+        self::post_optimizer_function($result);
 
     }
 
