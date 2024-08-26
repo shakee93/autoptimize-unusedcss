@@ -5,7 +5,7 @@ import {cn} from "lib/utils";
 
 const ErrorFetch = ({ error, className }: { error: string, className?: string}) => {
    return <div className={cn(
-       'flex flex-col pt-3 px-3 gap-2',
+       'flex flex-col pt-3 gap-2',
        className
    )}>
       <div className='w-fit'>

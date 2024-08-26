@@ -36,7 +36,7 @@ const SideBarActions = () => {
 
     return <Card className='flex items-center justify-center gap-3 py-2'>
         <Mode>
-            {revisions.length > 0 &&
+            {revisions?.length > 0 &&
                 <Popover>
                     <PopoverTrigger className='hover:dark:text-brand-100' asChild={false}>
                         <AppButton

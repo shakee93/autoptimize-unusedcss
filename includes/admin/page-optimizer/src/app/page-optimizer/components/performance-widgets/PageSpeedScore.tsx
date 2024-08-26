@@ -28,6 +28,7 @@ import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import {TestModeLine} from "app/page-optimizer/components/icons/line-icons";
 import {useTestModeUtils} from 'hooks/testModeUtils';
 import {AnimatePresence, m} from "framer-motion";
+import ErrorFetch from "components/ErrorFetch";
 // const Feedback = React.lazy(() =>
 //     import('app/page-optimizer/components/performance-widgets/Feedback'))
 
@@ -207,7 +208,7 @@ const PageSpeedScore = ({pagespeed, priority = true}: PageSpeedScoreProps) => {
 
                             }}
                             className={`flex gap-2 items-center text-sm h-12 rounded-[14px] bg-brand-0 dark:bg-brand-930/90 px-4 py-2 ${
-                                revisions.length > 0
+                                revisions?.length > 0
                                     ? '' : ''}`} data-tour="preview-button">
 
                             {loadingStatus ? <Loader className='w-5 animate-spin'/> :
@@ -225,71 +226,83 @@ const PageSpeedScore = ({pagespeed, priority = true}: PageSpeedScoreProps) => {
                       expanded && 'border-brand-200 dark:border-brand-800'
                   )}>
 
-                <div className="content relative flex w-full sm:w-1/2 lg:w-full flex-col justify-center items-center gap-3 px-4 lg:px-4 lg:pb-0 xl:px-8 py-2.5">
-                    <AnimatePresence>
-                        {reanalyze &&
-                            <m.div
-                                initial={{opacity: 0, x: -10}}
-                                animate={{opacity: 1, x: 0}}
-                                exit={{opacity: 0, x: -10}}
-                                className='absolute border px-2 rounded-full top-2 left-2.5 flex bg-brand-100 items-center gap-1.5'>
-                                <Loader className='w-4 animate-spin text-brand-700'/>
-                                <div className='text-xs text-brand-700'>
-                                    Analyzing..
-                                </div>
-                            </m.div>
-                        }
-                    </AnimatePresence>
+                <div className={cn(
+                    "content px-4 relative flex w-full sm:w-1/2 lg:w-full flex-col justify-center items-center gap-3  py-2.5",
+                    !error && "px-4 lg:px-4 lg:pb-0 xl:px-8"
+                )}>
 
-                    <div className='flex gap-6'>
+                    {error ?
+                        <ErrorFetch error={error}></ErrorFetch>
+                        : <>
+                            <AnimatePresence>
+                                {reanalyze &&
+                                    <m.div
+                                        initial={{opacity: 0, x: -10}}
+                                        animate={{opacity: 1, x: 0}}
+                                        exit={{opacity: 0, x: -10}}
+                                        className='absolute border px-2 rounded-full top-2 left-2.5 flex bg-brand-100 items-center gap-1.5'>
+                                        <Loader className='w-4 animate-spin text-brand-700'/>
+                                        <div className='text-xs text-brand-700'>
+                                            Analyzing..
+                                        </div>
+                                    </m.div>
+                                }
+                            </AnimatePresence>
+
+                            <div className='flex gap-6'>
 
 
-                        <div className='relative flex flex-col gap-3 px-4 items-center'>
+                                <div className='relative flex flex-col gap-3 px-4 items-center'>
 
-                            <div className='mt-6'>
-                                {!data || on ? (
-                                    <Skeleton className="w-44 h-44 rounded-full"/>
-                                ) : (
-                                    <PerformanceProgressBar
+                                    <div className='mt-6'>
+                                        {!data || on ? (
+                                            <Skeleton className="w-44 h-44 rounded-full"/>
+                                        ) : (
+                                            <PerformanceProgressBar
 
-                                        performance={(data?.performance && gain && metric) ?
-                                            (data.performance + gain >= 99) ? 99 :
-                                                data.performance + gain : data?.performance}>
-                                        {!!(metric && gain) && (
-                                            <div className='flex gap-1 flex-col text-xxs font-normal'>
+                                                performance={(data?.performance && gain && metric) ?
+                                                    (data.performance + gain >= 99) ? 99 :
+                                                        data.performance + gain : data?.performance}>
+                                                {!!(metric && gain) && (
+                                                    <div className='flex gap-1 flex-col text-xxs font-normal'>
                                                 <span>
                                                     {metric?.title}
                                                 </span>
-                                                <span className='text-sm text-green-600 -ml-1'>+{gain}</span>
-                                            </div>
+                                                        <span className='text-sm text-green-600 -ml-1'>+{gain}</span>
+                                                    </div>
+                                                )}
+                                            </PerformanceProgressBar>
                                         )}
-                                    </PerformanceProgressBar>
-                                )}
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div className="flex flex-col text-center gap-1">
-                        <div>{metric ? 'Forecasted Score' : 'Performance'} </div>
-                        <div className='text-xs text-brand-500 dark:text-brand-300 font-light'>
-                            Values are estimated and may vary with Google Page Speed Insights.
-                        </div>
-                    </div>
-                    <div
-                        className="flex justify-around text-sm gap-4 font-normal w-full mb-5 text-brand-700 dark:text-brand-300">
-                        <div className="flex lg:flex-col xl:flex-row items-center gap-1">
-                            <PerformanceIcons icon={'fail'}/>
-                            0-49
-                        </div>
-                        <div className="flex lg:flex-col xl:flex-row items-center gap-1">
-                            <PerformanceIcons icon={'average'}/>
-                            50-89
-                        </div>
-                        <div className="flex lg:flex-col xl:flex-row items-center gap-1">
-                            <PerformanceIcons icon={'pass'}/>
-                            89-100
-                        </div>
-                    </div>
+                            <div className="flex flex-col text-center gap-1">
+                                <div>{metric ? 'Forecasted Score' : 'Performance'} </div>
+                                <div className='text-xs text-brand-500 dark:text-brand-300 font-light'>
+                                    Values are estimated and may vary with Google Page Speed Insights.
+                                </div>
+                            </div>
+                            <div
+                                className="flex justify-around text-sm gap-4 font-normal w-full mb-5 text-brand-700 dark:text-brand-300">
+                                <div className="flex lg:flex-col xl:flex-row items-center gap-1">
+                                    <PerformanceIcons icon={'fail'}/>
+                                    0-49
+                                </div>
+                                <div className="flex lg:flex-col xl:flex-row items-center gap-1">
+                                    <PerformanceIcons icon={'average'}/>
+                                    50-89
+                                </div>
+                                <div className="flex lg:flex-col xl:flex-row items-center gap-1">
+                                    <PerformanceIcons icon={'pass'}/>
+                                    89-100
+                                </div>
+                            </div>
+
+
+                        </>
+                    }
+
                 </div>
 
                 <div className='border-t'>
