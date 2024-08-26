@@ -72,7 +72,10 @@ type GroupedSettings = Record<string, AuditSetting[]>;
 
 const SpeedSettings = ({}) => {
 
-    const {settings, data, activeReport, touched, fresh, activeGear, revisions} = useSelector(optimizerData);
+    const {settings, data,
+        activeReport,
+        settingsLoading,
+        activeGear, revisions} = useSelector(optimizerData);
     const [activeCategory,  setActiveCategory]= useState<SettingsCategory>('css')
     const [groupedSettings, setGroupedSettings] = useState<GroupedSettings>({});
     const {dispatch, openCategory,
@@ -357,6 +360,9 @@ const SpeedSettings = ({}) => {
     return <div className='dark:bg-brand-800/40 bg-brand-200 px-9 py-8 mt-2 rounded-3xl'>
         <SettingsStraightLine/>
         <div className="pb-4">
+            {settingsLoading &&
+                <div>loading...</div>
+            }
             <h3 className="font-semibold text-lg">Performance Gears</h3>
             <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
         </div>
@@ -388,7 +394,7 @@ const SpeedSettings = ({}) => {
                         {mode === 'accelerate' && <Accelerate cls={'px-2 py-2'} />}
                         {mode === 'turboMax' && <TurboMax cls={'px-2 py-2'} />}
                         <div>
-                            <p className="font-semibold ">{mode.charAt(0).toUpperCase() + mode.slice(1)}</p>
+                            <p className="font-semibold capitalize">{mode}</p>
                             {mode === 'turboMax' && <p className="font-normal text-[10px] leading-none">Test Mode Recommended</p>}
                         </div>
 
@@ -423,32 +429,39 @@ const SpeedSettings = ({}) => {
         </div>
 
         <div>
-            <div
-                onClick={() => {
-                    setTempMode('custom');
-                    setCustomMode(prevMode => !prevMode);
-                }}
-                onMouseEnter={() => setMouseOnSettingsGear('custom')}
-                onMouseLeave={() => setMouseOnSettingsGear('')}
-                className={cn(
-                    `select-none w-fit transition-all rounded-2xl cursor-pointer  
+            {settingsLoading ?
+                <div className='w-48 animate-pulse h-10 select-none transition-all rounded-2xl cursor-pointer
+          flex items-center gap-2 px-4 py-2 -ml-1 text-sm font-medium dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px] dark:hover:bg-brand-950 bg-brand-0 dark:bg-brand-950'>
+                </div> :
+                <div
+                    onClick={() => {
+                        setTempMode('custom');
+                        setCustomMode(prevMode => !prevMode);
+                    }}
+                    onMouseEnter={() => setMouseOnSettingsGear('custom')}
+                    onMouseLeave={() => setMouseOnSettingsGear('')}
+                    className={cn(
+                        `select-none w-fit transition-all rounded-2xl cursor-pointer  
           flex items-center gap-2 px-4 py-2 -ml-1 text-sm font-medium dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px] dark:hover:bg-brand-950 bg-brand-0 dark:bg-brand-950 `,
-                    activeGear === 'custom' && 'border-purple-700'
-                )}
-                data-tour="customize-settings"
-            >
-                {activeGear === 'custom' &&
-                    <div className="">
-                        <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
-                    </div>
-                }
+                        activeGear === 'custom' && 'border-purple-700'
+                    )}
+                    data-tour="customize-settings"
+                >
+                    {activeGear === 'custom' &&
+                        <div className="">
+                            <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
+                        </div>
+                    }
 
-                Customize Settings <ChevronDownIcon className={cn(
-                'w-4 rounded-[15px] transition-transform',
-                customMode && '-rotate-180'
-            )}/>
+                    Customize Settings <ChevronDownIcon className={cn(
+                    'w-4 rounded-[15px] transition-transform',
+                    customMode && '-rotate-180'
+                )}/>
 
-            </div>
+                </div>
+            }
+
+
         </div>
 
         {customMode &&

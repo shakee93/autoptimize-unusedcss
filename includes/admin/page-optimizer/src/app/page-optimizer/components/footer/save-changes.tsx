@@ -349,7 +349,6 @@ const SaveChanges = () => {
                     </DialogContent>
                 </div>
             </Dialog>
-            <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} variant='secondary'>Close</AppButton>
         </Mode>
         {/*<Mode>*/}
         {/*    {inProgress && <Loading />}*/}

@@ -50,6 +50,7 @@ export const optimizerData = createSelector(
             ...report,
             activeReport: state.activeReport,
             settings: settings.state,
+            settingsLoading: settings.loading,
             activeGear: activeGear?.inputs[0].value || 'accelerate',
             touched: !equal(settings.original, settings.state) || !!optimizeChangesFiles(report.changes).find(i => i?.changed),
             fresh : report?.state?.fresh,
