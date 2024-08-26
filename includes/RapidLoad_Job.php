@@ -299,14 +299,13 @@ class RapidLoad_Job{
                 $date->setTimezone(new DateTimeZone('UTC'));
                 $transformed_object->timestamp = $date->getTimestamp();
             } catch (Exception $exception) {
-                $transformed_object->timestamp = null; // or handle the exception as needed
+                $transformed_object->timestamp = null;
             }
 
-            // Add the transformed object to the array
             $transformed_data[] = $transformed_object;
         }
 
-        return $data;
+        return $transformed_data;
     }
 
     function get_last_optimization_revision_hash($strategy){
