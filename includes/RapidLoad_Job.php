@@ -279,15 +279,31 @@ class RapidLoad_Job{
 
         $data = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " ORDER BY id DESC LIMIT "  . $limit . " OFFSET 1", OBJECT);
 
-        foreach ($data as $d){
+        $transformed_data = [];
+
+        foreach ($data as $d) {
+
             $d->data = json_decode($d->data);
+
+            $transformed_object = new stdClass();
+            $transformed_object->id = $d->id;
+            $transformed_object->created_at = $d->created_at;
+
+            $transformed_object->data = new stdClass();
+            if (isset($d->data) && isset($d->data->performance)) {
+                $transformed_object->data->performance = $d->data->performance;
+            }
+
             try {
                 $date = new DateTime($d->created_at);
                 $date->setTimezone(new DateTimeZone('UTC'));
-                $d->timestamp = $date->getTimestamp();
-            }catch (Exception $exception){
-
+                $transformed_object->timestamp = $date->getTimestamp();
+            } catch (Exception $exception) {
+                $transformed_object->timestamp = null; // or handle the exception as needed
             }
+
+            // Add the transformed object to the array
+            $transformed_data[] = $transformed_object;
         }
 
         return $data;
