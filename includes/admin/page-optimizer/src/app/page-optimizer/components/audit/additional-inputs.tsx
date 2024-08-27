@@ -1,11 +1,7 @@
 import {Label} from "components/ui/label";
-import {Input} from "components/ui/input";
-import React, {useCallback, useEffect, useMemo, useState, useRef} from "react";
+import React, {useMemo, useState} from "react";
 import {Switch} from "components/ui/switch";
-import {InputProps, Textarea} from "components/ui/textarea";
-import {JsonView} from "react-json-view-lite";
-import FocusLock from "react-focus-lock";
-
+import {Textarea} from "components/ui/textarea";
 import {
     Select,
     SelectContent,
@@ -16,14 +12,13 @@ import {
     SelectValue,
 } from "components/ui/select";
 import {Button} from "components/ui/button";
-import {cn, isDev} from "lib/utils";
-import api from "../../../../services/api";
 import ApiService from "../../../../services/api";
 import {useAppContext} from "../../../../context/app";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import {toast} from "components/ui/use-toast";
 import {Loader} from "lucide-react";
-import {m} from "framer-motion";
+// import * as ToggleGroup from '@radix-ui/react-toggle-group';
+import { ToggleGroup, ToggleGroupItem } from "components/ui/toggle-group";
 
 interface AdditionalInputsProps {
     input?: AuditSettingInput
@@ -181,28 +176,27 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
        }
 
-        {input.control_type === 'number' &&
+        {input.control_type === 'number-range' &&
 
             <Label htmlFor="name" className="flex items-center gap-4 ml-4 text-left w-full">
                 <span>{input.control_label}</span>
-                <Select value={value}  onValueChange={v => update(v, input.key)}>
-                    <SelectTrigger className="w-[65px]">
-                        <SelectValue placeholder="Select action"/>
-                    </SelectTrigger>
-                    <SelectContent className="z-[100002] min-w-[65px]">
-                        <SelectGroup>
-                            {(input?.control_values as string[])?.map((value: string, index: number) => (
-                                <SelectItem
-                                    className="capitalize cursor-pointer"
-                                    key={index}
-                                    value={value}
-                                >
-                                    {value}
-                                </SelectItem>
-                            ))}
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
+                <ToggleGroup
+                    className="inline-flex bg-mauve6 rounded border border-1 space-x-px "
+                    type="single"
+                    value={String(value)} // this has been set to string because sometimes the data value returns as number
+                    onValueChange={(v) => update(v, input.key)}
+                    aria-label="Select action"
+                >
+                    {(input?.control_values as string[])?.map((value: string, index: number) => (
+                        <ToggleGroupItem
+                            key={index}
+                            value={String(value)}
+                            aria-label={value}
+                        >
+                            {value}
+                        </ToggleGroupItem>
+                    ))}
+                </ToggleGroup>
             </Label>
 
         }
