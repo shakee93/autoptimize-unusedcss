@@ -266,7 +266,7 @@ export const fetchSettings = (options: WordPressOptions, url : string, reload: b
         try {
             const currentState = getState(); // Access the current state
             const activeReport = currentState.app.activeReport;
-            const activeReportData = currentState.app.settings[activeReport]
+            const activeSettingsData = currentState.app.settings[activeReport]
 
             // TODO: don't let people bam on keyboard while waiting to laod the page speed
             // if(activeReportData.loading && activeReportData.data ) {
@@ -274,7 +274,11 @@ export const fetchSettings = (options: WordPressOptions, url : string, reload: b
             //     return;
             // }
 
-            if (activeReportData.loading) {
+            if (activeSettingsData.loading) {
+                return;
+            }
+
+            if (activeSettingsData.state && !reload) {
                 return;
             }
 
