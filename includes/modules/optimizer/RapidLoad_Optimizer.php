@@ -862,7 +862,6 @@ class RapidLoad_Optimizer
                 if(isset($settings[$setting['name']])){
                     continue;
                 }
-
                 if (in_array($audit, $setting['keys'])) {
 
                     $_setting = [
