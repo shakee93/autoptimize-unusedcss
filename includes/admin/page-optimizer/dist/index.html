@@ -11,8 +11,9 @@
 
       window.rapidload_optimizer = {
         page_optimizer_package_base: window.location.origin,
-        optimizer_url : 'https://rapidload.io/',
+        optimizer_url : 'https://rapidload.local/',
         ajax_url : 'http://rapidload.local/wp-admin/admin-ajax.php',
+        api_root: 'http://localhost:5556/api/v1'.includes('VITE') ? 'https://api.rapidload.io/api/v1' : 'http://localhost:5556/api/v1'
       };
 
 

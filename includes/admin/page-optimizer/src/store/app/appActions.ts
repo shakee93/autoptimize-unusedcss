@@ -2,6 +2,7 @@ import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {AnyAction} from 'redux';
 import {
     AppAction,
+    CHANGE_GEAR,
     CHANGE_REPORT_TYPE,
     FETCH_REPORT_FAILURE,
     FETCH_REPORT_REQUEST,
@@ -17,9 +18,6 @@ import {
 } from "./appTypes";
 import ApiService from "../../services/api";
 import Audit from "app/page-optimizer/components/audit/Audit";
-
-import SampleSettings from '../../lib/sample-settings'
-
 
 const transformAudit = (audit: Audit, metrics : Metric[]) => {
 
@@ -363,7 +361,6 @@ export const changeGear = (
         } = {starter, accelerate, turboMax};
 
         // excluding perf gear from updates.
-        // @ts-ignore
         const newOptions: AuditSetting[] = settings
             ?.map((s: AuditSetting) => ({
             ...s,
@@ -379,7 +376,7 @@ export const changeGear = (
         })) || [];
 
         dispatch({
-            type: UPDATE_SETTINGS, payload: {
+            type: CHANGE_GEAR, payload: {
                 settings: newOptions
             }
         });

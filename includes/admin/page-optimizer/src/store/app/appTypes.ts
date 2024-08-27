@@ -46,6 +46,7 @@ export const FETCH_SETTING_REQUEST = 'FETCH_SETTING_REQUEST';
 export const FETCH_SETTING_SUCCESS = 'FETCH_SETTING_SUCCESS';
 export const FETCH_SETTING_FAILURE = 'FETCH_SETTING_FAILURE';
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';
+export const CHANGE_GEAR = 'CHANGE_GEAR';
 export const CHANGE_REPORT_TYPE = 'CHANGE_REPORT_TYPE';
 export const UPDATE_FILE_ACTION = 'UPDATE_FILE_ACTION';
 export const GET_CSS_STATUS_SUCCESS = 'GET_CSS_STATUS_SUCCESS';
@@ -107,6 +108,13 @@ interface UpdateSettingsAction {
     },
 }
 
+interface ChangeGearAction {
+    type: typeof CHANGE_GEAR;
+    payload : {
+        settings : AuditSetting[];
+    },
+}
+
 interface ChangeReportTypeAction {
     type: typeof CHANGE_REPORT_TYPE;
     reportType: ReportType
@@ -125,6 +133,6 @@ interface UpdateFileActionAction {
 
 // Define the combined action type
 export type AppAction = FetchDataRequestAction | FetchDataSuccessAction | FetchDataFailureAction |
-    FetchSettingsRequestAction | FetchSettingsSuccessAction | FetchSettingsFailureAction |
+    FetchSettingsRequestAction | FetchSettingsSuccessAction | FetchSettingsFailureAction | ChangeGearAction|
     UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode;
 
