@@ -140,7 +140,7 @@ const SpeedSettings = ({}) => {
             });
         });
         return grouped;
-    }, [settings, data?.grouped, activeReport]);
+    }, [settings, data, activeReport]);
 
     useEffect(() => {
 
@@ -166,7 +166,7 @@ const SpeedSettings = ({}) => {
             dispatch(setCommonState('openCategory', 'css'));
         }
 
-    }, [settings]);
+    }, [settings, data, activeReport]);
 
     const updateValue = useCallback( (setting: AuditSetting, value: any, key: string) => {
         dispatch(updateSettings(

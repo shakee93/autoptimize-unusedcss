@@ -209,19 +209,13 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
     }
     const {settingsMode} = useCommonDispatch();
 
-    const [checkboxState, setCheckboxState] = useState(mainInput.value);
-//old code
     const handleCheckboxClick = () => {
         if (!actionRequired || ['onboard', 'preview'].includes(mode)) {
             return;
         }
-        const newCheckboxState = !checkboxState;
-        setCheckboxState(newCheckboxState);
-
-        updateValue(settings, newCheckboxState, mainInput.key);
+        updateValue(settings, !mainInput.value, mainInput.key);
+        dispatch(changeGear('custom'));
     };
-//old code end
-
 
     const [showStatus, setShowStatus] = useState(false);
     useEffect(() => {
@@ -253,7 +247,6 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                               className={actionRequired ? '' : 'border-dashed'}
                                               checked={mainInput.value}
                                               onCheckedChange={(c: boolean) =>{
-                                                  setCheckboxState(c);
                                                   updateValue(settings, c, mainInput.key);
                                                   dispatch(changeGear('custom'));
                                               }}/>
