@@ -659,6 +659,13 @@ class RapidLoad_Optimizer
                 'control_label' => 'Exclude Images from being set width and height',
                 'default' => ''
             ),
+            'uucss_adaptive_image_delivery' => array(
+                'control_type' => 'checkbox',
+                'control_label' => 'Enable adaptive Image delivery',
+                'control_values' => array('1', '0'),
+                'default' => '0',
+                'main_input' => false
+            ),
             'uucss_minify_excluded_files' => array(
                 'control_type' => 'textarea',
                 'control_label' => 'Exclude Images from being minified',

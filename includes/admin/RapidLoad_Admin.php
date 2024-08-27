@@ -592,6 +592,12 @@ class RapidLoad_Admin
 
             }
 
+            if(isset($_REQUEST['uucss_adaptive_image_delivery'])){
+
+                $options['uucss_adaptive_image_delivery'] = ($_REQUEST['uucss_adaptive_image_delivery'] == 'true' ? "1" : null);
+
+            }
+
             if(isset($_REQUEST['uucss_set_width_and_height'])){
 
                 $options['uucss_set_width_and_height'] = ($_REQUEST['uucss_set_width_and_height'] == 'true' ? "1" : null);
