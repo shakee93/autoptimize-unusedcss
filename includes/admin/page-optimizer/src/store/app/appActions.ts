@@ -268,7 +268,7 @@ export const fetchSettings = (options: WordPressOptions, url : string, reload: b
             const activeReport = currentState.app.activeReport;
             const activeSettingsData = currentState.app.settings[activeReport]
 
-            // TODO: don't let people bam on keyboard while waiting to laod the page speed
+            // TODO: don't let people bam on keyboard while waiting to load the page speed
             // if(activeReportData.loading && activeReportData.data ) {
             //     console.log('don\'t bam the mouse! we are loading your page speed details 😉');
             //     return;
@@ -278,7 +278,7 @@ export const fetchSettings = (options: WordPressOptions, url : string, reload: b
                 return;
             }
 
-            if (activeSettingsData.state && !reload) {
+            if (activeSettingsData?.state?.length > 0 && !reload) {
                 return;
             }
 

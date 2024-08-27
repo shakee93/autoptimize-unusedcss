@@ -31,9 +31,9 @@ export interface AppState {
     },
     settings: {
         [key in ReportType]: {
-            original?: AuditSetting[],
-            state?: AuditSetting[],
-            error?: string | null;
+            original: AuditSetting[],
+            state: AuditSetting[],
+            error: string | null;
             loading: boolean
         }
     },
