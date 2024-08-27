@@ -66,7 +66,16 @@ class RapidLoad_Image
 
         ?>
         <script id="rapidload-image-handler" type="text/javascript" norapidload>
+            <?php
+                $image_handler_script = `window.rapidload_replace_image_src=function(){var images=document.getElementsByTagName("img");for(var i=0;i<images.length;i++){var image=images[i];var url=image.getAttribute("data-rp-src");if(window.rapidload_io_data&&url){var options="ret_img";if(window.rapidload_io_data.optimize_level){options+=",q_"+window.rapidload_io_data.optimize_level}if(window.rapidload_io_data.support_next_gen_format){options+=",to_avif"}if(image.width!==0){options+=",w_"+image.width}else if(image.getAttribute("width")&&Number(image.getAttribute("width"))!==0){options+=",w_"+image.getAttribute("width")}url=window.rapidload_io_data.image_endpoint+options+"/"+url;if(image.getAttribute("src")!==url){image.setAttribute("src",url)}}}};var targetNode=document.getElementsByTagName("body")[0];var config={attributes:false,childList:true,subtree:true};var callback=function(mutationList,observer){for(var i=0;i<mutationList.length;i++){var mutation=mutationList[i];if(mutation.type==="childList"){var addedNodes=mutation.addedNodes;for(var j=0;j<addedNodes.length;j++){var node=addedNodes[j];if(node.nodeName==="#text"){continue}try{var imageTags=node.getElementsByTagName("img");if(imageTags.length){for(var k=0;k<imageTags.length;k++){var img=imageTags[k];var url=img.getAttribute("data-rp-src");if(window.rapidload_io_data&&url){var options="ret_img";if(window.rapidload_io_data.optimize_level){options+=",q_"+window.rapidload_io_data.optimize_level}if(window.rapidload_io_data.support_next_gen_format){options+=",to_avif"}if(img.getBoundingClientRect().width!==0){options+=",w_"+Math.floor(img.getBoundingClientRect().width)}img.setAttribute("src",window.rapidload_io_data.image_endpoint+options+"/"+url)}}}}catch(e){}}}}};var observer=new MutationObserver(callback);observer.observe(targetNode,config);var observer_bg=new IntersectionObserver(function(elements){elements.forEach(function(element){if(element.isIntersecting){observer_bg.unobserve(element.target);var attributes=element.target.getAttribute("data-rapidload-lazy-attributes").split(",");attributes.forEach(function(attribute){if(element.target.tagName==="IFRAME"){element.target.setAttribute(attribute,element.target.getAttribute("data-rapidload-lazy-"+attribute))}else{var value=element.target.getAttribute("data-rapidload-lazy-"+attribute);element.target.style.backgroundImage="url("+value.replace("ret_blank","ret_img")+")"}})}});window.dispatchEvent(new Event("resize"))},{rootMargin:"300px"});document.addEventListener("DOMContentLoaded",function(){window.rapidload_replace_image_src()});window.onresize=function(event){window.rapidload_replace_image_src()};var lazyElements=document.querySelectorAll('[data-rapidload-lazy-method="viewport"]');if(lazyElements&&lazyElements.length){lazyElements.forEach(function(element){observer_bg.observe(element)})}window.rapidload_replace_image_src();`;
+                if (defined('RAPIDLOAD_DEV_MODE') && RAPIDLOAD_DEV_MODE === true) {
+                    $filePath = RAPIDLOAD_PLUGIN_DIR . '/assets/js/rapidload_images.min.js';
 
+                    if (file_exists($filePath)) {
+                        $image_handler_script = file_get_contents($filePath);
+                    }
+                }
+            ?>
             (function(w, d){
                 w.rapidload_io_data = {
                     nonce : "<?php echo wp_create_nonce('rapidload_image') ?>",
@@ -74,14 +83,9 @@ class RapidLoad_Image
                     optimize_level : "<?php echo ( isset($this->options['uucss_image_optimize_level']) ? $this->options['uucss_image_optimize_level'] : 'null' ) ?>" ,
                     support_next_gen_format : <?php echo ( isset($this->options['uucss_support_next_gen_formats']) && $this->options['uucss_support_next_gen_formats'] == "1" ? 'true' : 'false' ) ?>
                 };
-                var b = d.getElementsByTagName('head')[0];
-                var s = d.createElement("script");
-                s.defer = true;
-                s.type = "text/javascript";
-                s.src = "<?php echo apply_filters('uucss/enqueue/cdn', self::get_relative_url(UUCSS_PLUGIN_URL . 'assets/js/rapidload_images.min.js?v=24' . UUCSS_VERSION)) ?>";
-                b.appendChild(s);
             }(window, document));
 
+            <?php echo $image_handler_script ?>
         </script>
         <?php
 
