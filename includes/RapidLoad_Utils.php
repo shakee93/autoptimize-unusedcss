@@ -729,7 +729,7 @@ trait RapidLoad_Utils {
             $path = $directory . DIRECTORY_SEPARATOR . $item;
 
             if (is_dir($path)) {
-                $files = array_merge($files, scanDirectory($path));
+                $files = array_merge($files,  self::get_files_in_dir($path));
             } else {
                 $files[] = $path;
             }
