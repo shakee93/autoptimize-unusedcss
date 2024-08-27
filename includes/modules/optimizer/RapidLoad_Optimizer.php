@@ -816,6 +816,7 @@ class RapidLoad_Optimizer
                         'file' => $cache_file,
                         'size' => @file_exists($cache_file) ? $this->formatSize(@filesize($cache_file)) : null,
                     ];
+                    $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }else{
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }
