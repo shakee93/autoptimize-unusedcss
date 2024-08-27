@@ -205,9 +205,17 @@ class RapidLoad_Module
                         $options['uucss_cdn_zone_id'] = $response->zone_id;
                         $options['uucss_cdn_dns_id'] = $response->dns_id;
                         $options['uucss_cdn_url'] = $response->cdn_url;
+                        do_action('rapidload/cdn/validated', [
+                            'clear' => $cdn != "1",
+                            'cdn_url' => $response->cdn_url
+                        ]);
                     }
 
                 }else{
+                    do_action('rapidload/cdn/validated', [
+                        'clear' => $cdn != "1",
+                        'cdn_url' => isset($options['uucss_cdn_url']) ? $options['uucss_cdn_url'] : null
+                    ]);
 
                     if(apply_filters('rapidload/cdn/clear-server-dns', false)){
 

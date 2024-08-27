@@ -39,6 +39,31 @@ class RapidLoad_Font
         add_filter('rapidload/webfont/handle', [$this, 'handle_web_font_js'], 10, 2);
 
         add_action('rapidload/admin-bar-actions', [$this, 'add_admin_clear_action']);
+
+        add_action('rapidload/cdn/validated', [$this, 'update_cdn_url_in_cached_files']);
+    }
+
+    public function update_cdn_url_in_cached_files($args) {
+        if (!isset($args['cdn_url'])) {
+            return;
+        }
+        $search_url = trailingslashit(site_url());
+        $replace_url = trailingslashit($args['cdn_url']);
+        if (isset($args['clear']) && boolval($args['clear']) == 1) {
+            $temp_url = $search_url;
+            $search_url = $replace_url;
+            $replace_url = $temp_url;
+        }
+        $files = self::get_files_in_dir(self::$base_dir);
+        foreach ($files as $file) {
+            if (pathinfo($file, PATHINFO_EXTENSION) === 'css') {
+                $content = file_get_contents($file);
+                if (strpos($content, $search_url) !== false) {
+                    $updated_content = str_replace($search_url, $replace_url, $content);
+                    file_put_contents($file, $updated_content);
+                }
+            }
+        }
     }
 
     public function add_admin_clear_action($wp_admin_bar){
