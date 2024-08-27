@@ -282,12 +282,17 @@ jobs:
             INSTANCE_ID=${{ github.event.number }}
             WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
             PLUGIN_PATH=/bitnami/wordpress/wp-content/plugins/autoptimize-unusedcss
+            TITAN_PATH=includes/admin/page-optimizer
             PLUGIN_DIR=/bitnami/wordpress/wp-content/plugins
             sudo docker exec -u root -i ${WP_CONTAINER} sh -c "
               if [ -d ${PLUGIN_PATH} ]; then
                 echo 'Plugin directory exists. Running git pull...'
                 cd ${PLUGIN_PATH}
                 git pull origin ${{ github.head_ref }}
+                cd ${TITAN_PATH}
+                npm install -g vite
+                npm install
+                vite build
               else
                 cd ${PLUGIN_DIR}
                 echo 'Cloning plugin repository...'
