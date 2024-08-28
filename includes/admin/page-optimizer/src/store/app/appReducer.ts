@@ -1,10 +1,12 @@
 import {
     AppAction,
     AppState,
+    CHANGE_GEAR,
     CHANGE_REPORT_TYPE,
     FETCH_REPORT_FAILURE,
     FETCH_REPORT_REQUEST,
-    FETCH_REPORT_SUCCESS, FETCH_SETTING_FAILURE,
+    FETCH_REPORT_SUCCESS,
+    FETCH_SETTING_FAILURE,
     FETCH_SETTING_REQUEST,
     FETCH_SETTING_SUCCESS,
     GET_CSS_STATUS_SUCCESS,
@@ -143,6 +145,17 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 }
             };
         case UPDATE_SETTINGS:
+            return {
+                ...state,
+                settings: {
+                    ...state.settings,
+                    [state.activeReport] : {
+                        ...state.settings[state.activeReport],
+                        state: action.payload.settings,
+                    }
+                }
+            };
+        case CHANGE_GEAR:
             return {
                 ...state,
                 settings: {

@@ -2,6 +2,7 @@ import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {AnyAction} from 'redux';
 import {
     AppAction,
+    CHANGE_GEAR,
     CHANGE_REPORT_TYPE,
     FETCH_REPORT_FAILURE,
     FETCH_REPORT_REQUEST,
@@ -17,9 +18,6 @@ import {
 } from "./appTypes";
 import ApiService from "../../services/api";
 import Audit from "app/page-optimizer/components/audit/Audit";
-
-import SampleSettings from '../../lib/sample-settings'
-
 
 const transformAudit = (audit: Audit, metrics : Metric[]) => {
 
@@ -266,15 +264,19 @@ export const fetchSettings = (options: WordPressOptions, url : string, reload: b
         try {
             const currentState = getState(); // Access the current state
             const activeReport = currentState.app.activeReport;
-            const activeReportData = currentState.app.settings[activeReport]
+            const activeSettingsData = currentState.app.settings[activeReport]
 
-            // TODO: don't let people bam on keyboard while waiting to laod the page speed
+            // TODO: don't let people bam on keyboard while waiting to load the page speed
             // if(activeReportData.loading && activeReportData.data ) {
             //     console.log('don\'t bam the mouse! we are loading your page speed details 😉');
             //     return;
             // }
 
-            if (activeReportData.loading) {
+            if (activeSettingsData.loading) {
+                return;
+            }
+
+            if (activeSettingsData?.state?.length > 0 && !reload) {
                 return;
             }
 
@@ -359,7 +361,6 @@ export const changeGear = (
         } = {starter, accelerate, turboMax};
 
         // excluding perf gear from updates.
-        // @ts-ignore
         const newOptions: AuditSetting[] = settings
             ?.map((s: AuditSetting) => ({
             ...s,
@@ -375,7 +376,7 @@ export const changeGear = (
         })) || [];
 
         dispatch({
-            type: UPDATE_SETTINGS, payload: {
+            type: CHANGE_GEAR, payload: {
                 settings: newOptions
             }
         });

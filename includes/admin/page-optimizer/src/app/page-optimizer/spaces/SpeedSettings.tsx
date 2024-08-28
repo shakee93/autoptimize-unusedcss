@@ -140,7 +140,7 @@ const SpeedSettings = ({}) => {
             });
         });
         return grouped;
-    }, [settings, data?.grouped, activeReport]);
+    }, [settings, data, activeReport]);
 
     useEffect(() => {
 
@@ -166,7 +166,7 @@ const SpeedSettings = ({}) => {
             dispatch(setCommonState('openCategory', 'css'));
         }
 
-    }, [settings]);
+    }, [settings, data, activeReport]);
 
     const updateValue = useCallback( (setting: AuditSetting, value: any, key: string) => {
         dispatch(updateSettings(
@@ -529,65 +529,6 @@ const SpeedSettings = ({}) => {
                     </m.div>
                 }
             </ul>
-
-            {data &&
-                <ul>
-                    {filteredAudits.length > 0 && (
-                        <m.button
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            key={activeCategory}
-                            onClick={() => setShowHideState(activeCategory)}
-                            className={cn(
-                                `select-none w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
-          flex items-center gap-2 px-5 py-1.5 pb-2 text-sm font-medium `,
-                                notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-10"
-                            )}
-                        >
-                            Show Additional Settings{" "} <ChevronDownIcon className={cn(
-                            'w-4 rounded-[15px] transition-transform',
-                            categoryStates[activeCategory] && '-rotate-180'
-                        )} />
-
-                        </m.button>
-                    )}
-
-                    { (categoryStates[activeCategory]) && (
-                        <>
-                            <div className={cn('font-normal text-sm ml-0.5 -mt-2 mb-3 px-5',
-                                notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-[42px]"
-                            )}>The audits associated with these settings are already optimized</div>
-
-                            {passedAudits.filter(item => item.category === activeCategory).map((item: AuditSetting, itemIndex) => (
-
-                                <li key={itemIndex}>
-                                    <m.div initial={{ opacity: 0}}
-                                           animate={{ opacity: 1}}
-                                           transition={{ duration: 0.3 }}
-                                    >
-                                        <AuditSettingsItem key={`${item.category}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={false} />
-                                    </m.div>
-                                </li>
-
-                            ))}
-                        </>
-                    )}
-
-                    {/*{(filteredAudits.length > 0 && !notPassedAudits.some(item => item.category === activeCategory)) &&*/}
-                    {/*    <m.div*/}
-                    {/*        initial={{opacity: 0, y: 10}}*/}
-                    {/*        animate={{opacity: 1, y: 0}}*/}
-                    {/*        exit={{opacity: 0, y: -20}}*/}
-                    {/*        className='flex flex-col gap-2 items-center px-2 pt-2 w-full mb-6'>*/}
-                    {/*        <div>*/}
-                    {/*            <img alt='Good Job!' className='w-64' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>*/}
-                    {/*        </div>*/}
-                    {/*        <span className='flex gap-2'>Brilliantly done! It's clear you've mastered this.</span>*/}
-                    {/*    </m.div>*/}
-                    {/*}*/}
-                </ul>
-            }
         </div>
             </>
         }
