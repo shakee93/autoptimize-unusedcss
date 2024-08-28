@@ -5,8 +5,8 @@ import SpeedPopover from "app/speed-popover";
 import {useAppContext} from "../context/app";
 import {ThunkDispatch} from "redux-thunk";
 import {useDispatch, useSelector} from "react-redux";
-import {AppAction, AppState, RootState} from "../store/app/appTypes";
-import {fetchData, getTestModeStatus} from "../store/app/appActions";
+import {AppAction, RootState} from "../store/app/appTypes";
+import {fetchReport, fetchSettings, getTestModeStatus} from "../store/app/appActions";
 import {Toaster} from "components/ui/toaster";
 import {AnimatePresence} from "framer-motion";
 import {useRootContext} from "../context/root";
@@ -25,12 +25,12 @@ const App = ({popup, _showOptimizer = false}: {
 }) => {
 
     const [popupNode, setPopupNode] = useState<HTMLElement | null>(null);
-    const {showOptimizer, setShowOptimizer, mode, options, setShowInprogress} = useAppContext()
+    const {showOptimizer, setShowOptimizer, mode, options} = useAppContext()
     const [shadowRoot, setShadowRoot] = useState<ShadowRoot | null>(null);
     const [mounted, setMounted] = useState(false)
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
-    const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
+    const {activeReport} = useSelector((state: RootState) => state.app);
     const {isDark } = useRootContext()
     const initialTestMode = window.rapidload_optimizer ? toBoolean(window.rapidload_optimizer.test_mode) : false;
 
@@ -68,10 +68,9 @@ const App = ({popup, _showOptimizer = false}: {
 
     useEffect(() => {
         // load initial data
-        dispatch(fetchData(options, options.optimizer_url, false));
+        dispatch(fetchSettings(options, options.optimizer_url, false));
+        dispatch(fetchReport(options, options.optimizer_url, false));
         dispatch(setCommonState('testModeStatus', initialTestMode));
-        //dispatch(setCommonState('inProgress', false))
-        setShowInprogress(false);
     }, [dispatch, activeReport]);
 
 

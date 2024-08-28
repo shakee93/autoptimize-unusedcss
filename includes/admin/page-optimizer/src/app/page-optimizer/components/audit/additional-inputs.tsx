@@ -77,15 +77,19 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
     const [activeCategory, setActiveCategory]= useState('third_party')
 
 
-    const groupedData = (input?.control_values as ControlValue[])?.reduce((acc: {[key: string]: ControlValue[]}, item: ControlValue) => {
-        if (!acc[item.type]) {
-            acc[item.type] = [];
-        }
-        const isValueIncluded = Array.isArray(value) ? value.includes(item.id) : value === item.id;
-       // const isValueIncluded = item.exclusions.every(exclusion => value.includes(exclusion));
-        acc[item.type].push({ ...item, isSelected: isValueIncluded });
-        return acc;
-    }, {});
+    const groupedData = useMemo(() => {
+        
+        return (input?.control_values as ControlValue[])?.reduce((acc: {[key: string]: ControlValue[]}, item: ControlValue) => {
+            if (!acc[item.type]) {
+                acc[item.type] = [];
+            }
+            const isValueIncluded = Array.isArray(value) ? value.includes(item.id) : value === item.id;
+            // const isValueIncluded = item.exclusions.every(exclusion => value.includes(exclusion));
+            acc[item.type].push({ ...item, isSelected: isValueIncluded });
+            return acc;
+        }, {})
+
+    }, [input, updates]);
 
 
     const handleSwitchChange = (isChecked: boolean, itemId: string) => {
@@ -99,7 +103,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
     const [textValue, setTextValue] = useState(value);
 
-    const handleChange = (e) => {
+    const handleChange = (e: any) => {
         e.preventDefault();
         setTextValue(e.target.value);
         update(e.target.value, input.key);

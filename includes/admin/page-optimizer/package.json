@@ -64,6 +64,7 @@
     "@radix-ui/react-toggle-group": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.2",
     "@reactour/tour": "^3.7.0",
+    "@reduxjs/toolkit": "^2.2.7",
     "@tanstack/react-table": "^8.19.3",
     "@types/react-redux": "^7.1.33",
     "@wordpress/dom-ready": "^4.4.0",

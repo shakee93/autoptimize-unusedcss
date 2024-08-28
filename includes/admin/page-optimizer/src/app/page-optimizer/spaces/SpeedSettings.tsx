@@ -30,7 +30,7 @@ import {cn} from "lib/utils";
 import {setCommonState} from "../../../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {BoltIcon, CheckCircleIcon, ChevronRightIcon, ChevronDownIcon,  ChevronUpIcon, CheckIcon, XMarkIcon  } from "@heroicons/react/24/solid";
-import {updateSettings} from "../../../store/app/appActions";
+import {changeGear, updateSettings} from "../../../store/app/appActions";
 import { m, AnimatePresence  } from 'framer-motion';
 import AuditSettingsItem from './AuditSettingsItem';
 import {useAppContext} from "../../../context/app";
@@ -72,15 +72,22 @@ type GroupedSettings = Record<string, AuditSetting[]>;
 
 const SpeedSettings = ({}) => {
 
-    const {settings, data, activeReport, touched, fresh, defaultSettingsMode, revisions} = useSelector(optimizerData);
+    const {settings, data,
+        activeReport,
+        settingsLoading,
+        activeGear, revisions} = useSelector(optimizerData);
     const [activeCategory,  setActiveCategory]= useState<SettingsCategory>('css')
     const [groupedSettings, setGroupedSettings] = useState<GroupedSettings>({});
-    const {dispatch, openCategory, activeTab, settingsMode, auditsReturn, testModeStatus} = useCommonDispatch()
+    const {dispatch, openCategory,
+        activeTab, auditsReturn, testModeStatus, settingsMode} = useCommonDispatch()
     const categoryOrder: SettingsCategory[] = [ 'css', 'javascript', 'image', 'font', 'cdn', 'cache'];
     const [sortedStatus, setSortedStatus] = useState(true)
-    const modes = ['starter', 'accelerate', 'turboMax'];
+    const modes: PerformanceGear[] = ['starter', 'accelerate', 'turboMax'];
+
+    const customUnsavedChanges = useRef<HTMLDivElement>(null);
+    const [tempMode, setTempMode] = useState<PerformanceGear>('custom');
     const [customMode, setCustomMode] = useState(false);
-    const [activeSettingsMode, setActiveSettingsMode] = useState(defaultSettingsMode || 'custom');
+
     const [mouseOnSettingsGear, setMouseOnSettingsGear] = useState('');
     const { toast } = useToast();
     const {testMode} = useSelector((state: RootState) => state.app);
@@ -114,23 +121,31 @@ const SpeedSettings = ({}) => {
     const groupByCategory = useCallback((settings: AuditSetting[]) => {
 
         const grouped = {} as GroupedSettings;
+
+        const audits = [
+            ...data?.grouped?.passed_audits || [],
+            ...data?.grouped?.diagnostics || [],
+            ...data?.grouped?.opportunities || [],
+        ]
+
         settings.forEach((setting) => {
             if (!grouped[setting.category]) {
                 grouped[setting.category] = [];
             }
+
             grouped[setting.category].push({
                 ...setting,
-                // audits: data.audits.filter(audit => audit.settings.find(s => s.name === setting.name))
-                audits: (data?.audits || []).filter(audit => audit.settings.find(s => s.name === setting.name))
+                audits: (audits || []).filter(audit => audit.settings.find(s => s.name === setting.name))
 
             });
         });
         return grouped;
-    }, [settings]);
+    }, [settings, data, activeReport]);
 
     useEffect(() => {
 
         const grouped = groupByCategory(settings || []);
+        
         const sortedCategories = Object.keys(grouped).sort((a, b) => {
             const indexA = categoryOrder.indexOf(a as SettingsCategory);
             const indexB = categoryOrder.indexOf(b as SettingsCategory);
@@ -142,6 +157,7 @@ const SpeedSettings = ({}) => {
             sortedGroupedSettings[category] = grouped[category as keyof typeof grouped];
         });
 
+
         setGroupedSettings(sortedGroupedSettings);
 
         if (openCategory) {
@@ -150,7 +166,7 @@ const SpeedSettings = ({}) => {
             dispatch(setCommonState('openCategory', 'css'));
         }
 
-    }, [settings]);
+    }, [settings, data, activeReport]);
 
     const updateValue = useCallback( (setting: AuditSetting, value: any, key: string) => {
         dispatch(updateSettings(
@@ -175,6 +191,7 @@ const SpeedSettings = ({}) => {
         }
 
         if (groupedSettings && sortedStatus ) {
+
 
             const allPassedAudits: any[] = [];
             const allNotPassedAudits: any[] = [];
@@ -215,51 +232,21 @@ const SpeedSettings = ({}) => {
 
     }, [ groupedSettings]);
 
-    const customUnsavedChanges = useRef<HTMLDivElement>(null);
-    const [tempMode, setTempMode] = useState('');
-
-    const settingsModeOnChange = (mode: string, activate?: boolean) => {
+    const settingsModeOnChange = (mode: PerformanceGear, activate?: boolean) => {
         handleTestModeSettingsChange(mode);
 
-        if(activeSettingsMode === 'custom' && !activate ){
+        if (activeGear === 'custom' && !activate) {
             customUnsavedChanges.current?.click();
-        }else{
-        setActiveSettingsMode(mode as settingsMode);
-        dispatch(setCommonState('settingsMode', mode));
+        } else {
 
-        if (!notPassedAudits) {
-            return;
-        }
+            dispatch(changeGear(
+                mode as BasePerformanceGear
+            ))
 
-        const allAudits = passedAudits.concat(notPassedAudits);
-
-        const starterLabels = ['Remove Unused CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
-        const accelerateLabels = [...starterLabels, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
-        const turboMaxLabels = [...accelerateLabels, 'Delay Javascript', 'Enable Critical CSS'];
-
-
-        // notPassedAudits.forEach(settings => {
-        allAudits.forEach(settings => {
-            const [mainInput] = settings.inputs
-
-            let settingsToReturn;
-
-            if (mode === 'starter' && starterLabels.includes(mainInput.control_label)) {
-                settingsToReturn = settings;
-            } else if (mode === 'accelerate' && accelerateLabels.includes(mainInput.control_label)) {
-                settingsToReturn = settings;
-            } else if (mode === 'turboMax' && turboMaxLabels.includes(mainInput.control_label)) {
-                settingsToReturn = settings;
-
+            if (!notPassedAudits) {
+                return;
             }
-            if (settingsToReturn) {
-                updateValue(settingsToReturn, true, mainInput.key);
-            }else{
-                updateValue(settings, false, mainInput.key);
-            }
-        });
         }
-
     };
 
     const handleTestModeSettingsChange = (gearSettingsMode: string,) => {
@@ -304,29 +291,24 @@ const SpeedSettings = ({}) => {
     }, [activeReport]);
 
     useEffect(() => {
-        if(!settingsMode){
-            defaultSettingsMode && dispatch(setCommonState('settingsMode', defaultSettingsMode));
-        }else{
-            setActiveSettingsMode(settingsMode || 'custom');
-        }
+
     }, [settings]);
 
     useEffect(() => {
-        if(revisions.length == 0 && !settingsMode ){
-            dispatch(setCommonState('settingsMode', 'accelerator'));
-            setActiveSettingsMode('accelerate');
+        if(revisions?.length == 0){
+            dispatch(changeGear('accelerate'));
         }
     },[])
 
 
-    const settingsDescriptions: { [key in settingsMode]: string } = {
+    const settingsDescriptions: { [key in PerformanceGear]: string } = {
         starter: "Optimizes foundational aspects for faster load speeds by removing unused CSS, minifying CSS and JavaScript, caching pages, and self-hosting Google Fonts.",
         accelerate: "Starter mode + RapidLoad CDN, serving next-gen images, and enhancing image handling with lazy loading, while also deferring JavaScript and adding crucial image attributes.",
         turboMax: "Unlock peak performance potential including Accelerator mode + generating critical CSS, advanced JavaScript handling methods, such as delaying execution for improved speed and efficiency.",
         custom: "Tailor your optimization strategy to your needs, combining features like Accelerator mode and advanced JavaScript handling for personalized performance."
     };
 
-    const currentMode: settingsMode = (mouseOnSettingsGear || activeSettingsMode) as settingsMode;
+    const currentMode: PerformanceGear = (mouseOnSettingsGear || activeGear) as PerformanceGear;
 
 
     const actionRequired = (item: AuditSetting): boolean => {
@@ -378,6 +360,9 @@ const SpeedSettings = ({}) => {
     return <div className='dark:bg-brand-800/40 bg-brand-200 px-9 py-8 mt-2 rounded-3xl'>
         <SettingsStraightLine/>
         <div className="pb-4">
+            {settingsLoading &&
+                <div>loading...</div>
+            }
             <h3 className="font-semibold text-lg">Performance Gears</h3>
             <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
         </div>
@@ -386,7 +371,7 @@ const SpeedSettings = ({}) => {
             {modes.map((mode, index) => (
                 <div
                     key={index}
-                    className={`cursor-pointer transition-all flex px-4 py-4 min-w-[166px] min-h-[166px] items-center justify-center w-fit rounded-3xl dark:bg-brand-950 bg-brand-0 dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px]  ${mode === activeSettingsMode ? ' border-purple-700 dark:border-purple-700' : ''}`}
+                    className={`cursor-pointer transition-all flex px-4 py-4 min-w-[166px] min-h-[166px] items-center justify-center w-fit rounded-3xl dark:bg-brand-950 bg-brand-0 dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px]  ${mode === activeGear ? ' border-purple-700 dark:border-purple-700' : ''}`}
                     onClick={e => {
                         setTempMode(mode);
                         settingsModeOnChange(mode);
@@ -398,7 +383,7 @@ const SpeedSettings = ({}) => {
 
                     <div className={`flex flex-col gap-1 items-center text-center ${mode === 'turboMax' ? ' pt-1.5' : ''}`}>
 
-                        {['starter', 'accelerate', 'turboMax'].includes(mode) && activeSettingsMode === mode && (
+                        {['starter', 'accelerate', 'turboMax'].includes(mode) && activeGear === mode && (
                             <div className="absolute ml-28 -mt-4">
                                 <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
                             </div>
@@ -409,7 +394,7 @@ const SpeedSettings = ({}) => {
                         {mode === 'accelerate' && <Accelerate cls={'px-2 py-2'} />}
                         {mode === 'turboMax' && <TurboMax cls={'px-2 py-2'} />}
                         <div>
-                            <p className="font-semibold ">{mode.charAt(0).toUpperCase() + mode.slice(1)}</p>
+                            <p className="font-semibold capitalize">{mode}</p>
                             {mode === 'turboMax' && <p className="font-normal text-[10px] leading-none">Test Mode Recommended</p>}
                         </div>
 
@@ -435,41 +420,48 @@ const SpeedSettings = ({}) => {
 
         <div className="py-4 ">
             {mouseOnSettingsGear ? (
-                <h3 className="font-semibold dark:text-brand-300">{mouseOnSettingsGear.charAt(0).toUpperCase() + mouseOnSettingsGear.slice(1)}{mouseOnSettingsGear === 'custom' ? ' Settings' : ''} {activeSettingsMode === mouseOnSettingsGear && 'Activated' }</h3>
+                <h3 className="font-semibold dark:text-brand-300 capitalize">{mouseOnSettingsGear} {activeGear === mouseOnSettingsGear && 'Activated' }</h3>
             ) : (
-                <h3 className="font-semibold dark:text-brand-300">{activeSettingsMode.charAt(0).toUpperCase() + activeSettingsMode.slice(1)}{activeSettingsMode === 'custom' ? ' Settings' : ''} Activated</h3>
+                <h3 className="font-semibold dark:text-brand-300 capitalize">{activeGear} Activated</h3>
             )}
             <span
                 className="font-normal text-sm text-zinc-600 dark:text-brand-300">{settingsDescriptions[currentMode]}</span>
         </div>
 
         <div>
-            <div
-                onClick={() => {
-                    setTempMode('custom');
-                    setCustomMode(prevMode => !prevMode);
-                }}
-                onMouseEnter={() => setMouseOnSettingsGear('custom')}
-                onMouseLeave={() => setMouseOnSettingsGear('')}
-                className={cn(
-                    `select-none w-fit transition-all rounded-2xl cursor-pointer  
+            {settingsLoading ?
+                <div className='w-48 animate-pulse h-10 select-none transition-all rounded-2xl cursor-pointer
+          flex items-center gap-2 px-4 py-2 -ml-1 text-sm font-medium dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px] dark:hover:bg-brand-950 bg-brand-0 dark:bg-brand-950'>
+                </div> :
+                <div
+                    onClick={() => {
+                        setTempMode('custom');
+                        setCustomMode(prevMode => !prevMode);
+                    }}
+                    onMouseEnter={() => setMouseOnSettingsGear('custom')}
+                    onMouseLeave={() => setMouseOnSettingsGear('')}
+                    className={cn(
+                        `select-none w-fit transition-all rounded-2xl cursor-pointer  
           flex items-center gap-2 px-4 py-2 -ml-1 text-sm font-medium dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px] dark:hover:bg-brand-950 bg-brand-0 dark:bg-brand-950 `,
-                    activeSettingsMode === 'custom' && 'border-purple-700'
-                )}
-                data-tour="customize-settings"
-            >
-                {activeSettingsMode === 'custom' &&
-                    <div className="">
-                        <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
-                    </div>
-                }
+                        activeGear === 'custom' && 'border-purple-700'
+                    )}
+                    data-tour="customize-settings"
+                >
+                    {activeGear === 'custom' &&
+                        <div className="">
+                            <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
+                        </div>
+                    }
 
-                Customize Settings <ChevronDownIcon className={cn(
-                'w-4 rounded-[15px] transition-transform',
-                customMode && '-rotate-180'
-            )}/>
+                    Customize Settings <ChevronDownIcon className={cn(
+                    'w-4 rounded-[15px] transition-transform',
+                    customMode && '-rotate-180'
+                )}/>
 
-            </div>
+                </div>
+            }
+
+
         </div>
 
         {customMode &&
@@ -506,12 +498,12 @@ const SpeedSettings = ({}) => {
             ))}
         </ul>
 
-        <div className='min-h-[380px]'>
+        <div className={cn(
+            data ? 'min-h-[380px]' : 'min-h-[280px]'
+        )}>
             <ul>
 
-                {notPassedAudits
-                    .filter((item) => item.category === activeCategory)
-                    .map((item: AuditSetting, itemIndex) => (
+                {groupedSettings[activeCategory]?.map((item: AuditSetting, itemIndex) => (
                         <li key={`${item.category}-${itemIndex}`}>
                             <m.div initial={{opacity: 0, y: -10}}
                                    animate={{opacity: 1, y: 0}}
@@ -524,9 +516,7 @@ const SpeedSettings = ({}) => {
                         </li>
                     ))}
 
-                {(notPassedAudits
-                        .filter((item) => item.category === activeCategory).length <= 2
-                  && filteredAudits.length === 0 ) &&  <m.div
+                {(groupedSettings[activeCategory]?.length <= 2 ) &&  <m.div
                         initial={{opacity: 0, y: 10}}
                         animate={{opacity: 1, y: 0}}
                         exit={{opacity: 0, y: -20}}
@@ -536,65 +526,6 @@ const SpeedSettings = ({}) => {
                                  src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>
                         </div>
                         <span className='flex text-sm mt-4 gap-2'>You're so close to perfection! One more fix and it's flawless!"</span>
-                    </m.div>
-                }
-            </ul>
-
-            <ul>
-
-
-                {filteredAudits.length > 0 && (
-                    <m.button
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        key={activeCategory}
-                        onClick={() => setShowHideState(activeCategory)}
-                        className={cn(
-                            `select-none w-full transition-all border-2 border-transparent rounded-[20px] cursor-pointer  
-          flex items-center gap-2 px-5 py-1.5 pb-2 text-sm font-medium `,
-                            notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-10"
-                        )}
-                    >
-                        Show Additional Settings{" "} <ChevronDownIcon className={cn(
-                            'w-4 rounded-[15px] transition-transform',
-                        categoryStates[activeCategory] && '-rotate-180'
-                    )} />
-
-                    </m.button>
-                )}
-
-                { (categoryStates[activeCategory]) && (
-                    <>
-                    <div className={cn('font-normal text-sm ml-0.5 -mt-2 mb-3 px-5',
-                        notPassedAudits.some(item => item.category === activeCategory) ? "" : "ml-[42px]"
-                    )}>The audits associated with these settings are already optimized</div>
-
-                    {passedAudits.filter(item => item.category === activeCategory).map((item: AuditSetting, itemIndex) => (
-
-                    <li key={itemIndex}>
-                        <m.div initial={{ opacity: 0}}
-                               animate={{ opacity: 1}}
-                               transition={{ duration: 0.3 }}
-                        >
-                            <AuditSettingsItem key={`${item.category}-${itemIndex}`} item={item} itemIndex={itemIndex} updateValue={updateValue} actionRequired={false} />
-                        </m.div>
-                    </li>
-
-                    ))}
-                    </>
-                )}
-
-                {(filteredAudits.length > 0 && !notPassedAudits.some(item => item.category === activeCategory)) &&
-                    <m.div
-                        initial={{opacity: 0, y: 10}}
-                        animate={{opacity: 1, y: 0}}
-                        exit={{opacity: 0, y: -20}}
-                        className='flex flex-col gap-2 items-center px-2 pt-2 w-full mb-6'>
-                        <div>
-                            <img alt='Good Job!' className='w-64' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>
-                        </div>
-                        <span className='flex gap-2'>Brilliantly done! It's clear you've mastered this.</span>
                     </m.div>
                 }
             </ul>

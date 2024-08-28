@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect} from "react";
 import ApiService from "../services/api";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
-import {fetchData} from "../store/app/appActions";
+import {fetchReport} from "../store/app/appActions";
 import {useAppContext} from "../context/app";
 import {useToast} from "components/ui/use-toast";
 import {useDispatch, useSelector} from "react-redux";
@@ -23,7 +23,6 @@ const useSubmitSettings = () => {
         invalidatingCache,
         setInvalidatingCache,
         global,
-        setShowInprogress
     } = useAppContext()
 
 
@@ -36,7 +35,8 @@ const useSubmitSettings = () => {
         touched,
         activeReport,
         data,
-        settings
+        settings,
+        activeGear
     } =
         useSelector(optimizerData)
 
@@ -64,10 +64,11 @@ const useSubmitSettings = () => {
 
             setSavingData(true);
 
+
             const res = await api.updateSettings(
                 url,
                 activeReport,
-                updatedData,
+                settings,
                 global,
                 analyze,
             );
@@ -117,11 +118,9 @@ const useSubmitSettings = () => {
                     })
                 }
 
-                dispatch(fetchData(options, url, true));
+                dispatch(fetchReport(options, url, true));
 
             }else if(!analyze){
-                dispatch(setCommonState('inProgress', true))
-                setShowInprogress(true);
 
             }
 
@@ -138,7 +137,7 @@ const useSubmitSettings = () => {
         setSavingData(false)
         setInvalidatingCache(false)
 
-    }, [data, activeReport,  savingData, invalidatingCache, settingsMode])
+    }, [data, activeReport,  savingData, invalidatingCache, settings, activeGear ])
 
     return {
         submitSettings

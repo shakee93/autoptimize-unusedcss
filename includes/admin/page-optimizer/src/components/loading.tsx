@@ -13,7 +13,6 @@ interface LoadingProps {
 
 const Loading: React.FC<LoadingProps> = ({ url, countDown , customMessage, customMessageAfter, className}) => {
 
-    const {showInprogress} = useAppContext()
     const {inProgress } = useCommonDispatch()
     const [seconds, setSeconds] = useState(29);
     const [messageBelow, setMessageBelow] = useState(customMessage? customMessage: 'Arriving in');
@@ -66,7 +65,7 @@ const Loading: React.FC<LoadingProps> = ({ url, countDown , customMessage, custo
                         <p>{messageBelow}</p>
                     )}
                 </div>
-            ): !showInprogress && (
+            ): (
                 <div className='absolute top-1/2 flex w-full items-center gap-4 text-center'>
                     <div className='w-full flex flex-col gap-6'>
                         <div>{messages[message]}...</div>

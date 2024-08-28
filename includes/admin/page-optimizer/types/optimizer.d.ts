@@ -5,7 +5,7 @@ interface OptimizerResults  {
     job_id?: string;
     audits: Audit[]
     metrics: Metric[],
-    settingsMode: settingsMode,
+    settingsMode: PerformanceGear,
     loadingExperience?: LoadingExperience
     originLoadingExperience?: LoadingExperience
     grouped: {
@@ -255,3 +255,7 @@ interface RapidLoadSetOptimizerEvent extends Event {
 }
 
 type CssErrorKeys = 'Critical CSS' | 'Unused CSS';
+
+
+type BasePerformanceGear = 'starter' | 'accelerate' | 'turboMax';
+type PerformanceGear = BasePerformanceGear | 'custom' ;

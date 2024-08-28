@@ -96,6 +96,25 @@
                 </div>
               </div>
 
+              <div class="flex mt-5">
+                <div class="pr-1">
+                  <div class="flex items-center mr-4 mt-3">
+                    <div @click="onData.uucss_adaptive_image_delivery = !onData.uucss_adaptive_image_delivery" :class="onData.uucss_adaptive_image_delivery? 'bg-purple':''"
+                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
+                      <svg v-if="onData.uucss_adaptive_image_delivery" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                           class="transform scale-125">
+                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                      </svg>
+                    </div>
+
+                  </div>
+                </div>
+                <div>
+                  <h1 @click="onData.uucss_adaptive_image_delivery = !onData.uucss_adaptive_image_delivery" class="font-normal text-base text-black-font cursor-pointer">Adaptive Image Delivery</h1>
+                  <p class="text-sm text-gray-font">Enable adaptive image delivery.</p>
+                </div>
+              </div>
+
               <div class="mt-5">
                 <h1 class="font-normal text-base text-black-font">Exclude from Serve next-gen Images</h1>
                 <p class="text-sm pb-3 text-gray-font">These images will be excluded from being converted to modern formats.</p>
@@ -318,6 +337,7 @@ export default {
           this.onData.uucss_lazy_load_images.uucss_lazy_load_iframes= options.uucss_lazy_load_iframes
           this.onData.uucss_lazy_load_images.uucss_exclude_images_from_lazy_load = options.uucss_exclude_images_from_lazy_load
           this.onData.uucss_generate_blurry_place_holder = options.uucss_generate_blurry_place_holder
+          this.onData.uucss_adaptive_image_delivery = options.uucss_adaptive_image_delivery
           this.onData.uucss_preload_lcp_image = options.uucss_preload_lcp_image
           this.onData.uucss_set_width_and_height = options.uucss_set_width_and_height
           this.onData.uucss_exclude_images = options.uucss_exclude_images
@@ -363,6 +383,7 @@ export default {
         uucss_exclude_above_the_fold_image_count: this.onData.uucss_lazy_load_images.image_count,
         uucss_lazy_load_iframes: this.onData.uucss_lazy_load_images.uucss_lazy_load_iframes,
         uucss_generate_blurry_place_holder: this.onData.uucss_generate_blurry_place_holder,
+        uucss_adaptive_image_delivery: this.onData.uucss_adaptive_image_delivery,
         uucss_exclude_images_from_lazy_load : this.onData.uucss_lazy_load_images.uucss_exclude_images_from_lazy_load,
         uucss_preload_lcp_image : this.onData.uucss_preload_lcp_image,
         uucss_set_width_and_height : this.onData.uucss_set_width_and_height,
@@ -427,6 +448,7 @@ export default {
         },
         uucss_set_width_and_height: false,
         uucss_generate_blurry_place_holder: false,
+        uucss_adaptive_image_delivery: false,
         uucss_preload_lcp_image: [],
       },
 

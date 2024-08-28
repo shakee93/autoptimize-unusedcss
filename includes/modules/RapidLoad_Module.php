@@ -205,9 +205,17 @@ class RapidLoad_Module
                         $options['uucss_cdn_zone_id'] = $response->zone_id;
                         $options['uucss_cdn_dns_id'] = $response->dns_id;
                         $options['uucss_cdn_url'] = $response->cdn_url;
+                        do_action('rapidload/cdn/validated', [
+                            'clear' => $cdn != "1",
+                            'cdn_url' => $response->cdn_url
+                        ]);
                     }
 
                 }else{
+                    do_action('rapidload/cdn/validated', [
+                        'clear' => $cdn != "1",
+                        'cdn_url' => isset($options['uucss_cdn_url']) ? $options['uucss_cdn_url'] : null
+                    ]);
 
                     if(apply_filters('rapidload/cdn/clear-server-dns', false)){
 
@@ -334,6 +342,7 @@ class RapidLoad_Module
                     'uucss_support_next_gen_formats' => isset($options['uucss_support_next_gen_formats']) && $options['uucss_support_next_gen_formats'] == "1" ? true : false,
                     'uucss_lazy_load_images' => isset($options['uucss_lazy_load_images']) && $options['uucss_lazy_load_images'] == "1" ? true : false,
                     'uucss_generate_blurry_place_holder' => isset($options['uucss_generate_blurry_place_holder']) && $options['uucss_generate_blurry_place_holder'] == "1" ? true : false,
+                    'uucss_adaptive_image_delivery' => isset($options['uucss_adaptive_image_delivery']) && $options['uucss_adaptive_image_delivery'] == "1" ? true : false,
                     'uucss_lazy_load_iframes' => isset($options['uucss_lazy_load_iframes']) && $options['uucss_lazy_load_iframes'] == "1" ? true : false,
                     'uucss_set_width_and_height' => isset($options['uucss_set_width_and_height']) && $options['uucss_set_width_and_height'] == "1" ? true : false,
                     'uucss_exclude_images_from_set_width_and_height' => isset($options['uucss_exclude_images_from_set_width_and_height']) ? $options['uucss_exclude_images_from_set_width_and_height'] : '',

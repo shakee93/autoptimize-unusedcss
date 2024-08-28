@@ -1,17 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {ArrowPathIcon, CheckCircleIcon, Cog8ToothIcon, XCircleIcon} from "@heroicons/react/24/solid";
-import {
-    CSSDelivery,
-    JavascriptDelivery,
-    ImageDeliverySVG,
-    FontDelivery,
-    CloudDelivery,
-    PageCache,
-} from '../icons/icon-svg';
-import ReactDOM from 'react-dom';
-// import { Dialog, Transition } from '@headlessui/react';
-// import { X } from "lucide-react";
-
 
 import { Switch } from "components/ui/switch"
 import {ThunkDispatch} from "redux-thunk";
@@ -49,6 +37,12 @@ import ApiService from "../../../../services/api";
 import {toast} from "components/ui/use-toast";
 import SlideLeft from "components/animation/SlideLeft";
 import {AnimatePresence} from "framer-motion";
+import {
+    CloudDelivery, CSSDelivery, FontDelivery,
+    ImageDeliverySVG,
+    JavascriptDelivery,
+    PageCache
+} from "app/page-optimizer/components/icons/category-icons";
 
 interface SettingItemProps {
     updateValue: ( setting: AuditSetting, value: any, key: any ) => void
@@ -155,7 +149,6 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true}: 
         font : <FontDelivery/>,
         css : <CSSDelivery/>,
     }), [])
-
 
     // temporarily show this popup on render blocking resources audit
     const showPopover = useMemo(() => additionalInputs.length > 0, [additionalInputs])

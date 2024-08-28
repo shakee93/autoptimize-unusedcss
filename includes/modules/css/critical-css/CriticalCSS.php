@@ -56,11 +56,17 @@ class CriticalCSS
 
         add_action('rapidload/job/updated', [$this, 'handle_job_updated'], 10 , 2);
 
+        add_action('rapidload/cdn/validated', [$this, 'update_cdn_url_in_cached_files']);
+
         if(is_admin()){
 
             $this->cache_trigger_hooks();
 
         }
+    }
+
+    public function update_cdn_url_in_cached_files($args) {
+        RapidLoad_CDN::update_cdn_url_in_cached_files(self::$base_dir, $args);
     }
 
     public function render_options($args){
