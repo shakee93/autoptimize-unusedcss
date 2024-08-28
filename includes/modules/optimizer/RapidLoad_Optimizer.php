@@ -294,9 +294,9 @@ class RapidLoad_Optimizer
 
     public static function post_optimizer_function($data){
 
-        foreach (self::$merged_options as $key => $option){
+        foreach (self::$options as $key => $option){
 
-            if(isset(self::$merged_options[$key]) && (self::$merged_options[$key] != "" && self::$merged_options[$key] && !empty(self::$merged_options[$key]))){
+            if(isset(self::$options[$key]) && (self::$options[$key] != "" && self::$options[$key] && !empty(self::$options[$key]))){
                 switch ($key){
                     case 'uucss_enable_uucss':
                     case 'uucss_inline_css':
@@ -357,19 +357,15 @@ class RapidLoad_Optimizer
 
             }
 
-            if(isset(self::$options[$key])){
+            $option_type = gettype(self::$options[$key]);
 
-                $option_type = gettype(self::$options[$key]);
-
-                if(isset(self::$global_options[$key])){
-                    if($option_type == "string" && self::$global_options[$key] == $option){
-                        unset(self::$options[$key]);
-                    }
-                    else if (($option_type == "object" || $option_type == "array") && json_encode($option) == json_encode(self::$global_options[$key])){
-                        unset(self::$options[$key]);
-                    }
+            if(isset(self::$global_options[$key])){
+                if($option_type == "string" && self::$global_options[$key] == $option){
+                    unset(self::$options[$key]);
                 }
-
+                else if (($option_type == "object" || $option_type == "array") && json_encode($option) == json_encode(self::$global_options[$key])){
+                    unset(self::$options[$key]);
+                }
             }
 
         }
@@ -421,6 +417,7 @@ class RapidLoad_Optimizer
             'uucss_enable_cpcss_mobile',
             'uucss_additional_css',
             'uucss_enable_uucss',
+            'uucss_safelist',
             'remove_cpcss_on_user_interaction',
             'uucss_excluded_files',
             //js
@@ -583,6 +580,7 @@ class RapidLoad_Optimizer
             'remove_cpcss_on_user_interaction' => array(
                 'control_type' => 'checkbox',
                 'control_label' => 'Remove Critical CSS on User Interaction',
+                'control_description' => '',
                 'control_values' => array('1', '0'),
                 'default' => '0'
             ),
@@ -643,7 +641,8 @@ class RapidLoad_Optimizer
             ),
             'uucss_enable_cpcss_mobile' => array(
                 'control_type' => 'checkbox',
-                'control_label' => 'Enable Separate CSS for Mobile',
+                'control_label' => 'Mobile Critical CSS',
+                'control_description' => 'Extract Critical CSS for mobile screens',
                 'control_values' => array('1', '0'),
                 'default' => '0',
                 'main_input' => false
@@ -651,6 +650,7 @@ class RapidLoad_Optimizer
             'uucss_excluded_js_files_from_defer' => array(
                 'control_type' => 'textarea',
                 'control_label' => 'Exclude Javascript from Deferring',
+                'control_description' => 'These JS files will be excluded from deferring.',
                 'default' => ''
             ),
             'uucss_exclude_images_from_modern_images' => array(
@@ -672,12 +672,14 @@ class RapidLoad_Optimizer
             ),
             'uucss_minify_excluded_files' => array(
                 'control_type' => 'textarea',
-                'control_label' => 'Exclude Css from being minified',
+                'control_label' => 'Exclude CSS from Minify',
+                'control_description' => 'These CSS files will be excluded from being minified.',
                 'default' => ''
             ),
             'uucss_exclude_files_from_minify_js' => array(
                 'control_type' => 'textarea',
-                'control_label' => 'Exclude js files from being minified',
+                'control_label' => 'Exclude Javascript from Minify',
+                'control_description' => 'These JS files will be excluded from being minified.',
                 'default' => ''
             ),
             'uucss_excluded_js_files' => array(
@@ -692,7 +694,8 @@ class RapidLoad_Optimizer
             ),
             'uucss_excluded_files' => array(
                 'control_type' => 'textarea',
-                'control_label' => 'Exclude CSS Files',
+                'control_label' => 'Exclude CSS from Remove Unused CSS',
+                'control_description' => 'These CSS files will be excluded from Remove Unused CSS optimization.',
                 'default' => ''
             ),
             'uucss_exclude_images_from_lazy_load' => array(
@@ -707,7 +710,8 @@ class RapidLoad_Optimizer
             ),
             'uucss_additional_css' => array(
                 'control_type' => 'textarea',
-                'control_label' => 'Additional Critical CSS',
+                'control_label' => 'Above-the-fold CSS',
+                'control_description' => 'Include any CSS content you need to load above the fold.',
                 'default' => ''
             ),
             'cpcss_purge_url' => array(
@@ -719,6 +723,7 @@ class RapidLoad_Optimizer
             'uucss_load_js_method' => array(
                 'control_type' => 'checkbox',
                 'control_label' => 'Defer Javascript',
+                'control_description' => 'Render-blocking JS on website can be resolved with defer javaScript.',
                 'control_values' => array('1', '0'),
                 'default' => '0'
             ),
@@ -781,6 +786,52 @@ class RapidLoad_Optimizer
                 'control_label' => 'Exclude Files',
                 'default' => ''
             ),
+            'uucss_safelist' => array(
+                'control_type' => 'textarea',
+                'control_label' => 'Force Include selectors',
+                'control_description' => 'These selectors will be forcefully included into optimization.',
+                'default' => ''
+            ),
+            'uucss_variables' => array(
+                'control_type' => 'checkbox',
+                'control_accordion_name' => 'uucss-misc-options',
+                'control_label' => 'CSS Variables',
+                'control_description' => 'Remove unused CSS variables.',
+                'control_values' => array('1', '0'),
+                'default' => '0'
+            ),
+            'uucss_cache_busting_v2' => array(
+                'control_type' => 'checkbox',
+                'control_accordion_name' => 'uucss-misc-options',
+                'control_label' => 'Cache Busting',
+                'control_description' => 'Enable RapidLoad crawler to view pages with a random query string.',
+                'control_values' => array('1', '0'),
+                'default' => '0'
+            ),
+            'uucss_keyframes' => array(
+                'control_type' => 'checkbox',
+                'control_accordion_name' => 'uucss-misc-options',
+                'control_label' => 'CSS Animation keyframes',
+                'control_description' => 'Remove unused keyframe animations.',
+                'control_values' => array('1', '0'),
+                'default' => '0'
+            ),
+            'uucss_fontface' => array(
+                'control_type' => 'checkbox',
+                'control_accordion_name' => 'uucss-misc-options',
+                'control_label' => 'CSS @font-face rules',
+                'control_description' => 'Remove unused @font-face rules.',
+                'control_values' => array('1', '0'),
+                'default' => '0'
+            ),
+            'uucss_include_inline_css' => array(
+                'control_type' => 'checkbox',
+                'control_accordion_name' => 'uucss-misc-options',
+                'control_label' => 'Inline CSS',
+                'control_description' => 'Optimize inline CSS.',
+                'control_values' => array('1', '0'),
+                'default' => '0'
+            ),
         );
 
         $inputs = array();
@@ -828,6 +879,17 @@ class RapidLoad_Optimizer
                         'size' => @file_exists($cache_file) ? $this->formatSize(@filesize($cache_file)) : null,
                     ];
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
+                }else if($input['key'] == "uucss_safelist"){
+                    $rulesArray = [];
+                    if(isset($options[$input['key']])){
+                        $dataArray = json_decode($options[$input['key']], true);
+                        foreach ($dataArray as $item) {
+                            if (isset($item['rule'])) {
+                                $rulesArray[] = $item['rule'];
+                            }
+                        }
+                    }
+                    $input['value'] = implode("\n",$rulesArray);
                 }else{
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }
@@ -849,7 +911,7 @@ class RapidLoad_Optimizer
             ['keys' => ['font-display', 'enable-font'], 'name' => 'Self Host Google Fonts', 'description' => 'Self host all your Google fonts and load fonts faster. Turn on CDN to serve these fonts faster through RapidLoad CDN.', 'category' => 'font', 'inputs' => ['uucss_self_host_google_fonts']],
             ['keys' => ['unsized-images'], 'name' => 'Minify CSS', 'description' => 'Remove unnecessary spaces, lines and comments from CSS files.', 'category' => 'css', 'inputs' => ['uucss_minify', 'uucss_minify_excluded_files']],
             ['keys' => ['unminified-javascript'], 'name' => 'Minify Javascript', 'description' => 'Remove unnecessary spaces, lines and comments from JS files.', 'category' => 'javascript', 'inputs' => ['minify_js', 'uucss_exclude_files_from_minify_js']],
-            ['keys' => ['unused-css-rules'], 'name' => 'Remove Unused CSS', 'description' => 'Remove unused CSS for each page and reduce page size.', 'category' => 'css', 'inputs' => ['uucss_enable_uucss', 'rapidload_purge_all', 'uucss_excluded_files']],
+            ['keys' => ['unused-css-rules'], 'name' => 'Remove Unused CSS', 'description' => 'Remove unused CSS for each page and reduce page size.', 'category' => 'css', 'inputs' => ['uucss_enable_uucss', 'rapidload_purge_all', 'uucss_excluded_files','uucss_safelist','uucss_variables','uucss_keyframes','uucss_fontface','uucss_include_inline_css','uucss_cache_busting_v2']],
             ['keys' => ['render-blocking-resources'], 'name' => 'Critical CSS', 'description' => 'Extract and prioritize above-the-fold CSS.', 'category' => 'css', 'inputs' => ['uucss_enable_cpcss', 'uucss_enable_cpcss_mobile', 'uucss_additional_css', 'cpcss_purge_url', 'remove_cpcss_on_user_interaction']],
             ['keys' => ['render-blocking-resources'], 'name' => 'Defer Javascript', 'description' => 'Render-blocking JS on website can be resolved with defer JavaScript.', 'category' => 'javascript', 'inputs' => ['uucss_load_js_method', 'uucss_excluded_js_files_from_defer']],
             ['keys' => ['offscreen-images'], 'name' => 'Lazy Load Images', 'description' => 'Delay loading of images until needed.', 'category' => 'image', 'inputs' => ['uucss_lazy_load_images', 'uucss_exclude_images_from_lazy_load']],
@@ -929,7 +991,20 @@ class RapidLoad_Optimizer
                     case 'number-range' :
                     case 'number' :{
                         if(isset($input->value) && isset($input->key)){
-                            self::$options[$input->key] = $input->value;
+                            if($input->key == "uucss_safelist"){
+                                $rulesArray = explode("\n",$input->value);
+                                $transformedRulesArray = [];
+                                foreach ($rulesArray as $rule) {
+                                    $transformedRulesArray[] = [
+                                        'type' => 'greedy',
+                                        'rule' => $rule
+                                    ];
+                                }
+                                self::$options[$input->key] = json_encode($transformedRulesArray);
+                                error_log(self::$options[$input->key]);
+                            }else{
+                                self::$options[$input->key] = $input->value;
+                            }
                         }else if(isset($new_options[$input->key])){
                             unset(self::$options[$input->key]);
                         }
