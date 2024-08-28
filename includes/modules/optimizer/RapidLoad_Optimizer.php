@@ -294,9 +294,9 @@ class RapidLoad_Optimizer
 
     public static function post_optimizer_function($data){
 
-        foreach (self::$options as $key => $option){
+        foreach (self::$merged_options as $key => $option){
 
-            if(isset(self::$options[$key]) && (self::$options[$key] != "" && self::$options[$key] && !empty(self::$options[$key]))){
+            if(isset(self::$merged_options[$key]) && (self::$merged_options[$key] != "" && self::$merged_options[$key] && !empty(self::$merged_options[$key]))){
                 switch ($key){
                     case 'uucss_enable_uucss':
                     case 'uucss_inline_css':
@@ -357,15 +357,19 @@ class RapidLoad_Optimizer
 
             }
 
-            $option_type = gettype(self::$options[$key]);
+            if(isset(self::$options[$key])){
 
-            if(isset(self::$global_options[$key])){
-                if($option_type == "string" && self::$global_options[$key] == $option){
-                    unset(self::$options[$key]);
+                $option_type = gettype(self::$options[$key]);
+
+                if(isset(self::$global_options[$key])){
+                    if($option_type == "string" && self::$global_options[$key] == $option){
+                        unset(self::$options[$key]);
+                    }
+                    else if (($option_type == "object" || $option_type == "array") && json_encode($option) == json_encode(self::$global_options[$key])){
+                        unset(self::$options[$key]);
+                    }
                 }
-                else if (($option_type == "object" || $option_type == "array") && json_encode($option) == json_encode(self::$global_options[$key])){
-                    unset(self::$options[$key]);
-                }
+
             }
 
         }
