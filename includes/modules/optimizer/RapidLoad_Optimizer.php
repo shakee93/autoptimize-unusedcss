@@ -672,7 +672,7 @@ class RapidLoad_Optimizer
             ),
             'uucss_minify_excluded_files' => array(
                 'control_type' => 'textarea',
-                'control_label' => 'Exclude Images from being minified',
+                'control_label' => 'Exclude Css from being minified',
                 'default' => ''
             ),
             'uucss_exclude_files_from_minify_js' => array(
