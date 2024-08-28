@@ -39,6 +39,12 @@ class RapidLoad_Font
         add_filter('rapidload/webfont/handle', [$this, 'handle_web_font_js'], 10, 2);
 
         add_action('rapidload/admin-bar-actions', [$this, 'add_admin_clear_action']);
+
+        add_action('rapidload/cdn/validated', [$this, 'update_cdn_url_in_cached_files']);
+    }
+
+    public function update_cdn_url_in_cached_files($args) {
+        RapidLoad_CDN::update_cdn_url_in_cached_files(self::$base_dir, $args);
     }
 
     public function add_admin_clear_action($wp_admin_bar){

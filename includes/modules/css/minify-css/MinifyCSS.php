@@ -43,7 +43,11 @@ class MinifyCSS
         /*if (!wp_next_scheduled('cron_rapidload_minify_css_storage_clean')) {
             wp_schedule_event(current_time('timestamp'), 'daily', 'cron_rapidload_minify_css_storage_clean');
         }*/
+        add_action('rapidload/cdn/validated', [$this, 'update_cdn_url_in_cached_files']);
+    }
 
+    public function update_cdn_url_in_cached_files($args) {
+        RapidLoad_CDN::update_cdn_url_in_cached_files(self::$base_dir, $args);
     }
 
     public function clean_minify_file_storage() {

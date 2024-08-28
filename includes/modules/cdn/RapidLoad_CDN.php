@@ -45,6 +45,10 @@ class RapidLoad_CDN
         $api = new RapidLoad_Api();
 
         if($remove){
+            do_action('rapidload/cdn/validated', [
+                'clear' => true,
+                'cdn_url' => isset($this->options['uucss_cdn_url']) ? $this->options['uucss_cdn_url'] : null
+            ]);
             unset($this->options['uucss_cdn_dns_id']);
             unset($this->options['uucss_cdn_zone_id']);
             unset($this->options['uucss_cdn_url']);
@@ -84,6 +88,10 @@ class RapidLoad_CDN
             $this->options['uucss_cdn_dns_id'] = $response->dns_id;
             $this->options['uucss_cdn_url'] = $response->cdn_url;
             RapidLoad_Base::update_option('rapidload_module_cdn',"1");
+            do_action('rapidload/cdn/validated', [
+                'clear' => false,
+                'cdn_url' => isset($this->options['uucss_cdn_url']) ? $this->options['uucss_cdn_url'] : null
+            ]);
         }
 
         RapidLoad_Base::update_option('autoptimize_uucss_settings', $this->options);
@@ -154,4 +162,26 @@ class RapidLoad_CDN
             && isset($this->options['uucss_cdn_zone_id']) && !empty($this->options['uucss_cdn_zone_id']);
     }
 
+    public static function update_cdn_url_in_cached_files($dir, $args) {
+        if (!isset($args['cdn_url'])) {
+            return;
+        }
+        $search_url = trailingslashit(site_url());
+        $replace_url = trailingslashit($args['cdn_url']);
+        if (isset($args['clear']) && boolval($args['clear']) == 1) {
+            $temp_url = $search_url;
+            $search_url = $replace_url;
+            $replace_url = $temp_url;
+        }
+        $files = self::get_files_in_dir($dir);
+        foreach ($files as $file) {
+            if (pathinfo($file, PATHINFO_EXTENSION) === 'css') {
+                $content = file_get_contents($file);
+                if (strpos($content, $search_url) !== false) {
+                    $updated_content = str_replace($search_url, $replace_url, $content);
+                    file_put_contents($file, $updated_content);
+                }
+            }
+        }
+    }
 }
