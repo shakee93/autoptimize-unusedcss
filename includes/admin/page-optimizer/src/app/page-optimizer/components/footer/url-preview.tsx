@@ -26,10 +26,8 @@ const UrlPreview = () => {
     return <div className='flex flex-row flex-1 gap-3 px-5 min-w-[350px] items-center bg-white dark:bg-brand-800'>
         <div>
             <div
-                // target="_blank"
-                // href={url}
                 className='text-sm items-center cursor-default text-ellipsis truncate md:max-w-sm lg:max-w-xl'>
-                {data?.loadingExperience?.initial_url ? data.loadingExperience.initial_url : url}
+                {data?.loadingExperience?.initial_url ? decodeURIComponent(data.loadingExperience.initial_url) : url}
                 {/*<ArrowTopRightOnSquareIcon className="h-4 w-4" />*/}
             </div>
 

@@ -1,6 +1,6 @@
 {
   "name": "@rapidload/page-optimizer",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Helps you get better page speed scores by analyzing and providing optimal actions (for Wordpress)",
   "homepage": "https://rapidload.io/",
   "repository": {
@@ -61,6 +61,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-switch": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
+    "@radix-ui/react-toggle-group": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.2",
     "@reactour/tour": "^3.7.0",
     "@reduxjs/toolkit": "^2.2.7",
