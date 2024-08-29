@@ -173,6 +173,8 @@ interface AuditSettingInput {
     control_values:  ControlValue[] | string [] ;
     control_payload: string;
     control_label: string;
+    control_accordion_name: string;
+    control_description: string;
     value: any;
     key: any;
     action: string
