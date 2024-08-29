@@ -852,6 +852,12 @@ class RapidLoad_Optimizer
                 'control_description' => 'These images will be excluded from inserting a width and height.',
                 'default' => ''
             ),
+            'excluded_page_paths' => array(
+                'control_type' => 'textarea',
+                'control_label' => 'Exclude Pages',
+                'control_description' => 'These pages will exclude from cache.',
+                'default' => ''
+            ),
             'uucss_preload_font_urls' => array(
                 'control_type' => 'textarea',
                 'control_label' => 'Preload Fonts',
@@ -910,8 +916,6 @@ class RapidLoad_Optimizer
 
         $rapidload_cache_args = RapidLoad_Cache::get_settings();
 
-        error_log(json_encode($rapidload_cache_args, JSON_PRETTY_PRINT));
-
         foreach ($keys as $key) {
             if (isset($input_map[$key])) {
                 $input = $input_map[$key];
@@ -968,6 +972,8 @@ class RapidLoad_Optimizer
                     $input['value'] = implode("\n",$rulesArray);
                 }else if($input['key'] == "cache_expires" || $input['key'] == "cache_expiry_time" || $input['key'] == "mobile_cache"){
                     $input['value'] = isset($rapidload_cache_args[$input['key']]) ? (string)$rapidload_cache_args[$input['key']] : null;
+                }else if($input['key'] == "excluded_page_paths"){
+                    $input['value'] = isset($rapidload_cache_args[$input['key']]) ? implode("\n",$this->transformRegexToPaths($rapidload_cache_args[$input['key']])) : null;
                 }else{
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }
@@ -978,6 +984,28 @@ class RapidLoad_Optimizer
         $settings['inputs'] = $inputs;
 
         return $settings;
+    }
+
+    public function transformRegexToPaths($regex) {
+        $pattern = trim($regex, '/');
+        $paths = explode('|', $pattern);
+        $paths = array_map(function($path) {
+            $cleanedPath = rtrim(trim($path, '^$'), '\/?');
+            $cleanedPath = str_replace(['\/', '\-'], ['/', '-'], $cleanedPath);
+            return $cleanedPath;
+        }, $paths);
+        return $paths;
+    }
+
+    function transformPathsToRegex(array $paths) {
+        $escapedPaths = array_map(function($path) {
+            if (substr($path, 0, 1) !== '/') {
+                $path = '/' . $path;
+            }
+            return '^' . preg_quote($path, '/') . '\/?$';
+        }, $paths);
+        $regexPattern = '/' . implode('|', $escapedPaths) . '/';
+        return $regexPattern;
     }
 
     public function transform_options_to_settings($url, $options) {
@@ -995,7 +1023,7 @@ class RapidLoad_Optimizer
             ['keys' => ['offscreen-images'], 'name' => 'Lazy Load Images', 'description' => 'Delay loading of images until needed.', 'category' => 'image', 'inputs' => ['uucss_lazy_load_images', 'uucss_exclude_images_from_lazy_load']],
             ['keys' => ['lcp-lazy-loaded'], 'name' => 'Exclude Above-the-fold Images from Lazy Load', 'description' => 'Improve your LCP images.', 'category' => 'image', 'inputs' => ['uucss_exclude_above_the_fold_images', 'uucss_exclude_above_the_fold_image_count']],
             ['keys' => ['bootup-time', 'unused-javascript'], 'name' => 'Delay Javascript', 'description' => 'Loading JS files on user interaction', 'category' => 'javascript', 'inputs' => ['delay_javascript', 'uucss_exclude_files_from_delay_js', 'delay_javascript_callback', 'uucss_excluded_js_files','uucss_load_scripts_on_user_interaction']],
-            ['keys' => ['server-response-time'], 'name' => 'Page Cache', 'description' => 'Optimize and cache static HTML pages to provide a snappier page experience.', 'category' => 'cache', 'inputs' => ['uucss_enable_cache','cache_expires','cache_expiry_time','mobile_cache']],
+            ['keys' => ['server-response-time'], 'name' => 'Page Cache', 'description' => 'Optimize and cache static HTML pages to provide a snappier page experience.', 'category' => 'cache', 'inputs' => ['uucss_enable_cache','cache_expires','cache_expiry_time','mobile_cache','excluded_page_paths']],
             ['keys' => ['third-party-facades'], 'name' => 'Lazy Load Iframes', 'description' => 'Delay loading of iframes until needed.', 'category' => 'image', 'inputs' => ['uucss_lazy_load_iframes', 'uucss_exclude_images_from_lazy_load']],
             ['keys' => ['uses-long-cache-ttl'], 'name' => 'RapidLoad CDN', 'description' => 'Load resource files faster by using 112 edge locations with only 27ms latency.', 'category' => 'cdn', 'inputs' => ['uucss_enable_cdn','clear_cdn_cache','uucss_cdn_url','validate_cdn_url']],
             ['keys' => ['uses-long-cache-ttl'], 'name' => 'Cache Policy', 'description' => 'Set up cache-control header to increase the browser cache expiration', 'category' => 'cache', 'inputs' => ['update_htaccess_file',]],
@@ -1090,6 +1118,9 @@ class RapidLoad_Optimizer
                                 self::$options[$input->key] = json_encode($transformedRulesArray);
                             }else if($input->key == "cache_expiry_time"){
                                 $rapidload_cache_args['cache_expiry_time'] = (float)$input->value;
+                            }else if($input->key == "excluded_page_paths"){
+                                $rapidload_cache_args['excluded_page_paths'] = $this->transformPathsToRegex(explode("\n",$input->value));
+                                error_log($rapidload_cache_args['excluded_page_paths']);
                             }else{
                                 self::$options[$input->key] = $input->value;
                             }
