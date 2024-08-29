@@ -568,12 +568,14 @@ class RapidLoad_Optimizer
             'uucss_support_next_gen_formats' => array(
                 'control_type' => 'checkbox',
                 'control_label' => 'Serve next-gen Images',
+                'control_description' => 'Serve the images in next-gen image formats to all the browsers that support them.',
                 'control_values' => array('1', '0'),
                 'default' => '0'
             ),
             'uucss_generate_blurry_place_holder' => array(
                 'control_type' => 'checkbox',
                 'control_label' => 'Low Quality Image placeholders (LQIP)',
+                'control_description' => 'Generate low quality blurry SVG image placeholders.',
                 'control_values' => array('1', '0'),
                 'default' => '0'
             ),
@@ -587,6 +589,7 @@ class RapidLoad_Optimizer
             'uucss_image_optimize_level' => array(
                 'control_type' => 'options',
                 'control_label' => 'Image Optimize Level',
+                'control_description' => 'Choose the image compression level.',
                 'control_values' => array('lossy', 'glossy', 'lossless'),
                 'default' => 'lossless'
             ),
@@ -656,6 +659,7 @@ class RapidLoad_Optimizer
             'uucss_exclude_images_from_modern_images' => array(
                 'control_type' => 'textarea',
                 'control_label' => 'Exclude Images from modern image urls',
+                'control_description' => 'These images will be excluded from being converted to modern formats.',
                 'default' => ''
             ),
             'uucss_exclude_images_from_set_width_and_height' => array(
@@ -685,11 +689,14 @@ class RapidLoad_Optimizer
             'uucss_excluded_js_files' => array(
                 'control_type' => 'textarea',
                 'control_label' => 'Exclude Javascript',
+                'control_description' => 'These JS files will be excluded from all optimizations.',
                 'default' => ''
             ),
             'delay_javascript_callback' => array(
                 'control_type' => 'textarea',
                 'control_label' => 'Callback Script',
+                'radio_name' => 'All Files',
+                'control_description' => 'These scripts will be executed on DOMContentLoaded',
                 'default' => ''
             ),
             'uucss_excluded_files' => array(
@@ -700,12 +707,14 @@ class RapidLoad_Optimizer
             ),
             'uucss_exclude_images_from_lazy_load' => array(
                 'control_type' => 'textarea',
-                'control_label' => 'Exclude Images/Iframes from Lazy Load',
+                'control_label' => 'Lazy Load',
+                'control_description' => 'Lazy load images and iframes.',
                 'default' => ''
             ),
             'uucss_exclude_images' => array(
                 'control_type' => 'textarea',
-                'control_label' => 'Exclude Images/Iframes',
+                'control_label' => 'Exclude Images from Lazy Load',
+                'control_description' => 'These images will be excluded from lazy-loading.',
                 'default' => ''
             ),
             'uucss_additional_css' => array(
@@ -719,6 +728,24 @@ class RapidLoad_Optimizer
                 'control_label' => 'Regenerate Critical CSS',
                 'action' => 'action=cpcss_purge_url&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' ),
                 'description' => ''
+            ),
+            'clear_cdn_cache' => array(
+                'control_type' => 'button',
+                'control_label' => 'Clear CDN Cache',
+                'control_description' => 'Clear resources caches across the CDN network',
+                'action' => 'action=purge_rapidload_cdn&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+            ),
+            'validate_cdn_url' => array(
+                'control_type' => 'button',
+                'control_label' => 'Validate CDN url',
+                'control_description' => 'validate cdn url',
+                'action' => 'action=validate_cdn&dashboard_cdn_validator&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+            ),
+            'uucss_cdn_url' => array(
+                'control_type' => 'text-input',
+                'readonly' => true,
+                'control_label' => 'CDN Endpoint',
+                'control_description' => 'Your CDN endpoint to store and serve all your resources across the CDN network',
             ),
             'uucss_load_js_method' => array(
                 'control_type' => 'checkbox',
@@ -736,6 +763,7 @@ class RapidLoad_Optimizer
             'delay_javascript' => array(
                 'control_type' => 'checkbox',
                 'control_label' => 'Delay Javascript',
+                'control_description' => 'Loading JS files on user interaction',
                 'control_values' => array('1', '0'),
                 'default' => '0'
             ),
@@ -747,8 +775,31 @@ class RapidLoad_Optimizer
             ),
             'uucss_lazy_load_iframes' => array(
                 'control_type' => 'checkbox',
-                'control_label' => 'Lazy Load Iframes',
+                'control_label' => 'Iframes Lazy Load',
+                'control_description' => 'Lazy load all iframes in your website.',
                 'control_values' => array('1', '0'),
+                'default' => '0'
+            ),
+            'cache_expires' => array(
+                'control_type' => 'checkbox',
+                'control_label' => 'Cache Expiration',
+                'control_description' => 'Cached pages expire.',
+                'control_values' => array('1', '0'),
+                'default' => '0'
+            ),
+            'mobile_cache' => array(
+                'control_type' => 'checkbox',
+                'control_label' => 'Mobile Cache',
+                'control_description' => 'Create a cached version for mobile devices.',
+                'control_values' => array('1', '0'),
+                'default' => '0'
+            ),
+            'cache_expiry_time' => array(
+                'control_type' => 'number-range',
+                'control_label' => 'Cache Expiration',
+                'control_description' => 'Cached pages expire.',
+                'control_values' => array('0', '2', '6', '12', '24'),
+                'control_values_suffix' => 'hours',
                 'default' => '0'
             ),
             'uucss_exclude_above_the_fold_images' => array(
@@ -760,6 +811,7 @@ class RapidLoad_Optimizer
             'uucss_exclude_above_the_fold_image_count' => array(
                 'control_type' => 'number-range',
                 'control_label' => 'Exclude Above-the-fold Images from Lazy Load',
+                'control_description' => 'Choose the image count to exclude from above-the-fold',
                 'control_values' => array('1','2', '3','4', '5'),
                 'default' => '5'
             ),
@@ -783,13 +835,33 @@ class RapidLoad_Optimizer
             ),
             'uucss_exclude_files_from_delay_js' => array(
                 'control_type' => 'button',
-                'control_label' => 'Exclude Files',
+                'control_label' => 'Exclude Javascript from Delaying',
+                'radio_name' => 'All Files',
+                'control_description' => 'These JS files will be excluded from delaying.',
                 'default' => ''
             ),
             'uucss_safelist' => array(
                 'control_type' => 'textarea',
                 'control_label' => 'Force Include selectors',
                 'control_description' => 'These selectors will be forcefully included into optimization.',
+                'default' => ''
+            ),
+            'uucss_exclude_images_from_set_width_and_height' => array(
+                'control_type' => 'textarea',
+                'control_label' => 'Exclude Width and Height',
+                'control_description' => 'These images will be excluded from inserting a width and height.',
+                'default' => ''
+            ),
+            'uucss_preload_font_urls' => array(
+                'control_type' => 'textarea',
+                'control_label' => 'Preload Fonts',
+                'control_description' => 'Preload critical font files to avoid FOUT and signal browsers to download fonts earlier.',
+                'default' => ''
+            ),
+            'uucss_load_scripts_on_user_interaction' => array(
+                'control_type' => 'textarea',
+                'control_label' => 'Delaying only selected Javascript',
+                'control_description' => 'These JS files will be excluded from delaying.',
                 'default' => ''
             ),
             'uucss_variables' => array(
@@ -835,6 +907,8 @@ class RapidLoad_Optimizer
         );
 
         $inputs = array();
+
+        $rapidload_cache_args = RapidLoad_Cache::get_settings();
 
         foreach ($keys as $key) {
             if (isset($input_map[$key])) {
@@ -890,6 +964,9 @@ class RapidLoad_Optimizer
                         }
                     }
                     $input['value'] = implode("\n",$rulesArray);
+                }else if($input['key'] == "cache_expires" || $input['key'] == "cache_expiry_time" || $input['key'] == "mobile_cache"){
+                    error_log('gets input for ' . $input['key'] . $rapidload_cache_args[$input['key']]);
+                    $input['value'] = isset($rapidload_cache_args[$input['key']]) ? (string)$rapidload_cache_args[$input['key']] : null;
                 }else{
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }
@@ -912,15 +989,16 @@ class RapidLoad_Optimizer
             ['keys' => ['unsized-images'], 'name' => 'Minify CSS', 'description' => 'Remove unnecessary spaces, lines and comments from CSS files.', 'category' => 'css', 'inputs' => ['uucss_minify', 'uucss_minify_excluded_files']],
             ['keys' => ['unminified-javascript'], 'name' => 'Minify Javascript', 'description' => 'Remove unnecessary spaces, lines and comments from JS files.', 'category' => 'javascript', 'inputs' => ['minify_js', 'uucss_exclude_files_from_minify_js']],
             ['keys' => ['unused-css-rules'], 'name' => 'Remove Unused CSS', 'description' => 'Remove unused CSS for each page and reduce page size.', 'category' => 'css', 'inputs' => ['uucss_enable_uucss', 'rapidload_purge_all', 'uucss_excluded_files','uucss_safelist','uucss_variables','uucss_keyframes','uucss_fontface','uucss_include_inline_css','uucss_cache_busting_v2']],
-            ['keys' => ['render-blocking-resources'], 'name' => 'Critical CSS', 'description' => 'Extract and prioritize above-the-fold CSS.', 'category' => 'css', 'inputs' => ['uucss_enable_cpcss', 'uucss_enable_cpcss_mobile', 'uucss_additional_css', 'cpcss_purge_url', 'remove_cpcss_on_user_interaction']],
+            ['keys' => ['render-blocking-resources'], 'name' => 'Critical CSS', 'description' => 'Extract and prioritize above-the-fold CSS.', 'category' => 'css', 'inputs' => ['uucss_enable_cpcss', 'uucss_enable_cpcss_mobile', 'uucss_additional_css', 'cpcss_purge_url', 'remove_cpcss_on_user_interaction','uucss_preload_font_urls']],
             ['keys' => ['render-blocking-resources'], 'name' => 'Defer Javascript', 'description' => 'Render-blocking JS on website can be resolved with defer JavaScript.', 'category' => 'javascript', 'inputs' => ['uucss_load_js_method', 'uucss_excluded_js_files_from_defer']],
             ['keys' => ['offscreen-images'], 'name' => 'Lazy Load Images', 'description' => 'Delay loading of images until needed.', 'category' => 'image', 'inputs' => ['uucss_lazy_load_images', 'uucss_exclude_images_from_lazy_load']],
             ['keys' => ['lcp-lazy-loaded'], 'name' => 'Exclude Above-the-fold Images from Lazy Load', 'description' => 'Improve your LCP images.', 'category' => 'image', 'inputs' => ['uucss_exclude_above_the_fold_images', 'uucss_exclude_above_the_fold_image_count']],
-            ['keys' => ['bootup-time', 'unused-javascript'], 'name' => 'Delay Javascript', 'description' => 'Loading JS files on user interaction', 'category' => 'javascript', 'inputs' => ['delay_javascript', 'uucss_exclude_files_from_delay_js', 'delay_javascript_callback', 'uucss_excluded_js_files']],
-            ['keys' => ['server-response-time'], 'name' => 'Page Cache', 'description' => 'Optimize and cache static HTML pages to provide a snappier page experience.', 'category' => 'cache', 'inputs' => ['uucss_enable_cache']],
+            ['keys' => ['bootup-time', 'unused-javascript'], 'name' => 'Delay Javascript', 'description' => 'Loading JS files on user interaction', 'category' => 'javascript', 'inputs' => ['delay_javascript', 'uucss_exclude_files_from_delay_js', 'delay_javascript_callback', 'uucss_excluded_js_files','uucss_load_scripts_on_user_interaction']],
+            ['keys' => ['server-response-time'], 'name' => 'Page Cache', 'description' => 'Optimize and cache static HTML pages to provide a snappier page experience.', 'category' => 'cache', 'inputs' => ['uucss_enable_cache','cache_expires','cache_expiry_time','mobile_cache']],
             ['keys' => ['third-party-facades'], 'name' => 'Lazy Load Iframes', 'description' => 'Delay loading of iframes until needed.', 'category' => 'image', 'inputs' => ['uucss_lazy_load_iframes', 'uucss_exclude_images_from_lazy_load']],
-            ['keys' => ['uses-long-cache-ttl'], 'name' => 'RapidLoad CDN', 'description' => 'Load resource files faster by using 112 edge locations with only 27ms latency.', 'category' => 'cdn', 'inputs' => ['uucss_enable_cdn']],
-            ['keys' => ['uses-long-cache-ttl'], 'name' => 'Cache Policy', 'description' => 'Set up cache-control header to increase the browser cache expiration', 'category' => 'cache', 'inputs' => ['update_htaccess_file']]
+            ['keys' => ['uses-long-cache-ttl'], 'name' => 'RapidLoad CDN', 'description' => 'Load resource files faster by using 112 edge locations with only 27ms latency.', 'category' => 'cdn', 'inputs' => ['uucss_enable_cdn','clear_cdn_cache','uucss_cdn_url','validate_cdn_url']],
+            ['keys' => ['uses-long-cache-ttl'], 'name' => 'Cache Policy', 'description' => 'Set up cache-control header to increase the browser cache expiration', 'category' => 'cache', 'inputs' => ['update_htaccess_file',]],
+            ['keys' => ['unsized-images'], 'name' => 'Add Width and Height Attributes', 'description' => 'Include width and height attributes for these images.', 'category' => 'image', 'inputs' => ['uucss_set_width_and_height','uucss_exclude_images_from_set_width_and_height']]
         ];
 
         foreach ($audits as $audit) {
@@ -968,6 +1046,8 @@ class RapidLoad_Optimizer
 
     public function optimizer_update_settings($result){
 
+        $rapidload_cache_args = RapidLoad_Cache::get_settings();
+
         foreach ($result as $settings){
             foreach ($settings->inputs as $input){
                 switch($input->control_type ){
@@ -976,11 +1056,17 @@ class RapidLoad_Optimizer
                         if(isset($input->value) && isset($input->key) && ($input->value || $input->value == "1")){
                             if($input->key == "uucss_load_js_method"){
                                 self::$options[$input->key] = "defer";
+                            }else if($input->key == "cache_expires" || $input->key == "mobile_cache"){
+                                $rapidload_cache_args[$input->key] = $input->value ? 1 : 0;
                             }else{
                                 self::$options[$input->key] = "1";
                             }
                         }else if(isset($input->key)){
-                            self::$options[$input->key] = "";
+                            if($input->key == "cache_expires" || $input->key == "mobile_cache"){
+                                $rapidload_cache_args[$input->key] = "0";
+                            }else{
+                                self::$options[$input->key] = "";
+                            }
                         }
                         break;
                     }
@@ -1002,6 +1088,11 @@ class RapidLoad_Optimizer
                                 }
                                 self::$options[$input->key] = json_encode($transformedRulesArray);
                                 error_log(self::$options[$input->key]);
+                            }else if($input->key == "cache_expiry_time"){
+
+                                $rapidload_cache_args['cache_expiry_time'] = (float)$input->value;
+                                error_log('updating expire time');
+
                             }else{
                                 self::$options[$input->key] = $input->value;
                             }
@@ -1033,6 +1124,11 @@ class RapidLoad_Optimizer
 
             }
         }
+
+        error_log(json_encode($rapidload_cache_args, JSON_PRETTY_PRINT));
+
+        RapidLoad_Cache::update_settings($rapidload_cache_args);
+        error_log(json_encode(RapidLoad_Cache::get_settings(), JSON_PRETTY_PRINT));
 
         if((isset(self::$options['uucss_lazy_load_images']) && self::$options['uucss_lazy_load_images'] == "1") || (isset(self::$options['uucss_support_next_gen_formats']) && self::$options['uucss_support_next_gen_formats'] == "1" ) || (isset(self::$options['uucss_lazy_load_iframes']) && self::$options['uucss_lazy_load_iframes'] == "1") ){
             self::$options['uucss_enable_image_delivery'] = "1";
