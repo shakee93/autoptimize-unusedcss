@@ -986,28 +986,6 @@ class RapidLoad_Optimizer
         return $settings;
     }
 
-    public function transformRegexToPaths($regex) {
-        $pattern = trim($regex, '/');
-        $paths = explode('|', $pattern);
-        $paths = array_map(function($path) {
-            $cleanedPath = rtrim(trim($path, '^$'), '\/?');
-            $cleanedPath = str_replace(['\/', '\-'], ['/', '-'], $cleanedPath);
-            return $cleanedPath;
-        }, $paths);
-        return $paths;
-    }
-
-    function transformPathsToRegex(array $paths) {
-        $escapedPaths = array_map(function($path) {
-            if (substr($path, 0, 1) !== '/') {
-                $path = '/' . $path;
-            }
-            return '^' . preg_quote($path, '/') . '\/?$';
-        }, $paths);
-        $regexPattern = '/' . implode('|', $escapedPaths) . '/';
-        return $regexPattern;
-    }
-
     public function transform_options_to_settings($url, $options) {
         $audits = $this->get_google_audits();
         $settings = [];
@@ -1120,7 +1098,6 @@ class RapidLoad_Optimizer
                                 $rapidload_cache_args['cache_expiry_time'] = (float)$input->value;
                             }else if($input->key == "excluded_page_paths"){
                                 $rapidload_cache_args['excluded_page_paths'] = $this->transformPathsToRegex(explode("\n",$input->value));
-                                error_log($rapidload_cache_args['excluded_page_paths']);
                             }else{
                                 self::$options[$input->key] = $input->value;
                             }
