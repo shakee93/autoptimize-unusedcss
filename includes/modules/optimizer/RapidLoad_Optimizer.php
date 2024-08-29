@@ -582,7 +582,7 @@ class RapidLoad_Optimizer
             'remove_cpcss_on_user_interaction' => array(
                 'control_type' => 'checkbox',
                 'control_label' => 'Remove Critical CSS on User Interaction',
-                'control_description' => '',
+                'control_description' => 'Remove Critical CSS when users engage',
                 'control_values' => array('1', '0'),
                 'default' => '0'
             ),
