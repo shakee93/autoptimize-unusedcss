@@ -910,6 +910,8 @@ class RapidLoad_Optimizer
 
         $rapidload_cache_args = RapidLoad_Cache::get_settings();
 
+        error_log(json_encode($rapidload_cache_args, JSON_PRETTY_PRINT));
+
         foreach ($keys as $key) {
             if (isset($input_map[$key])) {
                 $input = $input_map[$key];
@@ -965,7 +967,6 @@ class RapidLoad_Optimizer
                     }
                     $input['value'] = implode("\n",$rulesArray);
                 }else if($input['key'] == "cache_expires" || $input['key'] == "cache_expiry_time" || $input['key'] == "mobile_cache"){
-                    error_log('gets input for ' . $input['key'] . $rapidload_cache_args[$input['key']]);
                     $input['value'] = isset($rapidload_cache_args[$input['key']]) ? (string)$rapidload_cache_args[$input['key']] : null;
                 }else{
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
@@ -1087,12 +1088,8 @@ class RapidLoad_Optimizer
                                     ];
                                 }
                                 self::$options[$input->key] = json_encode($transformedRulesArray);
-                                error_log(self::$options[$input->key]);
                             }else if($input->key == "cache_expiry_time"){
-
                                 $rapidload_cache_args['cache_expiry_time'] = (float)$input->value;
-                                error_log('updating expire time');
-
                             }else{
                                 self::$options[$input->key] = $input->value;
                             }
@@ -1125,10 +1122,7 @@ class RapidLoad_Optimizer
             }
         }
 
-        error_log(json_encode($rapidload_cache_args, JSON_PRETTY_PRINT));
-
         RapidLoad_Cache::update_settings($rapidload_cache_args);
-        error_log(json_encode(RapidLoad_Cache::get_settings(), JSON_PRETTY_PRINT));
 
         if((isset(self::$options['uucss_lazy_load_images']) && self::$options['uucss_lazy_load_images'] == "1") || (isset(self::$options['uucss_support_next_gen_formats']) && self::$options['uucss_support_next_gen_formats'] == "1" ) || (isset(self::$options['uucss_lazy_load_iframes']) && self::$options['uucss_lazy_load_iframes'] == "1") ){
             self::$options['uucss_enable_image_delivery'] = "1";
