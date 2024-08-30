@@ -1,4 +1,4 @@
-=== RapidLoad – Auto Analyze & Optimize Page Speed (Instant Results) ===
+=== RapidLoad - Optimize Web Vitals Automatically ===
 Contributors: shakee93, futtta
 Donate link:
 Tags: unusedcss, criticalcss, rapidload, image optimization, minify js

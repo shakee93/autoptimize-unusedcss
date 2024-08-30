@@ -628,43 +628,48 @@ class RapidLoad_Optimizer
             'uucss_misc_options' => array(
                 'control_type' => 'accordion',
                 'inputs' => [
-                    'uucss_variables' => array(
+                    array(
                         'control_type' => 'checkbox',
                         'control_label' => 'CSS Variables',
                         'control_description' => 'Remove unused CSS variables.',
                         'control_values' => array('1', '0'),
+                        'key' => 'uucss_variables',
                         'default' => '0'
                     ),
-                    'uucss_keyframes' => array(
+                    array(
                         'control_type' => 'checkbox',
                         'control_accordion_name' => 'uucss-misc-options',
                         'control_label' => 'CSS Animation keyframes',
                         'control_description' => 'Remove unused keyframe animations.',
                         'control_values' => array('1', '0'),
+                        'key' => 'uucss_keyframes',
                         'default' => '0'
                     ),
-                    'uucss_fontface' => array(
+                    array(
                         'control_type' => 'checkbox',
                         'control_accordion_name' => 'uucss-misc-options',
                         'control_label' => 'CSS @font-face rules',
                         'control_description' => 'Remove unused @font-face rules.',
                         'control_values' => array('1', '0'),
+                        'key' => 'uucss_fontface',
                         'default' => '0'
                     ),
-                    'uucss_include_inline_css' => array(
+                    array(
                         'control_type' => 'checkbox',
                         'control_accordion_name' => 'uucss-misc-options',
                         'control_label' => 'Inline CSS',
                         'control_description' => 'Optimize inline CSS.',
                         'control_values' => array('1', '0'),
+                        'key' => 'uucss_include_inline_css',
                         'default' => '0'
                     ),
-                    'uucss_cache_busting_v2' => array(
+                    array(
                         'control_type' => 'checkbox',
                         'control_accordion_name' => 'uucss-misc-options',
                         'control_label' => 'Cache Busting',
                         'control_description' => 'Enable RapidLoad crawler to view pages with a random query string.',
                         'control_values' => array('1', '0'),
+                        'key' => 'uucss_cache_busting_v2',
                         'default' => '0'
                     ),
                 ],
@@ -1161,7 +1166,7 @@ class RapidLoad_Optimizer
                     }
                     case 'accordion' : {
                         foreach ($input->inputs as $accordion_key => $accordion_input){
-                            self::$options[$accordion_key] = isset($accordion_input->value) && ($accordion_input->value || $accordion_input->value == "1") ? "1" : "0";
+                            self::$options[$input->inputs[$accordion_key]['key']] = isset($accordion_input->value) && ($accordion_input->value || $accordion_input->value == "1") ? "1" : "0";
                         }
                         break;
                     }case 'gear' : {
