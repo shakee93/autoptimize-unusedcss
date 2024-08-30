@@ -565,76 +565,7 @@ class RapidLoad_Optimizer
 
     function get_settings_with_inputs($url , $keys, $settings, $options = array()) {
         $input_map = array(
-            'uucss_support_next_gen_formats' => array(
-                'control_type' => 'checkbox',
-                'control_label' => 'Serve next-gen Images',
-                'control_description' => 'Serve the images in next-gen image formats to all the browsers that support them.',
-                'control_values' => array('1', '0'),
-                'default' => '0'
-            ),
-            'uucss_generate_blurry_place_holder' => array(
-                'control_type' => 'checkbox',
-                'control_label' => 'Low Quality Image placeholders (LQIP)',
-                'control_description' => 'Generate low quality blurry SVG image placeholders.',
-                'control_values' => array('1', '0'),
-                'default' => '0'
-            ),
-            'remove_cpcss_on_user_interaction' => array(
-                'control_type' => 'checkbox',
-                'control_label' => 'Remove Critical CSS on User Interaction',
-                'control_description' => 'Remove Critical CSS when users engage',
-                'control_values' => array('1', '0'),
-                'default' => '0'
-            ),
-            'uucss_image_optimize_level' => array(
-                'control_type' => 'options',
-                'control_label' => 'Image Optimize Level',
-                'control_description' => 'Choose the image compression level.',
-                'control_values' => array('lossy', 'glossy', 'lossless'),
-                'default' => 'lossless'
-            ),
-            'uucss_self_host_google_fonts' => array(
-                'control_type' => 'checkbox',
-                'control_label' => 'Self Host Google Fonts',
-                'control_values' => array('1', '0'),
-                'default' => '0'
-            ),
-            'uucss_set_width_and_height' => array(
-                'control_type' => 'checkbox',
-                'control_label' => 'Add Width and Height Attributes',
-                'control_values' => array('1', '0'),
-                'default' => '0'
-            ),
-            'uucss_minify' => array(
-                'control_type' => 'checkbox',
-                'control_label' => 'Minify CSS',
-                'control_values' => array('1', '0'),
-                'default' => '0'
-            ),
-            'minify_js' => array(
-                'control_type' => 'checkbox',
-                'control_label' => 'Minify Javascript',
-                'control_values' => array('1', '0'),
-                'default' => '0'
-            ),
-            'uucss_enable_uucss' => array(
-                'control_type' => 'checkbox',
-                'control_label' => 'Remove Unused CSS',
-                'control_values' => array('1', '0'),
-                'default' => '0'
-            ),
-            'uucss_inline_css' => array(
-                'control_type' => 'checkbox',
-                'control_label' => 'Inline Small CSS Files',
-                'control_values' => array('1', '0'),
-                'default' => '0'
-            ),
-            'rapidload_purge_all' => array(
-                'control_type' => 'button',
-                'control_label' => 'Regenerate Unused CSS',
-                'action' => 'action=rapidload_purge_all&job_type=url&clear=false&immediate=true&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' ),
-                'description' => ''
-            ),
+            // CPCSS settings starts here
             'uucss_enable_cpcss' => array(
                 'control_type' => 'checkbox',
                 'control_label' => 'Enable Critical CSS',
@@ -650,77 +581,23 @@ class RapidLoad_Optimizer
                 'default' => '0',
                 'main_input' => false
             ),
-            'uucss_excluded_js_files_from_defer' => array(
-                'control_type' => 'textarea',
-                'control_label' => 'Exclude Javascript from Deferring',
-                'control_description' => 'These JS files will be excluded from deferring.',
-                'default' => ''
-            ),
-            'uucss_exclude_images_from_modern_images' => array(
-                'control_type' => 'textarea',
-                'control_label' => 'Exclude Images from modern image urls',
-                'control_description' => 'These images will be excluded from being converted to modern formats.',
-                'default' => ''
-            ),
-            'uucss_exclude_images_from_set_width_and_height' => array(
-                'control_type' => 'textarea',
-                'control_label' => 'Exclude Images from being set width and height',
-                'default' => ''
-            ),
-            'uucss_adaptive_image_delivery' => array(
-                'control_type' => 'checkbox',
-                'control_label' => 'Enable adaptive Image delivery',
-                'control_values' => array('1', '0'),
-                'default' => '0',
-                'main_input' => false
-            ),
-            'uucss_minify_excluded_files' => array(
-                'control_type' => 'textarea',
-                'control_label' => 'Exclude CSS from Minify',
-                'control_description' => 'These CSS files will be excluded from being minified.',
-                'default' => ''
-            ),
-            'uucss_exclude_files_from_minify_js' => array(
-                'control_type' => 'textarea',
-                'control_label' => 'Exclude Javascript from Minify',
-                'control_description' => 'These JS files will be excluded from being minified.',
-                'default' => ''
-            ),
-            'uucss_excluded_js_files' => array(
-                'control_type' => 'textarea',
-                'control_label' => 'Exclude Javascript',
-                'control_description' => 'These JS files will be excluded from all optimizations.',
-                'default' => ''
-            ),
-            'delay_javascript_callback' => array(
-                'control_type' => 'textarea',
-                'control_label' => 'Callback Script',
-                'radio_name' => 'All Files',
-                'control_description' => 'These scripts will be executed on DOMContentLoaded',
-                'default' => ''
-            ),
-            'uucss_excluded_files' => array(
-                'control_type' => 'textarea',
-                'control_label' => 'Exclude CSS from Remove Unused CSS',
-                'control_description' => 'These CSS files will be excluded from Remove Unused CSS optimization.',
-                'default' => ''
-            ),
-            'uucss_exclude_images_from_lazy_load' => array(
-                'control_type' => 'textarea',
-                'control_label' => 'Lazy Load',
-                'control_description' => 'Lazy load images and iframes.',
-                'default' => ''
-            ),
-            'uucss_exclude_images' => array(
-                'control_type' => 'textarea',
-                'control_label' => 'Exclude Images from Lazy Load',
-                'control_description' => 'These images will be excluded from lazy-loading.',
-                'default' => ''
-            ),
             'uucss_additional_css' => array(
                 'control_type' => 'textarea',
                 'control_label' => 'Above-the-fold CSS',
                 'control_description' => 'Include any CSS content you need to load above the fold.',
+                'default' => ''
+            ),
+            'remove_cpcss_on_user_interaction' => array(
+                'control_type' => 'checkbox',
+                'control_label' => 'Remove Critical CSS on User Interaction',
+                'control_description' => 'Remove Critical CSS when users engage',
+                'control_values' => array('1', '0'),
+                'default' => '0'
+            ),
+            'uucss_preload_font_urls' => array(
+                'control_type' => 'textarea',
+                'control_label' => 'Preload Fonts',
+                'control_description' => 'Preload critical font files to avoid FOUT and signal browsers to download fonts earlier.',
                 'default' => ''
             ),
             'cpcss_purge_url' => array(
@@ -729,23 +606,98 @@ class RapidLoad_Optimizer
                 'action' => 'action=cpcss_purge_url&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' ),
                 'description' => ''
             ),
-            'clear_cdn_cache' => array(
-                'control_type' => 'button',
-                'control_label' => 'Clear CDN Cache',
-                'control_description' => 'Clear resources caches across the CDN network',
-                'action' => 'action=purge_rapidload_cdn&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+            // UUCSS settings starts here
+            'uucss_enable_uucss' => array(
+                'control_type' => 'checkbox',
+                'control_label' => 'Remove Unused CSS',
+                'control_values' => array('1', '0'),
+                'default' => '0'
             ),
-            'validate_cdn_url' => array(
-                'control_type' => 'button',
-                'control_label' => 'Validate CDN url',
-                'control_description' => 'validate cdn url',
-                'action' => 'action=validate_cdn&dashboard_cdn_validator&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+            'uucss_excluded_files' => array(
+                'control_type' => 'textarea',
+                'control_label' => 'Exclude CSS from Remove Unused CSS',
+                'control_description' => 'These CSS files will be excluded from Remove Unused CSS optimization.',
+                'default' => ''
             ),
-            'uucss_cdn_url' => array(
-                'control_type' => 'text-input',
-                'readonly' => true,
-                'control_label' => 'CDN Endpoint',
-                'control_description' => 'Your CDN endpoint to store and serve all your resources across the CDN network',
+            'uucss_safelist' => array(
+                'control_type' => 'textarea',
+                'control_label' => 'Force Include selectors',
+                'control_description' => 'These selectors will be forcefully included into optimization.',
+                'default' => ''
+            ),
+            'uucss_misc_options' => array(
+                'control_type' => 'accordion',
+                'inputs' => [
+                    'uucss_variables' => array(
+                        'control_type' => 'checkbox',
+                        'control_label' => 'CSS Variables',
+                        'control_description' => 'Remove unused CSS variables.',
+                        'control_values' => array('1', '0'),
+                        'default' => '0'
+                    ),
+                    'uucss_keyframes' => array(
+                        'control_type' => 'checkbox',
+                        'control_accordion_name' => 'uucss-misc-options',
+                        'control_label' => 'CSS Animation keyframes',
+                        'control_description' => 'Remove unused keyframe animations.',
+                        'control_values' => array('1', '0'),
+                        'default' => '0'
+                    ),
+                    'uucss_fontface' => array(
+                        'control_type' => 'checkbox',
+                        'control_accordion_name' => 'uucss-misc-options',
+                        'control_label' => 'CSS @font-face rules',
+                        'control_description' => 'Remove unused @font-face rules.',
+                        'control_values' => array('1', '0'),
+                        'default' => '0'
+                    ),
+                    'uucss_include_inline_css' => array(
+                        'control_type' => 'checkbox',
+                        'control_accordion_name' => 'uucss-misc-options',
+                        'control_label' => 'Inline CSS',
+                        'control_description' => 'Optimize inline CSS.',
+                        'control_values' => array('1', '0'),
+                        'default' => '0'
+                    ),
+                    'uucss_cache_busting_v2' => array(
+                        'control_type' => 'checkbox',
+                        'control_accordion_name' => 'uucss-misc-options',
+                        'control_label' => 'Cache Busting',
+                        'control_description' => 'Enable RapidLoad crawler to view pages with a random query string.',
+                        'control_values' => array('1', '0'),
+                        'default' => '0'
+                    ),
+                ],
+            ),
+            'rapidload_purge_all' => array(
+                'control_type' => 'button',
+                'control_label' => 'Regenerate Unused CSS',
+                'action' => 'action=rapidload_purge_all&job_type=url&clear=false&immediate=true&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                'description' => ''
+            ),
+
+            // Minify CSS settings starts here
+            'uucss_minify' => array(
+                'control_type' => 'checkbox',
+                'control_label' => 'Minify CSS',
+                'control_description' => 'Remove unnecessary spaces, lines and comments from CSS files.',
+                'control_values' => array('1', '0'),
+                'default' => '0'
+            ),
+            'uucss_minify_excluded_files' => array(
+                'control_type' => 'textarea',
+                'control_label' => 'Exclude CSS from Minify',
+                'control_description' => 'These CSS files will be excluded from being minified.',
+                'default' => ''
+            ),
+
+            // JS settings here
+            'rapidload_js_delay_method' => array(
+                'control_type' => 'radio',
+                'control_label' => 'Delay Method',
+                'control_description' => 'Delay Method',
+                'control_values' => array('all', 'selected'),
+                'default' => 'all'
             ),
             'uucss_load_js_method' => array(
                 'control_type' => 'checkbox',
@@ -754,24 +706,109 @@ class RapidLoad_Optimizer
                 'control_values' => array('1', '0'),
                 'default' => '0'
             ),
-            'defer_inline_js' => array(
+            'uucss_excluded_js_files_from_defer' => array(
+                'control_type' => 'textarea',
+                'control_label' => 'Exclude Javascript from Deferring',
+                'control_description' => 'These JS files will be excluded from deferring.',
+                'default' => ''
+            ),
+            'minify_js' => array(
                 'control_type' => 'checkbox',
-                'control_label' => 'Defer Inline JS scripts',
+                'control_label' => 'Minify Javascript',
                 'control_values' => array('1', '0'),
                 'default' => '0'
+            ),
+            'uucss_exclude_files_from_minify_js' => array(
+                'control_type' => 'textarea',
+                'control_label' => 'Exclude Javascript from Minify',
+                'control_description' => 'These JS files will be excluded from being minified.',
+                'default' => ''
             ),
             'delay_javascript' => array(
                 'control_type' => 'checkbox',
                 'control_label' => 'Delay Javascript',
                 'control_description' => 'Loading JS files on user interaction',
                 'control_values' => array('1', '0'),
+                'default' => '0',
+                'control_visibility' => [
+                    'rapidload_js_delay_method' => 'all'
+                ]
+            ),
+            'uucss_exclude_files_from_delay_js' => array(
+                'control_type' => 'button',
+                'control_label' => 'Exclude Javascript from Delaying',
+                'control_description' => 'These JS files will be excluded from delaying.',
+                'default' => '',
+                'control_visibility' => [
+                    'rapidload_js_delay_method' => 'all'
+                ]
+            ),
+            'delay_javascript_callback' => array(
+                'control_type' => 'textarea',
+                'control_label' => 'Callback Script',
+                'control_description' => 'These scripts will be executed on DOMContentLoaded',
+                'default' => '',
+                'control_visibility' => [
+                    'rapidload_js_delay_method' => 'all'
+                ]
+            ),
+            'uucss_load_scripts_on_user_interaction' => array(
+                'control_type' => 'textarea',
+                'control_label' => 'Delaying only selected Javascript',
+                'control_description' => 'These JS files will be excluded from delaying.',
+                'default' => '',
+                'control_visibility' => [
+                    'rapidload_js_delay_method' => 'selected'
+                ]
+            ),
+
+            //Image settings starts here
+            'uucss_support_next_gen_formats' => array(
+                'control_type' => 'checkbox',
+                'control_label' => 'Serve next-gen Images',
+                'control_description' => 'Serve the images in next-gen image formats to all the browsers that support them.',
+                'control_values' => array('1', '0'),
                 'default' => '0'
+            ),
+            'uucss_image_optimize_level' => array(
+                'control_type' => 'options',
+                'control_label' => 'Image Optimize Level',
+                'control_description' => 'Choose the image compression level.',
+                'control_values' => array('lossy', 'glossy', 'lossless'),
+                'default' => 'lossless'
+            ),
+            'uucss_generate_blurry_place_holder' => array(
+                'control_type' => 'checkbox',
+                'control_label' => 'Low Quality Image placeholders (LQIP)',
+                'control_description' => 'Generate low quality blurry SVG image placeholders.',
+                'control_values' => array('1', '0'),
+                'default' => '0'
+            ),
+            'uucss_adaptive_image_delivery' => array(
+                'control_type' => 'checkbox',
+                'control_label' => 'Enable adaptive Image delivery',
+                'control_values' => array('1', '0'),
+                'default' => '0',
+                'main_input' => false
+            ),
+            'uucss_exclude_images_from_modern_images' => array(
+                'control_type' => 'textarea',
+                'control_label' => 'Exclude Images from modern image urls',
+                'control_description' => 'These images will be excluded from being converted to modern formats.',
+                'default' => ''
             ),
             'uucss_lazy_load_images' => array(
                 'control_type' => 'checkbox',
-                'control_label' => 'Lazy Load Images',
+                'control_label' => 'Image Lazy Load',
+                'control_description' => 'Lazy load images.',
                 'control_values' => array('1', '0'),
                 'default' => '0'
+            ),
+            'uucss_exclude_images_from_lazy_load' => array(
+                'control_type' => 'textarea',
+                'control_label' => 'Exclude Images from Lazy Load',
+                'control_description' => 'These images will be excluded from lazy-loading.',
+                'default' => ''
             ),
             'uucss_lazy_load_iframes' => array(
                 'control_type' => 'checkbox',
@@ -780,17 +817,79 @@ class RapidLoad_Optimizer
                 'control_values' => array('1', '0'),
                 'default' => '0'
             ),
+            'uucss_exclude_above_the_fold_images' => array(
+                'control_type' => 'checkbox',
+                'control_label' => 'Exclude LCP image from Lazy Load',
+                'control_description' => 'Choose the image count to exclude from above-the-fold',
+                'control_values' => array('1', '0'),
+                'default' => '0'
+            ),
+            'uucss_exclude_above_the_fold_image_count' => array(
+                'control_type' => 'number-range',
+                'control_label' => 'Exclude Above-the-fold Images from Lazy Load',
+                'control_description' => 'Choose the image count to exclude from above-the-fold',
+                'control_values' => array('1','2', '3','4', '5'),
+                'default' => '5'
+            ),
+            'uucss_set_width_and_height' => array(
+                'control_type' => 'checkbox',
+                'control_label' => 'Add Width and Height Attributes',
+                'control_description' => 'Include width and height attributes for these images.',
+                'control_values' => array('1', '0'),
+                'default' => '0'
+            ),
+            'uucss_exclude_images_from_set_width_and_height' => array(
+                'control_type' => 'textarea',
+                'control_label' => 'Exclude Images from being set width and height',
+                'control_description' => 'These images will be excluded from inserting a width and height.',
+                'default' => ''
+            ),
+
+            // Fonts settings starts here
+            'uucss_self_host_google_fonts' => array(
+                'control_type' => 'checkbox',
+                'control_label' => 'Self Host Google Fonts',
+                'control_values' => array('1', '0'),
+                'default' => '0'
+            ),
+
+            // CDN settings starts here
+            'uucss_enable_cdn' => array(
+                'control_type' => 'checkbox',
+                'control_label' => 'RapidLoad CDN',
+                'control_values' => array('1', '0'),
+                'default' => '0'
+            ),
+            'clear_cdn_cache' => array(
+                'control_type' => 'button',
+                'control_label' => 'Clear CDN Cache',
+                'control_description' => 'Clear resources caches across the CDN network',
+                'action' => 'action=purge_rapidload_cdn&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+            ),
+            'uucss_cdn_url' => array(
+                'control_type' => 'text-input',
+                'readonly' => true,
+                'control_label' => 'CDN Endpoint',
+                'control_description' => 'Your CDN endpoint to store and serve all your resources across the CDN network',
+            ),
+            'validate_cdn_url' => array(
+                'control_type' => 'button',
+                'control_label' => 'Validate CDN url',
+                'control_description' => 'validate cdn url',
+                'action' => 'action=validate_cdn&dashboard_cdn_validator&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+            ),
+
+            //Cache settings starts here
+            'uucss_enable_cache' => array(
+                'control_type' => 'checkbox',
+                'control_label' => 'Page Cache',
+                'control_values' => array('1', '0'),
+                'default' => '0'
+            ),
             'cache_expires' => array(
                 'control_type' => 'checkbox',
                 'control_label' => 'Cache Expiration',
                 'control_description' => 'Cached pages expire.',
-                'control_values' => array('1', '0'),
-                'default' => '0'
-            ),
-            'mobile_cache' => array(
-                'control_type' => 'checkbox',
-                'control_label' => 'Mobile Cache',
-                'control_description' => 'Create a cached version for mobile devices.',
                 'control_values' => array('1', '0'),
                 'default' => '0'
             ),
@@ -802,30 +901,18 @@ class RapidLoad_Optimizer
                 'control_values_suffix' => 'hours',
                 'default' => '0'
             ),
-            'uucss_exclude_above_the_fold_images' => array(
+            'mobile_cache' => array(
                 'control_type' => 'checkbox',
-                'control_label' => 'Exclude LCP image from Lazy Load',
+                'control_label' => 'Mobile Cache',
+                'control_description' => 'Create a cached version for mobile devices.',
                 'control_values' => array('1', '0'),
                 'default' => '0'
             ),
-            'uucss_exclude_above_the_fold_image_count' => array(
-                'control_type' => 'number-range',
-                'control_label' => 'Exclude Above-the-fold Images from Lazy Load',
-                'control_description' => 'Choose the image count to exclude from above-the-fold',
-                'control_values' => array('1','2', '3','4', '5'),
-                'default' => '5'
-            ),
-            'uucss_enable_cache' => array(
-                'control_type' => 'checkbox',
-                'control_label' => 'Page Cache',
-                'control_values' => array('1', '0'),
-                'default' => '0'
-            ),
-            'uucss_enable_cdn' => array(
-                'control_type' => 'checkbox',
-                'control_label' => 'RapidLoad CDN',
-                'control_values' => array('1', '0'),
-                'default' => '0'
+            'excluded_page_paths' => array(
+                'control_type' => 'textarea',
+                'control_label' => 'Exclude Pages',
+                'control_description' => 'These pages will exclude from cache.',
+                'default' => ''
             ),
             'update_htaccess_file' => array(
                 'control_type' => 'button',
@@ -833,77 +920,30 @@ class RapidLoad_Optimizer
                 'action' => 'action=update_htaccess&nonce=' . wp_create_nonce( 'uucss_nonce' ),
                 'default' => ''
             ),
-            'uucss_exclude_files_from_delay_js' => array(
-                'control_type' => 'button',
-                'control_label' => 'Exclude Javascript from Delaying',
-                'radio_name' => 'All Files',
-                'control_description' => 'These JS files will be excluded from delaying.',
-                'default' => ''
+
+            //Other settings starts here
+            'uucss_inline_css' => array(
+                'control_type' => 'checkbox',
+                'control_label' => 'Inline Small CSS Files',
+                'control_values' => array('1', '0'),
+                'default' => '0'
             ),
-            'uucss_safelist' => array(
+            'uucss_excluded_js_files' => array(
                 'control_type' => 'textarea',
-                'control_label' => 'Force Include selectors',
-                'control_description' => 'These selectors will be forcefully included into optimization.',
-                'default' => ''
+                'control_label' => 'Exclude Javascript',
+                'control_description' => 'These JS files will be excluded from all optimizations.',
+                'default' => '',
+                'control_visibility' => [
+                    'rapidload_js_delay_method' => 'all'
+                ]
             ),
-            'uucss_exclude_images_from_set_width_and_height' => array(
+            'uucss_exclude_images' => array(
                 'control_type' => 'textarea',
-                'control_label' => 'Exclude Width and Height',
-                'control_description' => 'These images will be excluded from inserting a width and height.',
+                'control_label' => 'Exclude Images from Lazy Load',
+                'control_description' => 'These images will be excluded from lazy-loading.',
                 'default' => ''
             ),
-            'uucss_preload_font_urls' => array(
-                'control_type' => 'textarea',
-                'control_label' => 'Preload Fonts',
-                'control_description' => 'Preload critical font files to avoid FOUT and signal browsers to download fonts earlier.',
-                'default' => ''
-            ),
-            'uucss_load_scripts_on_user_interaction' => array(
-                'control_type' => 'textarea',
-                'control_label' => 'Delaying only selected Javascript',
-                'control_description' => 'These JS files will be excluded from delaying.',
-                'default' => ''
-            ),
-            'uucss_variables' => array(
-                'control_type' => 'checkbox',
-                'control_accordion_name' => 'uucss-misc-options',
-                'control_label' => 'CSS Variables',
-                'control_description' => 'Remove unused CSS variables.',
-                'control_values' => array('1', '0'),
-                'default' => '0'
-            ),
-            'uucss_cache_busting_v2' => array(
-                'control_type' => 'checkbox',
-                'control_accordion_name' => 'uucss-misc-options',
-                'control_label' => 'Cache Busting',
-                'control_description' => 'Enable RapidLoad crawler to view pages with a random query string.',
-                'control_values' => array('1', '0'),
-                'default' => '0'
-            ),
-            'uucss_keyframes' => array(
-                'control_type' => 'checkbox',
-                'control_accordion_name' => 'uucss-misc-options',
-                'control_label' => 'CSS Animation keyframes',
-                'control_description' => 'Remove unused keyframe animations.',
-                'control_values' => array('1', '0'),
-                'default' => '0'
-            ),
-            'uucss_fontface' => array(
-                'control_type' => 'checkbox',
-                'control_accordion_name' => 'uucss-misc-options',
-                'control_label' => 'CSS @font-face rules',
-                'control_description' => 'Remove unused @font-face rules.',
-                'control_values' => array('1', '0'),
-                'default' => '0'
-            ),
-            'uucss_include_inline_css' => array(
-                'control_type' => 'checkbox',
-                'control_accordion_name' => 'uucss-misc-options',
-                'control_label' => 'Inline CSS',
-                'control_description' => 'Optimize inline CSS.',
-                'control_values' => array('1', '0'),
-                'default' => '0'
-            ),
+
         );
 
         $inputs = array();
@@ -965,8 +1005,20 @@ class RapidLoad_Optimizer
                     }
                     $input['value'] = implode("\n",$rulesArray);
                 }else if($input['key'] == "cache_expires" || $input['key'] == "cache_expiry_time" || $input['key'] == "mobile_cache"){
-                    error_log('gets input for ' . $input['key'] . $rapidload_cache_args[$input['key']]);
                     $input['value'] = isset($rapidload_cache_args[$input['key']]) ? (string)$rapidload_cache_args[$input['key']] : null;
+                }else if($input['key'] == "excluded_page_paths") {
+                    $input['value'] = isset($rapidload_cache_args[$input['key']]) ? implode("\n", $this->transformRegexToPaths($rapidload_cache_args[$input['key']])) : '';
+                }else if($input['key'] == "rapidload_js_delay_method"){
+                    $input['value'] = isset($options['uucss_load_scripts_on_user_interaction']) && !empty($options['uucss_load_scripts_on_user_interaction']) ? 'selected' : 'all' ;
+                }else if($input['key'] == "uucss_misc_options"){
+
+                    foreach ($input['inputs'] as $internal_key => $internal_input){
+
+                        $input['inputs'][$internal_key]['value'] = isset($options[$internal_key]) && $options[$internal_key] == "1" ? "1" : "0" ;
+
+                    }
+
+                    $input['value'] = isset($options['uucss_load_scripts_on_user_interaction']) && !empty($options['uucss_load_scripts_on_user_interaction']) ? 'selected' : 'all' ;
                 }else{
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }
@@ -988,13 +1040,13 @@ class RapidLoad_Optimizer
             ['keys' => ['font-display', 'enable-font'], 'name' => 'Self Host Google Fonts', 'description' => 'Self host all your Google fonts and load fonts faster. Turn on CDN to serve these fonts faster through RapidLoad CDN.', 'category' => 'font', 'inputs' => ['uucss_self_host_google_fonts']],
             ['keys' => ['unsized-images'], 'name' => 'Minify CSS', 'description' => 'Remove unnecessary spaces, lines and comments from CSS files.', 'category' => 'css', 'inputs' => ['uucss_minify', 'uucss_minify_excluded_files']],
             ['keys' => ['unminified-javascript'], 'name' => 'Minify Javascript', 'description' => 'Remove unnecessary spaces, lines and comments from JS files.', 'category' => 'javascript', 'inputs' => ['minify_js', 'uucss_exclude_files_from_minify_js']],
-            ['keys' => ['unused-css-rules'], 'name' => 'Remove Unused CSS', 'description' => 'Remove unused CSS for each page and reduce page size.', 'category' => 'css', 'inputs' => ['uucss_enable_uucss', 'uucss_excluded_files','uucss_safelist','uucss_variables','uucss_keyframes','uucss_fontface','uucss_include_inline_css','uucss_cache_busting_v2','rapidload_purge_all']],
+            ['keys' => ['unused-css-rules'], 'name' => 'Remove Unused CSS', 'description' => 'Remove unused CSS for each page and reduce page size.', 'category' => 'css', 'inputs' => ['uucss_enable_uucss', 'uucss_excluded_files','uucss_safelist','uucss_misc_options','rapidload_purge_all']],
             ['keys' => ['render-blocking-resources'], 'name' => 'Critical CSS', 'description' => 'Extract and prioritize above-the-fold CSS.', 'category' => 'css', 'inputs' => ['uucss_enable_cpcss', 'uucss_enable_cpcss_mobile', 'uucss_additional_css', 'remove_cpcss_on_user_interaction','uucss_preload_font_urls', 'cpcss_purge_url']],
             ['keys' => ['render-blocking-resources'], 'name' => 'Defer Javascript', 'description' => 'Render-blocking JS on website can be resolved with defer JavaScript.', 'category' => 'javascript', 'inputs' => ['uucss_load_js_method', 'uucss_excluded_js_files_from_defer']],
             ['keys' => ['offscreen-images'], 'name' => 'Lazy Load Images', 'description' => 'Delay loading of images until needed.', 'category' => 'image', 'inputs' => ['uucss_lazy_load_images', 'uucss_exclude_images_from_lazy_load']],
             ['keys' => ['lcp-lazy-loaded'], 'name' => 'Exclude Above-the-fold Images from Lazy Load', 'description' => 'Improve your LCP images.', 'category' => 'image', 'inputs' => ['uucss_exclude_above_the_fold_images', 'uucss_exclude_above_the_fold_image_count']],
-            ['keys' => ['bootup-time', 'unused-javascript'], 'name' => 'Delay Javascript', 'description' => 'Loading JS files on user interaction', 'category' => 'javascript', 'inputs' => ['delay_javascript', 'uucss_exclude_files_from_delay_js', 'delay_javascript_callback', 'uucss_excluded_js_files','uucss_load_scripts_on_user_interaction']],
-            ['keys' => ['server-response-time'], 'name' => 'Page Cache', 'description' => 'Optimize and cache static HTML pages to provide a snappier page experience.', 'category' => 'cache', 'inputs' => ['uucss_enable_cache','cache_expires','cache_expiry_time','mobile_cache']],
+            ['keys' => ['bootup-time', 'unused-javascript'], 'name' => 'Delay Javascript', 'description' => 'Loading JS files on user interaction', 'category' => 'javascript', 'inputs' => ['rapidload_js_delay_method','delay_javascript', 'uucss_exclude_files_from_delay_js', 'delay_javascript_callback', 'uucss_excluded_js_files','uucss_load_scripts_on_user_interaction']],
+            ['keys' => ['server-response-time'], 'name' => 'Page Cache', 'description' => 'Optimize and cache static HTML pages to provide a snappier page experience.', 'category' => 'cache', 'inputs' => ['uucss_enable_cache','cache_expires','cache_expiry_time','mobile_cache','excluded_page_paths']],
             ['keys' => ['third-party-facades'], 'name' => 'Lazy Load Iframes', 'description' => 'Delay loading of iframes until needed.', 'category' => 'image', 'inputs' => ['uucss_lazy_load_iframes', 'uucss_exclude_images_from_lazy_load']],
             ['keys' => ['uses-long-cache-ttl'], 'name' => 'RapidLoad CDN', 'description' => 'Load resource files faster by using 112 edge locations with only 27ms latency.', 'category' => 'cdn', 'inputs' => ['uucss_enable_cdn','clear_cdn_cache','uucss_cdn_url','validate_cdn_url']],
             ['keys' => ['uses-long-cache-ttl'], 'name' => 'Cache Policy', 'description' => 'Set up cache-control header to increase the browser cache expiration', 'category' => 'cache', 'inputs' => ['update_htaccess_file',]],
@@ -1087,12 +1139,10 @@ class RapidLoad_Optimizer
                                     ];
                                 }
                                 self::$options[$input->key] = json_encode($transformedRulesArray);
-                                error_log(self::$options[$input->key]);
                             }else if($input->key == "cache_expiry_time"){
-
                                 $rapidload_cache_args['cache_expiry_time'] = (float)$input->value;
-                                error_log('updating expire time');
-
+                            }else if($input->key == "excluded_page_paths"){
+                                $rapidload_cache_args['excluded_page_paths'] = $this->transformPathsToRegex(explode("\n",$input->value));
                             }else{
                                 self::$options[$input->key] = $input->value;
                             }
@@ -1109,7 +1159,12 @@ class RapidLoad_Optimizer
                         }
                         break;
                     }
-                    case 'gear' : {
+                    case 'accordion' : {
+                        foreach ($input->inputs as $accordion_key => $accordion_input){
+                            self::$options[$accordion_key] = isset($accordion_input->value) && ($accordion_input->value || $accordion_input->value == "1") ? "1" : "0";
+                        }
+                        break;
+                    }case 'gear' : {
                         if(isset($input->value)){
                             update_option('rapidload_titan_gear', $input->value);
                         }
@@ -1125,10 +1180,7 @@ class RapidLoad_Optimizer
             }
         }
 
-        error_log(json_encode($rapidload_cache_args, JSON_PRETTY_PRINT));
-
         RapidLoad_Cache::update_settings($rapidload_cache_args);
-        error_log(json_encode(RapidLoad_Cache::get_settings(), JSON_PRETTY_PRINT));
 
         if((isset(self::$options['uucss_lazy_load_images']) && self::$options['uucss_lazy_load_images'] == "1") || (isset(self::$options['uucss_support_next_gen_formats']) && self::$options['uucss_support_next_gen_formats'] == "1" ) || (isset(self::$options['uucss_lazy_load_iframes']) && self::$options['uucss_lazy_load_iframes'] == "1") ){
             self::$options['uucss_enable_image_delivery'] = "1";

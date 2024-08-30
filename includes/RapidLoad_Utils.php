@@ -738,4 +738,26 @@ trait RapidLoad_Utils {
         return $files;
 
     }
+
+    public function transformRegexToPaths($regex) {
+        $pattern = trim($regex, '/');
+        $paths = explode('|', $pattern);
+        $paths = array_map(function($path) {
+            $cleanedPath = rtrim(trim($path, '^$'), '\/?');
+            $cleanedPath = str_replace(['\/', '\-'], ['/', '-'], $cleanedPath);
+            return $cleanedPath;
+        }, $paths);
+        return $paths;
+    }
+
+    function transformPathsToRegex(array $paths) {
+        $escapedPaths = array_map(function($path) {
+            if (substr($path, 0, 1) !== '/') {
+                $path = '/' . $path;
+            }
+            return '^' . preg_quote($path, '/') . '\/?$';
+        }, $paths);
+        $regexPattern = '/' . implode('|', $escapedPaths) . '/';
+        return $regexPattern;
+    }
 }

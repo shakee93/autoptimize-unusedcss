@@ -295,10 +295,10 @@ const SpeedSettings = ({}) => {
     }, [settings]);
 
     useEffect(() => {
-        if(revisions?.length == 0){
+        if(revisions?.length == 0 && !activeGear){
             dispatch(changeGear('accelerate'));
         }
-    },[])
+    },[settings])
 
 
     const settingsDescriptions: { [key in PerformanceGear]: string } = {
