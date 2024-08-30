@@ -24,6 +24,7 @@ import Accordion from "components/accordion";
 
 interface AdditionalInputsProps {
     input?: AuditSettingInput
+    inputs?: AuditSettingInput
     data?: AuditSettingInput[]
     updates: {
         key: string,
@@ -114,7 +115,11 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
         }, 0);
     };
 
+    const [isOpen, setIsOpen] = useState(false);
 
+    const toggleIsOpen = () => {
+        setIsOpen(prevState => !prevState);
+    }
 
     return <div className='flex flex-col justify-start items-center gap-3 normal-case' >
 
@@ -238,62 +243,57 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
         }
 
-        {/*/!*accordion*!/*/}
-        {/*{input.control_type === 'checkbox' && input.control_accordion_name === 'uucss-misc-options' && (() => {*/}
-        {/*    const [isOpen, setIsOpen] = useState(false);*/}
+        {/*accordion starts here*/}
+        {input.control_type === 'accordion' &&
 
-        {/*    const toggleIsOpen = () => {*/}
-        {/*        setIsOpen(prevState => !prevState);*/}
-        {/*    }*/}
+            <Label
+                htmlFor="name"
+                className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60"
+            >
+                <div className="flex items-center justify-between cursor-pointer " onClick={toggleIsOpen} >
+                    <div className="flex flex-col">
+                            <span>
+                            Misc Options
+                            </span>
+                        <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[425px]">
+                            This base page optimization will be used on all the other pages in the selected group.
+                        </span>
+                    </div>
+                    <ChevronRightIcon  className={`h-5 transition-all ${isOpen && 'rotate-[90deg]'}`} />
+                </div>
 
-
-        {/*    return (*/}
-
-        {/*        <Label*/}
-        {/*            htmlFor="name"*/}
-        {/*            className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60"*/}
-        {/*        >*/}
-        {/*            <div className="flex items-center justify-between cursor-pointer " onClick={toggleIsOpen} >*/}
-        {/*                <div className="flex flex-col">*/}
-        {/*                    <span>*/}
-        {/*                    Misc Options*/}
-        {/*                    </span>*/}
-        {/*                    <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[425px]">*/}
-        {/*                    This base page optimization will be used on all the other pages in the selected group.*/}
-        {/*                </span>*/}
-        {/*                </div>*/}
-        {/*                <ChevronRightIcon  className={`h-5 transition-all ${isOpen && 'rotate-[90deg]'}`} />*/}
-        {/*            </div>*/}
-
-        {/*            <Accordion*/}
-        {/*                className="flex flex-col text-left w-full mt-4"*/}
-        {/*                initialRender={true}*/}
-        {/*                isOpen={isOpen}*/}
-        {/*            >*/}
-        {/*                <div className="flex flex-col gap-2">*/}
-        {/*                    <div className="flex gap-2" >*/}
-        {/*                        <Checkbox*/}
-        {/*                            checked={value}*/}
-        {/*                            onCheckedChange={(c: boolean) => update(c, input.key)}*/}
-        {/*                        />*/}
-        {/*                        <div className="flex flex-col mt-1">*/}
-        {/*                            <span className="cursor-pointer" onClick={() => update(!value, input.key)}>{input.control_label}</span>*/}
-        {/*                            <span className="pt-1 text-sm font-normal text-gray-600 sm:max-w-[425px]">*/}
-        {/*                                Remove unused CSS Variables*/}
-        {/*                            </span>*/}
-        {/*                        </div>*/}
-
-        {/*                    </div>*/}
-
-        {/*                </div>*/}
-        {/*            </Accordion>*/}
+                <Accordion
+                    id={input.key}
+                    className="flex flex-col text-left w-full mt-2"
+                    initialRender={true}
+                    isOpen={isOpen}
+                >
+                    {input.inputs.map((input) => (
+                        <div key={input.key} className="flex flex-col gap-2 mt-3">
+                            <div className="flex gap-2">
+                                <span>{input.value}</span>
+                                <span>{JSON.stringify(input)}</span>
+                                <Checkbox
+                                    checked={input.value === '1'}
+                                    onCheckedChange={(c: boolean) => update(c, input.key)}
+                                />
+                                <div className="flex flex-col mt-1">
+                                    <span className="cursor-pointer">{input.control_label}</span>
+                                    <span className="pt-1 text-sm font-normal text-gray-600 sm:max-w-[425px]">
+                                            {input.control_description}
+                                        </span>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </Accordion>
 
 
-        {/*        </Label>*/}
+            </Label>
 
 
-        {/*    );*/}
-        {/*})()}*/}
+        }
+        {/*accordion ends here*/}
 
         {input.control_type === 'button' && input.control_label === 'Exclude Javascript from Delaying' &&
 

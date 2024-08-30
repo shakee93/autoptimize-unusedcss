@@ -316,12 +316,14 @@ export const updateSettings = (
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState)  => {
         const currentState = getState(); // Access the current state
         const deviceType = currentState?.app?.activeReport;
+        console.log(payload)
 
         // @ts-ignore
         const newOptions: AuditSetting[] = currentState?.app?.settings[deviceType]?.state?.map((s: AuditSetting) => {
             if (s.name !== setting.name) {
                 return s; // Early return if the setting name doesn't match
             }
+
 
             return {
                 ...s,
