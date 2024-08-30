@@ -1019,7 +1019,7 @@ class RapidLoad_Optimizer
 
                     foreach ($input['inputs'] as $internal_key => $internal_input){
 
-                        $input['inputs'][$internal_key]['value'] = isset($options[$internal_key]) && $options[$internal_key] == "1" ? "1" : "0" ;
+                        $input['inputs'][$internal_key]['value'] = isset($options[$input['inputs'][$internal_key]['key']]) && $options[$input['inputs'][$internal_key]['key']] == "1" ? "1" : "0" ;
 
                     }
 
