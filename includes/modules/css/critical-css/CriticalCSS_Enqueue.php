@@ -25,7 +25,8 @@ class CriticalCSS_Enqueue
 
         $this->job_data = $job_data;
 
-        $this->data = $job_data->data;
+        $this->data = $job_data->get_cpcss_data();
+
         $this->warnings = $this->job_data->get_warnings();
 
         add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 20);
@@ -62,11 +63,22 @@ class CriticalCSS_Enqueue
 
         $this->is_mobile = $this->is_mobile() && isset($this->options) && isset($this->options['uucss_enable_cpcss_mobile']) && $this->options['uucss_enable_cpcss_mobile'] == "1";
 
+        $data = isset($this->data['desktop']) ? $this->data['desktop'] : null;
+
         if($this->is_mobile){
-            $this->data = str_replace(".css","-mobile.css", $this->data);
+            $data = isset($this->data['mobile']) ? $this->data['mobile'] : null;
         }
 
-        $file_exist = $this->file_system->exists(CriticalCSS::$base_dir . '/' . $this->data);
+        if(!isset($data)){
+            return [
+                'dom' => $this->dom,
+                'inject' => $this->inject,
+                'options' => $this->options,
+                'strategy' => $this->strategy
+            ];
+        }
+
+        $file_exist = $this->file_system->exists(CriticalCSS::$base_dir . '/' . $data);
 
         if(!$file_exist &&
             ($this->job_data->attempts <=2 || (time() - strtotime($this->job_data->created_at)) > 86400)) {
@@ -87,7 +99,7 @@ class CriticalCSS_Enqueue
 
         if($file_exist && $this->dom && $this->inject){
 
-            $this->enqueue_cpcss();
+            $this->enqueue_cpcss($data);
 
             return [
                 'dom' => $this->dom,
@@ -148,12 +160,12 @@ class CriticalCSS_Enqueue
         }
     }
 
-    function enqueue_cpcss(){
+    function enqueue_cpcss($cpcss_file){
 
         $critical_css_content = '';
 
-        if($this->file_system->exists(CriticalCSS::$base_dir . '/' . $this->data)){
-            $critical_css_content = $this->file_system->get_contents(CriticalCSS::$base_dir . '/' . $this->data );
+        if($this->file_system->exists(CriticalCSS::$base_dir . '/' . $cpcss_file)){
+            $critical_css_content = $this->file_system->get_contents(CriticalCSS::$base_dir . '/' . $cpcss_file );
         }
 
         if(isset($this->options['uucss_additional_css']) && !empty($this->options['uucss_additional_css'])){
@@ -172,7 +184,7 @@ class CriticalCSS_Enqueue
         $critical_css_content = '<style id="rapidload-critical-css" data-mode="'. ($this->is_mobile ? 'mobile' : 'desktop') .'">' . $critical_css_content . '</style>';
 
         $_frontend_data['data-mode'] = ($this->is_mobile ? 'mobile' : 'desktop');
-        $_frontend_data['cpcss-file'] = CriticalCSS::$base_dir . '/' . $this->data;
+        $_frontend_data['cpcss-file'] = CriticalCSS::$base_dir . '/' . $cpcss_file;
 
         if(!empty($_frontend_data)){
             $this->frontend_data['cpcss'] = $_frontend_data;

@@ -324,6 +324,9 @@ class RapidLoad_Optimizer
                             do_action('cpcss_async_queue', $job_data, [
                                 'immediate' => true,
                                 'titan' => true,
+                                'options' => [
+                                    'strategy' => self::$strategy
+                                ]
                             ]);
                         }
                         break;
@@ -985,9 +988,12 @@ class RapidLoad_Optimizer
                     if(!$data->exist()){
                         $data->save();
                     }
+                    $cpcss_data = $data->get_cpcss_data();
                     $settings['status'] = [
                         'status' => $data->status,
-                        'error' => $data->get_error()
+                        'error' => $data->get_error(),
+                        'desktop' => isset($cpcss_data['desktop']) && !empty($cpcss_data['desktop']) ? $cpcss_data['desktop'] : null,
+                        'mobile' => isset($cpcss_data['mobile']) && !empty($cpcss_data['mobile']) ? $cpcss_data['mobile'] : null,
                     ];
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }else if($input['key'] == "uucss_enable_cache"){
@@ -1166,7 +1172,10 @@ class RapidLoad_Optimizer
                     }
                     case 'accordion' : {
                         foreach ($input->inputs as $accordion_key => $accordion_input){
-                            self::$options[$input->inputs[$accordion_key]->key] = isset($accordion_input->value) && ($accordion_input->value || $accordion_input->value == "1") ? "1" : "0";
+                            self::$options[$input->inputs[$accordion_key]->key] =
+                                isset($accordion_input->value) &&
+                                ($accordion_input->value ||
+                                    $accordion_input->value == "1") ? "1" : "0";
                         }
                         break;
                     }case 'gear' : {

@@ -109,7 +109,6 @@ class RapidLoad_Job_Data{
         $this->status = 'queued';
         $this->queue_job_id = null;
         $this->attempts = $attempts >= 0 ? $attempts : $this->attempts + 1;
-        $this->data = null;
         $this->hits = 0;
         $this->stats = null;
         $this->warnings = null;
@@ -130,9 +129,9 @@ class RapidLoad_Job_Data{
         $this->clearFiles();
     }
 
-    public function mark_as_success($data, $stats, $warnings){
+    public function mark_as_success($data, $stats, $warnings, $status = 'success'){
         $this->data = isset($data) ? is_string($data) ? $data : serialize($data) : null;
-        $this->status = 'success';
+        $this->status = $status;
         $this->hits = 0;
         $this->stats = isset($stats) ? serialize($stats) : null;
         $this->warnings = isset($warnings) && count($warnings) > 0 ? $warnings : null;
@@ -157,6 +156,24 @@ class RapidLoad_Job_Data{
             return unserialize($this->data);
         }
         return [];
+    }
+
+    public function get_cpcss_data(){
+        return $this->transform_cpcss_data_to_array($this->data);
+    }
+
+    function transform_cpcss_data_to_array($input) {
+        if (is_string($input) && is_serialized($input)) {
+            $array = unserialize($input);
+        } elseif (is_string($input)) {
+            $array = [
+                'desktop' => $input,
+                'mobile' => str_replace(".css","-mobile.css",$input)
+            ];
+        } else {
+            $array = [];
+        }
+        return $array;
     }
 
     public function get_stats(){

@@ -259,7 +259,6 @@ class RapidLoad_Module
 
         $options = RapidLoad_Base::fetch_options($cache);
         $cache_options = RapidLoad_Cache::get_settings();
-        error_log(json_encode($cache_options, JSON_PRETTY_PRINT));
 
         $options = [
             'general' => [
