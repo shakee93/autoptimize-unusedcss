@@ -175,7 +175,8 @@ interface AuditSettingInput {
     control_label: string;
     value: any;
     key: any;
-    action: string
+    action: string,
+    inputs?: AuditSettingInput[]
 }
 
 interface ControlValue {
