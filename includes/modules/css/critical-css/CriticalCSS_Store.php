@@ -31,9 +31,26 @@ class CriticalCSS_Store
 
         $uucss_api = new RapidLoad_Api();
 
-        if(isset($this->args['immediate'])){
+        if(isset($this->args['immediate']) || isset($this->args['titan'])){
 
-            if(isset($this->args['titan']) && ($this->job_data->status == 'waiting' || $this->job_data->status == 'processing' || $this->job_data->status == 'success')){
+            $discontinue = false;
+
+            if(!isset($this->args['titan']) && ($this->job_data->status == 'waiting' || $this->job_data->status == 'processing' || $this->job_data->status == 'success')){
+                return;
+            }
+
+            if(isset($this->args['titan']) && isset($this->args['options']) && isset($this->args['options']['strategy'])){
+
+                $strategy = $this->args['options']['strategy'];
+                $cpcss_data = $this->job_data->get_cpcss_data();
+
+                if(isset($cpcss_data[$strategy]) && !empty($cpcss_data[$strategy]) && ($this->job_data->status == 'success' || $this->job_data->status == 'processing')){
+                    $discontinue = true;
+                }
+
+            }
+
+            if($discontinue){
                 return;
             }
 

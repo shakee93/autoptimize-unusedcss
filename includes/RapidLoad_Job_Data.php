@@ -129,9 +129,9 @@ class RapidLoad_Job_Data{
         $this->clearFiles();
     }
 
-    public function mark_as_success($data, $stats, $warnings){
+    public function mark_as_success($data, $stats, $warnings, $status = 'success'){
         $this->data = isset($data) ? is_string($data) ? $data : serialize($data) : null;
-        $this->status = 'success';
+        $this->status = $status;
         $this->hits = 0;
         $this->stats = isset($stats) ? serialize($stats) : null;
         $this->warnings = isset($warnings) && count($warnings) > 0 ? $warnings : null;
