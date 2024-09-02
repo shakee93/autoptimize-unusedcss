@@ -1166,7 +1166,7 @@ class RapidLoad_Optimizer
                     }
                     case 'accordion' : {
                         foreach ($input->inputs as $accordion_key => $accordion_input){
-                            self::$options[$input->inputs[$accordion_key]['key']] = isset($accordion_input->value) && ($accordion_input->value || $accordion_input->value == "1") ? "1" : "0";
+                            self::$options[$input->inputs[$accordion_key]->key] = isset($accordion_input->value) && ($accordion_input->value || $accordion_input->value == "1") ? "1" : "0";
                         }
                         break;
                     }case 'gear' : {
