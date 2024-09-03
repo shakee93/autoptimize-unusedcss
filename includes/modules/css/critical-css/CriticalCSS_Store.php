@@ -10,6 +10,7 @@ class CriticalCSS_Store
     public $options;
 
     public $purged_css;
+    public $purged_mobile_css;
     public $result;
 
     /**
@@ -30,9 +31,26 @@ class CriticalCSS_Store
 
         $uucss_api = new RapidLoad_Api();
 
-        if(isset($this->args['immediate'])){
+        if(isset($this->args['immediate']) || isset($this->args['titan'])){
 
-            if(isset($this->args['titan']) && ($this->job_data->status == 'waiting' || $this->job_data->status == 'processing' || $this->job_data->status == 'success')){
+            $discontinue = false;
+
+            if(!isset($this->args['titan']) && ($this->job_data->status == 'waiting' || $this->job_data->status == 'processing' || $this->job_data->status == 'success')){
+                return;
+            }
+
+            if(isset($this->args['titan']) && isset($this->args['options']) && isset($this->args['options']['strategy'])){
+
+                $strategy = $this->args['options']['strategy'];
+                $cpcss_data = $this->job_data->get_cpcss_data();
+
+                if(isset($cpcss_data[$strategy]) && !empty($cpcss_data[$strategy]) && ($this->job_data->status == 'success' || $this->job_data->status == 'processing')){
+                    $discontinue = true;
+                }
+
+            }
+
+            if($discontinue){
                 return;
             }
 
@@ -58,8 +76,9 @@ class CriticalCSS_Store
 
             $this->result       = $result;
             $this->purged_css = $result->data;
+            $this->purged_mobile_css = $result->data_mobile;
 
-            $this->cache_file($this->purged_css, $result->data_mobile);
+            $this->cache_file($this->purged_css, $this->purged_mobile_css);
             $this->cpcss_cached($this->job_data->job->url);
 
         }else{
@@ -104,8 +123,9 @@ class CriticalCSS_Store
 
                 $this->result       = $result;
                 $this->purged_css = $result->data;
+                $this->purged_mobile_css = $result->data_mobile;
 
-                $this->cache_file($this->purged_css, $result->data_mobile);
+                $this->cache_file($this->purged_css, $this->purged_mobile_css);
                 $this->cpcss_cached($this->job_data->job->url);
 
             }
@@ -114,12 +134,6 @@ class CriticalCSS_Store
     }
 
     function cache_file($purged_css, $purged_mobile = false, $result = false){
-
-        if(empty($purged_css)){
-            $this->job_data->mark_as_failed('Unknown error occurred');
-            $this->job_data->save();
-            return;
-        }
 
         if($result){
             $this->result = $result;
@@ -134,30 +148,33 @@ class CriticalCSS_Store
             ];
         }
 
-        $purged_css = apply_filters('rapidload/cache_file_creating/css', $purged_css);
-
-        $file_name = 'cpcss-' . $this->encode($purged_css) . '.css';
-        $file_name_mobile = str_replace(".css","-mobile.css",$file_name);
+        $data = $this->job_data->get_cpcss_data();
 
         if(!empty($purged_css)){
 
-            if(!$this->file_system->exists( CriticalCSS::$base_dir . '/' . $file_name)){
-                $this->file_system->put_contents(CriticalCSS::$base_dir . '/' . $file_name, $purged_css);
+            $data['desktop'] = 'cpcss-' . $this->encode($purged_css) . '.css';
+
+            $purged_css = apply_filters('rapidload/cache_file_creating/css', $purged_css);
+
+            if(!$this->file_system->exists( CriticalCSS::$base_dir . '/' . $data['desktop'])){
+                $this->file_system->put_contents(CriticalCSS::$base_dir . '/' . $data['desktop'], $purged_css);
             }
         }
 
         if(!empty($purged_mobile)){
 
+            $data['mobile'] = 'cpcss-' . $this->encode($purged_mobile) . '-mobile.css';
+
             $purged_mobile = apply_filters('rapidload/cache_file_creating/css', $purged_mobile);
 
-            if(!$this->file_system->exists( CriticalCSS::$base_dir . '/' . $file_name_mobile)){
-                $this->file_system->put_contents(CriticalCSS::$base_dir . '/' . $file_name_mobile, $purged_mobile);
+            if(!$this->file_system->exists( CriticalCSS::$base_dir . '/' . $data['mobile'])){
+                $this->file_system->put_contents(CriticalCSS::$base_dir . '/' . $data['mobile'], $purged_mobile);
             }
         }
 
         if($this->job_data){
 
-            $this->job_data->mark_as_success($file_name, null, $warnings);
+            $this->job_data->mark_as_success($data, null, $warnings);
             $this->job_data->save();
             $this->cpcss_cached($this->job_data->job->url);
 

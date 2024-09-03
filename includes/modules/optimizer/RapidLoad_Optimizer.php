@@ -324,6 +324,9 @@ class RapidLoad_Optimizer
                             do_action('cpcss_async_queue', $job_data, [
                                 'immediate' => true,
                                 'titan' => true,
+                                'options' => [
+                                    'strategy' => self::$strategy
+                                ]
                             ]);
                         }
                         break;
@@ -985,9 +988,12 @@ class RapidLoad_Optimizer
                     if(!$data->exist()){
                         $data->save();
                     }
+                    $cpcss_data = $data->get_cpcss_data();
                     $settings['status'] = [
                         'status' => $data->status,
-                        'error' => $data->get_error()
+                        'error' => $data->get_error(),
+                        'desktop' => isset($cpcss_data['desktop']) && !empty($cpcss_data['desktop']) ? $cpcss_data['desktop'] : null,
+                        'mobile' => isset($cpcss_data['mobile']) && !empty($cpcss_data['mobile']) ? $cpcss_data['mobile'] : null,
                     ];
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }else if($input['key'] == "uucss_enable_cache"){
@@ -1050,7 +1056,7 @@ class RapidLoad_Optimizer
             ['keys' => ['render-blocking-resources'], 'name' => 'Defer Javascript', 'description' => 'Render-blocking JS on website can be resolved with defer JavaScript.', 'category' => 'javascript', 'inputs' => ['uucss_load_js_method', 'uucss_excluded_js_files_from_defer']],
             ['keys' => ['offscreen-images'], 'name' => 'Lazy Load Images', 'description' => 'Delay loading of images until needed.', 'category' => 'image', 'inputs' => ['uucss_lazy_load_images', 'uucss_exclude_images_from_lazy_load']],
             ['keys' => ['lcp-lazy-loaded'], 'name' => 'Exclude Above-the-fold Images from Lazy Load', 'description' => 'Improve your LCP images.', 'category' => 'image', 'inputs' => ['uucss_exclude_above_the_fold_images', 'uucss_exclude_above_the_fold_image_count']],
-            ['keys' => ['bootup-time', 'unused-javascript'], 'name' => 'Delay Javascript', 'description' => 'Loading JS files on user interaction', 'category' => 'javascript', 'inputs' => ['rapidload_js_delay_method','delay_javascript', 'uucss_exclude_files_from_delay_js', 'delay_javascript_callback', 'uucss_excluded_js_files','uucss_load_scripts_on_user_interaction']],
+            ['keys' => ['bootup-time', 'unused-javascript'], 'name' => 'Delay Javascript', 'description' => 'Loading JS files on user interaction', 'category' => 'javascript', 'inputs' => ['delay_javascript', 'rapidload_js_delay_method', 'uucss_exclude_files_from_delay_js', 'delay_javascript_callback', 'uucss_excluded_js_files','uucss_load_scripts_on_user_interaction']],
             ['keys' => ['server-response-time'], 'name' => 'Page Cache', 'description' => 'Optimize and cache static HTML pages to provide a snappier page experience.', 'category' => 'cache', 'inputs' => ['uucss_enable_cache','cache_expires','cache_expiry_time','mobile_cache','excluded_page_paths']],
             ['keys' => ['third-party-facades'], 'name' => 'Lazy Load Iframes', 'description' => 'Delay loading of iframes until needed.', 'category' => 'image', 'inputs' => ['uucss_lazy_load_iframes', 'uucss_exclude_images_from_lazy_load']],
             ['keys' => ['uses-long-cache-ttl'], 'name' => 'RapidLoad CDN', 'description' => 'Load resource files faster by using 112 edge locations with only 27ms latency.', 'category' => 'cdn', 'inputs' => ['uucss_enable_cdn','clear_cdn_cache','uucss_cdn_url','validate_cdn_url']],
@@ -1166,7 +1172,10 @@ class RapidLoad_Optimizer
                     }
                     case 'accordion' : {
                         foreach ($input->inputs as $accordion_key => $accordion_input){
-                            self::$options[$input->inputs[$accordion_key]['key']] = isset($accordion_input->value) && ($accordion_input->value || $accordion_input->value == "1") ? "1" : "0";
+                            self::$options[$input->inputs[$accordion_key]->key] =
+                                isset($accordion_input->value) &&
+                                ($accordion_input->value ||
+                                    $accordion_input->value == "1") ? "1" : "0";
                         }
                         break;
                     }case 'gear' : {

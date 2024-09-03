@@ -760,4 +760,8 @@ trait RapidLoad_Utils {
         $regexPattern = '/' . implode('|', $escapedPaths) . '/';
         return $regexPattern;
     }
+
+    function is_serialized($string) {
+        return ($string == serialize(false) || @unserialize($string) !== false);
+    }
 }

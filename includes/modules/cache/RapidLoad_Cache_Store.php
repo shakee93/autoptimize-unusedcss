@@ -874,7 +874,7 @@ class RapidLoad_Cache_Store
     private static function get_cache_file_name() {
 
         $cache_keys      = self::get_cache_keys();
-        $cache_file_name = $cache_keys['scheme'] . 'index' . $cache_keys['device'] . $cache_keys['webp'] . '.html' . $cache_keys['compression'];
+        $cache_file_name = $cache_keys['scheme'] . 'index' . $cache_keys['preview'] . $cache_keys['device'] . $cache_keys['webp'] . '.html' . $cache_keys['compression'];
 
         return $cache_file_name;
     }
@@ -886,6 +886,7 @@ class RapidLoad_Cache_Store
             'device'      => '',
             'webp'        => '',
             'compression' => '',
+            'preview' => '',
         );
 
         if ( isset( $_SERVER['HTTPS'] ) && ( strtolower( $_SERVER['HTTPS'] ) === 'on' || $_SERVER['HTTPS'] == '1' ) ) {
@@ -926,6 +927,10 @@ class RapidLoad_Cache_Store
             } elseif ( strpos( RapidLoad_Cache_Engine::$request_headers['Accept-Encoding'], 'gzip' ) !== false ) {
                 $cache_keys['compression'] = '.gz';
             }
+        }
+
+        if(isset($_REQUEST['rapidload_preview'])){
+            $cache_keys['preview'] = '-preview';
         }
 
         return $cache_keys;
