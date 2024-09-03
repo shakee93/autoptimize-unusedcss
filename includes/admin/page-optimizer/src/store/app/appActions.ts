@@ -136,7 +136,7 @@ const transformSettings = (data: any) => {
         return data
     }
 
-    const settings = data?.data || [];
+    const settings = data?.data?.performance || [];
 
     return {
         data: settings.map((s: AuditSetting) => ({
