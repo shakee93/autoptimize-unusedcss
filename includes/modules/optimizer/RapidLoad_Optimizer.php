@@ -226,7 +226,13 @@ class RapidLoad_Optimizer
             unset(self::$merged_options['uucss_api_key']);
         }
 
-        wp_send_json_success($this->transform_options_to_settings($url, self::$merged_options));
+        wp_send_json_success([
+            'general_settings' => [
+                'rapidload_titan_gear' => get_option('rapidload_titan_gear', false),
+                'rapidload_test_mode' => self::$global_options['rapidload_test_mode']
+            ],
+            'titan_settings' => $this->transform_options_to_settings($url, self::$merged_options)
+        ]);
     }
 
     public function update_titan_settings()
@@ -324,6 +330,9 @@ class RapidLoad_Optimizer
                             do_action('cpcss_async_queue', $job_data, [
                                 'immediate' => true,
                                 'titan' => true,
+                                'options' => [
+                                    'strategy' => self::$strategy
+                                ]
                             ]);
                         }
                         break;
@@ -985,9 +994,12 @@ class RapidLoad_Optimizer
                     if(!$data->exist()){
                         $data->save();
                     }
+                    $cpcss_data = $data->get_cpcss_data();
                     $settings['status'] = [
                         'status' => $data->status,
-                        'error' => $data->get_error()
+                        'error' => $data->get_error(),
+                        'desktop' => isset($cpcss_data['desktop']) && !empty($cpcss_data['desktop']) ? $cpcss_data['desktop'] : null,
+                        'mobile' => isset($cpcss_data['mobile']) && !empty($cpcss_data['mobile']) ? $cpcss_data['mobile'] : null,
                     ];
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }else if($input['key'] == "uucss_enable_cache"){
@@ -1147,7 +1159,12 @@ class RapidLoad_Optimizer
                             }else if($input->key == "cache_expiry_time"){
                                 $rapidload_cache_args['cache_expiry_time'] = (float)$input->value;
                             }else if($input->key == "excluded_page_paths"){
-                                $rapidload_cache_args['excluded_page_paths'] = $this->transformPathsToRegex(explode("\n",$input->value));
+                                if(!empty($input->value)){
+                                    $paths = explode("\n",$input->value);
+                                    $rapidload_cache_args['excluded_page_paths'] = $this->transformPathsToRegex($paths);
+                                }else{
+                                    $rapidload_cache_args['excluded_page_paths'] = "";
+                                }
                             }else{
                                 self::$options[$input->key] = $input->value;
                             }
@@ -1166,7 +1183,10 @@ class RapidLoad_Optimizer
                     }
                     case 'accordion' : {
                         foreach ($input->inputs as $accordion_key => $accordion_input){
-                            self::$options[$input->inputs[$accordion_key]['key']] = isset($accordion_input->value) && ($accordion_input->value || $accordion_input->value == "1") ? "1" : "0";
+                            self::$options[$input->inputs[$accordion_key]->key] =
+                                isset($accordion_input->value) &&
+                                ($accordion_input->value ||
+                                    $accordion_input->value == "1") ? "1" : "0";
                         }
                         break;
                     }case 'gear' : {
@@ -1235,6 +1255,12 @@ class RapidLoad_Optimizer
 
         if($cdn_enabled != $cdn_enabled_prev_status){
             do_action('rapidload/validate-cdn', !$cdn_enabled);
+            $refresh_cdn_settings = RapidLoad_Base::fetch_options(false);
+            if(isset($refresh_cdn_settings['uucss_cdn_zone_id']) && isset($refresh_cdn_settings['uucss_cdn_dns_id']) && isset($refresh_cdn_settings['uucss_cdn_url'])){
+                self::$global_options['uucss_cdn_zone_id'] = $refresh_cdn_settings['uucss_cdn_zone_id'];
+                self::$global_options['uucss_cdn_dns_id'] = $refresh_cdn_settings['uucss_cdn_dns_id'];
+                self::$global_options['uucss_cdn_url'] = $refresh_cdn_settings['uucss_cdn_url'];
+            }
         }
 
         $this->associate_domain(false);
