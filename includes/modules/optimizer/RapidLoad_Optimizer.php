@@ -227,11 +227,11 @@ class RapidLoad_Optimizer
         }
 
         wp_send_json_success([
-            'general_settings' => [
+            'general' => [
                 'rapidload_titan_gear' => get_option('rapidload_titan_gear', false),
                 'rapidload_test_mode' => self::$global_options['rapidload_test_mode']
             ],
-            'titan_settings' => $this->transform_options_to_settings($url, self::$merged_options)
+            'performance' => $this->transform_options_to_settings($url, self::$merged_options)
         ]);
     }
 
