@@ -105,4 +105,3 @@ if(lazyElements && lazyElements.length){
         observer_bg.observe(element);
     });
 }
-window.rapidload_replace_image_src();
