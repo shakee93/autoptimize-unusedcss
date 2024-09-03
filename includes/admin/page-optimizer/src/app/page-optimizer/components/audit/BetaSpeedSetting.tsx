@@ -145,7 +145,27 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
     const [updates, setUpdates] = useState<{
         key: string,
         value: any
-    }[]>(additionalInputs.map(({ key, value }) => ({ key, value })))
+    }[]>(
+        additionalInputs.reduce((acc, currentValue, i, x) => {
+            const { key, value, inputs } = currentValue
+
+            if (inputs) {
+                inputs.forEach((cInput, index, array) => {
+                    acc.push({
+                        key: `${key}.${cInput.key}`,
+                        value: cInput.value,
+                    })
+                })
+            }
+
+            acc.push({
+                key, value
+            });
+
+            return acc
+        }, [] as any)
+    )
+
 
     const update = useCallback( (val: any, key: string) => {
         let changed = updates.find(i => i.key === key);
@@ -283,7 +303,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
                                                 </TooltipText>
                                             </div>
                                         </DialogTrigger>
-                                        <DialogContent asChild className={`${settings.name==="Delay Javascript"? 'sm:max-w-[650px] bg-brand-100':'sm:max-w-[450px]'} cursor-auto`}>
+                                        <DialogContent asChild className={`${settings.name==="Delay Javascript"? 'sm:max-w-[650px] bg-brand-100':'sm:max-w-[600px]'} cursor-auto`}>
 
                                             <DialogHeader className='border-b px-6 py-8 mt-1'>
                                                 <DialogTitle>{settings.name} Settings</DialogTitle>
