@@ -21,6 +21,7 @@ import {Loader} from "lucide-react";
 // import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import { ToggleGroup, ToggleGroupItem } from "components/ui/toggle-group";
 import Accordion from "components/accordion";
+import { RadioButton } from "components/ui/RadioButton";
 
 interface AdditionalInputsProps {
     input?: AuditSettingInput
@@ -294,6 +295,48 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
         }
         {/*accordion ends here*/}
+
+
+        {input?.control_type === 'radio' &&
+
+            <Label
+                htmlFor="name"
+                className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60"
+            >
+                <div className="flex items-center justify-between">
+                    <div className="flex flex-col">
+                        <span>{input.control_label}</span>
+                        <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[335px]">
+                            {input.control_description}
+                        </span>
+                    </div>
+                    <Checkbox
+                        checked={value}
+                        onCheckedChange={(c: boolean) => update(c, input.key)}
+                        className="self-center"
+                    />
+                    <ToggleGroup
+                        className="inline-flex bg-mauve6 rounded border border-1 space-x-px "
+                        type="single"
+                        value={String(value)} // this has been set to string because sometimes the data value returns as number
+                        onValueChange={(v) => update(v, input.key)}
+                        aria-label="Select action"
+                    >
+                        {(input?.control_values as string[])?.map((value: string, index: number) => (
+                            <ToggleGroupItem
+                                key={index}
+                                value={String(value)}
+                                aria-label={value}
+                            >
+                                {value}
+                            </ToggleGroupItem>
+                        ))}
+                    </ToggleGroup>
+                </div>
+            </Label>
+
+
+        }
 
         {input.control_type === 'button' && input.control_label === 'Exclude Javascript from Delaying' &&
 
