@@ -124,11 +124,9 @@ class RapidLoad_CDN_Enqueue
         $site_url = site_url();
         $cdn_url = $this->options['uucss_cdn_url'];
         $pattern = '/(@font-face\s*{[^}]*src:\s*url\(\s*)(' . preg_quote($site_url, '/') . '[^)]*\.(woff2?|ttf))(\s*\)[^}]*})/i';
-        $updated_content = preg_replace_callback($pattern, function($matches) use ($cdn_url, $site_url) {
+        return  preg_replace_callback($pattern, function($matches) use ($cdn_url, $site_url) {
             return str_replace($site_url, $cdn_url, $matches[0]);
         }, $content);
-
-        return $updated_content;
     }
 
     public function is_cdn_enabled(){
