@@ -15,8 +15,8 @@ import {cn} from "lib/utils";
 
 const TestModeSwitcher = () => {
 
-    const {testMode} = useSelector((state: RootState) => state.app);
-    const [localSwitchState, setLocalSwitchState] = useState<boolean>(testMode?.status || false);
+    const {testMode} = useSelector(optimizerData);
+    const [localSwitchState, setLocalSwitchState] = useState<boolean>(testMode);
     const [loadingStatus, setLoadingStatus] = useState(false);
     const {settingsMode, testModeStatus, testModeLoading, dispatch} = useCommonDispatch();
     const {handleTestModeSwitchChange} = useTestModeUtils();
@@ -25,7 +25,7 @@ const TestModeSwitcher = () => {
 
     useEffect(() => {
         if (testMode) {
-            dispatch(setCommonState('testModeStatus', testMode.status || false));
+            dispatch(setCommonState('testModeStatus', testMode));
         }
 
     }, [testMode]);
