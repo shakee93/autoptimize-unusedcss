@@ -226,7 +226,13 @@ class RapidLoad_Optimizer
             unset(self::$merged_options['uucss_api_key']);
         }
 
-        wp_send_json_success($this->transform_options_to_settings($url, self::$merged_options));
+        wp_send_json_success([
+            'general_settings' => [
+                'rapidload_titan_gear' => get_option('rapidload_titan_gear', false),
+                'rapidload_test_mode' => self::$global_options['rapidload_test_mode']
+            ],
+            'titan_settings' => $this->transform_options_to_settings($url, self::$merged_options)
+        ]);
     }
 
     public function update_titan_settings()
@@ -1153,7 +1159,12 @@ class RapidLoad_Optimizer
                             }else if($input->key == "cache_expiry_time"){
                                 $rapidload_cache_args['cache_expiry_time'] = (float)$input->value;
                             }else if($input->key == "excluded_page_paths"){
-                                $rapidload_cache_args['excluded_page_paths'] = $this->transformPathsToRegex(explode("\n",$input->value));
+                                if(!empty($input->value)){
+                                    $paths = explode("\n",$input->value);
+                                    $rapidload_cache_args['excluded_page_paths'] = $this->transformPathsToRegex($paths);
+                                }else{
+                                    $rapidload_cache_args['excluded_page_paths'] = "";
+                                }
                             }else{
                                 self::$options[$input->key] = $input->value;
                             }
@@ -1244,6 +1255,12 @@ class RapidLoad_Optimizer
 
         if($cdn_enabled != $cdn_enabled_prev_status){
             do_action('rapidload/validate-cdn', !$cdn_enabled);
+            $refresh_cdn_settings = RapidLoad_Base::fetch_options(false);
+            if(isset($refresh_cdn_settings['uucss_cdn_zone_id']) && isset($refresh_cdn_settings['uucss_cdn_dns_id']) && isset($refresh_cdn_settings['uucss_cdn_url'])){
+                self::$global_options['uucss_cdn_zone_id'] = $refresh_cdn_settings['uucss_cdn_zone_id'];
+                self::$global_options['uucss_cdn_dns_id'] = $refresh_cdn_settings['uucss_cdn_dns_id'];
+                self::$global_options['uucss_cdn_url'] = $refresh_cdn_settings['uucss_cdn_url'];
+            }
         }
 
         $this->associate_domain(false);
