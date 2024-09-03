@@ -1,5 +1,5 @@
 import {Label} from "components/ui/label";
-import React, {useCallback, useMemo, useState} from "react";
+import React, {useCallback, useMemo, useState, useEffect} from "react";
 import {Switch} from "components/ui/switch";
 import {Textarea} from "components/ui/textarea";
 import { Checkbox } from "components/ui/checkbox";
@@ -22,6 +22,7 @@ import {Loader} from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "components/ui/toggle-group";
 import Accordion from "components/accordion";
 import { RadioButton } from "components/ui/RadioButton";
+import * as RadioGroup from "@radix-ui/react-radio-group";
 
 interface AdditionalInputsProps {
     input?: AuditSettingInput
@@ -131,9 +132,19 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
         setIsOpen(prevState => !prevState);
     }
 
-    return <div className='flex flex-col justify-start items-center gap-3 normal-case' >
 
-        {input?.control_type === 'checkbox' && input.control_accordion_name != 'uucss-misc-options' &&
+    const [radioButtonState, setRadioButtonState] = useState('all');
+
+    useEffect(() => {
+
+        console.log('RadioButtonState changed:', radioButtonState);
+        console.log('All inputs:', input);
+    }, [radioButtonState, input]);
+
+    return (
+        <div className='flex flex-col justify-start items-center gap-3 normal-case' >
+
+        {input?.control_type === 'checkbox' &&
 
             <Label
                 htmlFor="name"
@@ -253,7 +264,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
         }
 
-        {/*accordion starts here*/}
+
         {input.control_type === 'accordion' &&
 
             <Label
@@ -299,7 +310,6 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
 
         }
-        {/*accordion ends here*/}
 
 
         {input?.control_type === 'radio' &&
@@ -315,29 +325,25 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                             {input.control_description}
                         </span>
                     </div>
-                    <Checkbox
-                        checked={value}
-                        onCheckedChange={(c: boolean) => update(c, input.key)}
-                        className="self-center"
-                    />
-                    <ToggleGroup
-                        className="inline-flex bg-mauve6 rounded border border-1 space-x-px "
-                        type="single"
-                        value={String(value)} // this has been set to string because sometimes the data value returns as number
-                        onValueChange={(v) => update(v, input.key)}
-                        aria-label="Select action"
-                    >
-                        {(input?.control_values as string[])?.map((value: string, index: number) => (
-                            <ToggleGroupItem
-                                key={index}
-                                value={String(value)}
-                                aria-label={value}
-                            >
-                                {value}
-                            </ToggleGroupItem>
-                        ))}
-                    </ToggleGroup>
-                </div>
+                        <RadioGroup.Root
+                            className="flex flex-row space-x-4"
+                            value={String(value)}
+                            onValueChange={(v) => {
+                                setRadioButtonState(v);
+                                update(v, input.key);
+                            }}
+                        >
+                            {(input?.control_values as string[])?.map((value: string, index: number) => (
+                                <RadioButton
+                                    key={index}
+                                    value={String(value)}
+                                    aria-label={value}
+                                >
+                                    {value}
+                                </RadioButton>
+                            ))}
+                        </RadioGroup.Root>
+                    </div>
             </Label>
 
 
@@ -407,7 +413,10 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                 </div>
             </div>
         }
+
+
     </div>
+    );
 }
 
 export default React.memo(Fields)
