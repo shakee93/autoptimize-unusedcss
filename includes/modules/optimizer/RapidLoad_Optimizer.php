@@ -443,6 +443,7 @@ class RapidLoad_Optimizer
             //image
             'uucss_enable_image_delivery',
             'uucss_support_next_gen_formats',
+            'uucss_adaptive_image_delivery',
             'uucss_image_optimize_level',
             'uucss_generate_blurry_place_holder',
             'uucss_exclude_images_from_modern_images',
