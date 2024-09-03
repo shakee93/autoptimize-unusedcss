@@ -88,13 +88,12 @@ class RapidLoad_CDN
             $this->options['uucss_cdn_dns_id'] = $response->dns_id;
             $this->options['uucss_cdn_url'] = $response->cdn_url;
             RapidLoad_Base::update_option('rapidload_module_cdn',"1");
+            RapidLoad_Base::update_option('autoptimize_uucss_settings', $this->options);
             do_action('rapidload/cdn/validated', [
                 'clear' => false,
                 'cdn_url' => isset($this->options['uucss_cdn_url']) ? $this->options['uucss_cdn_url'] : null
             ]);
         }
-
-        RapidLoad_Base::update_option('autoptimize_uucss_settings', $this->options);
 
         if(wp_doing_ajax() && isset($_REQUEST['dashboard_cdn_validator'])){
             wp_send_json_success([
