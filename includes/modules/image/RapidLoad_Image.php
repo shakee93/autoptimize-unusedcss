@@ -134,7 +134,7 @@ class RapidLoad_Image
             $options .= ',to_avif';
         }
 
-        if(isset(self::$instance->options['uucss_adaptive_image_delivery'])){
+        if(isset(self::$instance->options['uucss_adaptive_image_delivery']) && self::$instance->options['uucss_adaptive_image_delivery'] == "1"){
             if($width){
 
                 $options .= ',w_' . str_replace("px", "", $width);
