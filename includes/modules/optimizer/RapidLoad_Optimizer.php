@@ -228,8 +228,8 @@ class RapidLoad_Optimizer
 
         wp_send_json_success([
             'general' => [
-                'rapidload_titan_gear' => get_option('rapidload_titan_gear', false),
-                'rapidload_test_mode' => self::$global_options['rapidload_test_mode']
+                'performance_gear' => get_option('rapidload_titan_gear', false),
+                'test_mode' => self::$global_options['rapidload_test_mode']
             ],
             'performance' => $this->transform_options_to_settings($url, self::$merged_options)
         ]);
@@ -1091,24 +1091,24 @@ class RapidLoad_Optimizer
             }
         }
 
-        $settings["Performance Gears"] = [
-            'name' => "Performance Gears",
-            "description" => "Include width and height attributes for these images.",
-            "category" => "gear",
-            "inputs"=> [
-                [
-                    "control_type" => "gear",
-                    "control_label" => "Select performance gear",
-                    "control_values" => [
-                        "starter",
-                        "accelerate",
-                        "turbo-max"
-                    ],
-                    "value" => get_option('rapidload_titan_gear', false),
-                    "key" => "active_gear"
-                ]
-            ]
-        ];
+//        $settings["Performance Gears"] = [
+//            'name' => "Performance Gears",
+//            "description" => "Include width and height attributes for these images.",
+//            "category" => "gear",
+//            "inputs"=> [
+//                [
+//                    "control_type" => "gear",
+//                    "control_label" => "Select performance gear",
+//                    "control_values" => [
+//                        "starter",
+//                        "accelerate",
+//                        "turbo-max"
+//                    ],
+//                    "value" => get_option('rapidload_titan_gear', false),
+//                    "key" => "active_gear"
+//                ]
+//            ]
+//        ];
 
         return array_values($settings);
     }

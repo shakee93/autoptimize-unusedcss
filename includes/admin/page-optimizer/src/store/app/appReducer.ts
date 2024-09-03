@@ -38,17 +38,23 @@ const initialState: AppState = {
         desktop: blankReport,
     },
     settings: {
-        mobile: {
-            original: [],
-            state: [],
-            error: null,
-            loading: false,
+        performance: {
+            mobile: {
+                original: [],
+                state: [],
+                error: null,
+                loading: false,
+            },
+            desktop: {
+                original: [],
+                state: [],
+                error: null,
+                loading: false,
+            }
         },
-        desktop: {
-            original: [],
-            state: [],
-            error: null,
-            loading: false,
+        general: {
+            test_mode: true,
+            performance_gear: 'accelerate'
         }
     }
 };
@@ -112,10 +118,13 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 ...state,
                 settings: {
                     ...state.settings,
-                    [state.activeReport] : {
-                        ...state.settings[state.activeReport],
-                        loading: true,
-                        error: null
+                    performance: {
+                        ...state.settings.performance,
+                        [state.activeReport] : {
+                            ...state.settings.performance[state.activeReport],
+                            loading: true,
+                            error: null
+                        }
                     }
                 },
             };
@@ -124,12 +133,16 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 ...state,
                 settings: {
                     ...state.settings,
-                    [action.payload.activeReport] : {
-                        ...state.settings[action.payload.activeReport],
-                        original: JSON.parse(JSON.stringify(action.payload.data.data)),
-                        state: action.payload.data.data,
-                        error: null,
-                        loading: false,
+                    general: action.payload.data.general,
+                    performance: {
+                        ...state.settings.performance,
+                        [action.payload.activeReport] : {
+                            ...state.settings.performance[action.payload.activeReport],
+                            original: JSON.parse(JSON.stringify(action.payload.data.data)),
+                            state: action.payload.data.data,
+                            error: null,
+                            loading: false,
+                        }
                     }
                 }
             };
@@ -138,9 +151,12 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 ...state,
                 settings: {
                     ...state.settings,
-                    [state.activeReport] : {
-                        error: action.error,
-                        loading: false
+                    performance: {
+                        ...state.settings.performance,
+                        [state.activeReport] : {
+                            error: action.error,
+                            loading: false
+                        }
                     }
                 }
             };
@@ -149,9 +165,12 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 ...state,
                 settings: {
                     ...state.settings,
-                    [state.activeReport] : {
-                        ...state.settings[state.activeReport],
-                        state: action.payload.settings,
+                    performance: {
+                        ...state.settings.performance,
+                        [state.activeReport] : {
+                            ...state.settings.performance[state.activeReport],
+                            state: action.payload.settings,
+                        },
                     }
                 }
             };
@@ -160,9 +179,16 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 ...state,
                 settings: {
                     ...state.settings,
-                    [state.activeReport] : {
-                        ...state.settings[state.activeReport],
-                        state: action.payload.settings,
+                    general: {
+                        ...state.settings.general,
+                        performance_gear: action.payload.mode
+                    },
+                    performance: {
+                        ...state.settings.performance,
+                        [state.activeReport] : {
+                            ...state.settings.performance[state.activeReport],
+                            state: action.payload.settings,
+                        }
                     }
                 }
             };

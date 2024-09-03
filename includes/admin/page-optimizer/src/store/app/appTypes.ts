@@ -30,11 +30,17 @@ export interface AppState {
         desktop: Report,
     },
     settings: {
-        [key in ReportType]: {
-            original: AuditSetting[],
-            state: AuditSetting[],
-            error: string | null;
-            loading: boolean
+        performance: {
+            [key in ReportType]: {
+                original: AuditSetting[],
+                state: AuditSetting[],
+                error: string | null;
+                loading: boolean
+            }
+        },
+        general: {
+            test_mode: boolean
+            performance_gear: PerformanceGear
         }
     },
 }
@@ -112,6 +118,7 @@ interface ChangeGearAction {
     type: typeof CHANGE_GEAR;
     payload : {
         settings : AuditSetting[];
+        mode: PerformanceGear
     },
 }
 
