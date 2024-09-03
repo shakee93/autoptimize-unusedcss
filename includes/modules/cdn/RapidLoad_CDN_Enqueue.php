@@ -94,6 +94,14 @@ class RapidLoad_CDN_Enqueue
 
         }
 
+        $inline_styles = $this->dom->find( 'style' );
+
+        foreach ($inline_styles as $inline_style){
+
+            $inline_style->__set('innertext',$this->replace_font_urls_with_cdn($inline_style->innertext));
+
+        }
+
         $head = $this->dom->find('head', 0);
         $preconnect = '<link href="' . $this->options['uucss_cdn_url'] . '" rel="preconnect" crossorigin>';
         $first_child = $head->first_child();
@@ -110,6 +118,17 @@ class RapidLoad_CDN_Enqueue
             'strategy' => $this->strategy
         ];
 
+    }
+
+    function replace_font_urls_with_cdn($content) {
+        $site_url = site_url();
+        $cdn_url = $this->options['uucss_cdn_url'];
+        $pattern = '/(@font-face\s*{[^}]*src:\s*url\(\s*)(' . preg_quote($site_url, '/') . '[^)]*\.(woff2?|ttf))(\s*\)[^}]*})/i';
+        $updated_content = preg_replace_callback($pattern, function($matches) use ($cdn_url, $site_url) {
+            return str_replace($site_url, $cdn_url, $matches[0]);
+        }, $content);
+
+        return $updated_content;
     }
 
     public function is_cdn_enabled(){
