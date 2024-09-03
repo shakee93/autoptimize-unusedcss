@@ -330,7 +330,7 @@ export const updateSettings = (
         const deviceType = currentState?.app?.activeReport;
 
         // @ts-ignore
-        const newOptions: AuditSetting[] = currentState?.app?.settings[deviceType]?.state?.map((s: AuditSetting) => {
+        const newOptions: AuditSetting[] = currentState?.app?.settings.performance[deviceType]?.state?.map((s: AuditSetting) => {
             if (s.name !== setting.name) {
                 return s; // Early return if the setting name doesn't match
             }
