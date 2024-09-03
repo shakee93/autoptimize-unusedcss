@@ -333,21 +333,20 @@ export const updateSettings = (
 
             const inputKey = key.split('.')
 
-            // console.log(inputKey, payload);
-
-            const _s = {
+            return {
                 ...s,
                 inputs: s.inputs.map(input =>
                     inputKey.length > 1 ?
                         (input?.inputs && input.key === inputKey[0]) ? {
                             ...input,
-                            inputs: input?.inputs.map((i: AuditSettingInput) => i.key === inputKey[1] ? { ...i, value: payload} : i)
+                            inputs: input?.inputs.map((i: AuditSettingInput) => i.key === inputKey[1] ? {
+                                ...i,
+                                value: payload
+                            } : i)
                         } : input :
-                        input.key === key ? { ...input, value: payload } : input
+                        input.key === key ? {...input, value: payload} : input
                 )
-            };
-
-            return _s
+            }
         }) || [];
         
         dispatch({ type: UPDATE_SETTINGS , payload : {

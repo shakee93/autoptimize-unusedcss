@@ -167,12 +167,6 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
     )
 
 
-    useEffect(() => {
-        console.log(updates);
-    }, [updates])
-
-
-
     const update = useCallback( (val: any, key: string) => {
         let changed = updates.find(i => i.key === key);
 
