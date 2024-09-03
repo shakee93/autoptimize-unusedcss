@@ -261,11 +261,11 @@ class RapidLoad_Optimizer
 
         $body = json_decode(file_get_contents('php://input'));
 
-        if(!isset($body) || !isset($body->settings)){
+        if(!isset($body) || !isset($body->settings) || !isset($body->settings->performance)){
             wp_send_json_error('Missing required data to save the settings!');
         }
 
-        $this->optimizer_update_settings($body->settings);
+        $this->optimizer_update_settings($body->settings->performance,$body->settings->general);
 
         wp_send_json_success('optimization updated successfully');
 
@@ -1113,7 +1113,7 @@ class RapidLoad_Optimizer
         return array_values($settings);
     }
 
-    public function optimizer_update_settings($result){
+    public function optimizer_update_settings($result, $general_settings = null){
 
         $rapidload_cache_args = RapidLoad_Cache::get_settings();
 
@@ -1189,10 +1189,6 @@ class RapidLoad_Optimizer
                                     $accordion_input->value == "1") ? "1" : "0";
                         }
                         break;
-                    }case 'gear' : {
-                        if(isset($input->value)){
-                            update_option('rapidload_titan_gear', $input->value);
-                        }
                     }
                 }
 
@@ -1260,6 +1256,12 @@ class RapidLoad_Optimizer
                 self::$global_options['uucss_cdn_zone_id'] = $refresh_cdn_settings['uucss_cdn_zone_id'];
                 self::$global_options['uucss_cdn_dns_id'] = $refresh_cdn_settings['uucss_cdn_dns_id'];
                 self::$global_options['uucss_cdn_url'] = $refresh_cdn_settings['uucss_cdn_url'];
+            }
+        }
+
+        if($general_settings){
+            if(isset($general_settings->performance_gear)){
+                update_option('rapidload_titan_gear', $general_settings->performance_gear);
             }
         }
 
