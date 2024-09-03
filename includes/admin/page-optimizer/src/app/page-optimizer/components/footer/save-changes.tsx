@@ -196,7 +196,7 @@ const SaveChanges = () => {
     }, [data?.audits]);
 
 
-    const dialogData = useMemo(() => ( computeDialogData(data)), [data?.audits]);
+    const dialogData = useMemo(() => ( computeDialogData(data)), [data]);
 
     const savable = useMemo(() => {
         return  fresh ? true : (touched)

@@ -15,7 +15,7 @@ const InitTour = ({ mode }: {
     const {data, loading} = useSelector(optimizerData);
     const { setIsOpen, isOpen, setSteps, currentStep, setCurrentStep } = useTour()
     const { activeTab, isTourOpen, activeMetric, dispatch: commonDispatch } = useCommonDispatch()
-    const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
+    const {activeReport} = useSelector((state: RootState) => state.app);
 
     useEffect(() => {
 
