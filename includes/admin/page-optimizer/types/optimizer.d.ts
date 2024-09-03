@@ -178,6 +178,7 @@ interface AuditSettingInput {
     value: any;
     key: any;
     action: string
+    inputs?: AuditSettingInput[]
 }
 
 interface ControlValue {

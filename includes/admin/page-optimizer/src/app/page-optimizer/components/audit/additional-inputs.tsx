@@ -1,5 +1,5 @@
 import {Label} from "components/ui/label";
-import React, {useMemo, useState} from "react";
+import React, {useCallback, useMemo, useState} from "react";
 import {Switch} from "components/ui/switch";
 import {Textarea} from "components/ui/textarea";
 import { Checkbox } from "components/ui/checkbox";
@@ -48,6 +48,15 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
         }
 
         return updates.find(i => i.key === input.key)?.value;
+    }, [input, updates])
+
+    const childValue = useCallback((key: string) => {
+
+        if (!input) {
+            return '';
+        }
+
+        return updates.find(i => i.key === `${input.key}.${key}`)?.value;
     }, [input, updates])
 
     if (!input) {
@@ -265,27 +274,23 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
                 <Accordion
                     id={input.key}
-                    className="flex flex-col text-left w-full mt-2"
+                    className="flex flex-col text-left w-full gap-4 mt-6 ml-3"
                     initialRender={true}
                     isOpen={isOpen}
                 >
-                    {input.inputs.map((input) => (
-                        <div key={input.key} className="flex flex-col gap-2 mt-3">
-                            <div className="flex gap-2">
-                                <span>{input.value}</span>
-                                <span>{JSON.stringify(input)}</span>
-                                <Checkbox
-                                    checked={input.value === '1'}
-                                    onCheckedChange={(c: boolean) => update(c, input.key)}
-                                />
-                                <div className="flex flex-col mt-1">
-                                    <span className="cursor-pointer">{input.control_label}</span>
-                                    <span className="pt-1 text-sm font-normal text-gray-600 sm:max-w-[425px]">
-                                            {input.control_description}
+                    {input?.inputs?.map((childInput) => (
+                        <Label key={childInput.key} className="flex gap-1">
+                            <Checkbox
+                                checked={childValue(childInput.key)}
+                                onCheckedChange={(c: boolean) => update(c, `${input.key}.${childInput.key}`)}
+                            />
+                            <div className="flex flex-col">
+                                <span className="cursor-pointer">{childInput.control_label}</span>
+                                <span className="text-sm font-normal text-gray-600 sm:max-w-[425px]">
+                                            {childInput.control_description}
                                         </span>
-                                </div>
                             </div>
-                        </div>
+                        </Label>
                     ))}
                 </Accordion>
 

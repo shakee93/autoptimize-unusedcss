@@ -145,7 +145,27 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
     const [updates, setUpdates] = useState<{
         key: string,
         value: any
-    }[]>(additionalInputs.map(({ key, value }) => ({ key, value })))
+    }[]>(
+        additionalInputs.reduce((acc, currentValue, i, x) => {
+            const { key, value, inputs } = currentValue
+
+            if (inputs) {
+                inputs.forEach((cInput, index, array) => {
+                    acc.push({
+                        key: `${key}.${cInput.key}`,
+                        value: cInput.value,
+                    })
+                })
+            }
+
+            acc.push({
+                key, value
+            });
+
+            return acc
+        }, [] as any)
+    )
+
 
     const update = useCallback( (val: any, key: string) => {
         let changed = updates.find(i => i.key === key);

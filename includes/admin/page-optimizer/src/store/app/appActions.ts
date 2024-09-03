@@ -148,7 +148,15 @@ const transformSettings = (data: any) => {
                     {
                         value: input.value === '1' || input.value === true
                     }
-                )
+                ),
+                ...(input.inputs && {
+                    inputs: input.inputs.map(i => {
+                        return {
+                            ...i,
+                            value: i.control_type === 'checkbox' ? input.value === '1' || input.value === true : i.value
+                        }
+                    })
+                }),
             }))
         }))
     }
@@ -316,7 +324,6 @@ export const updateSettings = (
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState)  => {
         const currentState = getState(); // Access the current state
         const deviceType = currentState?.app?.activeReport;
-        console.log(payload)
 
         // @ts-ignore
         const newOptions: AuditSetting[] = currentState?.app?.settings[deviceType]?.state?.map((s: AuditSetting) => {
@@ -324,13 +331,22 @@ export const updateSettings = (
                 return s; // Early return if the setting name doesn't match
             }
 
+            const inputKey = key.split('.')
 
             return {
                 ...s,
                 inputs: s.inputs.map(input =>
-                    input.key === key ? { ...input, value: payload } : input
+                    inputKey.length > 1 ?
+                        (input?.inputs && input.key === inputKey[0]) ? {
+                            ...input,
+                            inputs: input?.inputs.map((i: AuditSettingInput) => i.key === inputKey[1] ? {
+                                ...i,
+                                value: payload
+                            } : i)
+                        } : input :
+                        input.key === key ? {...input, value: payload} : input
                 )
-            };
+            }
         }) || [];
         
         dispatch({ type: UPDATE_SETTINGS , payload : {
