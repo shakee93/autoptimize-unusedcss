@@ -193,6 +193,8 @@ class RapidLoad_Font
             $css = str_replace($font_url, $cached_font_url, $css);
         }
 
+        $css = apply_filters('rapidload/cpcss/minify', $css, false);
+
         file_put_contents($file_path, $css);
     }
 
