@@ -160,7 +160,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
             <Label
                 htmlFor="name"
-                className="flex flex-col text-left w-full dark:text-brand-300 bg-white rounded-xl py-4 px-4 border border-brand-200/60"
+                className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60"
             >
                 <div className="flex items-center justify-between">
                     <div className="flex flex-col">
@@ -184,7 +184,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
             <Label
                 htmlFor="name"
-                className="flex flex-col text-left w-full dark:text-brand-300 bg-white rounded-xl py-4 px-4 border border-brand-200/60"
+                className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60"
             >
                 <span>{input.control_label}</span>
                 <span className="pt-2 text-sm font-normal text-gray-600">
