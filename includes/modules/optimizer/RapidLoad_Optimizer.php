@@ -334,6 +334,12 @@ class RapidLoad_Optimizer
                                     'strategy' => self::$strategy
                                 ]
                             ]);
+                            do_action('cpcss_async_queue', $job_data, [
+                                'titan' => true,
+                                'options' => [
+                                    'strategy' => self::$strategy == "desktop" ? "mobile" : "desktop"
+                                ]
+                            ]);
                         }
                         break;
                     case 'uucss_self_host_google_fonts':
