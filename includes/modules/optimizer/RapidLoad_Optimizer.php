@@ -752,7 +752,7 @@ class RapidLoad_Optimizer
                 ]
             ),
             'uucss_exclude_files_from_delay_js' => array(
-                'control_type' => 'button',
+                'control_type' => 'tab',
                 'control_label' => 'Exclude Javascript from Delaying',
                 'control_description' => 'These JS files will be excluded from delaying.',
                 'default' => '',
@@ -1188,7 +1188,7 @@ class RapidLoad_Optimizer
                         }
                         break;
                     }
-                    case 'button' : {
+                    case 'tab' : {
                         if(isset($input->key) && $input->key == "uucss_exclude_files_from_delay_js"){
                             if(is_array($input->value)){
                                 self::$options['uucss_dynamic_js_exclusion_list'] = implode("\n",$input->value);
