@@ -23,6 +23,8 @@ import { ToggleGroup, ToggleGroupItem } from "components/ui/toggle-group";
 import Accordion from "components/accordion";
 import { RadioButton } from "components/ui/RadioButton";
 import * as RadioGroup from "@radix-ui/react-radio-group";
+import {optimizerData} from "../../../../store/app/appSelector";
+import {useSelector} from "react-redux";
 
 interface AdditionalInputsProps {
     input?: AuditSettingInput
@@ -39,6 +41,8 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
     const [loading, setLoading] = useState(false)
     const { options } = useAppContext()
+    const {settings } = useSelector(optimizerData);
+
     const excludeCategory = ['third_party', 'plugins', 'theme'];
 
 
@@ -132,14 +136,22 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
         setIsOpen(prevState => !prevState);
     }
 
+    const visible = useMemo(() => {
+        if (!input?.control_visibility) {
+            return true;
+        }
 
-    const [radioButtonState, setRadioButtonState] = useState('all');
+        const updatesMap = new Map(updates.map(({key, value}) => [key, value]));
 
-    useEffect(() => {
+        return input.control_visibility.some(condition =>
+            updatesMap.get(condition.key) === condition.value
+        );
+    }, [input?.control_visibility, updates]);
 
-        console.log('RadioButtonState changed:', radioButtonState);
-        console.log('All inputs:', input);
-    }, [radioButtonState, input]);
+
+    if (!visible) {
+        return <></>;
+    }
 
     return (
         <div className='flex flex-col justify-start items-center gap-3 normal-case' >
@@ -148,7 +160,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
             <Label
                 htmlFor="name"
-                className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60"
+                className="flex flex-col text-left w-full dark:text-brand-300 bg-white rounded-xl py-4 px-4 border border-brand-200/60"
             >
                 <div className="flex items-center justify-between">
                     <div className="flex flex-col">
@@ -172,7 +184,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
             <Label
                 htmlFor="name"
-                className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60"
+                className="flex flex-col text-left w-full dark:text-brand-300 bg-white rounded-xl py-4 px-4 border border-brand-200/60"
             >
                 <span>{input.control_label}</span>
                 <span className="pt-2 text-sm font-normal text-gray-600">
@@ -329,7 +341,6 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                             className="flex flex-row space-x-4"
                             value={String(value)}
                             onValueChange={(v) => {
-                                setRadioButtonState(v);
                                 update(v, input.key);
                             }}
                         >

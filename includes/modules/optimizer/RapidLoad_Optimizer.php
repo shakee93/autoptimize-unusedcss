@@ -745,7 +745,10 @@ class RapidLoad_Optimizer
                 'control_values' => array('1', '0'),
                 'default' => '0',
                 'control_visibility' => [
-                    'rapidload_js_delay_method' => 'all'
+                    [
+                        'key' => 'rapidload_js_delay_method',
+                        'value' => 'all',
+                    ]
                 ]
             ),
             'uucss_exclude_files_from_delay_js' => array(
@@ -754,7 +757,10 @@ class RapidLoad_Optimizer
                 'control_description' => 'These JS files will be excluded from delaying.',
                 'default' => '',
                 'control_visibility' => [
-                    'rapidload_js_delay_method' => 'all'
+                    [
+                        'key' => 'rapidload_js_delay_method',
+                        'value' => 'all',
+                    ]
                 ]
             ),
             'delay_javascript_callback' => array(
@@ -763,7 +769,10 @@ class RapidLoad_Optimizer
                 'control_description' => 'These scripts will be executed on DOMContentLoaded',
                 'default' => '',
                 'control_visibility' => [
-                    'rapidload_js_delay_method' => 'all'
+                    [
+                        'key' => 'rapidload_js_delay_method',
+                        'value' => 'all',
+                    ]
                 ]
             ),
             'uucss_load_scripts_on_user_interaction' => array(
@@ -772,7 +781,10 @@ class RapidLoad_Optimizer
                 'control_description' => 'These JS files will be excluded from delaying.',
                 'default' => '',
                 'control_visibility' => [
-                    'rapidload_js_delay_method' => 'selected'
+                    [
+                        'key' => 'rapidload_js_delay_method',
+                        'value' => 'selected',
+                    ]
                 ]
             ),
 
@@ -948,7 +960,10 @@ class RapidLoad_Optimizer
                 'control_description' => 'These JS files will be excluded from all optimizations.',
                 'default' => '',
                 'control_visibility' => [
-                    'rapidload_js_delay_method' => 'all'
+                    [
+                        'key' => 'rapidload_js_delay_method',
+                        'value' => 'all',
+                    ]
                 ]
             ),
             'uucss_exclude_images' => array(

@@ -314,9 +314,7 @@ const Setting = ({updateValue, settings, index, hideActions, showIcons = true, a
 
                                             <div className="grid gap-4 px-6 py-4">
                                                 {additionalInputs.map((input, index) =>
-                                                    <div key={index} >
-                                                        <Fields input={input} updates={updates} update={update} />
-                                                    </div>
+                                                    <Fields key={index} input={input} updates={updates} update={update} />
                                                 )}
                                             </div>
 
