@@ -391,6 +391,12 @@ class RapidLoad_Image_Enqueue
 
             foreach ( $iframes as $index => $iframe ) {
 
+                $parent = $iframe->parent();
+
+                if(isset($parent) && $parent->tag == 'noscript'){
+                    continue;
+                }
+
                 if ($iframe->srcdoc) {
 
                     if($this->is_file_excluded($iframe->srcdoc, 'uucss_exclude_images_from_lazy_load')){
