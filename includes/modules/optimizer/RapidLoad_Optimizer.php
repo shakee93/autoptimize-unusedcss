@@ -710,8 +710,8 @@ class RapidLoad_Optimizer
                 'control_type' => 'radio',
                 'control_label' => 'Delay Method',
                 'control_description' => 'Delay Method',
-                'control_values' => array('all', 'selected'),
-                'default' => 'all'
+                'control_values' => array('All Files', 'Selected Files'),
+                'default' => 'All Files'
             ),
             'uucss_load_js_method' => array(
                 'control_type' => 'checkbox',
@@ -747,7 +747,7 @@ class RapidLoad_Optimizer
                 'control_visibility' => [
                     [
                         'key' => 'rapidload_js_delay_method',
-                        'value' => 'all',
+                        'value' => 'All Files',
                     ]
                 ]
             ),
@@ -759,7 +759,7 @@ class RapidLoad_Optimizer
                 'control_visibility' => [
                     [
                         'key' => 'rapidload_js_delay_method',
-                        'value' => 'all',
+                        'value' => 'All Files',
                     ]
                 ]
             ),
@@ -771,7 +771,7 @@ class RapidLoad_Optimizer
                 'control_visibility' => [
                     [
                         'key' => 'rapidload_js_delay_method',
-                        'value' => 'all',
+                        'value' => 'All Files',
                     ]
                 ]
             ),
@@ -783,7 +783,7 @@ class RapidLoad_Optimizer
                 'control_visibility' => [
                     [
                         'key' => 'rapidload_js_delay_method',
-                        'value' => 'selected',
+                        'value' => 'Selected Files',
                     ]
                 ]
             ),
@@ -962,7 +962,7 @@ class RapidLoad_Optimizer
                 'control_visibility' => [
                     [
                         'key' => 'rapidload_js_delay_method',
-                        'value' => 'all',
+                        'value' => 'All Files',
                     ]
                 ]
             ),
@@ -1041,7 +1041,7 @@ class RapidLoad_Optimizer
                 }else if($input['key'] == "excluded_page_paths") {
                     $input['value'] = isset($rapidload_cache_args[$input['key']]) ? implode("\n", $this->transformRegexToPaths($rapidload_cache_args[$input['key']])) : '';
                 }else if($input['key'] == "rapidload_js_delay_method"){
-                    $input['value'] = isset($options['uucss_load_scripts_on_user_interaction']) && !empty($options['uucss_load_scripts_on_user_interaction']) ? 'selected' : 'all' ;
+                    $input['value'] = isset($options['uucss_load_scripts_on_user_interaction']) && !empty($options['uucss_load_scripts_on_user_interaction']) ? 'Selected Files' : 'All Files' ;
                 }else if($input['key'] == "uucss_misc_options"){
 
                     foreach ($input['inputs'] as $internal_key => $internal_input){
@@ -1050,7 +1050,7 @@ class RapidLoad_Optimizer
 
                     }
 
-                    $input['value'] = isset($options['uucss_load_scripts_on_user_interaction']) && !empty($options['uucss_load_scripts_on_user_interaction']) ? 'selected' : 'all' ;
+                    $input['value'] = isset($options['uucss_load_scripts_on_user_interaction']) && !empty($options['uucss_load_scripts_on_user_interaction']) ? 'Selected Files' : 'All Files' ;
                 }else{
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }
