@@ -3,38 +3,15 @@ document.addEventListener("DOMContentLoaded", function() {
     playButtons.forEach(function(playButton) {
         var videoContainer = playButton.closest('.rapidload-yt-video-container');
         var videoId = videoContainer.querySelector('img').getAttribute('data-video-id');
-        var resolutions = ['maxresdefault', 'hqdefault', 'mqdefault'];
-        function loadPosterImage(index) {
-            if (index >= resolutions.length) return;
-            var posterImageUrl = "https://i.ytimg.com/vi/" + videoId + "/" + resolutions[index] + ".jpg";
-            var testImg = new Image();
-            testImg.src = posterImageUrl;
-            testImg.onload = function() {
-                var posterImage = videoContainer.querySelector(".rapidload-yt-poster-image-");
-                if (posterImage) {
-                    if (window.rapidload_io_data && window.rapidload_io_data.support_next_gen_format) {
-                        var options = "ret_img";
-                        if (window.rapidload_io_data.optimize_level) {
-                            options += ",q_" + window.rapidload_io_data.optimize_level;
-                        }
-                        if (window.rapidload_io_data.support_next_gen_format) {
-                            options += ",to_avif";
-                        }
-                        if(window.rapidload_io_data.adaptive_image_delivery){
-                            if(posterImage.getBoundingClientRect().width !== 0){
-                                options += ",w_" + Math.floor(posterImage.getBoundingClientRect().width);
-                            }
-                        }
-                        posterImageUrl = window.rapidload_io_data.image_endpoint + options + "/" + posterImageUrl
-                    }
-                    posterImage.setAttribute("src",posterImageUrl );
-                }
-            };
-            testImg.onerror = function() {
-                loadPosterImage(index + 1);
+        function loadPosterImage() {
+            var posterImageUrl = "https://i.ytimg.com/vi/" + videoId + "/";
+            var posterImage = videoContainer.querySelector(".rapidload-yt-poster-image-");
+            posterImage.src = posterImageUrl + "hqdefault.jpg";
+            posterImage.onerror = function() {
+                posterImage.src = posterImageUrl + "mqdefault.jpg";
             };
         }
-        loadPosterImage(0);
+        loadPosterImage();
         playButton.addEventListener("click", function() {
             var parentElement = this.parentElement;
             this.style.display = "none";
