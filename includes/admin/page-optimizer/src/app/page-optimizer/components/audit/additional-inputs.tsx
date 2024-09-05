@@ -248,36 +248,39 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
         {input.control_type === 'number-range' &&
 
-            <Label htmlFor="name" className="flex items-center gap-4 ml-4 text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60">
-                <div className="flex flex-col">
-                    <span>{input.control_label}</span>
-                    <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[335px]">
+            <Label htmlFor="name"
+                   className="flex flex-col gap-4 text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60">
+                <div className="flex items-center justify-between">
+                    <div className="flex flex-col">
+                        <span>{input.control_label}</span>
+                        <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[335px]">
                             {input.control_description}
                         </span>
+                    </div>
+                    <ToggleGroup
+                        className="inline-flex bg-mauve6 rounded border border-1 space-x-px "
+                        type="single"
+                        value={String(value)} // this has been set to string because sometimes the data value returns as number
+                        onValueChange={(v) => update(v, input.key)}
+                        aria-label="Select action"
+                    >
+                        {(input?.control_values as string[])?.map((value: string, index: number) => (
+                            <ToggleGroupItem
+                                key={index}
+                                value={String(value)}
+                                aria-label={value}
+                            >
+                                {value}
+                            </ToggleGroupItem>
+                        ))}
+                    </ToggleGroup>
                 </div>
-                <ToggleGroup
-                    className="inline-flex bg-mauve6 rounded border border-1 space-x-px "
-                    type="single"
-                    value={String(value)} // this has been set to string because sometimes the data value returns as number
-                    onValueChange={(v) => update(v, input.key)}
-                    aria-label="Select action"
-                >
-                    {(input?.control_values as string[])?.map((value: string, index: number) => (
-                        <ToggleGroupItem
-                            key={index}
-                            value={String(value)}
-                            aria-label={value}
-                        >
-                            {value}
-                        </ToggleGroupItem>
-                    ))}
-                </ToggleGroup>
             </Label>
 
         }
 
 
-        {input.control_type === 'accordion' &&
+            {input.control_type === 'accordion' &&
 
             <Label
                 htmlFor="name"
