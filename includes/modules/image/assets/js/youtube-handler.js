@@ -6,6 +6,21 @@ document.addEventListener("DOMContentLoaded", function() {
         function loadPosterImage() {
             var posterImageUrl = "https://i.ytimg.com/vi/" + videoId + "/";
             var posterImage = videoContainer.querySelector(".rapidload-yt-poster-image-");
+            if (window.rapidload_io_data && window.rapidload_io_data.support_next_gen_format) {
+                var options = "ret_img";
+                if (window.rapidload_io_data.optimize_level) {
+                    options += ",q_" + window.rapidload_io_data.optimize_level;
+                }
+                if (window.rapidload_io_data.support_next_gen_format) {
+                    options += ",to_avif";
+                }
+                if(window.rapidload_io_data.adaptive_image_delivery){
+                    if(posterImage.getBoundingClientRect().width !== 0){
+                        options += ",w_" + Math.floor(posterImage.getBoundingClientRect().width);
+                    }
+                }
+                posterImageUrl = window.rapidload_io_data.image_endpoint + options + "/" + posterImageUrl
+            }
             posterImage.src = posterImageUrl + "hqdefault.jpg";
             posterImage.onerror = function() {
                 posterImage.src = posterImageUrl + "mqdefault.jpg";
