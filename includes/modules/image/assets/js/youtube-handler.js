@@ -21,9 +21,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
                 posterImageUrl = window.rapidload_io_data.image_endpoint + options + "/" + posterImageUrl
             }
-            posterImage.src = posterImageUrl + "hqdefrault.jpg";
+            posterImage.src = posterImageUrl + "hqdefault.jpg";
             posterImage.onerror = function() {
-                posterImage.src = posterImageUrl + "mqdefrault.jpg";
+                posterImage.src = posterImageUrl + "mqdefault.jpg";
             };
         }
         loadPosterImage();
