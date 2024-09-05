@@ -472,7 +472,7 @@ class RapidLoad_Image_Enqueue
 
             $play_button = $styles . '<div class="rapidload-yt-play-button rapidload-yt-play-button-' . $video_id . '"></div><script>' . $script . '</script>';
 
-            $place_holder_image = "data:image/svg+xml,%3Csvg width='250' height='164' viewBox='0 0 250 164' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='250' height='164' fill='black'/%3E%3C/svg%3E%0A";
+            RapidLoad_Image::get_replaced_url(UUCSS_PLUGIN_URL . 'assets/images/yt-placeholder.svg', null, $iframe->width, $iframe->height, ['retina' => 'ret_img']);
 
             $iframe->outertext = '<div class="rapidload-yt-video-container rapidload-yt-video-container-' . $video_id . '" style="width: 100%">' . $play_button . '<noscript>' . $iframe->outertext . '</noscript>' . '<img class="rapidload-yt-poster-image rapidload-yt-poster-image-' . $video_id . '" alt="' . $place_holder_image . '" src="' . $place_holder_image . '" width="' . $iframe->width . '" height="' . $iframe->height . '" data-video-id="' . $video_id . '"/></div>';
         }
