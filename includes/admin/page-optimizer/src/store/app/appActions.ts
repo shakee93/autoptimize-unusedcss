@@ -239,7 +239,7 @@ export const fetchReport = (options: WordPressOptions, url : string, reload: boo
             if (activeReportData.loading) {
                 return;
             }
-            console.log(testModeStatus)
+
             if (activeReportData.data && !reload && !inprogress) {
                 return;
             }
