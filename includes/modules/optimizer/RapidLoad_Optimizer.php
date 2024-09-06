@@ -301,7 +301,6 @@ class RapidLoad_Optimizer
     public static function post_optimizer_function($data){
 
         foreach (self::$options as $key => $option){
-            error_log($key . " = " . self::$options[$key]);
 
             if(isset(self::$options[$key]) && (self::$options[$key] != "" && self::$options[$key] && !empty(self::$options[$key]))){
                 switch ($key){
@@ -355,7 +354,6 @@ class RapidLoad_Optimizer
                     case 'uucss_load_js_method':
                         self::$options['uucss_enable_javascript'] = "1";
                         if(self::$global){
-                            error_log("fsdfsdf");
                             RapidLoad_Base::update_option('rapidload_module_js',"1");
                         }
                         break;
