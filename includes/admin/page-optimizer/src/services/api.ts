@@ -1,4 +1,4 @@
-import {isDev} from "lib/utils";
+import {isDev, toBoolean} from "lib/utils";
 import store from "../store";
 
 class ApiService {
@@ -178,11 +178,13 @@ class ApiService {
            const state = store.getState()
            const data = state.app.report[state.app.activeReport]
            const settings = state.app.settings.performance[state.app.activeReport]
+           const testModeStatus = state.app.testMode?.status ?? (window.rapidload_optimizer ? toBoolean(window.rapidload_optimizer.test_mode) : false);
+           const previewUrl = testModeStatus ? '?rapidload_preview': '';
 
            const api_root = this.options?.api_root || 'https://api.rapidload.io/api/v1';
            const pageSpeedURL = new URL(`${api_root}/page-speed`);
 
-           pageSpeedURL.searchParams.append('url', url)
+           pageSpeedURL.searchParams.append('url', url + previewUrl)
            pageSpeedURL.searchParams.append('strategy', state.app.activeReport)
            pageSpeedURL.searchParams.append('plugin_version', this.options.rapidload_version)
            pageSpeedURL.searchParams.append('titan_version', __OPTIMIZER_VERSION__)
