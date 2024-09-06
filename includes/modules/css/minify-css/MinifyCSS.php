@@ -44,6 +44,12 @@ class MinifyCSS
             wp_schedule_event(current_time('timestamp'), 'daily', 'cron_rapidload_minify_css_storage_clean');
         }*/
         add_action('rapidload/cdn/validated', [$this, 'update_cdn_url_in_cached_files']);
+
+        add_filter('rapidload/cpcss/minify', function ($css){
+            $minifier = new \MatthiasMullie\Minify\CSS();
+            $minifier->add($css);
+            return $minifier->minify();
+        });
     }
 
     public function update_cdn_url_in_cached_files($args) {

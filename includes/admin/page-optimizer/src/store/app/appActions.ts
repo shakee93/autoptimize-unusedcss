@@ -139,6 +139,10 @@ const transformSettings = (data: any) => {
     const settings = data?.data?.performance || [];
 
     return {
+        general: {
+            performance_gear: data?.data?.general?.performance_gear,
+            test_mode: data?.data?.general?.test_mode === "1"
+        },
         data: settings.map((s: AuditSetting) => ({
             ...s,
             inputs: s.inputs.map(input => ({
@@ -272,7 +276,7 @@ export const fetchSettings = (options: WordPressOptions, url : string, reload: b
         try {
             const currentState = getState(); // Access the current state
             const activeReport = currentState.app.activeReport;
-            const activeSettingsData = currentState.app.settings[activeReport]
+            const activeSettingsData = currentState.app.settings.performance[activeReport]
 
             // TODO: don't let people bam on keyboard while waiting to load the page speed
             // if(activeReportData.loading && activeReportData.data ) {
@@ -299,7 +303,7 @@ export const fetchSettings = (options: WordPressOptions, url : string, reload: b
 
             dispatch({ type: FETCH_SETTING_SUCCESS, payload: {
                     activeReport,
-                    data: transformSettings(response)
+                    data: transformSettings(response),
                 }});
 
 
@@ -326,7 +330,7 @@ export const updateSettings = (
         const deviceType = currentState?.app?.activeReport;
 
         // @ts-ignore
-        const newOptions: AuditSetting[] = currentState?.app?.settings[deviceType]?.state?.map((s: AuditSetting) => {
+        const newOptions: AuditSetting[] = currentState?.app?.settings.performance[deviceType]?.state?.map((s: AuditSetting) => {
             if (s.name !== setting.name) {
                 return s; // Early return if the setting name doesn't match
             }
@@ -366,7 +370,7 @@ export const changeGear = (
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState)  => {
         const currentState = getState(); // Access the current state
         const deviceType = currentState?.app?.activeReport;
-        const settings = currentState?.app?.settings[deviceType]?.state;
+        const settings = currentState?.app?.settings.performance[deviceType]?.state;
         const activeGear = settings?.find(s => s.category === 'gear')?.inputs[0].value
 
         // don't update if the mode is sam
@@ -395,7 +399,8 @@ export const changeGear = (
 
         dispatch({
             type: CHANGE_GEAR, payload: {
-                settings: newOptions
+                settings: newOptions,
+                mode
             }
         });
     }

@@ -68,7 +68,10 @@ const useSubmitSettings = () => {
             const res = await api.updateSettings(
                 url,
                 activeReport,
-                settings,
+                {
+                    settings,
+                    activeGear
+                },
                 global,
                 analyze,
             );

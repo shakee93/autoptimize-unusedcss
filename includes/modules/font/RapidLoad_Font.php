@@ -193,6 +193,8 @@ class RapidLoad_Font
             $css = str_replace($font_url, $cached_font_url, $css);
         }
 
+        $css = apply_filters('rapidload/cpcss/minify', $css, false);
+
         file_put_contents($file_path, $css);
     }
 
@@ -205,6 +207,9 @@ class RapidLoad_Font
 
     public static function download_urls_in_parallel($urls)
     {
+        if(!is_writable(self::$base_dir)){
+            return;
+        }
         $multi_handle = curl_multi_init();
         $file_pointers = [];
         $curl_handles = [];
@@ -213,6 +218,9 @@ class RapidLoad_Font
             $file = self::$base_dir . '/' . basename($url);
             $curl_handles[$key] = curl_init($url);
             $file_pointers[$key] = fopen($file, 'w');
+            if ($file_pointers[$key] === false) {
+                continue;
+            }
             curl_setopt($curl_handles[$key], CURLOPT_FILE, $file_pointers[$key]);
             curl_setopt($curl_handles[$key], CURLOPT_HEADER, 0);
             curl_setopt($curl_handles[$key], CURLOPT_CONNECTTIMEOUT, 60);
