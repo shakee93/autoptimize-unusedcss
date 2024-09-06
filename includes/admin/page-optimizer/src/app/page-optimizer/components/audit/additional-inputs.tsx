@@ -1,5 +1,5 @@
 import {Label} from "components/ui/label";
-import React, {useCallback, useMemo, useState} from "react";
+import React, {useCallback, useMemo, useState, useEffect} from "react";
 import {Switch} from "components/ui/switch";
 import {Textarea} from "components/ui/textarea";
 import { Checkbox } from "components/ui/checkbox";
@@ -21,6 +21,10 @@ import {Loader} from "lucide-react";
 // import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import { ToggleGroup, ToggleGroupItem } from "components/ui/toggle-group";
 import Accordion from "components/accordion";
+import { RadioButton } from "components/ui/RadioButton";
+import * as RadioGroup from "@radix-ui/react-radio-group";
+import {optimizerData} from "../../../../store/app/appSelector";
+import {useSelector} from "react-redux";
 
 interface AdditionalInputsProps {
     input?: AuditSettingInput
@@ -37,6 +41,8 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
     const [loading, setLoading] = useState(false)
     const { options } = useAppContext()
+    const {settings } = useSelector(optimizerData);
+
     const excludeCategory = ['third_party', 'plugins', 'theme'];
 
 
@@ -130,9 +136,27 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
         setIsOpen(prevState => !prevState);
     }
 
-    return <div className='flex flex-col justify-start items-center gap-3 normal-case' >
+    const visible = useMemo(() => {
+        if (!input?.control_visibility) {
+            return true;
+        }
 
-        {input?.control_type === 'checkbox' && input.control_accordion_name != 'uucss-misc-options' &&
+        const updatesMap = new Map(updates.map(({key, value}) => [key, value]));
+
+        return input.control_visibility.some(condition =>
+            updatesMap.get(condition.key) === condition.value
+        );
+    }, [input?.control_visibility, updates]);
+
+
+    if (!visible) {
+        return <></>;
+    }
+
+    return (
+        <div className='flex flex-col justify-start items-center gap-3 normal-case' >
+
+        {input?.control_type === 'checkbox' &&
 
             <Label
                 htmlFor="name"
@@ -160,7 +184,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
             <Label
                 htmlFor="name"
-                className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60"
+                className="flex flex-col text-left w-full bg-brand-100/30 dark:text-brand-300 rounded-xl py-4 px-4 border border-brand-200/60"
             >
                 <span>{input.control_label}</span>
                 <span className="pt-2 text-sm font-normal text-gray-600">
@@ -174,7 +198,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
             </Label>
         }
 
-        {input.control_type === 'button' && input.control_label != 'Exclude Javascript from Delaying' &&
+        {input.control_type === 'button' &&
             <Label htmlFor="name" className="flex ml-4 text-left w-full">
                 <Button disabled={loading} className='flex gap-2' onClick={e => buttonSubmit()}
                         variant='outline'>
@@ -224,36 +248,39 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
         {input.control_type === 'number-range' &&
 
-            <Label htmlFor="name" className="flex items-center gap-4 ml-4 text-left w-full">
-                <div className="flex flex-col">
-                    <span>{input.control_label}</span>
-                    <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[335px]">
+            <Label htmlFor="name"
+                   className="flex flex-col gap-4 text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60">
+                <div className="flex items-center justify-between">
+                    <div className="flex flex-col">
+                        <span>{input.control_label}</span>
+                        <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[335px]">
                             {input.control_description}
                         </span>
+                    </div>
+                    <ToggleGroup
+                        className="inline-flex bg-mauve6 rounded border border-1 space-x-px "
+                        type="single"
+                        value={String(value)} // this has been set to string because sometimes the data value returns as number
+                        onValueChange={(v) => update(v, input.key)}
+                        aria-label="Select action"
+                    >
+                        {(input?.control_values as string[])?.map((value: string, index: number) => (
+                            <ToggleGroupItem
+                                key={index}
+                                value={String(value)}
+                                aria-label={value}
+                            >
+                                {value}
+                            </ToggleGroupItem>
+                        ))}
+                    </ToggleGroup>
                 </div>
-                <ToggleGroup
-                    className="inline-flex bg-mauve6 rounded border border-1 space-x-px "
-                    type="single"
-                    value={String(value)} // this has been set to string because sometimes the data value returns as number
-                    onValueChange={(v) => update(v, input.key)}
-                    aria-label="Select action"
-                >
-                    {(input?.control_values as string[])?.map((value: string, index: number) => (
-                        <ToggleGroupItem
-                            key={index}
-                            value={String(value)}
-                            aria-label={value}
-                        >
-                            {value}
-                        </ToggleGroupItem>
-                    ))}
-                </ToggleGroup>
             </Label>
 
         }
 
-        {/*accordion starts here*/}
-        {input.control_type === 'accordion' &&
+
+            {input.control_type === 'accordion' &&
 
             <Label
                 htmlFor="name"
@@ -298,9 +325,47 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
 
         }
-        {/*accordion ends here*/}
 
-        {input.control_type === 'button' && input.control_label === 'Exclude Javascript from Delaying' &&
+
+        {input?.control_type === 'radio' &&
+
+            <Label
+                htmlFor="name"
+                className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60"
+            >
+                <div className="flex items-center justify-between">
+                    <div className="flex flex-col">
+                        <span>{input.control_label}</span>
+                        <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[335px]">
+                            {input.control_description}
+                        </span>
+                    </div>
+                    <ToggleGroup
+                        className="inline-flex bg-mauve6 rounded border border-1 space-x-px "
+                        type="single"
+                        value={String(value)}
+                        onValueChange={(v) => update(v, input.key)}
+                        aria-label="Select action"
+                    >
+                        {(input?.control_values as string[])?.map((value: string, index: number) => (
+                            <ToggleGroupItem
+                                className="w-fit px-4"
+                                key={index}
+                                value={String(value)}
+                                aria-label={value}
+                            >
+                                {value}
+                            </ToggleGroupItem>
+                        ))}
+                    </ToggleGroup>
+
+                    </div>
+            </Label>
+
+
+        }
+
+        {input.control_type === 'tab' &&
 
             <div className="w-full">
                 <div className='flex bg-brand-100/60 w-fit rounded-t-lg'>
@@ -364,7 +429,10 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                 </div>
             </div>
         }
+
+
     </div>
+    );
 }
 
 export default React.memo(Fields)

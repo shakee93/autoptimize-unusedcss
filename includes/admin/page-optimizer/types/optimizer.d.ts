@@ -175,6 +175,9 @@ interface AuditSettingInput {
     control_label: string;
     control_accordion_name: string;
     control_description: string;
+    control_visibility?: {
+        key: string, value: string
+    }[]
     value: any;
     key: any;
     action: string

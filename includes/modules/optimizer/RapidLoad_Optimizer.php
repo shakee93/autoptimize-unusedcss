@@ -717,8 +717,8 @@ class RapidLoad_Optimizer
                 'control_type' => 'radio',
                 'control_label' => 'Delay Method',
                 'control_description' => 'Delay Method',
-                'control_values' => array('all', 'selected'),
-                'default' => 'all'
+                'control_values' => array('All Files', 'Selected Files'),
+                'default' => 'All Files'
             ),
             'uucss_load_js_method' => array(
                 'control_type' => 'checkbox',
@@ -752,16 +752,22 @@ class RapidLoad_Optimizer
                 'control_values' => array('1', '0'),
                 'default' => '0',
                 'control_visibility' => [
-                    'rapidload_js_delay_method' => 'all'
+                    [
+                        'key' => 'rapidload_js_delay_method',
+                        'value' => 'All Files',
+                    ]
                 ]
             ),
             'uucss_exclude_files_from_delay_js' => array(
-                'control_type' => 'button',
+                'control_type' => 'tab',
                 'control_label' => 'Exclude Javascript from Delaying',
                 'control_description' => 'These JS files will be excluded from delaying.',
                 'default' => '',
                 'control_visibility' => [
-                    'rapidload_js_delay_method' => 'all'
+                    [
+                        'key' => 'rapidload_js_delay_method',
+                        'value' => 'All Files',
+                    ]
                 ]
             ),
             'delay_javascript_callback' => array(
@@ -770,7 +776,10 @@ class RapidLoad_Optimizer
                 'control_description' => 'These scripts will be executed on DOMContentLoaded',
                 'default' => '',
                 'control_visibility' => [
-                    'rapidload_js_delay_method' => 'all'
+                    [
+                        'key' => 'rapidload_js_delay_method',
+                        'value' => 'All Files',
+                    ]
                 ]
             ),
             'uucss_load_scripts_on_user_interaction' => array(
@@ -779,7 +788,10 @@ class RapidLoad_Optimizer
                 'control_description' => 'These JS files will be excluded from delaying.',
                 'default' => '',
                 'control_visibility' => [
-                    'rapidload_js_delay_method' => 'selected'
+                    [
+                        'key' => 'rapidload_js_delay_method',
+                        'value' => 'Selected Files',
+                    ]
                 ]
             ),
 
@@ -955,7 +967,10 @@ class RapidLoad_Optimizer
                 'control_description' => 'These JS files will be excluded from all optimizations.',
                 'default' => '',
                 'control_visibility' => [
-                    'rapidload_js_delay_method' => 'all'
+                    [
+                        'key' => 'rapidload_js_delay_method',
+                        'value' => 'All Files',
+                    ]
                 ]
             ),
             'uucss_exclude_images' => array(
@@ -1033,7 +1048,7 @@ class RapidLoad_Optimizer
                 }else if($input['key'] == "excluded_page_paths") {
                     $input['value'] = isset($rapidload_cache_args[$input['key']]) ? implode("\n", $this->transformRegexToPaths($rapidload_cache_args[$input['key']])) : '';
                 }else if($input['key'] == "rapidload_js_delay_method"){
-                    $input['value'] = isset($options['uucss_load_scripts_on_user_interaction']) && !empty($options['uucss_load_scripts_on_user_interaction']) ? 'selected' : 'all' ;
+                    $input['value'] = isset($options['uucss_load_scripts_on_user_interaction']) && !empty($options['uucss_load_scripts_on_user_interaction']) ? 'Selected Files' : 'All Files' ;
                 }else if($input['key'] == "uucss_misc_options"){
 
                     foreach ($input['inputs'] as $internal_key => $internal_input){
@@ -1042,7 +1057,7 @@ class RapidLoad_Optimizer
 
                     }
 
-                    $input['value'] = isset($options['uucss_load_scripts_on_user_interaction']) && !empty($options['uucss_load_scripts_on_user_interaction']) ? 'selected' : 'all' ;
+                    $input['value'] = isset($options['uucss_load_scripts_on_user_interaction']) && !empty($options['uucss_load_scripts_on_user_interaction']) ? 'Selected Files' : 'All Files' ;
                 }else{
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }
@@ -1180,7 +1195,7 @@ class RapidLoad_Optimizer
                         }
                         break;
                     }
-                    case 'button' : {
+                    case 'tab' : {
                         if(isset($input->key) && $input->key == "uucss_exclude_files_from_delay_js"){
                             if(is_array($input->value)){
                                 self::$options['uucss_dynamic_js_exclusion_list'] = implode("\n",$input->value);
