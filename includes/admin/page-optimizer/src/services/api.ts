@@ -178,7 +178,7 @@ class ApiService {
            const state = store.getState()
            const data = state.app.report[state.app.activeReport]
            const settings = state.app.settings.performance[state.app.activeReport]
-           const testModeStatus = state.app.testMode?.status ?? (window.rapidload_optimizer ? toBoolean(window.rapidload_optimizer.test_mode) : false);
+           const testModeStatus = state.app.testMode?.status ?? state.app.settings.general.test_mode ?? false;
            const previewUrl = testModeStatus ? '?rapidload_preview': '';
 
            const api_root = this.options?.api_root || 'https://api.rapidload.io/api/v1';
