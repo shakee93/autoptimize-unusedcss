@@ -43,15 +43,17 @@ export const optimizerData = createSelector(
     (state) => {
 
         const report = state.report[state.activeReport];
-        const settings = state.settings[state.activeReport];
-        const activeGear = settings.state?.find(s => s.category === 'gear')
+        const settings = state.settings.performance[state.activeReport];
+        const activeGear = state.settings.general.performance_gear
+        const testMode = state.settings.general.test_mode
 
         return {
             ...report,
             activeReport: state.activeReport,
             settings: settings.state,
             settingsLoading: settings.loading,
-            activeGear: activeGear?.inputs[0].value || 'accelerate',
+            activeGear,
+            testMode,
             touched: !equal(settings.original, settings.state) || !!optimizeChangesFiles(report.changes).find(i => i?.changed),
             fresh : report?.state?.fresh,
             reanalyze: report.data !== null && report.loading

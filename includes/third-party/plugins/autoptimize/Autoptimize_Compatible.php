@@ -61,7 +61,7 @@ class Autoptimize_Compatible extends RapidLoad_ThirdParty {
             return $args;
         });
 
-        add_filter('rapidload/cpcss/minify', function ($css){
+        /*add_filter('rapidload/cpcss/minify', function ($css){
 
             if(class_exists('autoptimizeCSSmin')){
                 $css = autoptimizeCSSmin::minify($css);
@@ -72,7 +72,7 @@ class Autoptimize_Compatible extends RapidLoad_ThirdParty {
             }
 
             return $css;
-        });
+        });*/
 
         add_filter('uucss/enqueue/cache-file-url/cdn', function ($default){
             return autoptimizeOptionWrapper::get_option( 'autoptimize_cdn_url' );

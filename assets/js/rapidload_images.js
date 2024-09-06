@@ -94,7 +94,9 @@ var observer_bg = new IntersectionObserver(function (elements) {
     }
 );
 document.addEventListener("DOMContentLoaded", function () {
-    window.rapidload_replace_image_src();
+    if(window.rapidload_io_data.adaptive_image_delivery){
+        window.rapidload_replace_image_src();
+    }
 });
 window.onresize = function (event) {
     window.rapidload_replace_image_src();
@@ -105,4 +107,3 @@ if(lazyElements && lazyElements.length){
         observer_bg.observe(element);
     });
 }
-window.rapidload_replace_image_src();
