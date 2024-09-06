@@ -226,6 +226,7 @@ export const fetchReport = (options: WordPressOptions, url : string, reload: boo
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
         try {
             const currentState = getState(); // Access the current state
+            const testModeStatus = currentState.app.testMode;
             const activeReport = currentState.app.activeReport;
             const activeReportData = currentState.app.report[activeReport]
 
@@ -238,7 +239,7 @@ export const fetchReport = (options: WordPressOptions, url : string, reload: boo
             if (activeReportData.loading) {
                 return;
             }
-
+            console.log(testModeStatus)
             if (activeReportData.data && !reload && !inprogress) {
                 return;
             }
@@ -246,7 +247,7 @@ export const fetchReport = (options: WordPressOptions, url : string, reload: boo
             dispatch({ type: FETCH_REPORT_REQUEST, activeReport });
 
             const response = await api.fetchPageSpeed(
-                url,
+                testModeStatus? url + '?rapidload_preview': url,
                 activeReport,
                 reload,
             );
