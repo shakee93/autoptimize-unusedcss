@@ -159,10 +159,10 @@ class RapidLoad_Job_Data{
     }
 
     public function get_cpcss_data(){
-        return $this->transform_cpcss_data_to_array($this->data);
+        return self::transform_cpcss_data_to_array($this->data);
     }
 
-    function transform_cpcss_data_to_array($input) {
+    public static function transform_cpcss_data_to_array($input) {
         if (is_string($input) && is_serialized($input)) {
             $array = unserialize($input);
         } elseif (is_string($input)) {
