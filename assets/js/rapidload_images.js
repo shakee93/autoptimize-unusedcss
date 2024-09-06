@@ -131,9 +131,6 @@ playButtons.forEach(function(playButton) {
             posterImageUrl = window.rapidload_io_data.image_endpoint + options + "/" + posterImageUrl
         }
         posterImage.src = posterImageUrl + "hqdefault.jpg";
-        posterImage.onerror = function() {
-            posterImage.src = posterImageUrl + "mqdefault.jpg";
-        };
     }
     loadPosterImage();
     playButton.addEventListener("click", function() {
