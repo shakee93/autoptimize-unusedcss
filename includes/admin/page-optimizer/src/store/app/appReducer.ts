@@ -70,7 +70,14 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
         case UPDATE_TEST_MODE:
             return {
                 ...state,
-                testMode: action.payload
+                testMode: action.payload,
+                settings: {
+                    ...state.settings,
+                    general: {
+                        ...state.settings.general,
+                        test_mode : action.payload.status 
+                    }
+                }
             };
         case FETCH_REPORT_REQUEST:
             return {

@@ -39,7 +39,7 @@ export interface AppState {
             }
         },
         general: {
-            test_mode: boolean
+            test_mode: boolean | TestMode
             performance_gear: PerformanceGear
         }
     },
