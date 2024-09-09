@@ -181,7 +181,24 @@ class CriticalCSS_Enqueue
 
         $critical_css_content = apply_filters('rapidload/cpcss/minify', $critical_css_content, ($this->is_mobile ? 'mobile' : 'desktop'));
 
-        $critical_css_content = '<style id="rapidload-critical-css" data-mode="'. ($this->is_mobile ? 'mobile' : 'desktop') .'">' . $critical_css_content . '</style>';
+        $cpcss_file_url = str_replace("/uucss/","/cpcss/" ,  apply_filters('uucss/enqueue/cache-file-url', $cpcss_file));
+
+        $critical_css_file_tag = "";
+
+        if(isset($_REQUEST['include_cpcss_file']) && $_REQUEST['include_cpcss_file'] == "1"){
+            $critical_css_file_tag = '<link rel="stylesheet" type="text/css" media="print" onload="this.media=\'all\'" href="' . $cpcss_file_url . '"/>';
+        }
+
+        $critical_css_with_tag = "";
+
+        if(apply_filters('rapidload/cpcss/partial-content', isset($_REQUEST['cpcss_partial']) && $_REQUEST['cpcss_partial'] == "1")){
+            $cssParts = $this->breakCSSIntoParts($critical_css_content);
+            foreach ($cssParts as $index => $part) {
+                $critical_css_with_tag .= '<style id="rapidload-critical-css-' . $index .'" data-mode="'. ($this->is_mobile ? 'mobile' : 'desktop') .'">' . $part . '</style>';
+            }
+        }else{
+            $critical_css_with_tag = '<style id="rapidload-critical-css" data-mode="'. ($this->is_mobile ? 'mobile' : 'desktop') .'">' . $critical_css_content . '</style>';
+        }
 
         $_frontend_data['data-mode'] = ($this->is_mobile ? 'mobile' : 'desktop');
         $_frontend_data['cpcss-file'] = CriticalCSS::$base_dir . '/' . $cpcss_file;
@@ -198,7 +215,7 @@ class CriticalCSS_Enqueue
 
             $title_content = $this->dom->find( 'title' )[0]->outertext;
 
-            $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $critical_css_content);
+            $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $critical_css_with_tag . $critical_css_file_tag);
 
             $this->update_noscript();
 
@@ -222,6 +239,38 @@ class CriticalCSS_Enqueue
             return true;
         });
 
+    }
+
+    function breakCSSIntoParts($cssContent, $maxLength = 80000) {
+        $parser = new \Sabberworm\CSS\Parser($cssContent);
+        $cssDocument = $parser->parse();
+        $cssParts = [];
+        $currentPart = '';
+        $currentLength = 0;
+
+        function addToCurrentPart(&$currentPart, &$currentLength, &$cssParts, $blockContent, $maxLength) {
+            if (($currentLength + strlen($blockContent)) > $maxLength) {
+                $cssParts[] = $currentPart;
+                $currentPart = '';
+                $currentLength = 0;
+            }
+            $currentPart .= $blockContent;
+            $currentLength += strlen($blockContent);
+        }
+
+        foreach ($cssDocument->getContents() as $content) {
+            if ($content instanceof \Sabberworm\CSS\RuleSet\DeclarationBlock) {
+                $blockContent = $content->render(Sabberworm\CSS\OutputFormat::createCompact());
+                addToCurrentPart($currentPart, $currentLength, $cssParts, $blockContent, $maxLength);
+            } elseif ($content instanceof \Sabberworm\CSS\RuleSet\AtRuleBlockList) {
+                $blockContent = $content->render(Sabberworm\CSS\OutputFormat::createCompact());
+                addToCurrentPart($currentPart, $currentLength, $cssParts, $blockContent, $maxLength);
+            }
+        }
+        if (!empty($currentPart)) {
+            $cssParts[] = $currentPart;
+        }
+        return $cssParts;
     }
 
     private static function is_css( $el ) {
