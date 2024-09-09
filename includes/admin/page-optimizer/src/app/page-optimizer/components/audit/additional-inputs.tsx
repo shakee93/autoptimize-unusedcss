@@ -25,6 +25,7 @@ import { RadioButton } from "components/ui/RadioButton";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import {optimizerData} from "../../../../store/app/appSelector";
 import {useSelector} from "react-redux";
+import { Input } from "components/ui/input";
 
 interface AdditionalInputsProps {
     input?: AuditSettingInput
@@ -191,6 +192,26 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                             {input.control_description}
                         </span>
                 <Textarea id={input.key}
+                          className="focus:outline-none focus-visible:ring-0 dark:text-brand-300 focus-visible:ring-offset-0 mt-2"
+                          value={textValue}
+                          onChange={handleChange}
+                />
+            </Label>
+        }
+        
+        {input.control_type === 'input' &&
+
+            <Label
+                htmlFor="name"
+                className="flex flex-col text-left w-full bg-brand-100/30 dark:text-brand-300 rounded-xl py-4 px-4 border border-brand-200/60"
+            >
+                <span>{input.control_label}</span>
+                <span className="pt-2 text-sm font-normal text-gray-600">
+                            {input.control_description}
+                        </span>
+                <Input id={input.key}
+                        readOnly={input?.readonly || false}
+                        placeholder={input?.placeholder || ''}
                           className="focus:outline-none focus-visible:ring-0 dark:text-brand-300 focus-visible:ring-offset-0 mt-2"
                           value={textValue}
                           onChange={handleChange}

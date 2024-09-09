@@ -893,17 +893,18 @@ class RapidLoad_Optimizer
                 'control_values' => array('1', '0'),
                 'default' => '0'
             ),
+            'uucss_cdn_url' => array(
+                'control_type' => 'input',
+                'readonly' => true,
+                'placeholder' => 'Your CDN url is not populated yet.',
+                'control_label' => 'CDN Endpoint',
+                'control_description' => 'Your CDN endpoint to store and serve all your resources across the CDN network',
+            ),
             'clear_cdn_cache' => array(
                 'control_type' => 'button',
                 'control_label' => 'Clear CDN Cache',
                 'control_description' => 'Clear resources caches across the CDN network',
                 'action' => 'action=purge_rapidload_cdn&nonce=' . wp_create_nonce( 'uucss_nonce' ),
-            ),
-            'uucss_cdn_url' => array(
-                'control_type' => 'text-input',
-                'readonly' => true,
-                'control_label' => 'CDN Endpoint',
-                'control_description' => 'Your CDN endpoint to store and serve all your resources across the CDN network',
             ),
             'validate_cdn_url' => array(
                 'control_type' => 'button',
