@@ -54,6 +54,7 @@ const Header = ({ url }: { url: string}) => {
         settings,
         data,
         revisions,
+        testMode,
         reanalyze
     } = useSelector(optimizerData);
     const {inProgress } = useCommonDispatch()
@@ -64,13 +65,10 @@ const Header = ({ url }: { url: string}) => {
         dispatch: commonDispatch
     } = useCommonDispatch()
 
-    const {testMode} = useSelector((state: RootState) => state.app);
-    const [testModeStatus, setTestModeStatus] = useState<boolean>(false);
+
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const { isDark } = useRootContext();
-    useEffect(() => {
-        setTestModeStatus(testMode?.status || false)
-    }, [testMode]);
+  
 
 
     return (
@@ -187,7 +185,7 @@ const Header = ({ url }: { url: string}) => {
             </header>
             {!loading && (
                 <AnimatePresence>
-                    {testModeStatus && (
+                    {testMode && (
                         <motion.div
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
