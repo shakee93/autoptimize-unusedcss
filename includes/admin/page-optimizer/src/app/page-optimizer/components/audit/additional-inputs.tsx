@@ -226,7 +226,6 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                     {loading && <Loader className='w-4 animate-spin -ml-1'/>}
                     {input.control_label}
                 </Button>
-                {/*{isDev && (<JsonView data={input} shouldInitiallyExpand={e => false}/>)}*/}
             </Label>
         }
 

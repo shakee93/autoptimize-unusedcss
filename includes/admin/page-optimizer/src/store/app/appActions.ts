@@ -365,7 +365,7 @@ export const changeGear = (
 
     const starter = ['Remove Unused CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
     const accelerate = [...starter, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
-    const turboMax = [...accelerate, 'Delay Javascript', 'Critical CSS'];
+    const turboMax = [...accelerate, 'Delay Javascript', 'Critical CSS', 'Serve next-gen Images (AVIF, WEBP)'];
 
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState)  => {
         const currentState = getState(); // Access the current state
