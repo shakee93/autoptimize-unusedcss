@@ -93,8 +93,9 @@ const PerformanceProgressBar: React.FC<PerformanceProgressBarProps> = ({
                 <div
                     style={{ color: loading ? loadingColor : progressbarColor }}
                     className={cn(
-                        'w-full flex gap-2 flex-col text-center text-4xl transition-all ease-out duration-300 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold',
-                        scoreClassName
+                        'w-full flex flex-col text-center text-4xl transition-all ease-out duration-300 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold',
+                        scoreClassName,
+                        children && 'gap-1'
                     )}
                 >
                     {!loading && <span>{score.toFixed(0)}</span>}
@@ -102,7 +103,7 @@ const PerformanceProgressBar: React.FC<PerformanceProgressBarProps> = ({
                         "text-xs font-normal px-6",
                         loading && 'text-brand-400'
                     )}>
-                        {loading ? messages[message] : "Performance Score"}
+                        {loading && messages[message] }
                     </span>
                     {children && (
                         <m.div

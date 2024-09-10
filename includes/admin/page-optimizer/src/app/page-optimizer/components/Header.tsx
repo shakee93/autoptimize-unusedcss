@@ -158,8 +158,7 @@ const Header = ({ url }: { url: string}) => {
 
                 </div>
             </header>
-            {!loading && (
-                <AnimatePresence>
+            <AnimatePresence>
                     {testMode && (
                         <motion.div
                             initial={{ opacity: 0, y: -10 }}
@@ -176,7 +175,6 @@ const Header = ({ url }: { url: string}) => {
                         </motion.div>
                     )}
                 </AnimatePresence>
-            )}
         </>
     )
 }
