@@ -851,7 +851,7 @@ class RapidLoad_Cache
     private static function get_default_user_settings() {
 
         $default_user_settings = array(
-            'cache_expires'                      => 0,
+            'cache_expires'                      => 1,
             'cache_expiry_time'                  => 0,
             'clear_site_cache_on_saved_post'     => 0,
             'clear_site_cache_on_saved_comment'  => 0,
