@@ -208,7 +208,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
 
             const { payload } = action;
             const activeReport = state.report[state.activeReport];
-            let changes = activeReport.changes.files.filter(f => f.file === payload.file)
+            const changes = activeReport.changes.files.filter(f => f.file === payload.file)
 
             if (changes.length == 0) {
                 activeReport.changes.files.push({
@@ -226,7 +226,6 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                     if (audit.files && audit.files.items && (audit.files.type === 'table' || audit.files.type === 'opportunity')) {
                         const updateActionValue = (item: AuditTableResource) => {
                             if (item.url && typeof item.url === 'object' && item.action && item.url.url === payload.file) {
-
 
                                 // reporting changes
                                 // if (!changes) {
