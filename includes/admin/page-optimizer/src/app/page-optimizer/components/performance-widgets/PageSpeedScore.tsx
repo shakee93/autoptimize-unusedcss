@@ -56,7 +56,7 @@ const PageSpeedScore = ({pagespeed, priority = true}: PageSpeedScoreProps) => {
     const [expanded, setExpanded] = useState(false)
 
 
-    const {data, error, reanalyze, revisions} = useSelector(optimizerData);
+    const {data, error, reanalyze, revisions,loading} = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
     const [on, setOn] = useState<boolean>(false)
 
@@ -239,7 +239,7 @@ const PageSpeedScore = ({pagespeed, priority = true}: PageSpeedScoreProps) => {
 
                 <div className='border-t'>
                     <AppButton
-                        onClick={e => setExpanded(p => !p)}
+                        onClick={e => !loading && setExpanded(p => !p)}
                         variant='outline'
                         className={cn(
                             'select-none border-b border-l-0 border-t-0 border-r-0 rounded-none bg-transparent hover:bg-transparent text-center text-xs text-brand-600 py-2',
