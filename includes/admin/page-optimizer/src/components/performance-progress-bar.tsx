@@ -26,9 +26,6 @@ const messages = [
     'Almost done',
 ];
 
-const loadingColor = 'rgb(231 231 233)'; // zinc-400
-const loadingBgColor = 'rgb(244 244 245)'; // zinc-100
-
 const PerformanceProgressBar: React.FC<PerformanceProgressBarProps> = ({
     performance,
     className,
@@ -75,12 +72,12 @@ const PerformanceProgressBar: React.FC<PerformanceProgressBarProps> = ({
     useEffect(cycleMessages, [cycleMessages]);
 
     const progressBarStyles = useMemo(() => buildStyles({
-        pathColor: loading ? loadingColor : progressbarColor,
-        trailColor: !background ? (loading ? loadingBgColor : progressbarBg) : 'transparent',
+        pathColor: progressbarColor,
+        trailColor: !background ? progressbarBg : 'transparent',
         pathTransitionDuration: 0.5,
         strokeLinecap: 'round',
-        backgroundColor: loading ? loadingBgColor : progressbarBg
-    }), [loading, progressbarColor, background, progressbarBg]);
+        backgroundColor: progressbarBg
+    }), [progressbarColor, background, progressbarBg]);
 
     return (
         <CircularProgressbarWithChildren
@@ -96,7 +93,7 @@ const PerformanceProgressBar: React.FC<PerformanceProgressBarProps> = ({
         >
             <AnimatePresence initial={false}>
                 <div
-                    style={{ color: loading ? loadingColor : progressbarColor }}
+                    style={{ color: progressbarColor }}
                     className={cn(
                         'w-full flex flex-col items-center text-center text-4xl transition-all ease-out duration-300 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold',
                         scoreClassName,
@@ -119,7 +116,6 @@ const PerformanceProgressBar: React.FC<PerformanceProgressBarProps> = ({
                                 }}
                                 className={cn(
                                     "text-xs font-normal px-6",
-                                    loading && 'text-brand-400'
                                 )}
                             >
                                 {loading && messages[message]}

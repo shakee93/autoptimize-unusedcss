@@ -372,7 +372,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                                 value={String(value)}
                                 aria-label={value}
                             >
-                                {value}
+                                {value}{input?.control_values_suffix}
                             </ToggleGroupItem>
                         ))}
                     </ToggleGroup>
