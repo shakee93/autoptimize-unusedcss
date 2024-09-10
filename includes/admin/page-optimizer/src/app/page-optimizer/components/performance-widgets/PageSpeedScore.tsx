@@ -176,9 +176,9 @@ const PageSpeedScore = ({pagespeed, priority = true}: PageSpeedScoreProps) => {
                                         ) : (
                                             <PerformanceProgressBar
                                                 loading={reanalyze}
-                                                performance={(data?.performance && gain && metric) ?
+                                                performance={loading ? ((data?.performance && gain && metric) ?
                                                     (data.performance + gain >= 99) ? 99 :
-                                                        data.performance + gain : data?.performance}>
+                                                        data.performance + gain : data?.performance) : 85}>
                                                 {!!(metric && gain) && (
                                                     <div className='flex gap-1 flex-col text-xxs font-normal'>
                                                 <span>

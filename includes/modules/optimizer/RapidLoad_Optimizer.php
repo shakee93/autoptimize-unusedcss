@@ -1006,19 +1006,12 @@ class RapidLoad_Optimizer
                 'control_values' => array('1', '0'),
                 'default' => '0'
             ),
-            'cache_expires' => array(
-                'control_type' => 'checkbox',
-                'control_label' => 'Cache Expiration',
-                'control_description' => 'Cached pages expire.',
-                'control_values' => array('1', '0'),
-                'default' => '0'
-            ),
             'cache_expiry_time' => array(
                 'control_type' => 'number-range',
                 'control_label' => 'Cache Expiration',
                 'control_description' => 'Cached pages expire.',
                 'control_values' => array('0', '2', '6', '12', '24'),
-                'control_values_suffix' => 'hours',
+                'control_values_suffix' => 'h',
                 'default' => '0'
             ),
             'mobile_cache' => array(
