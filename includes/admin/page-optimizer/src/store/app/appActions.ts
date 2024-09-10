@@ -61,12 +61,12 @@ const transformAudit = (audit: Audit, metrics : Metric[]) => {
 
 const transformReport = (data: any) => {
 
-    let metrics = data.data?.page_speed?.metrics.map((metric: Metric) => ({
+    const metrics = data.data?.page_speed?.metrics.map((metric: Metric) => ({
         ...metric,
         potentialGain: metric.refs ? (metric.refs?.weight - (metric.refs?.weight / 100) * metric.score) : 0
     }))
 
-    let audits : Audit[] = data.data.page_speed.audits
+    const audits : Audit[] = data.data.page_speed.audits
         .sort((a: Audit, b: Audit) => a.score - b.score)
         .map( (a: Audit) => transformAudit(a, metrics))
 
@@ -92,7 +92,7 @@ const transformReport = (data: any) => {
         return 0;
     }
 
-    let _data = {
+    const _data = {
         data: {
             performance:  data.data.page_speed.performance ? parseFloat(data.data?.page_speed?.performance.toFixed(0)) : 0,
 
@@ -219,7 +219,7 @@ export const getTestModeStatus = (options: WordPressOptions, url: string, mode?:
     }
 }
 
-export const fetchReport = (options: WordPressOptions, url : string, reload: boolean = false, inprogress: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
+export const fetchReport = (options: WordPressOptions, url : string, reload = false, inprogress = false): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
@@ -268,7 +268,7 @@ export const fetchReport = (options: WordPressOptions, url : string, reload: boo
     };
 };
 
-export const fetchSettings = (options: WordPressOptions, url : string, reload: boolean = false, inprogress: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
+export const fetchSettings = (options: WordPressOptions, url : string, reload = false, inprogress = false): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 

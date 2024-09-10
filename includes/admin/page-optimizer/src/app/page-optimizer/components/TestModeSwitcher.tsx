@@ -1,7 +1,6 @@
 import { m } from "framer-motion";
 import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
-import {RootState} from "../../../store/app/appTypes";
 import {setCommonState} from "../../../store/common/commonActions";
 import TooltipText from "components/ui/tooltip-text";
 import {Circle, Loader} from "lucide-react";
@@ -12,6 +11,7 @@ import {useTestModeUtils} from "hooks/testModeUtils";
 import {useAppContext} from "../../../context/app";
 import {optimizerData} from "../../../store/app/appSelector";
 import {cn} from "lib/utils";
+import { getTestModeStatus } from "../../../store/app/appActions";
 
 const TestModeSwitcher = () => {
 
