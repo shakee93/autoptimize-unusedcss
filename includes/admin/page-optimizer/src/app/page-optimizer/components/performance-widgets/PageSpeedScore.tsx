@@ -166,24 +166,8 @@ const PageSpeedScore = ({pagespeed, priority = true}: PageSpeedScoreProps) => {
                     {error ?
                         <ErrorFetch error={error}></ErrorFetch>
                         : <>
-                            <AnimatePresence>
-                                {reanalyze &&
-                                    <m.div
-                                        initial={{opacity: 0, x: -10}}
-                                        animate={{opacity: 1, x: 0}}
-                                        exit={{opacity: 0, x: -10}}
-                                        className='absolute border px-2 rounded-full top-2 left-2.5 flex bg-brand-100 items-center gap-1.5'>
-                                        <Loader className='w-4 animate-spin text-brand-700'/>
-                                        <div className='text-xs text-brand-700'>
-                                            Analyzing..
-                                        </div>
-                                    </m.div>
-                                }
-                            </AnimatePresence>
-
+                           
                             <div className='flex gap-6'>
-
-
                                 <div className='relative flex flex-col gap-3 px-4 items-center'>
 
                                     <div className='mt-6'>
