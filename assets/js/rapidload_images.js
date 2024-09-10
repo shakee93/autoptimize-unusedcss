@@ -101,6 +101,13 @@ document.addEventListener("DOMContentLoaded", function () {
 window.onresize = function (event) {
     window.rapidload_replace_image_src();
 };
+['mousemove', 'touchstart', 'keydown'].forEach(function (event) {
+    var user_interaction_listener = function () {
+        window.rapidload_replace_image_src();
+        removeEventListener(event, user_interaction_listener);
+    }
+    addEventListener(event, user_interaction_listener);
+});
 var lazyElements = document.querySelectorAll('[data-rapidload-lazy-method="viewport"]');
 if(lazyElements && lazyElements.length){
     lazyElements.forEach(function (element) {
