@@ -163,6 +163,7 @@ class CriticalCSS_Store
 
         $data = $this->job_data->get_cpcss_data();
         $file_character_length = isset($this->options['rapidload_cpcss_file_character_length']) ? $this->options['rapidload_cpcss_file_character_length'] : 60000;
+        $file_character_length = apply_filters('rapidload/cpcss/file-character-length', $file_character_length);
 
         if (!empty($purged_css)) {
             $purged_css = apply_filters('rapidload/cache_file_creating/css', $purged_css);
