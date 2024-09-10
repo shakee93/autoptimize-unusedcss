@@ -90,7 +90,7 @@ const SpeedSettings = ({}) => {
 
     const [mouseOnSettingsGear, setMouseOnSettingsGear] = useState('');
     const { toast } = useToast();
-    const {testMode} = useSelector((state: RootState) => state.app);
+    const {testMode} = useSelector(optimizerData);
     const { handleTestModeSwitchChange } = useTestModeUtils();
     const {options} = useAppContext()
 
@@ -251,7 +251,8 @@ const SpeedSettings = ({}) => {
 
     const handleTestModeSettingsChange = (gearSettingsMode: string,) => {
         let toastInstance: ReturnType<typeof toast> | undefined;
-        if( gearSettingsMode==="turboMax" && !testMode?.status){
+
+        if( gearSettingsMode==="turboMax" && !testMode){
             toastInstance = toast({
                 description: (
                     <>
