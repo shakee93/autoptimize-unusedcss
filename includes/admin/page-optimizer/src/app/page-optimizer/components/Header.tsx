@@ -1,67 +1,42 @@
 import {
-    ArrowPathIcon,
-    ArrowTopRightOnSquareIcon,
-    ComputerDesktopIcon,
-    DevicePhoneMobileIcon, XMarkIcon, EyeIcon, InformationCircleIcon, ArrowLeftCircleIcon
-} from "@heroicons/react/24/outline";
-import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
-import ThemeSwitcher from "components/ui/theme-switcher";
-import React, {useEffect, useMemo, useState} from "react";
+    DevicePhoneMobileIcon} from "@heroicons/react/24/outline";
+import React from "react";
 import {useAppContext} from "../../../context/app";
 import TooltipText from "components/ui/tooltip-text";
 import {ThunkDispatch} from "redux-thunk";
-import {AppAction, AppState, RootState} from "../../../store/app/appTypes";
+import {AppAction, RootState} from "../../../store/app/appTypes";
 import {useDispatch, useSelector} from "react-redux";
-import {changeReport, fetchReport, getCSSStatus} from "../../../store/app/appActions";
+import {changeReport, fetchReport} from "../../../store/app/appActions";
 import {optimizerData} from "../../../store/app/appSelector";
-import {Button} from "components/ui/button";
 import AppButton from "components/ui/app-button";
 import {cn} from "lib/utils";
 import {
-    ArrowLeft,
-    Loader,
     LogOut,
     Monitor,
-    RefreshCw, SaveIcon, ThumbsUpIcon
-} from "lucide-react";
-import { useTour } from '@reactour/tour'
-import Steps, {AuditSteps, FinalSteps} from "components/tour/steps";
+    RefreshCw} from "lucide-react";
 import useCommonDispatch from "hooks/useCommonDispatch";
-import {m, AnimatePresence, motion} from "framer-motion";
-import ScaleUp from "components/animation/ScaleUp";
-import {setCommonRootState, setCommonState} from "../../../store/common/commonActions";
-import equal from 'fast-deep-equal/es6/react'
+import {AnimatePresence, motion} from "framer-motion";
+import {setCommonState} from "../../../store/common/commonActions";
 import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
 import UrlPreview from "app/page-optimizer/components/footer/url-preview";
 import SaveChanges from "app/page-optimizer/components/footer/save-changes";
-import {useRootContext} from "../../../context/root";
+import {useRootContext} from "../../../context/root"; 
 
-// const Header = ({ url }: { url: string}) => {
 const Header = ({ url }: { url: string}) => {
-
-    const tourPromptKey = 'titan-tour-prompt'
 
     const {
         setShowOptimizer ,
         options,
         version,
-        mode,
-        savingData
     } = useAppContext()
 
     const { activeReport,
-        loading, error,
-        settings,
-        data,
-        revisions,
+        loading, 
         testMode,
         reanalyze
     } = useSelector(optimizerData);
     const {inProgress } = useCommonDispatch()
     const {
-        activeTab,
-        activeMetric,
-        settingsMode,
         dispatch: commonDispatch
     } = useCommonDispatch()
 
