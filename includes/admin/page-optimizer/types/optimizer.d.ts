@@ -173,6 +173,7 @@ interface AuditSettingInput {
     control_values:  ControlValue[] | string [] ;
     control_payload: string;
     control_label: string;
+    control_icon: string;
     control_accordion_name: string;
     control_description: string;
     control_visibility?: {
@@ -182,6 +183,7 @@ interface AuditSettingInput {
     key: any;
     action: string
     inputs?: AuditSettingInput[]
+    actions?: AuditSettingInput[]
     readonly?: boolean
     placeholder?: string
 }

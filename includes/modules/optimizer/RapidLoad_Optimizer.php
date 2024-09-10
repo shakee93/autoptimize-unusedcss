@@ -899,18 +899,32 @@ class RapidLoad_Optimizer
                 'placeholder' => 'Your CDN url is not populated yet.',
                 'control_label' => 'CDN Endpoint',
                 'control_description' => 'Your CDN endpoint to store and serve all your resources across the CDN network',
-            ),
-            'clear_cdn_cache' => array(
-                'control_type' => 'button',
-                'control_label' => 'Clear CDN Cache',
-                'control_description' => 'Clear resources caches across the CDN network',
-                'action' => 'action=purge_rapidload_cdn&nonce=' . wp_create_nonce( 'uucss_nonce' ),
-            ),
-            'validate_cdn_url' => array(
-                'control_type' => 'button',
-                'control_label' => 'Validate CDN url',
-                'control_description' => 'validate cdn url',
-                'action' => 'action=validate_cdn&dashboard_cdn_validator&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                'actions' => array(
+                    array(
+                        'key' => 'clear_cdn_cache',
+                        'control_type' => 'button',
+                        'control_label' => 'Clear CDN Cache',
+                        'control_icon' => 'rotate-cw',
+                        'control_description' => 'Clear resources caches across the CDN network',
+                        'action' => 'action=purge_rapidload_cdn&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                    ),
+                    array(
+                        'key' => 'validate_cdn_url',
+                        'control_type' => 'button',
+                        'control_label' => 'Validate CDN URL',
+                        'control_icon' => 'check-circle',
+                        'control_description' => 'Check if the CDN url is working',
+                        'action' => 'action=validate_cdn&dashboard_cdn_validator&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                    ),
+                    array(
+                        'key' => 'copy_cdn_url',
+                        'control_type' => 'button',
+                        'control_label' => 'Copy CDN URL',
+                        'control_icon' => 'clipboard',
+                        'control_description' => 'Copy to clipboard',
+                        'action' => 'clipboard',
+                    ),
+                )
             ),
 
             //Cache settings starts here
