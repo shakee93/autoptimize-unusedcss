@@ -231,7 +231,79 @@ class RapidLoad_Optimizer
                 'performance_gear' => get_option('rapidload_titan_gear', false),
                 'test_mode' => self::$global_options['rapidload_test_mode']
             ],
-            'performance' => $this->transform_options_to_settings($url, self::$merged_options)
+            'performance' => $this->transform_options_to_settings($url, self::$merged_options),
+            'actions' => [
+                array(
+                    'control_type' => 'button',
+                    'category' => 'general',
+                    'control_label' => 'Clear Site Cache',
+                    'control_icon' => 'clear_cache',
+                    'control_description' => 'Clear Site Cache',
+                    'action' => wp_nonce_url( add_query_arg( array(
+                        '_cache'  => 'rapidload-cache',
+                        '_action' => 'clear',
+                    ) ), 'rapidload_cache_clear_cache_nonce' ),
+                ),
+                array(
+                    'control_type' => 'button',
+                    'category' => 'general',
+                    'control_label' => 'Clear Page Cache',
+                    'control_icon' => 'clear_page_cache',
+                    'control_description' => 'Clear Site Cache',
+                    'action' => wp_nonce_url( add_query_arg( array(
+                        '_cache'  => 'rapidload-cache',
+                        '_action' => 'clearurl',
+                        '_url' => $this->transform_url($this->get_current_url()),
+                    ) ), 'rapidload_cache_clear_cache_nonce' ),
+                ),
+                array(
+                    'control_type' => 'button',
+                    'category' => 'general',
+                    'control_label' => 'Clear CSS/JS/Font Optimizations',
+                    'control_icon' => 'clear_all_optimizations',
+                    'control_description' => 'Clear CSS/JS/Font Optimizations',
+                    'action' => wp_nonce_url( add_query_arg( array(
+                        '_action' => 'rapidload_purge_all',
+                        '_job_type' => 'url'
+                    ) ), 'uucss_nonce', '_nonce' ),
+                ),
+                array(
+                    'control_type' => 'button',
+                    'category' => 'css',
+                    'control_label' => 'Clear CSS Optimizations',
+                    'control_icon' => 'clear_css_optimizations',
+                    'control_description' => 'Clear CSS Optimizations',
+                    'action' => wp_nonce_url( add_query_arg( array(
+                        '_action' => 'rapidload_purge_all',
+                        'job_type' => 'css',
+                        'clear' => true,
+                    ) ), 'uucss_nonce', 'nonce' ),
+                ),
+                array(
+                    'control_type' => 'button',
+                    'category' => 'javascript',
+                    'control_label' => 'Clear JS Optimizations',
+                    'control_icon' => 'clear_js_optimizations',
+                    'control_description' => 'Clear JS Optimizations',
+                    'action' => wp_nonce_url( add_query_arg( array(
+                        '_action' => 'rapidload_purge_all',
+                        'job_type' => 'js',
+                        'clear' => true,
+                    ) ), 'uucss_nonce', 'nonce' ),
+                ),
+                array(
+                    'control_type' => 'button',
+                    'category' => 'font',
+                    'control_label' => 'Clear Font Optimizations',
+                    'control_icon' => 'clear_font_optimizations',
+                    'control_description' => 'Clear Font Optimizations',
+                    'action' => wp_nonce_url( add_query_arg( array(
+                        '_action' => 'rapidload_purge_all',
+                        'job_type' => 'fonts',
+                        'clear' => true,
+                    ) ), 'uucss_nonce', 'nonce' ),
+                )
+            ]
         ]);
     }
 
