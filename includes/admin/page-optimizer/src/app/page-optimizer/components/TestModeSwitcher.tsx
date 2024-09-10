@@ -11,23 +11,22 @@ import {useTestModeUtils} from "hooks/testModeUtils";
 import {useAppContext} from "../../../context/app";
 import {optimizerData} from "../../../store/app/appSelector";
 import {cn} from "lib/utils";
-import { getTestModeStatus } from "../../../store/app/appActions";
 
 const TestModeSwitcher = () => {
 
     const {testMode} = useSelector(optimizerData);
     const [loadingStatus, setLoadingStatus] = useState(false);
-    const {settingsMode, testModeStatus, testModeLoading, dispatch} = useCommonDispatch();
+    const {testModeStatus, testModeLoading, dispatch} = useCommonDispatch();
     const {handleTestModeSwitchChange} = useTestModeUtils();
     const {options} = useAppContext();
-    const {data, error, reanalyze, revisions} = useSelector(optimizerData);
+    const { revisions} = useSelector(optimizerData);
 
     useEffect(() => {
         if (testMode) {
             dispatch(setCommonState('testModeStatus', testMode));
         }
 
-    }, [testMode]);
+    }, [testMode, dispatch]);
 
     const handleSwitchChange = async (isChecked: boolean) => {
         await handleTestModeSwitchChange(isChecked);
