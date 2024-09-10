@@ -78,7 +78,9 @@ class CriticalCSS_Enqueue
             ];
         }
 
-        $file_exist = $this->file_system->exists(CriticalCSS::$base_dir . '/' . $data);
+        $data = CriticalCSS::extract_file_data($data);
+
+        $file_exist = $this->file_system->exists(CriticalCSS::$base_dir . '/' . $data['file_name']);
 
         if(!$file_exist &&
             ($this->job_data->attempts <=2 || (time() - strtotime($this->job_data->created_at)) > 86400)) {
@@ -99,7 +101,7 @@ class CriticalCSS_Enqueue
 
         if($file_exist && $this->dom && $this->inject){
 
-            $this->enqueue_cpcss($data);
+            $this->enqueue_cpcss($data['file_name'], $data['file_count']);
 
             return [
                 'dom' => $this->dom,
@@ -160,47 +162,31 @@ class CriticalCSS_Enqueue
         }
     }
 
-    function enqueue_cpcss($cpcss_file){
+    function enqueue_cpcss($cpcss_file, $file_count = 1){
 
-        $critical_css_content = '';
+        $critical_css_with_tag = '';
+        $mode = $this->is_mobile ? 'mobile' : 'desktop';
 
-        if($this->file_system->exists(CriticalCSS::$base_dir . '/' . $cpcss_file)){
-            $critical_css_content = $this->file_system->get_contents(CriticalCSS::$base_dir . '/' . $cpcss_file );
+        for ($i = 1; $i <= $file_count; $i++) {
+            $file_name = ($i == 1) ? $cpcss_file : str_replace(".css","-" . $i . ".css", $cpcss_file);
+            $index = ($i == 1) ? "" : "-" . $i;
+            if($this->file_system->exists(CriticalCSS::$base_dir . '/' . $file_name)){
+                $part = $this->file_system->get_contents(CriticalCSS::$base_dir . '/' . $file_name );
+                $part = apply_filters('rapidload/cpcss/minify', $part, $mode);
+                if(!empty($part)){
+                    $critical_css_with_tag .= '<style id="rapidload-critical-css' . $index .'" data-mode="'. $mode .'">' . $part . '</style>';
+                }
+            }
         }
 
         if(isset($this->options['uucss_additional_css']) && !empty($this->options['uucss_additional_css'])){
 
-            $critical_css_content .= stripslashes($this->options['uucss_additional_css']);
+            $additional_css = apply_filters('rapidload/cpcss/minify', stripslashes($this->options['uucss_additional_css']), $mode);
+            $critical_css_with_tag .= '<style id="rapidload-critical-css-additional" data-mode="'. $mode .'">' . $additional_css . '</style>';
 
         }
 
-        if(empty($critical_css_content)){
-
-            return;
-        }
-
-        $critical_css_content = apply_filters('rapidload/cpcss/minify', $critical_css_content, ($this->is_mobile ? 'mobile' : 'desktop'));
-
-        $cpcss_file_url = str_replace("/uucss/","/cpcss/" ,  apply_filters('uucss/enqueue/cache-file-url', $cpcss_file));
-
-        $critical_css_file_tag = "";
-
-        if(isset($_REQUEST['include_cpcss_file']) && $_REQUEST['include_cpcss_file'] == "1"){
-            $critical_css_file_tag = '<link rel="stylesheet" type="text/css" media="print" onload="this.media=\'all\'" href="' . $cpcss_file_url . '"/>';
-        }
-
-        $critical_css_with_tag = "";
-
-        if(apply_filters('rapidload/cpcss/partial-content', isset($_REQUEST['cpcss_partial']) && $_REQUEST['cpcss_partial'] == "1")){
-            $cssParts = $this->breakCSSIntoParts($critical_css_content);
-            foreach ($cssParts as $index => $part) {
-                $critical_css_with_tag .= '<style id="rapidload-critical-css-' . $index .'" data-mode="'. ($this->is_mobile ? 'mobile' : 'desktop') .'">' . $part . '</style>';
-            }
-        }else{
-            $critical_css_with_tag = '<style id="rapidload-critical-css" data-mode="'. ($this->is_mobile ? 'mobile' : 'desktop') .'">' . $critical_css_content . '</style>';
-        }
-
-        $_frontend_data['data-mode'] = ($this->is_mobile ? 'mobile' : 'desktop');
+        $_frontend_data['data-mode'] = $mode;
         $_frontend_data['cpcss-file'] = CriticalCSS::$base_dir . '/' . $cpcss_file;
 
         if(!empty($_frontend_data)){
@@ -215,7 +201,7 @@ class CriticalCSS_Enqueue
 
             $title_content = $this->dom->find( 'title' )[0]->outertext;
 
-            $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $critical_css_with_tag . $critical_css_file_tag);
+            $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $critical_css_with_tag);
 
             $this->update_noscript();
 
@@ -239,38 +225,6 @@ class CriticalCSS_Enqueue
             return true;
         });
 
-    }
-
-    function breakCSSIntoParts($cssContent, $maxLength = 80000) {
-        $parser = new \Sabberworm\CSS\Parser($cssContent);
-        $cssDocument = $parser->parse();
-        $cssParts = [];
-        $currentPart = '';
-        $currentLength = 0;
-
-        function addToCurrentPart(&$currentPart, &$currentLength, &$cssParts, $blockContent, $maxLength) {
-            if (($currentLength + strlen($blockContent)) > $maxLength) {
-                $cssParts[] = $currentPart;
-                $currentPart = '';
-                $currentLength = 0;
-            }
-            $currentPart .= $blockContent;
-            $currentLength += strlen($blockContent);
-        }
-
-        foreach ($cssDocument->getContents() as $content) {
-            if ($content instanceof \Sabberworm\CSS\RuleSet\DeclarationBlock) {
-                $blockContent = $content->render(Sabberworm\CSS\OutputFormat::createCompact());
-                addToCurrentPart($currentPart, $currentLength, $cssParts, $blockContent, $maxLength);
-            } elseif ($content instanceof \Sabberworm\CSS\RuleSet\AtRuleBlockList) {
-                $blockContent = $content->render(Sabberworm\CSS\OutputFormat::createCompact());
-                addToCurrentPart($currentPart, $currentLength, $cssParts, $blockContent, $maxLength);
-            }
-        }
-        if (!empty($currentPart)) {
-            $cssParts[] = $currentPart;
-        }
-        return $cssParts;
     }
 
     private static function is_css( $el ) {
