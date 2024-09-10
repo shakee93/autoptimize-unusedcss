@@ -65,7 +65,12 @@ const Metrics = ({ metrics = [], performance } : MetricsProps) => {
                          onClick={e => {
                              dispatch(setCommonState('activeMetric',metric))
                          }}
-                         onMouseEnter={() => dispatch(setCommonState('hoveredMetric',metric))}
+                         onMouseEnter={() => {
+                             const delayedDispatch = setTimeout(() => {
+                                 dispatch(setCommonState('hoveredMetric', metric));
+                             }, 100);
+                             return () => clearTimeout(delayedDispatch);
+                         }}
                          onMouseLeave={() => dispatch(setCommonState('hoveredMetric',null))}
                          className={cn(
                              'lg:last:rounded-b-3xl select-none cursor-pointer dark:hover:bg-brand-900/50 hover:bg-brand-100/50 group flex flex-row justify-between items-center ' +
