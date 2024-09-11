@@ -330,7 +330,7 @@ class RapidLoad_Cache_Store
 
     public static function cache_expired( $cache_file ) {
 
-        if ( RapidLoad_Cache_Engine::$settings['cache_expiry_time'] === 0 ) {
+        if ( RapidLoad_Cache_Engine::$settings['cache_expiry_time'] == 0 ) {
             return false;
         }
 
