@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import { Archive, CheckCircleIcon, Code, FileCode2, FileJson, FileJson2, FileMinus2, FileType, Loader, LucideIcon, RefreshCw, RemoveFormatting, Type } from "lucide-react";
 import { useSelector } from "react-redux";
 import { optimizerData } from "../store/app/appSelector";
@@ -24,12 +24,17 @@ let icons: { [key: string]: ReactNode } = {
     default: <RefreshCw className='w-3.5' />
 }
 
+type GlobalAction = AuditSettingInput & {
+    category: string
+    loading?: boolean
+}
+
 const RapidLoadActions: React.FC = () => {
-    const { actions } = useSelector(optimizerData);
+    const { actions, settings } = useSelector(optimizerData);
     const {options} = useAppContext()
 
     
-    let [_actions, setActions] = useState<(AuditSettingInput & { loading: boolean })[]>(actions.map((a: any) => ({
+    let [_actions, setActions] = useState<GlobalAction[]>(actions.map((a: any) => ({
         ...a,
         loading: false
     })))
@@ -41,7 +46,7 @@ const RapidLoadActions: React.FC = () => {
         })))
     }, [actions])
 
-    const triggerAction = async (action: any) => {
+    const triggerAction = async (action: GlobalAction) => {
 
         try {
             setActions(prev => prev.map(a =>
@@ -70,6 +75,21 @@ const RapidLoadActions: React.FC = () => {
         ))
     }
 
+
+    const activeCategories = useMemo(() => {
+        const activeCategories = settings.reduce((acc, s) => {
+            const category = s.category;
+            const input = s.inputs[0];
+            if (input.control_type === 'checkbox' && input.value === true) {
+                acc[category] = true;
+            } else if (!acc[category]) {
+                acc[category] = false;
+            }
+            return acc;
+        }, {} as Record<string, boolean>);
+        return activeCategories
+    }, [settings])
+
     if(!actions) {
         return <></>
     }
@@ -79,7 +99,7 @@ const RapidLoadActions: React.FC = () => {
         <Card className='rounded-xl' >
             <div className='border-b py-2 text-xs px-6'>Cache Actions</div>
             <div className='items-center justify-center flex py-1'>
-                {_actions.map((action) => (
+                {_actions.filter((action: GlobalAction) => activeCategories[action.category] || action.category === 'general').map((action) => (
                     <TooltipText delay={0} key={action.control_icon} text={action.control_label}>
                         <AppButton
                             disabled={action.loading}
