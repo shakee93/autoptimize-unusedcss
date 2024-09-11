@@ -52,21 +52,34 @@ class RapidLoad_Admin_Bar {
         $tag = apply_filters('rapidload/titan/tag', 'latest');
 
         //$package = "https://unpkg.com/@rapidload/page-optimizer@{$tag}/dist";
-        $package = UUCSS_PLUGIN_URL . 'includes/admin/page-optimizer/dist';
 
-        /*if (defined('RAPIDLOAD_DEV_MODE')) {
-            $package = UUCSS_PLUGIN_URL . 'includes/admin/page-optimizer/dist';
-        }*/
+        $optimizer_path = 'includes/admin/page-optimizer/dist';
 
         $debug_titan = apply_filters('rapidload/titan/debug', false);
 
         if ($debug_titan) {
-            $package .= '-debug';
+            $optimizer_path .= '-debug';
         }
 
-        //wp_enqueue_style( 'rapidload_page_optimizer', $package .  '/assets/index.css',[],UUCSS_VERSION);
 
-        wp_register_script( 'rapidload_page_optimizer', $package .  '/assets/index.js',[], UUCSS_VERSION . (defined('RAPIDLOAD_PLUGIN_COMMIT_ID') ? '-' . RAPIDLOAD_PLUGIN_COMMIT_ID : ''));
+        $package = UUCSS_PLUGIN_URL . $optimizer_path;
+
+        $asset_map_file = RAPIDLOAD_PLUGIN_DIR . '/' . $optimizer_path . '/asset-map.php';
+        $indexJS = '/assets/index.js';
+        $indexCSS = '/assets/index.css';
+
+        if (file_exists($asset_map_file)) {
+            include_once($asset_map_file);
+            if (defined('RAPIDLOAD_ASSET_MAP')) {
+                $indexJS = isset(RAPIDLOAD_ASSET_MAP['assets/index.js']) ? RAPIDLOAD_ASSET_MAP['assets/index.js'] : $indexJS;
+                $indexCSS = isset(RAPIDLOAD_ASSET_MAP['assets/index.css']) ? RAPIDLOAD_ASSET_MAP['assets/index.css'] : $indexCSS;
+            }
+        }
+
+        $indexJS = '/' . ltrim($indexJS, '/');
+        $indexCSS = '/' . ltrim($indexCSS, '/');
+
+        wp_register_script( 'rapidload_page_optimizer', $package . $indexJS,[], UUCSS_VERSION);
 
         $current_url = isset($_SERVER['REQUEST_URI']) ? home_url($_SERVER['REQUEST_URI']) : $this->get_current_url();
 
@@ -75,7 +88,7 @@ class RapidLoad_Admin_Bar {
         }
 
         $data = array(
-            'titan_stylesheet_url' => $package .  '/assets/index.css',
+            'titan_stylesheet_url' => $package .  $indexCSS,
             'load_optimizer' => !(is_admin() && $page === 'rapidload'),
             'page_optimizer_package_base' => $package,
             'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist',
