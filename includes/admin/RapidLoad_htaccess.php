@@ -297,7 +297,8 @@ HTACCESS;
         if ( ! $is_apache ) {
             return [
                 'apache' => false,
-                'has_rapidload_rules' => false
+                'has_rapidload_rules' => false,
+                'success' => false
             ];
         }
 
@@ -314,7 +315,8 @@ HTACCESS;
         if ( false === $htaccess_content ) {
             return [
                 'apache' => $is_apache,
-                'has_rapidload_rules' => false
+                'has_rapidload_rules' => false,
+                'success' => false
             ];
         }
 
@@ -322,7 +324,8 @@ HTACCESS;
 
         return [
             'apache' => $is_apache,
-            'has_rapidload_rules' => $has_rapidload_rules
+            'has_rapidload_rules' => $has_rapidload_rules,
+            'success' => $is_apache && $has_rapidload_rules
         ];
     }
 
