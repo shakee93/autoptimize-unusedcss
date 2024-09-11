@@ -1,77 +1,49 @@
 import {
-    ArrowPathIcon,
-    ArrowTopRightOnSquareIcon,
-    ComputerDesktopIcon,
-    DevicePhoneMobileIcon, XMarkIcon, EyeIcon, InformationCircleIcon, ArrowLeftCircleIcon
-} from "@heroicons/react/24/outline";
-import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
-import ThemeSwitcher from "components/ui/theme-switcher";
-import React, {useEffect, useMemo, useState} from "react";
+    DevicePhoneMobileIcon} from "@heroicons/react/24/outline";
+import React from "react";
 import {useAppContext} from "../../../context/app";
 import TooltipText from "components/ui/tooltip-text";
 import {ThunkDispatch} from "redux-thunk";
-import {AppAction, AppState, RootState} from "../../../store/app/appTypes";
+import {AppAction, RootState} from "../../../store/app/appTypes";
 import {useDispatch, useSelector} from "react-redux";
-import {changeReport, fetchData, getCSSStatus} from "../../../store/app/appActions";
+import {changeReport, fetchReport} from "../../../store/app/appActions";
 import {optimizerData} from "../../../store/app/appSelector";
-import {Button} from "components/ui/button";
 import AppButton from "components/ui/app-button";
 import {cn} from "lib/utils";
 import {
-    ArrowLeft,
-    Loader,
     LogOut,
     Monitor,
-    RefreshCw, SaveIcon, ThumbsUpIcon
-} from "lucide-react";
-import { useTour } from '@reactour/tour'
-import Steps, {AuditSteps, FinalSteps} from "components/tour/steps";
+    RefreshCw} from "lucide-react";
 import useCommonDispatch from "hooks/useCommonDispatch";
-import {m, AnimatePresence, motion} from "framer-motion";
-import ScaleUp from "components/animation/ScaleUp";
-import {setCommonRootState, setCommonState} from "../../../store/common/commonActions";
-import equal from 'fast-deep-equal/es6/react'
+import {AnimatePresence, motion} from "framer-motion";
+import {setCommonState} from "../../../store/common/commonActions";
 import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
 import UrlPreview from "app/page-optimizer/components/footer/url-preview";
 import SaveChanges from "app/page-optimizer/components/footer/save-changes";
-import {useRootContext} from "../../../context/root";
+import {useRootContext} from "../../../context/root"; 
 
-// const Header = ({ url }: { url: string}) => {
 const Header = ({ url }: { url: string}) => {
-
-    const tourPromptKey = 'titan-tour-prompt'
 
     const {
         setShowOptimizer ,
         options,
         version,
-        mode,
-        showInprogress,
-        setShowInprogress,
-        savingData
     } = useAppContext()
 
     const { activeReport,
-        loading, error,
-        settings,
-        data,
-        revisions
+        loading, 
+        testMode,
+        reanalyze
     } = useSelector(optimizerData);
     const {inProgress } = useCommonDispatch()
     const {
-        activeTab,
-        activeMetric,
-        settingsMode,
         dispatch: commonDispatch
     } = useCommonDispatch()
 
-    const {testMode} = useSelector((state: RootState) => state.app);
-    const [testModeStatus, setTestModeStatus] = useState<boolean>(false);
+
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const { isDark } = useRootContext();
-    useEffect(() => {
-        setTestModeStatus(testMode?.status || false)
-    }, [testMode]);
+  
 
 
     return (
@@ -129,15 +101,13 @@ const Header = ({ url }: { url: string}) => {
                                 action='Apply Optimization'
                                 cancel='Discard & Analyze'
                                 onCancel={() => {
-                                    dispatch(fetchData(options, url, true))
+                                    dispatch(fetchReport(options, url, true))
                                     commonDispatch(setCommonState('openAudits', []))
                                 }}
                                 onClick={() => {
 
                                     if (!inProgress || !loading) {
-                                        dispatch(fetchData(options, url, true))
-                                        dispatch(setCommonState('inProgress', false))
-                                        setShowInprogress(false);
+                                        dispatch(fetchReport(options, url, true))
                                     }
                                     commonDispatch(setCommonState('openAudits', []))
 
@@ -167,50 +137,29 @@ const Header = ({ url }: { url: string}) => {
 
 
                 <div className='flex relative gap-4 items-center'>
-                    {!loading && !showInprogress ? (
-                        <>
-                            {!error && (
-                                <>
-                                    <SaveChanges/>
-                                    <UnsavedChanges
-                                        onCancel={() => {
-                                            setShowOptimizer(false)
-                                        }}
-                                        cancel='Discard & Leave'
-                                        onClick={() => {
-                                            setShowOptimizer(false);
-                                            setShowInprogress(false);
-                                        }}>
-                                        <TooltipText text='Close Optimizer'>
-                                            <LogOut className={cn(
-                                                'h-5 w-5 dark:text-brand-300 text-brand-600 transition-opacity',
-                                            )}/>
-                                        </TooltipText>
-                                    </UnsavedChanges>
-                                </>
-                            )}
-                        </>
-                    ): ( showInprogress && !savingData &&
-                        <Button
-                            className={cn(
-                                'flex overflow-hidden justify-between select-none relative text-sm gap-2 h-12 rounded-[14px] px-4 pr-6'
-                            )}
-                            onClick={() => {
-                                dispatch(setCommonState('inProgress', false))
-                                setShowInprogress(false);
-                            }}
-                        >
-                            <ArrowLeft className='w-5 mr-0.5'/>
-                            Back
-                        </Button>
-                    )}
 
+                    <>
+                        <SaveChanges/>
+                        <UnsavedChanges
+                            onCancel={() => {
+                                setShowOptimizer(false)
+                            }}
+                            cancel='Discard & Leave'
+                            onClick={() => {
+                                setShowOptimizer(false);
+                            }}>
+                            <TooltipText text='Close Optimizer'>
+                                <LogOut className={cn(
+                                    'h-5 w-5 dark:text-brand-300 text-brand-600 transition-opacity',
+                                )}/>
+                            </TooltipText>
+                        </UnsavedChanges>
+                    </>
 
                 </div>
             </header>
-            {!loading && !showInprogress && (
-                <AnimatePresence>
-                    {testModeStatus && (
+            <AnimatePresence>
+                    {testMode && (
                         <motion.div
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -226,7 +175,6 @@ const Header = ({ url }: { url: string}) => {
                         </motion.div>
                     )}
                 </AnimatePresence>
-            )}
         </>
     )
 }

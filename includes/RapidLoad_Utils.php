@@ -715,4 +715,53 @@ trait RapidLoad_Utils {
     static function is_wp_cli() {
         return defined('WP_CLI') && WP_CLI;
     }
+
+    public static function get_files_in_dir($directory){
+
+        $files = [];
+        $items = scandir($directory);
+
+        foreach ($items as $item) {
+            if ($item === '.' || $item === '..') {
+                continue;
+            }
+
+            $path = $directory . DIRECTORY_SEPARATOR . $item;
+
+            if (is_dir($path)) {
+                $files = array_merge($files,  self::get_files_in_dir($path));
+            } else {
+                $files[] = $path;
+            }
+        }
+
+        return $files;
+
+    }
+
+    public function transformRegexToPaths($regex) {
+        $pattern = trim($regex, '/');
+        $paths = explode('|', $pattern);
+        $paths = array_map(function($path) {
+            $cleanedPath = rtrim(trim($path, '^$'), '\/?');
+            $cleanedPath = str_replace(['\/', '\-'], ['/', '-'], $cleanedPath);
+            return $cleanedPath;
+        }, $paths);
+        return $paths;
+    }
+
+    function transformPathsToRegex(array $paths) {
+        $escapedPaths = array_map(function($path) {
+            if (substr($path, 0, 1) !== '/') {
+                $path = '/' . $path;
+            }
+            return '^' . preg_quote($path, '/') . '\/?$';
+        }, $paths);
+        $regexPattern = '/' . implode('|', $escapedPaths) . '/';
+        return $regexPattern;
+    }
+
+    function is_serialized($string) {
+        return ($string == serialize(false) || @unserialize($string) !== false);
+    }
 }

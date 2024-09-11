@@ -1,53 +1,60 @@
 import {CommonState} from "../common/commonTypes";
+import { LucideIcon } from "lucide-react";
 
 export interface RootState {
     app: AppState;
     common: CommonState
 }
 
+interface Report {
+    data?: OptimizerResults | null;
+    original?: OptimizerResults | null;
+    error?: string | null;
+    loading: boolean
+    settings?: AuditSetting[],
+    originalSettings?: AuditSetting[],
+    revisions: Revision[],
+    changes: {
+        files: Array<any>
+    },
+    state: {
+        fresh?: boolean
+    }
+}
+
 export interface AppState {
     activeReport: ReportType,
     cssStatus: CSSStatusResponse | null;
     testMode: TestMode | null;
-    mobile: {
-        defaultSettingsMode: settingsMode | null,
-        data?: OptimizerResults | null;
-        original?: OptimizerResults | null;
-        error?: string | null;
-        loading: boolean
-        settings?: AuditSetting[],
-        originalSettings?: AuditSetting[],
-        revisions: Revision[],
-        changes: {
-            files: Array<any>
-        },
-        state: {
-            fresh?: boolean
-        }
-
+    report: {
+        mobile: Report,
+        desktop: Report,
     },
-    desktop: {
-        defaultSettingsMode: settingsMode | null,
-        data?: OptimizerResults | null;
-        original?: OptimizerResults | null;
-        error?: string | null;
-        loading: boolean
-        settings?: AuditSetting[]
-        originalSettings?: AuditSetting[],
-        revisions: Revision[],
-        changes: {
-            files: Array<any>
+    settings: {
+        performance: {
+            [key in ReportType]: {
+                original: AuditSetting[],
+                state: AuditSetting[],
+                error: string | null;
+                loading: boolean
+            }
         },
-        state: {
-            fresh?: boolean
-        }
-    }
+        general: {
+            test_mode: boolean | TestMode
+            performance_gear: PerformanceGear
+        },
+        actions: AuditSettingInput[]
+    },
 }
 
-export const FETCH_DATA_REQUEST = 'FETCH_DATA_REQUEST';
-export const FETCH_DATA_SUCCESS = 'FETCH_DATA_SUCCESS';
-export const FETCH_DATA_FAILURE = 'FETCH_DATA_FAILURE';
+export const FETCH_REPORT_REQUEST = 'FETCH_REPORT_REQUEST';
+export const FETCH_REPORT_SUCCESS = 'FETCH_REPORT_SUCCESS';
+export const FETCH_REPORT_FAILURE = 'FETCH_REPORT_FAILURE';
+export const FETCH_SETTING_REQUEST = 'FETCH_SETTING_REQUEST';
+export const FETCH_SETTING_SUCCESS = 'FETCH_SETTING_SUCCESS';
+export const FETCH_SETTING_FAILURE = 'FETCH_SETTING_FAILURE';
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';
+export const CHANGE_GEAR = 'CHANGE_GEAR';
 export const CHANGE_REPORT_TYPE = 'CHANGE_REPORT_TYPE';
 export const UPDATE_FILE_ACTION = 'UPDATE_FILE_ACTION';
 export const GET_CSS_STATUS_SUCCESS = 'GET_CSS_STATUS_SUCCESS';
@@ -66,13 +73,13 @@ interface UpdateTestMode {
 }
 
 interface FetchDataRequestAction {
-    type: typeof FETCH_DATA_REQUEST;
+    type: typeof FETCH_REPORT_REQUEST;
     activeReport: ReportType
 }
 
 // Define action interfaces
 interface FetchDataSuccessAction {
-    type: typeof FETCH_DATA_SUCCESS;
+    type: typeof FETCH_REPORT_SUCCESS;
     payload: {
         data: any
         activeReport: ReportType
@@ -80,15 +87,40 @@ interface FetchDataSuccessAction {
 }
 
 interface FetchDataFailureAction {
-    type: typeof FETCH_DATA_FAILURE;
+    type: typeof FETCH_REPORT_FAILURE;
     error: string;
 }
 
+interface FetchSettingsRequestAction {
+    type: typeof FETCH_SETTING_REQUEST;
+    activeReport: ReportType
+}
+
+// Define action interfaces
+interface FetchSettingsSuccessAction {
+    type: typeof FETCH_SETTING_SUCCESS;
+    payload: {
+        data: any
+        activeReport: ReportType
+    }
+}
+
+interface FetchSettingsFailureAction {
+    type: typeof FETCH_SETTING_FAILURE;
+    error: string;
+}
 interface UpdateSettingsAction {
     type: typeof UPDATE_SETTINGS;
     payload : {
         settings : AuditSetting[];
-        data: any
+    },
+}
+
+interface ChangeGearAction {
+    type: typeof CHANGE_GEAR;
+    payload : {
+        settings : AuditSetting[];
+        mode: PerformanceGear
     },
 }
 
@@ -108,8 +140,8 @@ interface UpdateFileActionAction {
 }
 
 
-
-
 // Define the combined action type
-export type AppAction = FetchDataRequestAction | FetchDataSuccessAction | FetchDataFailureAction | UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode;
+export type AppAction = FetchDataRequestAction | FetchDataSuccessAction | FetchDataFailureAction |
+    FetchSettingsRequestAction | FetchSettingsSuccessAction | FetchSettingsFailureAction | ChangeGearAction|
+    UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode;
 

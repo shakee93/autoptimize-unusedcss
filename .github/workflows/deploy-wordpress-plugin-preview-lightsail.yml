@@ -242,6 +242,42 @@ jobs:
             sudo docker exec -u root -i \${WP_CONTAINER} sh -c "grep -A 2 'RAPIDLOAD_DEV_MODE' /bitnami/wordpress/wp-config.php"
           EOF
 
+      - name: Remove RAPIDLOAD_PLUGIN_COMMIT_ID in wp-config.php
+        run: |
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << EOF
+            set -x
+            INSTANCE_ID=${{ github.event.number }}
+            WP_CONTAINER=\$(sudo docker ps -q --filter "name=wordpress_\${INSTANCE_ID}")
+
+            echo "Removing RAPIDLOAD_PLUGIN_COMMIT_ID for : \${WP_CONTAINER}"
+
+            # Remove the existing RAPIDLOAD_PLUGIN_COMMIT_ID line if it exists
+            sudo docker exec -u root -i \${WP_CONTAINER} sh -c '
+              sed -i "/define( \x27RAPIDLOAD_PLUGIN_COMMIT_ID\x27/d" /bitnami/wordpress/wp-config.php
+            '
+
+            # Confirm removal
+            sudo docker exec -u root -i \${WP_CONTAINER} sh -c "grep -A 2 'RAPIDLOAD_PLUGIN_COMMIT_ID' /bitnami/wordpress/wp-config.php || echo 'RAPIDLOAD_PLUGIN_COMMIT_ID not found'"
+          EOF
+
+      - name: Add RAPIDLOAD_PLUGIN_COMMIT_ID in wp-config.php
+        run: |
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << EOF
+            set -x
+            INSTANCE_ID=${{ github.event.number }}
+            WP_CONTAINER=\$(sudo docker ps -q --filter "name=wordpress_\${INSTANCE_ID}")
+
+            echo "Adding RAPIDLOAD_PLUGIN_COMMIT_ID for : \${WP_CONTAINER}"
+
+            # Add the RAPIDLOAD_PLUGIN_COMMIT_ID definition
+            sudo docker exec -u root -i \${WP_CONTAINER} sh -c '
+              sed -i "/^\/\*\* Sets up WordPress vars and included files. \*\//i if ( ! defined( \x27RAPIDLOAD_PLUGIN_COMMIT_ID\x27 ) ) { define( \x27RAPIDLOAD_PLUGIN_COMMIT_ID\x27, \x27${{ github.sha }}\x27 ); }" /bitnami/wordpress/wp-config.php
+            '
+
+            # Confirm addition
+            sudo docker exec -u root -i \${WP_CONTAINER} sh -c "grep -A 2 'RAPIDLOAD_PLUGIN_COMMIT_ID' /bitnami/wordpress/wp-config.php"
+          EOF
+
       - name: Update WP_CACHE in wp-config.php
         if: ${{ github.event.action == 'opened' }}
         run: |
@@ -282,6 +318,7 @@ jobs:
             INSTANCE_ID=${{ github.event.number }}
             WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
             PLUGIN_PATH=/bitnami/wordpress/wp-content/plugins/autoptimize-unusedcss
+            TITAN_PATH=includes/admin/page-optimizer
             PLUGIN_DIR=/bitnami/wordpress/wp-content/plugins
             sudo docker exec -u root -i ${WP_CONTAINER} sh -c "
               if [ -d ${PLUGIN_PATH} ]; then

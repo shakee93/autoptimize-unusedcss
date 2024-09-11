@@ -4,3 +4,9 @@ vendor/simplehtmldom/simplehtmldom/example/*
 .idea
 
 release.sh
+.DS_Store
+includes/.DS_Store
+includes/admin/.DS_Store
+includes/admin/page-optimizer/.DS_Store
+
+.vscode

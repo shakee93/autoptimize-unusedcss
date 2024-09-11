@@ -56,11 +56,17 @@ class CriticalCSS
 
         add_action('rapidload/job/updated', [$this, 'handle_job_updated'], 10 , 2);
 
+        add_action('rapidload/cdn/validated', [$this, 'update_cdn_url_in_cached_files']);
+
         if(is_admin()){
 
             $this->cache_trigger_hooks();
 
         }
+    }
+
+    public function update_cdn_url_in_cached_files($args) {
+        RapidLoad_CDN::update_cdn_url_in_cached_files(self::$base_dir, $args);
     }
 
     public function render_options($args){
@@ -352,14 +358,10 @@ class CriticalCSS
 
         }else if(isset( $args['immediate'] )){
 
-            $spawned = $this->schedule_cron('cpcss_async_queue', [
+            $this->schedule_cron('cpcss_async_queue', [
                 'job_data' => $this->job_data,
                 'args'     => $args
             ]);
-
-            if(!$spawned){
-                $this->init_async_store($this->job_data, $args);
-            }
 
         }
 
@@ -440,9 +442,13 @@ class CriticalCSS
 
         foreach ($data as $value){
             if(!empty($value->data)){
-                array_push($used_files,$value->data);
-                if(isset($this->options['uucss_enable_cpcss_mobile'])){
-                    array_push($used_files,str_replace(".css", "-mobile.css", $value->data));
+                $files = RapidLoad_Job_Data::transform_cpcss_data_to_array($value->data);
+                foreach ($files as $file){
+                    $file_data = self::extract_file_data($file);
+                    for ($i = 1; $i <= $file_data['file_count']; $i++) {
+                        $file_name = ($i == 1) ? $file_data['file_name'] : str_replace(".css","-" . $i . ".css", $file_data['file_name']);
+                        array_push($used_files,$file_name);
+                    }
                 }
             }
         }
@@ -460,5 +466,53 @@ class CriticalCSS
                 closedir($handle);
             }
         }
+    }
+
+    public static function extract_file_data($fileName){
+        $pattern = '/(.*)\[(\d+)\]\.css$/';
+        if (preg_match($pattern, $fileName, $matches)) {
+            return [
+                'file_name' => $matches[1] . '.css',
+                'file_count' => (int)$matches[2]
+            ];
+        }
+        return [
+            'file_name' => $fileName,
+            'file_count' => 1
+        ];
+    }
+
+    public static function breakCSSIntoParts($cssContent, $maxLength = 60000) {
+        $parser = new \Sabberworm\CSS\Parser($cssContent);
+        $cssDocument = $parser->parse();
+        $cssParts = [];
+        $currentPart = '';
+        $currentLength = 0;
+
+        if(!function_exists('addToCurrentRapidLoadCpssPart')){
+            function addToCurrentRapidLoadCpssPart(&$currentPart, &$currentLength, &$cssParts, $blockContent, $maxLength) {
+                if (($currentLength + strlen($blockContent)) > $maxLength) {
+                    $cssParts[] = $currentPart;
+                    $currentPart = '';
+                    $currentLength = 0;
+                }
+                $currentPart .= $blockContent;
+                $currentLength += strlen($blockContent);
+            }
+        }
+
+        foreach ($cssDocument->getContents() as $content) {
+            if ($content instanceof \Sabberworm\CSS\RuleSet\DeclarationBlock) {
+                $blockContent = $content->render(Sabberworm\CSS\OutputFormat::createCompact());
+                addToCurrentRapidLoadCpssPart($currentPart, $currentLength, $cssParts, $blockContent, $maxLength);
+            } elseif ($content instanceof \Sabberworm\CSS\RuleSet\AtRuleBlockList) {
+                $blockContent = $content->render(Sabberworm\CSS\OutputFormat::createCompact());
+                addToCurrentRapidLoadCpssPart($currentPart, $currentLength, $cssParts, $blockContent, $maxLength);
+            }
+        }
+        if (!empty($currentPart)) {
+            $cssParts[] = $currentPart;
+        }
+        return $cssParts;
     }
 }

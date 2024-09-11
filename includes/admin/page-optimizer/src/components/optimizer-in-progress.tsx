@@ -9,7 +9,7 @@ import {ThunkDispatch} from "redux-thunk";
 import {useDispatch, useSelector} from "react-redux";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {AppAction, RootState} from "../store/app/appTypes";
-import {changeReport, fetchData, getCSSStatus} from "../store/app/appActions";
+import {getCSSStatus} from "../store/app/appActions";
 import {setCommonState} from "../store/common/commonActions";
 import Loading from "components/loading";
 import {m, AnimatePresence, motion} from "framer-motion";
@@ -25,13 +25,13 @@ const OptimizerInProgress = () => {
 
     const {data, loading, error, settings} = useSelector(optimizerData);
     const [fetchCalled, setFetchCalled] = useState(false);
-    const {options, savingData, setShowInprogress} = useAppContext();
+    const {options, savingData} = useAppContext();
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const url = options?.optimizer_url;
     const {activeReport, cssStatus} = useSelector((state: RootState) => state.app);
     const {inProgress, settingsMode} = useCommonDispatch()
     const loadingStatuses = ['failed', 'queued', 'processing'];
-    const intervalRef = useRef<NodeJS.Timer | null>(null);
+    const intervalRef = useRef<any | null>(null);
     const [loadingRegen, setLoadingRegen] = useState('')
 
     const [checkCircleCount, setCheckCircleCount] = useState(0);
@@ -49,7 +49,6 @@ const OptimizerInProgress = () => {
 
     useEffect(() => {
         dispatch(getCSSStatus(options, url, ['uucss', 'cpcss']));
-        localStorage.setItem('settingsMode', settingsMode as settingsMode);
     }, [dispatch]);
 
     useEffect(() => {
@@ -95,8 +94,8 @@ const OptimizerInProgress = () => {
         }, 10000);
 
         return () => {
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current);
+            if (intervalRef?.current) {
+                clearInterval(intervalRef?.current);
             }
         };
     }, [dispatch, cssStatus, filteredSettings, options, url, statusSent]);
@@ -129,9 +128,6 @@ const OptimizerInProgress = () => {
 
             const timer = setTimeout(() => {
                 setConfettiStatus(false);
-                // setShowInprogress(false);
-                // dispatch(setCommonState('inProgress', false))
-                // dispatch(fetchData(options, url, true));
             }, 5000);
             return () => clearTimeout(timer);
         }
@@ -394,7 +390,6 @@ const OptimizerInProgress = () => {
                     {/*        <Button*/}
                     {/*            onClick={() => {*/}
                     {/*                dispatch(fetchData(options, url, true))*/}
-                    {/*                dispatch(setCommonState('inProgress', false))*/}
                     {/*                setShowInprogress(false);*/}
                     {/*            }}*/}
                     {/*            className={`flex overflow-hidden select-none relative text-sm h-12 rounded-[14px] gap-2 items-center px-4 h-full`}>*/}

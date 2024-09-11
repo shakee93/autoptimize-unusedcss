@@ -5,7 +5,7 @@ interface OptimizerResults  {
     job_id?: string;
     audits: Audit[]
     metrics: Metric[],
-    settingsMode: settingsMode,
+    settingsMode: PerformanceGear,
     loadingExperience?: LoadingExperience
     originLoadingExperience?: LoadingExperience
     grouped: {
@@ -161,10 +161,11 @@ interface AuditSetting {
     inputs: AuditSettingInput[];
     audits: Audit[];
     status?: {
-        status: 'failed' | 'queued' | 'processing' | 'success'
+        status: 'failed' | 'queued' | 'processing' | 'success' | boolean
         stats: []
         warnings: []
         error: any
+        message: string
     }
 }
 
@@ -173,9 +174,23 @@ interface AuditSettingInput {
     control_values:  ControlValue[] | string [] ;
     control_payload: string;
     control_label: string;
+    control_icon: string;
+    control_accordion_name: string;
+    control_description: string;
+    control_values_suffix: string;
+    control_visibility?: {
+        key: string, value: string
+    }[]
     value: any;
     key: any;
     action: string
+    inputs?: AuditSettingInput[]
+    actions?: AuditSettingInput[]
+    readonly?: boolean
+    placeholder?: string
+    control_props?: {
+        [key: string]: any;
+    };
 }
 
 interface ControlValue {
@@ -255,3 +270,7 @@ interface RapidLoadSetOptimizerEvent extends Event {
 }
 
 type CssErrorKeys = 'Critical CSS' | 'Unused CSS';
+
+
+type BasePerformanceGear = 'starter' | 'accelerate' | 'turboMax';
+type PerformanceGear = BasePerformanceGear | 'custom' ;

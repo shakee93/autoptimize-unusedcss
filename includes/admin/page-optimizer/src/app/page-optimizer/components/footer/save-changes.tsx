@@ -25,7 +25,7 @@ import {useAppContext} from "../../../../context/app";
 import {useDispatch, useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
 import {ThunkDispatch} from "redux-thunk";
-import {AppAction, FETCH_DATA_REQUEST, RootState} from "../../../../store/app/appTypes";
+import {AppAction, FETCH_REPORT_REQUEST, RootState} from "../../../../store/app/appTypes";
 import {useToast} from "components/ui/use-toast";
 import {cn} from "lib/utils";
 import useSubmitSettings from "hooks/useSubmitSettings";
@@ -98,10 +98,10 @@ const SaveChanges = () => {
 
     const saveActions =[
         {
-            text: 'Save',
+            text: 'Apply Optimization',
             title: 'Save Changes?',
             description: "You have made changes to your settings. Click 'Save Changes' to apply your modifications or 'Discard' to revert to the previous state.",
-            onClick : submitSettings
+            onClick : () => submitSettings(true)
         },
         {
             text: <div className='flex w-full items-center justify-between'>
@@ -153,7 +153,6 @@ const SaveChanges = () => {
                         {/*        </div>*/}
                         {/*    </Accordion>*/}
 
-
                         {/*</div>*/}
                     </div>
                 :
@@ -163,7 +162,7 @@ const SaveChanges = () => {
                 }
             </div>,
             onClick : () => {
-                submitSettings(false)
+                submitSettings(true)
             },
             action_text: "Apply Optimization"
         },
@@ -196,7 +195,7 @@ const SaveChanges = () => {
     }, [data?.audits]);
 
 
-    const dialogData = useMemo(() => ( computeDialogData(data)), [data?.audits]);
+    const dialogData = useMemo(() => ( computeDialogData(data)), [data]);
 
     const savable = useMemo(() => {
         return  fresh ? true : (touched)
@@ -226,6 +225,11 @@ const SaveChanges = () => {
 
 
                         </Button>
+
+                        {/*<div className='flex gap-2 items-center text-sm text-brand-400'>*/}
+                        {/*    <Loader className='w-5 animate-spin'/>*/}
+                        {/*    Syncing Changes...*/}
+                        {/*</div>*/}
 
                         <UnsavedChanges
                             onCancel={() => { setShowOptimizer(false) }}
@@ -344,7 +348,6 @@ const SaveChanges = () => {
                     </DialogContent>
                 </div>
             </Dialog>
-            <AppButton className='text-sm' onClick={e => setShowOptimizer(false)} variant='secondary'>Close</AppButton>
         </Mode>
         {/*<Mode>*/}
         {/*    {inProgress && <Loading />}*/}

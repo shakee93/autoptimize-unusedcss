@@ -47,7 +47,7 @@ class RapidLoad_Image_Enqueue
             $this->options['uucss_exclude_above_the_fold_image_count'] = 3;
         }
 
-        //$this->preload_images();
+        $this->preload_images();
 
         $this->set_width_and_height();
 
@@ -455,13 +455,13 @@ class RapidLoad_Image_Enqueue
             }
             $iframe->src = $youtube_embed_url;
 
-            $script = '<script>document.addEventListener("DOMContentLoaded",function(){var e=document.querySelectorAll(".rapidload-yt-play-button-' . $video_id . '");e.forEach(function(e){e.addEventListener("click",function(){var t=this.parentElement;this.style.display="none";var n=t.querySelector("iframe"),r=t.querySelector(".rapidload-yt-poster-image-' . $video_id . '");r&& (r.style.display="none");var o=t.querySelector("noscript");o&&(o.outerHTML=o.innerHTML)})})});</script>';
+            $styles = '<style>.rapidload-yt-video-container-' . $video_id . '{position: relative;top: 0;left:0;width:max-content!important;height:100%;display:flex;justify-content:center;background-color:black}.rapidload-yt-poster-image-' . $video_id . '{display:block;}.rapidload-yt-play-button-' . $video_id . '{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:85px;height:65px;background-image:url(\'data:image/svg+xml,%3Csvg width=%2740%27 height=%2730%27 viewBox=%270%200%2040%2030%27 fill=%27none%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Crect x=%2712.1055%27 y=%278.10596%27 width=%2715.7895%27 height=%2714.2105%27 fill=%27white%27/%3E%3Cpath d=%27M31.6925 0.737305H8.30749C3.71938 0.737305 0 4.45669 0 9.04479V20.7348C0 25.3229 3.71938 29.0423 8.30749 29.0423H31.6925C36.2806 29.0423 40 25.3229 40 20.7348V9.04479C40 4.45669 36.2806 0.737305 31.6925 0.737305ZM26.0742 15.4586L15.1363 20.6753C14.8448 20.8143 14.5082 20.6018 14.5082 20.279V9.51941C14.5082 9.19195 14.8537 8.97972 15.1457 9.12774L26.0837 14.6705C26.4089 14.8353 26.4032 15.3017 26.0742 15.4586Z%27 fill=%27%23F61C0D%27/%3E%3C/svg%3E%0A\');background-size:cover;cursor:pointer;z-index: 10000;}</style>';
 
-            $styles = '<style>.rapidload-yt-video-container-' . $video_id . '{position: relative;top: 0;left:0;width:100%;height:100%;display:flex;justify-content:center;background-color:black}.rapidload-yt-poster-image-' . $video_id . '{display:block;height:auto}.rapidload-yt-play-button-' . $video_id . '{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:68px;height:48px;background-image:url(\'data:image/svg+xml,%3Csvg height="100%" version="1.1" viewBox="0 0 68 48" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"%3E%3Cpath class="ytp-large-play-button-bg" d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="%23f00"%3E%3C/path%3E%3Cpath d="M 45,24 27,14 27,34" fill="%23fff"%3E%3C/path%3E%3C/svg%3E\');background-size:cover;cursor:pointer;}</style>';
+            $play_button = $styles . '<div class="rapidload-yt-play-button rapidload-yt-play-button-' . $video_id . '"></div>';
 
-            $play_button = $styles . '<div class="rapidload-yt-play-button rapidload-yt-play-button-' . $video_id . '"></div>' . $script;
+            $place_holder_image = RapidLoad_Image::get_replaced_url(UUCSS_PLUGIN_URL . 'assets/images/yt-placeholder.svg', null, $iframe->width, $iframe->height, ['retina' => 'ret_img']);
 
-            $iframe->outertext = '<div class="rapidload-yt-video-container rapidload-yt-video-container-' . $video_id . '" style="width: 100%">' . $play_button . '<noscript>' . $iframe->outertext . '</noscript>' . '<img class="rapidload-yt-poster-image rapidload-yt-poster-image-' . $video_id . '" alt="" src="' . RapidLoad_Image::get_replaced_url($video_poster, null, $iframe->width, $iframe->height, ['retina' => 'ret_img']) . '" width="' . $iframe->width . '" height="' . $iframe->height . '"/></div>';
+            $iframe->outertext = '<div class="rapidload-yt-video-container rapidload-yt-video-container-' . $video_id . '" style="width: 100%">' . $play_button . '<noscript>' . $iframe->outertext . '</noscript>' . '<img class="rapidload-yt-poster-image rapidload-yt-poster-image-' . $video_id . '" alt="' . $place_holder_image . '" src="' . $place_holder_image . '" width="' . $iframe->width . '" height="' . $iframe->height . '" data-video-id="' . $video_id . '"/></div>';
         }
     }
 

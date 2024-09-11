@@ -31,7 +31,7 @@ class UnusedCSS_Store
 
         $uucss_api = new RapidLoad_Api();
 
-        if(isset($this->args['immediate'])){
+        if(isset($this->args['immediate']) || isset($this->args['titan'])){
 
             if(isset($this->args['titan']) && ($this->job_data->status == 'waiting' || $this->job_data->status == 'processing' || $this->job_data->status == 'success')){
                 return;

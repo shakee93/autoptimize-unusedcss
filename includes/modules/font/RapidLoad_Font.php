@@ -39,6 +39,12 @@ class RapidLoad_Font
         add_filter('rapidload/webfont/handle', [$this, 'handle_web_font_js'], 10, 2);
 
         add_action('rapidload/admin-bar-actions', [$this, 'add_admin_clear_action']);
+
+        add_action('rapidload/cdn/validated', [$this, 'update_cdn_url_in_cached_files']);
+    }
+
+    public function update_cdn_url_in_cached_files($args) {
+        RapidLoad_CDN::update_cdn_url_in_cached_files(self::$base_dir, $args);
     }
 
     public function add_admin_clear_action($wp_admin_bar){
@@ -187,6 +193,8 @@ class RapidLoad_Font
             $css = str_replace($font_url, $cached_font_url, $css);
         }
 
+        $css = apply_filters('rapidload/cpcss/minify', $css, false);
+
         file_put_contents($file_path, $css);
     }
 
@@ -199,6 +207,9 @@ class RapidLoad_Font
 
     public static function download_urls_in_parallel($urls)
     {
+        if(!is_writable(self::$base_dir)){
+            return;
+        }
         $multi_handle = curl_multi_init();
         $file_pointers = [];
         $curl_handles = [];
@@ -207,6 +218,9 @@ class RapidLoad_Font
             $file = self::$base_dir . '/' . basename($url);
             $curl_handles[$key] = curl_init($url);
             $file_pointers[$key] = fopen($file, 'w');
+            if ($file_pointers[$key] === false) {
+                continue;
+            }
             curl_setopt($curl_handles[$key], CURLOPT_FILE, $file_pointers[$key]);
             curl_setopt($curl_handles[$key], CURLOPT_HEADER, 0);
             curl_setopt($curl_handles[$key], CURLOPT_CONNECTTIMEOUT, 60);

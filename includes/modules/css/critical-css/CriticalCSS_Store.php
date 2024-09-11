@@ -10,6 +10,7 @@ class CriticalCSS_Store
     public $options;
 
     public $purged_css;
+    public $purged_mobile_css;
     public $result;
 
     /**
@@ -32,7 +33,24 @@ class CriticalCSS_Store
 
         if(isset($this->args['immediate'])){
 
-            if(isset($this->args['titan']) && ($this->job_data->status == 'waiting' || $this->job_data->status == 'processing' || $this->job_data->status == 'success')){
+            $discontinue = false;
+
+            if(!isset($this->args['titan']) && ($this->job_data->status == 'waiting' || $this->job_data->status == 'processing' || $this->job_data->status == 'success')){
+                return;
+            }
+
+            if(isset($this->args['titan']) && isset($this->args['options']) && isset($this->args['options']['strategy'])){
+
+                $strategy = $this->args['options']['strategy'];
+                $cpcss_data = $this->job_data->get_cpcss_data();
+
+                if(isset($cpcss_data[$strategy]) && !empty($cpcss_data[$strategy]) && ($this->job_data->status == 'success' || $this->job_data->status == 'processing')){
+                    $discontinue = true;
+                }
+
+            }
+
+            if($discontinue){
                 return;
             }
 
@@ -58,11 +76,29 @@ class CriticalCSS_Store
 
             $this->result       = $result;
             $this->purged_css = $result->data;
+            $this->purged_mobile_css = $result->data_mobile;
 
-            $this->cache_file($this->purged_css, $result->data_mobile);
+            $this->cache_file($this->purged_css, $this->purged_mobile_css);
             $this->cpcss_cached($this->job_data->job->url);
 
         }else{
+
+            $discontinue = false;
+
+            if(isset($this->args['titan']) && isset($this->args['options']) && isset($this->args['options']['strategy'])){
+
+                $strategy = $this->args['options']['strategy'];
+                $cpcss_data = $this->job_data->get_cpcss_data();
+
+                if(isset($cpcss_data[$strategy]) && !empty($cpcss_data[$strategy]) && ($this->job_data->status == 'success' || $this->job_data->status == 'processing')){
+                    $discontinue = true;
+                }
+
+            }
+
+            if($discontinue){
+                return;
+            }
 
             $cpcss_config = apply_filters('cpcss/purge/config', ( isset( $this->args['options'] ) ) ? $this->args['options'] : []);
 
@@ -104,8 +140,9 @@ class CriticalCSS_Store
 
                 $this->result       = $result;
                 $this->purged_css = $result->data;
+                $this->purged_mobile_css = $result->data_mobile;
 
-                $this->cache_file($this->purged_css, $result->data_mobile);
+                $this->cache_file($this->purged_css, $this->purged_mobile_css);
                 $this->cpcss_cached($this->job_data->job->url);
 
             }
@@ -113,57 +150,56 @@ class CriticalCSS_Store
         }
     }
 
-    function cache_file($purged_css, $purged_mobile = false, $result = false){
-
-        if(empty($purged_css)){
-            $this->job_data->mark_as_failed('Unknown error occurred');
-            $this->job_data->save();
-            return;
-        }
-
-        if($result){
+    function cache_file($purged_css, $purged_mobile = false, $result = false) {
+        if ($result) {
             $this->result = $result;
         }
 
-        $warnings = isset($this->result) && isset($this->result->meta) ? $this->result->meta->warnings : null;
+        $warnings = isset($this->result->meta->warnings) ? $this->result->meta->warnings : array();
 
-        if(isset($this->result->meta->stats) && isset($this->result->meta->stats->using) && in_array('rapidload', $this->result->meta->stats->using)){
-
-            $warnings[] = [
-                "message" => "Clear your page cache"
-            ];
+        if (isset($this->result->meta->stats->using) && in_array('rapidload', $this->result->meta->stats->using)) {
+            $warnings[] = array("message" => "Clear your page cache");
         }
 
-        $purged_css = apply_filters('rapidload/cache_file_creating/css', $purged_css);
+        $data = $this->job_data->get_cpcss_data();
+        $file_character_length = isset($this->options['rapidload_cpcss_file_character_length']) ? $this->options['rapidload_cpcss_file_character_length'] : 300000;
+        $file_character_length = apply_filters('rapidload/cpcss/file-character-length', $file_character_length);
 
-        $file_name = 'cpcss-' . $this->encode($purged_css) . '.css';
-        $file_name_mobile = str_replace(".css","-mobile.css",$file_name);
-
-        if(!empty($purged_css)){
-
-            if(!$this->file_system->exists( CriticalCSS::$base_dir . '/' . $file_name)){
-                $this->file_system->put_contents(CriticalCSS::$base_dir . '/' . $file_name, $purged_css);
-            }
+        if (!empty($purged_css)) {
+            $purged_css = apply_filters('rapidload/cache_file_creating/css', $purged_css);
+            $data['desktop'] = $this->handle_css_parts($purged_css, '', $file_character_length);
         }
 
-        if(!empty($purged_mobile)){
-
+        if (!empty($purged_mobile)) {
             $purged_mobile = apply_filters('rapidload/cache_file_creating/css', $purged_mobile);
-
-            if(!$this->file_system->exists( CriticalCSS::$base_dir . '/' . $file_name_mobile)){
-                $this->file_system->put_contents(CriticalCSS::$base_dir . '/' . $file_name_mobile, $purged_mobile);
-            }
+            $data['mobile'] = $this->handle_css_parts($purged_mobile, '-mobile', $file_character_length);
         }
 
-        if($this->job_data){
-
-            $this->job_data->mark_as_success($file_name, null, $warnings);
+        if ($this->job_data) {
+            $this->job_data->mark_as_success($data, null, $warnings);
             $this->job_data->save();
             $this->cpcss_cached($this->job_data->job->url);
+        }
+    }
 
+    function handle_css_parts($css, $suffix, $file_character_length) {
+        $parts = CriticalCSS::breakCSSIntoParts($css, $file_character_length);
+        $file_count = count($parts);
+        $file_suffix = $file_count > 1 ? "[$file_count]" : "";
+
+        $file_name = 'cpcss-' . $this->encode($css) . $suffix . '.css';
+        $final_file_name = str_replace('.css', $file_suffix . '.css', $file_name);
+
+        foreach ($parts as $index => $part) {
+            $part_file_name = $index === 0 ? $file_name : str_replace('.css', '-' . ($index + 1) . '.css', $file_name);
+            if (!$this->file_system->exists(CriticalCSS::$base_dir . '/' . $part_file_name)) {
+                $this->file_system->put_contents(CriticalCSS::$base_dir . '/' . $part_file_name, $part);
+            }
         }
 
+        return $final_file_name;
     }
+
 
     public function cpcss_cached($url){
         do_action( 'uucss/cached', [

@@ -13,7 +13,8 @@ const UrlPreview = () => {
 
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
     const {data, loading, error, activeReport} = useSelector(optimizerData);
-    const {mobile, desktop} = useSelector((state: RootState) => state.app);
+    const { report} = useSelector((state: RootState) => state.app);
+    const { mobile, desktop } = report
 
     const {
         togglePerformance,
@@ -26,14 +27,14 @@ const UrlPreview = () => {
         <div>
             <div
                 className='text-sm items-center cursor-default text-ellipsis truncate md:max-w-sm lg:max-w-xl'>
-                {data?.loadingExperience?.initial_url ? decodeURIComponent(data.loadingExperience.initial_url) : url}
+                {data?.loadingExperience?.initial_url ? decodeURIComponent(data.loadingExperience.initial_url.replace('?rapidload_preview', '')) : url}
                 {/*<ArrowTopRightOnSquareIcon className="h-4 w-4" />*/}
             </div>
 
             {!error &&
                 <div
                     className='flex h-4 items-center text-xxs leading-relaxed text-brand-500 cursor-default'>
-                    {loading ?
+                    {!data ?
                         <div
                             className='w-64 bg-brand-300 dark:bg-brand-600 animate-pulse h-2.5 rounded-sm mt-1'></div> :
                         <>

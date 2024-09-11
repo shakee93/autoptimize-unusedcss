@@ -1,5 +1,6 @@
-import {isDev} from "lib/utils";
+import {isDev, toBoolean} from "lib/utils";
 import store from "../store";
+import { toast } from "components/ui/use-toast";
 
 class ApiService {
     public baseURL: URL;
@@ -126,16 +127,62 @@ class ApiService {
         }
     }
 
+    async fetchSettings(url: string, activeReport: string, reload: boolean): Promise<any>  {
+
+        try {
+            let fresh = reload
+            let data = null
+
+            const query = new URLSearchParams();
+
+            this.baseURL.searchParams.append('action', 'fetch_titan_settings')
+            this.baseURL.searchParams.append('url', url)
+            this.baseURL.searchParams.append('strategy', activeReport)
+            this.baseURL.searchParams.append('new', reload as unknown as string)
+            this.baseURL.searchParams.append('is_dev', isDev as unknown as string)
+            // this.baseURL.searchParams.append('settingsMode', settingsMode || '')
+
+            const response = await fetch(this.baseURL, {
+                method: data ? "POST": "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+
+
+            let responseData = await this.throwIfError(response, {
+                fresh: reload
+            });
+
+            if (responseData?.reload) {
+                return await this.fetchPageSpeed(url, activeReport, true);
+            }
+
+            return responseData
+
+        } catch (error) {
+            console.error(error);
+            toast({
+                    description: 'Failed to fetch RapidLoad settings!',
+                    variant: 'destructive',
+                })
+            throw error;
+        }
+    }
+
     async analyzeViaAPI(url: string, strategy: string) {
 
        try {
            const state = store.getState()
-           const data = state.app[state.app.activeReport]
+           const data = state.app.report[state.app.activeReport]
+           const settings = state.app.settings.performance[state.app.activeReport]
+           const testModeStatus = state.app.testMode?.status ?? state.app.settings.general.test_mode ?? false;
+           const previewUrl = testModeStatus ? '?rapidload_preview': '';
 
            const api_root = this.options?.api_root || 'https://api.rapidload.io/api/v1';
            const pageSpeedURL = new URL(`${api_root}/page-speed`);
 
-           pageSpeedURL.searchParams.append('url', url)
+           pageSpeedURL.searchParams.append('url', url + previewUrl)
            pageSpeedURL.searchParams.append('strategy', state.app.activeReport)
            pageSpeedURL.searchParams.append('plugin_version', this.options.rapidload_version)
            pageSpeedURL.searchParams.append('titan_version', __OPTIMIZER_VERSION__)
@@ -150,7 +197,7 @@ class ApiService {
                    "Content-Type": "application/json",
                },
                body: JSON.stringify({
-                   settings: data.settings?.
+                   settings: settings.state?.
                    flatMap(t =>
                        t.inputs
                            .filter(({ value }) => value != null)
@@ -215,7 +262,7 @@ class ApiService {
                 this.baseURL.searchParams.delete('action')
             }
 
-            this.baseURL.searchParams.append('action', 'optimizer_update_settings');
+            this.baseURL.searchParams.append('action', 'update_titan_settings');
 
             if(global) this.baseURL.searchParams.append('global', 'true')
             if(analyze) this.baseURL.searchParams.append('analyze', 'true')
@@ -230,7 +277,12 @@ class ApiService {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    data,
+                    settings: {
+                        general: {
+                          performance_gear: data.activeGear
+                        },
+                        performance: data.settings
+                    },
                 }),
             });
 
