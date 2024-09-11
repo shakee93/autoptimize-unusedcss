@@ -45,6 +45,7 @@ export const optimizerData = createSelector(
         const report = state.report[state.activeReport];
         const settings = state.settings.performance[state.activeReport];
         const activeGear = state.settings.general.performance_gear
+        const actions = state.settings.actions
         const testMode = state.settings.general.test_mode
 
         return {
@@ -52,6 +53,7 @@ export const optimizerData = createSelector(
             activeReport: state.activeReport,
             settings: settings.state,
             settingsLoading: settings.loading,
+            actions,
             activeGear,
             testMode,
             touched: !equal(settings.original, settings.state) || !!optimizeChangesFiles(report.changes).find(i => i?.changed),

@@ -231,7 +231,21 @@ class RapidLoad_Optimizer
                 'performance_gear' => get_option('rapidload_titan_gear', false),
                 'test_mode' => self::$global_options['rapidload_test_mode']
             ],
-            'performance' => $this->transform_options_to_settings($url, self::$merged_options)
+            'performance' => $this->transform_options_to_settings($url, self::$merged_options),
+            'actions' => [
+                [
+                    'control_type' => 'button',
+                    'category' => 'general',
+                    'control_label' => 'Flush Cache',
+                    'control_icon' => 'clear_page_cache',
+                    'control_description' => 'Clear Page Cache',
+                    'action' => add_query_arg( array(
+                        '_action' => 'clearurl',
+                        '_cache'  => 'rapidload-cache',
+                        '_url' => $url,
+                    ), site_url() ),
+                ]
+            ]
         ]);
     }
 
@@ -893,23 +907,38 @@ class RapidLoad_Optimizer
                 'control_values' => array('1', '0'),
                 'default' => '0'
             ),
-            'clear_cdn_cache' => array(
-                'control_type' => 'button',
-                'control_label' => 'Clear CDN Cache',
-                'control_description' => 'Clear resources caches across the CDN network',
-                'action' => 'action=purge_rapidload_cdn&nonce=' . wp_create_nonce( 'uucss_nonce' ),
-            ),
             'uucss_cdn_url' => array(
                 'control_type' => 'input',
                 'readonly' => true,
+                'placeholder' => 'Your CDN url is not populated yet.',
                 'control_label' => 'CDN Endpoint',
                 'control_description' => 'Your CDN endpoint to store and serve all your resources across the CDN network',
-            ),
-            'validate_cdn_url' => array(
-                'control_type' => 'button',
-                'control_label' => 'Validate CDN url',
-                'control_description' => 'validate cdn url',
-                'action' => 'action=validate_cdn&dashboard_cdn_validator&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                'actions' => array(
+                    array(
+                        'key' => 'clear_cdn_cache',
+                        'control_type' => 'button',
+                        'control_label' => 'Clear CDN Cache',
+                        'control_icon' => 'rotate-cw',
+                        'control_description' => 'Clear resources caches across the CDN network',
+                        'action' => 'action=purge_rapidload_cdn&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                    ),
+                    array(
+                        'key' => 'validate_cdn_url',
+                        'control_type' => 'button',
+                        'control_label' => 'Validate CDN URL',
+                        'control_icon' => 'check-circle',
+                        'control_description' => 'Check if the CDN url is working',
+                        'action' => 'action=validate_cdn&dashboard_cdn_validator&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                    ),
+                    array(
+                        'key' => 'copy_cdn_url',
+                        'control_type' => 'button',
+                        'control_label' => 'Copy CDN URL',
+                        'control_icon' => 'clipboard',
+                        'control_description' => 'Copy to clipboard',
+                        'action' => 'clipboard',
+                    ),
+                )
             ),
 
             //Cache settings starts here
@@ -919,19 +948,12 @@ class RapidLoad_Optimizer
                 'control_values' => array('1', '0'),
                 'default' => '0'
             ),
-            'cache_expires' => array(
-                'control_type' => 'checkbox',
-                'control_label' => 'Cache Expiration',
-                'control_description' => 'Cached pages expire.',
-                'control_values' => array('1', '0'),
-                'default' => '0'
-            ),
             'cache_expiry_time' => array(
                 'control_type' => 'number-range',
                 'control_label' => 'Cache Expiration',
                 'control_description' => 'Cached pages expire.',
                 'control_values' => array('0', '2', '6', '12', '24'),
-                'control_values_suffix' => 'hours',
+                'control_values_suffix' => 'h',
                 'default' => '0'
             ),
             'mobile_cache' => array(
@@ -950,7 +972,7 @@ class RapidLoad_Optimizer
             'update_htaccess_file' => array(
                 'control_type' => 'button',
                 'control_label' => 'Setup Policies',
-                'action' => 'action=update_htaccess&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                'action' => 'update_htaccess_file',
                 'default' => ''
             ),
 
@@ -1011,6 +1033,8 @@ class RapidLoad_Optimizer
                         'error' => $data->get_error()
                     ];
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
+                }else if($input['key'] == "update_htaccess_file"){
+                    $settings['status'] = RapidLoad_htaccess::has_rapidload_rules();
                 }else if($input['key'] == "uucss_enable_cpcss"){
                     $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
                     if(!$data->exist()){

@@ -61,12 +61,12 @@ const transformAudit = (audit: Audit, metrics : Metric[]) => {
 
 const transformReport = (data: any) => {
 
-    let metrics = data.data?.page_speed?.metrics.map((metric: Metric) => ({
+    const metrics = data.data?.page_speed?.metrics.map((metric: Metric) => ({
         ...metric,
         potentialGain: metric.refs ? (metric.refs?.weight - (metric.refs?.weight / 100) * metric.score) : 0
     }))
 
-    let audits : Audit[] = data.data.page_speed.audits
+    const audits : Audit[] = data.data.page_speed.audits
         .sort((a: Audit, b: Audit) => a.score - b.score)
         .map( (a: Audit) => transformAudit(a, metrics))
 
@@ -92,7 +92,7 @@ const transformReport = (data: any) => {
         return 0;
     }
 
-    let _data = {
+    const _data = {
         data: {
             performance:  data.data.page_speed.performance ? parseFloat(data.data?.page_speed?.performance.toFixed(0)) : 0,
 
@@ -143,6 +143,7 @@ const transformSettings = (data: any) => {
             performance_gear: data?.data?.general?.performance_gear,
             test_mode: data?.data?.general?.test_mode === "1"
         },
+        actions: data?.data?.actions,
         data: settings.map((s: AuditSetting) => ({
             ...s,
             inputs: s.inputs.map(input => ({
@@ -219,7 +220,7 @@ export const getTestModeStatus = (options: WordPressOptions, url: string, mode?:
     }
 }
 
-export const fetchReport = (options: WordPressOptions, url : string, reload: boolean = false, inprogress: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
+export const fetchReport = (options: WordPressOptions, url : string, reload = false, inprogress = false): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
@@ -268,7 +269,7 @@ export const fetchReport = (options: WordPressOptions, url : string, reload: boo
     };
 };
 
-export const fetchSettings = (options: WordPressOptions, url : string, reload: boolean = false, inprogress: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
+export const fetchSettings = (options: WordPressOptions, url : string, reload = false, inprogress = false): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
@@ -365,7 +366,7 @@ export const changeGear = (
 
     const starter = ['Remove Unused CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
     const accelerate = [...starter, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
-    const turboMax = [...accelerate, 'Delay Javascript', 'Critical CSS'];
+    const turboMax = [...accelerate, 'Delay Javascript', 'Critical CSS', 'Serve next-gen Images (AVIF, WEBP)'];
 
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState)  => {
         const currentState = getState(); // Access the current state

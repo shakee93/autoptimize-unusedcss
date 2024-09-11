@@ -1543,6 +1543,4 @@ class RapidLoad_Admin
         }
     }
 
-
-
 }

@@ -25,6 +25,9 @@ import { RadioButton } from "components/ui/RadioButton";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import {optimizerData} from "../../../../store/app/appSelector";
 import {useSelector} from "react-redux";
+import { Input } from "components/ui/input";
+import { RotateCw, CheckCircle, Clipboard } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "components/ui/tooltip";
 
 interface AdditionalInputsProps {
     input?: AuditSettingInput
@@ -37,14 +40,29 @@ interface AdditionalInputsProps {
     update: (v: any, key: string ) => void
 }
 
+interface Action {
+    key: string;
+    control_type: string;
+    control_label: string;
+    control_icon?: string;
+    control_description: string;
+    action: string;
+}
+
+const iconMap = {
+  'rotate-cw': RotateCw,
+  'check-circle': CheckCircle,
+  'clipboard': Clipboard,
+};
+
 const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
     const { options } = useAppContext()
     const {settings } = useSelector(optimizerData);
-
+    const [activeCategory, setActiveCategory]= useState('third_party')
+    const [actionLoading, setActionLoading] = useState<{ [key: string]: boolean }>({});
     const excludeCategory = ['third_party', 'plugins', 'theme'];
-
 
     const value = useMemo(() => {
 
@@ -80,19 +98,49 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
 
                 toast({
                     description: <div className='flex w-full gap-2 text-center'>Your action is successful <CheckCircleIcon className='w-5 text-green-600'/></div>,
+                    duration: 0, // Set duration to 0
                 })
 
             } catch (error: any) {
 
                 toast({
                     description: <div className='flex w-full gap-2 text-center'>{error.message} <XCircleIcon className='w-5 text-red-600'/></div>,
+                    duration: 0, // Set duration to 0
                 })
             }
             setLoading(false)
         }
     }
 
-    const [activeCategory, setActiveCategory]= useState('third_party')
+
+
+    const handleInputAction = async (action: Action) => {
+        setActionLoading(prev => ({ ...prev, [action.key]: true }));
+
+        try {
+            if (action.action === 'clipboard') {
+                await navigator.clipboard.writeText(value);
+                toast({
+                    description: <div className='flex w-full gap-2 text-center'>CDN URL copied to clipboard <CheckCircleIcon className='w-5 text-green-600'/></div>,
+                    duration: 0, // Set duration to 0
+                });
+            } else {
+                const api = new ApiService(options, action.action);
+                await api.post();
+                toast({
+                    description: <div className='flex w-full gap-2 text-center'>{action.control_label} action successful <CheckCircleIcon className='w-5 text-green-600'/></div>,
+                    duration: 0, // Set duration to 0
+                });
+            }
+        } catch (error: any) {
+            toast({
+                description: <div className='flex w-full gap-2 text-center'>{error.message} <XCircleIcon className='w-5 text-red-600'/></div>,
+                duration: 0, // Set duration to 0
+            });
+        }
+
+        setActionLoading(prev => ({ ...prev, [action.key]: false }));
+    };
 
 
     const groupedData = useMemo(() => {
@@ -197,6 +245,61 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                 />
             </Label>
         }
+        
+        {input.control_type === 'input' &&
+
+            <Label
+                htmlFor="name"
+                className="flex flex-col text-left w-full bg-brand-100/30 dark:text-brand-300 rounded-xl py-4 px-4 border border-brand-200/60"
+            >
+                    <span>{input.control_label}</span>
+                    <span className="pt-2 text-sm font-normal text-gray-600">
+                        {input.control_description}
+                    </span>
+                    <div className="flex w-full items-center gap-2 mt-2">
+                        <Input
+                            id={input.key}
+                            readOnly={input?.readonly || false}
+                            placeholder={input?.placeholder || ''}
+                            className="flex-grow focus:outline-none focus-visible:ring-0 dark:text-brand-300 focus-visible:ring-offset-0"
+                            value={textValue}
+                            onChange={handleChange}
+                        />
+                        <div className="flex-shrink-0 flex gap-2">
+                            {input.actions?.map((action: Action) => {
+                                const IconComponent = action.control_icon ? iconMap[action.control_icon as keyof typeof iconMap] : null;
+                                return (
+                                    <TooltipProvider key={action.key} delayDuration={0}>
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <Button
+                                                    disabled={actionLoading[action.key]}
+                                                    className='flex-shrink-0 flex gap-2 whitespace-nowrap'
+                                                    onClick={() => handleInputAction(action)}
+                                                    variant='outline'
+                                                >
+                                                    {actionLoading[action.key] && <Loader className='w-4 animate-spin -ml-1' />}
+                                                    {IconComponent && <IconComponent className="w-4 h-4" />}
+                                                    {!IconComponent && action.control_label}
+                                                </Button>
+                                            </TooltipTrigger>
+                                            <TooltipContent 
+                                                className="max-w-[200px] p-2 text-sm break-words"
+                                                sideOffset={5}
+                                            >
+                                                <div className="flex flex-col">
+                                                    <span className="font-semibold text-sm mb-1">{action.control_label}</span>
+                                                    <span className="text-xs font-normal truncate">{action.control_description}</span>
+                                                </div>
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    </TooltipProvider>
+                                );
+                            })}
+                        </div>
+                    </div>
+           </Label>
+        }
 
         {input.control_type === 'button' &&
             <Label htmlFor="name" className="flex ml-4 text-left w-full">
@@ -205,7 +308,6 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                     {loading && <Loader className='w-4 animate-spin -ml-1'/>}
                     {input.control_label}
                 </Button>
-                {/*{isDev && (<JsonView data={input} shouldInitiallyExpand={e => false}/>)}*/}
             </Label>
         }
 
@@ -270,7 +372,7 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                                 value={String(value)}
                                 aria-label={value}
                             >
-                                {value}
+                                {value}{input?.control_values_suffix}
                             </ToggleGroupItem>
                         ))}
                     </ToggleGroup>

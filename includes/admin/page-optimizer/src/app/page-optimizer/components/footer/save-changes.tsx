@@ -101,7 +101,7 @@ const SaveChanges = () => {
             text: 'Apply Optimization',
             title: 'Save Changes?',
             description: "You have made changes to your settings. Click 'Save Changes' to apply your modifications or 'Discard' to revert to the previous state.",
-            onClick : submitSettings
+            onClick : () => submitSettings(true)
         },
         {
             text: <div className='flex w-full items-center justify-between'>
@@ -153,7 +153,6 @@ const SaveChanges = () => {
                         {/*        </div>*/}
                         {/*    </Accordion>*/}
 
-
                         {/*</div>*/}
                     </div>
                 :
@@ -163,7 +162,7 @@ const SaveChanges = () => {
                 }
             </div>,
             onClick : () => {
-                submitSettings(false)
+                submitSettings(true)
             },
             action_text: "Apply Optimization"
         },

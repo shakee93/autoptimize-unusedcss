@@ -55,7 +55,8 @@ const initialState: AppState = {
         general: {
             test_mode: true,
             performance_gear: 'accelerate'
-        }
+        },
+        actions: []
     }
 };
 
@@ -70,7 +71,14 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
         case UPDATE_TEST_MODE:
             return {
                 ...state,
-                testMode: action.payload
+                testMode: action.payload,
+                settings: {
+                    ...state.settings,
+                    general: {
+                        ...state.settings.general,
+                        test_mode : action.payload.status 
+                    }
+                }
             };
         case FETCH_REPORT_REQUEST:
             return {
@@ -134,6 +142,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 settings: {
                     ...state.settings,
                     general: action.payload.data.general,
+                    actions: action.payload.data.actions,
                     performance: {
                         ...state.settings.performance,
                         [action.payload.activeReport] : {
@@ -201,7 +210,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
 
             const { payload } = action;
             const activeReport = state.report[state.activeReport];
-            let changes = activeReport.changes.files.filter(f => f.file === payload.file)
+            const changes = activeReport.changes.files.filter(f => f.file === payload.file)
 
             if (changes.length == 0) {
                 activeReport.changes.files.push({
@@ -219,7 +228,6 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                     if (audit.files && audit.files.items && (audit.files.type === 'table' || audit.files.type === 'opportunity')) {
                         const updateActionValue = (item: AuditTableResource) => {
                             if (item.url && typeof item.url === 'object' && item.action && item.url.url === payload.file) {
-
 
                                 // reporting changes
                                 // if (!changes) {

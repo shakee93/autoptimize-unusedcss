@@ -1,4 +1,5 @@
 import {CommonState} from "../common/commonTypes";
+import { LucideIcon } from "lucide-react";
 
 export interface RootState {
     app: AppState;
@@ -39,9 +40,10 @@ export interface AppState {
             }
         },
         general: {
-            test_mode: boolean
+            test_mode: boolean | TestMode
             performance_gear: PerformanceGear
-        }
+        },
+        actions: AuditSettingInput[]
     },
 }
 

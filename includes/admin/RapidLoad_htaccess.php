@@ -290,4 +290,43 @@ HTACCESS;
         return $has_wp_rules;
     }
 
+    public static function has_rapidload_rules() {
+
+        global $is_apache;
+
+        if ( ! $is_apache ) {
+            return [
+                'apache' => false,
+                'has_rapidload_rules' => false,
+                'success' => false
+            ];
+        }
+
+        $htaccess_file = get_home_path() . '.htaccess';
+
+        $file_system = new RapidLoad_FileSystem();
+
+        if(!$file_system->is_readable($htaccess_file)){
+            wp_send_json_error('no access');
+        }
+
+        $htaccess_content = $file_system->get_contents( $htaccess_file );
+
+        if ( false === $htaccess_content ) {
+            return [
+                'apache' => $is_apache,
+                'has_rapidload_rules' => false,
+                'success' => false
+            ];
+        }
+
+        $has_rapidload_rules = (strpos($htaccess_content, '# BEGIN RapidLoad') !== false && strpos($htaccess_content, '# END RapidLoad') !== false);
+
+        return [
+            'apache' => $is_apache,
+            'has_rapidload_rules' => $has_rapidload_rules,
+            'success' => $has_rapidload_rules
+        ];
+    }
+
 }
