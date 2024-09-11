@@ -352,6 +352,12 @@ class RapidLoad_Admin
 
             }
 
+            if(isset($_REQUEST['rapidload_cpcss_file_character_length'])){
+
+                $options['rapidload_cpcss_file_character_length'] = $_REQUEST['rapidload_cpcss_file_character_length'];
+
+            }
+
         }
 
         if(isset($_REQUEST['uucss_excluded_files'])){
