@@ -135,7 +135,7 @@ class ApiService {
 
             const query = new URLSearchParams();
 
-            this.baseURL.searchParams.append('action', 'fetch_titan_settingsx')
+            this.baseURL.searchParams.append('action', 'fetch_titan_settingx')
             this.baseURL.searchParams.append('url', url)
             this.baseURL.searchParams.append('strategy', activeReport)
             this.baseURL.searchParams.append('new', reload as unknown as string)
