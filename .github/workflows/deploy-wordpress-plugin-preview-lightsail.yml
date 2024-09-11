@@ -249,15 +249,19 @@ jobs:
             INSTANCE_ID=${{ github.event.number }}
             WP_CONTAINER=\$(sudo docker ps -q --filter "name=wordpress_\${INSTANCE_ID}")
 
-            echo "update RAPIDLOAD_PLUGIN_COMMIT_ID for : \${WP_CONTAINER}"
+            echo "Remove and re-add RAPIDLOAD_PLUGIN_COMMIT_ID for : \${WP_CONTAINER}"
+
+            # Remove the existing RAPIDLOAD_PLUGIN_COMMIT_ID line if it exists
             sudo docker exec -u root -i \${WP_CONTAINER} sh -c '
-              if grep -q "define( \x27RAPIDLOAD_PLUGIN_COMMIT_ID\x27" /bitnami/wordpress/wp-config.php; then
-                sed -i "s/define( \x27RAPIDLOAD_PLUGIN_COMMIT_ID\x27, \x27.*\x27 );/define( \x27RAPIDLOAD_PLUGIN_COMMIT_ID\x27, \x27${{ github.sha }}\x27 );/" /bitnami/wordpress/wp-config.php;
-              else
-                sed -i "/^\/\*\* Sets up WordPress vars and included files. \*\//i if ( ! defined( \x27RAPIDLOAD_PLUGIN_COMMIT_ID\x27 ) ) { define( \x27RAPIDLOAD_PLUGIN_COMMIT_ID\x27, \x27${{ github.sha }}\x27 ); }" /bitnami/wordpress/wp-config.php;
-              fi
+              sed -i "/define( \x27RAPIDLOAD_PLUGIN_COMMIT_ID\x27/d" /bitnami/wordpress/wp-config.php
             '
-            # Check if the constant was successfully updated
+
+            # Add the RAPIDLOAD_PLUGIN_COMMIT_ID definition again
+            sudo docker exec -u root -i \${WP_CONTAINER} sh -c '
+              sed -i "/^\/\*\* Sets up WordPress vars and included files. \*\//i if ( ! defined( \x27RAPIDLOAD_PLUGIN_COMMIT_ID\x27 ) ) { define( \x27RAPIDLOAD_PLUGIN_COMMIT_ID\x27, \x27${{ github.sha }}\x27 ); }" /bitnami/wordpress/wp-config.php
+            '
+
+            # Check if the constant was successfully added
             sudo docker exec -u root -i \${WP_CONTAINER} sh -c "grep -A 2 'RAPIDLOAD_PLUGIN_COMMIT_ID' /bitnami/wordpress/wp-config.php"
           EOF
 
