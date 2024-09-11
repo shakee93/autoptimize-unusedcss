@@ -233,54 +233,18 @@ class RapidLoad_Optimizer
             ],
             'performance' => $this->transform_options_to_settings($url, self::$merged_options),
             'actions' => [
-                array(
-                    'control_type' => 'button',
-                    'category' => 'general',
-                    'control_label' => 'Clear Site Cache',
-                    'control_icon' => 'clear_cache',
-                    'control_description' => 'Clear Site Cache',
-                    'action' => '?_action=clear&_cache=rapidload-cache&nonce=' . wp_create_nonce( 'rapidload_cache_clear_cache_nonce' ),
-                ),
-                array(
+                [
                     'control_type' => 'button',
                     'category' => 'general',
                     'control_label' => 'Clear Page Cache',
                     'control_icon' => 'clear_page_cache',
-                    'control_description' => 'Clear Site Cache',
-                    'action' => '?_action=clearurl&_cache=rapidload-cache&_url=' . $url .'&nonce=' . wp_create_nonce( 'rapidload_cache_clear_cache_nonce' ),
-                ),
-                array(
-                    'control_type' => 'button',
-                    'category' => 'general',
-                    'control_label' => 'Clear CSS/JS/Font Optimizations',
-                    'control_icon' => 'clear_all_optimizations',
-                    'control_description' => 'Clear CSS/JS/Font Optimizations',
-                    'action' => '?action=rapidload_purge_all&clear=true&nonce=' . wp_create_nonce( 'uucss_nonce' ),
-                ),
-                array(
-                    'control_type' => 'button',
-                    'category' => 'css',
-                    'control_label' => 'Clear CSS Optimizations',
-                    'control_icon' => 'clear_css_optimizations',
-                    'control_description' => 'Clear CSS Optimizations',
-                    'action' => '?action=rapidload_purge_all&job_type=css&nonce=' . wp_create_nonce( 'uucss_nonce' ),
-                ),
-                array(
-                    'control_type' => 'button',
-                    'category' => 'javascript',
-                    'control_label' => 'Clear JS Optimizations',
-                    'control_icon' => 'clear_js_optimizations',
-                    'control_description' => 'Clear JS Optimizations',
-                    'action' => '?action=rapidload_purge_all&job_type=javascript&nonce=' . wp_create_nonce( 'uucss_nonce' ),
-                ),
-                array(
-                    'control_type' => 'button',
-                    'category' => 'font',
-                    'control_label' => 'Clear Font Optimizations',
-                    'control_icon' => 'clear_font_optimizations',
-                    'control_description' => 'Clear Font Optimizations',
-                    'action' => '?action=rapidload_purge_all&job_type=font&nonce=' . wp_create_nonce( 'uucss_nonce' ),
-                )
+                    'control_description' => 'Clear Page Cache',
+                    'action' => add_query_arg( array(
+                        '_action' => 'clearurl',
+                        '_cache'  => 'rapidload-cache',
+                        '_url' => $url,
+                    ), site_url() ),
+                ]
             ]
         ]);
     }
@@ -1008,7 +972,7 @@ class RapidLoad_Optimizer
             'update_htaccess_file' => array(
                 'control_type' => 'button',
                 'control_label' => 'Setup Policies',
-                'action' => 'action=update_htaccess&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                'action' => 'update_htaccess_file',
                 'default' => ''
             ),
 
