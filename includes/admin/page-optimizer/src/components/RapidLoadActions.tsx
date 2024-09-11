@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
-import { Archive, CheckCircleIcon, Code, FileCode2, FileJson, FileJson2, FileMinus2, FileType, Loader, LucideIcon, RefreshCw, RemoveFormatting, Type } from "lucide-react";
+import { Archive, CheckCircleIcon, Code, FileCode2, FileJson, FileJson2, FileMinus2, FileType, Loader, LucideIcon, RefreshCw, RemoveFormatting, Type, XCircleIcon } from "lucide-react";
 import { useSelector } from "react-redux";
 import { optimizerData } from "../store/app/appSelector";
 import Card from "components/ui/card";
@@ -16,7 +16,7 @@ interface ActionItem {
 
 let icons: { [key: string]: ReactNode } = {
     clear_cache: <Archive className='w-3.5' />,
-    clear_page_cache: <FileMinus2 className='w-3.5' />,
+    clear_page_cache: <FileMinus2 className='w-5' />,
     clear_all_optimizations: <FileCode2 className='w-3.5' />,
     clear_css_optimizations: <FileType className='w-3.5' />,
     clear_js_optimizations: <Code className='w-3.5' />,
@@ -64,6 +64,10 @@ const RapidLoadActions: React.FC = () => {
             })
 
         } catch (e) {
+            toast({
+                duration: 10,
+                description: <div className='flex w-full gap-2 text-center items-center'>An error occurred - {e?.message} <XCircleIcon className='w-5 text-red-600' /> </div>
+            });
             console.error(e);
         }
 
@@ -95,27 +99,23 @@ const RapidLoadActions: React.FC = () => {
     }
 
     return (
-
-        <Card className='rounded-xl' >
-            <div className='border-b py-2 text-xs px-6'>Cache Actions</div>
-            <div className='items-center justify-center flex py-1'>
-                {_actions.filter((action: GlobalAction) => activeCategories[action.category] || action.category === 'general').map((action) => (
-                    <TooltipText delay={0} key={action.control_icon} text={action.control_label}>
-                        <AppButton
-                            disabled={action.loading}
-                            onClick={e => triggerAction(action)}
-                            className='rounded-[15px] p-3.5' variant='ghost'>
-                            {action.loading ?
-                                <span>
-                                    <Loader className='motion-safe:animate-spin w-4' />
-                                </span> :
-                                icons[action.control_icon] || icons.default}
-                        </AppButton>
-                    </TooltipText>
-                ))}
-            </div>
-
-        </Card>
+        <div className='items-center justify-center flex py-1'>
+            {_actions.filter((action: GlobalAction) => activeCategories[action.category] || action.category === 'general').map((action) => (
+                <AppButton
+                    disabled={action.loading}
+                    onClick={e => triggerAction(action)}
+                    className='rounded-[15px] p-3.5 ' variant='ghost'>
+                    <div className='flex flex-col gap-1 items-center'>
+                        {action.loading ?
+                            <span>
+                                <Loader className='motion-safe:animate-spin w-4' />
+                            </span> :
+                            icons[action.control_icon] || icons.default}
+                        <span className='text-xxs font-normal text-brand-500'>{action.control_label}</span>
+                    </div>
+                </AppButton>
+            ))}
+        </div>
     );
 };
 

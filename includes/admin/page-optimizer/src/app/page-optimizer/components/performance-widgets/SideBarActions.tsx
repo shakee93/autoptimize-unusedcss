@@ -15,6 +15,7 @@ import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {useRootContext} from "../../../../context/root";
+import RapidLoadActions from "components/RapidLoadActions";
 
 const tourPromptKey = 'titan-tour-prompt'
 
@@ -78,6 +79,9 @@ const SideBarActions = () => {
 
 
         </AppButton>
+
+
+        <RapidLoadActions/>
 
     </Card>
 

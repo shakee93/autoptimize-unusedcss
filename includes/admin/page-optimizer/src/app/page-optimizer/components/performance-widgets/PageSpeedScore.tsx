@@ -281,9 +281,6 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                 <Feedback key={key} />
             </Suspense>
 
-            <RapidLoadActions />
-           
-
         </div>
     </>
 }

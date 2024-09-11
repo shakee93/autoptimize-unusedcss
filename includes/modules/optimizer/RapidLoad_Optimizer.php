@@ -236,7 +236,7 @@ class RapidLoad_Optimizer
                 [
                     'control_type' => 'button',
                     'category' => 'general',
-                    'control_label' => 'Clear Page Cache',
+                    'control_label' => 'Flush Cache',
                     'control_icon' => 'clear_page_cache',
                     'control_description' => 'Clear Page Cache',
                     'action' => add_query_arg( array(
