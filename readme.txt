@@ -4,7 +4,7 @@ Donate link:
 Tags: unusedcss, criticalcss, rapidload, image optimization, minify js
 Requires at least: 5.0
 Tested up to: 6.4
-Stable tag: 2.2.26
+Stable tag: 2.3.0
 Requires PHP: 5.4
 License: GPLv3
 License URI: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
@@ -154,6 +154,13 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 3. RapidLoad Dashboard.
 
 == Changelog ==
+
+= 2.3.0 - 11/09/2024 =
+ * feat: improve ui for better user experience
+ * feat: improve critical css by chunking file
+ * feat: merged the missing plugin settings to titan
+ * fix: update cdn url cache files on cdn url changes
+ * fix: known bugs
 
 = 2.2.26 - 21/08/2024 =
  * fix: showing unused css optimization table when remove unused css option disabled
