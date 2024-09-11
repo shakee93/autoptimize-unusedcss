@@ -90,8 +90,8 @@ const RapidLoadActions: React.FC = () => {
                 <AppButton
                     disabled={action.loading}
                     onClick={e => triggerAction(action)}
-                    className='rounded-[15px] p-3.5 ' variant='ghost'>
-                    <div className='flex flex-col gap-1 items-center'>
+                    className='rounded-[15px]  ' variant='ghost'>
+                    <div className='flex flex-col gap-1 items-center '>
                         {action.loading ?
                             <span>
                                 <Loader className='motion-safe:animate-spin w-4' />

@@ -1,5 +1,6 @@
 import {isDev, toBoolean} from "lib/utils";
 import store from "../store";
+import { toast } from "components/ui/use-toast";
 
 class ApiService {
     public baseURL: URL;
@@ -134,7 +135,7 @@ class ApiService {
 
             const query = new URLSearchParams();
 
-            this.baseURL.searchParams.append('action', 'fetch_titan_settings')
+            this.baseURL.searchParams.append('action', 'fetch_titan_settingsx')
             this.baseURL.searchParams.append('url', url)
             this.baseURL.searchParams.append('strategy', activeReport)
             this.baseURL.searchParams.append('new', reload as unknown as string)
@@ -145,14 +146,7 @@ class ApiService {
                 method: data ? "POST": "GET",
                 headers: {
                     "Content-Type": "application/json",
-                },
-                ...(
-                    data ? {
-                        body : JSON.stringify( {
-                            page_speed: data
-                        })
-                    } : {}
-                )
+                }
             });
 
 
@@ -168,6 +162,10 @@ class ApiService {
 
         } catch (error) {
             console.error(error);
+            toast({
+                    description: 'Failed to fetch RapidLoad settings!',
+                    variant: 'destructive',
+                })
             throw error;
         }
     }
