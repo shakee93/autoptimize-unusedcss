@@ -307,7 +307,12 @@ HTACCESS;
         $file_system = new RapidLoad_FileSystem();
 
         if(!$file_system->is_readable($htaccess_file)){
-            wp_send_json_error('no access');
+            return [
+                'apache' => false,
+                'has_rapidload_rules' => false,
+                'success' => false,
+                'error' => 'no access'
+            ];
         }
 
         $htaccess_content = $file_system->get_contents( $htaccess_file );
@@ -328,5 +333,6 @@ HTACCESS;
             'success' => $has_rapidload_rules
         ];
     }
+
 
 }
