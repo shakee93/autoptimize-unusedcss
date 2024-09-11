@@ -325,7 +325,7 @@ HTACCESS;
         return [
             'apache' => $is_apache,
             'has_rapidload_rules' => $has_rapidload_rules,
-            'success' => $is_apache && $has_rapidload_rules
+            'success' => $has_rapidload_rules
         ];
     }
 
