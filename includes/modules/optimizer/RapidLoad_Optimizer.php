@@ -849,6 +849,7 @@ class RapidLoad_Optimizer
             'uucss_adaptive_image_delivery' => array(
                 'control_type' => 'checkbox',
                 'control_label' => 'Enable adaptive Image delivery',
+                'control_description' => 'Resize your images based on device screen size to reduce download times.',
                 'control_values' => array('1', '0'),
                 'default' => '0',
                 'main_input' => false
@@ -1065,10 +1066,16 @@ class RapidLoad_Optimizer
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }else if($input['key'] == "uucss_enable_cache"){
                     $cache_file = RapidLoad_Cache_Store::get_cache_file($url);
+                    $cache_file_exist = @file_exists($cache_file);
                     $settings['status'] = [
-                        'status' => @file_exists($cache_file),
+                        'status' => $cache_file_exist ? 'success' : 'failed',
                         'file' => $cache_file,
-                        'size' => @file_exists($cache_file) ? $this->formatSize(@filesize($cache_file)) : null,
+                        'size' => $cache_file_exist ? $this->formatSize(@filesize($cache_file)) : null,
+                        'error' => [
+                            'code' => $cache_file_exist ? null : 422,
+                            'message' => $cache_file_exist ? null : 'Cache file not found',
+                        ],
+                        'url' => $url
                     ];
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }else if($input['key'] == "uucss_safelist"){

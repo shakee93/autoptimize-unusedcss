@@ -298,7 +298,11 @@ HTACCESS;
             return [
                 'apache' => false,
                 'has_rapidload_rules' => false,
-                'success' => false
+                'status' => 'failed',
+                'error' => [
+                    'code' => 422,
+                    'message' => 'Server not support'
+                ]
             ];
         }
 
@@ -308,10 +312,13 @@ HTACCESS;
 
         if(!$file_system->is_readable($htaccess_file)){
             return [
-                'apache' => false,
+                'server' => 'apache',
                 'has_rapidload_rules' => false,
-                'success' => false,
-                'error' => 'no access'
+                'status' => 'failed',
+                'error' => [
+                    'code' => 422,
+                    'message' => 'File cannot access'
+                ]
             ];
         }
 
@@ -319,18 +326,26 @@ HTACCESS;
 
         if ( false === $htaccess_content ) {
             return [
-                'apache' => $is_apache,
+                'server' => 'apache',
                 'has_rapidload_rules' => false,
-                'success' => false
+                'status' => 'failed',
+                'error' => [
+                    'code' => 422,
+                    'message' => 'File content empty'
+                ]
             ];
         }
 
         $has_rapidload_rules = (strpos($htaccess_content, '# BEGIN RapidLoad') !== false && strpos($htaccess_content, '# END RapidLoad') !== false);
 
         return [
-            'apache' => $is_apache,
+            'server' => 'apache',
             'has_rapidload_rules' => $has_rapidload_rules,
-            'success' => $has_rapidload_rules
+            'status' => 'success',
+            'error' => [
+                'code' => null,
+                'message' => null
+            ]
         ];
     }
 
