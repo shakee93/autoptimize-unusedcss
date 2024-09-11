@@ -6,6 +6,7 @@ import Card from "components/ui/card";
 import AppButton from "components/ui/app-button";
 import TooltipText from './ui/tooltip-text';
 import { toast } from './ui/use-toast';
+import { useAppContext } from '../context/app';
 
 interface ActionItem {
     id: string;
@@ -25,6 +26,9 @@ let icons: { [key: string]: ReactNode } = {
 
 const RapidLoadActions: React.FC = () => {
     const { actions } = useSelector(optimizerData);
+    const {options} = useAppContext()
+
+    
     let [_actions, setActions] = useState<(AuditSettingInput & { loading: boolean })[]>(actions.map((a: any) => ({
         ...a,
         loading: false
@@ -47,7 +51,7 @@ const RapidLoadActions: React.FC = () => {
                 } : a
             ))
 
-            let result = await fetch(action.action.replace(/&amp;/g, '&'));
+            let result = await fetch(options?.ajax_url + action.action.replace(/&amp;/g, '&'));
 
             toast({
                 duration: 10,
