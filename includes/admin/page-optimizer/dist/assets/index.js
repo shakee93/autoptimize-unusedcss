@@ -124,7 +124,7 @@ var Dp=Object.defineProperty;var $p=(e,r,s)=>r in e?Dp(e,r,{enumerable:!0,config
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
- */const Se=X("Circle",[["circle",{cx:"12",cy:"12",r:"10",key:"1mglay"}]]);/**
+ */const Se=Y("Circle",[["circle",{cx:"12",cy:"12",r:"10",key:"1mglay"}]]);/**
  * @license lucide-react v0.417.0 - ISC
  *
  * This source code is licensed under the ISC license.
