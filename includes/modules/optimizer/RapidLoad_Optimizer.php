@@ -107,7 +107,6 @@ class RapidLoad_Optimizer
             $first_child = $head->first_child();
             $first_child->__set('outertext', $script . $first_child->outertext);*/
 
-
             $body = $state['dom']->find('body', 0);
 
             $frontend_data_content = '<div id="rapidload-preview-container"></div>';
