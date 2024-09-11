@@ -30,11 +30,7 @@ import { RotateCw, CheckCircle, Clipboard } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "components/ui/tooltip";
 
 interface AdditionalInputsProps {
-    input?: AuditSettingInput & {
-        control_props?: {
-            [key: string]: any;
-        };
-    }
+    input?: AuditSettingInput
     inputs?: AuditSettingInput
     data?: AuditSettingInput[]
     updates: {
@@ -228,8 +224,6 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                     />
                 </div>
             </Label>
-
-
         }
 
         {input.control_type === 'textarea' &&
