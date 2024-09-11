@@ -1033,6 +1033,8 @@ class RapidLoad_Optimizer
                         'error' => $data->get_error()
                     ];
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
+                }else if($input['key'] == "update_htaccess_file"){
+                    $settings['status'] = RapidLoad_htaccess::has_rapidload_rules();
                 }else if($input['key'] == "uucss_enable_cpcss"){
                     $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
                     if(!$data->exist()){
