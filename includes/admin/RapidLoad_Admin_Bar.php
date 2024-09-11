@@ -108,8 +108,8 @@ class RapidLoad_Admin_Bar {
                 [
                     'tooltip' => 'Clear CSS/JS/Font Optimizations',
                     'href' => wp_nonce_url( add_query_arg( array(
-                        '_action' => 'rapidload_purge_all',
-                        '_job_type' => 'url'
+                        'action' => 'rapidload_purge_all',
+                        'clear' => 'true'
                     ) ), 'uucss_nonce', '_nonce' ),
                     'icon' => 'clear_optimization'
                 ]
@@ -207,8 +207,8 @@ class RapidLoad_Admin_Bar {
                     'title' => '<span class="ab-label">' . __( 'Clear CSS/JS/Font Optimizations', 'clear_optimization' ) . '</span>',
                     //'href'  => admin_url( 'admin.php?page=rapidload&action=rapidload_purge_all' ),
                     'href'   => wp_nonce_url( add_query_arg( array(
-                        '_action' => 'rapidload_purge_all',
-                        'job_type' => 'url',
+                        'action' => 'rapidload_purge_all',
+                        'clear' => 'true',
                     ) ), 'uucss_nonce', 'nonce' ),
                     'meta'  => array( 'class' => 'rapidload-clear-all', 'title' => 'RapidLoad will clear all the cached files' ),
                     'parent' => 'rapidload'
