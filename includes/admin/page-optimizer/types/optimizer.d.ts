@@ -187,6 +187,9 @@ interface AuditSettingInput {
     actions?: AuditSettingInput[]
     readonly?: boolean
     placeholder?: string
+    control_props?: {
+        [key: string]: any;
+    };
 }
 
 interface ControlValue {

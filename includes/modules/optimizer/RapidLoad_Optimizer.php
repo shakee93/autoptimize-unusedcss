@@ -636,7 +636,7 @@ class RapidLoad_Optimizer
                     'type' => 'number'
                 ],
                 'control_label' => 'CSS Chunck File Size',
-                'control_description' => 'RapidLoad creates chunks of critical CSS to improve speed.',
+                'control_description' => 'Splits large critical CSS files into smaller chunks to improve speed',
                 'default' => 300000
             ),
             'uucss_preload_font_urls' => array(
