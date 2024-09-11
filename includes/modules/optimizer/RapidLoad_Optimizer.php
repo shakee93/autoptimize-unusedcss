@@ -631,9 +631,12 @@ class RapidLoad_Optimizer
                 'default' => '0'
             ),
             'rapidload_cpcss_file_character_length' => array(
-                'control_type' => 'number',
-                'control_label' => 'Critical CSS file length',
-                'control_description' => 'Set length for critical css file',
+                'control_type' => 'input',
+                'control_props' => [
+                    'type' => 'number'
+                ],
+                'control_label' => 'CSS Chunck File Size',
+                'control_description' => 'RapidLoad creates chunks of critical CSS to improve speed.',
                 'default' => 300000
             ),
             'uucss_preload_font_urls' => array(

@@ -30,7 +30,11 @@ import { RotateCw, CheckCircle, Clipboard } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "components/ui/tooltip";
 
 interface AdditionalInputsProps {
-    input?: AuditSettingInput
+    input?: AuditSettingInput & {
+        control_props?: {
+            [key: string]: any;
+        };
+    }
     inputs?: AuditSettingInput
     data?: AuditSettingInput[]
     updates: {
@@ -259,11 +263,13 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                     <div className="flex w-full items-center gap-2 mt-2">
                         <Input
                             id={input.key}
-                            readOnly={input?.readonly || false}
+                            type={input.control_props?.type || "text"}
+                            readOnly={input.control_props?.readonly || input?.readonly || false}
                             placeholder={input?.placeholder || ''}
                             className="flex-grow focus:outline-none focus-visible:ring-0 dark:text-brand-300 focus-visible:ring-offset-0"
                             value={textValue}
                             onChange={handleChange}
+                            {...input.control_props}
                         />
                         <div className="flex-shrink-0 flex gap-2">
                             {input.actions?.map((action: Action) => {

@@ -63,7 +63,7 @@ const RapidLoadActions: React.FC = () => {
                 description: <div className='flex w-full gap-2 text-center items-center'>Successfully completed <CheckCircleIcon className='w-5 text-green-600' /> </div>
             })
 
-        } catch (e) {
+        } catch (e: any) {
             toast({
                 duration: 10,
                 description: <div className='flex w-full gap-2 text-center items-center'>An error occurred - {e?.message} <XCircleIcon className='w-5 text-red-600' /> </div>
@@ -80,27 +80,13 @@ const RapidLoadActions: React.FC = () => {
     }
 
 
-    const activeCategories = useMemo(() => {
-        const activeCategories = settings.reduce((acc, s) => {
-            const category = s.category;
-            const input = s.inputs[0];
-            if (input.control_type === 'checkbox' && input.value === true) {
-                acc[category] = true;
-            } else if (!acc[category]) {
-                acc[category] = false;
-            }
-            return acc;
-        }, {} as Record<string, boolean>);
-        return activeCategories
-    }, [settings])
-
     if(!actions) {
         return <></>
     }
 
     return (
         <div className='items-center justify-center flex py-1'>
-            {_actions.filter((action: GlobalAction) => activeCategories[action.category] || action.category === 'general').map((action) => (
+            {_actions.filter((action: GlobalAction) => action.category === 'general').map((action) => (
                 <AppButton
                     disabled={action.loading}
                     onClick={e => triggerAction(action)}
