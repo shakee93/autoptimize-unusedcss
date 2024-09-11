@@ -617,7 +617,7 @@ class RapidLoad_Optimizer
                 'default' => '0'
             ),
             'rapidload_cpcss_file_character_length' => array(
-                'control_type' => 'textarea',
+                'control_type' => 'number',
                 'control_label' => 'Critical CSS file length',
                 'control_description' => 'Set length for critical css file',
                 'default' => 300000
