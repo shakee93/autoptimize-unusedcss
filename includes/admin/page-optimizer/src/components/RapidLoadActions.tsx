@@ -88,6 +88,7 @@ const RapidLoadActions: React.FC = () => {
         <div className='items-center justify-center flex py-1'>
             {_actions.filter((action: GlobalAction) => action.category === 'general').map((action) => (
                 <AppButton
+                    key={action.control_icon}
                     disabled={action.loading}
                     onClick={e => triggerAction(action)}
                     className='rounded-[15px]  ' variant='ghost'>

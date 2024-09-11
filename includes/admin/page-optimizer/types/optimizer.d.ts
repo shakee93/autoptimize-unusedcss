@@ -161,10 +161,11 @@ interface AuditSetting {
     inputs: AuditSettingInput[];
     audits: Audit[];
     status?: {
-        status: 'failed' | 'queued' | 'processing' | 'success'
+        status: 'failed' | 'queued' | 'processing' | 'success' | boolean
         stats: []
         warnings: []
         error: any
+        message: string
     }
 }
 
