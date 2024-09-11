@@ -1,8 +1,8 @@
-import {buildStyles, CircularProgressbarWithChildren} from "react-circular-progressbar";
-import React, {ReactNode, useEffect, useState, useCallback, useMemo} from "react";
+import { buildStyles, CircularProgressbarWithChildren } from "react-circular-progressbar";
+import React, { ReactNode, useEffect, useState, useCallback, useMemo } from "react";
 import usePerformanceColors from "hooks/usePerformanceColors";
-import {cn} from "lib/utils";
-import {AnimatePresence, m} from "framer-motion";
+import { cn } from "lib/utils";
+import { AnimatePresence, m } from "framer-motion";
 import { Loader } from "lucide-react";
 
 interface PerformanceProgressBarProps {
@@ -89,7 +89,7 @@ const PerformanceProgressBar: React.FC<PerformanceProgressBarProps> = ({
                 loading && 'animate-spin'
             )}
             styles={progressBarStyles}
-            value={score}
+            value={!loading ? score : 85}
         >
             <AnimatePresence initial={false}>
                 <div
@@ -102,7 +102,7 @@ const PerformanceProgressBar: React.FC<PerformanceProgressBarProps> = ({
                     )}
                 >
                     {!loading && <span>{score.toFixed(0)}</span>}
-                    
+
                     <AnimatePresence mode="wait">
                         {loading && message !== -1 && (
                             <m.span
@@ -110,8 +110,8 @@ const PerformanceProgressBar: React.FC<PerformanceProgressBarProps> = ({
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
-                                transition={{ 
-                                    duration: 0.3, 
+                                transition={{
+                                    duration: 0.3,
                                     ease: [0.4, 0, 0.2, 1] // Easing function (ease-out)
                                 }}
                                 className={cn(
@@ -122,13 +122,13 @@ const PerformanceProgressBar: React.FC<PerformanceProgressBarProps> = ({
                             </m.span>
                         )}
                     </AnimatePresence>
-                    
+
                     {children && (
                         <m.div
                             key='children'
-                            initial={{opacity: 0, y: 10}}
-                            animate={{opacity: 1, y: 0}}
-                            exit={{opacity: 0, y: 10}}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 10 }}
                         >
                             {children}
                         </m.div>
