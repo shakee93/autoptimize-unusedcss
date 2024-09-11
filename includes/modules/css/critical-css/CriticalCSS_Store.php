@@ -183,6 +183,15 @@ class CriticalCSS_Store
     }
 
     function handle_css_parts($css, $suffix, $file_character_length) {
+
+        if($file_character_length == "0"){
+            $file_name = 'cpcss-' . $this->encode($css) . $suffix . '.css';
+            if (!$this->file_system->exists(CriticalCSS::$base_dir . '/' . $file_name)) {
+                $this->file_system->put_contents(CriticalCSS::$base_dir . '/' . $file_name, $css);
+            }
+            return $file_name;
+        }
+
         $parts = CriticalCSS::breakCSSIntoParts($css, $file_character_length);
         $file_count = count($parts);
         $file_suffix = $file_count > 1 ? "[$file_count]" : "";
