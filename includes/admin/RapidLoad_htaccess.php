@@ -341,7 +341,7 @@ HTACCESS;
         return [
             'server' => 'apache',
             'has_rapidload_rules' => $has_rapidload_rules,
-            'status' => 'success',
+            'status' => $has_rapidload_rules ? 'success' : 'failed',
             'error' => [
                 'code' => null,
                 'message' => null
