@@ -239,10 +239,7 @@ class RapidLoad_Optimizer
                     'control_label' => 'Clear Site Cache',
                     'control_icon' => 'clear_cache',
                     'control_description' => 'Clear Site Cache',
-                    'action' => wp_nonce_url( add_query_arg( array(
-                        '_cache'  => 'rapidload-cache',
-                        '_action' => 'clear',
-                    ) ), 'rapidload_cache_clear_cache_nonce' ),
+                    'action' => RapidLoad_Admin::get_action_link('clear_site_cache'),
                 ),
                 array(
                     'control_type' => 'button',
@@ -250,11 +247,7 @@ class RapidLoad_Optimizer
                     'control_label' => 'Clear Page Cache',
                     'control_icon' => 'clear_page_cache',
                     'control_description' => 'Clear Site Cache',
-                    'action' => wp_nonce_url( add_query_arg( array(
-                        '_cache'  => 'rapidload-cache',
-                        '_action' => 'clearurl',
-                        '_url' => $this->transform_url($this->get_current_url()),
-                    ) ), 'rapidload_cache_clear_cache_nonce' ),
+                    'action' => RapidLoad_Admin::get_action_link('clear_page_cache', $url),
                 ),
                 array(
                     'control_type' => 'button',
@@ -262,10 +255,7 @@ class RapidLoad_Optimizer
                     'control_label' => 'Clear CSS/JS/Font Optimizations',
                     'control_icon' => 'clear_all_optimizations',
                     'control_description' => 'Clear CSS/JS/Font Optimizations',
-                    'action' => wp_nonce_url( add_query_arg( array(
-                        '_action' => 'rapidload_purge_all',
-                        '_job_type' => 'url'
-                    ) ), 'uucss_nonce', '_nonce' ),
+                    'action' => RapidLoad_Admin::get_action_link('clear_all_optimizations'),
                 ),
                 array(
                     'control_type' => 'button',
@@ -273,11 +263,7 @@ class RapidLoad_Optimizer
                     'control_label' => 'Clear CSS Optimizations',
                     'control_icon' => 'clear_css_optimizations',
                     'control_description' => 'Clear CSS Optimizations',
-                    'action' => wp_nonce_url( add_query_arg( array(
-                        '_action' => 'rapidload_purge_all',
-                        'job_type' => 'css',
-                        'clear' => true,
-                    ) ), 'uucss_nonce', 'nonce' ),
+                    'action' => RapidLoad_Admin::get_action_link('clear_css_optimizations'),
                 ),
                 array(
                     'control_type' => 'button',
@@ -285,11 +271,7 @@ class RapidLoad_Optimizer
                     'control_label' => 'Clear JS Optimizations',
                     'control_icon' => 'clear_js_optimizations',
                     'control_description' => 'Clear JS Optimizations',
-                    'action' => wp_nonce_url( add_query_arg( array(
-                        '_action' => 'rapidload_purge_all',
-                        'job_type' => 'js',
-                        'clear' => true,
-                    ) ), 'uucss_nonce', 'nonce' ),
+                    'action' => RapidLoad_Admin::get_action_link('clear_js_optimizations'),
                 ),
                 array(
                     'control_type' => 'button',
@@ -297,11 +279,7 @@ class RapidLoad_Optimizer
                     'control_label' => 'Clear Font Optimizations',
                     'control_icon' => 'clear_font_optimizations',
                     'control_description' => 'Clear Font Optimizations',
-                    'action' => wp_nonce_url( add_query_arg( array(
-                        '_action' => 'rapidload_purge_all',
-                        'job_type' => 'fonts',
-                        'clear' => true,
-                    ) ), 'uucss_nonce', 'nonce' ),
+                    'action' => RapidLoad_Admin::get_action_link('clear_font_optimizations'),
                 )
             ]
         ]);
