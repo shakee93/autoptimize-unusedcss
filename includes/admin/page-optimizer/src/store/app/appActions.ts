@@ -143,6 +143,7 @@ const transformSettings = (data: any) => {
             performance_gear: data?.data?.general?.performance_gear,
             test_mode: data?.data?.general?.test_mode === "1"
         },
+        actions: data?.data?.actions,
         data: settings.map((s: AuditSetting) => ({
             ...s,
             inputs: s.inputs.map(input => ({

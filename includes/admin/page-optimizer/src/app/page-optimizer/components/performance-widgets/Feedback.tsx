@@ -92,7 +92,7 @@ const Feedback = () => {
 
     return (
         <Card className={cn(
-            'flex flex-col gap-4 px-6 py-5 xl:mb-12 bg-brand-0/70'
+            'flex flex-col gap-4 px-6 py-5 bg-brand-0/70 rounded-xl'
         )}>
             <div className='flex flex-col gap-0.5'>
                 <div className='text-sm font-medium'>How was the experience?</div>

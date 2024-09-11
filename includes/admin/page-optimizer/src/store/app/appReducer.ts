@@ -55,7 +55,8 @@ const initialState: AppState = {
         general: {
             test_mode: true,
             performance_gear: 'accelerate'
-        }
+        },
+        actions: []
     }
 };
 
@@ -141,6 +142,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 settings: {
                     ...state.settings,
                     general: action.payload.data.general,
+                    actions: action.payload.data.actions,
                     performance: {
                         ...state.settings.performance,
                         [action.payload.activeReport] : {
