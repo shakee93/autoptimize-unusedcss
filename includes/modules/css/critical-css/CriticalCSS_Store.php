@@ -162,7 +162,8 @@ class CriticalCSS_Store
         }
 
         $data = $this->job_data->get_cpcss_data();
-        $file_character_length = isset($this->options['rapidload_cpcss_file_character_length']) ? $this->options['rapidload_cpcss_file_character_length'] : 300000;
+        $file_chunk_enabled = isset($this->options['rapidload_enable_cpcss_file_chunk']) && $this->options['rapidload_enable_cpcss_file_chunk'] == "1";
+        $file_character_length = $file_chunk_enabled && isset($this->options['rapidload_cpcss_file_character_length']) ? $this->options['rapidload_cpcss_file_character_length'] : 0;
         $file_character_length = apply_filters('rapidload/cpcss/file-character-length', $file_character_length);
 
         if (!empty($purged_css)) {
