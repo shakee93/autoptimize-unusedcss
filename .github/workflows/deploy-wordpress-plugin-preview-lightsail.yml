@@ -293,6 +293,30 @@ jobs:
             fi
           EOF
 
+      - name: Run npm build in Docker Container
+        run: |
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
+            INSTANCE_ID=${{ github.event.number }}
+            WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
+            PLUGIN_PATH=/bitnami/wordpress/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer
+            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "
+              cd ${PLUGIN_PATH}
+              if [ -f package.json ]; then
+                echo 'Running npm install...'
+                npm install
+                echo 'Running npm run build...'
+                npm run build
+              else
+                echo 'package.json not found in ${PLUGIN_PATH}'
+              fi
+            "
+            if [ $? -eq 0 ]; then
+              echo "npm run build executed successfully in ${WP_CONTAINER}"
+            else
+              echo "Failed to run npm build in ${WP_CONTAINER}"
+            fi
+          EOF
+
       - name: Activate Plugin in Docker Container
         if: ${{ github.event.action == 'opened' }}
         run: |
