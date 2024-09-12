@@ -294,7 +294,7 @@ jobs:
           EOF
 
       - name: Activate Plugin in Docker Container
-        #if: ${{ github.event.action == 'opened' }}
+        if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
