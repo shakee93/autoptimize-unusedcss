@@ -632,7 +632,7 @@ class RapidLoad_Optimizer
                 'control_visibility' => [
                     [
                         'key' => 'rapidload_enable_cpcss_file_chunk',
-                        'value' => '1',
+                        'value' => true,
                     ]
                 ]
             ),
