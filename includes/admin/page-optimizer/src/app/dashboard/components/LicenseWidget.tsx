@@ -13,12 +13,12 @@ const LicenseWidget = () => {
     const [license, setLicense] = useState<License | null>(null);
 
     useEffect(() => {
-        const storedLicense = localStorage.getItem('RapidloadLicense');
+        const storedLicense = localStorage.getItem('rapidLoadLicense');
+
         if (storedLicense) {
             setLicense(JSON.parse(storedLicense));
-            console.log(storedLicense)
         }
-        console.log(window?.uucss_global?.active_modules.general)
+
     }, []);
 
     const toggleVisibility = () => {
@@ -33,6 +33,7 @@ const LicenseWidget = () => {
                       'overflow-hidden border border-transparent flex flex-col sm:flex-row lg:flex-col justify-around border-brand-200 dark:border-brand-800',
                   )}>
                 <div className="content flex w-full sm:w-1/2 lg:w-full flex-col px-6 pt-6 ">
+
                     <div className="text-lg font-bold text-brand-400 dark:text-brand-300">Welcome back,</div>
                     <div className="text-lg font-bold pb-2">{license?.name}</div>
 
@@ -103,32 +104,28 @@ const LicenseWidget = () => {
                     {/*        checked={true}*/}
                     {/*    />*/}
                     {/*</div>*/}
-                    <div className="text-xs text-brand-500 dark:text-brand-300 font-light">Your personal details are secured by RapidLoad.</div>
-                    <div className="grid grid-cols-3 gap-3">
-                        <div className="grid grid-cols-subgrid gap-3 col-span-3 justify-end">
-                            <div className="col-start-2">
-                                <button
-                                    className="mt-4 justify-center cursor-pointer transition duration-300 text-sm font-semibold text-brand-500 py-1.5">
-                                    View My Account
-                                </button>
-                            </div>
-                            <div className="col-start-3">
-                                <button
-                                    className="mt-4 justify-center cursor-pointer transition duration-300 bg-purple-750 text-sm font-semibold text-white py-1.5 px-4 border border-purple rounded-lg">
-                                    Upgrade Plan
-                                </button>
-                            </div>
-                        </div>
+                    <div className="text-xs text-brand-500 dark:text-brand-300 font-light">Your personal details are
+                        secured by RapidLoad.
                     </div>
+                    <div className="flex gap-6 justify-end">
+                        <button
+                            className="mt-4 cursor-pointer transition duration-300 text-sm font-semibold text-brand-500 py-1.5">
+                            View My Account
+                        </button>
+                        <button
+                            className="mt-4 cursor-pointer transition duration-300 bg-purple-750 text-sm font-semibold text-white py-1.5 px-4 border border-purple rounded-lg">
+                            Upgrade Plan
+                        </button>
+                    </div>
+
 
                 </div>
 
             </Card>
 
 
-
         </div>
-    </>
+        </>
     );
 };
 

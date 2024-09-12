@@ -1,9 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Card from "components/ui/card";
 import { cn } from "lib/utils";
 import { InformationCircleIcon, LinkIcon, CalendarIcon, EllipsisHorizontalCircleIcon,PencilSquareIcon, TrashIcon,ArrowTrendingUpIcon,ArrowTrendingDownIcon } from "@heroicons/react/24/outline";
 import PerformanceProgressBar from "components/performance-progress-bar";
 import { ScoreIcon} from "app/dashboard/components/icons/icon-svg";
+import { PlusIcon, FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import {ContentSelector} from "components/ui/content-selector";
+import AppButton from "components/ui/app-button"
 
 interface Settings {
     title: string;
@@ -19,6 +31,8 @@ interface Settings {
 
 
 const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => {
+    const [open, setOpen] = useState(false);
+
     return (
         <>
             <div className='w-full flex flex-col gap-4'>
@@ -28,14 +42,66 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                           )}>
 
                         <div className="content flex w-full sm:w-1/2 lg:w-full flex-col px-3 py-3 ">
-                            <div className='flex gap-2 items-center '>
+                            <div className='flex gap-2 items-center justify-between'>
                                 <div className="text-sm font-semibold dark:text-brand-300">{settings.title}</div>
+                                <div className="flex gap-4">
+                                    <div className="relative w-full">
+                                        <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                                                <MagnifyingGlassIcon className="h-6 w-6 text-brand-400/60"/>
+                                        </span>
+                                        <input
+                                            type="text"
+                                            placeholder="Search"
+                                            className="w-full pl-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400"
+                                        />
+                                    </div>
+
+                                    <button
+                                        className="dark:text-brand-950 border border-1 border-brand-300 bg-brand-0 px-3 py-1.5 rounded-lg flex w-fit gap-2 items-center cursor-pointer">
+                                        <FunnelIcon
+                                            className="w-5 h-5"/>Filter
+                                    </button>
+                                    <button
+                                        className="dark:text-brand-950 text-brand-0 bg-violet-950 px-3 py-1.5 rounded-lg flex w-fit gap-2 items-center cursor-pointer">
+                                        <PlusIcon
+                                            className="w-5 h-5 text-brand-0"/>Add
+                                    </button>
+
+                                    <Dialog open={open} onOpenChange={setOpen}>
+                                        <DialogTrigger asChild>
+                                            <button
+                                                className="dark:text-brand-950 text-brand-0 bg-violet-950 px-3 py-1.5 rounded-lg flex w-fit gap-2 items-center cursor-pointer"
+                                            >
+                                                <PlusIcon className="w-5 h-5 text-brand-0" />
+                                                Add
+                                            </button>
+                                        </DialogTrigger>
+
+                                        {/* DialogContent with ContentSelector */}
+                                        <DialogContent className="sm:max-w-[650px]">
+                                            <DialogHeader className='border-b px-6 py-4'>
+                                                <DialogTitle>Select Content to Optimize</DialogTitle>
+                                            </DialogHeader>
+                                            <div className="px-6 py-4">
+                                                {/* Render ContentSelector component */}
+                                                <ContentSelector />
+                                            </div>
+                                            <DialogFooter className='px-6 py-3 border-t'>
+                                                <AppButton onClick={() => setOpen(false)} variant='outline' className='text-sm'>Close</AppButton>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
+
+                                </div>
+
                             </div>
+
                             <div className="flex flex-col mt-4">
                                 <div className="-m-1.5 overflow-x-auto">
                                     <div className="p-1.5 min-w-full inline-block align-middle">
                                         <div className="border rounded-2xl overflow-hidden">
-                                            <table className="min-w-full divide-y divide-gray-200 dark:divide-brand-950">
+                                        <table
+                                                className="min-w-full divide-y divide-gray-200 dark:divide-brand-950">
                                                 <thead className="dark:bg-brand-900">
                                                 <tr>
                                                     <th scope="col"
@@ -62,7 +128,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                                     <th scope="col"
                                                         className="px-6 py-4 text-start text-xs font-medium uppercase">
                                                         <div className="flex items-center gap-2">
-                                                            <EllipsisHorizontalCircleIcon  className="h-4 w-4"/> Actions
+                                                            <EllipsisHorizontalCircleIcon className="h-4 w-4"/> Actions
                                                         </div>
 
 
@@ -78,18 +144,25 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                                             {item.pageScore.includes('+') ? (
                                                                 <span
                                                                     className="bg-green-200/40 px-3 py-1.5 rounded-xl flex w-fit gap-2 items-center cursor-pointer text-green-700 ">
-                                                                    {item.pageScore} <ArrowTrendingUpIcon className="w-4 h-4"/>
+                                                                    {item.pageScore} <ArrowTrendingUpIcon
+                                                                    className="w-4 h-4"/>
                                                                 </span>
                                                             ) : item.pageScore.includes('-') ? (
                                                                 <span
                                                                     className="bg-red-200/40 px-3 py-1.5 rounded-xl flex w-fit gap-2 items-center cursor-pointer text-green-700 ">
-                                                                    {item.pageScore} <ArrowTrendingDownIcon className="w-4 h-4"/>
+                                                                    {item.pageScore} <ArrowTrendingDownIcon
+                                                                    className="w-4 h-4"/>
                                                                 </span>
                                                             ) : (
                                                                 <span>{item.pageScore}</span>
                                                             )}
-                                                        </td>                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-brand-300">{item.updateDate}</td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center gap-2 "><span className="dark:text-brand-950 bg-gray-100 px-3 py-1.5 rounded-xl flex w-fit gap-2 items-center cursor-pointer"><PencilSquareIcon className="w-4 h-4"/>{item.actions}</span> <TrashIcon className="w-4 h-4 cursor-pointer"/></td>
+                                                        </td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-brand-300">{item.updateDate}</td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center gap-2 ">
+                                                            <span
+                                                                className="dark:text-brand-950 bg-gray-100 px-3 py-1.5 rounded-xl flex w-fit gap-2 items-center cursor-pointer"><PencilSquareIcon
+                                                                className="w-4 h-4"/>{item.actions}</span> <TrashIcon
+                                                            className="w-4 h-4 cursor-pointer"/></td>
                                                     </tr>
                                                 ))}
                                                 </tbody>

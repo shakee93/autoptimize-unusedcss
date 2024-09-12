@@ -30,7 +30,7 @@ import SlideUp from "components/animation/SlideUp";
 import {JsonView} from "react-json-view-lite";
 import ErrorFetch from "components/ErrorFetch";
 import SpeedInsights from "../speed-popover/components/speed-insights";
-
+import {ContentSelector} from "components/ui/content-selector";
 export interface AuditComponentRef {
     notifyHeightChange: () => void;
 }
@@ -141,7 +141,7 @@ export default function Dashboard() {
 
                                 <div className="">
 
-                                    <div   className="widgets pt-4 gap-4 grid">
+                                    <div className="widgets pt-4 gap-4 grid">
                                         <LicenseWidget/>
 
                                     </div>
@@ -149,7 +149,7 @@ export default function Dashboard() {
 
                                 <div className="col-span-2">
                                     <div className="widgets pt-4 gap-4 grid">
-                                        <SpeedInsights >
+                                        <SpeedInsights>
 
                                         </SpeedInsights>
                                     </div>
@@ -157,38 +157,38 @@ export default function Dashboard() {
 
                                 <div className="">
 
-                                    <div   className="widgets flex">
+                                    <div className="widgets flex">
                                         <CDNSummary/>
                                     </div>
                                 </div>
                                 <div className="">
 
-                                    <div   className="widgets flex">
+                                    <div className="widgets flex">
                                         <CacheSummary/>
                                     </div>
                                 </div>
 
                                 <div className="">
 
-                                    <div   className="widgets gap-4 grid">
+                                    <div className="widgets gap-4 grid">
                                         <UnusedCSSSummary
                                             settings={[
                                                 {
                                                     title: "Unused CSS summary",
                                                     total_jobs: 1000,
                                                     items: [
-                                                        { label: "Success jobs", value: "153 jobs", performance: 95 },
-                                                        { label: "Failed jobs", value: "153 jobs", performance: 95 },
-                                                        { label: "Warning jobs", value: "153 jobs", performance: 95 }
+                                                        {label: "Success jobs", value: "153 jobs", performance: 95},
+                                                        {label: "Failed jobs", value: "153 jobs", performance: 95},
+                                                        {label: "Warning jobs", value: "153 jobs", performance: 95}
                                                     ]
                                                 },
                                                 {
                                                     title: "Critical CSS summary",
                                                     total_jobs: 1000,
                                                     items: [
-                                                        { label: "Success jobs", value: "153 jobs", performance: 95 },
-                                                        { label: "Failed jobs", value: "153 jobs", performance: 95 },
-                                                        { label: "Warning jobs", value: "153 jobs", performance: 95 }
+                                                        {label: "Success jobs", value: "153 jobs", performance: 95},
+                                                        {label: "Failed jobs", value: "153 jobs", performance: 95},
+                                                        {label: "Warning jobs", value: "153 jobs", performance: 95}
                                                     ]
                                                 }
                                             ]}
@@ -199,21 +199,26 @@ export default function Dashboard() {
 
                                 <div className="col-span-3">
                                     <div className="widgets gap-4 grid">
-                                       <OptimizerPagesTable
-                                           settings={
-                                               {
-                                                   title: "Optimize Pages",
-                                                   total_jobs: 1000,
-                                                   data: dummyTableData
-                                               }
+                                        <OptimizerPagesTable
+                                            settings={
+                                                {
+                                                    title: "Optimize Pages",
+                                                    total_jobs: 1000,
+                                                    data: dummyTableData
+                                                }
                                             }
-                                       />
+                                        />
                                     </div>
                                 </div>
 
                                 <div className="col-span-3">
                                     <div className="widgets gap-4 grid">
-                                       <GeneralSettings/>
+                                        <GeneralSettings/>
+                                    </div>
+                                </div>
+                                <div className="col-span-3">
+                                    <div className="widgets gap-4 grid">
+                                        <ContentSelector/>
                                     </div>
                                 </div>
                                 {/*<article className={cn(*/}
