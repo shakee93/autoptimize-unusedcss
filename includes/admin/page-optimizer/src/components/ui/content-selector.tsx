@@ -3,12 +3,12 @@ import { ArrowRightIcon, PlusIcon, ArrowLeftIcon } from "@heroicons/react/24/out
 
 const ContentSelector = () => {
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedContent, setSelectedContent] = useState(null); // Track selected content
-    const [isDetailVisible, setIsDetailVisible] = useState(false); // Track if detailed list is visible
+    const [selectedContent, setSelectedContent] = useState(null);
+    const [isDetailVisible, setIsDetailVisible] = useState(false);
     const [showItem, setShowItem] = useState(false);
-    const [currentItem, setCurrentItem] = useState(null); // Track current item for header
+    const [currentItem, setCurrentItem] = useState(null);
 
-    // Define the content types and their counts
+
     const contentTypes = [
         { label: 'Pages', count: 5, type: 'pages' },
         { label: 'Products', count: 6, type: 'products' },
@@ -16,7 +16,7 @@ const ContentSelector = () => {
         { label: 'Categories', count: 7, type: 'categories' },
     ];
 
-    // Example dynamic lists for each content type
+
     const dynamicData = {
         pages: [
             { name: 'All Pages', hasSubList: true },
@@ -50,24 +50,24 @@ const ContentSelector = () => {
         setSearchTerm(e.target.value);
     };
 
-    // Handle click on main content list items (e.g., Pages, Products)
+
     const handleClick = (type) => {
-        setSelectedContent(type); // Set the selected content type
-        setIsDetailVisible(true); // Show the detail page list
+        setSelectedContent(type);
+        setIsDetailVisible(true);
     };
 
     const handleBackClick = () => {
-        setIsDetailVisible(false); // Go back to the main content list
+        setIsDetailVisible(false);
         setShowItem(false);
-        setCurrentItem(null); // Reset current item
+        setCurrentItem(null);
     };
 
-    // Filter content types based on search term for the main list
+
     const filteredContent = contentTypes.filter((content) =>
         content.label.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // Filter selected content's items based on the search term for detailed lists
+
     const filteredSelectedList = selectedContent
         ? dynamicData[selectedContent].filter((item) =>
             item.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -76,8 +76,8 @@ const ContentSelector = () => {
 
     const handleItemClick = (item) => {
         if (item.hasSubList) {
-            setShowItem(true); // Show items when going back
-            setCurrentItem(item); // Set current item for header
+            setShowItem(true);
+            setCurrentItem(item);
         }
     };
 
@@ -86,7 +86,7 @@ const ContentSelector = () => {
 
             {/* Header Section */}
             <div className="flex items-center px-6 py-3">
-                {/* Conditionally render the back button */}
+
                 {isDetailVisible && (
                     <button onClick={handleBackClick} className="mr-3">
                         <ArrowLeftIcon className="h-6 w-6 text-gray-500" />
