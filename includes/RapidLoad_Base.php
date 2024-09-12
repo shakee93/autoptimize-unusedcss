@@ -608,7 +608,8 @@ class RapidLoad_Base
             'uucss_exclude_above_the_fold_image_count' => 3,
             'uucss_enable_page_optimizer' => "1",
             'rapidload_test_mode' => "1",
-            'rapidload_cpcss_file_character_length' => 300000
+            'rapidload_cpcss_file_character_length' => 0,
+            'uucss_adaptive_image_delivery' => "1",
         ];
     }
 
