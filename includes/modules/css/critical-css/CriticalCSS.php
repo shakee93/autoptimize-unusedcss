@@ -502,13 +502,8 @@ class CriticalCSS
         }
 
         foreach ($cssDocument->getContents() as $content) {
-            if ($content instanceof \Sabberworm\CSS\RuleSet\DeclarationBlock) {
-                $blockContent = $content->render(Sabberworm\CSS\OutputFormat::createCompact());
-                addToCurrentRapidLoadCpssPart($currentPart, $currentLength, $cssParts, $blockContent, $maxLength);
-            } elseif ($content instanceof \Sabberworm\CSS\RuleSet\AtRuleBlockList) {
-                $blockContent = $content->render(Sabberworm\CSS\OutputFormat::createCompact());
-                addToCurrentRapidLoadCpssPart($currentPart, $currentLength, $cssParts, $blockContent, $maxLength);
-            }
+            $blockContent = $content->render(Sabberworm\CSS\OutputFormat::createCompact());
+            addToCurrentRapidLoadCpssPart($currentPart, $currentLength, $cssParts, $blockContent, $maxLength);
         }
         if (!empty($currentPart)) {
             $cssParts[] = $currentPart;
