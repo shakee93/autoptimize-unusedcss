@@ -2,6 +2,7 @@ import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {AnyAction} from 'redux';
 import {
     AppAction,
+    CHANGE_GEAR,
     CHANGE_REPORT_TYPE,
     FETCH_REPORT_FAILURE,
     FETCH_REPORT_REQUEST,
@@ -17,9 +18,6 @@ import {
 } from "./appTypes";
 import ApiService from "../../services/api";
 import Audit from "app/page-optimizer/components/audit/Audit";
-
-import SampleSettings from '../../lib/sample-settings'
-
 
 const transformAudit = (audit: Audit, metrics : Metric[]) => {
 
@@ -63,12 +61,12 @@ const transformAudit = (audit: Audit, metrics : Metric[]) => {
 
 const transformReport = (data: any) => {
 
-    let metrics = data.data?.page_speed?.metrics.map((metric: Metric) => ({
+    const metrics = data.data?.page_speed?.metrics.map((metric: Metric) => ({
         ...metric,
         potentialGain: metric.refs ? (metric.refs?.weight - (metric.refs?.weight / 100) * metric.score) : 0
     }))
 
-    let audits : Audit[] = data.data.page_speed.audits
+    const audits : Audit[] = data.data.page_speed.audits
         .sort((a: Audit, b: Audit) => a.score - b.score)
         .map( (a: Audit) => transformAudit(a, metrics))
 
@@ -94,7 +92,7 @@ const transformReport = (data: any) => {
         return 0;
     }
 
-    let _data = {
+    const _data = {
         data: {
             performance:  data.data.page_speed.performance ? parseFloat(data.data?.page_speed?.performance.toFixed(0)) : 0,
 
@@ -111,26 +109,42 @@ const transformReport = (data: any) => {
         },
 
         success: data.success,
-        settings: initiateSettings(audits),
-        revisions: data.data.revisions,
+        // settings: initiateSettings(audits),
+        revisions: data.data.revisions.map(({created_at, timestamp, data, id }: any) => {
+            return {
+                id,
+                created_at,
+                timestamp,
+                data: {
+                    performance: data.performance
+                }
+            }
+        }),
         individual_file_actions: data.data['individual-file-actions'],
         state: data.state
     };
 
 
+    delete _data.data.audits
     return _data
 }
 
 const transformSettings = (data: any) => {
 
-    const settings = SampleSettings;
 
-    const flattenedSettings = settings.flat();
+    if (!data.success) {
+        return data
+    }
 
-    const uniqueSettings = Array.from(new Set(flattenedSettings.map((setting: any) => JSON.stringify(setting)))).map((str: any) => JSON.parse(str));
+    const settings = data?.data?.performance || [];
 
     return {
-        data: uniqueSettings.map((s: AuditSetting) => ({
+        general: {
+            performance_gear: data?.data?.general?.performance_gear,
+            test_mode: data?.data?.general?.test_mode === "1"
+        },
+        actions: data?.data?.actions,
+        data: settings.map((s: AuditSetting) => ({
             ...s,
             inputs: s.inputs.map(input => ({
                 ...input,
@@ -139,35 +153,20 @@ const transformSettings = (data: any) => {
                     {
                         value: input.value === '1' || input.value === true
                     }
-                )
+                ),
+                ...(input.inputs && {
+                    inputs: input.inputs.map(i => {
+                        return {
+                            ...i,
+                            value: i.control_type === 'checkbox' ? input.value === '1' || input.value === true : i.value
+                        }
+                    })
+                }),
             }))
         }))
     }
 }
 
-// this grabs the data and populates a settings object with values
-const initiateSettings = (audits: Audit[]) => {
-
-    let settings = audits.map((a: { settings: any; }) => a.settings).filter((i: string | any[]) => i.length)
-
-    const flattenedSettings = settings.flat();
-
-    const uniqueSettings = Array.from(new Set(flattenedSettings.map((setting: any) => JSON.stringify(setting)))).map((str: any) => JSON.parse(str));
-
-    // convert 1's to true and false in checkbox
-    return uniqueSettings.map((s: AuditSetting) => ({
-        ...s,
-        inputs: s.inputs.map(input => ({
-            ...input,
-            ...(
-                input.control_type === 'checkbox' &&
-                {
-                    value: input.value === '1' || input.value === true
-                }
-            )
-        }))
-    }))
-}
 
 export const getCSSStatus = (options: WordPressOptions, url: string, types: string[]): ThunkAction<void, RootState, unknown, AnyAction> => {
 
@@ -221,7 +220,7 @@ export const getTestModeStatus = (options: WordPressOptions, url: string, mode?:
     }
 }
 
-export const fetchReport = (options: WordPressOptions, url : string, reload: boolean = false, inprogress: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
+export const fetchReport = (options: WordPressOptions, url : string, reload = false, inprogress = false): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
@@ -270,7 +269,7 @@ export const fetchReport = (options: WordPressOptions, url : string, reload: boo
     };
 };
 
-export const fetchSettings = (options: WordPressOptions, url : string, reload: boolean = false, inprogress: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
+export const fetchSettings = (options: WordPressOptions, url : string, reload = false, inprogress = false): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
@@ -278,15 +277,19 @@ export const fetchSettings = (options: WordPressOptions, url : string, reload: b
         try {
             const currentState = getState(); // Access the current state
             const activeReport = currentState.app.activeReport;
-            const activeReportData = currentState.app.settings[activeReport]
+            const activeSettingsData = currentState.app.settings.performance[activeReport]
 
-            // TODO: don't let people bam on keyboard while waiting to laod the page speed
+            // TODO: don't let people bam on keyboard while waiting to load the page speed
             // if(activeReportData.loading && activeReportData.data ) {
             //     console.log('don\'t bam the mouse! we are loading your page speed details 😉');
             //     return;
             // }
 
-            if (activeReportData.loading) {
+            if (activeSettingsData.loading) {
+                return;
+            }
+
+            if (activeSettingsData?.state?.length > 0 && !reload) {
                 return;
             }
 
@@ -301,7 +304,7 @@ export const fetchSettings = (options: WordPressOptions, url : string, reload: b
 
             dispatch({ type: FETCH_SETTING_SUCCESS, payload: {
                     activeReport,
-                    data: transformSettings(response)
+                    data: transformSettings(response),
                 }});
 
 
@@ -328,17 +331,27 @@ export const updateSettings = (
         const deviceType = currentState?.app?.activeReport;
 
         // @ts-ignore
-        const newOptions: AuditSetting[] = currentState?.app?.settings[deviceType]?.state?.map((s: AuditSetting) => {
+        const newOptions: AuditSetting[] = currentState?.app?.settings.performance[deviceType]?.state?.map((s: AuditSetting) => {
             if (s.name !== setting.name) {
                 return s; // Early return if the setting name doesn't match
             }
 
+            const inputKey = key.split('.')
+
             return {
                 ...s,
                 inputs: s.inputs.map(input =>
-                    input.key === key ? { ...input, value: payload } : input
+                    inputKey.length > 1 ?
+                        (input?.inputs && input.key === inputKey[0]) ? {
+                            ...input,
+                            inputs: input?.inputs.map((i: AuditSettingInput) => i.key === inputKey[1] ? {
+                                ...i,
+                                value: payload
+                            } : i)
+                        } : input :
+                        input.key === key ? {...input, value: payload} : input
                 )
-            };
+            }
         }) || [];
         
         dispatch({ type: UPDATE_SETTINGS , payload : {
@@ -348,34 +361,47 @@ export const updateSettings = (
 }
 
 export const changeGear = (
-    mode: BasePerformanceGear,
+    mode: BasePerformanceGear | PerformanceGear,
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const starter = ['Remove Unused CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
     const accelerate = [...starter, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
-    const turboMax = [...accelerate, 'Delay Javascript', 'Critical CSS'];
+    const turboMax = [...accelerate, 'Delay Javascript', 'Critical CSS', 'Serve next-gen Images (AVIF, WEBP)'];
 
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState)  => {
         const currentState = getState(); // Access the current state
         const deviceType = currentState?.app?.activeReport;
+        const settings = currentState?.app?.settings.performance[deviceType]?.state;
+        const activeGear = settings?.find(s => s.category === 'gear')?.inputs[0].value
+
+        // don't update if the mode is sam
+        if (activeGear === mode) {
+            return;
+        }
 
         const modes : {
             [key in BasePerformanceGear] : string[]
-        } = {starter, accelerate, turboMax}
+        } = {starter, accelerate, turboMax};
 
-        // @ts-ignore
-        const newOptions: AuditSetting[] = currentState?.app?.settings[deviceType]?.state?.map((s: AuditSetting) => ({
+        // excluding perf gear from updates.
+        const newOptions: AuditSetting[] = settings
+            ?.map((s: AuditSetting) => ({
             ...s,
             inputs: s.inputs.map((input, index) => ({
                 ...input,
-                value: index === 0 ? modes[mode]?.includes(s.name) : input.value
+                value: index === 0 ? (
+                    s.category === 'gear' ? mode :
+                        // update values only if it is not custom.
+                        (mode === 'custom' ? input.value : modes[mode]?.includes(s.name))
+                    // return input value for all the other sub-options
+                ) : input.value
             }))
         })) || [];
 
-
         dispatch({
-            type: UPDATE_SETTINGS, payload: {
-                settings: newOptions
+            type: CHANGE_GEAR, payload: {
+                settings: newOptions,
+                mode
             }
         });
     }

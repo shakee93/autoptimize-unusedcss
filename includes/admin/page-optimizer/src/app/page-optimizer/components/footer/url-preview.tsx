@@ -13,7 +13,8 @@ const UrlPreview = () => {
 
     const [isFaviconLoaded, setIsFaviconLoaded] = useState<boolean>(false)
     const {data, loading, error, activeReport} = useSelector(optimizerData);
-    const {mobile, desktop} = useSelector((state: RootState) => state.app);
+    const { report} = useSelector((state: RootState) => state.app);
+    const { mobile, desktop } = report
 
     const {
         togglePerformance,
@@ -25,10 +26,8 @@ const UrlPreview = () => {
     return <div className='flex flex-row flex-1 gap-3 px-5 min-w-[350px] items-center bg-white dark:bg-brand-800'>
         <div>
             <div
-                // target="_blank"
-                // href={url}
                 className='text-sm items-center cursor-default text-ellipsis truncate md:max-w-sm lg:max-w-xl'>
-                {data?.loadingExperience?.initial_url ? data.loadingExperience.initial_url : url}
+                {data?.loadingExperience?.initial_url ? decodeURIComponent(data.loadingExperience.initial_url.replace('?rapidload_preview', '')) : url}
                 {/*<ArrowTopRightOnSquareIcon className="h-4 w-4" />*/}
             </div>
 

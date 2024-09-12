@@ -65,7 +65,7 @@ class RapidLoad_Cache_Engine
         $xmlrpc_request       = ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST );
         $bad_request_uri      = ( str_replace( array( '.ico', '.txt', '.xml', '.xsl' ), '', $_SERVER['REQUEST_URI'] ) !== $_SERVER['REQUEST_URI'] );
 
-        if ( $valid_engine_running || $early_ajax_request || $rest_request || $xmlrpc_request || $bad_request_uri || wp_doing_cron() || wp_doing_ajax()) {
+        if ( $valid_engine_running || $early_ajax_request || $rest_request || $xmlrpc_request || $bad_request_uri || wp_doing_cron() ) { // wp_doing_ajax() removed
             return false;
         }
 

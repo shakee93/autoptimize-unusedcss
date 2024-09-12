@@ -12,7 +12,7 @@ export type CommonState = {
         openCategory?: SettingsCategory | '';
         storePassedAudits?:string[];
         inProgress: boolean;
-        settingsMode: settingsMode | null;
+        settingsMode: PerformanceGear | null;
         testModeStatus: boolean;
         testModeLoading: boolean;
         auditsReturn: boolean;
@@ -25,7 +25,7 @@ export type CommonState = {
         openCategory?: SettingsCategory | '';
         storePassedAudits?:string[];
         inProgress: boolean;
-        settingsMode: settingsMode | null;
+        settingsMode: PerformanceGear | null;
         testModeStatus: boolean;
         testModeLoading: boolean;
         auditsReturn: boolean;

@@ -352,6 +352,12 @@ class RapidLoad_Admin
 
             }
 
+            if(isset($_REQUEST['rapidload_cpcss_file_character_length'])){
+
+                $options['rapidload_cpcss_file_character_length'] = $_REQUEST['rapidload_cpcss_file_character_length'];
+
+            }
+
         }
 
         if(isset($_REQUEST['uucss_excluded_files'])){
@@ -589,6 +595,12 @@ class RapidLoad_Admin
             if(isset($_REQUEST['uucss_support_next_gen_formats'])){
 
                 $options['uucss_support_next_gen_formats'] = ($_REQUEST['uucss_support_next_gen_formats'] == 'true' ? "1" : null);
+
+            }
+
+            if(isset($_REQUEST['uucss_adaptive_image_delivery'])){
+
+                $options['uucss_adaptive_image_delivery'] = ($_REQUEST['uucss_adaptive_image_delivery'] == 'true' ? "1" : null);
 
             }
 
@@ -1536,7 +1548,5 @@ class RapidLoad_Admin
             }
         }
     }
-
-
 
 }

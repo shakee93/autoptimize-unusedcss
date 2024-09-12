@@ -575,7 +575,7 @@ class RapidLoad_Admin_Frontend
         $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
         $rule = isset($_REQUEST['rule']) ? $_REQUEST['rule'] : false;
         $regex = isset($_REQUEST['regex']) ? $_REQUEST['regex'] : false;
-        $clear = isset($_REQUEST['clear']) && boolval($_REQUEST['clear'] == 'true') ? true : false;
+        $clear = isset($_REQUEST['clear']) && boolval($_REQUEST['clear'] == 'true' || $_REQUEST['clear'] == '1') ? true : false;
         $url_list = isset($_REQUEST['url_list']) ? $_REQUEST['url_list'] : [];
         $immediate = isset($_REQUEST['immediate']) ? $_REQUEST['immediate'] : false;
 
@@ -603,7 +603,7 @@ class RapidLoad_Admin_Frontend
                     do_action('rapidload/vanish/css');
                 }elseif ($job_type === "js"){
                     do_action('rapidload/vanish/js');
-                }elseif ($job_type === "font"){
+                }elseif ($job_type === "fonts"){
                     do_action('rapidload/vanish/font');
                 }elseif ($url){
                     RapidLoad_DB::clear_job_data($job_type, [

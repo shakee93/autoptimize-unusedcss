@@ -55,7 +55,7 @@ const Settings = ({ audit, max = 2, type, auditSettings, className, hideActions,
             {/*<JsonView data={settings} shouldInitiallyExpand={e => false}/>*/}
             {auditSettings && auditSettings.length > 0 &&(
 
-                <div className={cn(
+                <div key={auditSettings.join(',')} className={cn(
                     'flex flex-wrap gap-2 items-center',
                     className
                 )}>

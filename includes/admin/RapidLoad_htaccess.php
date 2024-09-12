@@ -290,4 +290,64 @@ HTACCESS;
         return $has_wp_rules;
     }
 
+    public static function has_rapidload_rules() {
+
+        global $is_apache;
+
+        if ( ! $is_apache ) {
+            return [
+                'apache' => false,
+                'has_rapidload_rules' => false,
+                'status' => 'failed',
+                'error' => [
+                    'code' => 422,
+                    'message' => 'Server not support'
+                ]
+            ];
+        }
+
+        $htaccess_file = get_home_path() . '.htaccess';
+
+        $file_system = new RapidLoad_FileSystem();
+
+        if(!$file_system->is_readable($htaccess_file)){
+            return [
+                'server' => 'apache',
+                'has_rapidload_rules' => false,
+                'status' => 'failed',
+                'error' => [
+                    'code' => 422,
+                    'message' => 'File cannot access'
+                ]
+            ];
+        }
+
+        $htaccess_content = $file_system->get_contents( $htaccess_file );
+
+        if ( false === $htaccess_content ) {
+            return [
+                'server' => 'apache',
+                'has_rapidload_rules' => false,
+                'status' => 'failed',
+                'error' => [
+                    'code' => 422,
+                    'message' => 'File content empty'
+                ]
+            ];
+        }
+
+        $has_rapidload_rules = (strpos($htaccess_content, '# BEGIN RapidLoad') !== false && strpos($htaccess_content, '# END RapidLoad') !== false);
+
+        return [
+            'server' => 'apache',
+            'has_rapidload_rules' => $has_rapidload_rules,
+            'status' => $has_rapidload_rules ? 'success' : 'failed',
+            'error' => [
+                'code' => null,
+                'message' => null
+            ]
+        ];
+    }
+
+
 }

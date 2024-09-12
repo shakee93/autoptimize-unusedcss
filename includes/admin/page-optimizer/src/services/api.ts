@@ -1,5 +1,6 @@
-import {isDev} from "lib/utils";
+import {isDev, toBoolean} from "lib/utils";
 import store from "../store";
+import { toast } from "components/ui/use-toast";
 
 class ApiService {
     public baseURL: URL;
@@ -145,14 +146,7 @@ class ApiService {
                 method: data ? "POST": "GET",
                 headers: {
                     "Content-Type": "application/json",
-                },
-                ...(
-                    data ? {
-                        body : JSON.stringify( {
-                            page_speed: data
-                        })
-                    } : {}
-                )
+                }
             });
 
 
@@ -168,6 +162,10 @@ class ApiService {
 
         } catch (error) {
             console.error(error);
+            toast({
+                    description: 'Failed to fetch RapidLoad settings!',
+                    variant: 'destructive',
+                })
             throw error;
         }
     }
@@ -176,12 +174,15 @@ class ApiService {
 
        try {
            const state = store.getState()
-           const data = state.app[state.app.activeReport]
+           const data = state.app.report[state.app.activeReport]
+           const settings = state.app.settings.performance[state.app.activeReport]
+           const testModeStatus = state.app.testMode?.status ?? state.app.settings.general.test_mode ?? false;
+           const previewUrl = testModeStatus ? '?rapidload_preview': '';
 
            const api_root = this.options?.api_root || 'https://api.rapidload.io/api/v1';
            const pageSpeedURL = new URL(`${api_root}/page-speed`);
 
-           pageSpeedURL.searchParams.append('url', url)
+           pageSpeedURL.searchParams.append('url', url + previewUrl)
            pageSpeedURL.searchParams.append('strategy', state.app.activeReport)
            pageSpeedURL.searchParams.append('plugin_version', this.options.rapidload_version)
            pageSpeedURL.searchParams.append('titan_version', __OPTIMIZER_VERSION__)
@@ -196,7 +197,7 @@ class ApiService {
                    "Content-Type": "application/json",
                },
                body: JSON.stringify({
-                   settings: data.settings?.
+                   settings: settings.state?.
                    flatMap(t =>
                        t.inputs
                            .filter(({ value }) => value != null)
@@ -299,7 +300,7 @@ class ApiService {
                 this.baseURL.searchParams.delete('action')
             }
 
-            this.baseURL.searchParams.append('action', 'optimizer_update_settings');
+            this.baseURL.searchParams.append('action', 'update_titan_settings');
 
             if(global) this.baseURL.searchParams.append('global', 'true')
             if(analyze) this.baseURL.searchParams.append('analyze', 'true')
@@ -314,7 +315,12 @@ class ApiService {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    data,
+                    settings: {
+                        general: {
+                          performance_gear: data.activeGear
+                        },
+                        performance: data.settings
+                    },
                 }),
             });
 

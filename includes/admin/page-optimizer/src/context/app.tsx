@@ -30,8 +30,6 @@ interface OptimizerContextProps {
     optimizerContainer: RefObject<HTMLElement>
     invalidatingCache: boolean
     setInvalidatingCache: Dispatch<SetStateAction<boolean>>;
-    showInprogress: boolean;
-    setShowInprogress: Dispatch<SetStateAction<boolean>>;
     dashboard: boolean
 }
 
@@ -48,7 +46,6 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
 }) => {
     const isAdminBar = document.getElementById('wpadminbar');
 
-    const [showInprogress, setShowInprogress] = useState<boolean>(false);
     const [showOptimizer, setShowOptimizer] = useState<boolean>(false);
     const [manipulatingStyles, setManipulatingStyles] = useState<boolean>(false);
     const [mounted, setMounted] = useState<boolean>(false);
@@ -90,7 +87,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
         };
 
         window.addEventListener('rapidLoad:set-optimizer', updateData);
-
+        
         setMounted(true)
 
         if (mode) {
@@ -118,7 +115,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
         } else {
             document.documentElement.classList.remove('rapidload-optimizer-open')
         }
-
+        
     }, [showOptimizer])
 
     const _setShowOptimizer = (value: SetStateAction<boolean>) => {
@@ -152,8 +149,6 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
             optimizerContainer,
             invalidatingCache,
             setInvalidatingCache,
-            showInprogress,
-            setShowInprogress,
             dashboard
         }}>
             {children}

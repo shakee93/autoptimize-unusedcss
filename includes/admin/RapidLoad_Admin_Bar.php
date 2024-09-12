@@ -45,25 +45,41 @@ class RapidLoad_Admin_Bar {
 
     public function load_optimizer_scripts()
     {
+        $options = RapidLoad_Base::fetch_options();
+
         $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
 
         $tag = apply_filters('rapidload/titan/tag', 'latest');
 
-        $package = "https://unpkg.com/@rapidload/page-optimizer@{$tag}/dist";
+        //$package = "https://unpkg.com/@rapidload/page-optimizer@{$tag}/dist";
 
-        if (defined('RAPIDLOAD_DEV_MODE')) {
-            $package = UUCSS_PLUGIN_URL . 'includes/admin/page-optimizer/dist';
-        }
+        $optimizer_path = 'includes/admin/page-optimizer/dist';
 
         $debug_titan = apply_filters('rapidload/titan/debug', false);
 
         if ($debug_titan) {
-            $package .= '-debug';
+            $optimizer_path .= '-debug';
         }
 
-        //wp_enqueue_style( 'rapidload_page_optimizer', $package .  '/assets/index.css',[],UUCSS_VERSION);
 
-        wp_register_script( 'rapidload_page_optimizer', $package .  '/assets/index.js',[], UUCSS_VERSION);
+        $package = UUCSS_PLUGIN_URL . $optimizer_path;
+
+        $asset_map_file = RAPIDLOAD_PLUGIN_DIR . '/' . $optimizer_path . '/asset-map.php';
+        $indexJS = '/assets/index.js';
+        $indexCSS = '/assets/index.css';
+
+        if (file_exists($asset_map_file)) {
+            include_once($asset_map_file);
+            if (defined('RAPIDLOAD_ASSET_MAP')) {
+                $indexJS = isset(RAPIDLOAD_ASSET_MAP['assets/index.js']) ? RAPIDLOAD_ASSET_MAP['assets/index.js'] : $indexJS;
+                $indexCSS = isset(RAPIDLOAD_ASSET_MAP['assets/index.css']) ? RAPIDLOAD_ASSET_MAP['assets/index.css'] : $indexCSS;
+            }
+        }
+
+        $indexJS = '/' . ltrim($indexJS, '/');
+        $indexCSS = '/' . ltrim($indexCSS, '/');
+
+        wp_register_script( 'rapidload_page_optimizer', $package . $indexJS,[], UUCSS_VERSION);
 
         $current_url = isset($_SERVER['REQUEST_URI']) ? home_url($_SERVER['REQUEST_URI']) : $this->get_current_url();
 
@@ -72,7 +88,7 @@ class RapidLoad_Admin_Bar {
         }
 
         $data = array(
-            'titan_stylesheet_url' => $package .  '/assets/index.css',
+            'titan_stylesheet_url' => $package .  $indexCSS,
             'load_optimizer' => true,
             'page_optimizer_package_base' => $package,
             'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist',
@@ -105,8 +121,8 @@ class RapidLoad_Admin_Bar {
                 [
                     'tooltip' => 'Clear CSS/JS/Font Optimizations',
                     'href' => wp_nonce_url( add_query_arg( array(
-                        '_action' => 'rapidload_purge_all',
-                        '_job_type' => 'url'
+                        'action' => 'rapidload_purge_all',
+                        'clear' => 'true'
                     ) ), 'uucss_nonce', '_nonce' ),
                     'icon' => 'clear_optimization'
                 ]
@@ -114,7 +130,8 @@ class RapidLoad_Admin_Bar {
             'api_root' => defined('UUCSS_API_URL') ? UUCSS_API_URL : 'https://api.rapidload.io/api/v1',
             'enable_entire_site' => RapidLoad_DB::get_optimization_count() < 2,
             'rest_url' => RapidLoadRestApi::rest_url(),
-            'license_key' => RapidLoad_Base::get_license_key()
+            'license_key' => RapidLoad_Base::get_license_key(),
+            'test_mode' => boolval(isset($options['rapidload_test_mode']) && $options['rapidload_test_mode'] == "1")
         );
 
         wp_localize_script( 'rapidload_page_optimizer', 'rapidload_optimizer', $data );
@@ -157,6 +174,12 @@ class RapidLoad_Admin_Bar {
                     margin: 0 !important;
                 }
 
+                html.rapidload-optimizer-open,
+                .rapidload-optimizer-open body,
+                body.rapidload-optimizer-open {
+                    overflow: hidden !important;
+                }
+
                 .rpo-loaded\:with-popup #wp-admin-bar-rapidload .ab-sub-wrapper {
                     display: none !important;
                 }
@@ -197,8 +220,8 @@ class RapidLoad_Admin_Bar {
                     'title' => '<span class="ab-label">' . __( 'Clear CSS/JS/Font Optimizations', 'clear_optimization' ) . '</span>',
                     //'href'  => admin_url( 'admin.php?page=rapidload&action=rapidload_purge_all' ),
                     'href'   => wp_nonce_url( add_query_arg( array(
-                        '_action' => 'rapidload_purge_all',
-                        'job_type' => 'url',
+                        'action' => 'rapidload_purge_all',
+                        'clear' => 'true',
                     ) ), 'uucss_nonce', 'nonce' ),
                     'meta'  => array( 'class' => 'rapidload-clear-all', 'title' => 'RapidLoad will clear all the cached files' ),
                     'parent' => 'rapidload'

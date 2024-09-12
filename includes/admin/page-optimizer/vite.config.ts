@@ -14,10 +14,42 @@ export default defineConfig((configEnv) => {
             react(),
             dynamicBase({
                 publicPath: 'window.rapidload_optimizer.page_optimizer_package_base',
+                transformIndexHtml: true // BUILD + PREVIEW in local breaks when true
+            }),
+            {
+                name: 'generate-asset-map',
+                generateBundle(options, bundle) {
+                    console.log('Generating asset map...');
+                    const assetMap: Record<string, string> = {};
+                    for (const [fileName, asset] of Object.entries(bundle)) {
+                        console.log(asset.name);
 
-                transformIndexHtml:  true // BUILD + PREVIEW in local breaks when true
-
-            })
+                        if ('fileName' in asset) {
+                            // Remove hash from the key
+                            const keyWithoutHash = asset.fileName.replace(/(.+)\.[\w-]+(\.[^.]+)$/, '$1$2');
+                            assetMap[keyWithoutHash] = asset.fileName;
+                        }
+                    }
+                    
+                    const phpArray = Object.entries(assetMap)
+                        .map(([key, value]) => `    '${key}' => '${value}'`)
+                        .join(",\n");
+                    
+                    const phpContent = `<?php
+define('RAPIDLOAD_ASSET_MAP', [
+${phpArray}
+]);
+`;
+                    
+                    this.emitFile({
+                        type: 'asset',
+                        fileName: 'asset-map.php',
+                        source: phpContent
+                    });
+                    
+                    console.log('Asset map generated and saved as PHP file');
+                }
+            }
         ],
         define: {
             '__OPTIMIZER_VERSION__': JSON.stringify(packageJson.version),
@@ -55,9 +87,14 @@ export default defineConfig((configEnv) => {
                         ],
                     },
                     // entryFileNames: `assets/[name].js`,
-                    entryFileNames: `assets/[name].js`,
-                    chunkFileNames: `assets/[name].js`,
-                    assetFileNames: `assets/[name].[ext]`
+                    entryFileNames: `assets/[name].[hash].js`,
+                    chunkFileNames: `assets/[name].[hash].js`,
+                    assetFileNames: (assetInfo) => {
+                        if (assetInfo.name && /\.(woff2?|eot|ttf|otf)$/.test(assetInfo.name)) {
+                            return `assets/[name].[ext]`;
+                        }
+                        return `assets/[name].[hash].[ext]`;
+                    }
                 }
             }
         },
