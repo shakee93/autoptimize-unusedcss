@@ -155,6 +155,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.3.3 - 12/09/2024 =
+ * fix: Missing `@media` styles in chunked critical CSS files.
+
 = 2.3.2 - 12/09/2024 =
  * fix: Titan crash
 
