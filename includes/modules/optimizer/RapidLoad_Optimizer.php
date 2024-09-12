@@ -432,16 +432,6 @@ class RapidLoad_Optimizer
 
         self::$job->save(!self::$job->exist());
 
-        if(isset(self::$options['uucss_enable_cache'])){
-            self::$global_options['uucss_enable_cache'] = self::$options['uucss_enable_cache'];
-            RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
-        }
-
-        if(isset(self::$options['rapidload_cpcss_file_character_length'])){
-            self::$global_options['rapidload_cpcss_file_character_length'] = self::$options['rapidload_cpcss_file_character_length'];
-            RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
-        }
-
         $options = [
             //css
             'uucss_enable_css',
@@ -558,8 +548,6 @@ class RapidLoad_Optimizer
 
         }
 
-        self::post_optimizer_function($result);
-
         $result->job_id = isset(self::$job) ? self::$job->id : null;
 
         $hash = self::$job->get_last_optimization_revision_hash(self::$strategy);
@@ -578,12 +566,14 @@ class RapidLoad_Optimizer
         }
 
         return[
+            'url' => $url,
             'success' => true,
             'job_id' => isset(self::$job) ? self::$job->id : null,
             'page_speed' => $result,
             'revisions' => self::$job->get_optimization_revisions(self::$strategy, self::$revision_limit),
             'options' => self::$options,
             'merged_options' => self::$merged_options,
+            'global_options' => self::$global_options,
         ];
 
     }
@@ -1212,6 +1202,7 @@ class RapidLoad_Optimizer
                     case 'options' :
                     case 'textarea' :
                     case 'number-range' :
+                    case 'input' :
                     case 'number' :{
                         if(isset($input->value) && isset($input->key)){
                             if($input->key == "uucss_safelist"){
@@ -1334,6 +1325,16 @@ class RapidLoad_Optimizer
         }
 
         $this->associate_domain(false);
+
+        if(isset(self::$options['rapidload_cpcss_file_character_length'])){
+            self::$global_options['rapidload_cpcss_file_character_length'] = self::$options['rapidload_cpcss_file_character_length'];
+            RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
+        }
+
+        if(isset(self::$options['uucss_enable_cache'])){
+            self::$global_options['uucss_enable_cache'] = self::$options['uucss_enable_cache'];
+            RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
+        }
 
         self::post_optimizer_function($result);
 

@@ -764,4 +764,14 @@ trait RapidLoad_Utils {
     function is_serialized($string) {
         return ($string == serialize(false) || @unserialize($string) !== false);
     }
+
+    public static function debug_log($object){
+
+        if(gettype($object) == "string"){
+            error_log($object);
+        }else{
+            error_log(json_encode($object, JSON_PRETTY_PRINT));
+        }
+
+    }
 }
