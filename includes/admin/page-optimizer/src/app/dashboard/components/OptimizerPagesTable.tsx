@@ -4,7 +4,7 @@ import { cn } from "lib/utils";
 import { InformationCircleIcon, LinkIcon, CalendarIcon, EllipsisHorizontalCircleIcon,PencilSquareIcon, TrashIcon,ArrowTrendingUpIcon,ArrowTrendingDownIcon } from "@heroicons/react/24/outline";
 import PerformanceProgressBar from "components/performance-progress-bar";
 import { ScoreIcon} from "app/dashboard/components/icons/icon-svg";
-import { PlusIcon, FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { PlusIcon, FunnelIcon, MagnifyingGlassIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import {
     Dialog,
     DialogContent,
@@ -32,6 +32,46 @@ interface Settings {
 
 const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => {
     const [open, setOpen] = useState(false);
+
+    const contentTypes = [
+        { label: 'Pages', count: 5, type: 'pages' },
+        { label: 'Products', count: 6, type: 'products' },
+        { label: 'Tags', count: 12, type: 'tags' },
+        { label: 'Categories', count: 7, type: 'categories' },
+    ];
+
+
+    const dynamicData = {
+        pages: [
+            { name: 'All Pages', hasSubList: true },
+            { name: 'Pricing Page', hasSubList: false },
+            { name: 'Blog', hasSubList: false },
+            { name: 'Feature Page', hasSubList: false },
+        ],
+        products: [
+            { name: 'Product 1', hasSubList: false },
+            { name: 'Product 2', hasSubList: false },
+            { name: 'Product 3', hasSubList: false },
+            { name: 'Product 4', hasSubList: false },
+            { name: 'Product 5', hasSubList: false },
+            { name: 'All Products', hasSubList: true },
+        ],
+        tags: [
+            { name: 'Tag 1', hasSubList: false },
+            { name: 'Tag 2', hasSubList: false },
+            { name: 'Tag 3', hasSubList: false },
+            { name: 'All Tags', hasSubList: true },
+        ],
+        categories: [
+            { name: 'Category 1', hasSubList: false },
+            { name: 'Category 2', hasSubList: false },
+            { name: 'Category 3', hasSubList: false },
+            { name: 'All Categories', hasSubList: true },
+        ]
+    };
+
+
+
 
     return (
         <>
@@ -61,33 +101,26 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                         <FunnelIcon
                                             className="w-5 h-5"/>Filter
                                     </button>
-                                    <button
-                                        className="dark:text-brand-950 text-brand-0 bg-violet-950 px-3 py-1.5 rounded-lg flex w-fit gap-2 items-center cursor-pointer">
-                                        <PlusIcon
-                                            className="w-5 h-5 text-brand-0"/>Add
-                                    </button>
 
                                     <Dialog open={open} onOpenChange={setOpen}>
                                         <DialogTrigger asChild>
-                                            <button
-                                                className="dark:text-brand-950 text-brand-0 bg-violet-950 px-3 py-1.5 rounded-lg flex w-fit gap-2 items-center cursor-pointer"
-                                            >
-                                                <PlusIcon className="w-5 h-5 text-brand-0" />
-                                                Add
+                                            <button className="px-3 py-1.5 rounded-lg flex gap-2 items-center cursor-pointer bg-violet-950 text-brand-0">
+                                                <PlusIcon className="w-5 h-5" /> Add
                                             </button>
                                         </DialogTrigger>
-
-                                        {/* DialogContent with ContentSelector */}
+                                        <DialogTitle></DialogTitle>
                                         <DialogContent className="sm:max-w-[650px]">
-                                            <DialogHeader className='border-b px-6 py-4'>
-                                                <DialogTitle>Select Content to Optimize</DialogTitle>
-                                            </DialogHeader>
-                                            <div className="px-6 py-4">
-                                                {/* Render ContentSelector component */}
-                                                <ContentSelector />
+                                            <div className="py-2">
+                                                <ContentSelector
+                                                    contentTypes={contentTypes}
+                                                    dynamicData={dynamicData}
+                                                />
                                             </div>
-                                            <DialogFooter className='px-6 py-3 border-t'>
-                                                <AppButton onClick={() => setOpen(false)} variant='outline' className='text-sm'>Close</AppButton>
+                                            <DialogDescription></DialogDescription>
+                                            <DialogFooter className="px-6 py-3 border-t">
+                                                <AppButton onClick={() => setOpen(false)} variant='outline' className='text-sm'>
+                                                    Close
+                                                </AppButton>
                                             </DialogFooter>
                                         </DialogContent>
                                     </Dialog>
