@@ -9,12 +9,12 @@ import {ThunkDispatch} from "redux-thunk";
 import {AppAction, RootState} from "../store/app/appTypes";
 import {useDispatch} from "react-redux";
 import {setCommonState} from "../store/common/commonActions";
-import {fetchData} from "../store/app/appActions";
+import {fetchReport} from "../store/app/appActions";
 import Loading from "components/loading";
 import useCommonDispatch from "hooks/useCommonDispatch";
 
 const NextSteps = ({status} : { status: boolean}) => {
-    const {options, setShowInprogress} = useAppContext();
+    const {options} = useAppContext();
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const { handleTestModeSwitchChange } = useTestModeUtils();
     const { testModeStatus} = useCommonDispatch();
@@ -64,9 +64,7 @@ const NextSteps = ({status} : { status: boolean}) => {
                             <div className='flex gap-2'>
                                 <Button variant='outline' className='gap-2'
                                         onClick={async () => {
-                                            dispatch(fetchData(options, url, true))
-                                            dispatch(setCommonState('inProgress', false))
-                                            setShowInprogress(false);
+                                            dispatch(fetchReport(options, url, true))
                                             testModeStatus && await handleTestMode(false);
 
                                         }}

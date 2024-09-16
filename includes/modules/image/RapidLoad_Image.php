@@ -66,22 +66,29 @@ class RapidLoad_Image
 
         ?>
         <script id="rapidload-image-handler" type="text/javascript" norapidload>
+            <?php
+                $image_handler_script = <<<EOD
+                    window.rapidload_replace_image_src=function(){var images=document.getElementsByTagName("img");for(var i=0;i<images.length;i++){var image=images[i];var url=image.getAttribute("data-rp-src");if(window.rapidload_io_data&&url){var options="ret_img";if(window.rapidload_io_data.optimize_level){options+=",q_"+window.rapidload_io_data.optimize_level}if(window.rapidload_io_data.support_next_gen_format){options+=",to_avif"}if(window.rapidload_io_data.adaptive_image_delivery){if(image.width!==0){options+=",w_"+image.width}else if(image.getAttribute("width")&&Number(image.getAttribute("width"))!==0){options+=",w_"+image.getAttribute("width")}}url=window.rapidload_io_data.image_endpoint+options+"/"+url;if(image.getAttribute("src")!==url){image.setAttribute("src",url)}}}};var targetNode=document.getElementsByTagName("body")[0];var config={attributes:false,childList:true,subtree:true};var callback=function(mutationList,observer){for(var i=0;i<mutationList.length;i++){var mutation=mutationList[i];if(mutation.type==="childList"){var addedNodes=mutation.addedNodes;for(var j=0;j<addedNodes.length;j++){var node=addedNodes[j];if(node.nodeName==="#text"){continue}try{var imageTags=node.getElementsByTagName("img");if(imageTags.length){for(var k=0;k<imageTags.length;k++){var img=imageTags[k];var url=img.getAttribute("data-rp-src");if(window.rapidload_io_data&&url){var options="ret_img";if(window.rapidload_io_data.optimize_level){options+=",q_"+window.rapidload_io_data.optimize_level}if(window.rapidload_io_data.support_next_gen_format){options+=",to_avif"}if(window.rapidload_io_data.adaptive_image_delivery){if(img.getBoundingClientRect().width!==0){options+=",w_"+Math.floor(img.getBoundingClientRect().width)}}img.setAttribute("src",window.rapidload_io_data.image_endpoint+options+"/"+url)}}}}catch(e){}}}}};var observer=new MutationObserver(callback);observer.observe(targetNode,config);var observer_bg=new IntersectionObserver(function(elements){elements.forEach(function(element){if(element.isIntersecting){observer_bg.unobserve(element.target);var attributes=element.target.getAttribute("data-rapidload-lazy-attributes").split(",");attributes.forEach(function(attribute){if(element.target.tagName==="IFRAME"){element.target.setAttribute(attribute,element.target.getAttribute("data-rapidload-lazy-"+attribute))}else{var value=element.target.getAttribute("data-rapidload-lazy-"+attribute);element.target.style.backgroundImage="url("+value.replace("ret_blank","ret_img")+")"}})}});window.dispatchEvent(new Event("resize"))},{rootMargin:"300px"});document.addEventListener("DOMContentLoaded",function(){if(window.rapidload_io_data.adaptive_image_delivery){window.rapidload_replace_image_src()}});window.onresize=function(event){window.rapidload_replace_image_src()};["mousemove","touchstart","keydown"].forEach(function(event){var user_interaction_listener=function(){window.rapidload_replace_image_src();removeEventListener(event,user_interaction_listener)};addEventListener(event,user_interaction_listener)});var lazyElements=document.querySelectorAll('[data-rapidload-lazy-method="viewport"]');if(lazyElements&&lazyElements.length){lazyElements.forEach(function(element){observer_bg.observe(element)})}var playButtons=document.querySelectorAll(".rapidload-yt-play-button");playButtons.forEach(function(playButton){var videoContainer=playButton.closest(".rapidload-yt-video-container");var videoId=videoContainer.querySelector("img").getAttribute("data-video-id");function loadPosterImage(){var posterImageUrl="https://i.ytimg.com/vi/"+videoId+"/";var posterImage=videoContainer.querySelector(".rapidload-yt-poster-image");if(window.rapidload_io_data&&window.rapidload_io_data.support_next_gen_format){var options="ret_img";if(window.rapidload_io_data.optimize_level){options+=",q_"+window.rapidload_io_data.optimize_level}if(window.rapidload_io_data.support_next_gen_format){options+=",to_avif"}if(window.rapidload_io_data.adaptive_image_delivery){if(posterImage.getBoundingClientRect().width!==0){options+=",w_"+Math.floor(posterImage.getBoundingClientRect().width)}}posterImageUrl=window.rapidload_io_data.image_endpoint+options+"/"+posterImageUrl}posterImage.src=posterImageUrl+"hqdefault.jpg"}loadPosterImage();playButton.addEventListener("click",function(){var parentElement=this.parentElement;this.style.display="none";var posterImage=parentElement.querySelector(".rapidload-yt-poster-image");if(posterImage){posterImage.style.display="none"}var noscriptTag=parentElement.querySelector("noscript");if(noscriptTag){noscriptTag.outerHTML=noscriptTag.innerHTML}})});
+                EOD;
+                if (defined('RAPIDLOAD_DEV_MODE') && RAPIDLOAD_DEV_MODE === true) {
+                    $filePath = RAPIDLOAD_PLUGIN_DIR . '/assets/js/rapidload_images.js';
 
+                    if (file_exists($filePath)) {
+                        $image_handler_script = file_get_contents($filePath);
+                    }
+                }
+            ?>
             (function(w, d){
                 w.rapidload_io_data = {
                     nonce : "<?php echo wp_create_nonce('rapidload_image') ?>",
                     image_endpoint : "<?php echo RapidLoad_Image::$image_indpoint ?>",
                     optimize_level : "<?php echo ( isset($this->options['uucss_image_optimize_level']) ? $this->options['uucss_image_optimize_level'] : 'null' ) ?>" ,
+                    adaptive_image_delivery : <?php echo ( isset($this->options['uucss_adaptive_image_delivery']) && $this->options['uucss_adaptive_image_delivery'] == "1" ? 'true' : 'false' ) ?> ,
                     support_next_gen_format : <?php echo ( isset($this->options['uucss_support_next_gen_formats']) && $this->options['uucss_support_next_gen_formats'] == "1" ? 'true' : 'false' ) ?>
                 };
-                var b = d.getElementsByTagName('head')[0];
-                var s = d.createElement("script");
-                s.defer = true;
-                s.type = "text/javascript";
-                s.src = "<?php echo apply_filters('uucss/enqueue/cdn', self::get_relative_url(UUCSS_PLUGIN_URL . 'assets/js/rapidload_images.min.js?v=24' . UUCSS_VERSION)) ?>";
-                b.appendChild(s);
             }(window, document));
 
+            <?php echo $image_handler_script ?>
         </script>
         <?php
 
@@ -129,14 +136,16 @@ class RapidLoad_Image
             $options .= ',to_avif';
         }
 
-        if($width){
+        if(isset(self::$instance->options['uucss_adaptive_image_delivery']) && self::$instance->options['uucss_adaptive_image_delivery'] == "1"){
+            if($width){
 
-            $options .= ',w_' . str_replace("px", "", $width);
-        }
+                $options .= ',w_' . str_replace("px", "", $width);
+            }
 
-        if($height){
+            if($height){
 
-            $options .=  ',h_' . str_replace("px", "", $height);
+                $options .=  ',h_' . str_replace("px", "", $height);
+            }
         }
 
         return $cdn . $options . '/' . $url;

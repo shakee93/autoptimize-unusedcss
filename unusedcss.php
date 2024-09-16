@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: RapidLoad 2.2 - Speed Monster in One Plugin
+Plugin Name: RapidLoad - Optimize Web Vitals Automatically
 Plugin URI:  https://rapidload.io/
 Description: Makes your site even faster and lighter by automatically removing Unused CSS from your website.
-Version:     2.2.25
+Version:     2.3.3
 Author:      RapidLoad
 Author URI:  https://rapidload.io/
 */

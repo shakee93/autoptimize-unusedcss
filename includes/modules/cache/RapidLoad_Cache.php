@@ -29,6 +29,8 @@ class RapidLoad_Cache
 
         add_filter('uucss/enqueue/content/update', [$this, 'cache_page'], 100);
 
+        add_action('rapidload/cdn/validated', [$this, 'clear_cache_on_cdn_url_validate']);
+
         add_filter('rapidload/active-module/options', [$this, 'update_module_options']);
 
         add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_items' ), 90 );
@@ -77,6 +79,10 @@ class RapidLoad_Cache
         });
 
         //$this->display_admin_notice_for_directory_permission_issue();
+    }
+
+    public function clear_cache_on_cdn_url_validate(){
+        RapidLoad_Cache_Store::clearDirectory(RAPIDLOAD_CACHE_DIR);
     }
 
     public function display_admin_notice_for_directory_permission_issue(){
@@ -678,7 +684,12 @@ class RapidLoad_Cache
 
             if (RapidLoad_Cache_Engine::is_cacheable( $content ) && !RapidLoad_Cache_Engine::bypass_cache()) {
 
-                RapidLoad_Cache_Store::cache_page( str_replace("</body>","<div id='rapidload-cache-status' style='display:none;text-align:center;background-color:#a080c6;padding:1px;color:white;font-weight:500;'><p>Served by RapidLoad Cache</p></div>",$content) );
+                if(isset($_REQUEST['rapidload_preview'])){
+                    $content = str_replace("</body>","<div id='rapidload-cache-status' style='display:none;text-align:center;background-color:#a080c6;padding:1px;color:white;font-weight:500;'><p>Served by RapidLoad Cache</p></div></body>",$content);
+                }
+
+                RapidLoad_Cache_Store::cache_page( $content );
+
             }
 
         }
@@ -840,7 +851,7 @@ class RapidLoad_Cache
     private static function get_default_user_settings() {
 
         $default_user_settings = array(
-            'cache_expires'                      => 0,
+            'cache_expires'                      => 1,
             'cache_expiry_time'                  => 0,
             'clear_site_cache_on_saved_post'     => 0,
             'clear_site_cache_on_saved_comment'  => 0,

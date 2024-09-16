@@ -81,9 +81,16 @@ class Javascript_Enqueue
             $this->strategy = $state['strategy'];
         }
 
+        $remove_js_files = apply_filters('rapidload/js/remove-js-files', []);
+
         $links = $this->dom->find( 'script' );
 
         foreach ( $links as $link ) {
+
+            if(isset($link->id) && in_array($link->id, $remove_js_files)){
+                $link->outertext = '';
+                continue;
+            }
 
             $original_src = self::is_js($link) ? $link->src : null;
 
@@ -407,7 +414,8 @@ class Javascript_Enqueue
                 return;
             }
 
-            if(isset($link->id) && $this->str_contains($link->id,"rapidload-")){
+            if(isset($link->id) && in_array($link->id, ["rapidload-js-extra"])){
+                $link->norapidload = true;
                 return;
             }
 

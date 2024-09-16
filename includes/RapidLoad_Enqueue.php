@@ -478,7 +478,7 @@ class RapidLoad_Enqueue {
         }
 
         if ( is_user_logged_in() ) {
-            return false;
+            return apply_filters('uucss/frontend/enabled/logged-in', false);
         }
 
         if ( is_admin() ) {

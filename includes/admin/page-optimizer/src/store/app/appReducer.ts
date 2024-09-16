@@ -1,10 +1,12 @@
 import {
     AppAction,
     AppState,
+    CHANGE_GEAR,
     CHANGE_REPORT_TYPE,
     FETCH_REPORT_FAILURE,
     FETCH_REPORT_REQUEST,
-    FETCH_REPORT_SUCCESS, FETCH_SETTING_FAILURE,
+    FETCH_REPORT_SUCCESS,
+    FETCH_SETTING_FAILURE,
     FETCH_SETTING_REQUEST,
     FETCH_SETTING_SUCCESS,
     GET_CSS_STATUS_SUCCESS,
@@ -24,8 +26,7 @@ const blankReport =  {
     settings: [],
     originalSettings: [],
     revisions: [],
-    state: {},
-    defaultSettingsMode: null
+    state: {}
 }
 
 const initialState: AppState = {
@@ -37,21 +38,26 @@ const initialState: AppState = {
         desktop: blankReport,
     },
     settings: {
-        mobile: {
-            original: [],
-            state: [],
-            error: null,
-            loading: false,
+        performance: {
+            mobile: {
+                original: [],
+                state: [],
+                error: null,
+                loading: false,
+            },
+            desktop: {
+                original: [],
+                state: [],
+                error: null,
+                loading: false,
+            }
         },
-        desktop: {
-            original: [],
-            state: [],
-            error: null,
-            loading: false,
-        }
-    },
-    mobile: blankReport ,
-    desktop: blankReport
+        general: {
+            test_mode: true,
+            performance_gear: 'accelerate'
+        },
+        actions: []
+    }
 };
 
 const appReducer = (state = initialState, action: AppAction): AppState => {
@@ -65,7 +71,14 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
         case UPDATE_TEST_MODE:
             return {
                 ...state,
-                testMode: action.payload
+                testMode: action.payload,
+                settings: {
+                    ...state.settings,
+                    general: {
+                        ...state.settings.general,
+                        test_mode : action.payload.status 
+                    }
+                }
             };
         case FETCH_REPORT_REQUEST:
             return {
@@ -87,14 +100,13 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                     ...state.report,
                     [action.payload.activeReport] : {
                         ...state.report[action.payload.activeReport],
-                        original: JSON.parse(JSON.stringify(action.payload.data.data)),
+                        // original: JSON.parse(JSON.stringify(action.payload.data.data)),
                         data: action.payload.data.data,
                         error: null,
                         loading: false,
-                        settings: action.payload.data.settings,
-                        originalSettings: JSON.parse(JSON.stringify(action.payload.data.settings)),
+                        // settings: action.payload.data.settings,
+                        // originalSettings: JSON.parse(JSON.stringify(action.payload.data.settings)),
                         revisions: action.payload.data.revisions,
-                        defaultSettingsMode: action.payload.data.data.settingsMode
                     }
                 }
             };
@@ -114,10 +126,13 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 ...state,
                 settings: {
                     ...state.settings,
-                    [state.activeReport] : {
-                        ...state.settings[state.activeReport],
-                        loading: true,
-                        error: null
+                    performance: {
+                        ...state.settings.performance,
+                        [state.activeReport] : {
+                            ...state.settings.performance[state.activeReport],
+                            loading: true,
+                            error: null
+                        }
                     }
                 },
             };
@@ -126,12 +141,17 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 ...state,
                 settings: {
                     ...state.settings,
-                    [action.payload.activeReport] : {
-                        ...state.settings[action.payload.activeReport],
-                        original: JSON.parse(JSON.stringify(action.payload.data.data)),
-                        state: action.payload.data.data,
-                        error: null,
-                        loading: false,
+                    general: action.payload.data.general,
+                    actions: action.payload.data.actions,
+                    performance: {
+                        ...state.settings.performance,
+                        [action.payload.activeReport] : {
+                            ...state.settings.performance[action.payload.activeReport],
+                            original: JSON.parse(JSON.stringify(action.payload.data.data)),
+                            state: action.payload.data.data,
+                            error: null,
+                            loading: false,
+                        }
                     }
                 }
             };
@@ -140,9 +160,12 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 ...state,
                 settings: {
                     ...state.settings,
-                    [state.activeReport] : {
-                        error: action.error,
-                        loading: false
+                    performance: {
+                        ...state.settings.performance,
+                        [state.activeReport] : {
+                            error: action.error,
+                            loading: false
+                        }
                     }
                 }
             };
@@ -151,9 +174,30 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 ...state,
                 settings: {
                     ...state.settings,
-                    [state.activeReport] : {
-                        ...state.settings[state.activeReport],
-                        state: action.payload.settings,
+                    performance: {
+                        ...state.settings.performance,
+                        [state.activeReport] : {
+                            ...state.settings.performance[state.activeReport],
+                            state: action.payload.settings,
+                        },
+                    }
+                }
+            };
+        case CHANGE_GEAR:
+            return {
+                ...state,
+                settings: {
+                    ...state.settings,
+                    general: {
+                        ...state.settings.general,
+                        performance_gear: action.payload.mode
+                    },
+                    performance: {
+                        ...state.settings.performance,
+                        [state.activeReport] : {
+                            ...state.settings.performance[state.activeReport],
+                            state: action.payload.settings,
+                        }
                     }
                 }
             };
@@ -166,7 +210,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
 
             const { payload } = action;
             const activeReport = state.report[state.activeReport];
-            let changes = activeReport.changes.files.filter(f => f.file === payload.file)
+            const changes = activeReport.changes.files.filter(f => f.file === payload.file)
 
             if (changes.length == 0) {
                 activeReport.changes.files.push({
@@ -184,7 +228,6 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                     if (audit.files && audit.files.items && (audit.files.type === 'table' || audit.files.type === 'opportunity')) {
                         const updateActionValue = (item: AuditTableResource) => {
                             if (item.url && typeof item.url === 'object' && item.action && item.url.url === payload.file) {
-
 
                                 // reporting changes
                                 // if (!changes) {

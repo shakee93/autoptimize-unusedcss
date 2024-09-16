@@ -1,4 +1,5 @@
 import {CommonState} from "../common/commonTypes";
+import { LucideIcon } from "lucide-react";
 
 export interface RootState {
     app: AppState;
@@ -6,7 +7,6 @@ export interface RootState {
 }
 
 interface Report {
-    defaultSettingsMode: settingsMode | null,
     data?: OptimizerResults | null;
     original?: OptimizerResults | null;
     error?: string | null;
@@ -31,15 +31,20 @@ export interface AppState {
         desktop: Report,
     },
     settings: {
-        [key in ReportType]: {
-            original?: AuditSetting[],
-            state?: AuditSetting[],
-            error?: string | null;
-            loading: boolean
-        }
+        performance: {
+            [key in ReportType]: {
+                original: AuditSetting[],
+                state: AuditSetting[],
+                error: string | null;
+                loading: boolean
+            }
+        },
+        general: {
+            test_mode: boolean | TestMode
+            performance_gear: PerformanceGear
+        },
+        actions: AuditSettingInput[]
     },
-    mobile: Report,
-    desktop: Report
 }
 
 export const FETCH_REPORT_REQUEST = 'FETCH_REPORT_REQUEST';
@@ -49,6 +54,7 @@ export const FETCH_SETTING_REQUEST = 'FETCH_SETTING_REQUEST';
 export const FETCH_SETTING_SUCCESS = 'FETCH_SETTING_SUCCESS';
 export const FETCH_SETTING_FAILURE = 'FETCH_SETTING_FAILURE';
 export const UPDATE_SETTINGS = 'UPDATE_SETTINGS';
+export const CHANGE_GEAR = 'CHANGE_GEAR';
 export const CHANGE_REPORT_TYPE = 'CHANGE_REPORT_TYPE';
 export const UPDATE_FILE_ACTION = 'UPDATE_FILE_ACTION';
 export const GET_CSS_STATUS_SUCCESS = 'GET_CSS_STATUS_SUCCESS';
@@ -110,6 +116,14 @@ interface UpdateSettingsAction {
     },
 }
 
+interface ChangeGearAction {
+    type: typeof CHANGE_GEAR;
+    payload : {
+        settings : AuditSetting[];
+        mode: PerformanceGear
+    },
+}
+
 interface ChangeReportTypeAction {
     type: typeof CHANGE_REPORT_TYPE;
     reportType: ReportType
@@ -128,6 +142,6 @@ interface UpdateFileActionAction {
 
 // Define the combined action type
 export type AppAction = FetchDataRequestAction | FetchDataSuccessAction | FetchDataFailureAction |
-    FetchSettingsRequestAction | FetchSettingsSuccessAction | FetchSettingsFailureAction |
+    FetchSettingsRequestAction | FetchSettingsSuccessAction | FetchSettingsFailureAction | ChangeGearAction|
     UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode;
 

@@ -15,6 +15,8 @@ import Header from "app/page-optimizer/components/Header";
 import {cn} from "lib/utils";
 import {setCommonState} from "../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
+import {toBoolean} from "lib/utils";
+import Bugsnag from "@bugsnag/js";
 import Dashboard from "app/dashboard";
 import TestModeSwitcher from "app/page-optimizer/components/TestModeSwitcher";
 
@@ -29,14 +31,14 @@ const App = ({popup, _showOptimizer = false}: {
 }) => {
 
     const [popupNode, setPopupNode] = useState<HTMLElement | null>(null);
-    const {showOptimizer, version, setShowOptimizer, mode, options, setShowInprogress} = useAppContext()
+    const {showOptimizer, version, setShowOptimizer, mode, options} = useAppContext()
     const [shadowRoot, setShadowRoot] = useState<ShadowRoot | null>(null);
     const [mounted, setMounted] = useState(false)
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
-    const {activeReport, mobile, desktop} = useSelector((state: RootState) => state.app);
+    const {activeReport} = useSelector((state: RootState) => state.app);
     const {isDark } = useRootContext()
-
+    const initialTestMode = window.rapidload_optimizer ? toBoolean(window.rapidload_optimizer.test_mode) : false;
 
     useEffect(() => {
 
@@ -53,17 +55,28 @@ const App = ({popup, _showOptimizer = false}: {
 
         setTimeout(() => {
             setMounted(true)
-        }, 50)
-    }, [])
+        }, 50);
+
+        Bugsnag.leaveBreadcrumb('Titan Loaded')
+
+    }, []);
+
+    useEffect(() => {
+
+        if (showOptimizer) {
+            Bugsnag.leaveBreadcrumb('Titan Opened');
+        } else {
+            Bugsnag.leaveBreadcrumb('Titan Closed');
+        }
+
+    }, [showOptimizer])
 
 
     useEffect(() => {
         // load initial data
         dispatch(fetchSettings(options, options.optimizer_url, false));
         dispatch(fetchReport(options, options.optimizer_url, false));
-        // dispatch(getTestModeStatus(options, options.optimizer_url));
-        //dispatch(setCommonState('inProgress', false))
-        setShowInprogress(false);
+        dispatch(setCommonState('testModeStatus', initialTestMode));
     }, [dispatch, activeReport]);
 
     const hash = window.location.hash.replace("#", "");

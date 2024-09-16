@@ -23,7 +23,6 @@ const useSubmitSettings = () => {
         invalidatingCache,
         setInvalidatingCache,
         global,
-        setShowInprogress
     } = useAppContext()
 
 
@@ -36,7 +35,8 @@ const useSubmitSettings = () => {
         touched,
         activeReport,
         data,
-        settings
+        settings,
+        activeGear
     } =
         useSelector(optimizerData)
 
@@ -64,10 +64,14 @@ const useSubmitSettings = () => {
 
             setSavingData(true);
 
+
             const res = await api.updateSettings(
                 url,
                 activeReport,
-                updatedData,
+                {
+                    settings,
+                    activeGear
+                },
                 global,
                 analyze,
             );
@@ -120,8 +124,6 @@ const useSubmitSettings = () => {
                 dispatch(fetchReport(options, url, true));
 
             }else if(!analyze){
-                dispatch(setCommonState('inProgress', true))
-                setShowInprogress(true);
 
             }
 
@@ -138,7 +140,7 @@ const useSubmitSettings = () => {
         setSavingData(false)
         setInvalidatingCache(false)
 
-    }, [data, activeReport,  savingData, invalidatingCache, settingsMode])
+    }, [data, activeReport,  savingData, invalidatingCache, settings, activeGear ])
 
     return {
         submitSettings

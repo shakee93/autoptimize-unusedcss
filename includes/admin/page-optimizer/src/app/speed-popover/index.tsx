@@ -3,12 +3,16 @@ import SpeedInsights from "./components/speed-insights";
 import WebFont from 'webfontloader';
 import {useAppContext} from "../../context/app";
 import {Toaster} from "components/ui/toaster";
+import Bugsnag from "@bugsnag/js";
 
 function SpeedPopover() {
 
     const { options } = useAppContext()
 
 
+    useEffect(() => {
+        Bugsnag.leaveBreadcrumb('Popup Loaded')
+    }, [])
 
     return (
         <div id='rl-react-popup-wrapper'

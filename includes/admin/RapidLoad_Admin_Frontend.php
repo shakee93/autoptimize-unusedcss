@@ -27,7 +27,7 @@ class RapidLoad_Admin_Frontend
 
             if ($this->is_rapidload_page()) {
 
-//                $this->load_scripts();
+                $this->load_scripts();
 
                 // TODO: temporary should be removed so it supports all the browsers
                 add_filter('script_loader_tag', function ($tag, $handle) {
@@ -86,6 +86,7 @@ class RapidLoad_Admin_Frontend
             add_action( 'admin_menu', array( $this, 'add_rapidload_onboard_page' ) );
             add_action( 'admin_menu', array( $this, 'add_page_optimizer_page' ) );
             add_action('uucss/rule/saved', [$this, 'update_rule'], 10, 2);
+            add_action('admin_menu', [$this, 'remove_rapidload_legacey_dashboard_menu'], 999);
 
         }
 
@@ -575,7 +576,7 @@ class RapidLoad_Admin_Frontend
         $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : false;
         $rule = isset($_REQUEST['rule']) ? $_REQUEST['rule'] : false;
         $regex = isset($_REQUEST['regex']) ? $_REQUEST['regex'] : false;
-        $clear = isset($_REQUEST['clear']) && boolval($_REQUEST['clear'] == 'true') ? true : false;
+        $clear = isset($_REQUEST['clear']) && boolval($_REQUEST['clear'] == 'true' || $_REQUEST['clear'] == '1') ? true : false;
         $url_list = isset($_REQUEST['url_list']) ? $_REQUEST['url_list'] : [];
         $immediate = isset($_REQUEST['immediate']) ? $_REQUEST['immediate'] : false;
 
@@ -603,7 +604,7 @@ class RapidLoad_Admin_Frontend
                     do_action('rapidload/vanish/css');
                 }elseif ($job_type === "js"){
                     do_action('rapidload/vanish/js');
-                }elseif ($job_type === "font"){
+                }elseif ($job_type === "fonts"){
                     do_action('rapidload/vanish/font');
                 }elseif ($url){
                     RapidLoad_DB::clear_job_data($job_type, [
@@ -903,7 +904,7 @@ class RapidLoad_Admin_Frontend
 
     public function is_rapidload_page()
     {
-        return isset($_GET['page']) && $_GET['page'] === 'rapidload';
+        return isset($_GET['page']) && $_GET['page'] === 'rapidload-legacy-dashboard';
     }
 
     public function is_rapidload_on_board()
@@ -1082,6 +1083,16 @@ class RapidLoad_Admin_Frontend
             'RapidLoad',
             'RapidLoad',
             'edit_posts',
+            'rapidload-legacy-dashboard',
+            [$this, 'page_legacy'],
+            UUCSS_PLUGIN_URL. 'assets/images/logo-icon-light.svg',
+            59
+        );
+
+        add_menu_page(
+            'RapidLoad',
+            'RapidLoad',
+            'edit_posts',
             'rapidload',
             [$this, 'page'],
             UUCSS_PLUGIN_URL. 'assets/images/logo-icon-light.svg',
@@ -1133,8 +1144,7 @@ class RapidLoad_Admin_Frontend
 
     }
 
-    public function page()
-    {
+    public function page_legacy(){
 
         ?>
         <style>
@@ -1146,7 +1156,19 @@ class RapidLoad_Admin_Frontend
                 display: none !important;
             }
         </style>
-        <div id="rapidload-page-optimizer">  </div><?php
+        <div id="rapidload-app">  </div><?php
 
+    }
+
+    public function page(){
+
+        ?>
+        <div id="rapidload-page-optimizer">  </div>
+        <?php
+
+    }
+
+    public function remove_rapidload_legacey_dashboard_menu(){
+        remove_menu_page('rapidload-legacy-dashboard');
     }
 }

@@ -19,6 +19,7 @@ interface WordPressOptions {
     api_root?: string
     rest_url: string
     license_key?: string
+    test_mode?: boolean
 }
 
 type RapidLoadOptimizerModes ='normal' | 'onboard' | 'preview'

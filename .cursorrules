@@ -1,0 +1,3 @@
+page optimizer location: ./includes/admin/page-optimizer
+build new components in ./includes/admin/page-optimizer/src/components
+use tailwind for styles

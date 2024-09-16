@@ -37,7 +37,7 @@ class RapidLoad_Api
 		$url = self::$apiUrl . '/' . $endpoint . '?' . http_build_query( $data );
 
 		$response = wp_remote_get( $url, [
-			'timeout' => 120,
+			'timeout' => 360,
 			'headers' => [
 				'Authorization' => 'Bearer ' . $this->apiKey
 			]
@@ -55,7 +55,7 @@ class RapidLoad_Api
 		$url = self::$apiUrl . '/' . $endpoint;
 
 		$response = wp_remote_post( $url, [
-			'timeout' => 120,
+			'timeout' => 360,
 			'headers' => [
 				'Authorization' => 'Bearer ' . $this->apiKey
 			],
