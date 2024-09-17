@@ -370,6 +370,12 @@ class RapidLoad_Job{
 
     }
 
+    function delete_all_revisions(){
+        global $wpdb;
+        $id = $this->id;
+        $wpdb->query("DELETE FROM {$wpdb->prefix}rapidload_job_optimizations WHERE job_id = $id");
+    }
+
     function transform_individual_file_actions($options){
 
         $files = [];
@@ -458,6 +464,66 @@ class RapidLoad_Job{
         $regexPattern = '/' . $escapedPath . '/';
 
         return $regexPattern;
+    }
+
+    public static function get_all_optimizations_data_for($strategy, $start_from, $limit = 10){
+
+        global $wpdb;
+        $data = [];
+
+        $query = $wpdb->prepare("
+        SELECT t1.id, t1.job_id, t3.url, t1.strategy, t1.data AS last_data, 
+               IF(t1.id != t2.id, t2.data, NULL) AS first_data, 
+               t1.created_at 
+        FROM  {$wpdb->prefix}rapidload_job_optimizations t1 
+        LEFT JOIN  {$wpdb->prefix}rapidload_job_optimizations t2 
+        ON t1.job_id = t2.job_id 
+        AND t2.id = (SELECT MIN(id) FROM  {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = %s AND job_id = t1.job_id) 
+        LEFT JOIN {$wpdb->prefix}rapidload_job t3 
+        ON t1.job_id = t3.id 
+        WHERE t1.strategy = %s AND (t1.job_id, t1.created_at) IN (
+            SELECT job_id, MAX(created_at) 
+            FROM  {$wpdb->prefix}rapidload_job_optimizations 
+            WHERE strategy = %s 
+            GROUP BY job_id
+        ) 
+        ORDER BY t1.id DESC 
+        LIMIT %d, %d;
+    ", $strategy, $strategy, $strategy, $start_from, $limit);
+
+        $result = $wpdb->get_results($query, OBJECT);
+
+        foreach ($result as $value) {
+
+            $first_data = [];
+            $last_data = [];
+
+            if(isset($value->first_data)){
+                $value->first_data = json_decode($value->first_data);
+                $first_data = [
+                    'performance' => $value->first_data->performance,
+                ];
+            }
+
+            if(isset($value->last_data)){
+                $value->last_data = json_decode($value->last_data);
+                $last_data = [
+                    'performance' => $value->last_data->performance,
+                ];
+            }
+
+            array_push($data, [
+                'id' => $value->id,
+                'job_id' => $value->job_id,
+                'url' => $value->url,
+                'strategy' => $value->strategy,
+                'last_data' => $last_data,
+                'first_data' => $first_data,
+                'created_at' => $value->created_at,
+            ]);
+        }
+
+        return $data;
     }
 
 }

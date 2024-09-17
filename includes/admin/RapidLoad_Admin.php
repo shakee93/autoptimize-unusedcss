@@ -33,6 +33,8 @@ class RapidLoad_Admin
             add_action('wp_ajax_rapidload_titan_feedback', [$this, 'rapidload_titan_feedback']);
             add_action('wp_ajax_rapidload_enable_cdn_metering', [$this, 'rapidload_enable_cdn_metering']);
             add_action('wp_ajax_rapidload_enable_cdn_metering', [$this, 'rapidload_enable_image_metering']);
+            add_action('wp_ajax_rapidload_delete_titan_optimizations', [$this, 'rapidload_delete_titan_optimizations']);
+            add_action('wp_ajax_rapidload_titan_optimizations_data', [$this, 'rapidload_titan_optimizations_data']);
 
 
             add_action('wp_ajax_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
@@ -60,6 +62,44 @@ class RapidLoad_Admin
         add_filter('uucss/rules', [$this, 'rapidload_rule_types'], 90 , 1);
         add_action('add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
 
+    }
+
+    public function rapidload_titan_optimizations_data(){
+
+        $start_from = 0;
+        $limit = 10;
+
+        if(isset($_REQUEST['start_from'])){
+            $start_from = $_REQUEST['start_from'];
+        }
+        if(isset($_REQUEST['limit'])){
+            $limit = $_REQUEST['limit'];
+        }
+
+        wp_send_json_success(RapidLoad_Job::get_all_optimizations_data_for('desktop', $start_from, $limit));
+
+    }
+
+    public function rapidload_delete_titan_optimizations(){
+
+        if(!isset($_REQUEST['url'])){
+            wp_send_json_error('url required');
+        }
+
+        $url = $_REQUEST['url'];
+
+        $job = new RapidLoad_Job(['url' => $url]);
+
+        if(!isset($job->id)){
+            wp_send_json_error('job not found');
+        }
+
+        $job->delete_all_revisions();
+        $job->set_desktop_options(null);
+        $job->set_mobile_options(null);
+        $job->save();
+
+        wp_send_json_success('successfully deleted all optimizations data');
     }
 
     public function rapidload_enable_cdn_metering(){
