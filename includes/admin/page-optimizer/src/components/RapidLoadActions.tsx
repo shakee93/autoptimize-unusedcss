@@ -31,9 +31,9 @@ type GlobalAction = AuditSettingInput & {
 
 const RapidLoadActions: React.FC = () => {
     const { actions, settings } = useSelector(optimizerData);
-    const {options} = useAppContext()
+    const { options } = useAppContext()
 
-    
+
     let [_actions, setActions] = useState<GlobalAction[]>(actions.map((a: any) => ({
         ...a,
         loading: false
@@ -56,7 +56,7 @@ const RapidLoadActions: React.FC = () => {
                 } : a
             ))
 
-            let result = await fetch(options?.ajax_url + action.action.replace(/&amp;/g, '&'));
+            let result = await fetch(action.action.replace(/&amp;/g, '&'));
 
             toast({
                 duration: 10,
@@ -80,7 +80,7 @@ const RapidLoadActions: React.FC = () => {
     }
 
 
-    if(!actions) {
+    if (!actions) {
         return <></>
     }
 

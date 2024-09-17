@@ -143,7 +143,7 @@ class Javascript_Enqueue
                 }
             }
 
-            $node_header = '<script type="text/javascript" >' . $content . '</script>';
+            $node_header = '<script id="rapidload-js-script" type="text/javascript" >' . $content . '</script>';
 
             $title_content = $title->outertext;
 

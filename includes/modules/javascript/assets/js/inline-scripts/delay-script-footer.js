@@ -1,7 +1,95 @@
 //!injected by RapidLoad \n
+
+// Function to detect browser idle using Performance Observer
+function detectBrowserIdle() {
+    const startTime = performance.now();
+    let idleStart = null;
+    let isCPUIdle = false;
+    let isNetworkIdle = false;
+    const idleThreshold = 3000; // 3 seconds delay
+    let pendingNetworkRequests = 0;
+
+    function logWithTime(message) {
+        const elapsedSeconds = ((performance.now() - startTime) / 1000).toFixed(2);
+        console.log(`[${elapsedSeconds}s] ${message}`);
+    }
+
+    function fireEvent(eventName) {
+        logWithTime(`Firing event: ${eventName}`);
+        document.dispatchEvent(new CustomEvent(eventName));
+    }
+
+    // Create a PerformanceObserver to monitor long tasks
+    const longTaskObserver = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+            if (entry.entryType === 'longtask') {
+                if (isCPUIdle) {
+                    isCPUIdle = false;
+                    logWithTime('CPU is no longer idle');
+                    fireEvent('rapidload:cpu-active');
+                }
+                idleStart = null;
+            }
+        }
+    });
+
+    // Start observing long task entries
+    longTaskObserver.observe({ entryTypes: ['longtask'] });
+
+    // Create a PerformanceObserver to monitor network requests
+    const networkObserver = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+            if (entry.entryType === 'resource') {
+                pendingNetworkRequests++;
+                entry.responseEnd = entry.responseEnd || Date.now();
+                setTimeout(() => {
+                    pendingNetworkRequests--;
+                    checkNetworkIdle();
+                }, entry.responseEnd - entry.startTime);
+            }
+        }
+    });
+
+    // Start observing network request entries
+    networkObserver.observe({ entryTypes: ['resource'] });
+
+    // Function to check if the network is idle
+    function checkNetworkIdle() {
+        if (pendingNetworkRequests === 0 && !isNetworkIdle) {
+            isNetworkIdle = true;
+            logWithTime('Network is idle');
+            fireEvent('rapidload:network-idle');
+        } else if (pendingNetworkRequests > 0 && isNetworkIdle) {
+            isNetworkIdle = false;
+            logWithTime('Network is no longer idle');
+            fireEvent('rapidload:network-active');
+        }
+    }
+
+    // Function to check if the browser has been idle
+    function checkIdle() {
+        const now = performance.now();
+        if (!idleStart) {
+            idleStart = now;
+        } else if (now - idleStart >= idleThreshold) {
+            if (!isCPUIdle) {
+                isCPUIdle = true;
+                logWithTime('CPU is idle');
+                fireEvent('rapidload:cpu-idle');
+            }
+        }
+        requestAnimationFrame(checkIdle);
+    }
+
+    // Start checking for idle state
+    requestAnimationFrame(checkIdle);
+}
+
 (function () {
+ detectBrowserIdle();
     var totalScripts = prepareScripts();
-    const events = ['click', 'mousemove', 'touchstart', 'keydown'];
+    // const events = ['click', 'mousemove', 'touchstart', 'keydown'];
+    const events = ['rapidload:cpu-idle'];
     let userInteracted = false;
 
     function rpDebug(method = 'log', ...args) {
@@ -119,7 +207,9 @@
 
 
     var listener = async function () {
+        console.log('heee');
         if (!userInteracted) {
+            console.log('hereeee');
             userInteracted = true;
             removeEventListeners();
             await loadScriptsInDependencyOrder();
@@ -136,12 +226,13 @@
     };
 
     events.forEach(function (event) {
-        addEventListener(event, listener);
+        console.log(event);
+        document.addEventListener(event, listener);
     });
 
     function removeEventListeners() {
         events.forEach(function (event) {
-            removeEventListener(event, listener);
+            document.removeEventListener(event, listener);
         });
     }
 
@@ -157,4 +248,11 @@
         );
     }
 
+
+
+
+
+// Call the function to start detecting browser idle
+   
+    
 })();
