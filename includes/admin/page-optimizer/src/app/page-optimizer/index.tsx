@@ -70,7 +70,7 @@ export default function PageOptimizer() {
                 {testMode &&
                     <m.div
                         initial={{ borderWidth: '0px' }}
-                        animate={{ borderWidth: '4px' }}
+                        animate={{ borderWidth: '5px' }}
                         exit={{ borderWidth: '0px' }}
                         transition={{ duration: 0.5 }}
                         className={cn(
@@ -78,7 +78,7 @@ export default function PageOptimizer() {
                             'border-solid border-[#f7b250] rounded-none'
                         )}>
                         <div className={cn(
-                            'absolute -inset-[2px] rounded-lg',
+                            'absolute -inset-[3px] rounded-xl',
                             'border-[3px] border-[#f7b250]'
                         )} />
                     </m.div>}
