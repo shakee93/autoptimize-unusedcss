@@ -113,7 +113,6 @@ class RapidLoad_Admin
             }
         }
 
-        self::debug_log($data); // Log the result
         return $data;
     }
 
