@@ -79,7 +79,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
 
     useEffect(() => {
         // load initial data
-        dispatch(getTitanOptimizationData(options, 1, 15));
+      //  dispatch(getTitanOptimizationData(options, 0, 15));
 
     }, [dispatch]);
 
