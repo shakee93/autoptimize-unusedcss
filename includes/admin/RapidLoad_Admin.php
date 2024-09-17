@@ -35,6 +35,8 @@ class RapidLoad_Admin
             add_action('wp_ajax_rapidload_enable_cdn_metering', [$this, 'rapidload_enable_image_metering']);
             add_action('wp_ajax_rapidload_delete_titan_optimizations', [$this, 'rapidload_delete_titan_optimizations']);
             add_action('wp_ajax_rapidload_titan_optimizations_data', [$this, 'rapidload_titan_optimizations_data']);
+            add_action('wp_ajax_rapidload_fetch_post_types_with_links', [$this, 'rapidload_fetch_post_types_with_links']);
+            add_action('wp_ajax_rapidload_fetch_post_search_by_title_or_permalink', [$this, 'rapidload_fetch_post_search_by_title_or_permalink']);
 
 
             add_action('wp_ajax_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
@@ -62,6 +64,108 @@ class RapidLoad_Admin
         add_filter('uucss/rules', [$this, 'rapidload_rule_types'], 90 , 1);
         add_action('add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
 
+    }
+
+    function rapidload_fetch_post_types_with_links() {
+        $data = [];
+
+        $post_types = get_post_types( ['public' => true], 'names' );
+
+        foreach ( $post_types as $post_type ) {
+
+            $query = new WP_Query([
+                'post_type'      => $post_type,
+                'posts_per_page' => 10,
+                'orderby'        => 'post_modified',
+                'order'          => 'DESC',
+                'no_found_rows'  => true
+            ]);
+
+            if ( $query->have_posts() ) {
+                $posts_data = [];
+                $unique_urls = [];
+
+                foreach ( $query->posts as $post ) {
+                    $permalink = get_permalink( $post->ID );
+
+                    $parsed_url = wp_parse_url( $permalink );
+                    $base_url = isset( $parsed_url['scheme'] ) && isset( $parsed_url['host'] )
+                        ? $parsed_url['scheme'] . '://' . $parsed_url['host'] . $parsed_url['path']
+                        : $permalink;
+
+                    if ( !in_array( $base_url, $unique_urls ) ) {
+                        $unique_urls[] = $base_url;
+                        $posts_data[] = [
+                            'title'     => get_the_title( $post->ID ),
+                            'permalink' => $permalink,
+                        ];
+                    }
+                }
+
+                $data[] = [
+                    'post_type' => $post_type,
+                    'posts'     => $posts_data
+                ];
+            }
+        }
+
+        self::debug_log($data); // Log the result
+        return $data;
+    }
+
+    function rapidload_fetch_post_search_by_title_or_permalink() {
+
+        if ( !isset( $_REQUEST['s'] ) ) {
+            wp_send_json_error( 'Search key not found' );
+        }
+
+        $search_term = sanitize_text_field( $_REQUEST['s'] );
+        $search_term_lower = strtolower( $search_term );
+
+        if ( strlen( $search_term ) < 3 ) {
+            wp_send_json_error( 'Search term must be at least 3 characters long' );
+        }
+
+        $post_type = isset( $_REQUEST['post_type'] ) ? sanitize_text_field( $_REQUEST['post_type'] ) : 'any';
+        $posts_per_page = 10;
+        $paged = 1;
+        $data = [];
+
+        do {
+            $args = [
+                'posts_per_page'   => $posts_per_page,
+                'post_type'        => $post_type,
+                'post_status'      => 'publish',
+                'paged'            => $paged,
+                'fields'           => 'ids'
+            ];
+
+            $query = new WP_Query( $args );
+
+            if ( $query->have_posts() ) {
+                foreach ( $query->posts as $post_id ) {
+                    $permalink = get_permalink( $post_id );
+                    $permalink_lower = strtolower( $permalink );
+
+                    if ( stripos( $permalink_lower, $search_term_lower ) !== false || stripos( strtolower( get_the_title( $post_id ) ), $search_term_lower ) !== false ) {
+                        $data[] = [
+                            'id'        => $post_id,
+                            'post_type' => get_post_type( $post_id ),
+                            'title'     => get_the_title( $post_id ),
+                            'permalink' => $permalink,
+                        ];
+                    }
+                }
+            }
+
+            $paged++;
+        } while ( $query->found_posts > count( $data ) && $query->max_num_pages >= $paged );
+
+        if ( empty( $data ) ) {
+            wp_send_json_error( 'No results found' );
+        }
+
+        wp_send_json_success( $data );
     }
 
     public function rapidload_titan_optimizations_data(){
