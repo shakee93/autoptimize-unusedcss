@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Card from "components/ui/card";
 import { cn } from "lib/utils";
 import { InformationCircleIcon, LinkIcon, CalendarIcon, EllipsisHorizontalCircleIcon,PencilSquareIcon, TrashIcon,ArrowTrendingUpIcon,ArrowTrendingDownIcon } from "@heroicons/react/24/outline";
@@ -16,6 +16,10 @@ import {
 } from "@/components/ui/dialog"
 import {ContentSelector} from "components/ui/content-selector";
 import AppButton from "components/ui/app-button"
+import {fetchReport, fetchSettings, getTitanOptimizationData} from "../../../store/app/appActions";
+import {setCommonState} from "../../../store/common/commonActions";
+import {useAppContext} from "../../../context/app";
+import useCommonDispatch from "hooks/useCommonDispatch";
 
 interface Settings {
     title: string;
@@ -70,7 +74,14 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
         ]
     };
 
+    const {options} = useAppContext();
+    const { dispatch } = useCommonDispatch();
 
+    useEffect(() => {
+        // load initial data
+        dispatch(getTitanOptimizationData(options, 1, 15));
+
+    }, [dispatch]);
 
 
     return (

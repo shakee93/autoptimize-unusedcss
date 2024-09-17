@@ -253,6 +253,26 @@ class ApiService {
         }
     }
 
+    async getOptimizationData(startFrom: number, limit: number): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', 'rapidload_titan_optimizations_data');
+            this.baseURL.searchParams.append('start_from', startFrom)
+            this.baseURL.searchParams.append('limit', limit)
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
     async getLicense(): Promise<any> {
         try {
             this.baseURL.searchParams.append('action', 'uucss_license');

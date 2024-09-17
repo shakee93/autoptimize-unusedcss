@@ -132,7 +132,7 @@ const App = ({popup, _showOptimizer = false}: {
 
                                 <div className='flex'>
                                     <div data-tour='app-switch'
-                                         className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[4px] rounded-2xl cursor-pointer bg-brand-200/50'>
+                                         className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[4px] rounded-2xl cursor-pointer bg-brand-200/80'>
 
 
                                         {routes.map((route, i) => (

@@ -41,7 +41,7 @@ const TestModeSwitcher = () => {
         <div className='flex gap-2 justify-center'>
             <div className='w-fit'>
                 <div data-tour='test-mode'
-                     className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[4px] rounded-2xl cursor-pointer bg-brand-0'>
+                     className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[4px] rounded-2xl cursor-pointer bg-brand-200/80'>
                     {/*<div className={cn(*/}
                     {/*    'absolute translate-x-0 left-0.5 w-[70px] rounded-[14px] -z-1 duration-300 h-[44px] text-sm flex flex-col gap-2 px-3 py-2.5 font-medium dark:bg-brand-950 bg-brand-200/80',*/}
 
@@ -51,7 +51,7 @@ const TestModeSwitcher = () => {
                     <m.span
                         layoutId="bubble"
                         className={cn(
-                            'absolute w-[78px] transition rounded-[14px] -z-1 h-[44px] text-sm flex flex-col gap-2 px-3 py-2.5 font-medium dark:bg-brand-950 bg-brand-200/80',
+                            'absolute w-[78px] transition rounded-[14px] -z-1 h-[44px] text-sm flex flex-col gap-2 px-3 py-2.5 font-medium dark:bg-brand-950 bg-brand-0',
                             testMode && 'w-[110px] transition right-0.5 bg-amber-500/80'
                         )}
                         style={{borderRadius: 14}}

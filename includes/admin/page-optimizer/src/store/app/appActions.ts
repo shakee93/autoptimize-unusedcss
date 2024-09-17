@@ -220,6 +220,38 @@ export const getTestModeStatus = (options: WordPressOptions, url: string, mode?:
     }
 }
 
+
+export const getTitanOptimizationData = (options: WordPressOptions, startFrom: number, limit: number): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string }> => {
+
+        try {
+            const fetchOptimizationData = await api.getOptimizationData(startFrom, limit);
+            // dispatch({
+            //     type: UPDATE_TEST_MODE,
+            //     payload : fetchTestModeData?.data
+            // })
+            console.log(fetchOptimizationData)
+            return { success: true };
+        } catch (error: any) {
+            console.error('Error on fetchOptimizationData:', error);
+            let errorMessage: string;
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            } else {
+                errorMessage = 'An unknown error occurred';
+            }
+            return { success: false, error: errorMessage };
+        }
+
+
+    }
+}
+
 export const fetchReport = (options: WordPressOptions, url : string, reload = false, inprogress = false): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
