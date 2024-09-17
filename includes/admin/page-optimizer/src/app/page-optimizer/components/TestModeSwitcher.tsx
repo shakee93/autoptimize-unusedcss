@@ -51,11 +51,11 @@ const TestModeSwitcher = () => {
                     <m.span
                         layoutId="bubble"
                         className={cn(
-                            'absolute w-[78px] rounded-[14px] -z-1 h-[44px] text-sm flex flex-col gap-2 px-3 py-2.5 font-medium dark:bg-brand-950 bg-brand-200/80',
-                            testMode && 'w-[110px] right-0.5 bg-amber-500/80'
+                            'absolute w-[78px] transition rounded-[14px] -z-1 h-[44px] text-sm flex flex-col gap-2 px-3 py-2.5 font-medium dark:bg-brand-950 bg-brand-200/80',
+                            testMode && 'w-[110px] transition right-0.5 bg-amber-500/80'
                         )}
                         style={{borderRadius: 14}}
-                        transition={{type: "spring", bounce: 0, duration: 0.6}}
+                        transition={{type: "spring", bounce: 0, duration: 4}}
                     />
 
                     <div
@@ -103,9 +103,9 @@ const TestModeSwitcher = () => {
                 </div>
             </TooltipText>
         </div>
-        <div className="relative mt-4 -mb-2 rotate-180 ">
-            <TestModeLine width={testMode ? 110 : 200}/>
-        </div>
+        {/*<div className="relative mt-4 -mb-2 rotate-180 ">*/}
+        {/*    <TestModeLine width={testMode ? 110 : 200}/>*/}
+        {/*</div>*/}
     </div>
 }
 

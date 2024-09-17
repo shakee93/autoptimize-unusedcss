@@ -9,7 +9,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppAction, RootState} from "../store/app/appTypes";
 import {fetchReport, fetchSettings, getTestModeStatus} from "../store/app/appActions";
 import {Toaster} from "components/ui/toaster";
-import {AnimatePresence} from "framer-motion";
+import {AnimatePresence, m} from "framer-motion";
 import {useRootContext} from "../context/root";
 import Header from "app/page-optimizer/components/Header";
 import {cn} from "lib/utils";
@@ -120,7 +120,7 @@ const App = ({popup, _showOptimizer = false}: {
                     </Suspense>
 
 
-                    <div className=' z-[1000000] dark:bg-brand-930 bg-brand-50'>
+                    <div className=' z-[1000000] dark:bg-brand-930 bg-brand-0'>
                         <header className='flex gap-8 h-16 items-center justify-between border-b'>
                             <div className='flex items-center'>
                                 <div className='relative px-4'>
@@ -131,18 +131,24 @@ const App = ({popup, _showOptimizer = false}: {
                                 </div>
 
                                 <div className='flex'>
+                                    <div data-tour='app-switch'
+                                         className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[4px] rounded-2xl cursor-pointer bg-brand-200/50'>
 
-                                    {routes.map((route, i) => (
-                                        <button key={i}
-                                                onClick={e => setActiveRoute(route.id)}
-                                                className={cn(
-                                                    'px-6 flex-1 h-16 border-l text-sm tracking-wider border-b-2 border-b-transparent',
-                                                    activeRoute === route.id && 'dark:bg-brand-700 bg-brand-200 dark:border-b-brand-400 border-b-purple-950'
-                                                )}>
-                                            {route.title}
-                                        </button>
-                                    ))}
 
+                                        {routes.map((route, i) => (
+                                            <>
+
+                                                <button key={i}
+                                                        onClick={e => setActiveRoute(route.id)}
+                                                        className={cn(
+                                                            'px-6 flex-1 h-10 text-sm tracking-wider ',
+                                                            activeRoute === route.id && 'dark:bg-brand-700 bg-brand-0 rounded-xl'
+                                                        )}>
+                                                    {route.title}
+                                                </button>
+                                            </>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
 

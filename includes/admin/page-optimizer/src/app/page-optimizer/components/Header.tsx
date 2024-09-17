@@ -185,23 +185,23 @@ const Header = ({ url }: { url: string}) => {
 
                 </div>
             </header>
-            <AnimatePresence>
-                    {testMode && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{
-                                ease: 'easeInOut',
-                                duration: 0.5,
-                            }}
-                            className="z-[100000] w-full text-[13px] bg-[#D9CAEB] items-center text-center py-0.5 top-[74px] absolute dark:bg-brand-950"
-                        >
-                            <span className="font-semibold text-purple-900 dark:text-brand-300">Test Mode turned on,</span>
-                            optimizations are safely previewed without affecting your live website. Perfect for experimentation and fine-tuning.
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+            {/*<AnimatePresence>*/}
+            {/*        {testMode && (*/}
+            {/*            <motion.div*/}
+            {/*                initial={{ opacity: 0, y: -10 }}*/}
+            {/*                animate={{ opacity: 1, y: 0 }}*/}
+            {/*                exit={{ opacity: 0, y: -10 }}*/}
+            {/*                transition={{*/}
+            {/*                    ease: 'easeInOut',*/}
+            {/*                    duration: 0.5,*/}
+            {/*                }}*/}
+            {/*                className="z-[100000] w-full text-[13px] bg-[#D9CAEB] items-center text-center py-0.5 top-[74px] absolute dark:bg-brand-950"*/}
+            {/*            >*/}
+            {/*                <span className="font-semibold text-purple-900 dark:text-brand-300">Test Mode turned on,</span>*/}
+            {/*                optimizations are safely previewed without affecting your live website. Perfect for experimentation and fine-tuning.*/}
+            {/*            </motion.div>*/}
+            {/*        )}*/}
+            {/*    </AnimatePresence>*/}
         </>
     )
 }
