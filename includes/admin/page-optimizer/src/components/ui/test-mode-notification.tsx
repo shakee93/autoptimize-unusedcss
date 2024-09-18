@@ -27,9 +27,9 @@ function TestModeNotification() {
             transition={{ ease: "linear", duration: 0.5 }}
             className="z-[110000] w-full text-sm bg-purple-700/30 items-center text-center py-2"
         >
-      <span className="font-semibold text-purple-900">
-        Test Mode turned on,
-      </span>{" "}
+            <span className="font-semibold text-purple-900">
+                Test Mode turned on,
+            </span>{" "}
             optimizations are safely previewed without affecting your live website.
             Perfect for experimentation and fine-tuning.
         </motion.div>
