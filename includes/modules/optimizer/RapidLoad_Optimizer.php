@@ -412,7 +412,7 @@ class RapidLoad_Optimizer
 
                 if (isset($lcp_audit->files) && isset($lcp_audit->files->debugData) && !empty($lcp_audit->files->debugData->initiatorPath)) {
                     foreach ($lcp_audit->files->debugData->initiatorPath as $path) {
-                        if (isset($path->url) && preg_match('/\.(jpg|jpeg|jpg|png|gif)$/i', $path->url)) {
+                        if (isset($path->url) && preg_match('/\.(jpg|jpeg|jpg|png|webp|gif)$/i', $path->url)) {
                             $preload_images[] = $path->url;
                         }
                     }
