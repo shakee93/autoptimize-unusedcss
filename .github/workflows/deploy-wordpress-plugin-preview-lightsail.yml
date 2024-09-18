@@ -204,7 +204,7 @@ jobs:
           EOF
 
       - name: Set up environment and grant permissions
-        if: ${{ github.event.action == 'opened' }}
+        #if: ${{ github.event.action == 'opened' }}
         run: |
           ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << EOF
             set -x
@@ -214,6 +214,9 @@ jobs:
 
             # Grant 666 permissions to wp-config.php
             sudo docker exec -u root -i \${WP_CONTAINER} sh -c "chmod 666 /bitnami/wordpress/wp-config.php"
+
+            # Grant 777 permissions to cache folder (or specify desired permission level)
+            sudo docker exec -u root -i \${WP_CONTAINER} sh -c "chmod -R 777 /bitnami/wordpress/wp-content/cache"
           EOF
 
       - name: Update domain in wp-config.php
