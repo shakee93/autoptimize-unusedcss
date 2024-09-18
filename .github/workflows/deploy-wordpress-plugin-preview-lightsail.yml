@@ -213,7 +213,7 @@ jobs:
             WP_CONTAINER=\$(sudo docker ps -q --filter "name=wordpress_\${INSTANCE_ID}")
 
             # Grant 666 permissions to wp-config.php to cache folder
-            sudo docker exec -u root -i \${WP_CONTAINER} sh -c "chmod 666 /bitnami/wordpress/wp-config.php"
+            sudo docker exec -u root -i \${WP_CONTAINER} sh -c "chmod 666 /bitnami/wordpress/wp-config.php && chmod 666 /bitnami/wordpress/wp-content"
           EOF
 
       - name: Update domain in wp-config.php
