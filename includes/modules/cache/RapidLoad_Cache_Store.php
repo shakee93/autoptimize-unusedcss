@@ -741,14 +741,6 @@ class RapidLoad_Cache_Store
             return true;
         }
 
-        // Directory validation
-        /*$valid = false;
-        if ( ! empty( RAPIDLOAD_CACHE_DIR ) && strpos( $dir, RAPIDLOAD_CACHE_DIR ) === 0 ) {
-            $valid = true;
-        }
-        if ( ! empty( RAPIDLOAD_SETTINGS_DIR ) && strpos( $dir, RAPIDLOAD_SETTINGS_DIR ) === 0 ) {
-            $valid = true;
-        }*/
         if ( strpos( $dir, '../' ) !== false ) {
             return false;
         }
