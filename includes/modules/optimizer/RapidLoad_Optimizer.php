@@ -399,31 +399,6 @@ class RapidLoad_Optimizer
 
         }
 
-        $preload_images = [];
-
-        if (isset($data->audits) && is_array($data->audits)) {
-
-            $lcp_audit = array_filter($data->audits, function($audit) {
-                return $audit->id === 'prioritize-lcp-image';
-            });
-
-            if (!empty($lcp_audit)) {
-                $lcp_audit = reset($lcp_audit);
-
-                if (isset($lcp_audit->files) && isset($lcp_audit->files->debugData) && !empty($lcp_audit->files->debugData->initiatorPath)) {
-                    foreach ($lcp_audit->files->debugData->initiatorPath as $path) {
-                        if (isset($path->url) && preg_match('/\.(jpg|jpeg|jpg|png|gif)$/i', $path->url)) {
-                            $preload_images[] = $path->url;
-                        }
-                    }
-                }
-            }
-        }
-
-        if(!empty($preload_images)){
-            self::$options['uucss_preload_lcp_image'] = implode("\n",$preload_images);
-        }
-
         if(self::$strategy == "desktop"){
             self::$job->set_desktop_options(self::$options);
         }else{
@@ -564,6 +539,38 @@ class RapidLoad_Optimizer
             $optimization = new RapidLoad_Job_Optimization(self::$job, self::$strategy);
             $optimization->set_data($result);
             $optimization->save();
+        }
+
+        $preload_images = [];
+
+        if (isset($result->audits) && is_array($result->audits)) {
+
+            $lcp_audit = array_filter($result->audits, function($audit) {
+                return $audit->id === 'prioritize-lcp-image';
+            });
+
+            if (!empty($lcp_audit)) {
+                $lcp_audit = reset($lcp_audit);
+
+                if (isset($lcp_audit->files) && isset($lcp_audit->files->debugData) && !empty($lcp_audit->files->debugData->initiatorPath)) {
+                    foreach ($lcp_audit->files->debugData->initiatorPath as $path) {
+                        if (isset($path->url) && preg_match('/\.(jpg|jpeg|jpg|png|gif)$/i', $path->url)) {
+                            $preload_images[] = $path->url;
+                        }
+                    }
+                }
+            }
+        }
+
+        if(!empty($preload_images)){
+            self::$options['uucss_preload_lcp_image'] = implode("\n",$preload_images);
+            if(self::$strategy == "desktop"){
+                self::$job->set_desktop_options(self::$options);
+                self::$job->save();
+            }else{
+                self::$job->set_mobile_options(self::$options);
+                self::$job->save();
+            }
         }
 
         return[
@@ -1283,10 +1290,6 @@ class RapidLoad_Optimizer
             }
         }else{
             unset(self::$options['uucss_enable_image_delivery']);
-        }
-
-        if(!empty($preload_images)){
-            self::$options['uucss_preload_lcp_image'] = implode("\n",$preload_images);
         }
 
         if(isset(self::$options['uucss_self_host_google_fonts']) && self::$options['uucss_self_host_google_fonts'] == "1"){
