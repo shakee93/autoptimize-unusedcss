@@ -991,7 +991,7 @@ class RapidLoad_Cache_Store
             return;
         }
 
-        $new_cache_file_created = file_put_contents( $new_cache_file, $page_contents, LOCK_EX );
+        $new_cache_file_created = file_put_contents( $new_cache_file, $page_contents, 0755 );
 
         if ( $new_cache_file_created !== false ) {
             clearstatcache();
