@@ -31,14 +31,15 @@ import {JsonView} from "react-json-view-lite";
 import ErrorFetch from "components/ErrorFetch";
 import SpeedInsights from "../speed-popover/components/speed-insights";
 import {ContentSelector} from "components/ui/content-selector";
+import {RootState} from "../../store/app/appTypes";
+
+
 export interface AuditComponentRef {
     notifyHeightChange: () => void;
 }
 
 export default function Dashboard() {
     const {data, loading, error} = useSelector(optimizerData);
-    const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(data?.performance);
-    const { dispatch, activeMetric } = useCommonDispatch()
 
     const {
         options,
@@ -60,34 +61,6 @@ export default function Dashboard() {
         }
 
     }, [savingData])
-
-    const dummyTableData = [
-        {
-            urls: 'https://rapidload.io/..../autoptimize.css',
-            pageScore: '+11.01%',
-            updateDate: '2/24/2024',
-            actions: 'Optimize'
-        },
-        {
-            urls: 'https://example.com/style.css',
-            pageScore: '-5.32%',
-            updateDate: '3/12/2024',
-            actions: 'Optimize'
-        },
-        {
-            urls: 'https://dummywebsite.com/main.js',
-            pageScore: '+2.55%',
-            updateDate: '3/15/2024',
-            actions: 'Optimize'
-        },
-        {
-            urls: 'https://testsite.net/fonts.css',
-            pageScore: '+8.21%',
-            updateDate: '3/20/2024',
-            actions: 'Optimize'
-        },
-    ];
-
 
     return <>
 
@@ -204,7 +177,6 @@ export default function Dashboard() {
                                                 {
                                                     title: "Optimize Pages",
                                                     total_jobs: 1000,
-                                                    data: dummyTableData
                                                 }
                                             }
                                         />

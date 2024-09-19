@@ -12,7 +12,7 @@ import {
     FETCH_SETTING_SUCCESS,
     GET_CSS_STATUS_SUCCESS,
     RootState,
-    UPDATE_FILE_ACTION,
+    UPDATE_FILE_ACTION, UPDATE_OPTIMIZE_TABLE,
     UPDATE_SETTINGS,
     UPDATE_TEST_MODE
 } from "./appTypes";
@@ -229,11 +229,11 @@ export const getTitanOptimizationData = (options: WordPressOptions, startFrom: n
 
         try {
             const fetchOptimizationData = await api.getOptimizationData(startFrom, limit);
-            // dispatch({
-            //     type: UPDATE_TEST_MODE,
-            //     payload : fetchTestModeData?.data
-            // })
-            console.log(fetchOptimizationData)
+            dispatch({
+                type: UPDATE_OPTIMIZE_TABLE,
+                payload : fetchOptimizationData?.data
+            })
+
             return { success: true };
         } catch (error: any) {
             console.error('Error on fetchOptimizationData:', error);

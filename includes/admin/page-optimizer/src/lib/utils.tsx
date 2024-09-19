@@ -133,3 +133,12 @@ export function timeAgo(timestamp: number) {
 export function toBoolean(value: any): boolean {
   return value === true || value === 1 || value === '1' || value === 'true';
 }
+
+export function calculatePercentage(oldValue: number, newValue: number) {
+  if (oldValue === 0) return 0;
+  if (oldValue == null || newValue == null) {
+    return '-';
+  }
+  const percentage = ((newValue - oldValue) / oldValue) * 100;
+  return percentage.toFixed(2);
+}
