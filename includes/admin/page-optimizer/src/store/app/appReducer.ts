@@ -12,7 +12,8 @@ import {
     GET_CSS_STATUS_SUCCESS,
     UPDATE_FILE_ACTION,
     UPDATE_SETTINGS,
-    UPDATE_TEST_MODE
+    UPDATE_TEST_MODE,
+    UPDATE_OPTIMIZE_TABLE
 } from "./appTypes";
 
 const blankReport =  {
@@ -33,6 +34,7 @@ const initialState: AppState = {
     activeReport: 'desktop',
     cssStatus: null,
     testMode: null,
+    optimizationData: null,
     report: {
         mobile: blankReport,
         desktop: blankReport,
@@ -63,6 +65,11 @@ const initialState: AppState = {
 const appReducer = (state = initialState, action: AppAction): AppState => {
 
     switch (action.type) {
+        case UPDATE_OPTIMIZE_TABLE:
+            return {
+                ...state,
+                optimizationData: action.payload,
+            };
         case GET_CSS_STATUS_SUCCESS:
             return {
                 ...state,

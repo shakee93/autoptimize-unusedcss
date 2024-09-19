@@ -26,6 +26,7 @@ export interface AppState {
     activeReport: ReportType,
     cssStatus: CSSStatusResponse | null;
     testMode: TestMode | null;
+    optimizationData: OptimizeTable[];
     report: {
         mobile: Report,
         desktop: Report,
@@ -59,6 +60,13 @@ export const CHANGE_REPORT_TYPE = 'CHANGE_REPORT_TYPE';
 export const UPDATE_FILE_ACTION = 'UPDATE_FILE_ACTION';
 export const GET_CSS_STATUS_SUCCESS = 'GET_CSS_STATUS_SUCCESS';
 export const UPDATE_TEST_MODE = 'UPDATE_TEST_MODE';
+export const UPDATE_OPTIMIZE_TABLE = 'UPDATE_OPTIMIZE_TABLE';
+
+interface UpdateOptimizeTable {
+    type: typeof UPDATE_OPTIMIZE_TABLE,
+    payload : OptimizeTable,
+
+}
 
 interface GetCSSStatusSuccess {
     type: typeof GET_CSS_STATUS_SUCCESS,
@@ -143,5 +151,5 @@ interface UpdateFileActionAction {
 // Define the combined action type
 export type AppAction = FetchDataRequestAction | FetchDataSuccessAction | FetchDataFailureAction |
     FetchSettingsRequestAction | FetchSettingsSuccessAction | FetchSettingsFailureAction | ChangeGearAction|
-    UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode;
+    UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode | UpdateOptimizeTable;
 

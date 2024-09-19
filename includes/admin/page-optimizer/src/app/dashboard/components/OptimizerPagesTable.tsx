@@ -16,26 +16,25 @@ import {
 } from "@/components/ui/dialog"
 import {ContentSelector} from "components/ui/content-selector";
 import AppButton from "components/ui/app-button"
-import {fetchReport, fetchSettings, getTitanOptimizationData} from "../../../store/app/appActions";
-import {setCommonState} from "../../../store/common/commonActions";
+import { getTitanOptimizationData} from "../../../store/app/appActions";
 import {useAppContext} from "../../../context/app";
 import useCommonDispatch from "hooks/useCommonDispatch";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../store/app/appTypes";
+import DateComponent from "components/DateComponent";
+import {calculatePercentage} from "lib/utils";
+import PercentageIndicator from "components/PercentageIndicator";
+import TableSkeleton from "components/ui/TableSkeleton";
 
 interface Settings {
     title: string;
     total_jobs: number
-    data: {
-        urls: string;
-        pageScore: string;
-        updateDate: string;
-        actions: string;
-
-    }[];
 }
 
 
 const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => {
     const [open, setOpen] = useState(false);
+    const {optimizationData} = useSelector((state: RootState) => state.app);
 
     const contentTypes = [
         { label: 'Pages', count: 5, type: 'pages' },
@@ -77,10 +76,21 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
     const {options} = useAppContext();
     const { dispatch } = useCommonDispatch();
 
-    useEffect(() => {
-        // load initial data
-      //  dispatch(getTitanOptimizationData(options, 0, 15));
+    const [loading, setLoading] = useState(true);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                await dispatch(getTitanOptimizationData(options, 0, 15));
+            } catch (error) {
+                console.error('Error fetching optimization data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
     }, [dispatch]);
 
 
@@ -180,33 +190,19 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                                 </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-gray-200 dark:divide-brand-950">
-                                                {settings.data.map((item, idx) => (
-                                                    <tr key={idx}
-                                                        className={idx % 2 === 0 ? 'bg-gray-100/30 dark:bg-brand-950' : 'bg-white dark:bg-brand-900'}>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-brand-300">{item.urls}</td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm ">
-                                                            {item.pageScore.includes('+') ? (
-                                                                <span
-                                                                    className="bg-green-200/40 px-3 py-1.5 rounded-xl flex w-fit gap-2 items-center cursor-pointer text-green-700 ">
-                                                                    {item.pageScore} <ArrowTrendingUpIcon
-                                                                    className="w-4 h-4"/>
-                                                                </span>
-                                                            ) : item.pageScore.includes('-') ? (
-                                                                <span
-                                                                    className="bg-red-200/40 px-3 py-1.5 rounded-xl flex w-fit gap-2 items-center cursor-pointer text-green-700 ">
-                                                                    {item.pageScore} <ArrowTrendingDownIcon
-                                                                    className="w-4 h-4"/>
-                                                                </span>
-                                                            ) : (
-                                                                <span>{item.pageScore}</span>
-                                                            )}
+                                                {loading ? <TableSkeleton rows={4} columns={4} /> : optimizationData?.map((item, idx) => (
+                                                    <tr key={idx} className={idx % 2 === 0 ? 'bg-gray-100/30 dark:bg-brand-950' : 'bg-white dark:bg-brand-900'}>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-brand-300">{item.url}</td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                                            <PercentageIndicator percentage={calculatePercentage(item.first_data?.performance, item.last_data?.performance)} />
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-brand-300">{item.updateDate}</td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center gap-2 ">
-                                                            <span
-                                                                className="dark:text-brand-950 bg-gray-100 px-3 py-1.5 rounded-xl flex w-fit gap-2 items-center cursor-pointer"><PencilSquareIcon
-                                                                className="w-4 h-4"/>{item.actions}</span> <TrashIcon
-                                                            className="w-4 h-4 cursor-pointer"/></td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-brand-300"><DateComponent data={item.created_at} /></td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center gap-2">
+                                                            <span className="dark:text-brand-950 bg-gray-100 px-3 py-1.5 rounded-xl flex w-fit gap-2 items-center cursor-pointer">
+                                                                <PencilSquareIcon className="w-4 h-4" /> Optimize
+                                                            </span>
+                                                            <TrashIcon className="w-4 h-4 cursor-pointer" />
+                                                        </td>
                                                     </tr>
                                                 ))}
                                                 </tbody>
@@ -215,29 +211,6 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                     </div>
                                 </div>
                             </div>
-
-                            {/*<div className="table-container ">*/}
-                            {/*    <table className="mt-4 table-auto text-left w-full border-collapse">*/}
-                            {/*        <thead className='bg-gray-50 dark:bg-gray-700'>*/}
-                            {/*        <tr>*/}
-                            {/*            <th>URLs</th>*/}
-                            {/*            <th>Page Score</th>*/}
-                            {/*            <th>Update Date</th>*/}
-                            {/*            <th>Actions</th>*/}
-                            {/*        </tr>*/}
-                            {/*        </thead>*/}
-                            {/*        <tbody>*/}
-                            {/*        {settings.data.map((item, idx) => (*/}
-                            {/*            <tr key={idx}>*/}
-                            {/*                <td>{item.urls}</td>*/}
-                            {/*                <td>{item.pageScore}</td>*/}
-                            {/*                <td>{item.updateDate}</td>*/}
-                            {/*                <td>{item.actions}</td>*/}
-                            {/*            </tr>*/}
-                            {/*        ))}*/}
-                            {/*        </tbody>*/}
-                            {/*    </table>*/}
-                            {/*</div>*/}
                         </div>
 
                     </Card>

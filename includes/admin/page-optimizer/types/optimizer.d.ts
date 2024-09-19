@@ -234,6 +234,16 @@ interface CSSStatusResponse {
     cpcss: CSSJobStatus;
 }
 
+interface OptimizeTable {
+    id: string
+    created_at: string;
+    first_data: { performance : number };
+    last_data: { performance : number };
+    job_id: string;
+    strategy: string
+    url: string;
+}
+
 interface TestMode {
     status: boolean;
 }
