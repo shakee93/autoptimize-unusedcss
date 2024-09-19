@@ -748,10 +748,10 @@ class RapidLoad_Cache_Store
         }
         if ( ! empty( RAPIDLOAD_SETTINGS_DIR ) && strpos( $dir, RAPIDLOAD_SETTINGS_DIR ) === 0 ) {
             $valid = true;
-        }
-        if ( ! $valid || strpos( $dir, '../' ) !== false ) {
-            return false;
         }*/
+        if ( strpos( $dir, '../' ) !== false ) {
+            return false;
+        }
 
         if ( ! wp_mkdir_p( $dir ) ) {
             return false;
