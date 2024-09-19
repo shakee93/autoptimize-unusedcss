@@ -730,7 +730,7 @@ class RapidLoad_Cache_Store
         return ( $new_settings_file_created === false ) ? false : $new_settings_file;
     }
 
-    private static function mkdir_p( $dir ) {
+    public static function mkdir_p( $dir ) {
 
         $mode_octal  = (int) apply_filters( 'rapidload_mkdir_mode', 0755 );
         $mode_string = decoct( $mode_octal ); // Get the last three digits (e.g. '755').
@@ -742,7 +742,7 @@ class RapidLoad_Cache_Store
         }
 
         // Directory validation
-        $valid = false;
+        /*$valid = false;
         if ( ! empty( RAPIDLOAD_CACHE_DIR ) && strpos( $dir, RAPIDLOAD_CACHE_DIR ) === 0 ) {
             $valid = true;
         }
@@ -751,7 +751,7 @@ class RapidLoad_Cache_Store
         }
         if ( ! $valid || strpos( $dir, '../' ) !== false ) {
             return false;
-        }
+        }*/
 
         if ( ! wp_mkdir_p( $dir ) ) {
             return false;
