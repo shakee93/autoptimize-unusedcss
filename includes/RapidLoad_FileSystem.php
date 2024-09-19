@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) or die();
 class RapidLoad_FileSystem
 {
     public function put_contents( $file_location, $css , $mode = 0755){
-        return @file_put_contents($file_location, $css, $mode);
+        return @file_put_contents($file_location, $css, 0755);
     }
 
     public function exists( $dir ){
