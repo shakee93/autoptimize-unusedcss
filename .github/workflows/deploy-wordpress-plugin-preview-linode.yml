@@ -1,0 +1,160 @@
+name: Deploy WordPress Test Environment on Pull Request
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get the branch name
+        run: |
+          echo "Branch name: ${{ github.head_ref }}"
+
+      - name: Check for merge conflicts
+        run: |
+          git fetch origin
+          git checkout ${{ github.head_ref }}
+          git merge origin/${{ github.base_ref }} --no-commit --no-ff || echo "::set-output name=conflict::true"
+        id: merge_check
+
+      - name: Comment on PR if there are merge conflicts
+        if: steps.merge_check.outputs.conflict == 'true'
+        run: |
+          curl -X POST -H "Authorization: token ${{ secrets.SSH_GITHUB_TOKEN }}" \
+            -d "{\"body\": \"There are merge conflicts in this pull request. Please resolve the conflicts before merging.\"}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments"
+        continue-on-error: true
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} 'echo SSH successfully configured'
+
+      - name: Set environment variables
+        run: |
+          echo "INSTANCE_ID=${{ github.event.number }}" >> $GITHUB_ENV
+          echo "WORDPRESS_PORT=$((3000 + ${{ github.event.number }}))" >> $GITHUB_ENV
+
+      - name: Comment on PR
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          curl -X POST -H "Authorization: token ${{ secrets.SSH_GITHUB_TOKEN }}" \
+            -d "{\"body\": \"WordPress instance for this PR is available at https://pr-${{ github.event.number }}.rapidload.live\"}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments"
+
+      - name: Create dynamic Nginx config
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          INSTANCE_ID=${{ github.event.number }}
+          WORDPRESS_PORT=$((3000 + INSTANCE_ID))
+          CONFIG_FILE_NAME="pr-${INSTANCE_ID}.rapidload.live.conf"
+          LOCAL_CONFIG_FILE_PATH="./${CONFIG_FILE_NAME}"
+          REMOTE_CONFIG_FILE_PATH="/root/${CONFIG_FILE_NAME}" # Updated to root directory
+          TARGET_CONFIG_FILE_PATH="/etc/nginx/conf/vhosts/${CONFIG_FILE_NAME}" # Update Nginx path if required
+
+          # Create the Nginx config file locally
+          cat <<EOF > ${LOCAL_CONFIG_FILE_PATH}
+
+          server {
+              listen 443;
+              server_name pr-${INSTANCE_ID}.rapidload.live;
+
+              location / {
+                  proxy_pass http://localhost:${WORDPRESS_PORT};
+                  proxy_set_header Host \$host;
+                  proxy_set_header X-Real-IP \$remote_addr;
+                  proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto \$scheme;
+              }
+          }
+
+          server {
+              listen 80;
+              server_name pr-${INSTANCE_ID}.rapidload.live;
+
+              location / {
+                  proxy_pass http://localhost:${WORDPRESS_PORT};
+                  proxy_set_header Host \$host;
+                  proxy_set_header X-Real-IP \$remote_addr;
+                  proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto \$scheme;
+              }
+          }
+          EOF
+
+          # Copy the config file to the remote server's /root directory
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${LOCAL_CONFIG_FILE_PATH} root@${{ secrets.SSH_HOST }}:${REMOTE_CONFIG_FILE_PATH}
+
+          # Move the config file to the target directory using sudo
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} "sudo mv ${REMOTE_CONFIG_FILE_PATH} ${TARGET_CONFIG_FILE_PATH}"
+
+      - name: Restart Nginx
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} 'sudo systemctl restart nginx' # Updated restart command
+
+      - name: Add DNS A Record to Cloudflare
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          CF_API_TOKEN=${{ secrets.CF_API_TOKEN }}
+          ZONE_ID=${{ secrets.CF_ZONE_ID }}
+          RECORD_NAME=pr-${{ github.event.number }}
+          RECORD_CONTENT=${{ secrets.SSH_HOST }}
+          curl -X POST "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records" \
+            -H "Authorization: Bearer ${CF_API_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data '{
+              "type": "A",
+              "name": "'"${RECORD_NAME}"'",
+              "content": "'"${RECORD_CONTENT}"'",
+              "ttl": 1,
+              "proxied": true
+            }'
+
+      - name: Create dynamic docker-compose file
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          INSTANCE_ID=${{ github.event.number }}
+          WORDPRESS_PORT=$((3000 + INSTANCE_ID))
+          WP_USERNAME=${{ secrets.WP_USERNAME }}
+          WP_PASSWORD=${{ secrets.WP_PASSWORD }}
+          SSH_HOST=${{ secrets.SSH_HOST }}
+
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${SSH_HOST} <<EOF
+            export INSTANCE_ID=${INSTANCE_ID}
+            export WORDPRESS_PORT=${WORDPRESS_PORT}
+            export WP_USERNAME=${WP_USERNAME}
+            export WP_PASSWORD=${WP_PASSWORD}
+
+            # Create instance directory
+            mkdir -p /root/wp-${INSTANCE_ID}
+
+            # Copy the template to the instance directory
+            cp /root/docker-compose-template.yml /root/wp-${INSTANCE_ID}/docker-compose.yml
+
+            # Modify the copied template file
+            sed -i "s/wordpress_data_instance_id/wordpress_data_${INSTANCE_ID}/g" /root/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/wordpress_data:/wordpress_data_${INSTANCE_ID}:/g" /root/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/wordpress_instance_id/wordpress_${INSTANCE_ID}/g" /root/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/mariadb_data_instance_id/mariadb_data_${INSTANCE_ID}/g" /root/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/mariadb_data:/mariadb_data_${INSTANCE_ID}:/g" /root/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/wordpress_port/${WORDPRESS_PORT}/g" /root/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/wp_username/${WP_USERNAME}/g" /root/wp-${INSTANCE_ID}/docker-compose.yml
+            sed -i "s/wp_password/${WP_PASSWORD}/g" /root/wp-${INSTANCE_ID}/docker-compose.yml
+          EOF
+
+      - name: Clean up unused Docker networks
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << EOF
+            sudo docker network prune -f
+          EOF
