@@ -165,7 +165,7 @@ jobs:
       - name: Deploy WordPress
         if: ${{ github.event.action == 'opened' }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << EOF
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} << EOF
             INSTANCE_ID=${{ github.event.number }}
             WORDPRESS_PORT=$((3000 + INSTANCE_ID))
             export INSTANCE_ID WORDPRESS_PORT
@@ -197,7 +197,7 @@ jobs:
       - name: Set up environment and grant permissions
         if: ${{ github.event.action == 'opened' }}
         run: |
-          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << EOF
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} << EOF
             set -x
             INSTANCE_ID=${{ github.event.number }}
             DOMAIN="pr-${INSTANCE_ID}.rapidload.live"
@@ -210,7 +210,7 @@ jobs:
       - name: Create cache folder and grant 755 permissions
         if: ${{ github.event.action == 'opened' }}
         run: |
-          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << EOF
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} << EOF
             set -x
             INSTANCE_ID=${{ github.event.number }}
             DOMAIN="pr-${INSTANCE_ID}.rapidload.live"
@@ -223,7 +223,7 @@ jobs:
       - name: Update domain in wp-config.php
         if: ${{ github.event.action == 'opened' }}
         run: |
-          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << EOF
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} << EOF
             set -x
             INSTANCE_ID=${{ github.event.number }}
             DOMAIN="pr-${INSTANCE_ID}.rapidload.live"
@@ -236,7 +236,7 @@ jobs:
       - name: Update RAPIDLOAD_DEV_MODE in wp-config.php
         if: ${{ github.event.action == 'opened' }}
         run: |
-          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << EOF
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} << EOF
             set -x
             INSTANCE_ID=${{ github.event.number }}
             WP_CONTAINER=\$(sudo docker ps -q --filter "name=wordpress_\${INSTANCE_ID}")
@@ -249,7 +249,7 @@ jobs:
       - name: Update WP_CACHE in wp-config.php
         if: ${{ github.event.action == 'opened' }}
         run: |
-          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << EOF
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} << EOF
             set -x
             INSTANCE_ID=${{ github.event.number }}
             WP_CONTAINER=\$(sudo docker ps -q --filter "name=wordpress_\${INSTANCE_ID}")
@@ -262,7 +262,7 @@ jobs:
       - name: Update robots.txt in Docker container
         if: ${{ github.event.action == 'opened' }}
         run: |
-          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
             WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
 
@@ -272,7 +272,7 @@ jobs:
 
       - name: Clone or Update WordPress Plugin Repository in Docker Container
         run: |
-          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
             WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
             PLUGIN_PATH=/bitnami/wordpress/wp-content/plugins/autoptimize-unusedcss
@@ -299,7 +299,7 @@ jobs:
 
       - name: Run npm build in Docker Container
         run: |
-          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
             WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
             PLUGIN_PATH=/bitnami/wordpress/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer
@@ -324,7 +324,7 @@ jobs:
       - name: Activate Plugin in Docker Container
         if: ${{ github.event.action == 'opened' }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
             WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
             if [ -n "${WP_CONTAINER}" ]; then
@@ -349,7 +349,7 @@ jobs:
       - name: Disable plugin upload capability
         if: ${{ github.event.action == 'opened' }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} << 'EOF'
             INSTANCE_ID=${{ github.event.number }}
             WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
 
@@ -360,7 +360,7 @@ jobs:
       - name: Clean up old Docker containers and volumes
         #if: ${{ github.event.action == 'opened' }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} << 'EOF'
             # Remove Docker containers older than 30 days
             old_containers=$(sudo docker ps -a --filter "status=exited" --format "{{.ID}} {{.CreatedAt}}" | while read id created; do
               if [ $(date -d "$created" +%s) -lt $(date -d '30 days ago' +%s) ]; then
