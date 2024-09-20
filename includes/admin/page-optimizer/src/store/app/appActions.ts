@@ -252,6 +252,69 @@ export const getTitanOptimizationData = (options: WordPressOptions, startFrom: n
     }
 }
 
+export const searchData = (options: WordPressOptions, action: string, searchFor: string, postType: string): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string }> => {
+
+        try {
+            const searchForData = await api.searchData(action, searchFor, postType);
+            // dispatch({
+            //     type: UPDATE_OPTIMIZE_TABLE,
+            //     payload : fetchOptimizationData?.data
+            // })
+            console.log(searchForData);
+            return { success: true };
+        } catch (error: any) {
+            console.error('Error on fetchOptimizationData:', error);
+            let errorMessage: string;
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            } else {
+                errorMessage = 'An unknown error occurred';
+            }
+            return { success: false, error: errorMessage };
+        }
+
+
+    }
+}
+
+
+export const fetchPages = (options: WordPressOptions): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string }> => {
+
+        try {
+            const fetchPostsPages = await api.fetchPages();
+            // dispatch({
+            //     type: UPDATE_OPTIMIZE_TABLE,
+            //     payload : fetchOptimizationData?.data
+            // })
+            console.log(fetchPostsPages);
+            return { success: true };
+        } catch (error: any) {
+           // console.error('Error on fetchPostsPages:', error);
+            let errorMessage: string;
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            } else {
+                errorMessage = 'An unknown error occurred';
+            }
+            return { success: false, error: errorMessage };
+        }
+
+
+    }
+}
+
 export const fetchReport = (options: WordPressOptions, url : string, reload = false, inprogress = false): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);

@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog"
 import {ContentSelector} from "components/ui/content-selector";
 import AppButton from "components/ui/app-button"
-import { getTitanOptimizationData} from "../../../store/app/appActions";
+import {fetchPages, getTitanOptimizationData, searchData} from "../../../store/app/appActions";
 import {useAppContext} from "../../../context/app";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {useSelector} from "react-redux";
@@ -75,14 +75,16 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
 
     const {options} = useAppContext();
     const { dispatch } = useCommonDispatch();
-
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+    const maxPagesToShow = 10
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                await dispatch(getTitanOptimizationData(options, 0, 15));
+                await dispatch(getTitanOptimizationData(options, 0, 50));
             } catch (error) {
                 console.error('Error fetching optimization data:', error);
             } finally {
@@ -93,6 +95,64 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
         fetchData();
     }, [dispatch]);
 
+    useEffect(() => {
+        const searchForData = async () => {
+            try {
+                setLoading(true);
+                await dispatch(searchData(options, 'rapidload_fetch_post_search_by_title_or_permalink', 'page', 'page'));
+            } catch (error) {
+                console.error('Error fetching optimization data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+       // searchForData();
+    }, [dispatch]);
+
+
+    useEffect(() => {
+        const fetchAllPages = async () => {
+            try {
+                setLoading(true);
+                await dispatch(fetchPages(options));
+            } catch (error) {
+                console.error('Error fetching optimization data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchAllPages();
+    }, [dispatch]);
+
+
+    const totalPages = optimizationData ? Math.ceil(optimizationData.length / itemsPerPage) : 0;
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentData = optimizationData ? optimizationData.slice(startIndex, startIndex + itemsPerPage) : [];
+
+    const handleClickPage = (page: number) => {
+        setCurrentPage(page);
+    };
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) setCurrentPage(currentPage - 1);
+    };
+
+    const getPageNumbers = () => {
+        const pages = [];
+        const startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+        const endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+        }
+        return pages;
+    };
 
     return (
         <>
@@ -105,6 +165,8 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                         <div className="content flex w-full sm:w-1/2 lg:w-full flex-col px-3 py-3 ">
                             <div className='flex gap-2 items-center justify-between'>
                                 <div className="text-sm font-semibold dark:text-brand-300">{settings.title}</div>
+
+
                                 <div className="flex gap-4">
                                     <div className="relative w-full">
                                         <span className="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -125,8 +187,9 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
 
                                     <Dialog open={open} onOpenChange={setOpen}>
                                         <DialogTrigger asChild>
-                                            <button className="px-3 py-1.5 rounded-lg flex gap-2 items-center cursor-pointer bg-violet-950 text-brand-0">
-                                                <PlusIcon className="w-5 h-5" /> Add
+                                            <button
+                                                className="px-3 py-1.5 rounded-lg flex gap-2 items-center cursor-pointer bg-violet-950 text-brand-0">
+                                                <PlusIcon className="w-5 h-5"/> Add
                                             </button>
                                         </DialogTrigger>
                                         <DialogTitle></DialogTitle>
@@ -139,7 +202,8 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                             </div>
                                             <DialogDescription></DialogDescription>
                                             <DialogFooter className="px-6 py-3 border-t">
-                                                <AppButton onClick={() => setOpen(false)} variant='outline' className='text-sm'>
+                                                <AppButton onClick={() => setOpen(false)} variant='outline'
+                                                           className='text-sm'>
                                                     Close
                                                 </AppButton>
                                             </DialogFooter>
@@ -154,7 +218,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                 <div className="-m-1.5 overflow-x-auto">
                                     <div className="p-1.5 min-w-full inline-block align-middle">
                                         <div className="border rounded-2xl overflow-hidden">
-                                        <table
+                                            <table
                                                 className="min-w-full divide-y divide-gray-200 dark:divide-brand-950">
                                                 <thead className="dark:bg-brand-900">
                                                 <tr>
@@ -190,26 +254,59 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                                 </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-gray-200 dark:divide-brand-950">
-                                                {loading ? <TableSkeleton rows={4} columns={4} /> : optimizationData?.map((item, idx) => (
-                                                    <tr key={idx} className={idx % 2 === 0 ? 'bg-gray-100/30 dark:bg-brand-950' : 'bg-white dark:bg-brand-900'}>
+                                                {loading ? <TableSkeleton rows={4}
+                                                                          columns={4}/> : currentData?.map((item, idx) => (
+                                                    <tr key={idx}
+                                                        className={idx % 2 === 0 ? 'bg-gray-100/30 dark:bg-brand-950' : 'bg-white dark:bg-brand-900'}>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-brand-300">{item.url}</td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                                            <PercentageIndicator percentage={calculatePercentage(item.first_data?.performance, item.last_data?.performance)} />
+                                                            <PercentageIndicator
+                                                                percentage={calculatePercentage(item.first_data?.performance, item.last_data?.performance)}/>
                                                         </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-brand-300"><DateComponent data={item.created_at} /></td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-brand-300">
+                                                            <DateComponent data={item.created_at}/></td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center gap-2">
-                                                            <span className="dark:text-brand-950 bg-gray-100 px-3 py-1.5 rounded-xl flex w-fit gap-2 items-center cursor-pointer">
-                                                                <PencilSquareIcon className="w-4 h-4" /> Optimize
+                                                            <span
+                                                                className="dark:text-brand-950 bg-gray-100 px-3 py-1.5 rounded-xl flex w-fit gap-2 items-center cursor-pointer">
+                                                                <PencilSquareIcon className="w-4 h-4"/> Optimize
                                                             </span>
-                                                            <TrashIcon className="w-4 h-4 cursor-pointer" />
+                                                            <TrashIcon className="w-4 h-4 cursor-pointer"/>
                                                         </td>
                                                     </tr>
                                                 ))}
                                                 </tbody>
                                             </table>
+
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div className="flex justify-center gap-4 mt-4">
+                                <button
+                                    className="px-4 py-2 bg-gray-300 rounded-lg disabled:opacity-50"
+                                    disabled={currentPage === 1}
+                                    onClick={handlePreviousPage}
+                                >
+                                    Previous
+                                </button>
+                                <div className="flex gap-2">
+                                    {getPageNumbers().map((page) => (
+                                        <button
+                                            key={page}
+                                            className={`px-3 py-1 rounded-lg ${page === currentPage ? 'bg-gray-700 text-white' : 'bg-gray-300'}`}
+                                            onClick={() => handleClickPage(page)}
+                                        >
+                                            {page}
+                                        </button>
+                                    ))}
+                                </div>
+                                <button
+                                    className="px-4 py-2 bg-gray-300 rounded-lg disabled:opacity-50"
+                                    disabled={currentPage === totalPages}
+                                    onClick={handleNextPage}
+                                >
+                                    Next
+                                </button>
                             </div>
                         </div>
 
