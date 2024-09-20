@@ -6,6 +6,7 @@ on:
 
 jobs:
   pr-closed:
+    if: false  # This will prevent the job from running
     runs-on: ubuntu-latest
 
     steps:
