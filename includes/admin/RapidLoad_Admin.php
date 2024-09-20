@@ -108,12 +108,12 @@ class RapidLoad_Admin
 
                 $data[] = [
                     'post_type' => $post_type,
-                    'posts'     => $posts_data
+                    'links'     => $posts_data
                 ];
             }
         }
 
-        return $data;
+        wp_send_json_success($data);
     }
 
     function rapidload_fetch_post_search_by_title_or_permalink() {
