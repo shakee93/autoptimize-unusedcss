@@ -34,10 +34,10 @@ jobs:
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY_LINODE }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} 'echo SSH successfully configured'
+          ssh-keyscan ${{ secrets.SSH_HOST_LINODE }} >> ~/.ssh/known_hosts
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} 'echo SSH successfully configured'
 
       - name: Set environment variables
         run: |
@@ -92,15 +92,15 @@ jobs:
           EOF
 
           # Copy the config file to the remote server's /root directory
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${LOCAL_CONFIG_FILE_PATH} root@${{ secrets.SSH_HOST }}:${REMOTE_CONFIG_FILE_PATH}
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${LOCAL_CONFIG_FILE_PATH} root@${{ secrets.SSH_HOST_LINODE }}:${REMOTE_CONFIG_FILE_PATH}
 
           # Move the config file to the target directory using sudo
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} "sudo mv ${REMOTE_CONFIG_FILE_PATH} ${TARGET_CONFIG_FILE_PATH}"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} "sudo mv ${REMOTE_CONFIG_FILE_PATH} ${TARGET_CONFIG_FILE_PATH}"
 
       - name: Restart Nginx
         if: ${{ github.event.action == 'opened' }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} 'sudo systemctl restart nginx' # Updated restart command
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} 'sudo systemctl restart nginx' # Updated restart command
 
       - name: Add DNS A Record to Cloudflare
         if: ${{ github.event.action == 'opened' }}
@@ -108,7 +108,7 @@ jobs:
           CF_API_TOKEN=${{ secrets.CF_API_TOKEN }}
           ZONE_ID=${{ secrets.CF_ZONE_ID }}
           RECORD_NAME=pr-${{ github.event.number }}
-          RECORD_CONTENT=${{ secrets.SSH_HOST }}
+          RECORD_CONTENT=${{ secrets.SSH_HOST_LINODE }}
           curl -X POST "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records" \
             -H "Authorization: Bearer ${CF_API_TOKEN}" \
             -H "Content-Type: application/json" \
@@ -127,7 +127,7 @@ jobs:
           WORDPRESS_PORT=$((3000 + INSTANCE_ID))
           WP_USERNAME=${{ secrets.WP_USERNAME }}
           WP_PASSWORD=${{ secrets.WP_PASSWORD }}
-          SSH_HOST=${{ secrets.SSH_HOST }}
+          SSH_HOST=${{ secrets.SSH_HOST_LINODE }}
 
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${SSH_HOST} <<EOF
             export INSTANCE_ID=${INSTANCE_ID}
@@ -155,6 +155,6 @@ jobs:
       - name: Clean up unused Docker networks
         if: ${{ github.event.action == 'opened' }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << EOF
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} << EOF
             sudo docker network prune -f
           EOF
