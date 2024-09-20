@@ -68,6 +68,9 @@ jobs:
               listen 443;
               server_name pr-${INSTANCE_ID}.rapidload.live;
 
+              ssl_certificate /etc/nginx/ssl/selfsigned.crt;
+              ssl_certificate_key /etc/nginx/ssl/selfsigned.key;
+
               location / {
                   proxy_pass http://localhost:${WORDPRESS_PORT};
                   proxy_set_header Host \$host;
@@ -157,4 +160,231 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} << EOF
             sudo docker network prune -f
+          EOF
+
+      - name: Deploy WordPress
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << EOF
+            INSTANCE_ID=${{ github.event.number }}
+            WORDPRESS_PORT=$((3000 + INSTANCE_ID))
+            export INSTANCE_ID WORDPRESS_PORT
+
+            # Get the container IDs
+            WP_CONTAINER=\$(sudo docker ps -q --filter "name=wordpress_\${INSTANCE_ID}")
+            DB_CONTAINER=\$(sudo docker ps -q --filter "name=mariadb_\${INSTANCE_ID}")
+
+            echo "WP_CONTAINER ID: \${WP_CONTAINER}"
+            echo "DB_CONTAINER ID: \${DB_CONTAINER}"
+
+            # Stop and remove any existing Docker services using the same ports
+            # if [ ! -z "\$WP_CONTAINER" ]; then
+            #   sudo docker stop \${WP_CONTAINER}
+            #   sudo docker rm \${WP_CONTAINER}
+            # fi
+
+            # if [ ! -z "\$DB_CONTAINER" ]; then
+            #   sudo docker stop \${DB_CONTAINER}
+            #   sudo docker rm \${DB_CONTAINER}
+            # fi
+
+            # Start the new services
+            sudo docker-compose -f /root/wp-\${INSTANCE_ID}/docker-compose.yml up -d
+            sleep 30 # wait for the services to start
+            sudo docker-compose -f /root/wp-\${INSTANCE_ID}/docker-compose.yml logs wordpress
+          EOF
+
+      - name: Set up environment and grant permissions
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << EOF
+            set -x
+            INSTANCE_ID=${{ github.event.number }}
+            DOMAIN="pr-${INSTANCE_ID}.rapidload.live"
+            WP_CONTAINER=\$(sudo docker ps -q --filter "name=wordpress_\${INSTANCE_ID}")
+
+            # Grant 666 permissions to wp-config.php to cache folder
+            sudo docker exec -u root -i \${WP_CONTAINER} sh -c "chmod 666 /bitnami/wordpress/wp-config.php"
+          EOF
+
+      - name: Create cache folder and grant 755 permissions
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << EOF
+            set -x
+            INSTANCE_ID=${{ github.event.number }}
+            DOMAIN="pr-${INSTANCE_ID}.rapidload.live"
+            WP_CONTAINER=\$(sudo docker ps -q --filter "name=wordpress_\${INSTANCE_ID}")
+
+            # Create cache folder if it doesn't exist and grant 755 permissions
+            sudo docker exec -u root -i \${WP_CONTAINER} sh -c "if [ ! -d /bitnami/wordpress/wp-content/cache ]; then mkdir -p /bitnami/wordpress/wp-content/cache; fi && chmod -R 755 /bitnami/wordpress/wp-content/cache"
+          EOF
+
+      - name: Update domain in wp-config.php
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << EOF
+            set -x
+            INSTANCE_ID=${{ github.event.number }}
+            DOMAIN="pr-${INSTANCE_ID}.rapidload.live"
+            WP_CONTAINER=\$(sudo docker ps -q --filter "name=wordpress_\${INSTANCE_ID}")
+
+            echo "update domain for : \${WP_CONTAINER}"
+            sudo docker exec -u root -i \${WP_CONTAINER} sh -c "sed -i 's/127.0.0.1/\${DOMAIN}/g; s|http://|https://|g' /bitnami/wordpress/wp-config.php"
+          EOF
+
+      - name: Update RAPIDLOAD_DEV_MODE in wp-config.php
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << EOF
+            set -x
+            INSTANCE_ID=${{ github.event.number }}
+            WP_CONTAINER=\$(sudo docker ps -q --filter "name=wordpress_\${INSTANCE_ID}")
+
+            echo "update RAPIDLOAD_DEV_MODE for : \${WP_CONTAINER}"
+            sudo docker exec -u root -i \${WP_CONTAINER} sh -c 'sed -i "/^\/\*\* Sets up WordPress vars and included files. \*\//i if ( ! defined( \x27RAPIDLOAD_DEV_MODE\x27 ) ) { define( \x27RAPIDLOAD_DEV_MODE\x27, true ); }" /bitnami/wordpress/wp-config.php'
+            sudo docker exec -u root -i \${WP_CONTAINER} sh -c "grep -A 2 'RAPIDLOAD_DEV_MODE' /bitnami/wordpress/wp-config.php"
+          EOF
+
+      - name: Update WP_CACHE in wp-config.php
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << EOF
+            set -x
+            INSTANCE_ID=${{ github.event.number }}
+            WP_CONTAINER=\$(sudo docker ps -q --filter "name=wordpress_\${INSTANCE_ID}")
+
+            echo "update WP_CACHE for : \${WP_CONTAINER}"
+            sudo docker exec -u root -i \${WP_CONTAINER} sh -c 'sed -i "/^\/\*\* Sets up WordPress vars and included files. \*\//i if ( ! defined( \x27WP_CACHE\x27 ) ) { define( \x27WP_CACHE\x27, true ); }" /bitnami/wordpress/wp-config.php'
+            sudo docker exec -u root -i \${WP_CONTAINER} sh -c "grep -A 2 'WP_CACHE' /bitnami/wordpress/wp-config.php"
+          EOF
+
+      - name: Update robots.txt in Docker container
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << 'EOF'
+            INSTANCE_ID=${{ github.event.number }}
+            WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
+
+            # Create or update robots.txt to prevent Google indexing
+            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "echo -e 'User-agent: *\nDisallow: /' > /bitnami/wordpress/robots.txt"
+          EOF
+
+      - name: Clone or Update WordPress Plugin Repository in Docker Container
+        run: |
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << 'EOF'
+            INSTANCE_ID=${{ github.event.number }}
+            WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
+            PLUGIN_PATH=/bitnami/wordpress/wp-content/plugins/autoptimize-unusedcss
+            PLUGIN_DIR=/bitnami/wordpress/wp-content/plugins
+
+            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "
+              if [ -d ${PLUGIN_PATH} ]; then
+                echo 'Plugin directory exists. Running git pull...'
+                cd ${PLUGIN_PATH}
+                git pull origin ${{ github.head_ref }}
+              else
+                cd ${PLUGIN_DIR}
+                echo 'Cloning plugin repository...'
+                git config --global http.postBuffer 524288000
+                git clone --depth 1 -b ${{ github.head_ref }} --single-branch https://github.com/shakee93/autoptimize-unusedcss.git ${PLUGIN_PATH}
+              fi
+            "
+            if [ $? -eq 0 ]; then
+              echo "Plugin repository updated successfully in ${WP_CONTAINER}"
+            else
+              echo "Failed to update plugin repository in ${WP_CONTAINER}"
+            fi
+          EOF
+
+      - name: Run npm build in Docker Container
+        run: |
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << 'EOF'
+            INSTANCE_ID=${{ github.event.number }}
+            WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
+            PLUGIN_PATH=/bitnami/wordpress/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer
+            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "
+              cd ${PLUGIN_PATH}
+              if [ -f package.json ]; then
+                echo 'Running npm install...'
+                npm install
+                echo 'Running npm run build...'
+                npm run build
+              else
+                echo 'package.json not found in ${PLUGIN_PATH}'
+              fi
+            "
+            if [ $? -eq 0 ]; then
+              echo "npm run build executed successfully in ${WP_CONTAINER}"
+            else
+              echo "Failed to run npm build in ${WP_CONTAINER}"
+            fi
+          EOF
+
+      - name: Activate Plugin in Docker Container
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << 'EOF'
+            INSTANCE_ID=${{ github.event.number }}
+            WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
+            if [ -n "${WP_CONTAINER}" ]; then
+              sudo docker exec -i ${WP_CONTAINER} sh -c "wp plugin activate autoptimize-unusedcss --allow-root"
+              if [ $? -eq 0 ]; then
+                echo "Plugin unusedcss activated successfully in ${WP_CONTAINER}"
+              else
+                echo "Failed to activate plugin unusedcss in ${WP_CONTAINER}"
+              fi
+
+              sudo docker exec -i ${WP_CONTAINER} sh -c "wp rapidload update_db --allow-root"
+              sudo docker exec -i ${WP_CONTAINER} sh -c "wp option update siteurl 'https://pr-${{ github.event.number }}.rapidload.live' --allow-root"
+              sudo docker exec -i ${WP_CONTAINER} sh -c "wp option update home 'https://pr-${{ github.event.number }}.rapidload.live' --allow-root"
+              sudo docker exec -i ${WP_CONTAINER} sh -c "wp search-replace 'http://127.0.0.1' 'https://pr-${{ github.event.number }}.rapidload.live' --all-tables --allow-root"
+              sudo docker exec -i ${WP_CONTAINER} sh -c "wp rapidload connect '${{ secrets.RAPIDLOAD_LICENSE_KEY }}' --uucss=1 --cpcss=1 --url='https://pr-${{ github.event.number }}.rapidload.live' --allow-root"
+
+            else
+              echo "No container found with name wordpress_${INSTANCE_ID}"
+            fi
+          EOF
+
+      - name: Disable plugin upload capability
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << 'EOF'
+            INSTANCE_ID=${{ github.event.number }}
+            WP_CONTAINER=$(sudo docker ps -q --filter "name=wordpress_${INSTANCE_ID}")
+
+            # Remove the 'upload_plugins' capability from the 'administrator' role
+            sudo docker exec -u root -i ${WP_CONTAINER} sh -c "echo \"define('DISALLOW_FILE_MODS', true);\" >> /bitnami/wordpress/wp-config.php"
+          EOF
+
+      - name: Clean up old Docker containers and volumes
+        #if: ${{ github.event.action == 'opened' }}
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST }} << 'EOF'
+            # Remove Docker containers older than 30 days
+            old_containers=$(sudo docker ps -a --filter "status=exited" --format "{{.ID}} {{.CreatedAt}}" | while read id created; do
+              if [ $(date -d "$created" +%s) -lt $(date -d '30 days ago' +%s) ]; then
+                echo $id
+              fi
+            done)
+            if [ ! -z "$old_containers" ]; then
+              echo "Removing old containers: $old_containers"
+              sudo docker rm $old_containers
+            else
+              echo "No old containers found."
+            fi
+
+            # Remove dangling Docker volumes older than 30 days
+            old_volumes=$(sudo docker volume ls -q --filter "dangling=true" | while read volume; do
+              created=$(sudo docker volume inspect -f '{{.CreatedAt}}' $volume | head -n 1 | sed 's/\(.*\)+0000 UTC/\1/')
+              if [ $(date -d "$created" +%s) -lt $(date -d '30 days ago' +%s) ]; then
+                echo $volume
+              fi
+            done)
+            if [ ! -z "$old_volumes" ]; then
+              echo "Removing old volumes: $old_volumes"
+              sudo docker volume rm $old_volumes
+            else
+              echo "No old volumes found."
+            fi
           EOF
