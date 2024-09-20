@@ -1,6 +1,7 @@
 import {isDev, toBoolean} from "lib/utils";
 import store from "../store";
 import { toast } from "components/ui/use-toast";
+import {fetchPages} from "../store/app/appActions";
 
 class ApiService {
     public baseURL: URL;
@@ -258,6 +259,47 @@ class ApiService {
             this.baseURL.searchParams.append('action', 'rapidload_titan_optimizations_data');
             this.baseURL.searchParams.append('start_from', startFrom)
             this.baseURL.searchParams.append('limit', limit)
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async searchData(action: string, searchFor: string, postType: string): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', action);
+            this.baseURL.searchParams.append('s', searchFor)
+            this.baseURL.searchParams.append('post_type', postType)
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+
+    async fetchPages(): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', 'rapidload_fetch_post_types_with_links');
+            // this.baseURL.searchParams.append('s', searchFor)
+            // this.baseURL.searchParams.append('post_type', postType)
 
             const response = await fetch(this.baseURL, {
                 method: 'POST',
