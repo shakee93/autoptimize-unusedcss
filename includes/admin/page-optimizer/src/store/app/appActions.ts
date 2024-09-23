@@ -3,7 +3,7 @@ import {AnyAction} from 'redux';
 import {
     AppAction,
     CHANGE_GEAR,
-    CHANGE_REPORT_TYPE,
+    CHANGE_REPORT_TYPE, FETCH_POSTS,
     FETCH_REPORT_FAILURE,
     FETCH_REPORT_REQUEST,
     FETCH_REPORT_SUCCESS,
@@ -284,19 +284,19 @@ export const searchData = (options: WordPressOptions, action: string, searchFor:
 }
 
 
-export const fetchPages = (options: WordPressOptions): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+export const fetchPosts = (options: WordPressOptions): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string }> => {
 
         try {
-            const fetchPostsPages = await api.fetchPages();
-            // dispatch({
-            //     type: UPDATE_OPTIMIZE_TABLE,
-            //     payload : fetchOptimizationData?.data
-            // })
-            console.log(fetchPostsPages);
+            const fetchPostsPages = await api.fetchPosts();
+            dispatch({
+                type: FETCH_POSTS,
+                payload : fetchPostsPages?.data
+            })
+
             return { success: true };
         } catch (error: any) {
            // console.error('Error on fetchPostsPages:', error);

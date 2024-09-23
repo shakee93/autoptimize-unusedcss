@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog"
 import {ContentSelector} from "components/ui/content-selector";
 import AppButton from "components/ui/app-button"
-import {fetchPages, getTitanOptimizationData, searchData} from "../../../store/app/appActions";
+import {fetchPosts, getTitanOptimizationData, searchData} from "../../../store/app/appActions";
 import {useAppContext} from "../../../context/app";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {useSelector} from "react-redux";
@@ -34,44 +34,7 @@ interface Settings {
 
 const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => {
     const [open, setOpen] = useState(false);
-    const {optimizationData} = useSelector((state: RootState) => state.app);
-
-    const contentTypes = [
-        { label: 'Pages', count: 5, type: 'pages' },
-        { label: 'Products', count: 6, type: 'products' },
-        { label: 'Tags', count: 12, type: 'tags' },
-        { label: 'Categories', count: 7, type: 'categories' },
-    ];
-
-
-    const dynamicData = {
-        pages: [
-            { name: 'All Pages', hasSubList: true },
-            { name: 'Pricing Page', hasSubList: false },
-            { name: 'Blog', hasSubList: false },
-            { name: 'Feature Page', hasSubList: false },
-        ],
-        products: [
-            { name: 'Product 1', hasSubList: false },
-            { name: 'Product 2', hasSubList: false },
-            { name: 'Product 3', hasSubList: false },
-            { name: 'Product 4', hasSubList: false },
-            { name: 'Product 5', hasSubList: false },
-            { name: 'All Products', hasSubList: true },
-        ],
-        tags: [
-            { name: 'Tag 1', hasSubList: false },
-            { name: 'Tag 2', hasSubList: false },
-            { name: 'Tag 3', hasSubList: false },
-            { name: 'All Tags', hasSubList: true },
-        ],
-        categories: [
-            { name: 'Category 1', hasSubList: false },
-            { name: 'Category 2', hasSubList: false },
-            { name: 'Category 3', hasSubList: false },
-            { name: 'All Categories', hasSubList: true },
-        ]
-    };
+    const {optimizationData, allPosts} = useSelector((state: RootState) => state.app);
 
     const {options} = useAppContext();
     const { dispatch } = useCommonDispatch();
@@ -84,7 +47,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
         const fetchData = async () => {
             try {
                 setLoading(true);
-                await dispatch(getTitanOptimizationData(options, 0, 50));
+                await dispatch(getTitanOptimizationData(options, 0, 10));
             } catch (error) {
                 console.error('Error fetching optimization data:', error);
             } finally {
@@ -93,6 +56,8 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
         };
 
         fetchData();
+
+
     }, [dispatch]);
 
     useEffect(() => {
@@ -115,7 +80,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
         const fetchAllPages = async () => {
             try {
                 setLoading(true);
-                await dispatch(fetchPages(options));
+                await dispatch(fetchPosts(options));
             } catch (error) {
                 console.error('Error fetching optimization data:', error);
             } finally {
@@ -125,6 +90,10 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
 
         fetchAllPages();
     }, [dispatch]);
+
+    useEffect(() => {
+       console.log(allPosts)
+    }, [allPosts]);
 
 
     const totalPages = optimizationData ? Math.ceil(optimizationData.length / itemsPerPage) : 0;
@@ -196,8 +165,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                         <DialogContent className="sm:max-w-[650px]">
                                             <div className="py-2">
                                                 <ContentSelector
-                                                    contentTypes={contentTypes}
-                                                    dynamicData={dynamicData}
+                                                    data={allPosts}
                                                 />
                                             </div>
                                             <DialogDescription></DialogDescription>

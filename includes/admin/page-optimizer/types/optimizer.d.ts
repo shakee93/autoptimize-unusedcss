@@ -244,6 +244,17 @@ interface OptimizeTable {
     url: string;
 }
 
+interface Link {
+    title: string;
+    permalink: string;
+}
+
+interface posts {
+    post_type: string;
+    links: Link[];
+}
+
+
 interface TestMode {
     status: boolean;
 }

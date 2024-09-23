@@ -1,44 +1,52 @@
 import React, { useState } from 'react';
 import { ArrowRightIcon, PlusIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+import {fetchReport, fetchSettings} from "../../store/app/appActions";
+import useCommonDispatch from "hooks/useCommonDispatch";
+import {useAppContext} from "../../context/app";
 
-const ContentSelector = ({ contentTypes, dynamicData }) => {
+
+const ContentSelector = ({ data }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedContent, setSelectedContent] = useState(null);
     const [currentItem, setCurrentItem] = useState(null);
+    const { dispatch } = useCommonDispatch();
+    const {options} = useAppContext();
 
-    if (!contentTypes) {
+
+    if (!data) {
         return <div>Loading...</div>;
     }
 
     const handleSearchChange = (e) => setSearchTerm(e.target.value);
 
-    const handleContentClick = (type) => {
-        setSelectedContent(type);
+    const handleContentClick = (postType) => {
+        setSelectedContent(postType);
         setCurrentItem(null);
     };
 
     const handleBackClick = () => {
         setSelectedContent(null);
         setCurrentItem(null);
-        setSearchTerm('')
+        setSearchTerm('');
     };
 
     const handleItemClick = (item) => {
-        if (item.hasSubList) setCurrentItem(item);
-        currentItem && setSearchTerm(item.name);
+       // currentItem && setSearchTerm(item.title);
+
+        dispatch(fetchSettings(options, item.permalink, true));
+        dispatch(fetchReport(options, item.permalink, true));
+        window.location.hash = '#/optimize';
     };
 
-    const filteredContent = contentTypes.filter(content =>
-        content.label.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredContent = data.filter(content =>
+        content.post_type.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const filteredSelectedList = selectedContent
-        ? dynamicData[selectedContent].filter(item =>
-            item.name.toLowerCase().includes(searchTerm.toLowerCase())
+        ? data.find(item => item.post_type === selectedContent)?.links.filter(link =>
+            link.title.toLowerCase().includes(searchTerm.toLowerCase())
         )
         : [];
-
-    const shouldShowFilteredSelectedList = !currentItem || searchTerm !== '';
 
     return (
         <>
@@ -51,9 +59,7 @@ const ContentSelector = ({ contentTypes, dynamicData }) => {
                 )}
                 <div className="text-gray-900 font-medium text-lg">
                     {selectedContent
-                        ? currentItem
-                            ? `Optimize : ${currentItem.name}`
-                            : `Select ${selectedContent.charAt(0).toUpperCase() + selectedContent.slice(1)}`
+                        ? `Select ${selectedContent.charAt(0).toUpperCase() + selectedContent.slice(1)}`
                         : 'Select a content to Optimize'}
                 </div>
             </div>
@@ -67,53 +73,41 @@ const ContentSelector = ({ contentTypes, dynamicData }) => {
                     onChange={handleSearchChange}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400"
                 />
-                {currentItem && (
-                    <div className="py-2 text-gray-600">
-                        This base page optimization will be used on all the
-                        other pages in the selected group.
-                    </div>
-                )}
 
                 {/* Content list changes dynamically based on `selectedContent` */}
                 <ul className="overflow-y-auto pt-4 max-h-72">
                     {!selectedContent ? (
-                        // Main content list
+                        // Main content list: post types
                         filteredContent.map(content => (
                             <li
-                                key={content.type}
+                                key={content.post_type}
                                 className="py-4 cursor-pointer hover:bg-gray-50 rounded-xl"
-                                onClick={() => handleContentClick(content.type)}
+                                onClick={() => handleContentClick(content.post_type)}
                             >
                                 <div className="flex mx-6 justify-between items-center">
-                                    <div className="flex items-center space-x-2">
-                                        <div className="text-gray-900 font-medium">{content.label}</div>
+                                    <div className="flex gap-4">
+                                        <div className="text-gray-900 font-medium capitalize">{content.post_type}</div>
                                         <span
                                             className="text-gray-500 text-xs border border-0.5 rounded-lg px-2 py-0.5 bg-brand-0">
-                                            {content.count} {content.label}
+                                             {content.links.length} {content.post_type}
                                         </span>
                                     </div>
+
                                     <ArrowRightIcon className="h-6 w-6 text-gray-500"/>
                                 </div>
                             </li>
                         ))
-                    ) : (shouldShowFilteredSelectedList &&
-                        // Detailed list for selected content
-                        filteredSelectedList.map(item => (
+                    ) : (
+                        // Detailed list for selected post type: links
+                        filteredSelectedList?.map(link => (
                             <li
-                                key={item.name}
+                                key={link.permalink}
                                 className="py-4 cursor-pointer hover:bg-gray-50 rounded-xl"
-                                onClick={() => handleItemClick(item)}
+                                onClick={() => handleItemClick(link)}
                             >
                                 <div className="flex mx-6 justify-between items-center">
-                                    <div className="flex items-center space-x-2">
-                                        <div className="text-gray-900 font-medium">{item.name}</div>
-                                    </div>
-
-                                    {item.hasSubList ? (
-                                        <ArrowRightIcon className="h-6 w-6 text-gray-500"/>
-                                    ) : (
-                                        <PlusIcon className="h-6 w-6 text-gray-500"/>
-                                    )}
+                                    <div className="text-gray-900 font-medium">{link.title}</div>
+                                    <PlusIcon className="h-6 w-6 text-gray-500" />
                                 </div>
                             </li>
                         ))

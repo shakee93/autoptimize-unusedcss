@@ -27,6 +27,7 @@ export interface AppState {
     cssStatus: CSSStatusResponse | null;
     testMode: TestMode | null;
     optimizationData: OptimizeTable[];
+    allPosts: posts | null;
     report: {
         mobile: Report,
         desktop: Report,
@@ -61,10 +62,16 @@ export const UPDATE_FILE_ACTION = 'UPDATE_FILE_ACTION';
 export const GET_CSS_STATUS_SUCCESS = 'GET_CSS_STATUS_SUCCESS';
 export const UPDATE_TEST_MODE = 'UPDATE_TEST_MODE';
 export const UPDATE_OPTIMIZE_TABLE = 'UPDATE_OPTIMIZE_TABLE';
+export const FETCH_POSTS = 'FETCH_POSTS';
+
+interface FetchPosts {
+    type: typeof FETCH_POSTS,
+    payload : posts,
+}
 
 interface UpdateOptimizeTable {
     type: typeof UPDATE_OPTIMIZE_TABLE,
-    payload : OptimizeTable,
+    payload : OptimizeTable[],
 
 }
 
@@ -151,5 +158,5 @@ interface UpdateFileActionAction {
 // Define the combined action type
 export type AppAction = FetchDataRequestAction | FetchDataSuccessAction | FetchDataFailureAction |
     FetchSettingsRequestAction | FetchSettingsSuccessAction | FetchSettingsFailureAction | ChangeGearAction|
-    UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode | UpdateOptimizeTable;
+    UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode | UpdateOptimizeTable | FetchPosts;
 

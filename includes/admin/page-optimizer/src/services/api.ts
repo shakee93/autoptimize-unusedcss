@@ -1,7 +1,7 @@
 import {isDev, toBoolean} from "lib/utils";
 import store from "../store";
 import { toast } from "components/ui/use-toast";
-import {fetchPages} from "../store/app/appActions";
+import {fetchPages, fetchPosts} from "../store/app/appActions";
 
 class ApiService {
     public baseURL: URL;
@@ -295,7 +295,7 @@ class ApiService {
     }
 
 
-    async fetchPages(): Promise<any> {
+    async fetchPosts(): Promise<any> {
         try {
             this.baseURL.searchParams.append('action', 'rapidload_fetch_post_types_with_links');
             // this.baseURL.searchParams.append('s', searchFor)

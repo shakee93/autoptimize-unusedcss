@@ -79,35 +79,63 @@ const App = ({popup, _showOptimizer = false}: {
         dispatch(setCommonState('testModeStatus', initialTestMode));
     }, [dispatch, activeReport]);
 
-    const hash = window.location.hash.replace("#", "");
-    const [activeRoute, setActiveRoute] = useState( hash.length > 0 ? hash : '/');
-    const [routes, setRoutes] = useState( [
-        {
-            title: "Dashboard",
-            id: "/",
-            component: <Dashboard />
-        },
-        {
-            title: "Optimize",
-            id: "/optimize",
-            component: <PageOptimizer/>
-        }
-    ])
+   // const hash = window.location.hash.replace("#", "");
+   //  const [activeRoute, setActiveRoute] = useState( hash.length > 0 ? hash : '/');
+   //  const [routes, setRoutes] = useState( [
+   //      {
+   //          title: "Dashboard",
+   //          id: "/",
+   //          component: <Dashboard />
+   //      },
+   //      {
+   //          title: "Optimize",
+   //          id: "/optimize",
+   //          component: <PageOptimizer/>
+   //      }
+   //  ])
+   //
+   //
+   //  useEffect(() => {
+   //      window.location.hash = '#' + activeRoute
+   //  }, [activeRoute])
+   //
+   //  useEffect(() => {
+   //      const validRoute = routes.some(route => route.id === window.location.hash.replace('#', ''))
+   //
+   //
+   //      if (!validRoute) {
+   //          setActiveRoute('/')
+   //      }
+   //
+   //  }, [])
 
+    const [activeRoute, setActiveRoute] = useState(window.location.hash.replace("#", "") || "/");
+    const [routes, setRoutes] = useState([
+        { title: "Dashboard", id: "/", component: <Dashboard /> },
+        { title: "Optimize", id: "/optimize", component: <PageOptimizer /> },
+    ]);
+
+    // Effect to listen for hash changes
+    useEffect(() => {
+        const handleHashChange = () => {
+            const hash = window.location.hash.replace("#", "");
+            const validRoute = routes.some(route => route.id === hash);
+            if (validRoute) {
+                setActiveRoute(hash);
+            } else {
+                setActiveRoute("/");
+            }
+        };
+
+        window.addEventListener("hashchange", handleHashChange);
+        return () => {
+            window.removeEventListener("hashchange", handleHashChange);
+        };
+    }, [routes]);
 
     useEffect(() => {
-        window.location.hash = '#' + activeRoute
-    }, [activeRoute])
-
-    useEffect(() => {
-        const validRoute = routes.some(route => route.id === window.location.hash.replace('#', ''))
-
-
-        if (!validRoute) {
-            setActiveRoute('/')
-        }
-
-    }, [])
+        window.location.hash = activeRoute;
+    }, [activeRoute]);
 
     return (
         <AnimatePresence>

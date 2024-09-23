@@ -13,7 +13,7 @@ import {
     UPDATE_FILE_ACTION,
     UPDATE_SETTINGS,
     UPDATE_TEST_MODE,
-    UPDATE_OPTIMIZE_TABLE
+    UPDATE_OPTIMIZE_TABLE, FETCH_POSTS
 } from "./appTypes";
 
 const blankReport =  {
@@ -34,7 +34,8 @@ const initialState: AppState = {
     activeReport: 'desktop',
     cssStatus: null,
     testMode: null,
-    optimizationData: null,
+    optimizationData: [],
+    allPosts: null,
     report: {
         mobile: blankReport,
         desktop: blankReport,
@@ -65,6 +66,11 @@ const initialState: AppState = {
 const appReducer = (state = initialState, action: AppAction): AppState => {
 
     switch (action.type) {
+        case FETCH_POSTS:
+            return {
+                ...state,
+                allPosts: action.payload,
+            };
         case UPDATE_OPTIMIZE_TABLE:
             return {
                 ...state,
