@@ -56,7 +56,7 @@ const RapidLoadActions: React.FC = () => {
                 } : a
             ))
 
-            let result = await fetch(options?.ajax_url + action.action.replace(/&amp;/g, '&'));
+            let result = await fetch(action.action.replace(/&amp;/g, '&'));
 
             toast({
                 duration: 10,
