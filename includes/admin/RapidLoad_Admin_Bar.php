@@ -174,11 +174,11 @@ class RapidLoad_Admin_Bar {
                     margin: 0 !important;
                 }
 
-                html.rapidload-optimizer-open,
+                /*html.rapidload-optimizer-open,
                 .rapidload-optimizer-open body,
                 body.rapidload-optimizer-open {
                     overflow: hidden !important;
-                }
+                }*/
 
                 .rpo-loaded\:with-popup #wp-admin-bar-rapidload .ab-sub-wrapper {
                     display: none !important;
