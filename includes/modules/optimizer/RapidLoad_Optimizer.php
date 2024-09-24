@@ -760,11 +760,11 @@ class RapidLoad_Optimizer
                 'control_values_description' => array(
                     [
                         'value' => 'All Files',
-                        'description' => 'Every JavaScript file on the site will be delayed.'
+                        'description' => 'Every JavaScript file will be delayed.'
                     ],
                     [
                         'value' => 'Selected Files',
-                        'description' => 'The files listed in the textbox will be delayed.'
+                        'description' => 'The files listed below will be delayed.'
                     ]),
                 'default' => 'All Files'
             ),
