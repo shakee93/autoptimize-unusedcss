@@ -438,9 +438,23 @@ const Fields = ({input, updates, update}: AdditionalInputsProps) => {
                 <div className="flex items-center justify-between">
                     <div className="flex flex-col">
                         <span>{input.control_label}</span>
-                        <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[335px]">
-                            {input.control_description}
-                        </span>
+                        {input?.control_values_description && input.control_values_description.length > 0 ? (
+                            input?.control_values_description.map((control_value: any) => {
+                                if (control_value.value === value) {
+                                    return (
+                                        <span key={control_value.value}
+                                              className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[335px]">
+                                                {control_value.description}
+                                        </span>
+                                    );
+                                }
+                                return null;
+                            })
+                            ) : (
+                                <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[335px]">
+                                    {input.control_description}
+                                </span>
+                        )}
                     </div>
                     <ToggleGroup
                         className="inline-flex bg-mauve6 rounded border border-1 space-x-px "
