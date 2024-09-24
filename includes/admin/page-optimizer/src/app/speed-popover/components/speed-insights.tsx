@@ -309,26 +309,42 @@ const SpeedInsights = ({children }: {
     const root = options?.plugin_url
 
     return (
-        <>
-        {dashboard ?(
+        // <>
+        // {dashboard ?(
+        //         // <Content/>
+        //     <></>
+        //     ):(
+        //         <HoverCard
+        //             // open={true}
+        //             openDelay={0}>
+        //             <a href={options?.dashboard_url ? options?.dashboard_url : '#'}>
+        //                 <HoverCardTrigger asChild>
+        //                     <div className={`${!root ? 'bg-gray-900 dark:bg-brand-900 py-1 cursor-pointer' : 'flex gap-1 items-center cursor-pointer text-white'}`}>
+        //                         {children && children}
+        //                     </div>
+        //                 </HoverCardTrigger>
+        //             </a>
+        //             <HoverCardContent id='rpo-popup-content' className="font-sans animate-rl-scale-in z-[99999]" sideOffset={5} >
+        //                 <Content/>
+        //             </HoverCardContent>
+        //         </HoverCard>
+        //     )}
+        // </>
+
+        <HoverCard
+            // open={true}
+            openDelay={0}>
+            <a href={options?.dashboard_url ? options?.dashboard_url : '#'}>
+                <HoverCardTrigger asChild>
+                    <div className={`${!root ? 'bg-gray-900 dark:bg-brand-900 py-1 cursor-pointer' : 'flex gap-1 items-center cursor-pointer text-white'}`}>
+                        {children && children}
+                    </div>
+                </HoverCardTrigger>
+            </a>
+            <HoverCardContent id='rpo-popup-content' className="font-sans animate-rl-scale-in z-[99999]" sideOffset={5} >
                 <Content/>
-            ):(
-                <HoverCard
-                    // open={true}
-                    openDelay={0}>
-                    <a href={options?.dashboard_url ? options?.dashboard_url : '#'}>
-                        <HoverCardTrigger asChild>
-                            <div className={`${!root ? 'bg-gray-900 dark:bg-brand-900 py-1 cursor-pointer' : 'flex gap-1 items-center cursor-pointer text-white'}`}>
-                                {children && children}
-                            </div>
-                        </HoverCardTrigger>
-                    </a>
-                    <HoverCardContent id='rpo-popup-content' className="font-sans animate-rl-scale-in z-[99999]" sideOffset={5} >
-                        <Content/>
-                    </HoverCardContent>
-                </HoverCard>
-            )}
-        </>
+            </HoverCardContent>
+        </HoverCard>
     );
 
 }

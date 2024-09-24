@@ -8,7 +8,6 @@ import {useAppContext} from "../../context/app";
 const ContentSelector = ({ data }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedContent, setSelectedContent] = useState(null);
-    const [currentItem, setCurrentItem] = useState(null);
     const { dispatch } = useCommonDispatch();
     const {options} = useAppContext();
 
@@ -21,18 +20,14 @@ const ContentSelector = ({ data }) => {
 
     const handleContentClick = (postType) => {
         setSelectedContent(postType);
-        setCurrentItem(null);
     };
 
     const handleBackClick = () => {
         setSelectedContent(null);
-        setCurrentItem(null);
         setSearchTerm('');
     };
 
     const handleItemClick = (item) => {
-       // currentItem && setSearchTerm(item.title);
-
         dispatch(fetchSettings(options, item.permalink, true));
         dispatch(fetchReport(options, item.permalink, true));
         window.location.hash = '#/optimize';

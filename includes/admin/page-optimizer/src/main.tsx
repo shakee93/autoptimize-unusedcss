@@ -96,7 +96,6 @@ const ApplicationErrorBoundary = ({fallback, onError, children}: ApplicationErro
     return ErrorBoundary ? <ErrorBoundary FallbackComponent={ApplicationCrashed} >{children}</ErrorBoundary> : children
 }
 
-const isAdminPage = window.location.href.includes('/wp-admin');
 export class RapidLoadOptimizer {
     constructor({
                     mode = 'normal',
@@ -117,15 +116,18 @@ export class RapidLoadOptimizer {
                        popup={popup}
                        global={global}
                        showOptimizer={showOptimizer} >
-                       {popup && !isAdminPage && (
+                       {popup && (
                            <ShadowRoot disabled={!shadowRoot} node={popup} styles={stylesUrl}>
                                <SpeedPopover/>
                            </ShadowRoot>
                        )}
 
-                       <ShadowRoot disabled={!shadowRoot} styles={stylesUrl}>
-                           <App _showOptimizer={showOptimizer} popup={popup}/>
-                       </ShadowRoot>
+
+                           <ShadowRoot disabled={!shadowRoot} styles={stylesUrl}>
+                               <App _showOptimizer={showOptimizer} popup={popup}/>
+                           </ShadowRoot>
+
+
                    </Providers>
 
                </ApplicationErrorBoundary>
