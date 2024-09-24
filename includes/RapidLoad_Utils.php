@@ -774,4 +774,25 @@ trait RapidLoad_Utils {
         }
 
     }
+
+    public static function log_user_agent() {
+        if (defined('DOING_CRON') && DOING_CRON) {
+            return;
+        }
+
+        if (defined('DOING_AJAX') && DOING_AJAX) {
+            return;
+        }
+
+        if (isset($_SERVER['HTTP_USER_AGENT']) && isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '.') === false) {
+            $user_agent = $_SERVER['HTTP_USER_AGENT'];
+            self::debug_log("Request URI: " . $_SERVER['REQUEST_URI'] . " - " . "User Agent: " . $user_agent);
+        } else {
+            if (isset($_SERVER['REQUEST_URI'])) {
+                self::debug_log("Request URI: " . $_SERVER['REQUEST_URI']);
+            }
+            self::debug_log("User Agent: Not available or not an HTML request");
+        }
+    }
+    
 }
