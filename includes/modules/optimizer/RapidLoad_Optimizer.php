@@ -239,11 +239,10 @@ class RapidLoad_Optimizer
                     'control_label' => 'Flush Cache',
                     'control_icon' => 'clear_page_cache',
                     'control_description' => 'Clear Page Cache',
-                    'action' => add_query_arg( array(
-                        '_action' => 'clearurl',
+                    'action' => wp_nonce_url( add_query_arg( array(
                         '_cache'  => 'rapidload-cache',
-                        '_url' => $url,
-                    ), site_url() ),
+                        '_action' => 'clear',
+                    ) ), 'rapidload_cache_clear_cache_nonce' )
                 ]
             ]
         ]);
