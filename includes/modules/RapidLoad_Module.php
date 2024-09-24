@@ -14,6 +14,15 @@ class RapidLoad_Module
         $this->load_modules();
     }
 
+    private static $module_instance = null;
+
+    public static function get(){
+        if(!self::$module_instance){
+            self::$module_instance = new RapidLoad_Module();
+        }
+        return self::$module_instance;
+    }
+
     function init(){
 
         $this->modules['unused-css'] = [
