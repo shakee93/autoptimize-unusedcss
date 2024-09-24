@@ -757,6 +757,15 @@ class RapidLoad_Optimizer
                 'control_label' => 'Delay Method',
                 'control_description' => 'Delay Method',
                 'control_values' => array('All Files', 'Selected Files'),
+                'control_values_description' => array(
+                    [
+                        'value' => 'All Files',
+                        'description' => 'Every JavaScript file on the site will be delayed.'
+                    ],
+                    [
+                        'value' => 'Selected Files',
+                        'description' => 'The files listed in the textbox will be delayed.'
+                    ]),
                 'default' => 'All Files'
             ),
             'uucss_load_js_method' => array(
@@ -824,7 +833,7 @@ class RapidLoad_Optimizer
             'uucss_load_scripts_on_user_interaction' => array(
                 'control_type' => 'textarea',
                 'control_label' => 'Delaying only selected Javascript',
-                'control_description' => 'These JS files will be excluded from delaying.',
+                'control_description' => 'Add JavaScript files to forcefully delay.',
                 'default' => '',
                 'control_visibility' => [
                     [
