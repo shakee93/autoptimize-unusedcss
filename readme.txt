@@ -4,7 +4,7 @@ Donate link:
 Tags: unusedcss, criticalcss, rapidload, image optimization, minify js
 Requires at least: 5.0
 Tested up to: 6.6
-Stable tag: 2.3.3
+Stable tag: 2.3.4
 Requires PHP: 5.4
 License: GPLv3
 License URI: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
