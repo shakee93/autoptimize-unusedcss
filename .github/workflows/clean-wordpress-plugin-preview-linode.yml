@@ -1,4 +1,4 @@
-name: Clean Lightsail on Pull Request close
+name: Clean Linode on Pull Request close
 
 on:
   pull_request:
@@ -19,10 +19,10 @@ jobs:
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY_LINODE }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} 'echo SSH successfully configured'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} 'echo SSH successfully configured'
 
       - name: Set environment variables
         run: |
@@ -32,9 +32,9 @@ jobs:
         run: |
           INSTANCE_ID=${{ github.event.number }}
           CONFIG_FILE_NAME="pr-${INSTANCE_ID}.rapidload.live.conf"
-          TARGET_CONFIG_FILE_PATH="/opt/bitnami/nginx/conf/vhosts/${CONFIG_FILE_NAME}"
+          TARGET_CONFIG_FILE_PATH="/etc/nginx/conf/vhosts/${CONFIG_FILE_NAME}" # Updated to correct Nginx path
 
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} \
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} \
             "if [ -f '$TARGET_CONFIG_FILE_PATH' ]; then \
                echo 'Deleting $TARGET_CONFIG_FILE_PATH'; \
                sudo rm '$TARGET_CONFIG_FILE_PATH'; \
@@ -44,32 +44,32 @@ jobs:
 
       - name: Restart Nginx
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} 'sudo /opt/bitnami/ctlscript.sh restart nginx'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} 'sudo systemctl restart nginx' # Correct Nginx restart command
 
-      #- name: Delete DNS A Record from Cloudflare
-        #run: |
+          #- name: Delete DNS A Record from Cloudflare
+          #run: |
           #CF_API_TOKEN=${{ secrets.CF_API_TOKEN }}
           #ZONE_ID=${{ secrets.CF_ZONE_ID }}
           #RECORD_NAME=pr-${{ github.event.number }}
 
           # Fetch the DNS record ID
           #RECORD_ID=$(curl -X GET "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records?type=A&name=${RECORD_NAME}" \
-            #-H "Authorization: Bearer ${CF_API_TOKEN}" \
-            #-H "Content-Type: application/json" | jq -r '.result[0].id')
+          #-H "Authorization: Bearer ${CF_API_TOKEN}" \
+          #-H "Content-Type: application/json" | jq -r '.result[0].id')
 
           # Check if the RECORD_ID is not null
           #if [ -n "$RECORD_ID" ]; then
-            #echo "Deleting DNS record with ID $RECORD_ID"
-            #curl -X DELETE "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records/${RECORD_ID}" \
-              #-H "Authorization: Bearer ${CF_API_TOKEN}" \
-              #-H "Content-Type: application/json"
+          #echo "Deleting DNS record with ID $RECORD_ID"
+          #curl -X DELETE "https://api.cloudflare.com/client/v4/zones/${ZONE_ID}/dns_records/${RECORD_ID}" \
+          #-H "Authorization: Bearer ${CF_API_TOKEN}" \
+          #-H "Content-Type: application/json"
           #else
-            #echo "DNS record not found"
-          #fi
+          #echo "DNS record not found"
+        #fi
 
       - name: Clean Docker WordPress
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${{ secrets.SSH_HOST }} << EOF
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} << EOF
             INSTANCE_ID=${{ github.event.number }}
             WORDPRESS_PORT=$((3000 + INSTANCE_ID))
             export INSTANCE_ID WORDPRESS_PORT
@@ -110,13 +110,13 @@ jobs:
           INSTANCE_ID=${{ github.event.number }}
           SSH_HOST=${{ secrets.SSH_HOST }}
 
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa bitnami@${SSH_HOST} <<EOF
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${SSH_HOST_LINODE} <<EOF
             export INSTANCE_ID=${INSTANCE_ID}
 
-            if [ -d "/home/bitnami/wp-${INSTANCE_ID}" ]; then
-              echo "Directory exists. Deleting /home/bitnami/wp-${INSTANCE_ID}..."
-              rm -r /home/bitnami/wp-${INSTANCE_ID}
+            if [ -d "/root/wp-${INSTANCE_ID}" ]; then # Updated path to root directory
+              echo "Directory exists. Deleting /root/wp-${INSTANCE_ID}..."
+              rm -r /root/wp-${INSTANCE_ID}
             else
-              echo "Directory /home/bitnami/wp-${INSTANCE_ID} does not exist. Skipping deletion."
+              echo "Directory /root/wp-${INSTANCE_ID} does not exist. Skipping deletion."
             fi
           EOF

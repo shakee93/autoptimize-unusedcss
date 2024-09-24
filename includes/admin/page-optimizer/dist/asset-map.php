@@ -1,15 +1,15 @@
 <?php
 define('RAPIDLOAD_ASSET_MAP', [
-    'assets/inter-cyrillic-ext-wght-normal.woff2' => 'assets/inter-cyrillic-ext-wght-normal.woff2',
-    'assets/inter-greek-ext-wght-normal.woff2' => 'assets/inter-greek-ext-wght-normal.woff2',
-    'assets/inter-cyrillic-wght-normal.woff2' => 'assets/inter-cyrillic-wght-normal.woff2',
     'assets/inter-vietnamese-wght-normal.woff2' => 'assets/inter-vietnamese-wght-normal.woff2',
+    'assets/inter-cyrillic-ext-wght-normal.woff2' => 'assets/inter-cyrillic-ext-wght-normal.woff2',
     'assets/inter-latin-ext-wght-normal.woff2' => 'assets/inter-latin-ext-wght-normal.woff2',
-    'assets/inter-latin-wght-normal.woff2' => 'assets/inter-latin-wght-normal.woff2',
     'assets/inter-greek-wght-normal.woff2' => 'assets/inter-greek-wght-normal.woff2',
-    'assets/index.css' => 'assets/index.DHPscgfg.css',
-    'assets/InitTour.js' => 'assets/InitTour.Bd0qb63X.js',
-    'assets/index.js' => 'assets/index.BX9eDSbV.js',
+    'assets/inter-greek-ext-wght-normal.woff2' => 'assets/inter-greek-ext-wght-normal.woff2',
+    'assets/inter-latin-wght-normal.woff2' => 'assets/inter-latin-wght-normal.woff2',
+    'assets/inter-cyrillic-wght-normal.woff2' => 'assets/inter-cyrillic-wght-normal.woff2',
+    'assets/index.css' => 'assets/index.DrZEBFiJ.css',
+    'assets/index.js' => 'assets/index.LyPo4ZQm.js',
+    'assets/InitTour.js' => 'assets/InitTour.BZm1OslN.js',
     'assets/animations.js' => 'assets/animations.CWk52Myu.js',
     'assets/core-vendor.js' => 'assets/core-vendor.a21Wwx5s.js',
     'assets/vendor.js' => 'assets/vendor.C2Ge5RaU.js'

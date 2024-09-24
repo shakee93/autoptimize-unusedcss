@@ -3,7 +3,7 @@ Contributors: shakee93, futtta
 Donate link:
 Tags: unusedcss, criticalcss, rapidload, image optimization, minify js
 Requires at least: 5.0
-Tested up to: 6.4
+Tested up to: 6.6
 Stable tag: 2.3.3
 Requires PHP: 5.4
 License: GPLv3
@@ -154,6 +154,8 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 3. RapidLoad Dashboard.
 
 == Changelog ==
+
+= 2.3.4 - 17/09/2024 =
 
 = 2.3.3 - 12/09/2024 =
  * fix: Missing `@media` styles in chunked critical CSS files.

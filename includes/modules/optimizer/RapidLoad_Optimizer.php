@@ -239,11 +239,10 @@ class RapidLoad_Optimizer
                     'control_label' => 'Flush Cache',
                     'control_icon' => 'clear_page_cache',
                     'control_description' => 'Clear Page Cache',
-                    'action' => add_query_arg( array(
-                        '_action' => 'clearurl',
+                    'action' => wp_nonce_url( add_query_arg( array(
                         '_cache'  => 'rapidload-cache',
-                        '_url' => $url,
-                    ), site_url() ),
+                        '_action' => 'clear',
+                    ) ), 'rapidload_cache_clear_cache_nonce' )
                 ]
             ]
         ]);
@@ -399,31 +398,6 @@ class RapidLoad_Optimizer
 
         }
 
-        $preload_images = [];
-
-        if (isset($data->audits) && is_array($data->audits)) {
-
-            $lcp_audit = array_filter($data->audits, function($audit) {
-                return $audit->id === 'prioritize-lcp-image';
-            });
-
-            if (!empty($lcp_audit)) {
-                $lcp_audit = reset($lcp_audit);
-
-                if (isset($lcp_audit->files) && isset($lcp_audit->files->debugData) && !empty($lcp_audit->files->debugData->initiatorPath)) {
-                    foreach ($lcp_audit->files->debugData->initiatorPath as $path) {
-                        if (isset($path->url) && preg_match('/\.(jpg|jpeg|jpg|png|gif)$/i', $path->url)) {
-                            $preload_images[] = $path->url;
-                        }
-                    }
-                }
-            }
-        }
-
-        if(!empty($preload_images)){
-            self::$options['uucss_preload_lcp_image'] = implode("\n",$preload_images);
-        }
-
         if(self::$strategy == "desktop"){
             self::$job->set_desktop_options(self::$options);
         }else{
@@ -564,6 +538,38 @@ class RapidLoad_Optimizer
             $optimization = new RapidLoad_Job_Optimization(self::$job, self::$strategy);
             $optimization->set_data($result);
             $optimization->save();
+        }
+
+        $preload_images = [];
+
+        if (isset($result->audits) && is_array($result->audits)) {
+
+            $lcp_audit = array_filter($result->audits, function($audit) {
+                return $audit->id === 'prioritize-lcp-image';
+            });
+
+            if (!empty($lcp_audit)) {
+                $lcp_audit = reset($lcp_audit);
+
+                if (isset($lcp_audit->files) && isset($lcp_audit->files->debugData) && !empty($lcp_audit->files->debugData->initiatorPath)) {
+                    foreach ($lcp_audit->files->debugData->initiatorPath as $path) {
+                        if (isset($path->url) && preg_match('/\.(jpg|jpeg|jpg|png|gif)$/i', $path->url)) {
+                            $preload_images[] = $path->url;
+                        }
+                    }
+                }
+            }
+        }
+
+        if(!empty($preload_images)){
+            self::$options['uucss_preload_lcp_image'] = implode("\n",$preload_images);
+            if(self::$strategy == "desktop"){
+                self::$job->set_desktop_options(self::$options);
+                self::$job->save();
+            }else{
+                self::$job->set_mobile_options(self::$options);
+                self::$job->save();
+            }
         }
 
         return[
@@ -751,6 +757,15 @@ class RapidLoad_Optimizer
                 'control_label' => 'Delay Method',
                 'control_description' => 'Delay Method',
                 'control_values' => array('All Files', 'Selected Files'),
+                'control_values_description' => array(
+                    [
+                        'value' => 'All Files',
+                        'description' => 'Every JavaScript file will be delayed.'
+                    ],
+                    [
+                        'value' => 'Selected Files',
+                        'description' => 'The files listed below will be delayed.'
+                    ]),
                 'default' => 'All Files'
             ),
             'uucss_load_js_method' => array(
@@ -818,7 +833,7 @@ class RapidLoad_Optimizer
             'uucss_load_scripts_on_user_interaction' => array(
                 'control_type' => 'textarea',
                 'control_label' => 'Delaying only selected Javascript',
-                'control_description' => 'These JS files will be excluded from delaying.',
+                'control_description' => 'Add JavaScript files to forcefully delay.',
                 'default' => '',
                 'control_visibility' => [
                     [
@@ -1283,10 +1298,6 @@ class RapidLoad_Optimizer
             }
         }else{
             unset(self::$options['uucss_enable_image_delivery']);
-        }
-
-        if(!empty($preload_images)){
-            self::$options['uucss_preload_lcp_image'] = implode("\n",$preload_images);
         }
 
         if(isset(self::$options['uucss_self_host_google_fonts']) && self::$options['uucss_self_host_google_fonts'] == "1"){

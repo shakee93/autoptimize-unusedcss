@@ -151,7 +151,7 @@ class RapidLoad_Base
 
             $this->container['feedback'] = new RapidLoad_Feedback();
             $this->container['buffer'] = new RapidLoad_Buffer();
-            $this->container['modules'] = new RapidLoad_Module();
+            $this->container['modules'] = RapidLoad_Module::get();
             $this->container['queue'] = new RapidLoad_Queue();
             $this->container['admin'] = new RapidLoad_Admin();
             $this->container['admin_frontend'] = new RapidLoad_Admin_Frontend();
