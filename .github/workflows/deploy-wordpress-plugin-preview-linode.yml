@@ -283,6 +283,7 @@ jobs:
               if [ -d ${PLUGIN_PATH} ]; then
                 echo 'Plugin directory exists. Running git pull...'
                 cd ${PLUGIN_PATH}
+                git reset --hard HEAD
                 git pull origin ${{ github.head_ref }}
               else
                 cd ${PLUGIN_DIR}
