@@ -27,7 +27,6 @@ export default function PageOptimizer() {
     const {data, loading, error} = useSelector(optimizerData);
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(data?.performance);
     const { dispatch, activeMetric } = useCommonDispatch()
-    const {  dashboard } = useAppContext();
 
     const {
         options,
@@ -65,7 +64,7 @@ export default function PageOptimizer() {
                 " bg-white font-sans   flex min-h-screen flex-col text-base items-center ",
                 "dark:text-brand-300 text-brand-800",
                 "notranslate",
-                !dashboard ? 'fixed z-[100000] top-0 left-0 w-screen h-screen overflow-hidden': ''
+                // !dashboard ? ' z-[100000] top-0 left-0 h-screen overflow-hidden': ''
             )}>
 
             <Header url={url}/>

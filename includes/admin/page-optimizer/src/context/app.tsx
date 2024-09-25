@@ -30,19 +30,17 @@ interface OptimizerContextProps {
     optimizerContainer: RefObject<HTMLElement>
     invalidatingCache: boolean
     setInvalidatingCache: Dispatch<SetStateAction<boolean>>;
-    dashboard: boolean
 }
 
 export const AppContext = createContext<OptimizerContextProps | null>(null)
 
 
-export const AppProvider = ({ children, initShowOptimizerValue, global, mode, modeData, dashboard = false } : {
+export const AppProvider = ({ children, initShowOptimizerValue, global, mode, modeData } : {
     children: ReactNode
     mode: RapidLoadOptimizerModes
     modeData?: RapidLoadOptimizerModeData
     initShowOptimizerValue?: boolean,
     global: boolean,
-    dashboard?: boolean
 }) => {
     const isAdminBar = document.getElementById('wpadminbar');
 
@@ -149,7 +147,6 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
             optimizerContainer,
             invalidatingCache,
             setInvalidatingCache,
-            dashboard
         }}>
             {children}
         </AppContext.Provider>

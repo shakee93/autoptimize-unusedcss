@@ -22,7 +22,7 @@ import TestModeSwitcher from "app/page-optimizer/components/TestModeSwitcher";
 
 const AppTour = React.lazy(() => import( 'components/tour'))
 const InitTour = React.lazy(() => import('components/tour/InitTour'))
-
+import {isDev, isAdminPage} from "lib/utils";
 
 
 const App = ({popup, _showOptimizer = false}: {
@@ -40,9 +40,11 @@ const App = ({popup, _showOptimizer = false}: {
     const {isDark } = useRootContext()
     const initialTestMode = window.rapidload_optimizer ? toBoolean(window.rapidload_optimizer.test_mode) : false;
 
+
     useEffect(() => {
 
-        if (_showOptimizer) {
+
+        if (_showOptimizer && isAdminPage || isDev) {
             setShowOptimizer(true)
         }
 

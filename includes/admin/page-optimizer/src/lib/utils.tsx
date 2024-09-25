@@ -38,7 +38,7 @@ export function transformFileType(audit: Audit, type?: string) {
 }
 
 export const isDev = import.meta.env.DEV
-
+export const isAdminPage = window.location.href.includes('/wp-admin');
 export function isUrl(input: string): boolean {
   try {
     new URL(input);

@@ -9,7 +9,7 @@ import "@fontsource-variable/inter";
 import {createRoot} from 'react-dom/client';
 import ShadowRoot from "components/shadow-dom";
 import SpeedPopover from "app/speed-popover";
-import {isDev} from "lib/utils";
+import {isDev, isAdminPage} from "lib/utils";
 import Providers from "./Providers";
 
 import Bugsnag from '@bugsnag/js'
@@ -95,7 +95,6 @@ const ApplicationErrorBoundary = ({fallback, onError, children}: ApplicationErro
 
     return ErrorBoundary ? <ErrorBoundary FallbackComponent={ApplicationCrashed} >{children}</ErrorBoundary> : children
 }
-
 export class RapidLoadOptimizer {
     constructor({
                     mode = 'normal',
@@ -120,14 +119,12 @@ export class RapidLoadOptimizer {
                            <ShadowRoot disabled={!shadowRoot} node={popup} styles={stylesUrl}>
                                <SpeedPopover/>
                            </ShadowRoot>
-                       )}
 
+                       )}
 
                            <ShadowRoot disabled={!shadowRoot} styles={stylesUrl}>
                                <App _showOptimizer={showOptimizer} popup={popup}/>
                            </ShadowRoot>
-
-
                    </Providers>
 
                </ApplicationErrorBoundary>
@@ -159,7 +156,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const container = document.getElementById('rapidload-page-optimizer') as HTMLDivElement;
 
         // see if admin bar node is there get popup container
-        let popup = replaceParentWithDiv(document.getElementById('rl-node-wrapper') as HTMLDivElement)
+        let popup = null
+        if(!isAdminPage){
+            popup = replaceParentWithDiv(document.getElementById('rl-node-wrapper') as HTMLDivElement)
+        }
 
 
         new RapidLoadOptimizer({

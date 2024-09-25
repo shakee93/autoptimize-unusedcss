@@ -122,9 +122,7 @@ export default function Dashboard() {
 
                                 <div className="col-span-2">
                                     <div className="widgets pt-4 gap-4 grid">
-                                        <SpeedInsights>
-
-                                        </SpeedInsights>
+                                        <SpeedInsights dashboardMode={true} />
                                     </div>
                                 </div>
 

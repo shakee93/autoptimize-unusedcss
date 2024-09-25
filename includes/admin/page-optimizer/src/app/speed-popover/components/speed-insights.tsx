@@ -29,9 +29,9 @@ import ErrorFetch from "components/ErrorFetch";
 import {cn} from "lib/utils";
 import PageSpeedWidget from "app/dashboard/components/performance-widgets/PageSpeedWidget";
 
-const Content = () => {
+const Content = ({ dashboard = false }) => {
 
-    const {dashboard, options, version} = useAppContext()
+    const { options, version} = useAppContext()
     const {data, error, loading, activeReport} = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
     const { toast } = useToast()
@@ -67,7 +67,6 @@ const Content = () => {
 
             return () => clearInterval(timer);
         }
-
 
     }, [data, loading])
 
@@ -299,14 +298,19 @@ const Content = () => {
     )
 }
 
-const SpeedInsights = ({children }: {
+const SpeedInsights = ({children, dashboardMode  }: {
     children?: ReactNode,
+    dashboardMode?: boolean,
 }) => {
 
-    const {options, dashboard} = useAppContext()
+    const {options} = useAppContext()
     const [open, setOpen] = useState<boolean>(false)
 
     const root = options?.plugin_url
+
+    if (dashboardMode) {
+        return <Content dashboard={dashboardMode} />;
+    }
 
     return (
         // <>
@@ -342,7 +346,7 @@ const SpeedInsights = ({children }: {
                 </HoverCardTrigger>
             </a>
             <HoverCardContent id='rpo-popup-content' className="font-sans animate-rl-scale-in z-[99999]" sideOffset={5} >
-                <Content/>
+                <Content />
             </HoverCardContent>
         </HoverCard>
     );
