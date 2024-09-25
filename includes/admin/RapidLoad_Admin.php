@@ -73,6 +73,9 @@ class RapidLoad_Admin
     function rapidload_fetch_post_types_with_links() {
         $data = [];
 
+        $cart_page_id = wc_get_page_id( 'cart' );
+        $checkout_page_id = wc_get_page_id( 'checkout' );
+
         $post_types = get_post_types( ['public' => true], 'names' );
 
         foreach ( $post_types as $post_type ) {
@@ -90,7 +93,14 @@ class RapidLoad_Admin
                 $unique_urls = [];
 
                 foreach ( $query->posts as $post ) {
-                    $permalink = get_permalink( $post->ID );
+
+                    $post_id = $post->ID;
+
+                    if ( $post_type === 'page' && ( $post_id == $cart_page_id || $post_id == $checkout_page_id ) ) {
+                        continue;
+                    }
+
+                    $permalink = get_permalink( $post_id );
 
                     $parsed_url = wp_parse_url( $permalink );
                     $base_url = isset( $parsed_url['scheme'] ) && isset( $parsed_url['host'] )
@@ -100,7 +110,7 @@ class RapidLoad_Admin
                     if ( !in_array( $base_url, $unique_urls ) ) {
                         $unique_urls[] = $base_url;
                         $posts_data[] = [
-                            'title'     => get_the_title( $post->ID ),
+                            'title'     => get_the_title( $post_id ),
                             'permalink' => $permalink,
                         ];
                     }
@@ -129,6 +139,9 @@ class RapidLoad_Admin
             wp_send_json_error( 'Search term must be at least 3 characters long' );
         }
 
+        $cart_page_id = wc_get_page_id( 'cart' );
+        $checkout_page_id = wc_get_page_id( 'checkout' );
+
         $post_type = isset( $_REQUEST['post_type'] ) ? sanitize_text_field( $_REQUEST['post_type'] ) : 'any';
         $posts_per_page = 10;
         $paged = 1;
@@ -147,6 +160,11 @@ class RapidLoad_Admin
 
             if ( $query->have_posts() ) {
                 foreach ( $query->posts as $post_id ) {
+
+                    if ( $post_type === 'page' && ( $post_id == $cart_page_id || $post_id == $checkout_page_id ) ) {
+                        continue;
+                    }
+
                     $permalink = get_permalink( $post_id );
                     $permalink_lower = strtolower( $permalink );
 
