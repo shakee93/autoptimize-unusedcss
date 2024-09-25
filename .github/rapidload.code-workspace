@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"name": "royal-elementor-kit",
+			"path": "../../../themes/royal-elementor-kit"
+		},
+		{
+			"name": "autoptimize-unusedcss",
+			"path": ".."
+		},
+		{
+			"name": "rapidload-api",
+			"path": "../../../../../../../../Projects/rapidload/rapidload-api"
+		}
+	],
+	"settings": {}
+}
