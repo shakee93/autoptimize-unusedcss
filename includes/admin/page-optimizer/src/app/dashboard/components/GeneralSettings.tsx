@@ -1,14 +1,10 @@
 import React, { useEffect, useState, FC } from 'react';
 import { Textarea } from 'components/ui/textarea';
 import { Checkbox } from 'components/ui/checkbox';
-import { saveGeneralSettings } from '../../../store/app/appActions';
 import useCommonDispatch from 'hooks/useCommonDispatch';
+import { saveGeneralSettings } from '../../../store/app/appActions';
 import { useAppContext } from '../../../context/app';
-
-
-interface GeneralSettingsProps {
-    options: GeneralSettings;
-}
+import AppButton from "components/ui/app-button";
 
 const defaultSettings: GeneralSettings = {
     uucss_excluded_links: [],
@@ -22,7 +18,11 @@ const defaultSettings: GeneralSettings = {
     uucss_disable_add_to_re_queue: false,
 };
 
-const GeneralSettings: FC = () => {
+interface GeneralSettingsProps {
+    onClose: (open: boolean) => void;
+}
+
+const GeneralSettings: FC<GeneralSettingsProps> = ({ onClose }) => {
     const { dispatch } = useCommonDispatch();
     const { options } = useAppContext();
     const [settingsData, setSettingsData] = useState<GeneralSettings>(defaultSettings);
@@ -69,37 +69,43 @@ const GeneralSettings: FC = () => {
         );
     };
 
-
     return (
-        <div className="content flex w-full sm:w-1/2 lg:w-full flex-col px-6">
-            <div className="grid items-center mb-4">
-                <div className="text-sm font-semibold dark:text-brand-300">Exclude URLs</div>
-                <div className="text-xs font-normal dark:text-brand-300 text-brand-500 mt-1">
-                    URLs that need to be excluded from RapidLoad optimization.
+        <>
+            <div className="content flex w-full sm:w-1/2 lg:w-full flex-col px-6">
+                <div className="grid items-center mb-4">
+                    <div className="text-sm font-semibold dark:text-brand-300">Exclude URLs</div>
+                    <div className="text-xs font-normal dark:text-brand-300 text-brand-500 mt-1">
+                        URLs that need to be excluded from RapidLoad optimization.
+                    </div>
+                    <Textarea
+                        className="mt-1 focus:outline-none focus-visible:ring-0 dark:text-brand-300 rounded-2xl"
+                        value={settingsData.uucss_excluded_links?.join('\n')}
+                        onChange={(e) =>
+                            setSettingsData({...settingsData, uucss_excluded_links: e.target.value.split('\n')})
+                        }
+                    />
                 </div>
-                <Textarea
-                    className="mt-1 focus:outline-none focus-visible:ring-0 dark:text-brand-300 rounded-2xl"
-                    value={settingsData.uucss_excluded_links?.join('\n')}
-                    onChange={(e) =>
-                        setSettingsData({ ...settingsData, uucss_excluded_links: e.target.value.split('\n') })
-                    }
-                />
+
+                {renderCheckbox('Minify HTML', 'Minify the HTML output of your pages.', 'rapidload_minify_html')}
+                {renderCheckbox('Query String', 'Identify URLs with query strings as separate URLs.', 'uucss_query_string')}
+                {renderCheckbox('Preload Links', 'Preload internal links for faster navigation.', 'preload_internal_links')}
+                {renderCheckbox('Debug Mode', 'Enable debug logs for RapidLoad.', 'uucss_enable_debug')}
+
+
             </div>
-
-            {renderCheckbox('Minify HTML', 'Minify the HTML output of your pages.', 'rapidload_minify_html')}
-            {renderCheckbox('Query String', 'Identify URLs with query strings as separate URLs.', 'uucss_query_string')}
-            {renderCheckbox('Preload Links', 'Preload internal links for faster navigation.', 'preload_internal_links')}
-            {renderCheckbox('Debug Mode', 'Enable debug logs for RapidLoad.', 'uucss_enable_debug')}
-
-            <div className="flex justify-end">
-                <button
+            <div className="border-t flex justify-end mt-4 px-4 pt-4">
+                <AppButton onClick={() => onClose(false)}
+                           className='mr-2 text-sm text-gray-500 bg-brand-0 hover:bg-accent border border-input'>
+                    Close
+                </AppButton>
+                <AppButton
                     onClick={handleSaveSettings}
-                    className="mt-2 bg-violet-950 text-sm font-semibold text-white py-1.5 px-4 rounded-lg hover:bg-violet-900"
+                    className="bg-violet-950 text-sm font-semibold text-white py-1.5 px-4 rounded-lg hover:bg-violet-900"
                 >
                     Save Settings
-                </button>
+                </AppButton>
             </div>
-        </div>
+        </>
     );
 };
 
