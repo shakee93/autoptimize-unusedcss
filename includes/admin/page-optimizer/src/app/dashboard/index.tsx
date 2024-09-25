@@ -126,47 +126,47 @@ export default function Dashboard() {
                                     </div>
                                 </div>
 
-                                <div className="">
+                                {/*<div className="">*/}
 
-                                    <div className="widgets flex">
-                                        <CDNSummary/>
-                                    </div>
-                                </div>
-                                <div className="">
+                                {/*    <div className="widgets flex">*/}
+                                {/*        <CDNSummary/>*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
+                                {/*<div className="">*/}
 
-                                    <div className="widgets flex">
-                                        <CacheSummary/>
-                                    </div>
-                                </div>
+                                {/*    <div className="widgets flex">*/}
+                                {/*        <CacheSummary/>*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
 
-                                <div className="">
+                                {/*<div className="">*/}
 
-                                    <div className="widgets gap-4 grid">
-                                        <UnusedCSSSummary
-                                            settings={[
-                                                {
-                                                    title: "Unused CSS summary",
-                                                    total_jobs: 1000,
-                                                    items: [
-                                                        {label: "Success jobs", value: "153 jobs", performance: 95},
-                                                        {label: "Failed jobs", value: "153 jobs", performance: 95},
-                                                        {label: "Warning jobs", value: "153 jobs", performance: 95}
-                                                    ]
-                                                },
-                                                {
-                                                    title: "Critical CSS summary",
-                                                    total_jobs: 1000,
-                                                    items: [
-                                                        {label: "Success jobs", value: "153 jobs", performance: 95},
-                                                        {label: "Failed jobs", value: "153 jobs", performance: 95},
-                                                        {label: "Warning jobs", value: "153 jobs", performance: 95}
-                                                    ]
-                                                }
-                                            ]}
-                                        />
+                                {/*    <div className="widgets gap-4 grid">*/}
+                                {/*        <UnusedCSSSummary*/}
+                                {/*            settings={[*/}
+                                {/*                {*/}
+                                {/*                    title: "Unused CSS summary",*/}
+                                {/*                    total_jobs: 1000,*/}
+                                {/*                    items: [*/}
+                                {/*                        {label: "Success jobs", value: "153 jobs", performance: 95},*/}
+                                {/*                        {label: "Failed jobs", value: "153 jobs", performance: 95},*/}
+                                {/*                        {label: "Warning jobs", value: "153 jobs", performance: 95}*/}
+                                {/*                    ]*/}
+                                {/*                },*/}
+                                {/*                {*/}
+                                {/*                    title: "Critical CSS summary",*/}
+                                {/*                    total_jobs: 1000,*/}
+                                {/*                    items: [*/}
+                                {/*                        {label: "Success jobs", value: "153 jobs", performance: 95},*/}
+                                {/*                        {label: "Failed jobs", value: "153 jobs", performance: 95},*/}
+                                {/*                        {label: "Warning jobs", value: "153 jobs", performance: 95}*/}
+                                {/*                    ]*/}
+                                {/*                }*/}
+                                {/*            ]}*/}
+                                {/*        />*/}
 
-                                    </div>
-                                </div>
+                                {/*    </div>*/}
+                                {/*</div>*/}
 
                                 <div className="col-span-3">
                                     <div className="widgets gap-4 grid">
@@ -186,25 +186,8 @@ export default function Dashboard() {
                                         <GeneralSettings/>
                                     </div>
                                 </div>
-                                <div className="col-span-3">
-                                    <div className="widgets gap-4 grid">
-                                        <ContentSelector/>
-                                    </div>
-                                </div>
-                                {/*<article className={cn(*/}
-                                {/*     'col-span-12'*/}
-                                {/*)}>*/}
 
-                                {/*    /!*<AnimatePresence initial={true} mode='wait'>*!/*/}
-                                {/*    /!*    {activeMetric ? (*!/*/}
-                                {/*    /!*        <SpeedIndex/>*!/*/}
-                                {/*    /!*    ) : (*!/*/}
-                                {/*    /!*        <SlideUp uuid='perf'>*!/*/}
-                                {/*    /!*            <Performance/>*!/*/}
-                                {/*    /!*        </SlideUp>*!/*/}
-                                {/*    /!*    )}*!/*/}
-                                {/*    /!*</AnimatePresence>*!/*/}
-                                {/*</article>*/}
+
                             </>}
                     </section>
                 ) : (

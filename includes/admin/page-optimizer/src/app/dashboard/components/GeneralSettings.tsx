@@ -26,7 +26,9 @@ import AppButton from "components/ui/app-button";
 import {Lock} from "lucide-react";
 import {Status} from "app/page-optimizer/components/audit/BetaSpeedSetting";
 import {Checkbox} from "components/ui/checkbox";
-import {getTestModeStatus, updateLicense} from "../../../store/app/appActions";
+import {getTestModeStatus, saveGeneralSettings, updateLicense} from "../../../store/app/appActions";
+import useCommonDispatch from "hooks/useCommonDispatch";
+import {useAppContext} from "../../../context/app";
 
 interface GeneralOptions {
     uucss_excluded_links?: string[];
@@ -57,7 +59,8 @@ declare global {
 }
 
 const GeneralSettings = () => {
-
+    const { dispatch } = useCommonDispatch();
+    const {options} = useAppContext();
     const [settingsData, setSettingsData] = useState<GeneralSettings>({
         excludeUrl: [],
         minifyHtml: false,
@@ -81,7 +84,7 @@ const GeneralSettings = () => {
 // Function to handle "Save Settings" button click
     const handleSaveSettings = () => {
         console.log("Saved Settings:", settingsData);
-       // dispatch(saveSettings(settingsData)); // Dispatch action to save settings
+        dispatch(saveGeneralSettings(options,settingsData));
     };
 
     useEffect(() => {

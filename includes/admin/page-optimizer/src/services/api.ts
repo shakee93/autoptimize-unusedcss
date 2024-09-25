@@ -294,12 +294,30 @@ class ApiService {
         }
     }
 
+    async saveGeneralSettings(data: any): Promise<any> {
+        try {
+            console.log(data)
+            const formData = new FormData();
+            this.baseURL.searchParams.append('action', 'update_rapidload_settings');
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
 
     async fetchPosts(): Promise<any> {
         try {
             this.baseURL.searchParams.append('action', 'rapidload_fetch_post_types_with_links');
-            // this.baseURL.searchParams.append('s', searchFor)
-            // this.baseURL.searchParams.append('post_type', postType)
 
             const response = await fetch(this.baseURL, {
                 method: 'POST',
@@ -318,26 +336,6 @@ class ApiService {
     async getLicense(): Promise<any> {
         try {
             this.baseURL.searchParams.append('action', 'uucss_license');
-
-            const response = await fetch(this.baseURL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-
-            });
-            return this.throwIfError(response);
-        } catch (error) {
-            console.error(error);
-            throw error;
-        }
-    }
-
-    async updateGeneralSettings(url: string, mode: string): Promise<any> {
-        try {
-            this.baseURL.searchParams.append('action', 'update_rapidload_settings');
-            this.baseURL.searchParams.append('url', url)
-            this.baseURL.searchParams.append('test_mode', mode)
 
             const response = await fetch(this.baseURL, {
                 method: 'POST',

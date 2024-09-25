@@ -284,6 +284,37 @@ export const searchData = (options: WordPressOptions, action: string, searchFor:
 }
 
 
+export const saveGeneralSettings = (options: WordPressOptions, data: any): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string }> => {
+
+        try {
+            const saveGeneralSettings = await api.saveGeneralSettings(data);
+            // dispatch({
+            //     type: UPDATE_OPTIMIZE_TABLE,
+            //     payload : fetchOptimizationData?.data
+            // })
+            console.log(saveGeneralSettings);
+            return { success: true };
+        } catch (error: any) {
+            console.error('Error on saving General Settings:', error);
+            let errorMessage: string;
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            } else {
+                errorMessage = 'An unknown error occurred';
+            }
+            return { success: false, error: errorMessage };
+        }
+
+
+    }
+}
+
 export const fetchPosts = (options: WordPressOptions): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
