@@ -181,13 +181,6 @@ export default function Dashboard() {
                                     </div>
                                 </div>
 
-                                <div className="col-span-3">
-                                    <div className="widgets gap-4 grid">
-                                        <GeneralSettings/>
-                                    </div>
-                                </div>
-
-
                             </>}
                     </section>
                 ) : (

@@ -23,7 +23,11 @@ import TestModeSwitcher from "app/page-optimizer/components/TestModeSwitcher";
 const AppTour = React.lazy(() => import( 'components/tour'))
 const InitTour = React.lazy(() => import('components/tour/InitTour'))
 import {isDev, isAdminPage} from "lib/utils";
-
+import {Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger} from "components/ui/dialog";
+import {PlusIcon} from "@heroicons/react/24/outline";
+import {ContentSelector} from "components/ui/content-selector";
+import AppButton from "components/ui/app-button";
+import GeneralSettingsTrigger from "app/dashboard/components/GeneralSettingsTrigger";
 
 const App = ({popup, _showOptimizer = false}: {
     popup?: HTMLElement | null,
@@ -39,7 +43,7 @@ const App = ({popup, _showOptimizer = false}: {
     const {activeReport} = useSelector((state: RootState) => state.app);
     const {isDark } = useRootContext()
     const initialTestMode = window.rapidload_optimizer ? toBoolean(window.rapidload_optimizer.test_mode) : false;
-
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
 
@@ -139,6 +143,8 @@ const App = ({popup, _showOptimizer = false}: {
         window.location.hash = activeRoute;
     }, [activeRoute]);
 
+
+
     return (
         <AnimatePresence>
             {(mounted && showOptimizer) &&
@@ -183,9 +189,16 @@ const App = ({popup, _showOptimizer = false}: {
                             </div>
 
 
-                            <div>
-                                <TestModeSwitcher/>
+                            <div className="flex gap-2 items-center pr-6">
+                                <div>
+                                    <TestModeSwitcher/>
+                                </div>
+
+                                <div>
+                                    <GeneralSettingsTrigger open={open} onOpenChange={setOpen}/>
+                                </div>
                             </div>
+
                         </header>
 
                     </div>

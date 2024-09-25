@@ -1,32 +1,7 @@
 import React, {Suspense, useEffect, useState} from 'react';
-import Card from "components/ui/card";
-import {cn} from "lib/utils";
-import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
-import { CheckBadgeIcon, EyeIcon, EyeSlashIcon,InformationCircleIcon  } from "@heroicons/react/24/outline";
-import {Switch} from "components/ui/switch";
-import {Label} from "components/ui/label";
-import {Skeleton} from "components/ui/skeleton"
-import PerformanceProgressBar from "components/performance-progress-bar";
 import {Textarea} from "components/ui/textarea";
-import {Button} from "components/ui/button";
-import Mode from "app/page-optimizer/components/Mode";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
-} from "components/ui/dialog";
-import TooltipText from "components/ui/tooltip-text";
-import {Cog6ToothIcon} from "@heroicons/react/20/solid";
-import Fields from "app/page-optimizer/components/audit/additional-inputs";
-import AppButton from "components/ui/app-button";
-import {Lock} from "lucide-react";
-import {Status} from "app/page-optimizer/components/audit/BetaSpeedSetting";
 import {Checkbox} from "components/ui/checkbox";
-import {getTestModeStatus, saveGeneralSettings, updateLicense} from "../../../store/app/appActions";
+import {getTestModeStatus, saveGeneralSettings} from "../../../store/app/appActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {useAppContext} from "../../../context/app";
 
@@ -109,22 +84,10 @@ const GeneralSettings = () => {
 
     return ( <>
 
-        <div className='w-full flex flex-col gap-4'>
-            <Card data-tour='license-widget'
-                  className={cn(
-                      'overflow-hidden border border-transparent flex flex-col sm:flex-row lg:flex-col justify-around border-brand-200 dark:border-brand-800',
-                  )}>
 
-                <div className="content flex w-full sm:w-1/2 lg:w-full flex-col px-6 py-6">
-                    <div className='flex gap-2 items-center'>
-                        <div className="text-base font-semibold dark:text-brand-300">General Settings</div>
-                        <InformationCircleIcon className="h-[18px] w-[18px]" />
-                    </div>
+                <div className="content flex w-full sm:w-1/2 lg:w-full flex-col px-6">
 
-                    <div className='my-2 mb-4'>
-
-
-                    <div className='grid items-center py-2'>
+                    <div className='grid items-center'>
                         <div className="text-sm font-semibold dark:text-brand-300">Exclude URLs</div>
                         <div className="text-xs font-normal dark:text-brand-300 text-brand-500 mt-1">URLs that needs to be excluded from the whole RapidLoad optimization.</div>
                         <Textarea className="mt-1 focus:outline-none focus-visible:ring-0 dark:text-brand-300 focus-visible:ring-offset-0 rounded-2xl" />
@@ -186,14 +149,9 @@ const GeneralSettings = () => {
                             Save Settings
                         </button>
                     </div>
-                    </div>
+
                 </div>
 
-            </Card>
-
-
-
-        </div>
     </>
     );
 };
