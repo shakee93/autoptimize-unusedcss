@@ -147,6 +147,10 @@ class CriticalCSS_Enqueue
                 continue;
             }
 
+            if(isset($sheet->href) && $this->str_contains($sheet->href. 'fonts.googleapis.com')){
+                continue;
+            }
+
             if(!$this->is_mobile && apply_filters('rapidload/cpcss/set-preload-css', true)){
                 if(!isset($sheet->{'data-href'}) && isset($sheet->{'href'})){
                     $sheet->{'data-href'} = $sheet->{'href'};
