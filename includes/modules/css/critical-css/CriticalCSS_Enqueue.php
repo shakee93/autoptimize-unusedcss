@@ -147,7 +147,7 @@ class CriticalCSS_Enqueue
                 continue;
             }
 
-            if(isset($sheet->href) && $this->str_contains($sheet->href. 'fonts.googleapis.com')){
+            if(isset($sheet->href) && $this->str_contains($sheet->href, 'fonts.googleapis.com')){
                 continue;
             }
 
