@@ -36,6 +36,14 @@ class UnusedCSS
             return;
         }
 
+        if(defined('RAPIDLOAD_CPCSS_ENABLED')){
+            return;
+        }
+
+        if (!defined('RAPIDLOAD_UUCSS_ENABLED')) {
+            define('RAPIDLOAD_UUCSS_ENABLED', true);
+        }
+
         if(apply_filters('uucss/enable/notfound_fallback', true)){
             add_action( 'template_redirect', [$this, 'uucss_notfound_fallback'] );
         }
@@ -68,6 +76,22 @@ class UnusedCSS
         add_action('rapidload/admin-bar-actions', [$this, 'add_admin_clear_action']);
 
         add_action('rapidload/cdn/validated', [$this, 'update_cdn_url_in_cached_files']);
+
+        add_action('rapidload/uucss/job/handle', [$this, 'initiate_uucss_job'], 10, 2);
+    }
+
+    public function initiate_uucss_job($job, $args){
+
+        if(!isset($job)){
+            return;
+        }
+
+        $job_data = new RapidLoad_Job_Data($job, 'uucss');
+        if(!isset($job_data->id)){
+            $job_data->save();
+        }
+
+        do_action('uucss_async_queue', $job_data, $args);
     }
 
     public function update_cdn_url_in_cached_files($args) {

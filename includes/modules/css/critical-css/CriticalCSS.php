@@ -42,6 +42,10 @@ class CriticalCSS
             return;
         }
 
+        if (!defined('RAPIDLOAD_CPCSS_ENABLED')) {
+            define('RAPIDLOAD_CPCSS_ENABLED', true);
+        }
+
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
 
         add_action('rapidload/vanish/css', [ $this, 'vanish' ]);
@@ -62,6 +66,25 @@ class CriticalCSS
 
             $this->cache_trigger_hooks();
 
+        }
+
+        add_action('rapidload/cpcss/job/handle', [$this, 'initiate_cpcss_job'], 10, 3);
+    }
+
+    public function initiate_cpcss_job($job, $first_arg, $second_arg = null){
+
+        if(!isset($job)){
+            return;
+        }
+
+        $job_data = new RapidLoad_Job_Data($job, 'cpcss');
+        if(!isset($job_data->id)){
+            $job_data->save();
+        }
+
+        do_action('cpcss_async_queue', $job_data, $first_arg);
+        if(isset($second_arg)){
+            do_action('cpcss_async_queue', $job_data, $second_arg);
         }
     }
 

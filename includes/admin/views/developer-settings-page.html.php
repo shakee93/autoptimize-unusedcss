@@ -45,7 +45,7 @@ $third_party_cache_plugins = array_filter($third_party_plugins, function ($plugi
             <?php endif; ?>
             <?php if ( $api_key_verified) : ?>
 
-                <?php if(isset($_GET['uucss_jobs']) && isset($options['uucss_enable_css']) && $options['uucss_enable_css'] == "1" && isset($options['uucss_enable_uucss']) && $options['uucss_enable_uucss'] == "1") : ?>
+                <?php if(isset($_GET['uucss_jobs']) && defined('RAPIDLOAD_UUCSS_ENABLED')) : ?>
                 <li class="uucss-history uucss-job-history">
                     <h2>
                         Optimization Jobs

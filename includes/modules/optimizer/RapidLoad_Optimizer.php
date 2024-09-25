@@ -163,16 +163,16 @@ class RapidLoad_Optimizer
 
         wp_send_json_success([
             'uucss' => [
-                'status' => $job_data_uucss->status,
-                'error' => isset($job_data_uucss->error) ? unserialize($job_data_uucss->error) : null,
-                'warnings' => isset($job_data_uucss->warnings) ? unserialize($job_data_uucss->warnings) : null,
-                'stats' => isset($job_data_uucss->stats) ? unserialize($job_data_uucss->stats) : null
+                'status' => isset($job_data_uucss->id) ? $job_data_uucss->status : null,
+                'error' => isset($job_data_uucss->id) && isset($job_data_uucss->error) ? unserialize($job_data_uucss->error) : null,
+                'warnings' => isset($job_data_uucss->id) && isset($job_data_uucss->warnings) ? unserialize($job_data_uucss->warnings) : null,
+                'stats' => isset($job_data_uucss->id) && isset($job_data_uucss->stats) ? unserialize($job_data_uucss->stats) : null
             ],
             'cpcss' => [
-                'status' => $job_data_cpcss->status,
-                'error' => isset($job_data_cpcss->error) ? unserialize($job_data_cpcss->error) : null,
-                'warnings' => isset($job_data_cpcss->warnings) ? unserialize($job_data_cpcss->warnings) : null,
-                'stats' => isset($job_data_cpcss->stats) ? unserialize($job_data_cpcss->stats) : null
+                'status' => isset($job_data_cpcss->id) ? $job_data_cpcss->status : null,
+                'error' => isset($job_data_cpcss->id) && isset($job_data_cpcss->error) ? unserialize($job_data_cpcss->error) : null,
+                'warnings' => isset($job_data_cpcss->id) && isset($job_data_cpcss->warnings) ? unserialize($job_data_cpcss->warnings) : null,
+                'stats' => isset($job_data_cpcss->id) && isset($job_data_cpcss->stats) ? unserialize($job_data_cpcss->stats) : null
             ],
             'cache' => [
                 'status' => @file_exists($cache_file),
@@ -326,28 +326,19 @@ class RapidLoad_Optimizer
                         }
                         self::$options['uucss_enable_css'] = "1";
                         if($key == "uucss_enable_uucss"){
-                            $job_data = new RapidLoad_Job_Data(self::$job, 'uucss');
-                            if(!isset($job_data->id)){
-                                $job_data->save();
-                            }
-                            do_action('uucss_async_queue', $job_data, [
+                            do_action('rapidload/uucss/job/handle', self::$job, [
                                 'immediate' => true,
                                 'titan' => true,
                             ]);
                         }
                         if($key == "uucss_enable_cpcss"){
-                            $job_data = new RapidLoad_Job_Data(self::$job, 'cpcss');
-                            if(!isset($job_data->id)){
-                                $job_data->save();
-                            }
-                            do_action('cpcss_async_queue', $job_data, [
+                            do_action('rapidload/cpcss/job/handle', self::$job, [
                                 'immediate' => true,
                                 'titan' => true,
                                 'options' => [
                                     'strategy' => self::$strategy
                                 ]
-                            ]);
-                            do_action('cpcss_async_queue', $job_data, [
+                            ], [
                                 'titan' => true,
                                 'options' => [
                                     'strategy' => self::$strategy == "desktop" ? "mobile" : "desktop"
@@ -1058,29 +1049,23 @@ class RapidLoad_Optimizer
                     $input['value'] = $options[$input['key']] == "defer" || $options[$input['key']] == "1";
                 }else if($input['key'] == "uucss_enable_uucss"){
                     $data = new RapidLoad_Job_Data(self::$job, 'uucss');
-                    if(!$data->exist()){
-                        $data->save();
-                    }
                     $settings['status'] = [
-                        'status' => $data->status,
-                        'stats' => $data->get_stats(),
-                        'warnings' => $data->get_warnings(),
-                        'error' => $data->get_error()
+                        'status' => isset($data->id) ? $data->status : null,
+                        'stats' =>  isset($data->id) ? $data->get_stats() : null,
+                        'warnings' =>  isset($data->id) ? $data->get_warnings() : null,
+                        'error' =>  isset($data->id) ? $data->get_error() : null
                     ];
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }else if($input['key'] == "update_htaccess_file"){
                     $settings['status'] = RapidLoad_htaccess::has_rapidload_rules();
                 }else if($input['key'] == "uucss_enable_cpcss"){
                     $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
-                    if(!$data->exist()){
-                        $data->save();
-                    }
                     $cpcss_data = $data->get_cpcss_data();
                     $settings['status'] = [
-                        'status' => $data->status,
-                        'error' => $data->get_error(),
-                        'desktop' => isset($cpcss_data['desktop']) && !empty($cpcss_data['desktop']) ? $cpcss_data['desktop'] : null,
-                        'mobile' => isset($cpcss_data['mobile']) && !empty($cpcss_data['mobile']) ? $cpcss_data['mobile'] : null,
+                        'status' => isset($data->id) ? $data->status : null,
+                        'error' => isset($data->id) ? $data->get_error() : null,
+                        'desktop' => isset($data->id) && isset($cpcss_data['desktop']) && !empty($cpcss_data['desktop']) ? $cpcss_data['desktop'] : null,
+                        'mobile' => isset($data->id) && isset($cpcss_data['mobile']) && !empty($cpcss_data['mobile']) ? $cpcss_data['mobile'] : null,
                     ];
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }else if($input['key'] == "uucss_enable_cache"){

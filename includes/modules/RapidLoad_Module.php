@@ -25,16 +25,6 @@ class RapidLoad_Module
 
     function init(){
 
-        $this->modules['unused-css'] = [
-            'id' => 'unused-css',
-            'title' => 'Unused CSS',
-            'description' => 'Removing unused css and increase your page scores, you can boost your site with this option',
-            'group' => 'css',
-            'status' => 'on',
-            'class' => UnusedCSS::class,
-            'global' => 'uucss'
-        ];
-
         $this->modules['critical-css'] = [
             'id' => 'critical-css',
             'title' => 'Critical CSS',
@@ -43,6 +33,16 @@ class RapidLoad_Module
             'status' => 'on',
             'class' => CriticalCSS::class,
             'global' => 'cpcss'
+        ];
+
+        $this->modules['unused-css'] = [
+            'id' => 'unused-css',
+            'title' => 'Unused CSS',
+            'description' => 'Removing unused css and increase your page scores, you can boost your site with this option',
+            'group' => 'css',
+            'status' => 'on',
+            'class' => UnusedCSS::class,
+            'global' => 'uucss'
         ];
 
         $this->modules['minify-css'] = [
