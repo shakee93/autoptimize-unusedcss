@@ -15,9 +15,7 @@
                 link.removeAttribute('data-href');
                 link.removeAttribute('data-media');
                 link.addEventListener('load', function () {
-                    setTimeout(function () {
-                        file.remove();
-                    }, 5000);
+                    file.remove();
                 });
                 file.parentNode.insertBefore(link, file.nextSibling);
             });
