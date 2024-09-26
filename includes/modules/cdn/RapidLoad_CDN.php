@@ -30,14 +30,16 @@ class RapidLoad_CDN
             return true;
         });
 
-        add_filter('rapidload/cache_file_creating/css', function ($css){
+        add_filter('rapidload/cache_file_creating/css', [$this, 'replace_cdn_for_css_content']);
+    }
 
-            if($this->is_cdn_enabled()){
-                $css = str_replace(trailingslashit(site_url()), $this->options['uucss_cdn_url'], $css);
-            }
+    public function replace_cdn_for_css_content($css){
 
-            return $css;
-        });
+        if($this->is_cdn_enabled()){
+            $css = str_replace(trailingslashit(site_url()), $this->options['uucss_cdn_url'], $css);
+        }
+
+        return $css;
     }
 
     public function validate_cdn($remove = false){
