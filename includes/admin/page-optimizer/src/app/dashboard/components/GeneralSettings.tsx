@@ -102,17 +102,14 @@ const GeneralSettings: FC<GeneralSettingsProps> = ({ onClose }) => {
                 {renderCheckbox('Debug Mode', 'Enable debug logs for RapidLoad.', 'uucss_enable_debug')}
 
 
-                <Label
-                    htmlFor="name"
-                    className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60"
-                >
+                <div className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60 my-4">
                     <div className="flex items-center justify-between cursor-pointer " onClick={toggleIsOpen} >
                         <div className="flex flex-col">
                             <span>
-                            Misc Options
+                            Queue Options
                             </span>
-                            <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[425px]">
-                            This base page optimization will be used on all the other pages in the selected group.
+                            <span className="text-sm font-normal text-gray-600 sm:max-w-[425px]">
+                            More advanced options for pro users.
                         </span>
                         </div>
                         <ChevronRightIcon  className={`h-5 transition-all ${isOpen && 'rotate-[90deg]'}`} />
@@ -123,11 +120,6 @@ const GeneralSettings: FC<GeneralSettingsProps> = ({ onClose }) => {
                         initialRender={true}
                         isOpen={isOpen}
                     >
-                        {/* Queue Options Heading */}
-                        <div className="flex justify-between items-center border-b pb-2 mb-4">
-                            <h2 className="text-lg font-semibold">Queue Options</h2>
-                            <p className="text-sm text-gray-500">More advanced options for pro users.</p>
-                        </div>
 
                         {/* Queue Dropdowns */}
                         <div className="flex items-center space-x-4 mb-4">
@@ -180,7 +172,7 @@ const GeneralSettings: FC<GeneralSettingsProps> = ({ onClose }) => {
                     </Accordion>
 
 
-                </Label>
+                </div>
 
 
 

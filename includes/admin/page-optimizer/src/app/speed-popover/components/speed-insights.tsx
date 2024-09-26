@@ -153,6 +153,14 @@ const Content = ({ dashboard = false }) => {
             </>
         );
     }
+    const newUrl = (() => {
+        if (!options.dashboard_url) {
+            return '#';
+        }
+        const newQueryParam = `optimize-url=${options.optimizer_url}`;
+        const [baseUrl, queryParams] = options.dashboard_url.split('?');
+        return `${baseUrl}?${newQueryParam}${queryParams ? '&' + queryParams : ''}#/optimize`;
+    })();
 
     return (
         <div
@@ -288,7 +296,8 @@ const Content = ({ dashboard = false }) => {
 
                     <div className={cn('flex gap-3 text-sm ', dashboard? 'flex-row-reverse': '')}>
 
-                        <a href={`${options.dashboard_url}#/optimize&optimize-url=${options.optimizer_url}`}>
+                        {/*<a href={`${options.dashboard_url}#/optimize`}>*/}
+                            <a href={newUrl}>
                             <AppButton>
                                 <BoltIcon className='w-4 text-white dark:text-brand-900 rounded-[15px]'/> Titan Optimizer
                             </AppButton>

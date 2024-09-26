@@ -35,16 +35,12 @@ const GeneralSettingsTrigger: React.FC<MyDialogProps> = ({ open, onOpenChange })
                     <DialogTitle>General Settings</DialogTitle>
                 </DialogHeader>
                 <div className="py-2">
-                    <GeneralSettings/>
+                    <GeneralSettings onClose={onOpenChange}/>
                 </div>
                 <DialogDescription>
                     {/* Additional description if needed */}
                 </DialogDescription>
-                <DialogFooter className="px-6 py-3 border-t">
-                    <AppButton onClick={() => onOpenChange(false)} variant='outline' className='text-sm'>
-                        Close
-                    </AppButton>
-                </DialogFooter>
+
             </DialogContent>
         </Dialog>
     );

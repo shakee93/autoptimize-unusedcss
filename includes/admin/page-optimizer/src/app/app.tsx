@@ -93,7 +93,10 @@ const App = ({popup, _showOptimizer = false}: {
 
         // Get the value of 'optimize-url' query parameter
         const optimizeUrl = urlParams.get('optimize-url');
-        console.log(optimizeUrl)
+        if(optimizeUrl){
+            console.log(optimizeUrl)
+        }
+
     }, []);
 
    // const hash = window.location.hash.replace("#", "");
@@ -151,7 +154,9 @@ const App = ({popup, _showOptimizer = false}: {
     }, [routes]);
 
     useEffect(() => {
-        window.location.hash = activeRoute;
+        if (isAdminPage) {
+            window.location.hash = activeRoute;
+        }
     }, [activeRoute]);
 
 
