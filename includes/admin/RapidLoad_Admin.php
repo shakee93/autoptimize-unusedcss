@@ -73,8 +73,12 @@ class RapidLoad_Admin
     function rapidload_fetch_post_types_with_links() {
         $data = [];
 
-        $cart_page_id = wc_get_page_id( 'cart' );
-        $checkout_page_id = wc_get_page_id( 'checkout' );
+        if ( class_exists( 'WooCommerce' ) ) {
+            $cart_page_id = wc_get_page_id( 'cart' );
+            $checkout_page_id = wc_get_page_id( 'checkout' );
+        } else {
+            $cart_page_id = $checkout_page_id = 0;
+        }
 
         $post_types = get_post_types( ['public' => true], 'names' );
 
@@ -139,8 +143,12 @@ class RapidLoad_Admin
             wp_send_json_error( 'Search term must be at least 3 characters long' );
         }
 
-        $cart_page_id = wc_get_page_id( 'cart' );
-        $checkout_page_id = wc_get_page_id( 'checkout' );
+        if ( class_exists( 'WooCommerce' ) ) {
+            $cart_page_id = wc_get_page_id( 'cart' );
+            $checkout_page_id = wc_get_page_id( 'checkout' );
+        } else {
+            $cart_page_id = $checkout_page_id = 0;
+        }
 
         $post_type = isset( $_REQUEST['post_type'] ) ? sanitize_text_field( $_REQUEST['post_type'] ) : 'any';
         $posts_per_page = 10;

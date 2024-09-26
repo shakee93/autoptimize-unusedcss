@@ -269,15 +269,15 @@ interface License {
 }
 
 interface GeneralSettings {
-    uucss_excluded_links: string[];
-    rapidload_minify_html: boolean;
-    uucss_query_string: boolean;
-    preload_internal_links: boolean;
-    uucss_enable_debug: boolean;
-    uucss_jobs_per_queue: number;
-    uucss_queue_interval: number;
-    uucss_disable_add_to_queue: boolean;
-    uucss_disable_add_to_re_queue: boolean;
+    excludeUrl: string[];
+    minifyHtml: boolean;
+    queryString: boolean;
+    preloadLinks: boolean;
+    debugMode: boolean;
+    queueRunJob: number;
+    queueRunJobInterval: number;
+    disableAutoQueue: boolean;
+    disableReQueue: boolean;
 }
 
 interface Revision {
