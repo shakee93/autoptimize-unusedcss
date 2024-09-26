@@ -45,11 +45,11 @@ class RapidLoad_Image
     }
 
     public function optimize_css_file_images($css) {
-        $regex = '/url\(\s*["\']?(.*?)["\']?\s*\)/i';
+        $regex = '/url\(\s*(["\']?)(.*?)\1\s*\)/i';
         $site_url = site_url();
 
         return preg_replace_callback($regex, function ($matches) use ($site_url) {
-            $url = $matches[1];
+            $url = $matches[2];
 
             if (preg_match('/^(https?:\/\/|\/\/)/i', $url)) {
                 if (strpos($url, '//') === 0) {
