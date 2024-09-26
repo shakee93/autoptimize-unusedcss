@@ -142,3 +142,21 @@ export function calculatePercentage(oldValue: number, newValue: number) {
   const percentage = ((newValue - oldValue) / oldValue) * 100;
   return percentage.toFixed(2);
 }
+
+
+export const saveToLocalStorage = (key: any, value: any) => {
+  try {
+    localStorage.setItem(key, value);
+  } catch (error) {
+    console.error(`Error saving ${key} to localStorage`, error);
+  }
+};
+
+export const getFromLocalStorage = (key) => {
+  try {
+    return localStorage.getItem(key);
+  } catch (error) {
+    console.error(`Error retrieving ${key} from localStorage`, error);
+    return null;
+  }
+};
