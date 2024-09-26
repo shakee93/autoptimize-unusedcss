@@ -88,104 +88,101 @@ export default function Dashboard() {
                     savingData && 'relative overflow-hidden'
                 )}>
 
-                {!loading ? (
-                    <section
-                        ref={optimizerContainer}
-                        className={cn(
-                            'relative container grid grid-cols-3 gap-6 pt-[84px] mt-4',
-                        )}>
+                <section
+                    ref={optimizerContainer}
+                    className={cn(
+                        'relative container grid grid-cols-3 gap-6 pt-[84px] mt-4',
+                    )}>
 
-                        {(savingData || invalidatingCache) && (
-                            <div className='fixed inset-0 flex justify-center items-center bg-brand-50/80 dark:bg-brand-950/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'>
-                                <div className='fixed top-1/2 flex gap-2 items-center justify-center'>
-                                    <Loader className='w-5 animate-spin'/>
-                                    {savingData && 'Saving Changes...'}
-                                    {invalidatingCache && 'Flushing Cache...'}
+                    {(savingData || invalidatingCache) && (
+                        <div
+                            className='fixed inset-0 flex justify-center items-center bg-brand-50/80 dark:bg-brand-950/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'>
+                            <div className='fixed top-1/2 flex gap-2 items-center justify-center'>
+                                <Loader className='w-5 animate-spin'/>
+                                {savingData && 'Saving Changes...'}
+                                {invalidatingCache && 'Flushing Cache...'}
+                            </div>
+                        </div>
+                    )}
+
+                    {error ?
+                        <div className='col-span-12 py-32 flex flex-col gap-6 justify-center items-center text-center'>
+                            <ErrorFetch className='items-center' error={error}/>
+                        </div> :
+                        <>
+
+
+                            <div className="">
+
+                                <div className="widgets pt-4 gap-4 grid">
+                                    <LicenseWidget/>
+
                                 </div>
                             </div>
-                        )}
 
-                        {error ?
-                            <div className='col-span-12 py-32 flex flex-col gap-6 justify-center items-center text-center'>
-                                <ErrorFetch className='items-center' error={error}/>
-                            </div> :
-                            <>
-
-
-                                <div className="">
-
-                                    <div className="widgets pt-4 gap-4 grid">
-                                        <LicenseWidget/>
-
-                                    </div>
+                            <div className="col-span-2">
+                                <div className="widgets pt-4 gap-4 grid">
+                                    <SpeedInsights dashboardMode={true}/>
                                 </div>
+                            </div>
 
-                                <div className="col-span-2">
-                                    <div className="widgets pt-4 gap-4 grid">
-                                        <SpeedInsights dashboardMode={true} />
-                                    </div>
-                                </div>
+                            {/*<div className="">*/}
 
-                                {/*<div className="">*/}
+                            {/*    <div className="widgets flex">*/}
+                            {/*        <CDNSummary/>*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
+                            {/*<div className="">*/}
 
-                                {/*    <div className="widgets flex">*/}
-                                {/*        <CDNSummary/>*/}
-                                {/*    </div>*/}
-                                {/*</div>*/}
-                                {/*<div className="">*/}
+                            {/*    <div className="widgets flex">*/}
+                            {/*        <CacheSummary/>*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
 
-                                {/*    <div className="widgets flex">*/}
-                                {/*        <CacheSummary/>*/}
-                                {/*    </div>*/}
-                                {/*</div>*/}
+                            {/*<div className="">*/}
 
-                                {/*<div className="">*/}
+                            {/*    <div className="widgets gap-4 grid">*/}
+                            {/*        <UnusedCSSSummary*/}
+                            {/*            settings={[*/}
+                            {/*                {*/}
+                            {/*                    title: "Unused CSS summary",*/}
+                            {/*                    total_jobs: 1000,*/}
+                            {/*                    items: [*/}
+                            {/*                        {label: "Success jobs", value: "153 jobs", performance: 95},*/}
+                            {/*                        {label: "Failed jobs", value: "153 jobs", performance: 95},*/}
+                            {/*                        {label: "Warning jobs", value: "153 jobs", performance: 95}*/}
+                            {/*                    ]*/}
+                            {/*                },*/}
+                            {/*                {*/}
+                            {/*                    title: "Critical CSS summary",*/}
+                            {/*                    total_jobs: 1000,*/}
+                            {/*                    items: [*/}
+                            {/*                        {label: "Success jobs", value: "153 jobs", performance: 95},*/}
+                            {/*                        {label: "Failed jobs", value: "153 jobs", performance: 95},*/}
+                            {/*                        {label: "Warning jobs", value: "153 jobs", performance: 95}*/}
+                            {/*                    ]*/}
+                            {/*                }*/}
+                            {/*            ]}*/}
+                            {/*        />*/}
 
-                                {/*    <div className="widgets gap-4 grid">*/}
-                                {/*        <UnusedCSSSummary*/}
-                                {/*            settings={[*/}
-                                {/*                {*/}
-                                {/*                    title: "Unused CSS summary",*/}
-                                {/*                    total_jobs: 1000,*/}
-                                {/*                    items: [*/}
-                                {/*                        {label: "Success jobs", value: "153 jobs", performance: 95},*/}
-                                {/*                        {label: "Failed jobs", value: "153 jobs", performance: 95},*/}
-                                {/*                        {label: "Warning jobs", value: "153 jobs", performance: 95}*/}
-                                {/*                    ]*/}
-                                {/*                },*/}
-                                {/*                {*/}
-                                {/*                    title: "Critical CSS summary",*/}
-                                {/*                    total_jobs: 1000,*/}
-                                {/*                    items: [*/}
-                                {/*                        {label: "Success jobs", value: "153 jobs", performance: 95},*/}
-                                {/*                        {label: "Failed jobs", value: "153 jobs", performance: 95},*/}
-                                {/*                        {label: "Warning jobs", value: "153 jobs", performance: 95}*/}
-                                {/*                    ]*/}
-                                {/*                }*/}
-                                {/*            ]}*/}
-                                {/*        />*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
 
-                                {/*    </div>*/}
-                                {/*</div>*/}
-
-                                <div className="col-span-3">
-                                    <div className="widgets gap-4 grid">
-                                        <OptimizerPagesTable
-                                            settings={
-                                                {
-                                                    title: "Optimize Pages",
-                                                    total_jobs: 1000,
-                                                }
+                            <div className="col-span-3">
+                                <div className="widgets gap-4 grid">
+                                    <OptimizerPagesTable
+                                        settings={
+                                            {
+                                                title: "Optimize Pages",
+                                                total_jobs: 1000,
                                             }
-                                        />
-                                    </div>
+                                        }
+                                    />
                                 </div>
+                            </div>
 
-                            </>}
-                    </section>
-                ) : (
-                    <Loading url={url}/>
-                )}
+                        </>}
+                </section>
             </div>
             {/*{!error && (*/}
             {/*    <Footer />*/}

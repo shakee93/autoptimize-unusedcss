@@ -28,6 +28,8 @@ import {ExclamationCircleIcon} from "@heroicons/react/20/solid";
 import ErrorFetch from "components/ErrorFetch";
 import {cn} from "lib/utils";
 import PageSpeedWidget from "app/dashboard/components/performance-widgets/PageSpeedWidget";
+import useCommonDispatch from "hooks/useCommonDispatch";
+import {setCommonState} from "../../../store/common/commonActions";
 
 const Content = ({ dashboard = false }) => {
 
@@ -37,6 +39,7 @@ const Content = ({ dashboard = false }) => {
     const { toast } = useToast()
     const [progressbarColor, setProgressbarColor] = useState('#ECECED');
     const [on, setOn] = useState<boolean>(false)
+
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
     const progressBarColor = () => {
@@ -50,6 +53,7 @@ const Content = ({ dashboard = false }) => {
             setProgressbarColor('#09B42F');
         }
     };
+
 
     useEffect(() => {
         progressBarColor();
@@ -284,7 +288,7 @@ const Content = ({ dashboard = false }) => {
 
                     <div className={cn('flex gap-3 text-sm ', dashboard? 'flex-row-reverse': '')}>
 
-                        <a href={`${options.dashboard_url}#/optimize`}>
+                        <a href={`${options.dashboard_url}#/optimize&optimize-url=${options.optimizer_url}`}>
                             <AppButton>
                                 <BoltIcon className='w-4 text-white dark:text-brand-900 rounded-[15px]'/> Titan Optimizer
                             </AppButton>

@@ -38,7 +38,6 @@ const App = ({popup, _showOptimizer = false}: {
     const {showOptimizer, version, setShowOptimizer, mode, options} = useAppContext()
     const [shadowRoot, setShadowRoot] = useState<ShadowRoot | null>(null);
     const [mounted, setMounted] = useState(false)
-
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const {activeReport} = useSelector((state: RootState) => state.app);
     const {isDark } = useRootContext()
@@ -83,7 +82,19 @@ const App = ({popup, _showOptimizer = false}: {
         dispatch(fetchSettings(options, options.optimizer_url, false));
         dispatch(fetchReport(options, options.optimizer_url, false));
         dispatch(setCommonState('testModeStatus', initialTestMode));
+
     }, [dispatch, activeReport]);
+
+    useEffect(() => {
+        const queryString = window.location.search;
+
+        // Parse the query string
+        const urlParams = new URLSearchParams(queryString);
+
+        // Get the value of 'optimize-url' query parameter
+        const optimizeUrl = urlParams.get('optimize-url');
+        console.log(optimizeUrl)
+    }, []);
 
    // const hash = window.location.hash.replace("#", "");
    //  const [activeRoute, setActiveRoute] = useState( hash.length > 0 ? hash : '/');

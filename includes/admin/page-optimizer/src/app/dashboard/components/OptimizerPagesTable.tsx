@@ -16,7 +16,13 @@ import {
 } from "@/components/ui/dialog"
 import {ContentSelector} from "components/ui/content-selector";
 import AppButton from "components/ui/app-button"
-import {fetchPosts, getTitanOptimizationData, searchData} from "../../../store/app/appActions";
+import {
+    fetchPosts,
+    fetchReport,
+    fetchSettings,
+    getTitanOptimizationData,
+    searchData
+} from "../../../store/app/appActions";
 import {useAppContext} from "../../../context/app";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {useSelector} from "react-redux";
@@ -122,6 +128,13 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
         }
         return pages;
     };
+
+    const handleOptimizeClick  = (url: string) => {
+        dispatch(fetchSettings(options, url, true));
+        dispatch(fetchReport(options, url, true));
+        window.location.hash = '#/optimize';
+    };
+
 
     return (
         <>
@@ -235,7 +248,10 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                                             <DateComponent data={item.created_at}/></td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center gap-2">
                                                             <span
-                                                                className="dark:text-brand-950 bg-gray-100 px-3 py-1.5 rounded-xl flex w-fit gap-2 items-center cursor-pointer">
+                                                                className="dark:text-brand-950 bg-gray-100 px-3 py-1.5 rounded-xl flex w-fit gap-2 items-center cursor-pointer"
+                                                                onClick={() => {
+                                                                    handleOptimizeClick(item.url)
+                                                                }}>
                                                                 <PencilSquareIcon className="w-4 h-4"/> Optimize
                                                             </span>
                                                             <TrashIcon className="w-4 h-4 cursor-pointer"/>

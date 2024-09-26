@@ -5,6 +5,7 @@ import useCommonDispatch from 'hooks/useCommonDispatch';
 import { saveGeneralSettings } from '../../../store/app/appActions';
 import { useAppContext } from '../../../context/app';
 import AppButton from "components/ui/app-button";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from 'components/ui/select';
 
 const defaultSettings: GeneralSettings = {
     uucss_excluded_links: [],
@@ -26,6 +27,8 @@ const GeneralSettings: FC<GeneralSettingsProps> = ({ onClose }) => {
     const { dispatch } = useCommonDispatch();
     const { options } = useAppContext();
     const [settingsData, setSettingsData] = useState<GeneralSettings>(defaultSettings);
+    const [jobCount, setJobCount] = useState('1 Job');
+    const [timeInterval, setTimeInterval] = useState('10 Minutes');
 
     useEffect(() => {
         const GeneralSettings = window.uucss_global?.active_modules?.general?.options;
@@ -42,7 +45,7 @@ const GeneralSettings: FC<GeneralSettingsProps> = ({ onClose }) => {
                 uucss_disable_add_to_re_queue: !!GeneralSettings.uucss_disable_add_to_re_queue,
             });
         }
-    }, []);
+        }, []);
 
     const handleCheckboxChange = (key: keyof GeneralSettings) => {
         setSettingsData(prev => ({ ...prev, [key]: !prev[key] }));
@@ -50,7 +53,6 @@ const GeneralSettings: FC<GeneralSettingsProps> = ({ onClose }) => {
 
     const handleSaveSettings = () => {
         dispatch(saveGeneralSettings(options, settingsData));
-        console.log("Saved Settings:", settingsData);
     };
 
     const renderCheckbox = (label: string, description: string, key: keyof GeneralSettings) => {
@@ -91,19 +93,75 @@ const GeneralSettings: FC<GeneralSettingsProps> = ({ onClose }) => {
                 {renderCheckbox('Preload Links', 'Preload internal links for faster navigation.', 'preload_internal_links')}
                 {renderCheckbox('Debug Mode', 'Enable debug logs for RapidLoad.', 'uucss_enable_debug')}
 
+                {/* Queue Options Heading */}
+                <div className="flex justify-between items-center border-b pb-2 mb-4">
+                    <h2 className="text-lg font-semibold">Queue Options</h2>
+                    <p className="text-sm text-gray-500">More advanced options for pro users.</p>
+                </div>
+
+                {/* Queue Dropdowns */}
+                <div className="flex items-center space-x-4 mb-4">
+                    <div className="flex flex-col">
+                        <label className="text-sm font-medium text-gray-700">Run</label>
+                        <Select value={jobCount} onValueChange={(v) => setJobCount(v)}>
+                            <SelectTrigger className="w-[130px] capitalize bg-brand-0">
+                                <SelectValue placeholder="1 Job" />
+                            </SelectTrigger>
+                            <SelectContent className="z-[100001]">
+                                <SelectGroup>
+                                    <SelectLabel>Jobs</SelectLabel>
+                                    {['1 Job', '2 Jobs', '3 Jobs'].map((value, index) => (
+                                        <SelectItem
+                                            className="capitalize cursor-pointer"
+                                            key={index}
+                                            value={value}
+                                        >
+                                            {value}
+                                        </SelectItem>
+                                    ))}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div className="flex items-center">
+                        <label className="text-sm font-medium text-gray-700">Per</label>
+                        <Select value={timeInterval} onValueChange={(v) => setTimeInterval(v)}>
+                            <SelectTrigger className="w-[130px] capitalize bg-brand-0">
+                                <SelectValue placeholder="10 Minutes" />
+                            </SelectTrigger>
+                            <SelectContent className="z-[100001]">
+                                <SelectGroup>
+                                    <SelectLabel>Time Interval</SelectLabel>
+                                    {['1 Minute', '5 Minutes', '10 Minutes', '30 Minutes', '1 Hour'].map((value, index) => (
+                                        <SelectItem
+                                            className="capitalize cursor-pointer"
+                                            key={index}
+                                            value={value}
+                                        >
+                                            {value}
+                                        </SelectItem>
+                                    ))}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+
 
             </div>
-            <div className="border-t flex justify-end mt-4 px-4 pt-4">
+            <div className="border-t flex justify-end mt-4 px-4 pt-4 gap-2">
+                <AppButton
+                    onClick={handleSaveSettings}
+                    className="text-sm font-semibold text-white py-1.5 px-4 rounded-lg"
+                >
+                    Save Changes
+                </AppButton>
                 <AppButton onClick={() => onClose(false)}
                            className='mr-2 text-sm text-gray-500 bg-brand-0 hover:bg-accent border border-input'>
                     Close
                 </AppButton>
-                <AppButton
-                    onClick={handleSaveSettings}
-                    className="bg-violet-950 text-sm font-semibold text-white py-1.5 px-4 rounded-lg hover:bg-violet-900"
-                >
-                    Save Settings
-                </AppButton>
+
             </div>
         </>
     );
