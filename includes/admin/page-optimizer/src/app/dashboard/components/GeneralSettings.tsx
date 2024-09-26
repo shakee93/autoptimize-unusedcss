@@ -74,6 +74,11 @@ const GeneralSettings: FC<GeneralSettingsProps> = ({ onClose }) => {
         );
     };
 
+    const [isOpen, setIsOpen] = useState(false);
+    const toggleIsOpen = () => {
+        setIsOpen(prevState => !prevState);
+    }
+
     return (
         <>
             <div className="content flex w-full sm:w-1/2 lg:w-full flex-col px-6">
@@ -97,86 +102,85 @@ const GeneralSettings: FC<GeneralSettingsProps> = ({ onClose }) => {
                 {renderCheckbox('Debug Mode', 'Enable debug logs for RapidLoad.', 'uucss_enable_debug')}
 
 
-                {/*<Label*/}
-                {/*    htmlFor="name"*/}
-                {/*    className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60"*/}
-                {/*>*/}
-                {/*    <div className="flex items-center justify-between cursor-pointer " onClick={toggleIsOpen} >*/}
-                {/*        <div className="flex flex-col">*/}
-                {/*            <span>*/}
-                {/*            Misc Options*/}
-                {/*            </span>*/}
-                {/*            <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[425px]">*/}
-                {/*            This base page optimization will be used on all the other pages in the selected group.*/}
-                {/*        </span>*/}
-                {/*        </div>*/}
-                {/*        <ChevronRightIcon  className={`h-5 transition-all ${isOpen && 'rotate-[90deg]'}`} />*/}
-                {/*    </div>*/}
+                <Label
+                    htmlFor="name"
+                    className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60"
+                >
+                    <div className="flex items-center justify-between cursor-pointer " onClick={toggleIsOpen} >
+                        <div className="flex flex-col">
+                            <span>
+                            Misc Options
+                            </span>
+                            <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[425px]">
+                            This base page optimization will be used on all the other pages in the selected group.
+                        </span>
+                        </div>
+                        <ChevronRightIcon  className={`h-5 transition-all ${isOpen && 'rotate-[90deg]'}`} />
+                    </div>
 
-                {/*    <Accordion*/}
-                {/*        id={input.key}*/}
-                {/*        className="flex flex-col text-left w-full gap-4 mt-6 ml-3"*/}
-                {/*        initialRender={true}*/}
-                {/*        isOpen={isOpen}*/}
-                {/*    >*/}
-                {/*        /!* Queue Options Heading *!/*/}
-                {/*        <div className="flex justify-between items-center border-b pb-2 mb-4">*/}
-                {/*            <h2 className="text-lg font-semibold">Queue Options</h2>*/}
-                {/*            <p className="text-sm text-gray-500">More advanced options for pro users.</p>*/}
-                {/*        </div>*/}
+                    <Accordion
+                        className="flex flex-col text-left w-full gap-4 mt-6 ml-3"
+                        initialRender={true}
+                        isOpen={isOpen}
+                    >
+                        {/* Queue Options Heading */}
+                        <div className="flex justify-between items-center border-b pb-2 mb-4">
+                            <h2 className="text-lg font-semibold">Queue Options</h2>
+                            <p className="text-sm text-gray-500">More advanced options for pro users.</p>
+                        </div>
 
-                {/*        /!* Queue Dropdowns *!/*/}
-                {/*        <div className="flex items-center space-x-4 mb-4">*/}
-                {/*            <div className="flex items-center gap-2">*/}
-                {/*                <label className="text-sm font-medium text-gray-700">Run</label>*/}
-                {/*                <Select value={jobCount} onValueChange={(v) => setJobCount(v)}>*/}
-                {/*                    <SelectTrigger className="w-[130px] capitalize bg-brand-0">*/}
-                {/*                        <SelectValue placeholder="1 Job" />*/}
-                {/*                    </SelectTrigger>*/}
-                {/*                    <SelectContent className="z-[100001]">*/}
-                {/*                        <SelectGroup>*/}
-                {/*                            <SelectLabel>Jobs</SelectLabel>*/}
-                {/*                            {['1 Job', '2 Jobs', '3 Jobs'].map((value, index) => (*/}
-                {/*                                <SelectItem*/}
-                {/*                                    className="capitalize cursor-pointer"*/}
-                {/*                                    key={index}*/}
-                {/*                                    value={value}*/}
-                {/*                                >*/}
-                {/*                                    {value}*/}
-                {/*                                </SelectItem>*/}
-                {/*                            ))}*/}
-                {/*                        </SelectGroup>*/}
-                {/*                    </SelectContent>*/}
-                {/*                </Select>*/}
-                {/*            </div>*/}
+                        {/* Queue Dropdowns */}
+                        <div className="flex items-center space-x-4 mb-4">
+                            <div className="flex items-center gap-2">
+                                <label className="text-sm font-medium text-gray-700">Run</label>
+                                <Select value={jobCount} onValueChange={(v) => setJobCount(v)}>
+                                    <SelectTrigger className="w-[130px] capitalize bg-brand-0">
+                                        <SelectValue placeholder="1 Job" />
+                                    </SelectTrigger>
+                                    <SelectContent className="z-[100001]">
+                                        <SelectGroup>
+                                            <SelectLabel>Jobs</SelectLabel>
+                                            {['1 Job', '2 Jobs', '3 Jobs'].map((value, index) => (
+                                                <SelectItem
+                                                    className="capitalize cursor-pointer"
+                                                    key={index}
+                                                    value={value}
+                                                >
+                                                    {value}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            </div>
 
-                {/*            <div className="flex items-center gap-2">*/}
-                {/*                <label className="text-sm font-medium text-gray-700">Per</label>*/}
-                {/*                <Select value={timeInterval} onValueChange={(v) => setTimeInterval(v)}>*/}
-                {/*                    <SelectTrigger className="w-[130px] capitalize bg-brand-0">*/}
-                {/*                        <SelectValue placeholder="10 Minutes" />*/}
-                {/*                    </SelectTrigger>*/}
-                {/*                    <SelectContent className="z-[100001]">*/}
-                {/*                        <SelectGroup>*/}
-                {/*                            <SelectLabel>Time Interval</SelectLabel>*/}
-                {/*                            {['1 Minute', '5 Minutes', '10 Minutes', '30 Minutes', '1 Hour'].map((value, index) => (*/}
-                {/*                                <SelectItem*/}
-                {/*                                    className="capitalize cursor-pointer"*/}
-                {/*                                    key={index}*/}
-                {/*                                    value={value}*/}
-                {/*                                >*/}
-                {/*                                    {value}*/}
-                {/*                                </SelectItem>*/}
-                {/*                            ))}*/}
-                {/*                        </SelectGroup>*/}
-                {/*                    </SelectContent>*/}
-                {/*                </Select>*/}
-                {/*            </div>*/}
-                {/*        </div>*/}
-                {/*    </Accordion>*/}
+                            <div className="flex items-center gap-2">
+                                <label className="text-sm font-medium text-gray-700">Per</label>
+                                <Select value={timeInterval} onValueChange={(v) => setTimeInterval(v)}>
+                                    <SelectTrigger className="w-[130px] capitalize bg-brand-0">
+                                        <SelectValue placeholder="10 Minutes" />
+                                    </SelectTrigger>
+                                    <SelectContent className="z-[100001]">
+                                        <SelectGroup>
+                                            <SelectLabel>Time Interval</SelectLabel>
+                                            {['1 Minute', '5 Minutes', '10 Minutes', '30 Minutes', '1 Hour'].map((value, index) => (
+                                                <SelectItem
+                                                    className="capitalize cursor-pointer"
+                                                    key={index}
+                                                    value={value}
+                                                >
+                                                    {value}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+                    </Accordion>
 
 
-                {/*</Label>*/}
+                </Label>
 
 
 

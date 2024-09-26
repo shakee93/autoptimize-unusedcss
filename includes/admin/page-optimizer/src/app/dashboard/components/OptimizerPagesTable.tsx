@@ -162,7 +162,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                     </div>
 
                                     <button
-                                        className="dark:text-brand-950 border border-1 border-brand-300 bg-brand-0 px-3 py-1.5 rounded-lg flex w-fit gap-2 items-center cursor-pointer">
+                                        className="dark:text-brand-950 border border-1 border-brand-300 bg-brand-0 py-1 px-[11px] rounded-lg flex w-fit gap-2 items-center cursor-pointer">
                                         <FunnelIcon
                                             className="w-5 h-5"/>Filter
                                     </button>
@@ -170,7 +170,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                     <Dialog open={open} onOpenChange={setOpen}>
                                         <DialogTrigger asChild>
                                             <button
-                                                className="px-3 py-1.5 rounded-lg flex gap-2 items-center cursor-pointer bg-violet-950 text-brand-0">
+                                                className="rounded-lg flex gap-2 items-center cursor-pointer bg-black text-brand-0 py-1 px-[11px] pr-[15px]">
                                                 <PlusIcon className="w-5 h-5"/> Add
                                             </button>
                                         </DialogTrigger>
