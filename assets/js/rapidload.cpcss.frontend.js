@@ -2,9 +2,9 @@
 
     var RapidLoadCPCSS = function () {
         var fired = false;
-
         var load_css = function () {
             var files = document.querySelectorAll('link[data-href]');
+            var loaded_files_count = 0;
             if (!files.length || fired) return;
 
             files.forEach(function (file) {
@@ -16,6 +16,16 @@
                 link.removeAttribute('data-media');
                 link.addEventListener('load', function () {
                     file.remove();
+                    loaded_files_count++;
+                    if(loaded_files_count === files.length){
+                        window.dispatchEvent(new Event('resize'));
+                    }
+                });
+                link.addEventListener('error', function () {
+                    loaded_files_count++
+                    if(loaded_files_count === files.length){
+                        window.dispatchEvent(new Event('resize'));
+                    }
                 });
                 file.parentNode.insertBefore(link, file.nextSibling);
             });
