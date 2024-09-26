@@ -195,7 +195,7 @@ const Content = ({ dashboard = false }) => {
 
                     <div className='mt-2'>
                         {loading || on || error ? (
-                            <Skeleton className="w-44 h-44 rounded-full"/>
+                            <Skeleton className={cn('w-44 h-44 rounded-full ', dashboard && 'mt-10' )}/>
                         ) : (
                             dashboard ? (
                                 <PageSpeedWidget dashboardMode={true}/>
