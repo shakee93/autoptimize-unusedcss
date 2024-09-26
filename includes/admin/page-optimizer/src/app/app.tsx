@@ -79,25 +79,17 @@ const App = ({popup, _showOptimizer = false}: {
 
     useEffect(() => {
         // load initial data
-        dispatch(fetchSettings(options, options.optimizer_url, false));
-        dispatch(fetchReport(options, options.optimizer_url, false));
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const optimizeUrl = urlParams.get('optimize-url');
+        console.log(optimizeUrl);
+        dispatch(fetchSettings(options, optimizeUrl ? optimizeUrl : options.optimizer_url, false));
+        dispatch(fetchReport(options, optimizeUrl ? optimizeUrl :options.optimizer_url, false));
         dispatch(setCommonState('testModeStatus', initialTestMode));
 
     }, [dispatch, activeReport]);
 
-    useEffect(() => {
-        const queryString = window.location.search;
 
-        // Parse the query string
-        const urlParams = new URLSearchParams(queryString);
-
-        // Get the value of 'optimize-url' query parameter
-        const optimizeUrl = urlParams.get('optimize-url');
-        if(optimizeUrl){
-            console.log(optimizeUrl)
-        }
-
-    }, []);
 
    // const hash = window.location.hash.replace("#", "");
    //  const [activeRoute, setActiveRoute] = useState( hash.length > 0 ? hash : '/');
