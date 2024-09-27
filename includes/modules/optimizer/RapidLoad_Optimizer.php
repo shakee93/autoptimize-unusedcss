@@ -40,7 +40,7 @@ class RapidLoad_Optimizer
 
         self::$revision_limit = apply_filters('rapidload/optimizer/revision-limit', 10);
 
-        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 99);
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 90);
 
     }
 
