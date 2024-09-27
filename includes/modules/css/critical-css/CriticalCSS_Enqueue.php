@@ -157,8 +157,6 @@ class CriticalCSS_Enqueue
 
             unset($sheet->href);
 
-
-
         }
     }
 
