@@ -201,6 +201,7 @@ class RapidLoad_Admin
 
         $start_from = 0;
         $limit = 10;
+        $s = null;
 
         if(isset($_REQUEST['start_from'])){
             $start_from = $_REQUEST['start_from'];
@@ -208,8 +209,11 @@ class RapidLoad_Admin
         if(isset($_REQUEST['limit'])){
             $limit = $_REQUEST['limit'];
         }
+        if(isset($_REQUEST['s']) && !empty($_REQUEST['s'])){
+            $s = $_REQUEST['s'];
+        }
 
-        wp_send_json_success(RapidLoad_Job::get_all_optimizations_data_for('desktop', $start_from, $limit));
+        wp_send_json_success(RapidLoad_Job::get_all_optimizations_data_for('desktop', $start_from, $limit, $s));
 
     }
 
