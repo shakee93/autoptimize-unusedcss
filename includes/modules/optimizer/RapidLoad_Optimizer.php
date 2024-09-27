@@ -1256,7 +1256,9 @@ class RapidLoad_Optimizer
                                     $rapidload_cache_args['excluded_page_paths'] = "";
                                 }
                             }else{
-                                self::$options[$input->key] = $input->value;
+                                if($input->key != "uucss_cdn_url"){
+                                    self::$options[$input->key] = $input->value;
+                                }
                             }
                         }else if(isset($new_options[$input->key])){
                             unset(self::$options[$input->key]);
