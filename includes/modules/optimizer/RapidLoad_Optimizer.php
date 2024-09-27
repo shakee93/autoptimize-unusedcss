@@ -941,12 +941,12 @@ class RapidLoad_Optimizer
                 'control_description' => 'Your CDN endpoint to store and serve all your resources across the CDN network',
                 'actions' => array(
                     array(
-                        'key' => 'clear_cdn_cache',
+                        'key' => 'copy_cdn_url',
                         'control_type' => 'button',
-                        'control_label' => 'Clear CDN Cache',
-                        'control_icon' => 'rotate-cw',
-                        'control_description' => 'Clear resources caches across the CDN network',
-                        'action' => 'action=purge_rapidload_cdn&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                        'control_label' => 'Copy CDN URL',
+                        'control_icon' => 'clipboard',
+                        'control_description' => 'Copy to clipboard',
+                        'action' => 'clipboard',
                     ),
                     array(
                         'key' => 'validate_cdn_url',
@@ -957,12 +957,12 @@ class RapidLoad_Optimizer
                         'action' => 'action=validate_cdn&dashboard_cdn_validator&nonce=' . wp_create_nonce( 'uucss_nonce' ),
                     ),
                     array(
-                        'key' => 'copy_cdn_url',
+                        'key' => 'clear_cdn_cache',
                         'control_type' => 'button',
-                        'control_label' => 'Copy CDN URL',
-                        'control_icon' => 'clipboard',
-                        'control_description' => 'Copy to clipboard',
-                        'action' => 'clipboard',
+                        'control_label' => 'Clear CDN Cache',
+                        'control_icon' => 'rotate-cw',
+                        'control_description' => 'Clear resources caches across the CDN network',
+                        'action' => 'action=purge_rapidload_cdn&nonce=' . wp_create_nonce( 'uucss_nonce' ),
                     ),
                 )
             ),
