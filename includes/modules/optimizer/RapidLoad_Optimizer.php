@@ -964,6 +964,8 @@ class RapidLoad_Optimizer
                         'control_icon' => 'check-circle',
                         'control_description' => 'Check if the CDN url is working',
                         'action' => 'action=validate_cdn&dashboard_cdn_validator&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                        // this state will be updated in the frontend after response using data.${provided_key}
+                        'action_response_mutates' => ['uucss_cdn_url'],
                     ),
                     array(
                         'key' => 'copy_cdn_url',
