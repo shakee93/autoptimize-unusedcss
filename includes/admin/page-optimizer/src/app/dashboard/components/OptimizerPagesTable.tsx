@@ -67,41 +67,6 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
 
     }, [dispatch]);
 
-    useEffect(() => {
-        const searchForData = async () => {
-            try {
-                setLoading(true);
-                await dispatch(searchData(options, 'rapidload_fetch_post_search_by_title_or_permalink', 'page', 'page'));
-            } catch (error) {
-                console.error('Error fetching optimization data:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-       // searchForData();
-    }, [dispatch]);
-
-
-    useEffect(() => {
-        const fetchAllPages = async () => {
-            try {
-                setLoading(true);
-                await dispatch(fetchPosts(options));
-            } catch (error) {
-                console.error('Error fetching optimization data:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchAllPages();
-    }, [dispatch]);
-
-    useEffect(() => {
-       console.log(allPosts)
-    }, [allPosts]);
-
 
     const totalPages = optimizationData ? Math.ceil(optimizationData.length / itemsPerPage) : 0;
     const startIndex = (currentPage - 1) * itemsPerPage;

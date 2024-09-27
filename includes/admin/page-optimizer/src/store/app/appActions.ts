@@ -276,8 +276,8 @@ export const searchData = (options: WordPressOptions, action: string, searchFor:
         }
 
 
-    }
-}
+    };
+};
 
 
 export const saveGeneralSettings = (options: WordPressOptions, data: any): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
@@ -288,10 +288,7 @@ export const saveGeneralSettings = (options: WordPressOptions, data: any): Thunk
 
         try {
             const saveGeneralSettings = await api.saveGeneralSettings(data);
-            // dispatch({
-            //     type: UPDATE_OPTIMIZE_TABLE,
-            //     payload : fetchOptimizationData?.data
-            // })
+
             console.log(saveGeneralSettings);
             return { success: true };
         } catch (error: any) {
@@ -308,25 +305,20 @@ export const saveGeneralSettings = (options: WordPressOptions, data: any): Thunk
         }
 
 
-    }
-}
+    };
+};
 
-export const fetchPosts = (options: WordPressOptions): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
-
+export const fetchPosts = (options: WordPressOptions): ThunkAction<void, RootState, unknown, AnyAction> => {
     const api = new ApiService(options);
 
-    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string }> => {
-
+    return async (dispatch: ThunkDispatch<RootState, unknown, AnyAction>) => {
         try {
             const fetchPostsPages = await api.fetchPosts();
             dispatch({
                 type: FETCH_POSTS,
-                payload : fetchPostsPages?.data
-            })
-
-            return { success: true };
+                payload: fetchPostsPages?.data,
+            });
         } catch (error: any) {
-           // console.error('Error on fetchPostsPages:', error);
             let errorMessage: string;
             if (error instanceof Error) {
                 errorMessage = error.message;
@@ -335,12 +327,11 @@ export const fetchPosts = (options: WordPressOptions): ThunkAction<Promise<{ suc
             } else {
                 errorMessage = 'An unknown error occurred';
             }
-            return { success: false, error: errorMessage };
+            console.error(errorMessage);
+
         }
-
-
-    }
-}
+    };
+};
 
 export const fetchReport = (options: WordPressOptions, url : string, reload = false, inprogress = false): ThunkAction<void, RootState, unknown, AnyAction> => {
 

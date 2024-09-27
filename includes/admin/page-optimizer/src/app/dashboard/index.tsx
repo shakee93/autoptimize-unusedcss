@@ -8,7 +8,7 @@ import OptimizerPagesTable from "app/dashboard/components/OptimizerPagesTable";
 import GeneralSettings from "app/dashboard/components/GeneralSettings";
 import Header from "app/page-optimizer/components/Header";
 
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useAppContext} from "../../context/app";
 import {cn} from "lib/utils";
 import Audit from "app/page-optimizer/components/audit/Audit";
@@ -31,7 +31,9 @@ import {JsonView} from "react-json-view-lite";
 import ErrorFetch from "components/ErrorFetch";
 import SpeedInsights from "../speed-popover/components/speed-insights";
 import {ContentSelector} from "components/ui/content-selector";
-import {RootState} from "../../store/app/appTypes";
+import {AppAction, RootState} from "../../store/app/appTypes";
+import {fetchPosts} from "../../store/app/appActions";
+import {ThunkDispatch} from "redux-thunk";
 
 
 export interface AuditComponentRef {
@@ -50,7 +52,7 @@ export default function Dashboard() {
     } = useAppContext()
 
     let url = options?.optimizer_url;
-
+    const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
 
     // TODO: temp fix for scroll view leakage
     useEffect(() => {
@@ -61,6 +63,7 @@ export default function Dashboard() {
         }
 
     }, [savingData])
+
 
     return <>
 
