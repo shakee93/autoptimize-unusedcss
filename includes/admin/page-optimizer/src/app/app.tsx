@@ -82,7 +82,7 @@ const App = ({popup, _showOptimizer = false}: {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const optimizeUrl = urlParams.get('optimize-url');
-        console.log(optimizeUrl);
+
         dispatch(fetchSettings(options, optimizeUrl ? optimizeUrl : options.optimizer_url, false));
         dispatch(fetchReport(options, optimizeUrl ? optimizeUrl :options.optimizer_url, false));
         dispatch(setCommonState('testModeStatus', initialTestMode));

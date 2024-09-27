@@ -23,6 +23,7 @@ const UrlPreview = () => {
 
     const url = options.optimizer_url
 
+    console.log("intial data",data?.loadingExperience?.initial_url);
     return <div className='flex flex-row flex-1 gap-3 px-5 min-w-[350px] items-center bg-white dark:bg-brand-800'>
         <div>
             <div
