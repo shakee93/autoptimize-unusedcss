@@ -260,14 +260,10 @@ export const searchData = (options: WordPressOptions, action: string, searchFor:
 
         try {
             const searchForData = await api.searchData(action, searchFor, postType);
-            // dispatch({
-            //     type: UPDATE_OPTIMIZE_TABLE,
-            //     payload : fetchOptimizationData?.data
-            // })
-            console.log(searchForData);
-            return { success: true };
+
+            return searchForData;
         } catch (error: any) {
-            console.error('Error on fetchOptimizationData:', error);
+
             let errorMessage: string;
             if (error instanceof Error) {
                 errorMessage = error.message;

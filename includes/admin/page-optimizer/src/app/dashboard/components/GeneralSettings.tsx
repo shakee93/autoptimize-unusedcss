@@ -74,6 +74,26 @@ const GeneralSettings: FC<GeneralSettingsProps> = ({ onClose }) => {
         );
     };
 
+    const renderTextarea = (label: string, description: string, key: keyof GeneralSettings) => {
+        const value = Array.isArray(settingsData[key]) ? settingsData[key].join('\n') : '';
+
+        return (
+            <div className="grid items-center my-4">
+                <div className="text-sm font-semibold dark:text-brand-300">{label}</div>
+                <div className="text-xs font-normal dark:text-brand-300 text-brand-500 mt-1">
+                    {description}
+                </div>
+                <Textarea
+                    className="mt-1 focus:outline-none focus-visible:ring-0 dark:text-brand-300 rounded-2xl"
+                    value={value} // Use the value derived above
+                    onChange={(e) =>
+                        setSettingsData({ ...settingsData, [key]: e.target.value.split('\n') })
+                    }
+                />
+            </div>
+        );
+    };
+
     const [isOpen, setIsOpen] = useState(false);
     const toggleIsOpen = () => {
         setIsOpen(prevState => !prevState);
@@ -82,27 +102,14 @@ const GeneralSettings: FC<GeneralSettingsProps> = ({ onClose }) => {
     return (
         <>
             <div className="content flex w-full sm:w-1/2 lg:w-full flex-col px-6">
-                <div className="grid items-center mb-4">
-                    <div className="text-sm font-semibold dark:text-brand-300">Exclude URLs</div>
-                    <div className="text-xs font-normal dark:text-brand-300 text-brand-500 mt-1">
-                        URLs that need to be excluded from RapidLoad optimization.
-                    </div>
-                    <Textarea
-                        className="mt-1 focus:outline-none focus-visible:ring-0 dark:text-brand-300 rounded-2xl"
-                        value={settingsData.uucss_excluded_links?.join('\n')}
-                        onChange={(e) =>
-                            setSettingsData({...settingsData, uucss_excluded_links: e.target.value.split('\n')})
-                        }
-                    />
-                </div>
 
                 {renderCheckbox('Minify HTML', 'Minify the HTML output of your pages.', 'rapidload_minify_html')}
                 {renderCheckbox('Query String', 'Identify URLs with query strings as separate URLs.', 'uucss_query_string')}
                 {renderCheckbox('Preload Links', 'Preload internal links for faster navigation.', 'preload_internal_links')}
                 {renderCheckbox('Debug Mode', 'Enable debug logs for RapidLoad.', 'uucss_enable_debug')}
+                {renderTextarea('Exclude URLs', 'URLs that need to be excluded from RapidLoad optimization.', 'uucss_excluded_links')}
 
-
-                <div className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60 my-4">
+                <div className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60 my-2">
                     <div className="flex items-center justify-between cursor-pointer " onClick={toggleIsOpen} >
                         <div className="flex flex-col">
                             <span>
@@ -116,13 +123,13 @@ const GeneralSettings: FC<GeneralSettingsProps> = ({ onClose }) => {
                     </div>
 
                     <Accordion
-                        className="flex flex-col text-left w-full gap-4 mt-6 ml-3"
+                        className="flex flex-col text-left w-full gap-1 mt-6 ml-3"
                         initialRender={true}
                         isOpen={isOpen}
                     >
 
                         {/* Queue Dropdowns */}
-                        <div className="flex items-center space-x-4 mb-4">
+                        <div className="flex items-center space-x-4 mb-1">
                             <div className="flex items-center gap-2">
                                 <label className="text-sm font-medium text-gray-700">Run</label>
                                 <Select value={jobCount} onValueChange={(v) => setJobCount(v)}>
@@ -169,6 +176,8 @@ const GeneralSettings: FC<GeneralSettingsProps> = ({ onClose }) => {
                                 </Select>
                             </div>
                         </div>
+                        {renderCheckbox('Disable Auto Queue', 'Disable jobs adding to queue on user visits.', 'uucss_disable_add_to_queue')}
+                        {renderCheckbox('Disable Re-Queue', 'Disable jobs re-queuing on warnings.', 'uucss_disable_add_to_re_queue')}
                     </Accordion>
 
 
