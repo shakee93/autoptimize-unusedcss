@@ -43,6 +43,7 @@ const App = ({popup, _showOptimizer = false}: {
     const {isDark } = useRootContext()
     const initialTestMode = window.rapidload_optimizer ? toBoolean(window.rapidload_optimizer.test_mode) : false;
     const [open, setOpen] = useState(false);
+    const { headerUrl } = useCommonDispatch();
 
     useEffect(() => {
 
@@ -80,8 +81,9 @@ const App = ({popup, _showOptimizer = false}: {
     useEffect(() => {
         // load initial data
         const optimizeUrl = getOptimizeUrl();
-        dispatch(fetchSettings(options, optimizeUrl ? optimizeUrl : options.optimizer_url, false));
-        dispatch(fetchReport(options, optimizeUrl ? optimizeUrl :options.optimizer_url, false));
+        dispatch(setCommonState('headerUrl', optimizeUrl));
+        dispatch(fetchSettings(options, headerUrl ? headerUrl : options.optimizer_url, false));
+        dispatch(fetchReport(options, headerUrl ? headerUrl :options.optimizer_url, false));
         dispatch(setCommonState('testModeStatus', initialTestMode));
 
     }, [dispatch, activeReport]);
@@ -143,7 +145,7 @@ const App = ({popup, _showOptimizer = false}: {
     }, [routes]);
 
     useEffect(() => {
-        if (isAdminPage) {
+        if (isAdminPage || isDev) {
             window.location.hash = activeRoute;
         }
     }, [activeRoute]);

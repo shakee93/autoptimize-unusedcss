@@ -31,6 +31,7 @@ import DateComponent from "components/DateComponent";
 import {calculatePercentage} from "lib/utils";
 import PercentageIndicator from "components/PercentageIndicator";
 import TableSkeleton from "components/ui/TableSkeleton";
+import {setCommonState} from "../../../store/common/commonActions";
 
 interface Settings {
     title: string;
@@ -130,6 +131,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
     };
 
     const handleOptimizeClick  = (url: string) => {
+        dispatch(setCommonState('headerUrl', url));
         dispatch(fetchSettings(options, url, true));
         dispatch(fetchReport(options, url, true));
         window.location.hash = '#/optimize';

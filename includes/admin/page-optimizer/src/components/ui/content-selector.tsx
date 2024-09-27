@@ -3,6 +3,7 @@ import { ArrowRightIcon, PlusIcon, ArrowLeftIcon } from "@heroicons/react/24/out
 import {fetchReport, fetchSettings} from "../../store/app/appActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {useAppContext} from "../../context/app";
+import {setCommonState} from "../../store/common/commonActions";
 
 
 const ContentSelector = ({ data }) => {
@@ -28,6 +29,7 @@ const ContentSelector = ({ data }) => {
     };
 
     const handleItemClick = (item) => {
+        dispatch(setCommonState('headerUrl', item.permalink));
         dispatch(fetchSettings(options, item.permalink, true));
         dispatch(fetchReport(options, item.permalink, true));
         window.location.hash = '#/optimize';
