@@ -107,7 +107,7 @@ const GeneralSettings: FC<GeneralSettingsProps> = ({ onClose }) => {
                 {renderCheckbox('Query String', 'Identify URLs with query strings as separate URLs.', 'uucss_query_string')}
                 {renderCheckbox('Preload Links', 'Preload internal links for faster navigation.', 'preload_internal_links')}
                 {renderCheckbox('Debug Mode', 'Enable debug logs for RapidLoad.', 'uucss_enable_debug')}
-                {renderTextarea('Exclude URLs', 'URLs that need to be excluded from RapidLoad optimization.', 'uucss_excluded_links')}
+
 
                 <div className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60 my-2">
                     <div className="flex items-center justify-between cursor-pointer " onClick={toggleIsOpen} >
@@ -183,7 +183,7 @@ const GeneralSettings: FC<GeneralSettingsProps> = ({ onClose }) => {
 
                 </div>
 
-
+                {renderTextarea('Exclude URLs', 'URLs that need to be excluded from RapidLoad optimization.', 'uucss_excluded_links')}
 
 
             </div>

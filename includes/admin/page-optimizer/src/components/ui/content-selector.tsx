@@ -14,12 +14,24 @@ const ContentSelector = ({ data }) => {
     const [noResults, setNoResults] = useState(false);
     const { dispatch } = useCommonDispatch();
     const {options} = useAppContext();
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const abortControllerRef = useRef<AbortController | null>(null);
 
-    if (!data) {
-        return <div>Loading...</div>;
-    }
+    // const filteredContent = data.filter(content =>
+    //     content.post_type.toLowerCase().includes(searchTerm.toLowerCase())
+    // );
+
+    const filteredContent = data
+        ? data.filter(content =>
+            content.post_type.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        : [];
+
+    const filteredSelectedList = selectedContent
+        ? data.find(item => item.post_type === selectedContent)?.links || []
+        : [];
+
+
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
@@ -44,27 +56,72 @@ const ContentSelector = ({ data }) => {
         window.location.hash = '#/optimize';
     };
 
-    const filteredContent = data.filter(content =>
-        content.post_type.toLowerCase().includes(searchTerm.toLowerCase())
-    );
 
-    const filteredSelectedList = selectedContent
-        ? data.find(item => item.post_type === selectedContent)?.links || []
-        : [];
+
+    // useEffect(() => {
+    //     const searchForData = async () => {
+    //         if (searchTerm.length < 3 || !selectedContent) {
+    //             setSearchResults([]);
+    //             return;
+    //         }
+    //
+    //         if (abortControllerRef.current) {
+    //             abortControllerRef.current.abort();
+    //         }
+    //
+    //         abortControllerRef.current = new AbortController();
+    //         const signal = abortControllerRef.current.signal;
+    //
+    //         try {
+    //             setLoading(true);
+    //             const response = await dispatch(searchData(options, 'rapidload_fetch_post_search_by_title_or_permalink', searchTerm, selectedContent, { signal }));
+    //
+    //             if (response.success) {
+    //                 setSearchResults(response.data);
+    //                 setNoResults(false);
+    //
+    //             } else {
+    //
+    //                 setSearchResults([]);
+    //                 if (searchTerm) {
+    //                     setNoResults(true);
+    //                 }
+    //             }
+    //
+    //         } catch (error: unknown) {
+    //             if (error instanceof DOMException && error.name === 'AbortError') {
+    //                 console.error('Search aborted:', error);
+    //             } else {
+    //                 console.error('Error fetching optimization data:', error);
+    //             }
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+    //
+    //     const debounceTimeout = setTimeout(() => {
+    //         searchForData();
+    //     }, 300);
+    //
+    //     return () => {
+    //         clearTimeout(debounceTimeout);
+    //         if (abortControllerRef.current) {
+    //             abortControllerRef.current.abort();
+    //         }
+    //     };
+    // }, [searchTerm, selectedContent, dispatch, options]);
 
     useEffect(() => {
         const searchForData = async () => {
-            if (searchTerm.length < 3) {
+            if (searchTerm.length < 3 || !selectedContent) {
                 setSearchResults([]);
                 return;
             }
 
-            if (abortControllerRef.current) {
-                abortControllerRef.current.abort();
-            }
-
-            abortControllerRef.current = new AbortController();
-            const signal = abortControllerRef.current.signal;
+            // Create a new AbortController for each search
+            const abortController = new AbortController();
+            abortControllerRef.current = abortController;
+            const signal = abortController.signal;
 
             try {
                 setLoading(true);
@@ -73,37 +130,47 @@ const ContentSelector = ({ data }) => {
                 if (response.success) {
                     setSearchResults(response.data);
                     setNoResults(false);
-
                 } else {
-
                     setSearchResults([]);
                     if (searchTerm) {
                         setNoResults(true);
                     }
                 }
-
-            } catch (error: unknown) {
+            } catch (error) {
                 if (error instanceof DOMException && error.name === 'AbortError') {
                     console.error('Search aborted:', error);
                 } else {
                     console.error('Error fetching optimization data:', error);
                 }
             } finally {
-                setLoading(false);
+                // Only set loading to false if the request was not aborted
+                if (abortControllerRef.current === abortController) {
+                    setLoading(false);
+                }
             }
         };
 
         const debounceTimeout = setTimeout(() => {
             searchForData();
-        }, 300); // Debounce for 300ms
+        }, 300);
 
         return () => {
             clearTimeout(debounceTimeout);
+            // Abort the previous request
             if (abortControllerRef.current) {
-                abortControllerRef.current.abort(); // Clean up the abort controller on component unmount
+                abortControllerRef.current.abort();
             }
         };
     }, [searchTerm, selectedContent, dispatch, options]);
+
+
+    useEffect(() => {
+        if (!data) {
+            setLoading(true);
+        } else {
+            setLoading(false);
+        }
+    }, [data]);
 
     return (
         <>
@@ -174,7 +241,7 @@ const ContentSelector = ({ data }) => {
                                 ))
                             ) : noResults ? (
                                 <div className="text-gray-500 text-center py-4">No results found</div>
-                            ) : (
+                            ) : searchTerm.length < 3 && (
                                 filteredSelectedList.map(link => (
                                     <li
                                         key={link.permalink}
