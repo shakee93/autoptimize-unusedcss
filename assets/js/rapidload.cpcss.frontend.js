@@ -46,6 +46,10 @@
         this.add_events();
     };
 
+    window && setTimeout(function (){
+        window.scrollTo(0, 0)
+    }, 800);
+
     document.addEventListener("DOMContentLoaded", function () {
         new RapidLoadCPCSS();
     });
