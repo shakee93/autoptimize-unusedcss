@@ -151,16 +151,11 @@ class CriticalCSS_Enqueue
                 continue;
             }
 
-            if(!$this->is_mobile && apply_filters('rapidload/cpcss/set-preload-css', true)){
-                if(!isset($sheet->{'data-href'}) && isset($sheet->{'href'})){
-                    $sheet->{'data-href'} = $sheet->{'href'};
-                }
-                unset($sheet->href);
-            }else{
-                if(!apply_filters('rapidload/frontend/do-not-load/original-css', false) && isset($sheet->{'data-href'}) && !apply_filters('rapidload/cpcss/disable/unset-href-mobile',false)){
-                    unset($sheet->href);
-                }
+            if(!isset($sheet->{'data-href'}) && isset($sheet->{'href'})){
+                $sheet->{'data-href'} = $sheet->{'href'};
             }
+
+            unset($sheet->href);
 
 
 
