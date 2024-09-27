@@ -22,7 +22,7 @@ import TestModeSwitcher from "app/page-optimizer/components/TestModeSwitcher";
 
 const AppTour = React.lazy(() => import( 'components/tour'))
 const InitTour = React.lazy(() => import('components/tour/InitTour'))
-import {isDev, isAdminPage} from "lib/utils";
+import {isDev, isAdminPage, getOptimizeUrl} from "lib/utils";
 import {Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger} from "components/ui/dialog";
 import {PlusIcon} from "@heroicons/react/24/outline";
 import {ContentSelector} from "components/ui/content-selector";
@@ -79,10 +79,7 @@ const App = ({popup, _showOptimizer = false}: {
 
     useEffect(() => {
         // load initial data
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const optimizeUrl = urlParams.get('optimize-url');
-
+        const optimizeUrl = getOptimizeUrl();
         dispatch(fetchSettings(options, optimizeUrl ? optimizeUrl : options.optimizer_url, false));
         dispatch(fetchReport(options, optimizeUrl ? optimizeUrl :options.optimizer_url, false));
         dispatch(setCommonState('testModeStatus', initialTestMode));
