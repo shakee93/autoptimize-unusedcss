@@ -252,7 +252,7 @@ export const getTitanOptimizationData = (options: WordPressOptions, startFrom: n
     }
 }
 
-export const searchData = (options: WordPressOptions, action: string, searchFor: string, postType: string): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+export const searchData = (options: WordPressOptions, action: string, searchFor: string, postType: string): ThunkAction<Promise<{ data: any, success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 

@@ -1,5 +1,7 @@
 import {
-    DevicePhoneMobileIcon} from "@heroicons/react/24/outline";
+    ArrowTopRightOnSquareIcon,
+    DevicePhoneMobileIcon
+} from "@heroicons/react/24/outline";
 import React from "react";
 import {useAppContext} from "../../../context/app";
 import TooltipText from "components/ui/tooltip-text";
@@ -11,9 +13,11 @@ import {optimizerData} from "../../../store/app/appSelector";
 import AppButton from "components/ui/app-button";
 import {cn} from "lib/utils";
 import {
+    Loader,
     LogOut,
     Monitor,
-    RefreshCw} from "lucide-react";
+    RefreshCw
+} from "lucide-react";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {AnimatePresence, motion} from "framer-motion";
 import {setCommonState} from "../../../store/common/commonActions";
@@ -72,7 +76,7 @@ const Header = ({ url }: { url: string}) => {
             )}
 
             <header
-                className='z-[110000] w-full px-6 py-3 flex gap-3 justify-between border-b backdrop-blur-sm dark:bg-brand-930/80 bg-brand-50/75 '>
+                className='z-[110000] fixed bottom-4 px-2 py-2 flex gap-3 justify-between backdrop-blur-sm dark:bg-brand-930/80 bg-brand-0 rounded-3xl'>
                 <div className='flex gap-12 items-center'>
                     {/*{!dashboard &&*/}
                     {/*    <div className='relative'>*/}
@@ -149,37 +153,51 @@ const Header = ({ url }: { url: string}) => {
                                                variant='outline'>
                                         <div className={`flex flex-col gap-[1px] items-center`}>
                                             <RefreshCw className={cn(
-                                                'w-4 -mt-0.5',
+                                                'w-4 h-4',
                                                 loading && 'animate-spin'
                                             )}/>
-                                            <span className='text-xxs font-normal text-brand-500'>Analyze </span>
+                                            {/*<span className='text-xxs font-normal text-brand-500'>Analyze </span>*/}
                                         </div>
                                     </AppButton>
                                 </TooltipText>
                             </UnsavedChanges>
+                            <TooltipText text="Preview" className="dark:bg-brand-930/90 ">
+                                <div
+                                    onClick={() => {
+
+                                        {
+                                            window.open(options.optimizer_url + '?rapidload_preview', '_blank');
+                                        }
+
+                                    }}
+                                    className={`flex items-center text-sm h-12 hover:bg-accent bg-brand-0 dark:bg-brand-930/90 px-2 pr-3`}
+                                         data-tour="preview-button">
+                                        <ArrowTopRightOnSquareIcon className='w-5'/>
+                                </div>
+                            </TooltipText>
                         </div>
                     </div>
                 </div>
 
 
-                <div className='flex relative gap-4 items-center'>
+                <div className='flex items-center'>
 
                     <>
                         <SaveChanges/>
-                        <UnsavedChanges
-                            onCancel={() => {
-                                setShowOptimizer(false)
-                            }}
-                            cancel='Discard & Leave'
-                            onClick={() => {
-                                setShowOptimizer(false);
-                            }}>
-                            <TooltipText text='Close Optimizer'>
-                                <LogOut className={cn(
-                                    'h-5 w-5 dark:text-brand-300 text-brand-600 transition-opacity',
-                                )}/>
-                            </TooltipText>
-                        </UnsavedChanges>
+                        {/*<UnsavedChanges*/}
+                        {/*    onCancel={() => {*/}
+                        {/*        setShowOptimizer(false)*/}
+                        {/*    }}*/}
+                        {/*    cancel='Discard & Leave'*/}
+                        {/*    onClick={() => {*/}
+                        {/*        setShowOptimizer(false);*/}
+                        {/*    }}>*/}
+                        {/*    <TooltipText text='Close Optimizer'>*/}
+                        {/*        <LogOut className={cn(*/}
+                        {/*            'h-5 w-5 dark:text-brand-300 text-brand-600 transition-opacity',*/}
+                        {/*        )}/>*/}
+                        {/*    </TooltipText>*/}
+                        {/*</UnsavedChanges>*/}
                     </>
 
                 </div>

@@ -164,7 +164,7 @@ const App = ({popup, _showOptimizer = false}: {
 
 
                     <div className=' z-[1000000] dark:bg-brand-930 bg-brand-0'>
-                        <header className='flex gap-8 h-16 items-center justify-between border-b'>
+                        <header className='flex gap-8 h-16 items-center justify-between'>
                             <div className='flex items-center'>
                                 <div className='relative px-4'>
                                     <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>

@@ -57,60 +57,6 @@ const ContentSelector = ({ data }) => {
     };
 
 
-
-    // useEffect(() => {
-    //     const searchForData = async () => {
-    //         if (searchTerm.length < 3 || !selectedContent) {
-    //             setSearchResults([]);
-    //             return;
-    //         }
-    //
-    //         if (abortControllerRef.current) {
-    //             abortControllerRef.current.abort();
-    //         }
-    //
-    //         abortControllerRef.current = new AbortController();
-    //         const signal = abortControllerRef.current.signal;
-    //
-    //         try {
-    //             setLoading(true);
-    //             const response = await dispatch(searchData(options, 'rapidload_fetch_post_search_by_title_or_permalink', searchTerm, selectedContent, { signal }));
-    //
-    //             if (response.success) {
-    //                 setSearchResults(response.data);
-    //                 setNoResults(false);
-    //
-    //             } else {
-    //
-    //                 setSearchResults([]);
-    //                 if (searchTerm) {
-    //                     setNoResults(true);
-    //                 }
-    //             }
-    //
-    //         } catch (error: unknown) {
-    //             if (error instanceof DOMException && error.name === 'AbortError') {
-    //                 console.error('Search aborted:', error);
-    //             } else {
-    //                 console.error('Error fetching optimization data:', error);
-    //             }
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-    //
-    //     const debounceTimeout = setTimeout(() => {
-    //         searchForData();
-    //     }, 300);
-    //
-    //     return () => {
-    //         clearTimeout(debounceTimeout);
-    //         if (abortControllerRef.current) {
-    //             abortControllerRef.current.abort();
-    //         }
-    //     };
-    // }, [searchTerm, selectedContent, dispatch, options]);
-
     useEffect(() => {
         const searchForData = async () => {
             if (searchTerm.length < 3 || !selectedContent) {
@@ -118,14 +64,10 @@ const ContentSelector = ({ data }) => {
                 return;
             }
 
-            // Create a new AbortController for each search
-            const abortController = new AbortController();
-            abortControllerRef.current = abortController;
-            const signal = abortController.signal;
 
             try {
                 setLoading(true);
-                const response = await dispatch(searchData(options, 'rapidload_fetch_post_search_by_title_or_permalink', searchTerm, selectedContent, { signal }));
+                const response = await dispatch(searchData(options, 'rapidload_fetch_post_search_by_title_or_permalink', searchTerm, selectedContent));
 
                 if (response.success) {
                     setSearchResults(response.data);
@@ -143,10 +85,8 @@ const ContentSelector = ({ data }) => {
                     console.error('Error fetching optimization data:', error);
                 }
             } finally {
-                // Only set loading to false if the request was not aborted
-                if (abortControllerRef.current === abortController) {
                     setLoading(false);
-                }
+
             }
         };
 
@@ -156,10 +96,7 @@ const ContentSelector = ({ data }) => {
 
         return () => {
             clearTimeout(debounceTimeout);
-            // Abort the previous request
-            if (abortControllerRef.current) {
-                abortControllerRef.current.abort();
-            }
+
         };
     }, [searchTerm, selectedContent, dispatch, options]);
 
