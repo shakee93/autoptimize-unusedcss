@@ -28,6 +28,8 @@ import {PlusIcon} from "@heroicons/react/24/outline";
 import {ContentSelector} from "components/ui/content-selector";
 import AppButton from "components/ui/app-button";
 import GeneralSettingsTrigger from "app/dashboard/components/GeneralSettingsTrigger";
+import ThemeSwitcher from "components/ui/theme-switcher";
+import TooltipText from "components/ui/tooltip-text";
 
 const App = ({popup, _showOptimizer = false}: {
     popup?: HTMLElement | null,
@@ -44,6 +46,7 @@ const App = ({popup, _showOptimizer = false}: {
     const initialTestMode = window.rapidload_optimizer ? toBoolean(window.rapidload_optimizer.test_mode) : false;
     const [open, setOpen] = useState(false);
     const { headerUrl } = useCommonDispatch();
+    const { changeTheme } = useRootContext()
 
     useEffect(() => {
 
@@ -196,13 +199,16 @@ const App = ({popup, _showOptimizer = false}: {
                             </div>
 
 
-                            <div className="flex gap-2 items-center pr-6">
-                                <div>
-                                    <TestModeSwitcher/>
-                                </div>
+                            <div className="flex gap-6 items-center pr-6">
+                                <TestModeSwitcher/>
 
-                                <div>
+                                <div className="flex items-center gap-3">
                                     <GeneralSettingsTrigger open={open} onOpenChange={setOpen}/>
+                                    <TooltipText text="Theme">
+                                    <div onClick={e => changeTheme()}>
+                                        <ThemeSwitcher></ThemeSwitcher>
+                                    </div>
+                                    </TooltipText>
                                 </div>
                             </div>
 

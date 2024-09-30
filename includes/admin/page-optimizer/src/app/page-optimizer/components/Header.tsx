@@ -76,7 +76,7 @@ const Header = ({ url }: { url: string}) => {
             )}
 
             <header
-                className='z-[110000] fixed bottom-4 px-2 py-2 flex gap-3 justify-between backdrop-blur-sm dark:bg-brand-930/80 rounded-3xl'>
+                className='z-[110000] fixed bottom-4 px-2 py-2 flex gap-3 justify-between dark:bg-brand-930/80 rounded-3xl'>
                 <div className='flex gap-12 items-center rounded-3xl bg-brand-0 '>
                     <div className='flex flex-column items-center gap-3 '>
                         <div className="border-r border-accent px-2">
@@ -139,7 +139,7 @@ const Header = ({ url }: { url: string}) => {
                                                    variant='outline'>
                                             <div className={`flex flex-col gap-[1px] items-center`}>
                                                 <RefreshCw className={cn(
-                                                    'w-4 h-4',
+                                                    'w-5 h-5',
                                                     loading && 'animate-spin'
                                                 )}/>
                                                 {/*<span className='text-xxs font-normal text-brand-500'>Analyze </span>*/}
@@ -158,7 +158,7 @@ const Header = ({ url }: { url: string}) => {
                                         }}
                                         className={`flex items-center text-sm h-12 hover:bg-transparent bg-brand-0 dark:bg-brand-930/90 px-3`}
                                         data-tour="preview-button">
-                                        <ArrowTopRightOnSquareIcon className='w-[18px]'/>
+                                        <ArrowTopRightOnSquareIcon className='w-[22px]'/>
                                     </div>
                                 </TooltipText>
                             </div>
@@ -191,23 +191,6 @@ const Header = ({ url }: { url: string}) => {
 
                 {/*</div>*/}
             </header>
-            {/*<AnimatePresence>*/}
-            {/*        {testMode && (*/}
-            {/*            <motion.div*/}
-            {/*                initial={{ opacity: 0, y: -10 }}*/}
-            {/*                animate={{ opacity: 1, y: 0 }}*/}
-            {/*                exit={{ opacity: 0, y: -10 }}*/}
-            {/*                transition={{*/}
-            {/*                    ease: 'easeInOut',*/}
-            {/*                    duration: 0.5,*/}
-            {/*                }}*/}
-            {/*                className="z-[100000] w-full text-[13px] bg-[#D9CAEB] items-center text-center py-0.5 top-[74px] absolute dark:bg-brand-950"*/}
-            {/*            >*/}
-            {/*                <span className="font-semibold text-purple-900 dark:text-brand-300">Test Mode turned on,</span>*/}
-            {/*                optimizations are safely previewed without affecting your live website. Perfect for experimentation and fine-tuning.*/}
-            {/*            </motion.div>*/}
-            {/*        )}*/}
-            {/*    </AnimatePresence>*/}
         </>
     )
 }
