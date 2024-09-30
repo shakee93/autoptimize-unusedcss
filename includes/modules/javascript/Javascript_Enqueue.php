@@ -61,6 +61,8 @@ class Javascript_Enqueue
 
     public function update_content($state){
 
+        self::debug_log('doing js optimization');
+
         global $wp_scripts;
 
         $this->global_scripts = $wp_scripts;

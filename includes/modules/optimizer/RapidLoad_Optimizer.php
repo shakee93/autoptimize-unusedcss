@@ -83,6 +83,8 @@ class RapidLoad_Optimizer
 
     public function update_content($state){
 
+        self::debug_log('doing titan');
+
         if(isset($state['dom']) && isset($_REQUEST['rapidload_preview'])){
 
             /*$head = $state['dom']->find('head', 0);

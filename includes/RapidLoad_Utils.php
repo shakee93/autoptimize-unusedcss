@@ -765,14 +765,20 @@ trait RapidLoad_Utils {
         return ($string == serialize(false) || @unserialize($string) !== false);
     }
 
-    public static function debug_log($object){
-
-        if(gettype($object) == "string"){
-            error_log($object);
-        }else{
-            error_log(json_encode($object, JSON_PRETTY_PRINT));
+    public static function debug_log(...$objects)
+    {
+        if(defined('RAPIDLOAD_DEBUG_LOG') && RAPIDLOAD_DEBUG_LOG){
+            $currentDateTime = date("Y-m-d H:i:s");
+            error_log("================== LOG START - " . $currentDateTime . " ==================");
+            foreach ($objects as $object) {
+                if (gettype($object) == "string") {
+                    error_log($object);
+                } else {
+                    error_log(json_encode($object, JSON_PRETTY_PRINT));
+                }
+            }
+            error_log("================== LOG END - " . $currentDateTime . " ==================");
         }
-
     }
 
     public static function log_user_agent() {
