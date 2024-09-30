@@ -274,11 +274,31 @@ class ApiService {
         }
     }
 
-    async searchData(action: string, searchFor: string, postType: string): Promise<any> {
+
+    async searchData(action: string, searchFor: string, postType?: string): Promise<any> {
         try {
             this.baseURL.searchParams.append('action', action);
             this.baseURL.searchParams.append('s', searchFor)
             this.baseURL.searchParams.append('post_type', postType)
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async deleteOptimizedData(url: string): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', 'rapidload_delete_titan_optimizations');
+            this.baseURL.searchParams.append('url', url)
 
             const response = await fetch(this.baseURL, {
                 method: 'POST',

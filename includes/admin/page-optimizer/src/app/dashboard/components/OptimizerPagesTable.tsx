@@ -17,6 +17,7 @@ import {
 import {ContentSelector} from "components/ui/content-selector";
 import AppButton from "components/ui/app-button"
 import {
+    deleteOptimizedData,
     fetchPosts,
     fetchReport,
     fetchSettings,
@@ -32,6 +33,8 @@ import {calculatePercentage} from "lib/utils";
 import PercentageIndicator from "components/PercentageIndicator";
 import TableSkeleton from "components/ui/TableSkeleton";
 import {setCommonState} from "../../../store/common/commonActions";
+import {toast, useToast} from "components/ui/use-toast";
+import {CheckCircleIcon, CheckIcon, XCircleIcon} from "@heroicons/react/24/solid";
 
 interface Settings {
     title: string;
@@ -42,59 +45,25 @@ interface Settings {
 const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => {
     const [open, setOpen] = useState(false);
     const {optimizationData, allPosts} = useSelector((state: RootState) => state.app);
-
+    const { toast } = useToast();
     const {options} = useAppContext();
     const { dispatch } = useCommonDispatch();
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
-    const maxPagesToShow = 10
+    const startFrom = 0;
+    const limit = 10
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-                await dispatch(getTitanOptimizationData(options, 0, 10));
-            } catch (error) {
-                console.error('Error fetching optimization data:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
 
 
-    }, [dispatch]);
-
-
-    const totalPages = optimizationData ? Math.ceil(optimizationData.length / itemsPerPage) : 0;
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentData = optimizationData ? optimizationData.slice(startIndex, startIndex + itemsPerPage) : [];
-
-    const handleClickPage = (page: number) => {
-        setCurrentPage(page);
-    };
-
-    const handleNextPage = () => {
-        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-    };
-
-    const handlePreviousPage = () => {
-        if (currentPage > 1) setCurrentPage(currentPage - 1);
-    };
-
-    const getPageNumbers = () => {
-        const pages = [];
-        const startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
-        const endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
-
-        for (let i = startPage; i <= endPage; i++) {
-            pages.push(i);
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            await dispatch(getTitanOptimizationData(options, startFrom, limit));
+        } catch (error) {
+            console.error('Error fetching optimization data:', error);
+        } finally {
+            setLoading(false);
         }
-        return pages;
     };
-
     const handleOptimizeClick  = (url: string) => {
         dispatch(setCommonState('headerUrl', url));
         dispatch(fetchSettings(options, url, true));
@@ -102,6 +71,58 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
         window.location.hash = '#/optimize';
     };
 
+    useEffect(() => {
+        fetchData();
+    }, [dispatch]);
+
+    const deleteOptimizationData = async (url: string) => {
+        try {
+            setLoading(true);
+            const response = await dispatch(deleteOptimizedData(options, url));
+
+            if (response.success) {
+                toast({
+                    description: <div className='flex w-full gap-2 text-center'>Optimization deleted
+                        successfully <CheckCircleIcon className='w-5 text-green-600'/></div>,
+                })
+                fetchData();
+            }
+
+        } catch (error) {
+            // console.error('Error deleting optimization data:', error);
+            toast({
+                description: <div className='flex w-full gap-2 text-center'>{error} <XCircleIcon className='w-5 text-red-600'/></div>,
+            })
+        } finally {
+            setLoading(false);
+
+        }
+    };
+
+    const searchOptimizationData = async (url: string) => {
+        try {
+            setLoading(true);
+            const response = await dispatch(searchData(options, 'rapidload_titan_optimizations_data', url));
+
+            if (response.success) {
+                console.log(response)
+            } else {
+                console.log(response)
+            }
+
+        } catch (error) {
+            console.error('Error deleting optimization data:', error);
+        } finally {
+            setLoading(false);
+
+        }
+    };
+
+
+    const [searchInput, setSearchInput] = useState('');
+    const handleInputChange = (event) => {
+        setSearchInput(event.target.value);
+    };
 
     return (
         <>
@@ -125,13 +146,17 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                             type="text"
                                             placeholder="Search"
                                             className="w-full pl-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400"
+                                            value={searchInput}
+                                            onChange={handleInputChange}
                                         />
                                     </div>
 
                                     <button
+                                        onClick={() => {
+                                            searchOptimizationData(searchInput)
+                                        }}
                                         className="dark:text-brand-950 border border-1 border-brand-300 bg-brand-0 py-1 px-[11px] rounded-lg flex w-fit gap-2 items-center cursor-pointer">
-                                        <FunnelIcon
-                                            className="w-5 h-5"/>Filter
+                                        <FunnelIcon className="w-5 h-5"/>Filter
                                     </button>
 
                                     <Dialog open={open} onOpenChange={setOpen}>
@@ -203,7 +228,8 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                                 </thead>
                                                 <tbody className="divide-y divide-gray-200 dark:divide-brand-950">
                                                 {loading ? <TableSkeleton rows={4}
-                                                                          columns={4}/> : currentData?.map((item, idx) => (
+                                                                          columns={4}/> : (
+                                                    optimizationData && optimizationData.length > 0 ? (optimizationData?.map((item, idx) => (
                                                     <tr key={idx}
                                                         className={idx % 2 === 0 ? 'bg-gray-100/30 dark:bg-brand-950' : 'bg-white dark:bg-brand-900'}>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-brand-300">{item.url}</td>
@@ -221,10 +247,21 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                                                 }}>
                                                                 <PencilSquareIcon className="w-4 h-4"/> Optimize
                                                             </span>
-                                                            <TrashIcon className="w-4 h-4 cursor-pointer"/>
+                                                            <TrashIcon  onClick={() => {
+                                                                deleteOptimizationData(item.url)
+                                                            }} className="w-4 h-4 cursor-pointer"/>
                                                         </td>
                                                     </tr>
-                                                ))}
+                                                        ))
+                                                    ) : (
+                                                        <tr>
+                                                            <td colSpan={4}
+                                                                className="text-gray-500 text-center py-4">No results
+                                                                found
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                )}
                                                 </tbody>
                                             </table>
 
@@ -232,33 +269,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex justify-center gap-4 mt-4">
-                                <button
-                                    className="px-4 py-2 bg-gray-300 rounded-lg disabled:opacity-50"
-                                    disabled={currentPage === 1}
-                                    onClick={handlePreviousPage}
-                                >
-                                    Previous
-                                </button>
-                                <div className="flex gap-2">
-                                    {getPageNumbers().map((page) => (
-                                        <button
-                                            key={page}
-                                            className={`px-3 py-1 rounded-lg ${page === currentPage ? 'bg-gray-700 text-white' : 'bg-gray-300'}`}
-                                            onClick={() => handleClickPage(page)}
-                                        >
-                                            {page}
-                                        </button>
-                                    ))}
-                                </div>
-                                <button
-                                    className="px-4 py-2 bg-gray-300 rounded-lg disabled:opacity-50"
-                                    disabled={currentPage === totalPages}
-                                    onClick={handleNextPage}
-                                >
-                                    Next
-                                </button>
-                            </div>
+
                         </div>
 
                     </Card>

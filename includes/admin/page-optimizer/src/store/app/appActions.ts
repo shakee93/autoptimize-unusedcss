@@ -252,11 +252,11 @@ export const getTitanOptimizationData = (options: WordPressOptions, startFrom: n
     }
 }
 
-export const searchData = (options: WordPressOptions, action: string, searchFor: string, postType: string): ThunkAction<Promise<{ data: any, success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+export const searchData = (options: WordPressOptions, action: string, searchFor: string, postType?: string): ThunkAction<Promise<{ data: any, success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
-    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string }> => {
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ data: any, success: boolean, error?: string }> => {
 
         try {
             const searchForData = await api.searchData(action, searchFor, postType);
@@ -272,7 +272,35 @@ export const searchData = (options: WordPressOptions, action: string, searchFor:
             } else {
                 errorMessage = 'An unknown error occurred';
             }
-            return { success: false, error: errorMessage };
+            return { data: null, success: false, error: errorMessage };
+        }
+
+
+    };
+};
+
+
+export const deleteOptimizedData = (options: WordPressOptions,url: string): ThunkAction<Promise<{ url: any, success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ url: any, success: boolean, error?: string }> => {
+
+        try {
+            const deleteData = await api.deleteOptimizedData(url);
+
+            return deleteData;
+        } catch (error: any) {
+
+            let errorMessage: string;
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            } else {
+                errorMessage = 'An unknown error occurred';
+            }
+            return { url: null, success: false, error: errorMessage };
         }
 
 

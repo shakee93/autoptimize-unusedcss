@@ -42,9 +42,6 @@ const UrlPreview = () => {
                 {
                     finalUrl
                 }
-
-
-
             </div>
 
             {!error &&

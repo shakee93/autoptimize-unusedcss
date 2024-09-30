@@ -108,13 +108,6 @@ export default function Dashboard() {
                         </div>
                     )}
 
-                    {error ?
-                        <div className='col-span-12 py-32 flex flex-col gap-6 justify-center items-center text-center'>
-                            <ErrorFetch className='items-center' error={error}/>
-                        </div> :
-                        <>
-
-
                             <div className="">
 
                                 <div className="widgets pt-4 gap-4 grid">
@@ -184,7 +177,6 @@ export default function Dashboard() {
                                 </div>
                             </div>
 
-                        </>}
                 </section>
             </div>
             {/*{!error && (*/}
