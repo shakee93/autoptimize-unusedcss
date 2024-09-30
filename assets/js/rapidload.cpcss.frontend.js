@@ -41,14 +41,17 @@
                 };
                 addEventListener(event, listener);
             });
+            setTimeout(function (){
+                const scrollTop = document.documentElement.scrollTop;
+                if(scrollTop > 100){
+                    console.log('loading css for scroll top - ' + scrollTop );
+                    load_css();
+                }
+            }, 800);
         };
 
         this.add_events();
     };
-
-    window && setTimeout(function (){
-        window.scrollTo(0, 0)
-    }, 800);
 
     document.addEventListener("DOMContentLoaded", function () {
         new RapidLoadCPCSS();

@@ -42,7 +42,7 @@ class CriticalCSS
             return;
         }
 
-        if (!defined('RAPIDLOAD_CPCSS_ENABLED')) {
+        if (apply_filters('rapidload/cpcss/disable-uucss-on-cpcss', true) && !defined('RAPIDLOAD_CPCSS_ENABLED')) {
             define('RAPIDLOAD_CPCSS_ENABLED', true);
         }
 
