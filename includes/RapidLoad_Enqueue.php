@@ -26,9 +26,15 @@ class RapidLoad_Enqueue {
 
         add_action('wp_enqueue_scripts', function (){
 
+            if(wp_doing_ajax()){
+                return;
+            }
+
             $this->url = $this->get_current_url();
+            self::debug_log("current url", $this->url);
 
             $this->url = $this->transform_url($this->url);
+            self::debug_log("transformed url", $this->url);
 
             if($this->enabled($this->url)){
 
@@ -300,12 +306,6 @@ class RapidLoad_Enqueue {
             $args['post_id'] = url_to_postid($url);
         }
 
-        /*if(RapidLoad_Base::get()->rules_enabled() && !$this->rule){
-
-            $this->rule = $this->get_current_rule();
-
-        }*/
-
         if(!isset(RapidLoad_Enqueue::$job)){
             RapidLoad_Enqueue::$job = new RapidLoad_Job([
                 'url' => $url
@@ -345,6 +345,7 @@ class RapidLoad_Enqueue {
 
         if($front_end_enabled['job_id_set'] && $front_end_enabled['enabled']){
             $this->replace_css(RapidLoad_Enqueue::$job);
+            self::debug_log('modify html content');
         }
 
     }
