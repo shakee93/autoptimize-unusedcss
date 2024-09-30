@@ -80,7 +80,7 @@
             </div>
           </div>
 
-          <div class="grid">
+          <div class="grid" v-if="onData.uucss_query_string_enabled">
             <div class="mb-5">
               <div class="flex">
                 <div class="pr-1">
@@ -313,6 +313,7 @@ export default {
           this.onData.uucss_enable_debug = option.uucss_enable_debug;
           this.onData.uucss_excluded_links = option.uucss_excluded_links?.replace(/,/g, '\n');
           this.onData.uucss_query_string = option.uucss_query_string;
+          this.onData.uucss_query_string_enabled = option.uucss_query_string_enabled;
           this.onData.rapidload_minify_html = option.rapidload_minify_html;
           this.onData.queue_option.uucss_jobs_per_queue = option.uucss_jobs_per_queue < 2 ? option.uucss_jobs_per_queue + " Job" : option.uucss_jobs_per_queue + " Jobs";
           this.onData.queue_option.uucss_queue_interval = option.uucss_queue_interval > 5999 ? option.uucss_queue_interval / 6000 + " Hour" : option.uucss_queue_interval < 61 ? option.uucss_queue_interval / 60 + " Minute" : option.uucss_queue_interval / 60 + " Minutes";

@@ -276,6 +276,7 @@ class RapidLoad_Module
                     'uucss_excluded_links' => isset($options['uucss_excluded_links']) ? $options['uucss_excluded_links'] : null,
                     'rapidload_minify_html' => isset($options['rapidload_minify_html']) && $options['rapidload_minify_html'] == "1" ? true : false,
                     'uucss_query_string' => isset($options['uucss_query_string']) && $options['uucss_query_string'] == "1" ? true : false,
+                    'uucss_query_string_enabled' => apply_filters('uucss/url/enable-query-strings', false),
                     'uucss_enable_debug' => isset($options['uucss_enable_debug']) && $options['uucss_enable_debug'] == "1" ? true : false,
                     'uucss_jobs_per_queue' => isset($options['uucss_jobs_per_queue']) ? $options['uucss_jobs_per_queue'] : 1,
                     'uucss_queue_interval' => isset($options['uucss_queue_interval']) ? $options['uucss_queue_interval'] : 600,
