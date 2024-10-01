@@ -221,11 +221,11 @@ export const getTestModeStatus = (options: WordPressOptions, url: string, mode?:
 }
 
 
-export const getTitanOptimizationData = (options: WordPressOptions, startFrom: number, limit: number): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+export const getTitanOptimizationData = (options: WordPressOptions, startFrom: number, limit: number): ThunkAction<Promise<{ hasMoreData?: boolean, success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
-    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string }> => {
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ hasMoreData?: boolean, success: boolean, error?: string }> => {
 
         try {
             const fetchOptimizationData = await api.getOptimizationData(startFrom, limit);
@@ -233,8 +233,10 @@ export const getTitanOptimizationData = (options: WordPressOptions, startFrom: n
                 type: UPDATE_OPTIMIZE_TABLE,
                 payload : fetchOptimizationData?.data
             })
+            const hasMoreData = fetchOptimizationData?.data && fetchOptimizationData.data.length > 0;
 
-            return { success: true };
+            console.log(fetchOptimizationData )
+            return { success: true, hasMoreData: hasMoreData };
         } catch (error: any) {
             console.error('Error on fetchOptimizationData:', error);
             let errorMessage: string;
