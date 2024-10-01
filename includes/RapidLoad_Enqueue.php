@@ -16,6 +16,10 @@ class RapidLoad_Enqueue {
 
     public function __construct()
     {
+        if(!self::should_start()){
+            return;
+        }
+
         $this->options = RapidLoad_Base::get_merged_options();
 
         if(isset($_COOKIE['rapidload_debug']) && $_COOKIE['rapidload_debug'] == "1" || apply_filters('rapidload/enable/frontend_rapidload_debug', false)){
@@ -49,6 +53,22 @@ class RapidLoad_Enqueue {
             }
 
         });
+    }
+
+    public static function should_start(){
+        if(wp_doing_cron()){
+            return false;
+        }
+        if(wp_doing_ajax()){
+            return false;
+        }
+        if (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], 'favicon.ico') !== false) {
+            return false;
+        }
+        if (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], 'robots.txt') !== false) {
+            return false;
+        }
+        return true;
     }
 
     public function replace_css($job)

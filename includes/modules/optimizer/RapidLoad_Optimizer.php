@@ -266,7 +266,8 @@ class RapidLoad_Optimizer
         }
 
         $strategy = isset($_REQUEST['strategy']) ? $_REQUEST['strategy'] : 'mobile';
-        self::$global = isset($_REQUEST['global']) && $_REQUEST['global'];
+
+        self::$global = isset($_REQUEST['global']) && $_REQUEST['global'] || rtrim(site_url(), "/") == rtrim($url, "/");
 
         $this->pre_optimizer_function($url, $strategy, self::$global);
 
