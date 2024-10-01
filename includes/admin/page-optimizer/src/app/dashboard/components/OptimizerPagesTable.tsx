@@ -59,11 +59,11 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
     const { options } = useAppContext();
     const { dispatch } = useCommonDispatch();
     const [loading, setLoading] = useState(true);
-    const [pagination, setPagination] = useState({ startFrom: 0, limit: 10, hasMore: true });
+    const [pagination, setPagination] = useState({ startFrom: 0, limit: 10, hasMore: false });
     const [tempOptimizationData, setTempOptimizationData] = useState<OptimizeTable[]>([]);
     const tableContainerRef = useRef<HTMLDivElement | null>(null);
-    const [isFirstFetch, setIsFirstFetch] = useState(true);
     const [searchInput, setSearchInput] = useState('');
+    const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
         if (optimizationData) {
@@ -72,15 +72,16 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
     }, [optimizationData]);
 
     const fetchData = async () => {
+        if (searchInput) return;
+
         try {
-            if (isFirstFetch) setLoading(true);
+            if (pagination.startFrom === 0) setLoading(true);
             const newOptimizationData = await dispatch(getTitanOptimizationData(options, pagination.startFrom, pagination.limit));
             setPagination((prev) => ({ ...prev, hasMore: newOptimizationData.hasMoreData || false }));
         } catch (error) {
             console.error('Error fetching optimization data:', error);
         } finally {
             setLoading(false);
-            setIsFirstFetch(false);
         }
     };
 
@@ -139,11 +140,12 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
     };
 
     const searchOptimizationData = async (url: string) => {
+
         try {
             setLoading(true);
             const response = await dispatch(searchData(options, 'rapidload_titan_optimizations_data', url));
             if (response.success) {
-                // handle successful search response if needed
+                setTempOptimizationData(response.data)
             }
         } catch (error) {
             console.error('Error no data found:', error);
@@ -153,8 +155,26 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchInput(event.target.value);
+        const value = event.target.value;
+        setSearchInput(value);
+
+        if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
+
+        if (value.length > 3) {
+            debounceTimeoutRef.current = setTimeout(() => {
+                searchOptimizationData(value);
+            }, 300);
+        }else if (value.length < 1){
+            setTempOptimizationData([]);
+            setPagination({ startFrom: 0, limit: 10, hasMore: false });
+        }
     };
+
+    useEffect(() => {
+        return () => {
+            if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
+        };
+    }, []);
 
     return (
         <div className='w-full flex flex-col gap-4'>
@@ -205,10 +225,10 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                     </div>
                     <div className="flex flex-col mt-4">
                         <div className="-m-1.5 overflow-x-auto">
-                            <div ref={tableContainerRef} className='max-h-[600px] overflow-y-auto p-1.5 min-w-full inline-block align-middle'>
-                                <div className="border rounded-2xl overflow-hidden">
+                            <div className=' p-1.5 min-w-full inline-block align-middle'>
+                                <div ref={tableContainerRef}  className="max-h-[600px] overflow-y-auto border rounded-2xl overflow-hidden">
                                     <table className="min-w-full divide-y divide-gray-200 dark:divide-brand-950">
-                                        <thead className="dark:bg-brand-900">
+                                        <thead className="dark:bg-brand-900 sticky top-0 z-10 bg-brand-0">
                                         <tr>
                                             <th scope="col" className="px-6 py-4 text-start text-xs font-medium uppercase">
                                                 <div className="flex items-center gap-2">
@@ -266,7 +286,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                         )}
                                         </tbody>
                                     </table>
-                                    {pagination.hasMore && <div className="py-4 text-center text-gray-500">Loading more data...</div>}
+                                    {pagination.hasMore && tempOptimizationData.length > 9 && !searchInput && <div className="py-4 text-center text-gray-500">Loading more data...</div>}
                                 </div>
                             </div>
                         </div>
