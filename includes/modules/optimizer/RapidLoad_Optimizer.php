@@ -222,7 +222,7 @@ class RapidLoad_Optimizer
 
         $strategy = isset($_REQUEST['strategy']) ? $_REQUEST['strategy'] : 'mobile';
 
-        $this->pre_optimizer_function($url, $strategy, null);
+        $this->pre_optimizer_function($url, $strategy, null, false);
 
         if(isset(self::$merged_options['uucss_api_key'])){
             unset(self::$merged_options['uucss_api_key']);
@@ -287,11 +287,11 @@ class RapidLoad_Optimizer
 
     }
 
-    public function  pre_optimizer_function($url, $strategy, $global){
+    public function  pre_optimizer_function($url, $strategy, $global, $can_be_saved = false){
         self::$job = new RapidLoad_Job([
             'url' => $this->transform_url($url)
         ]);
-        if(!isset(self::$job->id)){
+        if(!isset(self::$job->id) && $can_be_saved){
             self::$job->save();
         }
 
@@ -301,7 +301,7 @@ class RapidLoad_Optimizer
 
         self::$global = $global;
 
-        self::$options = self::$strategy == "desktop" ? self::$job->get_desktop_options() : self::$job->get_mobile_options();
+        self::$options = self::$strategy == "desktop" ? isset(self::$job->id) ? self::$job->get_desktop_options() : self::$job->get_mobile_options() : self::$global_options;
 
         self::$previous_options = self::$options;
 
@@ -491,7 +491,7 @@ class RapidLoad_Optimizer
         $strategy = isset($_REQUEST['strategy']) ? $_REQUEST['strategy'] : 'mobile';
         $global = isset($_REQUEST['global']) && $_REQUEST['global'];
 
-        $this->pre_optimizer_function($url, $strategy, $global);
+        $this->pre_optimizer_function($url, $strategy, $global, true);
 
         $body = file_get_contents('php://input');
 
