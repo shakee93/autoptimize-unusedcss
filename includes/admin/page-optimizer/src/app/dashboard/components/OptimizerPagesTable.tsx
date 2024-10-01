@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Card from "components/ui/card";
 import { cn } from "lib/utils";
 import { InformationCircleIcon, LinkIcon, CalendarIcon, EllipsisHorizontalCircleIcon,PencilSquareIcon, TrashIcon,ArrowTrendingUpIcon,ArrowTrendingDownIcon } from "@heroicons/react/24/outline";
@@ -38,6 +38,7 @@ import {CheckCircleIcon, CheckIcon, XCircleIcon} from "@heroicons/react/24/solid
 
 interface Settings {
     title: string;
+    description: string;
     total_jobs: number
 }
 
@@ -48,16 +49,18 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
     const { toast } = useToast();
     const {options} = useAppContext();
     const { dispatch } = useCommonDispatch();
-    const startFrom = 0;
-    const limit = 10
     const [loading, setLoading] = useState(true);
+    const [startFrom, setStartFrom] = useState(0);
+    const [limit, setLimit] = useState(10);
+    const [hasMore, setHasMore] = useState(true);
 
+    const tableContainerRef = useRef(null);
 
-
-    const fetchData = async () => {
+    const fetchData = async (reset = false) => {
         try {
             setLoading(true);
             await dispatch(getTitanOptimizationData(options, startFrom, limit));
+            if (reset) setHasMore(true);
         } catch (error) {
             console.error('Error fetching optimization data:', error);
         } finally {
@@ -73,7 +76,24 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
 
     useEffect(() => {
         fetchData();
-    }, [dispatch]);
+    }, [dispatch, startFrom]);
+
+    const handleScroll = () => {
+        const container = tableContainerRef.current;
+        if (!container || loading || !hasMore) return;
+
+        if (container.scrollTop + container.clientHeight >= container.scrollHeight) {
+            setStartFrom((prev) => prev + 10);
+        }
+    };
+
+    useEffect(() => {
+        const container = tableContainerRef.current;
+        if (container) {
+            container.addEventListener('scroll', handleScroll);
+            return () => container.removeEventListener('scroll', handleScroll);
+        }
+    }, [loading, hasMore]);
 
     const deleteOptimizationData = async (url: string) => {
         try {
@@ -91,7 +111,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
         } catch (error) {
             // console.error('Error deleting optimization data:', error);
             toast({
-                description: <div className='flex w-full gap-2 text-center'>{error} <XCircleIcon className='w-5 text-red-600'/></div>,
+                description: <div className='flex w-full gap-2 text-center'>{error? error : "Error deleting data"} <XCircleIcon className='w-5 text-red-600'/></div>,
             })
         } finally {
             setLoading(false);
@@ -103,15 +123,11 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
         try {
             setLoading(true);
             const response = await dispatch(searchData(options, 'rapidload_titan_optimizations_data', url));
-
             if (response.success) {
-                console.log(response)
-            } else {
-                console.log(response)
+                // console.log(response)
             }
-
         } catch (error) {
-            console.error('Error deleting optimization data:', error);
+            console.error('Error no data found:', error);
         } finally {
             setLoading(false);
 
@@ -134,7 +150,12 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
 
                         <div className="content flex w-full sm:w-1/2 lg:w-full flex-col px-3 py-3 ">
                             <div className='flex gap-2 items-center justify-between'>
-                                <div className="text-sm font-semibold dark:text-brand-300">{settings.title}</div>
+                                <div className='grid dark:text-brand-300 select-none'>
+                                    <div
+                                        className="font-medium text-base">{settings.title}</div>
+                                    <div
+                                        className="text-sm font-normal">{settings.description}</div>
+                                </div>
 
 
                                 <div className="flex gap-4">
@@ -188,8 +209,8 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                             </div>
 
                             <div className="flex flex-col mt-4">
-                                <div className="-m-1.5 overflow-x-auto">
-                                    <div className="p-1.5 min-w-full inline-block align-middle">
+                            <div className="-m-1.5 overflow-x-auto">
+                                    <div ref={tableContainerRef} className={cn(optimizationData && optimizationData.length > 9 ? 'max-h-[600px] overflow-y-auto' : '', 'p-1.5 min-w-full inline-block align-middle')}>
                                         <div className="border rounded-2xl overflow-hidden">
                                             <table
                                                 className="min-w-full divide-y divide-gray-200 dark:divide-brand-950">
@@ -264,6 +285,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                                 )}
                                                 </tbody>
                                             </table>
+                                            {hasMore && <div className="py-4 text-center text-gray-500">Loading more data...</div>}
 
                                         </div>
                                     </div>
