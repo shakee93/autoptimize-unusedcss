@@ -20,13 +20,7 @@ class UnusedCSS
     {
         $this->options = RapidLoad_Base::get_merged_options();
 
-        new UnusedCSS_Queue();
-
         $this->file_system = new RapidLoad_FileSystem();
-
-        add_action('rapidload/job/purge', [$this, 'cache_uucss'], 10, 2);
-
-        add_action('uucss_async_queue', [$this, 'init_async_store'], 10, 2);
 
         if( ! $this->initFileSystem() ){
             return;
@@ -43,6 +37,12 @@ class UnusedCSS
         if (!defined('RAPIDLOAD_UUCSS_ENABLED')) {
             define('RAPIDLOAD_UUCSS_ENABLED', true);
         }
+
+        new UnusedCSS_Queue();
+
+        add_action('rapidload/job/purge', [$this, 'cache_uucss'], 10, 2);
+
+        add_action('uucss_async_queue', [$this, 'init_async_store'], 10, 2);
 
         if(apply_filters('uucss/enable/notfound_fallback', true)){
             add_action( 'template_redirect', [$this, 'uucss_notfound_fallback'] );

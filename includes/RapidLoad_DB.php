@@ -586,6 +586,7 @@ abstract class RapidLoad_DB
         $data['created_at'] = isset( $link->job_created_at ) ? $link->job_created_at : null;
         $data['hits'] = isset( $link->hits ) ? $link->hits : null;
         $data['applied_successful_links'] = isset( $link->applied_successful_links ) ? $link->applied_successful_links : 0;
+        $data['time'] = isset( $link->created_at ) ? strtotime( $link->created_at ) * 1000 : null;
 
         if(isset($data['rule_id'])){
             $job_url = RapidLoad_Job::find_or_fail($data['rule_id']);

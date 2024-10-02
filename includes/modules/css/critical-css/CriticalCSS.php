@@ -22,17 +22,11 @@ class CriticalCSS
     {
         $this->options = RapidLoad_Base::get_merged_options();
 
-        add_action('uucss/options/css', [$this, 'render_options']);
-
         $this->file_system = new RapidLoad_FileSystem();
 
         add_action('wp_ajax_cpcss_purge_url', [$this, 'cpcss_purge_url']);
 
-        add_action('cpcss_async_queue', [$this, 'init_async_store'], 10, 2);
-
         self::$cpcss_other_plugins = apply_filters('cpcss/other-plugins', []);
-
-        new CriticalCSS_Queue();
 
         if( ! $this->initFileSystem() ){
             return;
@@ -41,6 +35,12 @@ class CriticalCSS
         if(!isset($this->options['uucss_enable_css']) || !isset($this->options['uucss_enable_cpcss']) || $this->options['uucss_enable_css'] != "1" || $this->options['uucss_enable_cpcss'] != "1" || !empty(self::$cpcss_other_plugins)){
             return;
         }
+
+        new CriticalCSS_Queue();
+
+        add_action('uucss/options/css', [$this, 'render_options']);
+
+        add_action('cpcss_async_queue', [$this, 'init_async_store'], 10, 2);
 
         if (apply_filters('rapidload/cpcss/disable-uucss-on-cpcss', true) && !defined('RAPIDLOAD_CPCSS_ENABLED')) {
             define('RAPIDLOAD_CPCSS_ENABLED', true);
