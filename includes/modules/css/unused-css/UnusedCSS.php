@@ -271,9 +271,9 @@ class UnusedCSS
                 if(isset($job_data->id)){
 
                     if($job->rule != 'is_url'){
-                        $link['rule_status'] = $job_data->status;
-                        $link['rule_hits'] = $job_data->hits;
-                        $link['applied_links'] = count($job->get_urls());
+                        //$link['rule_status'] = $job_data->status;
+                       // $link['rule_hits'] = $job_data->hits;
+                        //$link['applied_links'] = count($job->get_urls());
                     }
 
                     if(!isset($link['status'])){

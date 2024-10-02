@@ -549,17 +549,29 @@ abstract class RapidLoad_DB
 
     static function get_merged_data($start_from = 0, $limit = 10, $where = '', $order_by = 'id DESC'){
 
+        self::debug_log($where, $order_by, $start_from, $limit);
+
+        $status_column = "CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE uucss.status END AS status,";
+        if(defined('RAPIDLOAD_CPCSS_ENABLED') && RAPIDLOAD_CPCSS_ENABLED){
+            $status_column = "CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE CASE WHEN uucss.status is null THEN cpcss.status ELSE NULL END END AS status,";
+        }
+
         global $wpdb;
 
-        $data = $wpdb->get_results("select * from (select 
+        $query = "select * from (select 
         job.id, job.job_id, job.url, job.rule, job.regex, job.rule_id, job.rule_note, job.status as job_status, job.created_at as job_created_at,
         (case when job.rule = 'is_url' then 0 else (select count(id) from {$wpdb->prefix}rapidload_job where rule_id = job.id and rule = 'is_url') end) as applied_successful_links,
-        uucss.data as files, uucss.stats, uucss.warnings, uucss.attempts, uucss.hits, CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE uucss.status END AS status, 
+        uucss.data as files, uucss.stats, uucss.warnings, uucss.attempts, uucss.hits, 
+        " . $status_column ." 
         cpcss.data as cpcss, cpcss.stats as cpcss_stats, cpcss.warnings as cpcss_warnings, cpcss.attempts as cpcss_attempts, cpcss.hits as cpcss_hits, cpcss.status as cpcss_status 
         
         from (select (case when rule_id is not null then rule_id else id end) as id , id as job_id, url, rule, regex, rule_id, rule_note, status, created_at from {$wpdb->prefix}rapidload_job) as job
         left join (select * from {$wpdb->prefix}rapidload_job_data where job_type = 'uucss') as uucss on job.id = uucss.job_id
-        left join (select * from {$wpdb->prefix}rapidload_job_data where job_type = 'cpcss') as cpcss on job.id = cpcss.job_id) as dervied_table {$where} ORDER BY {$order_by} LIMIT {$start_from},{$limit}", OBJECT);
+        left join (select * from {$wpdb->prefix}rapidload_job_data where job_type = 'cpcss') as cpcss on job.id = cpcss.job_id) as dervied_table {$where} ORDER BY {$order_by} LIMIT {$start_from},{$limit}";
+
+        self::debug_log($query);
+
+        $data = $wpdb->get_results($query, OBJECT);
 
         $data = array_map(function ($job){
             return self::transform_link($job);
