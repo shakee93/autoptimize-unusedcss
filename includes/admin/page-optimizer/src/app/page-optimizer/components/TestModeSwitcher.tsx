@@ -38,38 +38,40 @@ const TestModeSwitcher = () => {
 
 
     return <div>
-        <div className='flex gap-2 justify-center'>
+        <div className='flex gap-6 justify-center'>
+            {loadingStatus &&
+                <TooltipText text={ `Turning ${testModeStatus ? 'on Test Mode' : 'on Live Mode'}`} className="dark:bg-brand-930/90">
+                    <Loader className='w-5 animate-spin'/>
+                </TooltipText>
+            }
             <div className='w-fit'>
-                <div data-tour='test-mode'
-                     className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[4px] rounded-2xl cursor-pointer bg-brand-200/80'>
-                    {/*<div className={cn(*/}
-                    {/*    'absolute translate-x-0 left-0.5 w-[70px] rounded-[14px] -z-1 duration-300 h-[44px] text-sm flex flex-col gap-2 px-3 py-2.5 font-medium dark:bg-brand-950 bg-brand-200/80',*/}
+                <div
+                    data-tour='test-mode'
+                    className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[4px] rounded-2xl cursor-pointer bg-brand-200/80 overflow-hidden'
+                >
+                    <div
+                        className={`absolute top-1 bottom-1 left-1 bg-white dark:bg-brand-700 rounded-xl transition-all duration-300 ease-in-out transform ${
+                            testMode ? "translate-x-[60%] w-[60%] bg-amber-400" : "translate-x-0  w-[40%]"
+                        }`}
+                    ></div>
 
-                    {/*    testMode && 'w-[118px] -translate-x-1 right-0.5 bg-amber-500/80'*/}
-                    {/*)}>*/}
-                    {/*</div>*/}
-                    <m.span
-                        layoutId="bubble"
-                        className={cn(
-                            'absolute w-[78px] transition rounded-[14px] -z-1 h-[44px] text-sm flex flex-col gap-2 px-3 py-2.5 font-medium dark:bg-brand-950 bg-brand-0',
-                            testMode && 'w-[110px] transition right-0.5 bg-amber-500/80'
-                        )}
-                        style={{borderRadius: 14}}
-                        transition={{type: "spring", bounce: 0, duration: 4}}
-                    />
-
+                    {/* Live Button */}
                     <div
                         onClick={async () => {
                             if (testMode) {
                                 await handleSwitchChange(false);
                             }
                         }}
-                        className={`relative z-1 items-center text-sm flex gap-2 px-3 py-2.5 font-medium rounded-2xl ${testMode ? 'text-brand-500' : ''}`}
+                        className={`relative z-10 items-center text-sm flex gap-2 px-3 h-10 font-medium rounded-2xl ${
+                            testMode ? 'text-brand-500' : ''
+                        }`}
                     >
                         <Circle
-                            className={cn(`w-1.5 stroke-0 ${testMode ? 'fill-brand-300' : 'fill-green-600'} animate-ping absolute inline-flex opacity-75`)}/>
+                            className={cn(`w-1.5 stroke-0 ${testMode ? 'fill-brand-300' : 'fill-green-600'} animate-ping absolute inline-flex opacity-75`)}
+                        />
                         <Circle
-                            className={cn(`w-1.5 stroke-0 ${testMode ? 'fill-brand-300' : 'fill-green-600'} relative inline-flex`)}/>
+                            className={cn(`w-1.5 stroke-0 ${testMode ? 'fill-brand-300' : 'fill-green-600'} relative inline-flex`)}
+                        />
                         Live
                     </div>
 
@@ -79,12 +81,16 @@ const TestModeSwitcher = () => {
                                 await handleSwitchChange(true);
                             }
                         }}
-                        className={`relative justify-center items-center z-1 text-sm flex pl-6 pr-5 py-2.5 whitespace-nowrap font-medium rounded-2xl ${testMode ? 'text-brand-0' : 'text-brand-500'}`}
+                        className={`relative justify-center items-center z-10 text-sm flex pl-6 pr-5 h-10 whitespace-nowrap font-medium rounded-2xl ${
+                            testMode ? '' : 'text-brand-500'
+                        }`}
                     >
                         Test Mode
                     </div>
                 </div>
             </div>
+
+
             {/*<TooltipText text={loadingStatus ? "loading" : "Preview"} className="dark:bg-brand-930/90">*/}
             {/*    <div*/}
             {/*        onClick={() => {*/}

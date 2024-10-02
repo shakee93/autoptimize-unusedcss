@@ -71,11 +71,13 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
         }
     }, [optimizationData]);
 
-    const fetchData = async () => {
-        if (searchInput) return;
+    const fetchData = async (freshFetch = false) => {
 
         try {
-            if (pagination.startFrom === 0) setLoading(true);
+            if (freshFetch) {
+                setTempOptimizationData([]);
+                setPagination({ startFrom: 0, limit: 10, hasMore: false });
+            }
             const newOptimizationData = await dispatch(getTitanOptimizationData(options, pagination.startFrom, pagination.limit));
             setPagination((prev) => ({ ...prev, hasMore: newOptimizationData.hasMoreData || false }));
         } catch (error) {
@@ -87,14 +89,18 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
 
     const handleOptimizeClick = (url: string) => {
         dispatch(setCommonState('headerUrl', url));
-        dispatch(fetchSettings(options, url, true));
-        dispatch(fetchReport(options, url, true));
+        dispatch(fetchSettings(options, url, false));
+        dispatch(fetchReport(options, url, false));
         window.location.hash = '#/optimize';
     };
 
     useEffect(() => {
-        fetchData();
-    }, [dispatch, pagination.startFrom]);
+        if (pagination.startFrom < 1) {
+            fetchData(true);
+        } else {
+            fetchData();
+        }
+    }, [pagination.startFrom]);
 
     const handleScroll = () => {
         const container = tableContainerRef.current;
@@ -165,8 +171,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                 searchOptimizationData(value);
             }, 300);
         }else if (value.length < 1){
-            setTempOptimizationData([]);
-            setPagination({ startFrom: 0, limit: 10, hasMore: false });
+            fetchData(true);
         }
     };
 
@@ -260,7 +265,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                                 tempOptimizationData.map((item, idx) => (
                                                     <tr key={idx} className={idx % 2 === 0 ? 'bg-gray-100/30 dark:bg-brand-950' : 'bg-white dark:bg-brand-900'}>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-brand-300">
-                                                            {idx} ) {item.url}
+                                                            {item.url}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                                                             <PercentageIndicator percentage={calculatePercentage(item.first_data?.performance, item.last_data?.performance)} />

@@ -158,7 +158,7 @@ const App = ({popup, _showOptimizer = false}: {
     return (
         <AnimatePresence>
             {(mounted && showOptimizer) &&
-                <div className='dark:text-brand-300 text-brand-800'>
+                <div className='dark:text-brand-300 text-brand-800 bg-brand-200/60 '>
                     <Suspense>
                         <AppTour isDark={isDark}>
                             <InitTour mode={mode}/>
@@ -166,33 +166,61 @@ const App = ({popup, _showOptimizer = false}: {
                     </Suspense>
 
 
-                    <div className=' z-[1000000] dark:bg-brand-930 bg-brand-0'>
-                        <header className='flex gap-8 h-16 items-center justify-between'>
+                    <div className=' z-[1000000] dark:bg-brand-930 justify-center flex container'>
+                        <header className=' z-[110000] container px-2 py-2 flex gap-3 mt-4 justify-between dark:bg-brand-930/80  bg-brand-0 rounded-3xl'>
                             <div className='flex items-center'>
                                 <div className='relative px-4'>
-                                    <img className='w-36' src={ options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'} alt='RapidLoad - #1 to unlock breakneck page speed'/>
+                                    <img className='w-36'
+                                         src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'}
+                                         alt='RapidLoad - #1 to unlock breakneck page speed'/>
                                     {version && (
-                                        <span className='absolute text-xxs w-[200px] left-[90px] top-[1px] dark:text-brand-500 text-brand-400'>v{version}</span>
+                                        <span
+                                            className='absolute text-xxs w-[200px] left-[90px] top-[1px] dark:text-brand-500 text-brand-400'>v{version}</span>
                                     )}
                                 </div>
 
-                                <div className='flex'>
-                                    <div data-tour='app-switch'
-                                         className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[4px] rounded-2xl cursor-pointer bg-brand-200/80'>
+                                {/*<div className='flex'>*/}
+                                {/*    <div data-tour='app-switch'*/}
+                                {/*         className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[4px] rounded-2xl cursor-pointer bg-brand-200/80'>*/}
 
+
+                                {/*        {routes.map((route, i) => (*/}
+                                {/*            <>*/}
+
+                                {/*                <button key={i}*/}
+                                {/*                        onClick={e => setActiveRoute(route.id)}*/}
+                                {/*                        className={cn(*/}
+                                {/*                            'px-6 flex-1 h-10 text-sm tracking-wider ',*/}
+                                {/*                            activeRoute === route.id && 'dark:bg-brand-700 bg-brand-0 rounded-xl'*/}
+                                {/*                        )}>*/}
+                                {/*                    {route.title}*/}
+                                {/*                </button>*/}
+                                {/*            </>*/}
+                                {/*        ))}*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
+                                <div className='flex'>
+                                    <div
+                                        data-tour='app-switch'
+                                        className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[8px] rounded-2xl cursor-pointer bg-brand-200/80 overflow-hidden'
+                                    >
+                                        <div
+                                            className={`absolute top-1 bottom-1 w-[50%] left-1 bg-white dark:bg-brand-700 rounded-xl transition-all duration-300 ease-in-out transform ${
+                                                activeRoute === routes[1].id ? "translate-x-[93%]" : "translate-x-0 "
+                                            }`}
+                                        ></div>
 
                                         {routes.map((route, i) => (
-                                            <>
-
-                                                <button key={i}
-                                                        onClick={e => setActiveRoute(route.id)}
-                                                        className={cn(
-                                                            'px-6 flex-1 h-10 text-sm tracking-wider ',
-                                                            activeRoute === route.id && 'dark:bg-brand-700 bg-brand-0 rounded-xl'
-                                                        )}>
-                                                    {route.title}
-                                                </button>
-                                            </>
+                                            <button
+                                                key={i}
+                                                onClick={() => setActiveRoute(route.id)}
+                                                className={cn(
+                                                    'px-6 flex-1 h-10 text-sm tracking-wider z-10',
+                                                    activeRoute === route.id ? 'text-black dark:text-white' : 'text-gray-500'
+                                                )}
+                                            >
+                                                {route.title}
+                                            </button>
                                         ))}
                                     </div>
                                 </div>
@@ -205,9 +233,9 @@ const App = ({popup, _showOptimizer = false}: {
                                 <div className="flex items-center gap-3">
                                     <GeneralSettingsTrigger open={open} onOpenChange={setOpen}/>
                                     <TooltipText text="Theme">
-                                    <div onClick={e => changeTheme()}>
-                                        <ThemeSwitcher></ThemeSwitcher>
-                                    </div>
+                                        <div onClick={e => changeTheme()}>
+                                            <ThemeSwitcher></ThemeSwitcher>
+                                        </div>
                                     </TooltipText>
                                 </div>
                             </div>
