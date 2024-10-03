@@ -24,7 +24,7 @@ export interface AuditComponentRef {
 }
 
 export default function PageOptimizer() {
-    const {data, loading, error} = useSelector(optimizerData);
+    const {data, loading, error, testMode} = useSelector(optimizerData);
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(data?.performance);
     const { dispatch, activeMetric } = useCommonDispatch()
 
@@ -66,6 +66,24 @@ export default function PageOptimizer() {
                 "notranslate",
                 // !dashboard ? ' z-[100000] top-0 left-0 h-screen overflow-hidden': ''
             )}>
+
+            <AnimatePresence>
+                {testMode &&
+                    <m.div
+                        initial={{ borderWidth: '0px' }}
+                        animate={{ borderWidth: '5px' }}
+                        exit={{ borderWidth: '0px' }}
+                        transition={{ duration: 0.5 }}
+                        className={cn(
+                            'absolute inset-0 z-[110002] pointer-events-none fixed',
+                            'border-solid border-[#f7b250] rounded-none'
+                        )}>
+                        <div className={cn(
+                            'absolute -inset-[3px] rounded-xl',
+                            'border-[3px] border-[#f7b250]'
+                        )} />
+                    </m.div>}
+            </AnimatePresence>
 
             <Header url={url}/>
 
