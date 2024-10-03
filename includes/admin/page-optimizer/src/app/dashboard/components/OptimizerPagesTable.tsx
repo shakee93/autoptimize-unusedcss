@@ -203,11 +203,11 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                     onChange={handleInputChange}
                                 />
                             </div>
-                            <button
-                                onClick={() => searchOptimizationData(searchInput)}
-                                className="dark:text-brand-950 border border-1 border-brand-300 bg-brand-0 py-1 px-[11px] rounded-lg flex w-fit gap-2 items-center cursor-pointer">
-                                <FunnelIcon className="w-5 h-5" />Filter
-                            </button>
+                            {/*<button*/}
+                            {/*    onClick={() => searchOptimizationData(searchInput)}*/}
+                            {/*    className="dark:text-brand-950 border border-1 border-brand-300 bg-brand-0 py-1 px-[11px] rounded-lg flex w-fit gap-2 items-center cursor-pointer">*/}
+                            {/*    <FunnelIcon className="w-5 h-5" />Filter*/}
+                            {/*</button>*/}
                             <Dialog open={open} onOpenChange={setOpen}>
                                 <DialogTrigger asChild>
                                     <button className="rounded-lg flex gap-2 items-center cursor-pointer bg-black text-brand-0 py-1 px-[11px] pr-[15px]">
