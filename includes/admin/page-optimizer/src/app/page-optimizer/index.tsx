@@ -18,6 +18,7 @@ import TogglePerformance from "components/toggle-performance";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import SlideUp from "components/animation/SlideUp";
 import ErrorFetch from "components/ErrorFetch";
+import TestModeNotification from "components/ui/test-mode-notification";
 
 export interface AuditComponentRef {
     notifyHeightChange: () => void;
@@ -61,7 +62,7 @@ export default function PageOptimizer() {
             id='rapidload-page-optimizer-wrapper'
             translate="no"
             className={cn(
-                " bg-white font-sans   flex min-h-screen flex-col text-base items-center ",
+                " bg-white font-sans flex min-h-screen flex-col text-base items-center ",
                 "dark:text-brand-300 text-brand-800",
                 "notranslate",
                 // !dashboard ? ' z-[100000] top-0 left-0 h-screen overflow-hidden': ''
@@ -69,6 +70,7 @@ export default function PageOptimizer() {
 
             <AnimatePresence>
                 {testMode &&
+                   <>
                     <m.div
                         initial={{ borderWidth: '0px' }}
                         animate={{ borderWidth: '5px' }}
@@ -76,13 +78,16 @@ export default function PageOptimizer() {
                         transition={{ duration: 0.5 }}
                         className={cn(
                             'absolute inset-0 z-[110002] pointer-events-none fixed',
-                            'border-solid border-[#f7b250] rounded-none'
+                            'border-solid border-amber-500 rounded-none'
                         )}>
                         <div className={cn(
                             'absolute -inset-[3px] rounded-xl',
-                            'border-[3px] border-[#f7b250]'
+                            'border-[3px] border-amber-500'
                         )} />
-                    </m.div>}
+                    </m.div>
+                    <TestModeNotification/>
+                   </>
+                }
             </AnimatePresence>
 
             <Header url={url}/>

@@ -26,6 +26,7 @@ import UrlPreview from "app/page-optimizer/components/footer/url-preview";
 import SaveChanges from "app/page-optimizer/components/footer/save-changes";
 import {useRootContext} from "../../../context/root";
 
+
 const Header = ({ url }: { url: string}) => {
 
     const {
@@ -73,25 +74,26 @@ const Header = ({ url }: { url: string}) => {
     return (
         <>
 
-            {!loading && (
-                <AnimatePresence>
-                    {testMode && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{
-                                ease: 'easeInOut',
-                                duration: 0.5,
-                            }}
-                            className="w-full text-[13px] bg-[#D9CAEB] items-center text-center py-0.5 top-[74px] dark:bg-brand-950"
-                        >
-                            <span className="font-semibold text-purple-900 dark:text-brand-300">Test Mode turned on,</span>
-                            optimizations are safely previewed without affecting your live website. Perfect for experimentation and fine-tuning.
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            )}
+            {/*{!loading && (*/}
+            {/*    <AnimatePresence>*/}
+            {/*        {testMode && (*/}
+            {/*            // <motion.div*/}
+            {/*            //     initial={{ opacity: 0, y: -10 }}*/}
+            {/*            //     animate={{ opacity: 1, y: 0 }}*/}
+            {/*            //     exit={{ opacity: 0, y: -10 }}*/}
+            {/*            //     transition={{*/}
+            {/*            //         ease: 'easeInOut',*/}
+            {/*            //         duration: 0.5,*/}
+            {/*            //     }}*/}
+            {/*            //     className="w-full text-[13px] bg-[#D9CAEB] items-center text-center py-0.5 top-[74px] dark:bg-brand-950"*/}
+            {/*            // >*/}
+            {/*            //     <span className="font-semibold text-purple-900 dark:text-brand-300">Test Mode turned on,</span>*/}
+            {/*            //     optimizations are safely previewed without affecting your live website. Perfect for experimentation and fine-tuning.*/}
+            {/*            // </motion.div>*/}
+
+            {/*        )}*/}
+            {/*    </AnimatePresence>*/}
+            {/*)}*/}
 
             <motion.header
                 initial={{ y: -100 }}
@@ -100,7 +102,7 @@ const Header = ({ url }: { url: string}) => {
                 }}
                 exit={{ y: -100 }}
                 transition={{ ease: "easeInOut", duration: 1 }}
-                className={`z-[110000] fixed ${scrolled ? '-top-0' : '-bottom-[85px]'}  px-2 py-2 flex gap-3 justify-between dark:bg-brand-930/80 rounded-3xl`}>
+                className={`z-[110000] fixed ${scrolled ? '-top-0' : '-bottom-[70px]'}  px-2 py-2 flex gap-3 justify-between dark:bg-brand-930/80 rounded-3xl`}>
                 <div className='flex gap-12 items-center rounded-3xl bg-brand-0 border-[3px] border-brand-200 shadow-xl'>
                     <div className='flex flex-column items-center gap-3 '>
                         {/*<div className="border-r border-accent px-2">*/}
