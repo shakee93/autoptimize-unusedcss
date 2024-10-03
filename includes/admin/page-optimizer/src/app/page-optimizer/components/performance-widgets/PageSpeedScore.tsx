@@ -159,7 +159,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                     expanded && 'border-brand-200 dark:border-brand-800'
                 )}>
                 {/*Report Switch*/}
-                <div className="border-r border-accent px-2 flex">
+                <div className="px-2 flex">
                     <div className="py-2">
                         <div data-tour='switch-report-strategy'
                              className='select-none relative flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>

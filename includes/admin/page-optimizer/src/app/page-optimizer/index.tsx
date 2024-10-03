@@ -68,27 +68,10 @@ export default function PageOptimizer() {
                 // !dashboard ? ' z-[100000] top-0 left-0 h-screen overflow-hidden': ''
             )}>
 
-            <AnimatePresence>
-                {testMode &&
-                   <>
-                    <m.div
-                        initial={{ borderWidth: '0px' }}
-                        animate={{ borderWidth: '5px' }}
-                        exit={{ borderWidth: '0px' }}
-                        transition={{ duration: 0.5 }}
-                        className={cn(
-                            'absolute inset-0 z-[110002] pointer-events-none fixed',
-                            'border-solid border-amber-500 rounded-none'
-                        )}>
-                        <div className={cn(
-                            'absolute -inset-[3px] rounded-xl',
-                            'border-[3px] border-amber-500'
-                        )} />
-                    </m.div>
-                    <TestModeNotification/>
-                   </>
-                }
-            </AnimatePresence>
+
+            {testMode &&
+                <TestModeNotification/>
+            }
 
             <Header url={url}/>
 
