@@ -57,7 +57,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
     const [expanded, setExpanded] = useState(false)
 
 
-    const { data, error, reanalyze, revisions, loading } = useSelector(optimizerData);
+    const { data, error, reanalyze, revisions, loading, activeReport } = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
     const [on, setOn] = useState<boolean>(false)
 
@@ -158,6 +158,33 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                     'overflow-hidden border border-transparent flex flex-col sm:flex-row lg:flex-col justify-around',
                     expanded && 'border-brand-200 dark:border-brand-800'
                 )}>
+                {/*Report Switch*/}
+                <div className="border-r border-accent px-2 flex">
+                    <div className="py-2">
+                        <div data-tour='switch-report-strategy'
+                             className='select-none relative flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>
+                            <div className={cn(
+                                'absolute shadow-md translate-x-0 left-0.5 w-[55px] rounded-[14px] -z-1 duration-300 h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',
+                                activeReport === 'desktop' && 'w-[55px] -translate-x-1 left-1/2'
+                            )}>
+                            </div>
+
+                            <TooltipText text="Mobile">
+                                <div onClick={() => dispatch(changeReport('mobile'))}
+                                     className={`relative z-1 text-sm flex flex-column gap-2 px-5 py-3 font-medium rounded-2xl`}>
+                                    <DevicePhoneMobileIcon className="h-5 w-5 font-medium dark:text-brand-500"/>
+                                </div>
+                            </TooltipText>
+
+                            <TooltipText text='Desktop'>
+                                <div onClick={() => dispatch(changeReport('desktop'))}
+                                     className={`relative z-1 text-sm flex flex-column gap-2 pl-2 px-5 py-3 font-medium rounded-2xl`}>
+                                    <Monitor className="h-5 w-5 font-medium dark:text-brand-500 "/>
+                                </div>
+                            </TooltipText>
+                        </div>
+                    </div>
+                </div>
 
                 <div className={cn(
                     "content px-4 relative flex w-full sm:w-1/2 lg:w-full flex-col justify-center items-center gap-3  py-2.5",

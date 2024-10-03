@@ -33,7 +33,7 @@ const UrlPreview = () => {
         ? (initialUrl === headerUrl ? initialUrl : headerUrl || url)
         : (headerUrl || url);
 
-    return <div className='flex flex-row flex-1 gap-3 px-5 min-w-[280px] items-center bg-white dark:bg-brand-800'>
+    return <div className='flex flex-row flex-1 gap-3 px-5 min-w-[280px] items-center dark:bg-brand-800'>
         <div>
             <div
                 className='text-sm items-center cursor-default text-ellipsis truncate md:max-w-sm lg:max-w-xl'>

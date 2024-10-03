@@ -77,34 +77,34 @@ const Header = ({ url }: { url: string}) => {
 
             <header
                 className='z-[110000] fixed bottom-4 px-2 py-2 flex gap-3 justify-between dark:bg-brand-930/80 rounded-3xl'>
-                <div className='flex gap-12 items-center rounded-3xl bg-brand-0 '>
+                <div className='flex gap-12 items-center rounded-3xl bg-brand-0 border-[3px] border-brand-200 shadow-xl'>
                     <div className='flex flex-column items-center gap-3 '>
-                        <div className="border-r border-accent px-2">
-                            <div className="py-2">
-                            <div data-tour='switch-report-strategy'
-                                 className='select-none relative flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>
-                                <div className={cn(
-                                    'absolute shadow-md translate-x-0 left-0.5 w-[55px] rounded-[14px] -z-1 duration-300 h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',
-                                    activeReport === 'desktop' && 'w-[55px] -translate-x-1 left-1/2'
-                                )}>
-                                </div>
+                        {/*<div className="border-r border-accent px-2">*/}
+                        {/*    <div className="py-2">*/}
+                        {/*    <div data-tour='switch-report-strategy'*/}
+                        {/*         className='select-none relative flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>*/}
+                        {/*        <div className={cn(*/}
+                        {/*            'absolute shadow-md translate-x-0 left-0.5 w-[55px] rounded-[14px] -z-1 duration-300 h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',*/}
+                        {/*            activeReport === 'desktop' && 'w-[55px] -translate-x-1 left-1/2'*/}
+                        {/*        )}>*/}
+                        {/*        </div>*/}
 
-                                <TooltipText text="Mobile">
-                                    <div onClick={() => dispatch(changeReport('mobile'))}
-                                         className={`relative z-1 text-sm flex flex-column gap-2 px-5 py-3 font-medium rounded-2xl`}>
-                                        <DevicePhoneMobileIcon className="h-5 w-5 font-medium dark:text-brand-500"/>
-                                    </div>
-                                </TooltipText>
+                        {/*        <TooltipText text="Mobile">*/}
+                        {/*            <div onClick={() => dispatch(changeReport('mobile'))}*/}
+                        {/*                 className={`relative z-1 text-sm flex flex-column gap-2 px-5 py-3 font-medium rounded-2xl`}>*/}
+                        {/*                <DevicePhoneMobileIcon className="h-5 w-5 font-medium dark:text-brand-500"/>*/}
+                        {/*            </div>*/}
+                        {/*        </TooltipText>*/}
 
-                                <TooltipText text='Desktop'>
-                                    <div onClick={() => dispatch(changeReport('desktop'))}
-                                         className={`relative z-1 text-sm flex flex-column gap-2 pl-2 px-5 py-3 font-medium rounded-2xl`}>
-                                        <Monitor className="h-5 w-5 font-medium dark:text-brand-500 "/>
-                                    </div>
-                                </TooltipText>
-                            </div>
-                            </div>
-                        </div>
+                        {/*        <TooltipText text='Desktop'>*/}
+                        {/*            <div onClick={() => dispatch(changeReport('desktop'))}*/}
+                        {/*                 className={`relative z-1 text-sm flex flex-column gap-2 pl-2 px-5 py-3 font-medium rounded-2xl`}>*/}
+                        {/*                <Monitor className="h-5 w-5 font-medium dark:text-brand-500 "/>*/}
+                        {/*            </div>*/}
+                        {/*        </TooltipText>*/}
+                        {/*    </div>*/}
+                        {/*    </div>*/}
+                        {/*</div>*/}
                         <div className="">
                             <UrlPreview/>
                         </div>

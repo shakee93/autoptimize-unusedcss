@@ -358,181 +358,190 @@ const SpeedSettings = ({ }) => {
 
 
 
-    return <div className='dark:bg-brand-800/40 bg-brand-200 px-9 py-8 mt-2 rounded-3xl'>
-        <SettingsStraightLine />
-        <div className="pb-4">
-            {settingsLoading &&
-                <div>loading...</div>
-            }
-            <h3 className="font-semibold text-lg">Performance Gears</h3>
-            <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
-        </div>
+    return <AnimatePresence>
+        <m.div
+            initial={{opacity: 0}}
+            animate={{opacity: 1}}
+            transition={{duration: 0.2, delay: 0.05}}
+            className='px-7 py-6 pb-0'
+        >
+            {/*<SettingsStraightLine />*/}
+            <div className="pb-4">
+                {settingsLoading &&
+                    <div>loading...</div>
+                }
+                <h3 className="font-semibold text-lg">Performance Gears</h3>
+                <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
+            </div>
 
-        <div className="flex gap-4" data-tour="settings-gear">
-            {modes.map((mode, index) => (
-                <div
-                    key={index}
-                    className={`cursor-pointer transition-all flex px-4 py-4 min-w-[166px] min-h-[166px] items-center justify-center w-fit rounded-3xl dark:bg-brand-950 bg-brand-0 dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px]  ${mode === activeGear ? ' border-purple-700 dark:border-purple-700' : ''}`}
-                    onClick={e => {
-                        setTempMode(mode);
-                        settingsModeOnChange(mode);
+            <div className="flex gap-4" data-tour="settings-gear">
+                {modes.map((mode, index) => (
+                    <div
+                        key={index}
+                        className={`cursor-pointer transition-all flex px-4 py-4 min-w-[166px] min-h-[166px] items-center justify-center w-fit rounded-3xl dark:bg-brand-950 bg-brand-0 dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px]  ${mode === activeGear ? ' border-purple-700 dark:border-purple-700' : ''}`}
+                        onClick={e => {
+                            setTempMode(mode);
+                            settingsModeOnChange(mode);
 
-                    }}
-                    onMouseEnter={() => setMouseOnSettingsGear(mode)}
-                    onMouseLeave={() => setMouseOnSettingsGear('')}
-                >
+                        }}
+                        onMouseEnter={() => setMouseOnSettingsGear(mode)}
+                        onMouseLeave={() => setMouseOnSettingsGear('')}
+                    >
 
-                    <div className={`flex flex-col gap-1 items-center text-center ${mode === 'turboMax' ? ' pt-1.5' : ''}`}>
+                        <div
+                            className={`flex flex-col gap-1 items-center text-center ${mode === 'turboMax' ? ' pt-1.5' : ''}`}>
 
-                        {['starter', 'accelerate', 'turboMax'].includes(mode) && activeGear === mode && (
-                            <div className="absolute ml-28 -mt-4">
-                                <CheckCircleIcon className="w-6 h-6 text-purple-800" />
+                            {['starter', 'accelerate', 'turboMax'].includes(mode) && activeGear === mode && (
+                                <div className="absolute ml-28 -mt-4">
+                                    <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
+                                </div>
+                            )}
+
+
+                            {mode === 'starter' && <Starter cls={'px-2 py-2'}/>}
+                            {mode === 'accelerate' && <Accelerate cls={'px-2 py-2'}/>}
+                            {mode === 'turboMax' && <TurboMax cls={'px-2 py-2'}/>}
+                            <div>
+                                <p className="font-semibold capitalize">{mode}</p>
+                                {mode === 'turboMax' &&
+                                    <p className="font-normal text-[10px] leading-none">Test Mode Recommended</p>}
                             </div>
-                        )}
 
-
-                        {mode === 'starter' && <Starter cls={'px-2 py-2'} />}
-                        {mode === 'accelerate' && <Accelerate cls={'px-2 py-2'} />}
-                        {mode === 'turboMax' && <TurboMax cls={'px-2 py-2'} />}
-                        <div>
-                            <p className="font-semibold capitalize">{mode}</p>
-                            {mode === 'turboMax' && <p className="font-normal text-[10px] leading-none">Test Mode Recommended</p>}
                         </div>
-
                     </div>
-                </div>
-            ))}
-        </div>
+                ))}
+            </div>
 
 
-        <UnsavedChanges
-            title='Modified Customize Settings changes'
-            description="Switching to Performance Modes will result in the loss of any customized settings."
-            action='Activate'
-            performanceGear={true}
-            cancel='Cancel'
-            onClick={() => {
-                settingsModeOnChange(tempMode, true);
+            <UnsavedChanges
+                title='Modified Customize Settings changes'
+                description="Switching to Performance Modes will result in the loss of any customized settings."
+                action='Activate'
+                performanceGear={true}
+                cancel='Cancel'
+                onClick={() => {
+                    settingsModeOnChange(tempMode, true);
 
-            }} >
-            <div ref={customUnsavedChanges}></div>
-        </UnsavedChanges>
+                }}>
+                <div ref={customUnsavedChanges}></div>
+            </UnsavedChanges>
 
 
-        <div className="py-4 ">
-            {mouseOnSettingsGear ? (
-                <h3 className="font-semibold dark:text-brand-300 capitalize">{mouseOnSettingsGear} {activeGear === mouseOnSettingsGear && 'Activated'}</h3>
-            ) : (
-                <h3 className="font-semibold dark:text-brand-300 capitalize">{activeGear} Activated</h3>
-            )}
-            <span
-                className="font-normal text-sm text-zinc-600 dark:text-brand-300">{settingsDescriptions[currentMode]}</span>
-        </div>
+            <div className="py-4 ">
+                {mouseOnSettingsGear ? (
+                    <h3 className="font-semibold dark:text-brand-300 capitalize">{mouseOnSettingsGear} {activeGear === mouseOnSettingsGear && 'Activated'}</h3>
+                ) : (
+                    <h3 className="font-semibold dark:text-brand-300 capitalize">{activeGear} Activated</h3>
+                )}
+                <span
+                    className="font-normal text-sm text-zinc-600 dark:text-brand-300">{settingsDescriptions[currentMode]}</span>
+            </div>
 
-        <div>
-            {settingsLoading ?
-                <div className='w-48 animate-pulse h-10 select-none transition-all rounded-2xl cursor-pointer
+            <div>
+                {settingsLoading ?
+                    <div className='w-48 animate-pulse h-10 select-none transition-all rounded-2xl cursor-pointer
           flex items-center gap-2 px-4 py-2 -ml-1 text-sm font-medium dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px] dark:hover:bg-brand-950 bg-brand-0 dark:bg-brand-950'>
-                </div> :
-                <div
-                    onClick={() => {
-                        setTempMode('custom');
-                        setCustomMode(prevMode => !prevMode);
-                    }}
-                    onMouseEnter={() => setMouseOnSettingsGear('custom')}
-                    onMouseLeave={() => setMouseOnSettingsGear('')}
-                    className={cn(
-                        `select-none w-fit transition-all rounded-2xl cursor-pointer  
+                    </div> :
+                    <div
+                        onClick={() => {
+                            setTempMode('custom');
+                            setCustomMode(prevMode => !prevMode);
+                        }}
+                        onMouseEnter={() => setMouseOnSettingsGear('custom')}
+                        onMouseLeave={() => setMouseOnSettingsGear('')}
+                        className={cn(
+                            `select-none w-fit transition-all rounded-2xl cursor-pointer  
           flex items-center gap-2 px-4 py-2 -ml-1 text-sm font-medium dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px] dark:hover:bg-brand-950 bg-brand-0 dark:bg-brand-950 `,
-                        activeGear === 'custom' && 'border-purple-700'
-                    )}
-                    data-tour="customize-settings"
-                >
-                    {activeGear === 'custom' &&
-                        <div className="">
-                            <CheckCircleIcon className="w-6 h-6 text-purple-800" />
-                        </div>
-                    }
+                            activeGear === 'custom' && 'border-purple-700'
+                        )}
+                        data-tour="customize-settings"
+                    >
+                        {activeGear === 'custom' &&
+                            <div className="">
+                                <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
+                            </div>
+                        }
 
-                    Customize Settings <ChevronDownIcon className={cn(
+                        Customize Settings <ChevronDownIcon className={cn(
                         'w-4 rounded-[15px] transition-transform',
                         customMode && '-rotate-180'
-                    )} />
+                    )}/>
 
-                </div>
-            }
+                    </div>
+                }
 
 
-        </div>
+            </div>
 
-        {customMode &&
-            <>
-                <div className="py-3 relative">
-                    <SettingsLine width={getWidthForCategory(activeCategory) || 220} category={activeCategory} />
+            {customMode &&
+                <>
+                    <div className="py-3 relative">
+                        <SettingsLine width={getWidthForCategory(activeCategory) || 220} category={activeCategory}/>
 
-                </div>
+                    </div>
 
-                <ul className='flex gap-3 ml-12'>
-                    {categoryOrder.map((category: SettingsCategory, index) => (
-                        <li key={index} onClick={e => {
-                            // setSortedStatus(true);
-                            setActiveCategory(category);
-                            dispatch(setCommonState('openCategory', category));
-                        }}>
-                            <m.div
-                                id={category}
-                                transition={{ duration: 0.5 }} className={cn(
+                    <ul className='flex gap-3 ml-12'>
+                        {categoryOrder.map((category: SettingsCategory, index) => (
+                            <li key={index} onClick={e => {
+                                // setSortedStatus(true);
+                                setActiveCategory(category);
+                                dispatch(setCommonState('openCategory', category));
+                            }}>
+                                <m.div
+                                    id={category}
+                                    transition={{duration: 0.5}} className={cn(
                                     'cursor-pointer select-none flex gap-2 transition-all items-center border border-transparent py-[6px] pr-3 pl-[7px] rounded-2xl w-fit mb-4 hover:bg-brand-50' +
                                     ' dark:bg-brand-950/60 dark:hover:bg-brand-950 bg-brand-0 hover:shadow-md',
                                     activeCategory === category && 'dark:bg-brand-950 shadow-md transition-all'
                                 )}>
-                                <div>
-                                    {activeCategory === category ? <>{icons[category]}</> : <>{iconsDuotone[category]}</>}
-                                </div>
-                                <span className='font-medium tracking-wide'>
+                                    <div>
+                                        {activeCategory === category ? <>{icons[category]}</> : <>{iconsDuotone[category]}</>}
+                                    </div>
+                                    <span className='font-medium tracking-wide'>
                                     {capitalizeCategory(category)}
                                 </span>
 
-                            </m.div>
-                        </li>
-                    ))}
-                </ul>
-
-                <div className={cn(
-                    data ? 'min-h-[380px]' : 'min-h-[280px]'
-                )}>
-                    <ul>
-
-                        {groupedSettings[activeCategory]?.map((item: AuditSetting, itemIndex) => (
-                            <li key={`${item.category}-${itemIndex}`}>
-                                <m.div initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.3, delay: itemIndex ? 0.05 * itemIndex : 0 }}
-                                >
-                                    <AuditSettingsItem key={`${item.category}-${itemIndex}`} item={item}
-                                        itemIndex={itemIndex} updateValue={updateValue}
-                                        actionRequired={true} />
                                 </m.div>
                             </li>
                         ))}
-
-                        {(groupedSettings[activeCategory]?.length <= 2) && <m.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            className='flex flex-col gap-2 items-center px-2 mt-12 w-full mb-6'>
-                            <div>
-                                <img alt='Good Job!' className='w-60 -ml-6'
-                                    src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'} />
-                            </div>
-                            <span className='flex text-sm mt-4 gap-2'>You're so close to perfection! One more fix and it's flawless!"</span>
-                        </m.div>
-                        }
                     </ul>
-                </div>
-            </>
-        }
-    </div>
+
+                    <div className={cn(
+                        data ? 'min-h-[380px]' : 'min-h-[280px]'
+                    )}>
+                        <ul>
+
+                            {groupedSettings[activeCategory]?.map((item: AuditSetting, itemIndex) => (
+                                <li key={`${item.category}-${itemIndex}`}>
+                                    <m.div initial={{opacity: 0, y: -10}}
+                                           animate={{opacity: 1, y: 0}}
+                                           transition={{duration: 0.3, delay: itemIndex ? 0.05 * itemIndex : 0}}
+                                    >
+                                        <AuditSettingsItem key={`${item.category}-${itemIndex}`} item={item}
+                                                           itemIndex={itemIndex} updateValue={updateValue}
+                                                           actionRequired={true}/>
+                                    </m.div>
+                                </li>
+                            ))}
+
+                            {(groupedSettings[activeCategory]?.length <= 2) && <m.div
+                                initial={{opacity: 0, y: 10}}
+                                animate={{opacity: 1, y: 0}}
+                                exit={{opacity: 0, y: -20}}
+                                className='flex flex-col gap-2 items-center px-2 mt-12 w-full mb-6'>
+                                <div>
+                                    <img alt='Good Job!' className='w-60 -ml-6'
+                                         src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>
+                                </div>
+                                <span className='flex text-sm mt-4 gap-2'>You're so close to perfection! One more fix and it's flawless!"</span>
+                            </m.div>
+                            }
+                        </ul>
+                    </div>
+                </>
+            }
+        </m.div>
+    </AnimatePresence>
 }
 
 export default SpeedSettings

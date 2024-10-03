@@ -101,22 +101,22 @@ const Performance = () => {
                 Fix Performance Issues</h2>
             <div ref={navbarRef} style={{ height: '1px' }}></div>
             <div className={cn(
-                'tabs flex sticky gap-2 -top-1',
+                'tabs flex sticky -top-1 dark:bg-brand-800/40 bg-brand-200 px-4 py-4 pb-1 rounded-t-3xl',
             )}>
                 <div
 
                     onClick={() => dispatch(setCommonState('activeTab', 'configurations'))}
                     className={cn(
 
-                        `whitespace-nowrap dark:bg-brand-930/90 bg-brand-0 border-2 border-transparent rounded-[20px] cursor-pointer w-[200px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+                        `whitespace-nowrap dark:bg-brand-930/90 bg-brand-0 border-r rounded-l-[20px] cursor-pointer w-[200px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
 
                         activeTab === 'configurations' ? "font-medium " : "text-brand-500 dark:hover:text-brand-300"
                     )}
                     data-tour="speed-settings"> <BoltIcon className='w-4 rounded-[15px]'/>  Speed Settings</div>
 
-                <Card data-tour='audit-groups'
+                <div data-tour='audit-groups'
                       className={cn(
-                          'dark:bg-brand-930/90 bg-brand-0 flex justify-between items-center select-none p-0 pl-6 pr-3 rounded-[20px]',
+                          'dark:bg-brand-930/90 bg-brand-0 flex justify-between items-center select-none p-0 pl-6 pr-3 rounded-r-[20px] w-full',
                           isSticky && 'rounded-b-xl rounded-t-none shadow-lg'
                       )}
 
@@ -173,10 +173,10 @@ const Performance = () => {
                         </AnimatePresence>
 
                     </div>
-                </Card>
+                </div>
             </div>
 
-            <div className="audits pt-6 flex mb-24">
+            <div className="audits flex mb-24 dark:bg-brand-800/40 bg-brand-200 rounded-b-3xl px-4 py-4">
                 <div className='w-full flex flex-col gap-2.5'>
 
                     <AnimatePresence initial={false}>

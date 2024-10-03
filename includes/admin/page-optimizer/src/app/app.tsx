@@ -158,7 +158,7 @@ const App = ({popup, _showOptimizer = false}: {
     return (
         <AnimatePresence>
             {(mounted && showOptimizer) &&
-                <div className='dark:text-brand-300 text-brand-800 bg-brand-200/60 '>
+                <div className='dark:text-brand-300 text-brand-800 bg-brand-200/60 dark:bg-brand-900'>
                     <Suspense>
                         <AppTour isDark={isDark}>
                             <InitTour mode={mode}/>
