@@ -69,9 +69,9 @@ export default function PageOptimizer() {
             )}>
 
 
-            {testMode &&
-                <TestModeNotification/>
-            }
+            {/*{testMode &&*/}
+            {/*    <TestModeNotification/>*/}
+            {/*}*/}
 
             <Header url={url}/>
 

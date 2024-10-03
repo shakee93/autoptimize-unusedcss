@@ -30,6 +30,8 @@ import AppButton from "components/ui/app-button";
 import GeneralSettingsTrigger from "app/dashboard/components/GeneralSettingsTrigger";
 import ThemeSwitcher from "components/ui/theme-switcher";
 import TooltipText from "components/ui/tooltip-text";
+import {optimizerData} from "../store/app/appSelector";
+import TestModeNotification from "components/ui/test-mode-notification";
 
 const App = ({popup, _showOptimizer = false}: {
     popup?: HTMLElement | null,
@@ -47,6 +49,7 @@ const App = ({popup, _showOptimizer = false}: {
     const [open, setOpen] = useState(false);
     const { headerUrl } = useCommonDispatch();
     const { changeTheme } = useRootContext()
+    const {testMode} = useSelector(optimizerData);
 
     useEffect(() => {
 
@@ -158,6 +161,10 @@ const App = ({popup, _showOptimizer = false}: {
     return (
         <AnimatePresence>
             {(mounted && showOptimizer) &&
+                <>
+                    {testMode &&
+                        <TestModeNotification/>
+                    }
                 <div className='dark:text-brand-300 text-brand-800 bg-brand-200/60 dark:bg-brand-900'>
                     <Suspense>
                         <AppTour isDark={isDark}>
@@ -247,6 +254,7 @@ const App = ({popup, _showOptimizer = false}: {
                     {routes.find(route => route.id === activeRoute)?.component || routes[0].component}
 
                 </div>
+                </>
             }
         </AnimatePresence>
     );
