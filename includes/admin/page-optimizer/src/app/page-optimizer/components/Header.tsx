@@ -2,7 +2,7 @@ import {
     ArrowTopRightOnSquareIcon,
     DevicePhoneMobileIcon
 } from "@heroicons/react/24/outline";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {useAppContext} from "../../../context/app";
 import TooltipText from "components/ui/tooltip-text";
 import {ThunkDispatch} from "redux-thunk";
@@ -50,7 +50,25 @@ const Header = ({ url }: { url: string}) => {
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const { isDark } = useRootContext();
 
+// State to manage header visibility based on scroll
+    const [scrolled, setScrolled] = useState(false);
 
+    // Monitor scroll position
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 30) {
+                setScrolled(true);
+            } else {
+                setScrolled(false);
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll);
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
 
     return (
         <>
@@ -75,8 +93,14 @@ const Header = ({ url }: { url: string}) => {
                 </AnimatePresence>
             )}
 
-            <header
-                className='z-[110000] fixed bottom-4 px-2 py-2 flex gap-3 justify-between dark:bg-brand-930/80 rounded-3xl'>
+            <motion.header
+                initial={{ y: -100 }}
+                animate={{
+                    y: scrolled ? 0 : -100,
+                }}
+                exit={{ y: -100 }}
+                transition={{ ease: "easeInOut", duration: 1 }}
+                className={`z-[110000] fixed ${scrolled ? '-top-0' : '-bottom-[85px]'}  px-2 py-2 flex gap-3 justify-between dark:bg-brand-930/80 rounded-3xl`}>
                 <div className='flex gap-12 items-center rounded-3xl bg-brand-0 border-[3px] border-brand-200 shadow-xl'>
                     <div className='flex flex-column items-center gap-3 '>
                         {/*<div className="border-r border-accent px-2">*/}
@@ -190,7 +214,7 @@ const Header = ({ url }: { url: string}) => {
                 {/*    </>*/}
 
                 {/*</div>*/}
-            </header>
+            </motion.header>
         </>
     )
 }
