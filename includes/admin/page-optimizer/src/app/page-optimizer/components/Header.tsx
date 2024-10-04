@@ -57,7 +57,7 @@ const Header = ({ url }: { url: string}) => {
     // Monitor scroll position
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 30) {
+            if (window.scrollY > 76) {
                 setScrolled(true);
             } else {
                 setScrolled(false);
@@ -96,13 +96,14 @@ const Header = ({ url }: { url: string}) => {
             {/*)}*/}
 
             <motion.header
-                initial={{ y: -100 }}
-                animate={{
-                    y: scrolled ? 0 : -100,
-                }}
-                exit={{ y: -100 }}
-                transition={{ ease: "easeInOut", duration: 1 }}
-                className={`z-[110000] fixed ${scrolled ? '-top-0' : '-bottom-[70px]'}  px-2 py-2 flex gap-3 justify-between dark:bg-brand-930/80 rounded-3xl`}>
+                // initial={{ y: -100 }}
+                // animate={{
+                //     y: scrolled ? 0 : -100,
+                // }}
+                // exit={{ y: -100 }}
+                // transition={{ ease: "easeInOut", duration: 1 }}
+                // ${scrolled ? '-top-0' : '-bottom-[70px]'}
+                className={`z-[110000] ${scrolled ? 'fixed top-0' : 'absolute top-[76px] '} px-2 py-2 flex gap-3 justify-between dark:bg-brand-930/80 rounded-3xl`}>
                 <div className='flex gap-12 items-center rounded-3xl bg-brand-0 border-[3px] border-brand-200 shadow-xl'>
                     <div className='flex flex-column items-center gap-3 '>
                         {/*<div className="border-r border-accent px-2">*/}
