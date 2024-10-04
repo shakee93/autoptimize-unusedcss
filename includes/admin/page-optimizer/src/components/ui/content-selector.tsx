@@ -136,7 +136,7 @@ const ContentSelector = ({ data }) => {
                 />
 
                 {/* Content list changes dynamically based on `selectedContent` */}
-                <ul className="overflow-y-auto pt-4 max-h-72">
+                <ul className="overflow-y-auto mt-4 max-h-72">
                     {loading ?
                         <div className="flex gap-4"><Skeleton className="w-72 h-10 "/><Skeleton className="w-72 h-10 "/></div>
                         : !selectedContent ? (
