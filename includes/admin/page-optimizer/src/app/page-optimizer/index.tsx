@@ -78,7 +78,7 @@ export default function PageOptimizer() {
             <div
                 id='rapidload-page-optimizer-content'
                 className={cn(
-                'overflow-y-auto w-full h-fit pb-20',
+                'overflow-y-auto w-full h-fit pb-20 pt-[72px]',
                 'dark:bg-brand-900 bg-brand-200/60 min-h-screen',
                 savingData && 'relative overflow-hidden'
             )}>

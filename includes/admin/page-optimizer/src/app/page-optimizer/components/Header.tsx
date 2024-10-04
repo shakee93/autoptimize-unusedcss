@@ -11,7 +11,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {changeReport, fetchReport} from "../../../store/app/appActions";
 import {optimizerData} from "../../../store/app/appSelector";
 import AppButton from "components/ui/app-button";
-import {cn} from "lib/utils";
+import {cn, isAdminPage} from "lib/utils";
 import {
     Loader,
     LogOut,
@@ -103,8 +103,8 @@ const Header = ({ url }: { url: string}) => {
                 // exit={{ y: -100 }}
                 // transition={{ ease: "easeInOut", duration: 1 }}
                 // ${scrolled ? '-top-0' : '-bottom-[70px]'}
-                className={`z-[110000] ${scrolled ? 'fixed top-0' : 'absolute top-[76px] '} px-2 py-2 flex gap-3 justify-between dark:bg-brand-930/80 rounded-3xl`}>
-                <div className='flex gap-12 items-center rounded-3xl bg-brand-0 border-[3px] border-brand-200 shadow-xl'>
+                className={`z-[110000] ${scrolled ? 'fixed ' : 'absolute top-[76px] '} ${isAdminPage ? 'top-8': 'top-0'} px-2 py-2 flex gap-3 justify-between dark:bg-brand-930/80 rounded-3xl`}>
+                <div className={`flex gap-12 items-center rounded-3xl bg-brand-0 border-[3px] border-brand-200 transition-all duration-500 ${scrolled && 'shadow-xl'}`}>
                     <div className='flex flex-column items-center gap-3 '>
                         {/*<div className="border-r border-accent px-2">*/}
                         {/*    <div className="py-2">*/}
