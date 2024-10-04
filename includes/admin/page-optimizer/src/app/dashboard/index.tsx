@@ -34,7 +34,9 @@ import {ContentSelector} from "components/ui/content-selector";
 import {AppAction, RootState} from "../../store/app/appTypes";
 import {fetchPosts} from "../../store/app/appActions";
 import {ThunkDispatch} from "redux-thunk";
-
+import OneClickBooster from "./components/performance-widgets/OneClickBooster";
+import PerformanceWidget from './components/performance-widgets/PerformanceWidget';
+import PageSpeedCoach from './components/performance-widgets/PageSpeedCoach';
 
 export interface AuditComponentRef {
     notifyHeightChange: () => void;
@@ -78,15 +80,15 @@ export default function Dashboard() {
             }}
             id='rapidload-page-optimizer-wrapper'
             className={cn(
-                "bg-white h-fit font-sans overflow-hidden flex flex-col text-base items-center "
+                "h-fit font-sans overflow-hidden flex flex-col text-base items-center "
             )}>
 
 
             <div
                 id='rapidload-page-optimizer-content'
                 className={cn(
-                    'overflow-y-auto w-full pb-20 -mt-[70px] min-h-[780px] flex items-center',
-                    'dark:bg-brand-900 bg-brand-200/60 ',
+                    'overflow-y-auto w-full pb-20 min-h-[780px] mt-4 flex items-center',
+                    'dark:bg-brand-900',
                     // 'dark:bg-brand-930 bg-brand-50 min-h-screen',
                     savingData && 'relative overflow-hidden'
                 )}>
@@ -94,7 +96,7 @@ export default function Dashboard() {
                 <section
                     ref={optimizerContainer}
                     className={cn(
-                        'relative container grid grid-cols-3 gap-6 pt-[84px] mt-4',
+                        'relative container flex flex-col mt-4 gap-4',
                     )}>
 
                     {(savingData || invalidatingCache) && (
@@ -108,75 +110,95 @@ export default function Dashboard() {
                         </div>
                     )}
 
-                            <div className="">
-
-                                <div className="widgets pt-4 gap-4 grid">
-                                    <LicenseWidget/>
-
-                                </div>
+                    <div className="flex gap-4">
+                        <div className="flex flex-col gap-4">
+                            <div>
+                                <PerformanceWidget/>
                             </div>
-
-                            <div className="col-span-2">
-                                <div className="widgets pt-4 gap-4 grid">
-                                    <SpeedInsights dashboardMode={true}/>
-                                </div>
+                            <div>
+                                <OneClickBooster/>
                             </div>
+                        </div>
+                        <div className="flex flex-col gap-4 flex-grow">
+                            <PageSpeedCoach/>
+                        </div>
 
-                            {/*<div className="">*/}
+                    </div>
+                    {/*<div className="flex-col">*/}
+                    {/*    <div className="widgets pt-4 gap-4 grid">*/}
+                    {/*        <PageSpeedCoach/>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
 
-                            {/*    <div className="widgets flex">*/}
-                            {/*        <CDNSummary/>*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
-                            {/*<div className="">*/}
+                    {/*<div className="">*/}
 
-                            {/*    <div className="widgets flex">*/}
-                            {/*        <CacheSummary/>*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
+                    {/*    <div className="widgets pt-4 gap-4 grid">*/}
+                    {/*        <LicenseWidget/>*/}
 
-                            {/*<div className="">*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
 
-                            {/*    <div className="widgets gap-4 grid">*/}
-                            {/*        <UnusedCSSSummary*/}
-                            {/*            settings={[*/}
-                            {/*                {*/}
-                            {/*                    title: "Unused CSS summary",*/}
-                            {/*                    total_jobs: 1000,*/}
-                            {/*                    items: [*/}
-                            {/*                        {label: "Success jobs", value: "153 jobs", performance: 95},*/}
-                            {/*                        {label: "Failed jobs", value: "153 jobs", performance: 95},*/}
-                            {/*                        {label: "Warning jobs", value: "153 jobs", performance: 95}*/}
-                            {/*                    ]*/}
-                            {/*                },*/}
-                            {/*                {*/}
-                            {/*                    title: "Critical CSS summary",*/}
-                            {/*                    total_jobs: 1000,*/}
-                            {/*                    items: [*/}
-                            {/*                        {label: "Success jobs", value: "153 jobs", performance: 95},*/}
-                            {/*                        {label: "Failed jobs", value: "153 jobs", performance: 95},*/}
-                            {/*                        {label: "Warning jobs", value: "153 jobs", performance: 95}*/}
-                            {/*                    ]*/}
-                            {/*                }*/}
-                            {/*            ]}*/}
-                            {/*        />*/}
+                    {/*<div className="col-span-2">*/}
+                    {/*    <div className="widgets pt-4 gap-4 grid">*/}
+                    {/*        <SpeedInsights dashboardMode={true}/>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
 
-                            {/*    </div>*/}
-                            {/*</div>*/}
+                    {/*<div className="">*/}
 
-                            <div className="col-span-3">
-                                <div className="widgets gap-4 grid">
-                                    <OptimizerPagesTable
-                                        settings={
-                                            {
-                                                title: "Optimize Pages",
-                                                description: "Check out you Optimized Pages details in here.",
-                                                total_jobs: 1000,
-                                            }
-                                        }
-                                    />
-                                </div>
-                            </div>
+                    {/*    <div className="widgets flex">*/}
+                    {/*        <CDNSummary/>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
+                    {/*<div className="">*/}
+
+                    {/*    <div className="widgets flex">*/}
+                    {/*        <CacheSummary/>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
+
+                    {/*<div className="">*/}
+
+                    {/*    <div className="widgets gap-4 grid">*/}
+                    {/*        <UnusedCSSSummary*/}
+                    {/*            settings={[*/}
+                    {/*                {*/}
+                    {/*                    title: "Unused CSS summary",*/}
+                    {/*                    total_jobs: 1000,*/}
+                    {/*                    items: [*/}
+                    {/*                        {label: "Success jobs", value: "153 jobs", performance: 95},*/}
+                    {/*                        {label: "Failed jobs", value: "153 jobs", performance: 95},*/}
+                    {/*                        {label: "Warning jobs", value: "153 jobs", performance: 95}*/}
+                    {/*                    ]*/}
+                    {/*                },*/}
+                    {/*                {*/}
+                    {/*                    title: "Critical CSS summary",*/}
+                    {/*                    total_jobs: 1000,*/}
+                    {/*                    items: [*/}
+                    {/*                        {label: "Success jobs", value: "153 jobs", performance: 95},*/}
+                    {/*                        {label: "Failed jobs", value: "153 jobs", performance: 95},*/}
+                    {/*                        {label: "Warning jobs", value: "153 jobs", performance: 95}*/}
+                    {/*                    ]*/}
+                    {/*                }*/}
+                    {/*            ]}*/}
+                    {/*        />*/}
+
+                    {/*    </div>*/}
+                    {/*</div>*/}
+
+                    <div className="col-span-3">
+                        <div className="widgets gap-4 grid">
+                            <OptimizerPagesTable
+                                settings={
+                                    {
+                                        title: "Optimize Pages",
+                                        description: "Check out you Optimized Pages details in here.",
+                                        total_jobs: 1000,
+                                    }
+                                }
+                            />
+                        </div>
+                    </div>
 
                 </section>
             </div>

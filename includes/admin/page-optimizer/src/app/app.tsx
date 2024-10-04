@@ -165,7 +165,7 @@ const App = ({popup, _showOptimizer = false}: {
                     {testMode &&
                         <TestModeNotification/>
                     }
-                <div className='dark:text-brand-300 text-brand-800 dark:bg-brand-900'>
+                <div className='dark:text-brand-300 text-brand-800 dark:bg-brand-900 bg-brand-200/60 '>
                     <Suspense>
                         <AppTour isDark={isDark}>
                             <InitTour mode={mode}/>
@@ -173,7 +173,7 @@ const App = ({popup, _showOptimizer = false}: {
                     </Suspense>
 
 
-                    <div className=' z-[1000000] dark:bg-brand-930 bg-brand-200/60 justify-center flex container'>
+                    <div className=' z-[1000000] dark:bg-brand-930 justify-center flex container'>
                         <header className=' z-[110000] container px-2 py-2 flex gap-3 mt-4 justify-between dark:bg-brand-930/80  bg-brand-0 rounded-3xl'>
                             <div className='flex items-center'>
                                 <div className='relative px-4'>

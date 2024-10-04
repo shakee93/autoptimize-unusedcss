@@ -4,6 +4,7 @@ import { LucideIcon } from "lucide-react";
 export interface RootState {
     app: AppState;
     common: CommonState
+    chat: ChatState
 }
 
 interface Report {
