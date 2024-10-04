@@ -1,3 +1,4 @@
+// lib code
 (function(global, factory) {
     if (typeof exports === "object" && typeof module !== "undefined") {
         factory(exports);
@@ -219,35 +220,85 @@
     exports.prerender = prerender;
 
 }));
+// rapidload preload code start
+(function () {
 
-function setupRapidloadsmartlinkPrefetchAndPrerender() {
-    let options = {
-        prerenderAndPrefetch: true,
-        throttle: 1,
-        origins: [location.hostname],
-        onError: (error) => {},
+    function isMobileDevice() {
+        return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+    }
+
+    if (isMobileDevice()) {
+        let options = {
+            prerenderAndPrefetch: true,
+            throttle: 1,
+            origins: [location.hostname],
+            onError: (error) => {},
+        };
+
+        rapidloadsmartlink.listen(options);
+        return;
+    }
+
+    let link = document.createElement('link');
+    let connection = (navigator.connection && (navigator.connection.saveData || navigator.connection.effectiveType === '2g'));
+    let support_prefetch = link.relList && link.relList.supports && link.relList.supports('prefetch');
+
+    if (connection || !support_prefetch) {
+        return;
+    }
+
+    let load_link = (link) => {
+        if (!link.includes('?') && link.startsWith(window.location.origin) && window.location.href !== link) {
+            rapidloadsmartlink.prefetch([link]);
+        }
     };
 
-    function userInteractionHandler() {
-        rapidloadsmartlink.listen(options);
-        removeEventListeners();
-    }
+    let lastX = null,
+        lastY = null,
+        animationFrameId = null;
 
-    let interactionEvents = ['click', 'touchstart', 'mousemove', 'keydown'];
+    let handleProximityPreload = (x, y) => {
+        document.querySelectorAll('a[href]').forEach((anchor) => {
+            let rect = anchor.getBoundingClientRect();
+            let distanceX = Math.min(Math.abs(x - rect.left), Math.abs(x - rect.right));
+            let distanceY = Math.min(Math.abs(y - rect.top), Math.abs(y - rect.bottom));
+            let distance = Math.hypot(distanceX, distanceY);
 
-    function addEventListeners() {
-        interactionEvents.forEach(event => {
-            document.addEventListener(event, userInteractionHandler);
+            if (distance < 200) {
+                load_link(anchor.href);
+            }
         });
-    }
+    };
 
-    function removeEventListeners() {
-        interactionEvents.forEach(event => {
-            document.removeEventListener(event, userInteractionHandler);
+    let throttleMouseMove = (event) => {
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+        }
+
+        animationFrameId = requestAnimationFrame(() => {
+            let x = event.clientX;
+            let y = event.clientY;
+            if (lastX === null || lastY === null || Math.hypot(x - lastX, y - lastY) > 100) {
+                lastX = x;
+                lastY = y;
+                handleProximityPreload(x, y);
+            }
         });
-    }
+    };
 
-    addEventListeners();
-}
+    let handleTouchStart = (event) => {
+        let anchor = event.target.closest('a');
+        if (anchor && anchor.href) {
+            load_link(anchor.href);
+        }
+    };
 
-setupRapidloadsmartlinkPrefetchAndPrerender();
+    let params = { capture: true, passive: true };
+
+    document.addEventListener('mousemove', throttleMouseMove, params);
+
+    window.requestAnimationFrame = window.requestAnimationFrame || function (callback) {
+        return setTimeout(callback, 1000 / 60);
+    };
+
+})();
