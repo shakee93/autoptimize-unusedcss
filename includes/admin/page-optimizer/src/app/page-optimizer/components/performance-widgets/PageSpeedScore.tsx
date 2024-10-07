@@ -249,7 +249,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                     </div>
                 </div>
 
-                <div className="flex flex-col text-center gap-1 relative content justify-center items-center">
+                <div className="flex flex-col items-center text-center py-2">
                     <UrlPreview/>
                 </div>
 
@@ -265,7 +265,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                             <div className='flex gap-6'>
                                 <div className='relative flex flex-col gap-3 px-4 items-center'>
 
-                                    <div className='mt-6'>
+                                    <div className=''>
                                         {!data || on ? (
                                             <Skeleton className="w-44 h-44 rounded-full"/>
                                         ) : (
