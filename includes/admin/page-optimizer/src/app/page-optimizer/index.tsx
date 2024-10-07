@@ -62,7 +62,7 @@ export default function PageOptimizer() {
             id='rapidload-page-optimizer-wrapper'
             translate="no"
             className={cn(
-                " bg-white font-sans flex min-h-screen flex-col text-base items-center ",
+                "font-sans flex min-h-screen flex-col text-base items-center ",
                 "dark:text-brand-300 text-brand-800",
                 "notranslate",
                 // !dashboard ? ' z-[100000] top-0 left-0 h-screen overflow-hidden': ''
@@ -79,7 +79,7 @@ export default function PageOptimizer() {
                 id='rapidload-page-optimizer-content'
                 className={cn(
                 'overflow-y-auto w-full h-fit pb-20 pt-[72px]',
-                'dark:bg-brand-900 bg-brand-200/60 min-h-screen',
+                'min-h-screen',
                 savingData && 'relative overflow-hidden'
             )}>
 

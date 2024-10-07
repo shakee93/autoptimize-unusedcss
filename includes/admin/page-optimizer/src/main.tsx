@@ -49,7 +49,6 @@ const logError = (error: Error, info: { componentStack: string }) => {
 const ApplicationCrashed = () => {
 
     const containerStyles = {
-        background: 'white',
         bottom: 0,
         position: 'absolute' as 'absolute',
         left: '50%',

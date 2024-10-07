@@ -15,7 +15,7 @@ function TestModeNotification() {
                 className={cn(
                     'inset-0 z-[110002] pointer-events-none fixed',
                     'border-solid border-amber-500 rounded-none',
-                    isAdminPage && 'ml-[160px]',
+                    isAdminPage && 'ml-[160px] mt-8',
                 )}>
                 <div className={cn(
                     'absolute -inset-[3px] rounded-xl',

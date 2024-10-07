@@ -98,14 +98,14 @@ const SaveChanges = () => {
 
     const saveActions =[
         {
-            text: 'Apply Optimization',
+            text: 'Save Changes',
             title: 'Save Changes?',
             description: "You have made changes to your settings. Click 'Save Changes' to apply your modifications or 'Discard' to revert to the previous state.",
             onClick : () => submitSettings(true)
         },
         {
             text: <div className='flex w-full items-center justify-between'>
-                {/*Save & Analyze*/} Apply Optimization
+                {/*Save & Analyze*/} Save Changes
                 {/*<TooltipText text='2 Optimizations are in progess'>*/}
                 {/*    <DropdownMenuShortcut className='flex gap-1.5 items-center'>*/}
                 {/*        <RefreshCcw className='w-3 animate-spin text-orange-500'/>2</DropdownMenuShortcut>*/}
@@ -164,7 +164,7 @@ const SaveChanges = () => {
             onClick : () => {
                 submitSettings(true)
             },
-            action_text: "Apply Optimization"
+            action_text: "Save Changes"
         },
         {
             text: 'Apply for Entire Site',

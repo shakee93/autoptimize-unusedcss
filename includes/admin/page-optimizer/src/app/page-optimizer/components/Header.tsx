@@ -132,66 +132,66 @@ const Header = ({ url }: { url: string}) => {
                         {/*    </div>*/}
                         {/*    </div>*/}
                         {/*</div>*/}
-                        <div className="">
-                            <UrlPreview/>
-                        </div>
-                        <div className="border-l border-r border-accent pl-2 pr-2">
-                            <div className="py-2">
-                            <div className='flex overflow-hidden' data-tour="current-url">
-                                <UnsavedChanges
-                                    title='Analyze without applying optimization?'
-                                    description="Your changes are not saved yet. If you analyze now, your recent edits won't be included."
-                                    action='Apply Optimization'
-                                    cancel='Discard & Analyze'
-                                    onCancel={() => {
-                                        dispatch(fetchReport(options, url, true))
-                                        commonDispatch(setCommonState('openAudits', []))
-                                    }}
-                                    onClick={() => {
+                        {/*<div className="">*/}
+                        {/*    <UrlPreview/>*/}
+                        {/*</div>*/}
+                        {/*<div className="border-l border-r border-accent pl-2 pr-2">*/}
+                        {/*    <div className="py-2">*/}
+                        {/*    <div className='flex overflow-hidden' data-tour="current-url">*/}
+                        {/*        <UnsavedChanges*/}
+                        {/*            title='Analyze without applying optimization?'*/}
+                        {/*            description="Your changes are not saved yet. If you analyze now, your recent edits won't be included."*/}
+                        {/*            action='Apply Optimization'*/}
+                        {/*            cancel='Discard & Analyze'*/}
+                        {/*            onCancel={() => {*/}
+                        {/*                dispatch(fetchReport(options, url, true))*/}
+                        {/*                commonDispatch(setCommonState('openAudits', []))*/}
+                        {/*            }}*/}
+                        {/*            onClick={() => {*/}
 
-                                        if (!inProgress || !loading) {
-                                            dispatch(fetchReport(options, url, true))
-                                        }
-                                        commonDispatch(setCommonState('openAudits', []))
+                        {/*                if (!inProgress || !loading) {*/}
+                        {/*                    dispatch(fetchReport(options, url, true))*/}
+                        {/*                }*/}
+                        {/*                commonDispatch(setCommonState('openAudits', []))*/}
 
-                                    }}>
-                                    <TooltipText
-                                        text='Analyze the page'>
-                                        <AppButton asChild={true} data-tour='analyze'
+                        {/*            }}>*/}
+                        {/*            <TooltipText*/}
+                        {/*                text='Analyze the page'>*/}
+                        {/*                <AppButton asChild={true} data-tour='analyze'*/}
 
-                                                   className={cn(
-                                                       'transition-none rounded-none h-12 px-3 pr-3 ' +
-                                                       'border-r-0 border-l-0 border-t-0 border-b-0 bg-transparent hover:bg-transparent',
-                                                   )}
-                                                   variant='outline'>
-                                            <div className={`flex flex-col gap-[1px] items-center`}>
-                                                <RefreshCw className={cn(
-                                                    'w-5 h-5',
-                                                    loading && 'animate-spin'
-                                                )}/>
-                                                {/*<span className='text-xxs font-normal text-brand-500'>Analyze </span>*/}
-                                            </div>
-                                        </AppButton>
-                                    </TooltipText>
-                                </UnsavedChanges>
-                                <TooltipText text="Preview" className="dark:bg-brand-930/90 ">
-                                    <div
-                                        onClick={() => {
+                        {/*                           className={cn(*/}
+                        {/*                               'transition-none rounded-none h-12 px-3 pr-3 ' +*/}
+                        {/*                               'border-r-0 border-l-0 border-t-0 border-b-0 bg-transparent hover:bg-transparent',*/}
+                        {/*                           )}*/}
+                        {/*                           variant='outline'>*/}
+                        {/*                    <div className={`flex flex-col gap-[1px] items-center`}>*/}
+                        {/*                        <RefreshCw className={cn(*/}
+                        {/*                            'w-5 h-5',*/}
+                        {/*                            loading && 'animate-spin'*/}
+                        {/*                        )}/>*/}
+                        {/*                        /!*<span className='text-xxs font-normal text-brand-500'>Analyze </span>*!/*/}
+                        {/*                    </div>*/}
+                        {/*                </AppButton>*/}
+                        {/*            </TooltipText>*/}
+                        {/*        </UnsavedChanges>*/}
+                        {/*        <TooltipText text="Preview" className="dark:bg-brand-930/90 ">*/}
+                        {/*            <div*/}
+                        {/*                onClick={() => {*/}
 
-                                            {
-                                                window.open(options.optimizer_url + '?rapidload_preview', '_blank');
-                                            }
+                        {/*                    {*/}
+                        {/*                        window.open(options.optimizer_url + '?rapidload_preview', '_blank');*/}
+                        {/*                    }*/}
 
-                                        }}
-                                        className={`flex items-center text-sm h-12 hover:bg-transparent bg-brand-0 dark:bg-brand-930/90 px-3`}
-                                        data-tour="preview-button">
-                                        <ArrowTopRightOnSquareIcon className='w-[22px]'/>
-                                    </div>
-                                </TooltipText>
-                            </div>
-                            </div>
-                        </div>
-                        <SaveChanges/>
+                        {/*                }}*/}
+                        {/*                className={`flex items-center text-sm h-12 hover:bg-transparent bg-brand-0 dark:bg-brand-930/90 px-3`}*/}
+                        {/*                data-tour="preview-button">*/}
+                        {/*                <ArrowTopRightOnSquareIcon className='w-[22px]'/>*/}
+                        {/*            </div>*/}
+                        {/*        </TooltipText>*/}
+                        {/*    </div>*/}
+                        {/*    </div>*/}
+                        {/*</div>*/}
+                        {/*<SaveChanges/>*/}
                     </div>
                 </div>
 

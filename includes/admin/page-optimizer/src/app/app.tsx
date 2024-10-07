@@ -173,7 +173,7 @@ const App = ({popup, _showOptimizer = false}: {
                     </Suspense>
 
 
-                    <div className=' z-[1000000] dark:bg-brand-930 justify-center flex container'>
+                    <div className=' z-[1000000] justify-center flex container'>
                         <header className=' z-[110000] container px-2 py-2 flex gap-3 mt-4 justify-between dark:bg-brand-930/80  bg-brand-0 rounded-3xl'>
                             <div className='flex items-center'>
                                 <div className='relative px-4'>

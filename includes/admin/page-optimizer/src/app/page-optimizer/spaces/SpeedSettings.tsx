@@ -40,6 +40,7 @@ import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { useToast } from "components/ui/use-toast";
 import { RootState } from "../../../store/app/appTypes"; // Import the new component
 import { useTestModeUtils } from 'hooks/testModeUtils';
+import SaveChanges from "app/page-optimizer/components/footer/save-changes";
 
 const capitalizeCategory = (category: string) => {
     if (category === 'css' || category === 'cdn') {
@@ -538,6 +539,10 @@ const SpeedSettings = ({ }) => {
                             }
                         </ul>
                     </div>
+                    <div className="flex justify-end mt-6">
+                        <SaveChanges/>
+                    </div>
+
                 </>
             }
         </m.div>
