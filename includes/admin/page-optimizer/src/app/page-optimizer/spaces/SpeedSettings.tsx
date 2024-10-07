@@ -41,6 +41,7 @@ import { useToast } from "components/ui/use-toast";
 import { RootState } from "../../../store/app/appTypes"; // Import the new component
 import { useTestModeUtils } from 'hooks/testModeUtils';
 import SaveChanges from "app/page-optimizer/components/footer/save-changes";
+import useSubmitSettings from "hooks/useSubmitSettings";
 
 const capitalizeCategory = (category: string) => {
     if (category === 'css' || category === 'cdn') {
@@ -182,7 +183,7 @@ const SpeedSettings = ({ }) => {
     const [passedAudits, setPassedAudits] = useState<AuditSetting[]>([]);
     const [notPassedAudits, setNotPassedAudits] = useState<AuditSetting[]>([]);
     const isInitialRender = useRef(true);
-
+    const { submitSettings } = useSubmitSettings()
 
     useEffect(() => {
 
@@ -243,7 +244,7 @@ const SpeedSettings = ({ }) => {
             dispatch(changeGear(
                 mode as BasePerformanceGear
             ))
-
+            submitSettings(true);
             if (!notPassedAudits) {
                 return;
             }
@@ -542,7 +543,7 @@ const SpeedSettings = ({ }) => {
                                 {/*}*/}
                             </ul>
                         </div>
-                        <div className="flex justify-end mt-6">
+                        <div  className="flex justify-end mt-6">
                             <SaveChanges/>
                         </div>
 
