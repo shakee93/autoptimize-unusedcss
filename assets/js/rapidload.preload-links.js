@@ -237,68 +237,63 @@
 
         rapidloadsmartlink.listen(options);
         return;
-    }
+    }else{
 
-    let link = document.createElement('link');
-    let connection = (navigator.connection && (navigator.connection.saveData || navigator.connection.effectiveType === '2g'));
-    let support_prefetch = link.relList && link.relList.supports && link.relList.supports('prefetch');
-
-    if (connection || !support_prefetch) {
-        return;
-    }
-
-    let load_link = (link) => {
-        if (!link.includes('?') && link.startsWith(window.location.origin) && window.location.href !== link) {
-            rapidloadsmartlink.prefetch([link]);
-        }
-    };
-
-    let lastX = null,
-        lastY = null,
-        animationFrameId = null;
-
-    let handleProximityPreload = (x, y) => {
-        document.querySelectorAll('a[href]').forEach((anchor) => {
-            let rect = anchor.getBoundingClientRect();
-            let distanceX = Math.min(Math.abs(x - rect.left), Math.abs(x - rect.right));
-            let distanceY = Math.min(Math.abs(y - rect.top), Math.abs(y - rect.bottom));
-            let distance = Math.hypot(distanceX, distanceY);
-
-            if (distance < 200) {
-                load_link(anchor.href);
+        let load_link = (link) => {
+            if (!link.includes('?') && link.startsWith(window.location.origin) && window.location.href !== link) {
+                rapidloadsmartlink.prefetch([link]);
             }
-        });
-    };
-
-    let throttleMouseMove = (event) => {
-        if (animationFrameId) {
-            cancelAnimationFrame(animationFrameId);
-        }
-
-        animationFrameId = requestAnimationFrame(() => {
-            let x = event.clientX;
-            let y = event.clientY;
-            if (lastX === null || lastY === null || Math.hypot(x - lastX, y - lastY) > 100) {
+        };
+    
+        let lastX = null,
+            lastY = null,
+            animationFrameId = null;
+    
+        let handleProximityPreload = (x, y) => {
+            document.querySelectorAll('a[href]').forEach((anchor) => {
+                let rect = anchor.getBoundingClientRect();
+                let distanceX = Math.min(Math.abs(x - rect.left), Math.abs(x - rect.right));
+                let distanceY = Math.min(Math.abs(y - rect.top), Math.abs(y - rect.bottom));
+                let distance = Math.hypot(distanceX, distanceY);
+    
+                if (distance < 200) {
+                    load_link(anchor.href);
+                }
+            });
+            
+        };
+    
+        let throttleMouseMove = (event) => {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+    
+            animationFrameId = requestAnimationFrame(() => {
+                let x = event.clientX;
+                let y = event.clientY;
+    
+                if (lastX !== null && lastY !== null && Math.hypot(x - lastX, y - lastY) < 100) {
+                    return;
+                }
+    
                 lastX = x;
                 lastY = y;
+    
                 handleProximityPreload(x, y);
+            });
+        };
+    
+        let handleTouchStart = (event) => {
+            let anchor = event.target.closest('a');
+            if (anchor && anchor.href) {
+                load_link(anchor.href);
             }
-        });
-    };
+        };
+    
+        let params = { capture: true, passive: true };
+    
+        document.addEventListener('mousemove', throttleMouseMove, params);
 
-    let handleTouchStart = (event) => {
-        let anchor = event.target.closest('a');
-        if (anchor && anchor.href) {
-            load_link(anchor.href);
-        }
-    };
-
-    let params = { capture: true, passive: true };
-
-    document.addEventListener('mousemove', throttleMouseMove, params);
-
-    window.requestAnimationFrame = window.requestAnimationFrame || function (callback) {
-        return setTimeout(callback, 1000 / 60);
-    };
+    }
 
 })();
