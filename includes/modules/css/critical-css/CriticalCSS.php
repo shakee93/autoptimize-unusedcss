@@ -42,7 +42,7 @@ class CriticalCSS
 
         add_action('cpcss_async_queue', [$this, 'init_async_store'], 10, 2);
 
-        if (apply_filters('rapidload/cpcss/disable-uucss-on-cpcss', true) && !defined('RAPIDLOAD_CPCSS_ENABLED')) {
+        if ((!isset($this->options['enable_uucss_on_cpcss']) || isset($this->options['enable_uucss_on_cpcss']) && $this->options['enable_uucss_on_cpcss'] != "1" ) && !defined('RAPIDLOAD_CPCSS_ENABLED')) {
             define('RAPIDLOAD_CPCSS_ENABLED', true);
         }
 

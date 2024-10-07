@@ -702,8 +702,6 @@
 
                         var tippyOptions;
 
-                        console.log(rowData)
-
                         tippyOptions = {
                             theme: 'light',
                             triggerTarget: stat.find('span')[0],
