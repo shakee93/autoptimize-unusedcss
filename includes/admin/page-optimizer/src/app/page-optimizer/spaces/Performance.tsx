@@ -176,8 +176,8 @@ const Performance = () => {
                 </div>
             </div>
 
-            <div className="audits flex mb-24 dark:bg-brand-800/40 bg-brand-200 rounded-b-3xl px-4 py-4">
-                <div className='w-full flex flex-col gap-2.5'>
+            <div className="audits flex mb-24 dark:bg-brand-800/40 bg-brand-200 rounded-b-3xl">
+                <div className='w-full flex flex-col'>
 
                     <AnimatePresence initial={false}>
                         <div key='performance' className='grid grid-cols-12 gap-6 w-full relative '>
@@ -188,7 +188,8 @@ const Performance = () => {
                                        <SpeedSettings/>
                                    </>
                                     :
-                                    <AuditList activeTab={activeTab}/>
+                                    <div className=" px-4 py-4"><AuditList activeTab={activeTab}/></div>
+
                                 }
                             </div>
                         </div>
