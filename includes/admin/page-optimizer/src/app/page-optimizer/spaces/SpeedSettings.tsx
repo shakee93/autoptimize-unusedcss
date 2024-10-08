@@ -42,7 +42,7 @@ import { RootState } from "../../../store/app/appTypes"; // Import the new compo
 import { useTestModeUtils } from 'hooks/testModeUtils';
 import SaveChanges from "app/page-optimizer/components/footer/save-changes";
 import useSubmitSettings from "hooks/useSubmitSettings";
-import {Loader} from "lucide-react";
+import { Loader } from "lucide-react";
 import { buildStyles, CircularProgressbarWithChildren } from "react-circular-progressbar";
 const capitalizeCategory = (category: string) => {
     if (category === 'css' || category === 'cdn') {
@@ -365,12 +365,12 @@ const SpeedSettings = ({ }) => {
 
     return <AnimatePresence>
         <m.div
-            initial={{opacity: 0}}
-            animate={{opacity: 1}}
-            transition={{duration: 0.2, delay: 0.05}}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2, delay: 0.05 }}
             className=''
         >
-            <div className='border-b border-brand-400/60 px-11 py-4'>
+            <div className='border-b border-brand-300 px-11 py-4'>
                 <div className="pb-4">
                     {settingsLoading &&
                         <div>loading...</div>
@@ -396,13 +396,13 @@ const SpeedSettings = ({ }) => {
                             <div
                                 className={`flex flex-col gap-1 items-center text-center ${mode === 'turboMax' ? ' pt-1.5' : ''}`}>
 
-                                {['starter', 'accelerate', 'turboMax'].includes(mode) && activeGear === mode &&  (
+                                {['starter', 'accelerate', 'turboMax'].includes(mode) && activeGear === mode && (
                                     <div className="absolute ml-28 -mt-4">
                                         {(savingData || invalidatingCache) ? (
                                             // <Loader className='w-24 animate-spin'/>
                                             <></>
                                         ) : (
-                                            <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
+                                            <CheckCircleIcon className="w-6 h-6 text-purple-800" />
                                         )}
 
                                     </div>
@@ -511,14 +511,14 @@ const SpeedSettings = ({ }) => {
                         >
                             {activeGear === 'custom' &&
                                 <div className="">
-                                    <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
+                                    <CheckCircleIcon className="w-6 h-6 text-purple-800" />
                                 </div>
                             }
 
                             Customize Settings <ChevronDownIcon className={cn(
-                            'w-4 rounded-[15px] transition-transform',
-                            customMode && '-rotate-180'
-                        )}/>
+                                'w-4 rounded-[15px] transition-transform',
+                                customMode && '-rotate-180'
+                            )} />
 
                         </div>
                     }
@@ -529,7 +529,7 @@ const SpeedSettings = ({ }) => {
                 {customMode &&
                     <>
                         <div className="py-3 relative">
-                            <SettingsLine width={getWidthForCategory(activeCategory) || 220} category={activeCategory}/>
+                            <SettingsLine width={getWidthForCategory(activeCategory) || 220} category={activeCategory} />
 
                         </div>
 
@@ -542,17 +542,17 @@ const SpeedSettings = ({ }) => {
                                 }}>
                                     <m.div
                                         id={category}
-                                        transition={{duration: 0.5}} className={cn(
-                                        'cursor-pointer select-none flex gap-2 transition-all items-center border border-transparent py-[6px] pr-3 pl-[7px] rounded-2xl w-fit mb-4 hover:bg-brand-50' +
-                                        ' dark:bg-brand-950/60 dark:hover:bg-brand-950 bg-brand-0 hover:shadow-md',
-                                        activeCategory === category && 'dark:bg-brand-950 shadow-md transition-all'
-                                    )}>
+                                        transition={{ duration: 0.5 }} className={cn(
+                                            'cursor-pointer select-none flex gap-2 transition-all items-center border border-transparent py-[6px] pr-3 pl-[7px] rounded-2xl w-fit mb-4 hover:bg-brand-50' +
+                                            ' dark:bg-brand-950/60 dark:hover:bg-brand-950 bg-brand-0 hover:shadow-md',
+                                            activeCategory === category && 'dark:bg-brand-950 shadow-md transition-all'
+                                        )}>
                                         <div>
                                             {activeCategory === category ? <>{icons[category]}</> : <>{iconsDuotone[category]}</>}
                                         </div>
                                         <span className='font-medium tracking-wide'>
-                                    {capitalizeCategory(category)}
-                                </span>
+                                            {capitalizeCategory(category)}
+                                        </span>
 
                                     </m.div>
                                 </li>
@@ -566,13 +566,13 @@ const SpeedSettings = ({ }) => {
 
                                 {groupedSettings[activeCategory]?.map((item: AuditSetting, itemIndex) => (
                                     <li key={`${item.category}-${itemIndex}`}>
-                                        <m.div initial={{opacity: 0, y: -10}}
-                                               animate={{opacity: 1, y: 0}}
-                                               transition={{duration: 0.3, delay: itemIndex ? 0.05 * itemIndex : 0}}
+                                        <m.div initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.3, delay: itemIndex ? 0.05 * itemIndex : 0 }}
                                         >
                                             <AuditSettingsItem key={`${item.category}-${itemIndex}`} item={item}
-                                                               itemIndex={itemIndex} updateValue={updateValue}
-                                                               actionRequired={true}/>
+                                                itemIndex={itemIndex} updateValue={updateValue}
+                                                actionRequired={true} />
                                         </m.div>
                                     </li>
                                 ))}
@@ -591,8 +591,8 @@ const SpeedSettings = ({ }) => {
                                 {/*}*/}
                             </ul>
                         </div>
-                        <div  className="flex justify-end mt-6">
-                            <SaveChanges/>
+                        <div className="flex justify-end mt-6">
+                            <SaveChanges />
                         </div>
 
                     </>

@@ -19,7 +19,7 @@ import xusePerformanceColors from "hooks/usePerformanceColors";
 import AppButton from "components/ui/app-button";
 import Feedback from "app/page-optimizer/components/performance-widgets/Feedback";
 import TooltipText from "components/ui/tooltip-text";
-import {changeReport, fetchReport} from "../../../../store/app/appActions";
+import { changeReport, fetchReport } from "../../../../store/app/appActions";
 import { ArrowTopRightOnSquareIcon, DevicePhoneMobileIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
 import { getTestModeStatus } from "../../../../store/app/appActions";
 import { useToast } from "components/ui/use-toast";
@@ -69,7 +69,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
     } = useCommonDispatch()
     //Test Mode
     const { options } = useAppContext();
-    const { settingsMode, testModeStatus, testModeLoading,inProgress } = useCommonDispatch();
+    const { settingsMode, testModeStatus, testModeLoading, inProgress } = useCommonDispatch();
     const { testMode } = useSelector((state: RootState) => state.app);
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
     const [localSwitchState, setLocalSwitchState] = useState<boolean>(testMode?.status || false);
@@ -158,36 +158,34 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
         <div className='w-full flex flex-col gap-4'>
             {/*<TestModeSwitcher />*/}
             <Card data-tour='speed-insights'
-                  className={cn(
-                      'overflow-hidden border border-transparent flex flex-col sm:flex-row lg:flex-col justify-around',
-                      expanded && 'border-brand-200 dark:border-brand-800'
-                  )}>
+                className={cn(
+                    'overflow-hidden border border-transparent flex flex-col sm:flex-row lg:flex-col justify-around',
+                    expanded && 'border-brand-200 dark:border-brand-800'
+                )}>
                 {/*Report Switch*/}
                 <div
-                    className="mx-2 my-2 px-2 flex bg-[#f6f6f6f6] rounded-2xl justify-between border border-[#EAEAEAEA]">
-                    <div className="py-2">
-                        <div data-tour='switch-report-strategy'
-                             className='select-none relative flex dark:bg-brand-800 py-0.5 bg-[#E8E8E8] rounded-xl cursor-pointer'>
-                            <div className={cn(
-                                'absolute shadow-md translate-x-0 left-0.5 w-[55px] rounded-[12px] -z-1 duration-300 h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',
-                                activeReport === 'desktop' && 'w-[55px] -translate-x-1 left-1/2'
-                            )}>
-                            </div>
-
-                            <TooltipText text="Mobile">
-                                <div onClick={() => dispatch(changeReport('mobile'))}
-                                     className={`relative z-1 text-sm flex flex-column gap-2 px-5 py-3 font-medium rounded-xl`}>
-                                    <DevicePhoneMobileIcon className="h-5 w-5 font-medium dark:text-brand-500"/>
-                                </div>
-                            </TooltipText>
-
-                            <TooltipText text='Desktop'>
-                                <div onClick={() => dispatch(changeReport('desktop'))}
-                                     className={`relative z-1 text-sm flex flex-column gap-2 pl-2 px-5 py-3 font-medium rounded-xl`}>
-                                    <Monitor className="h-5 w-5 font-medium dark:text-brand-500 "/>
-                                </div>
-                            </TooltipText>
+                    className="flex px-2 py-2 mb-3 justify-between ">
+                    <div data-tour='switch-report-strategy'
+                        className='select-none relative flex dark:bg-brand-800 py-0.5 bg-[#E8E8E8] rounded-2xl cursor-pointer'>
+                        <div className={cn(
+                            'absolute shadow-md translate-x-0 left-0.5 w-[48px] rounded-[15px] -z-1 duration-300 h-10 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',
+                            activeReport === 'desktop' && 'w-[51px] -translate-x-1 left-1/2'
+                        )}>
                         </div>
+
+                        <TooltipText text="Mobile">
+                            <div onClick={() => dispatch(changeReport('mobile'))}
+                                className={`relative z-1 text-sm flex flex-column gap-2 pl-[18px] px-5 py-3 font-medium rounded-xl`}>
+                                <DevicePhoneMobileIcon className="w-4 font-medium dark:text-brand-500" />
+                            </div>
+                        </TooltipText>
+
+                        <TooltipText text='Desktop'>
+                            <div onClick={() => dispatch(changeReport('desktop'))}
+                                className={`relative z-1 text-sm flex flex-column gap-2 pl-2 px-5 py-1 font-medium rounded-xl`}>
+                                <Monitor className="w-4 font-medium dark:text-brand-500 " />
+                            </div>
+                        </TooltipText>
                     </div>
                     <div className="pl-2 pr-2 content-center">
                         <div className="flex overflow-hidden">
@@ -213,16 +211,16 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                                         text='Analyze the page'>
                                         <AppButton asChild={true} data-tour='analyze'
 
-                                                   className={cn(
-                                                       'transition-none rounded-none h-12 px-3 pr-3 ' +
-                                                       'border-r-0 border-l-0 border-t-0 border-b-0 bg-transparent hover:bg-transparent',
-                                                   )}
-                                                   variant='outline'>
+                                            className={cn(
+                                                'transition-none rounded-none h-8 px-3 pr-3 ' +
+                                                'border-r-0 border-l-0 border-t-0 border-b-0 bg-transparent hover:bg-transparent',
+                                            )}
+                                            variant='outline'>
                                             <div className={`flex flex-col gap-[1px] items-center`}>
                                                 <RefreshCw className={cn(
-                                                    'w-5 h-5',
+                                                    'w-4',
                                                     loading && 'animate-spin'
-                                                )}/>
+                                                )} />
                                                 {/*<span className='text-xxs font-normal text-brand-500'>Analyze </span>*/}
                                             </div>
                                         </AppButton>
@@ -239,9 +237,9 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                                             }
 
                                         }}
-                                        className={`flex items-center text-sm h-12 hover:bg-transparent dark:bg-brand-930/90 px-3`}
-                                        >
-                                        <ArrowTopRightOnSquareIcon className='w-[22px]'/>
+                                        className={`flex items-center text-sm h-8 hover:bg-transparent dark:bg-brand-930/90 px-3`}
+                                    >
+                                        <ArrowTopRightOnSquareIcon className='w-4' />
                                     </div>
                                 </TooltipText>
                             </div>
@@ -250,7 +248,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                 </div>
 
                 <div className="flex flex-col items-center text-center py-2">
-                    <UrlPreview/>
+                    <UrlPreview />
                 </div>
 
                 <div className={cn(
@@ -267,7 +265,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
 
                                     <div className=''>
                                         {!data || on ? (
-                                            <Skeleton className="w-44 h-44 rounded-full"/>
+                                            <Skeleton className="w-44 h-44 rounded-full" />
                                         ) : (
                                             <PerformanceProgressBar
                                                 loading={reanalyze}
@@ -297,15 +295,15 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                             <div
                                 className="flex justify-around text-sm gap-4 font-normal w-full mb-5 text-brand-700 dark:text-brand-300">
                                 <div className="flex lg:flex-col xl:flex-row items-center gap-1">
-                                    <PerformanceIcons icon={'fail'}/>
+                                    <PerformanceIcons icon={'fail'} />
                                     0-49
                                 </div>
                                 <div className="flex lg:flex-col xl:flex-row items-center gap-1">
-                                    <PerformanceIcons icon={'average'}/>
+                                    <PerformanceIcons icon={'average'} />
                                     50-89
                                 </div>
                                 <div className="flex lg:flex-col xl:flex-row items-center gap-1">
-                                    <PerformanceIcons icon={'pass'}/>
+                                    <PerformanceIcons icon={'pass'} />
                                     89-100
                                 </div>
                             </div>
@@ -331,16 +329,16 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                     {(data?.metrics && !expanded) && (
                         <>
                             <div className='flex justify-around my-2  px-2'
-                                 onMouseLeave={() => dispatch(setCommonState('hoveredMetric', null))}
+                                onMouseLeave={() => dispatch(setCommonState('hoveredMetric', null))}
                             >
                                 {data.metrics.map(metric => (
                                     <div key={metric.id}
-                                         onMouseEnter={() => dispatch(setCommonState('hoveredMetric', metric))}
+                                        onMouseEnter={() => dispatch(setCommonState('hoveredMetric', metric))}
 
-                                         className='text-xs text-center flex flex-col
+                                        className='text-xs text-center flex flex-col
                              gap-0.5 px-2 py-2 bg-brand-100/20 hover:bg-brand-100 cursor-default rounded-[14px]'>
                                         <div className='font-medium tracking-wider '>{metric.refs.acronym}</div>
-                                        <MetricValue metric={metric}/>
+                                        <MetricValue metric={metric} />
                                     </div>
                                 ))}
                             </div>
@@ -362,13 +360,13 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                                 !activeMetric && 'bg-brand-100/80 dark:bg-brand-900/80 '
                             )
                             }>
-                            <span><Hash className='w-4 text-brand-400'/></span> All Audits
+                            <span><Hash className='w-4 text-brand-400' /></span> All Audits
                         </div>
-                        <Metrics performance={data?.performance} metrics={data.metrics}/>
+                        <Metrics performance={data?.performance} metrics={data.metrics} />
                     </div>
                 )}
             </Card>
-            <SideBarActions/>
+            <SideBarActions />
 
             <Suspense>
                 <Feedback key={key} />
