@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { optimizerData } from "../../../store/app/appSelector";
 import React, { ReactNode, useCallback, useEffect, useMemo, useState, useRef, MouseEventHandler } from "react";
 import {
-    Starter, Accelerate, TurboMax
+    Starter, Accelerate, TurboMax, GearLoading
 } from "app/page-optimizer/components/icons/gear-icons";
 
 import {
@@ -42,7 +42,8 @@ import { RootState } from "../../../store/app/appTypes"; // Import the new compo
 import { useTestModeUtils } from 'hooks/testModeUtils';
 import SaveChanges from "app/page-optimizer/components/footer/save-changes";
 import useSubmitSettings from "hooks/useSubmitSettings";
-
+import {Loader} from "lucide-react";
+import { buildStyles, CircularProgressbarWithChildren } from "react-circular-progressbar";
 const capitalizeCategory = (category: string) => {
     if (category === 'css' || category === 'cdn') {
         return category.toUpperCase();
@@ -94,7 +95,7 @@ const SpeedSettings = ({ }) => {
     const { toast } = useToast();
     const { testMode } = useSelector(optimizerData);
     const { handleTestModeSwitchChange } = useTestModeUtils();
-    const { options } = useAppContext()
+    const { options, savingData, invalidatingCache } = useAppContext()
 
     const icons: {
         [key in SettingsCategory]: React.ReactElement;
@@ -244,7 +245,9 @@ const SpeedSettings = ({ }) => {
             dispatch(changeGear(
                 mode as BasePerformanceGear
             ))
+
             submitSettings(true);
+
             if (!notPassedAudits) {
                 return;
             }
@@ -376,7 +379,7 @@ const SpeedSettings = ({ }) => {
                     <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
                 </div>
 
-                <div className="flex gap-4" data-tour="settings-gear">
+                <div className={`flex gap-4 ${(savingData || invalidatingCache) && 'cursor-not-allowed opacity-90 pointer-events-none'}`} data-tour="settings-gear">
                     {modes.map((mode, index) => (
                         <div
                             key={index}
@@ -393,20 +396,65 @@ const SpeedSettings = ({ }) => {
                             <div
                                 className={`flex flex-col gap-1 items-center text-center ${mode === 'turboMax' ? ' pt-1.5' : ''}`}>
 
-                                {['starter', 'accelerate', 'turboMax'].includes(mode) && activeGear === mode && (
+                                {['starter', 'accelerate', 'turboMax'].includes(mode) && activeGear === mode &&  (
                                     <div className="absolute ml-28 -mt-4">
-                                        <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
+                                        {(savingData || invalidatingCache) ? (
+                                            // <Loader className='w-24 animate-spin'/>
+                                            <></>
+                                        ) : (
+                                            <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
+                                        )}
+
                                     </div>
                                 )}
 
+                                {activeGear === mode && (savingData || invalidatingCache) ? (
+                                    // <GearLoading options={options} />
+                                    // <Loader className='w-24 animate-spin'/>
+                                    <CircularProgressbarWithChildren
+                                        strokeWidth={6}
+                                        background={false}
+                                        value={80}
+                                        className={cn(
+                                            'max-h-[54px] relative w-full align-middle animate-spin mt-4',
+                                        )}
+                                        styles={{
+                                            path: {
+                                                stroke: '#7E22CE',
+                                                strokeLinecap: 'round',
+                                                transition: 'stroke-dashoffset 0.5s ease 0s',
+                                            },
+                                            trail: {
+                                                stroke: 'transparent',
+                                            },
+                                        }}
 
-                                {mode === 'starter' && <Starter cls={'px-2 py-2'}/>}
-                                {mode === 'accelerate' && <Accelerate cls={'px-2 py-2'}/>}
-                                {mode === 'turboMax' && <TurboMax cls={'px-2 py-2'}/>}
+                                    />
+
+                                ) : (
+                                    <>
+                                        {mode === 'starter' && <Starter cls={'px-2 py-2'} />}
+                                        {mode === 'accelerate' && <Accelerate cls={'px-2 py-2'} />}
+                                        {mode === 'turboMax' && <TurboMax cls={'px-2 py-2'} />}
+                                    </>
+                                )}
+
+
                                 <div>
-                                    <p className="font-semibold capitalize">{mode}</p>
-                                    {mode === 'turboMax' &&
-                                        <p className="font-normal text-[10px] leading-none">Test Mode Recommended</p>}
+                                    {activeGear === mode && (savingData || invalidatingCache) ? (
+                                        <p className="font-semibold capitalize z-[110000] mt-2"
+
+                                        >Loading...</p>
+                                    ) : (
+                                        <>
+                                            <p className="font-semibold capitalize"
+                                            >{mode}</p>
+                                            {mode === 'turboMax' && (
+                                                <p className="font-normal text-[10px] leading-none">Test Mode Recommended</p>
+                                            )}
+                                        </>
+                                    )}
+
                                 </div>
 
                             </div>

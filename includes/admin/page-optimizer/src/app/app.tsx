@@ -222,7 +222,7 @@ const App = ({popup, _showOptimizer = false}: {
                                                 key={i}
                                                 onClick={() => setActiveRoute(route.id)}
                                                 className={cn(
-                                                    'px-6 flex-1 h-10 text-sm tracking-wider z-10',
+                                                    'px-6 flex-1 h-10 text-sm tracking-wider z-10 font-medium',
                                                     activeRoute === route.id ? 'text-black dark:text-white' : 'text-gray-500'
                                                 )}
                                             >

@@ -129,7 +129,7 @@ const Performance = () => {
                                    className={cn(
                                        `cursor-pointer flex items-center gap-2 px-4 py-3 text-sm font-medium `,
                                        isSticky && 'py-3',
-                                       activeTab === tab.key ? "font-medium " : "text-brand-500 dark:hover:text-brand-300 text-brand-400"
+                                       activeTab === tab.key ? "font-medium " : "dark:hover:text-brand-300 text-brand-400"
                                    )}
                                    key={tab.key}
                                >
