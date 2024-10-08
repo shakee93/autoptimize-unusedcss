@@ -53,6 +53,7 @@ class RapidLoad_Optimizer
             'rapidload_css_job_status' => 'rapidload_css_job_status',
             'fetch_titan_settings' => 'fetch_titan_settings',
             'update_titan_settings' => 'update_titan_settings',
+            'update_titan_performance_gear' => 'update_titan_performance_gear',
         ];
 
         foreach ($actions as $action => $method) {
@@ -202,6 +203,64 @@ class RapidLoad_Optimizer
 
         wp_send_json_success($last_metrics);
 
+    }
+
+    public function update_titan_performance_gear(){
+
+        self::verify_nonce();
+
+        if(!isset($_REQUEST['titan_gear']) || empty($_REQUEST['titan_gear'])){
+            wp_send_json_error('titan gear required');
+        }
+
+        if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])){
+            wp_send_json_error('url required');
+        }
+
+        $url = $_REQUEST['url'];
+        $titan_gear = $_REQUEST['titan_gear'];
+
+        if(filter_var($url, FILTER_VALIDATE_URL) == false){
+            wp_send_json_error('url not valid');
+        }
+
+        $strategy = isset($_REQUEST['strategy']) ? $_REQUEST['strategy'] : 'mobile';
+
+        $global = isset($_REQUEST['global']) && $_REQUEST['global'] || rtrim(strtolower($url),"/") == rtrim(strtolower(site_url()), "/");
+
+        $this->pre_optimizer_function($url, $strategy, $global);
+
+        $starter = ['uucss_enable_uucss', 'uucss_minify', 'minify_js', 'uucss_enable_cache', 'uucss_self_host_google_fonts'];
+
+        $accelerate = array_merge($starter, ['uucss_enable_cdn', 'uucss_support_next_gen_formats', 'uucss_lazy_load_iframes', 'uucss_lazy_load_images', 'uucss_exclude_above_the_fold_images', 'uucss_set_width_and_height', 'uucss_load_js_method']);
+
+        $turboMax = array_merge($accelerate, ['delay_javascript', 'uucss_enable_cpcss', 'uucss_support_next_gen_formats']);
+
+        $setOptions = function($enabledOptions) {
+            foreach (self::$options as $key => $value) {
+                if (in_array($key, $enabledOptions)) {
+                    self::$options[$key] = "1";
+                } else {
+                    unset(self::$options[$key]);
+                }
+            }
+        };
+
+        switch ($titan_gear) {
+            case 'starter':
+                $setOptions($starter);
+                break;
+            case 'accelerate':
+                $setOptions($accelerate);
+                break;
+            case 'turboMax':
+                $setOptions($turboMax);
+                break;
+        }
+
+        self::post_optimizer_function(null);
+
+        wp_send_json_success();
     }
 
     public function fetch_titan_settings(){
@@ -401,7 +460,7 @@ class RapidLoad_Optimizer
 
         $preload_images = [];
 
-        if (isset($data->audits) && is_array($data->audits)) {
+        if (isset($data) && isset($data->audits) && is_array($data->audits)) {
 
             $lcp_audit = array_filter($data->audits, function($audit) {
                 return $audit->id === 'prioritize-lcp-image';
