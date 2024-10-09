@@ -50,8 +50,8 @@ const TestModeSwitcher = () => {
                     className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[4px] rounded-2xl cursor-pointer bg-brand-200/80 overflow-hidden'
                 >
                     <div
-                        className={`absolute top-1 bottom-1 left-1 bg-white dark:bg-brand-700 rounded-xl transition-all duration-300 ease-in-out transform ${
-                            testMode ? "translate-x-[60%] w-[60%] bg-amber-400" : "translate-x-0  w-[40%]"
+                        className={`absolute top-1 bottom-1 left-1 dark:bg-brand-700 rounded-xl transition-all duration-300 ease-in-out transform ${
+                            testMode ? "translate-x-[60%] w-[60%] bg-amber-500 " : "translate-x-0  w-[40%] bg-white"
                         }`}
                     ></div>
 
@@ -63,7 +63,7 @@ const TestModeSwitcher = () => {
                             }
                         }}
                         className={`relative z-10 items-center text-sm flex gap-2 px-3 h-10 font-medium rounded-2xl ${
-                            testMode ? 'text-brand-500' : ''
+                            testMode ? 'text-brand-500 ' : ''
                         }`}
                     >
                         <Circle

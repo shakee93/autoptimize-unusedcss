@@ -32,6 +32,7 @@ import ThemeSwitcher from "components/ui/theme-switcher";
 import TooltipText from "components/ui/tooltip-text";
 import {optimizerData} from "../store/app/appSelector";
 import TestModeNotification from "components/ui/test-mode-notification";
+import {Circle} from "lucide-react";
 
 const App = ({popup, _showOptimizer = false}: {
     popup?: HTMLElement | null,
@@ -162,98 +163,87 @@ const App = ({popup, _showOptimizer = false}: {
         <AnimatePresence>
             {(mounted && showOptimizer) &&
                 <>
-                    {testMode &&
-                        <TestModeNotification/>
-                    }
-                <div className='dark:text-brand-300 text-brand-800 dark:bg-brand-900 bg-brand-200/60 '>
-                    <Suspense>
-                        <AppTour isDark={isDark}>
-                            <InitTour mode={mode}/>
-                        </AppTour>
-                    </Suspense>
+                    {/*{testMode &&*/}
+                    {/*    <TestModeNotification/>*/}
+                    {/*}*/}
+                    <div className='dark:text-brand-300 text-brand-800 dark:bg-brand-900 bg-brand-200/60 '>
+                        <Suspense>
+                            <AppTour isDark={isDark}>
+                                <InitTour mode={mode}/>
+                            </AppTour>
+                        </Suspense>
 
 
-                    <div className=' z-[1000000] justify-center flex container'>
-                        <header className=' z-[110000] container px-2 py-2 flex gap-3 mt-4 justify-between dark:bg-brand-930/80  bg-brand-0 rounded-3xl'>
-                            <div className='flex items-center'>
-                                <div className='relative px-4'>
-                                    <img className='w-36'
-                                         src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'}
-                                         alt='RapidLoad - #1 to unlock breakneck page speed'/>
-                                    {version && (
-                                        <span
-                                            className='absolute text-xxs w-[200px] left-[90px] top-[1px] dark:text-brand-500 text-brand-400'>v{version}</span>
-                                    )}
-                                </div>
-
-                                {/*<div className='flex'>*/}
-                                {/*    <div data-tour='app-switch'*/}
-                                {/*         className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[4px] rounded-2xl cursor-pointer bg-brand-200/80'>*/}
-
-
-                                {/*        {routes.map((route, i) => (*/}
-                                {/*            <>*/}
-
-                                {/*                <button key={i}*/}
-                                {/*                        onClick={e => setActiveRoute(route.id)}*/}
-                                {/*                        className={cn(*/}
-                                {/*                            'px-6 flex-1 h-10 text-sm tracking-wider ',*/}
-                                {/*                            activeRoute === route.id && 'dark:bg-brand-700 bg-brand-0 rounded-xl'*/}
-                                {/*                        )}>*/}
-                                {/*                    {route.title}*/}
-                                {/*                </button>*/}
-                                {/*            </>*/}
-                                {/*        ))}*/}
-                                {/*    </div>*/}
-                                {/*</div>*/}
-                                <div className='flex'>
-                                    <div
-                                        data-tour='app-switch'
-                                        className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[8px] rounded-2xl cursor-pointer bg-brand-200/80 overflow-hidden'
-                                    >
+                        <div className=' z-[1000000] justify-center flex container'>
+                            <header
+                                className={cn(' z-[110000] container px-2 py-2 flex gap-3 mt-4 justify-between dark:bg-brand-930/80  bg-brand-0 rounded-2xl', testMode && 'ring-2 ring-[#f7b250] ring-offset-0')}>
+                                <div className='flex items-center'>
+                                    <div className='relative px-4'>
+                                        <img className='w-10'
+                                             src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/new-logo.svg`) : '/new-logo.svg'}
+                                             alt='RapidLoad - #1 to unlock breakneck page speed'/>
+                                        {/*{version && (*/}
+                                        {/*    <span*/}
+                                        {/*        className='absolute text-xxs w-[200px] left-[90px] top-[1px] dark:text-brand-500 text-brand-400'>v{version}</span>*/}
+                                        {/*)}*/}
+                                    </div>
+                                    <div className='flex px-2'>
                                         <div
-                                            className={`absolute top-1 bottom-1 w-[50%] left-1 bg-white dark:bg-brand-700 rounded-xl transition-all duration-300 ease-in-out transform ${
-                                                activeRoute === routes[1].id ? "translate-x-[93%]" : "translate-x-0 "
-                                            }`}
-                                        ></div>
-
-                                        {routes.map((route, i) => (
-                                            <button
-                                                key={i}
-                                                onClick={() => setActiveRoute(route.id)}
-                                                className={cn(
-                                                    'px-6 flex-1 h-10 text-sm tracking-wider z-10 font-medium',
-                                                    activeRoute === route.id ? 'text-black dark:text-white' : 'text-gray-500'
-                                                )}
+                                            data-tour='app-switch'
+                                            className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[8px] rounded-2xl cursor-pointer overflow-hidden'
+                                        >
+                                            <div
+                                                className={`absolute top-1 bottom-1 left-1 bg-brand-200/60 border dark:bg-brand-700 rounded-xl transition-all duration-300 ease-in-out transform ${
+                                                    activeRoute === routes[1].id ? "translate-x-[115%] w-[45%]" : "translate-x-0 w-[55%]"
+                                                }`}
                                             >
-                                                {route.title}
-                                            </button>
-                                        ))}
+
+                                            </div>
+
+                                            {routes.map((route, i) => (
+                                                <button
+                                                    key={i}
+                                                    onClick={() => setActiveRoute(route.id)}
+                                                    className={cn(
+                                                        'flex h-10 text-sm z-10 font-medium items-center px-3 gap-2',
+                                                        activeRoute === route.id ? 'text-black dark:text-white' : 'text-gray-500'
+                                                    )}
+                                                >
+                                                    <Circle
+                                                        className={cn(`w-2 stroke-0 transition-all fill-purple-800 relative inline-flex`, activeRoute === route.id ? 'delay-200 ' : 'opacity-0')}
+                                                    />
+                                                    {route.title}
+                                                </button>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
 
-                            <div className="flex gap-6 items-center pr-6">
-                                <TestModeSwitcher/>
+                                <div className="flex gap-6 items-center">
+                                    <TestModeSwitcher/>
 
-                                <div className="flex items-center gap-3">
-                                    <GeneralSettingsTrigger open={open} onOpenChange={setOpen}/>
-                                    <TooltipText text="Theme">
-                                        <div onClick={e => changeTheme()}>
-                                            <ThemeSwitcher></ThemeSwitcher>
-                                        </div>
-                                    </TooltipText>
+                                    <div className="flex items-center gap-3">
+                                        <GeneralSettingsTrigger open={open} onOpenChange={setOpen}/>
+                                        {/*<TooltipText text="Theme">*/}
+                                        {/*    <div onClick={e => changeTheme()}>*/}
+                                        {/*        <ThemeSwitcher></ThemeSwitcher>*/}
+                                        {/*    </div>*/}
+                                        {/*</TooltipText>*/}
+                                    </div>
                                 </div>
+
+                            </header>
+
+                        </div>
+
+                        {routes.find(route => route.id === activeRoute)?.component || routes[0].component}
+                        {version && (
+                            <div className='text-right px-6 py-2'>
+                                <span className='text-xxs dark:text-brand-500 text-black'>© 2024 RapidLoad v{version}</span>
                             </div>
-
-                        </header>
-
+                        )}
                     </div>
-
-                    {routes.find(route => route.id === activeRoute)?.component || routes[0].component}
-
-                </div>
                 </>
             }
         </AnimatePresence>
