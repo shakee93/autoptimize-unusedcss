@@ -16,7 +16,7 @@ class RapidLoad_Link_Preload
             return;
         };
 
-        add_action('rapidload/job/handle', [$this, 'preload_links'], 40, 2);
+        add_action('rapidload/job/handle', [$this, 'preload_links'], 20, 2);
     }
 
 

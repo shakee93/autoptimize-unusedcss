@@ -56,6 +56,7 @@ class RapidLoad_Link_Preload_Enqueue
         $node = $this->dom->createElement('script', $jsCode);
         $node->setAttribute('id', 'rapidload-preload-links');
         $node->setAttribute('type', 'text/javascript');
+        $node->setAttribute('norapidload',true);
         $body->appendChild($node);
 
         return [

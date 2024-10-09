@@ -235,7 +235,7 @@ class CriticalCSS_Enqueue
 
             $node->setAttribute('id', 'rapidload-cpcss-frontend-js');
             $node->setAttribute('type', 'text/javascript');
-            $node->setAttribute('norapidload','');
+            $node->setAttribute('norapidload',true);
             $body->appendChild($node);
 
         }
