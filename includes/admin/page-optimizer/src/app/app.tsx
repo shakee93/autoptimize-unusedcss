@@ -178,7 +178,7 @@ const App = ({popup, _showOptimizer = false}: {
                             <header
                                 className={cn(' z-[110000] container px-2 py-2 flex gap-3 mt-4 justify-between dark:bg-brand-930/80  bg-brand-0 rounded-2xl', testMode && 'ring-2 ring-[#f7b250] ring-offset-0')}>
                                 <div className='flex items-center'>
-                                    <div className='relative px-4'>
+                                    <div className='relative px-2'>
                                         <img className='w-10'
                                              src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/new-logo.svg`) : '/new-logo.svg'}
                                              alt='RapidLoad - #1 to unlock breakneck page speed'/>
