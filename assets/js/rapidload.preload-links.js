@@ -34,6 +34,8 @@
         // Prerender the resource
         prerenderResource(anchorElement) {
             const href = anchorElement.href;
+            if (this.prerenderSet.has(href)) return; // If already prerendered, skip
+
             const prerenderTimeout = setTimeout(() => {
                 if (this.shouldPrefetch(href)) {
                     this.createLinkElement("prerender", href);
@@ -41,7 +43,6 @@
                 }
             }, 200);
 
-            // Cancel prerendering if the user moves the mouse away
             anchorElement.addEventListener("mouseleave", () => clearTimeout(prerenderTimeout), { once: true });
         }
     }
