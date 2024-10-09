@@ -15,6 +15,13 @@
                 url.startsWith(window.location.origin);
         }
 
+        shouldPrerender(url) {
+            // Avoid prerendering if already prerendered or URL is not same-origin
+            return !this.prerenderSet.has(url) &&
+                window.location.href !== url &&
+                url.startsWith(window.location.origin);
+        }
+
         // Create a link element (for prefetch or prerender)
         createLinkElement(rel, href) {
             const link = document.createElement("link");
@@ -34,10 +41,9 @@
         // Prerender the resource
         prerenderResource(anchorElement) {
             const href = anchorElement.href;
-            if (this.prerenderSet.has(href)) return; // If already prerendered, skip
-
+            // Add a condition to check if the URL should be prerendered
             const prerenderTimeout = setTimeout(() => {
-                if (this.shouldPrefetch(href)) {
+                if (this.shouldPrerender(href)) {  // Use a new shouldPrerender method
                     this.createLinkElement("prerender", href);
                     this.prerenderSet.add(href);
                 }
