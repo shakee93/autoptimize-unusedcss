@@ -7,10 +7,10 @@ define('RAPIDLOAD_ASSET_MAP', [
     'assets/inter-vietnamese-wght-normal.woff2' => 'assets/inter-vietnamese-wght-normal.woff2',
     'assets/inter-latin-ext-wght-normal.woff2' => 'assets/inter-latin-ext-wght-normal.woff2',
     'assets/inter-latin-wght-normal.woff2' => 'assets/inter-latin-wght-normal.woff2',
-    'assets/index.css' => 'assets/index.CUuCsFC3.css',
-    'assets/core-vendor.js' => 'assets/core-vendor.a21Wwx5s.js',
+    'assets/index.css' => 'assets/index.Bplk0diV.css',
+    'assets/index.js' => 'assets/index.C9MHwMir.js',
     'assets/animations.js' => 'assets/animations.Be10g_kJ.js',
-    'assets/index.js' => 'assets/index.0wP1Sc7h.js',
-    'assets/InitTour.js' => 'assets/InitTour.D2YZiyQp.js',
+    'assets/core-vendor.js' => 'assets/core-vendor.a21Wwx5s.js',
+    'assets/InitTour.js' => 'assets/InitTour.C8KYdqab.js',
     'assets/vendor.js' => 'assets/vendor.B6ncEjG2.js'
 ]);
