@@ -7,8 +7,13 @@
             this.prerenderSet = new Set();
         }
 
-        // Check if the URL is eligible for prefetching
+        cleanURL(url) {
+            const parsedURL = new URL(url, window.location.origin);
+            return parsedURL.origin + parsedURL.pathname + parsedURL.search; // Exclude the hash
+        }
+
         shouldPrefetch(url) {
+            url = this.cleanURL(url);
             return !this.prefetchSet.has(url) &&
                 !url.includes("?") &&
                 window.location.href !== url &&
@@ -16,7 +21,7 @@
         }
 
         shouldPrerender(url) {
-            // Avoid prerendering if already prerendered or URL is not same-origin
+            url = this.cleanURL(url);
             return !this.prerenderSet.has(url) &&
                 window.location.href !== url &&
                 url.startsWith(window.location.origin);
