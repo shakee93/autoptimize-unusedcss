@@ -12,10 +12,21 @@
             return parsedURL.origin + parsedURL.pathname + parsedURL.search; // Exclude the hash
         }
 
+        isFileURL(url) {
+            return /\.(jpeg|jpg|png|gif|svg|webp|bmp|pdf|doc|docx|xls)$/.test(url);
+        }
+
+        isExcludedURL(url) {
+            const excludedPatterns = ['/refer/', '/go/', '/recommend/', '/recommends/'];
+            return excludedPatterns.some(pattern => url.includes(pattern));
+        }
+
         shouldPrefetch(url) {
             url = this.cleanURL(url);
             return !this.prefetchSet.has(url) &&
                 !url.includes("?") &&
+                !this.isFileURL(url) &&
+                !this.isExcludedURL(url) &&
                 window.location.href !== url &&
                 url.startsWith(window.location.origin);
         }
@@ -23,6 +34,8 @@
         shouldPrerender(url) {
             url = this.cleanURL(url);
             return !this.prerenderSet.has(url) &&
+                !this.isFileURL(url) &&
+                !this.isExcludedURL(url) &&
                 window.location.href !== url &&
                 url.startsWith(window.location.origin);
         }
