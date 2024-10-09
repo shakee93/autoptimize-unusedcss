@@ -1,15 +1,17 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Starter, Accelerate, TurboMax } from '../../../page-optimizer/components/icons/gear-icons';
 import { cn } from '../../../../lib/utils';
 import { CursorArrowRaysIcon, CheckCircleIcon } from '@heroicons/react/24/solid';
 import { ChevronDown, LoaderIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import {changeGear} from "../../../../store/app/appActions";
+import useCommonDispatch from "hooks/useCommonDispatch";
+import {useSelector} from "react-redux";
+import {optimizerData} from "../../../../store/app/appSelector";
 
-type BoosterLevel = 'Starter' | 'Accelerate' | 'TurboMax';
+const boosterLevels: PerformanceGear[] = ['starter', 'accelerate', 'turboMax'];
 
-const boosterLevels: BoosterLevel[] = ['Starter', 'Accelerate', 'TurboMax'];
-
-const OptimizationSteps = [
+const Steps = [
     "Analyze with Google PageSpeed",
     "Change performance gear to TurboMax",
     "Apply DOM optimizations",
@@ -20,13 +22,25 @@ const OptimizationSteps = [
 ];
 
 const OneClickBooster: React.FC = () => {
-    const [activeLevel, setActiveLevel] = useState<BoosterLevel>('Starter');
+    const { activeGear, settings } = useSelector(optimizerData);
+    const [activeLevel, setActiveLevel] = useState<PerformanceGear>(activeGear || 'accelerate');
     const [isAccordionOpen, setIsAccordionOpen] = useState(true);
     const [currentStep, setCurrentStep] = useState(-1);
     const [isOptimizing, setIsOptimizing] = useState(false);
+    const [OptimizationSteps, setOptimizationSteps] = useState(Steps);
+    const { dispatch} = useCommonDispatch()
 
-    const startOptimization = useCallback((level: BoosterLevel) => {
+
+    const startOptimization = useCallback((level: PerformanceGear) => {
+
         if (level !== activeLevel) {
+
+            dispatch(changeGear(
+                level as BasePerformanceGear
+            )).then((options : any) => {
+                setOptimizationSteps(options)
+            });
+
             setActiveLevel(level);
             setIsOptimizing(true);
             setCurrentStep(0);
@@ -47,18 +61,41 @@ const OneClickBooster: React.FC = () => {
         }
     }, [activeLevel]);
 
+    // Function to get filtered options
+    const getFilteredOptions = (settings, optimizationSteps) => {
+        return settings
+            .filter((s) => optimizationSteps.includes(s.name)) // Filter based on OptimizationSteps
+            .map((s) => ({
+                category: s.category,
+                name: s.name,
+                inputs: s.inputs[0] ? {
+                    control_label: s.inputs[0].control_label,
+                    control_type: s.inputs[0].control_type,
+                    key: s.inputs[0].key,
+                    value: s.inputs[0].value,
+                } : null
+            }));
+    };
+
+
+    useEffect(() => {
+        console.log(settings);
+        const newOptions = getFilteredOptions(settings, OptimizationSteps);
+        console.log(newOptions);
+    }, [OptimizationSteps]);
+
     const toggleAccordion = useCallback(() => {
         setIsAccordionOpen(prev => !prev);
     }, []);
 
-    const getIcon = useMemo(() => (level: BoosterLevel) => {
+    const getIcon = useMemo(() => (level: PerformanceGear) => {
         const iconProps = {
             cls: `w-16 h-16 ${activeLevel === level ? 'text-purple-600' : 'text-gray-400'}`
         };
         switch (level) {
-            case 'Starter': return <Starter {...iconProps} />;
-            case 'Accelerate': return <Accelerate {...iconProps} />;
-            case 'TurboMax': return <TurboMax {...iconProps} />;
+            case 'starter': return <Starter {...iconProps} />;
+            case 'accelerate': return <Accelerate {...iconProps} />;
+            case 'turboMax': return <TurboMax {...iconProps} />;
         }
     }, [activeLevel]);
 
@@ -69,7 +106,7 @@ const OneClickBooster: React.FC = () => {
         return OptimizationSteps[currentStep] + '...';
     }, [isAccordionOpen, currentStep]);
 
-    const renderBoosterLevel = useCallback((level: BoosterLevel) => (
+    const renderBoosterLevel = useCallback((level: PerformanceGear) => (
         <div
             key={level}
             className={cn(
@@ -86,7 +123,7 @@ const OneClickBooster: React.FC = () => {
                     </div>
                 )}
             </div>
-            <span>{level}</span>
+            <span className="capitalize">{level}</span>
         </div>
     ), [activeLevel, getIcon, startOptimization]);
 

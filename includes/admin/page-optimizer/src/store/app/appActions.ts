@@ -505,7 +505,7 @@ export const updateSettings = (
 
 export const changeGear = (
     mode: BasePerformanceGear | PerformanceGear,
-): ThunkAction<void, RootState, unknown, AnyAction> => {
+): ThunkAction<Promise<string[] | undefined>, RootState, unknown, AnyAction> => {
 
     const starter = ['Remove Unused CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
     const accelerate = [...starter, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
@@ -526,6 +526,7 @@ export const changeGear = (
             [key in BasePerformanceGear] : string[]
         } = {starter, accelerate, turboMax};
 
+        //console.log(modes[mode])
         // excluding perf gear from updates.
         const newOptions: AuditSetting[] = settings
             ?.map((s: AuditSetting) => ({
@@ -541,12 +542,17 @@ export const changeGear = (
             }))
         })) || [];
 
+        // Check if mode is a valid key in modes
+        const options = mode in modes ? modes[mode as keyof typeof modes] : undefined;
+
         dispatch({
             type: CHANGE_GEAR, payload: {
                 settings: newOptions,
                 mode
             }
         });
+
+        return Promise.resolve(options);
     }
 }
 
