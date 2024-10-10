@@ -12,6 +12,10 @@ class RapidLoad_CDN
 
         add_action('wp_ajax_validate_cdn', [$this, 'validate_cdn']);
 
+        if (defined('RAPIDLOAD_DEV_MODE')) {
+            add_action("wp_ajax_nopriv_validate_cdn", [$this, 'validate_cdn']);
+        }
+
         add_action('rapidload/validate-cdn', [$this, 'validate_cdn']);
 
         if(!isset($this->options['uucss_enable_cdn']) || $this->options['uucss_enable_cdn'] != "1"){

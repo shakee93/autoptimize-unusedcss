@@ -54,6 +54,8 @@ class UnusedCSS_Enqueue
 
     function update_content($state){
 
+        self::debug_log('doing unused css');
+
         if(isset($state['dom'])){
             $this->dom = $state['dom'];
         }
