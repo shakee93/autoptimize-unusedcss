@@ -414,6 +414,7 @@ class RapidLoad_Optimizer
             'rapidload_enable_cpcss_file_chunk',
             'rapidload_cpcss_file_character_length',
             'uucss_excluded_files',
+            'enable_uucss_on_cpcss',
             //js
             'uucss_enable_javascript',
             'minify_js',
@@ -642,6 +643,14 @@ class RapidLoad_Optimizer
                 'control_description' => 'Enable Splits large critical CSS files',
                 'control_values' => array('1', '0'),
                 'default' => '0',
+            ),
+            'enable_uucss_on_cpcss' => array(
+                'control_type' => 'checkbox',
+                'control_label' => 'Enable Remove Unused CSS with Critical CSS',
+                'control_description' => 'Enable Remove Unused CSS with Critical CSS',
+                'control_values' => array('1', '0'),
+                'default' => '0',
+                'global' => true,
             ),
             'uucss_preload_font_urls' => array(
                 'control_type' => 'textarea',
@@ -958,6 +967,8 @@ class RapidLoad_Optimizer
                         'control_icon' => 'check-circle',
                         'control_description' => 'Check if the CDN url is working',
                         'action' => 'action=validate_cdn&dashboard_cdn_validator&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                        // this state will be updated in the frontend after response using data.${provided_key}
+                        'action_response_mutates' => ['uucss_cdn_url'],
                     ),
                     array(
                         'key' => 'clear_cdn_cache',
@@ -1141,7 +1152,7 @@ class RapidLoad_Optimizer
             ['keys' => ['unsized-images'], 'name' => 'Minify CSS', 'description' => 'Remove unnecessary spaces, lines and comments from CSS files.', 'category' => 'css', 'inputs' => ['uucss_minify', 'uucss_minify_excluded_files']],
             ['keys' => ['unminified-javascript'], 'name' => 'Minify Javascript', 'description' => 'Remove unnecessary spaces, lines and comments from JS files.', 'category' => 'javascript', 'inputs' => ['minify_js', 'uucss_exclude_files_from_minify_js']],
             ['keys' => ['unused-css-rules'], 'name' => 'Remove Unused CSS', 'description' => 'Remove unused CSS for each page and reduce page size.', 'category' => 'css', 'inputs' => ['uucss_enable_uucss', 'uucss_excluded_files','uucss_safelist','uucss_misc_options','rapidload_purge_all']],
-            ['keys' => ['render-blocking-resources'], 'name' => 'Critical CSS', 'description' => 'Extract and prioritize above-the-fold CSS.', 'category' => 'css', 'inputs' => ['uucss_enable_cpcss', 'uucss_enable_cpcss_mobile', 'uucss_additional_css', 'remove_cpcss_on_user_interaction', 'rapidload_enable_cpcss_file_chunk', 'rapidload_cpcss_file_character_length', 'uucss_preload_font_urls', 'cpcss_purge_url']],
+            ['keys' => ['render-blocking-resources'], 'name' => 'Critical CSS', 'description' => 'Extract and prioritize above-the-fold CSS.', 'category' => 'css', 'inputs' => ['uucss_enable_cpcss', 'uucss_enable_cpcss_mobile', 'uucss_additional_css', 'remove_cpcss_on_user_interaction', 'rapidload_enable_cpcss_file_chunk', 'rapidload_cpcss_file_character_length', 'enable_uucss_on_cpcss', 'uucss_preload_font_urls', 'cpcss_purge_url']],
             ['keys' => ['render-blocking-resources'], 'name' => 'Defer Javascript', 'description' => 'Render-blocking JS on website can be resolved with defer JavaScript.', 'category' => 'javascript', 'inputs' => ['uucss_load_js_method', 'uucss_excluded_js_files_from_defer']],
             ['keys' => ['offscreen-images'], 'name' => 'Lazy Load Images', 'description' => 'Delay loading of images until needed.', 'category' => 'image', 'inputs' => ['uucss_lazy_load_images', 'uucss_exclude_images_from_lazy_load']],
             ['keys' => ['lcp-lazy-loaded'], 'name' => 'Exclude Above-the-fold Images from Lazy Load', 'description' => 'Improve your LCP images.', 'category' => 'image', 'inputs' => ['uucss_exclude_above_the_fold_images', 'uucss_exclude_above_the_fold_image_count']],
@@ -1251,7 +1262,9 @@ class RapidLoad_Optimizer
                                     $rapidload_cache_args['excluded_page_paths'] = "";
                                 }
                             }else{
-                                self::$options[$input->key] = $input->value;
+                                if($input->key != "uucss_cdn_url"){
+                                    self::$options[$input->key] = $input->value;
+                                }
                             }
                         }else if(isset($new_options[$input->key])){
                             unset(self::$options[$input->key]);
@@ -1356,6 +1369,11 @@ class RapidLoad_Optimizer
 
         if(isset(self::$options['uucss_enable_cache'])){
             self::$global_options['uucss_enable_cache'] = self::$options['uucss_enable_cache'];
+            RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
+        }
+
+        if(isset(self::$options['enable_uucss_on_cpcss'])){
+            self::$global_options['enable_uucss_on_cpcss'] = self::$options['enable_uucss_on_cpcss'];
             RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
         }
 
