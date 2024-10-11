@@ -660,6 +660,7 @@ class Javascript_Enqueue
     private function containsFunctionCall($node) {
         // Check if the node itself is a CallExpression
         if ($node->getType() === 'CallExpression') {
+            //self::debug_log('found CallExpression', $node->render(new PrettyPrint()));
             return true;
         }
 
@@ -667,6 +668,7 @@ class Javascript_Enqueue
         if (method_exists($node, 'getExpression')) {
             $expression = $node->getExpression();
             if ($expression && $this->containsFunctionCall($expression)) {
+                //self::debug_log('found getExpression', $expression->render(new PrettyPrint()));
                 return true;
             }
         }
@@ -675,6 +677,7 @@ class Javascript_Enqueue
             $declarations = $node->getDeclarations();
             foreach ($declarations as $declaration) {
                 if ($this->containsFunctionCall($declaration)) {
+                    //self::debug_log('found getDeclarations', $declaration->render(new PrettyPrint()));
                     return true;
                 }
             }
@@ -684,6 +687,7 @@ class Javascript_Enqueue
             $arguments = $node->getArguments();
             foreach ($arguments as $arg) {
                 if ($this->containsFunctionCall($arg)) {
+                    //self::debug_log('found getArguments', $arg->render(new PrettyPrint()));
                     return true;
                 }
             }
@@ -692,12 +696,14 @@ class Javascript_Enqueue
         if (method_exists($node, 'getCallee')) {
             $callee = $node->getCallee();
             if ($callee && $this->containsFunctionCall($callee)) {
+                //self::debug_log('found getCallee', $callee->render(new PrettyPrint()));
                 return true;
             }
         }
 
         return false;
     }
+
 
     public function assignWindow($node)
     {
