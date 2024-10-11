@@ -895,6 +895,12 @@ class RapidLoad_Optimizer
                 'control_description' => 'These images will be excluded from lazy-loading.',
                 'default' => ''
             ),
+            'uucss_exclude_iframes_from_lazy_load' => array(
+                'control_type' => 'textarea',
+                'control_label' => 'Exclude Iframes from Lazy Load',
+                'control_description' => 'These iframes will be excluded from lazy-loading.',
+                'default' => ''
+            ),
             'uucss_lazy_load_iframes' => array(
                 'control_type' => 'checkbox',
                 'control_label' => 'Iframes Lazy Load',
@@ -1150,7 +1156,7 @@ class RapidLoad_Optimizer
             ['keys' => ['lcp-lazy-loaded'], 'name' => 'Exclude Above-the-fold Images from Lazy Load', 'description' => 'Improve your LCP images.', 'category' => 'image', 'inputs' => ['uucss_exclude_above_the_fold_images', 'uucss_exclude_above_the_fold_image_count']],
             ['keys' => ['bootup-time', 'unused-javascript'], 'name' => 'Delay Javascript', 'description' => 'Loading JS files on user interaction', 'category' => 'javascript', 'inputs' => ['delay_javascript', 'rapidload_js_delay_method', 'uucss_exclude_files_from_delay_js', 'delay_javascript_callback', 'uucss_excluded_js_files','uucss_load_scripts_on_user_interaction']],
             ['keys' => ['server-response-time'], 'name' => 'Page Cache', 'description' => 'Optimize and cache static HTML pages to provide a snappier page experience.', 'category' => 'cache', 'inputs' => ['uucss_enable_cache','cache_expires','cache_expiry_time','mobile_cache','excluded_page_paths']],
-            ['keys' => ['third-party-facades'], 'name' => 'Lazy Load Iframes', 'description' => 'Delay loading of iframes until needed.', 'category' => 'image', 'inputs' => ['uucss_lazy_load_iframes', 'uucss_exclude_images_from_lazy_load']],
+            ['keys' => ['third-party-facades'], 'name' => 'Lazy Load Iframes', 'description' => 'Delay loading of iframes until needed.', 'category' => 'image', 'inputs' => ['uucss_lazy_load_iframes', 'uucss_exclude_iframes_from_lazy_load']],
             ['keys' => ['uses-long-cache-ttl'], 'name' => 'RapidLoad CDN', 'description' => 'Load resource files faster by using 112 edge locations with only 27ms latency.', 'category' => 'cdn', 'inputs' => ['uucss_enable_cdn','uucss_cdn_url', 'validate_cdn_url', 'clear_cdn_cache']],
             ['keys' => ['uses-long-cache-ttl'], 'name' => 'Cache Policy', 'description' => 'Set up cache-control header to increase the browser cache expiration', 'category' => 'cache', 'inputs' => ['update_htaccess_file',]],
             ['keys' => ['unsized-images'], 'name' => 'Add Width and Height Attributes', 'description' => 'Include width and height attributes for these images.', 'category' => 'image', 'inputs' => ['uucss_set_width_and_height','uucss_exclude_images_from_set_width_and_height']]

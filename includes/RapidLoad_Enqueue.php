@@ -184,10 +184,15 @@ class RapidLoad_Enqueue {
             }
 
 
-            return $dom;
+
+            if (gettype($dom) == "string") {
+                $html = $dom;
+            } else {
+                $html = $dom->__toString();
+            }
         }
 
-        return $html;
+        return apply_filters('uucss/enqueue/content/after', $html);
     }
 
     public function is_url_allowed($url = null, $args = null)

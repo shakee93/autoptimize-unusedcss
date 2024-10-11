@@ -395,7 +395,7 @@ class RapidLoad_Image_Enqueue
 
                 if ($iframe->srcdoc) {
 
-                    if($this->is_file_excluded($iframe->srcdoc, 'uucss_exclude_images_from_lazy_load')){
+                    if($this->is_file_excluded($iframe->srcdoc, 'uucss_exclude_iframes_from_lazy_load')){
                         continue;
                     }
 
