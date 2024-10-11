@@ -109,6 +109,7 @@
     "semver-compare": "^1.0.0",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
+    "tinycolor2": "^1.6.0",
     "underscore": "^1.13.7",
     "uuid": "^10.0.0",
     "webfontloader": "^1.6.28"
@@ -127,6 +128,7 @@
     "@types/react": "^18.3.3",
     "@types/react-is": "^18.3.0",
     "@types/semver-compare": "^1.0.3",
+    "@types/tinycolor2": "^1.4.6",
     "@types/underscore": "^1.11.15",
     "@types/webfontloader": "^1.6.38",
     "@typescript-eslint/eslint-plugin": "5.48.1",

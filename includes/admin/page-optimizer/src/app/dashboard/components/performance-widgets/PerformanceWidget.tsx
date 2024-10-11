@@ -5,8 +5,13 @@ import PerformanceProgressBar from "components/performance-progress-bar";
 import {cn} from "lib/utils";
 import {CircularProgressbarWithChildren} from "react-circular-progressbar";
 import { BoltIcon } from "@heroicons/react/24/solid";
+import usePerformanceColors from "hooks/usePerformanceColors";
+import tinycolor from 'tinycolor2';
 
 const PerformanceWidget: React.FC = () => {
+    const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(40);
+    const lighterColor = tinycolor(progressbarBg).lighten(10).toString();
+
     return (
         <div className="flex flex-col gap-2">
             <h4 className="text-md font-semibold ml-4 flex gap-2 items-center">
@@ -29,18 +34,21 @@ const PerformanceWidget: React.FC = () => {
                         </div>
                     </div>
                     {/* Divider with BoltIcon */}
-                    <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-400 p-2 rounded-full text-white z-10">
+                    <div className={`absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 p-2 rounded-full text-white z-10`}
+                         style={{ background: `linear-gradient(to right, ${progressbarColor}, ${lighterColor})` }}
+                    >
                         <BoltIcon className="h-6 w-6 text-white" />
                     </div>
 
                     {/* Optimized Score */}
-                    <div className="flex flex-col items-center gap-2 bg-green-100/30 px-10 py-4 rounded-2xl">
+                    <div className="flex flex-col items-center gap-2 px-10 py-4 rounded-2xl"
+                         style={{ background: progressbarBg}}>
                         <div className="text-lg font-semibold">Optimized Score</div>
                         <div className="">
                             <PerformanceProgressBar
                                 className={cn('max-h-[140px]')}
                                 scoreClassName={"text-brand-950"}
-                                performance={100}
+                                performance={40}
                             />
                         </div>
                         <div className="text-sm text-gray-600">
