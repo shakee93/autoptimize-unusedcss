@@ -142,6 +142,7 @@ class RapidLoad_Module
 
         new RapidLoad_HTML_Minifier();
         new RapidLoad_CSS_Aggregator();
+        new RapidLoad_Link_Preload();
 
     }
 
