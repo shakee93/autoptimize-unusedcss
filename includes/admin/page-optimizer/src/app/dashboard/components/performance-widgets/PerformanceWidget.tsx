@@ -15,9 +15,9 @@ const PerformanceWidget: React.FC = () => {
     return (
 
         <div className="flex flex-col gap-2">
-            <h4 className="text-md font-semibold ml-4 flex gap-2 items-center">
-                Performance <GaugeCircle className="w-5 h-5"/>
-            </h4>
+            {/*<h4 className="text-md font-semibold ml-4 flex gap-2 items-center">*/}
+            {/*    Performance <GaugeCircle className="w-5 h-5"/>*/}
+            {/*</h4>*/}
             <div
                 className="flex items-center justify-center text-md gap-2 bg-white rounded-t-3xl border border-b-0 w-full overflow-hidden relative">
                 <div className="flex justify-center p-4 max-w-xl mx-auto w-full relative">
