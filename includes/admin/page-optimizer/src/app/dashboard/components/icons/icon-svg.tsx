@@ -15,3 +15,9 @@ export const ScoreIcon:FC<SvgProps> = ({className}) => (
 
 );
 
+export const CustomCheckIcon:FC<SvgProps> = ({className}) => (
+    <svg className={`${className}`} width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fillRule="evenodd" clipRule="evenodd" d="M10 1.57895L3.83716 9.5L0 5.55449L1.20657 4.33219L3.69573 6.89165L8.66867 0.5L10 1.57895Z" fill="black" fillOpacity="0.6"/>
+    </svg>
+);
+
