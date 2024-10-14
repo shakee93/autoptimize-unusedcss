@@ -803,11 +803,14 @@
                         } else if ((rowData.status === 'success' || rowData.rule_status === 'success') && warnings.length) {
                             stat.find('span').append('<span class="dashicons dashicons-warning"></span>');
                             tippy(stat.find('span')[0], tippyOptions);
+                        } else if(rowData.status === 'failed'){
+                            stat.find('span').append('<span class="dashicons dashicons-info error"></span>');
+                            tippy(stat.find('span')[0], tippyOptions);
                         } else if (rowData.cpcss){
                             if(rowData.cpcss.status === 'success'){
                                 stat.find('span').append('<span class="dashicons dashicons-yes-alt"></span>');
                                 tippy(stat.find('span')[0], tippyOptions);
-                            }else{
+                            }else if(rowData.cpcss.status === 'failed'){
                                 stat.find('span').append('<span class="dashicons dashicons-info error"></span>');
                                 tippy(stat.find('span')[0], tippyOptions);
                             }
@@ -1471,11 +1474,14 @@
                         } else if (rowData.status === 'success' && rowData.meta.warnings.length) {
                             stat.find('span').append('<span class="dashicons dashicons-warning"></span>');
                             tippy(stat.find('span')[0], tippyOptions);
+                        } else if(rowData.status === 'failed'){
+                            stat.find('span').append('<span class="dashicons dashicons-info error"></span>');
+                            tippy(stat.find('span')[0], tippyOptions);
                         } else if (rowData.cpcss){
                             if(rowData.cpcss.status === 'success'){
                                 stat.find('span').append('<span class="dashicons dashicons-yes-alt"></span>');
                                 tippy(stat.find('span')[0], tippyOptions);
-                            }else{
+                            }else if(rowData.cpcss.status === 'failed'){
                                 stat.find('span').append('<span class="dashicons dashicons-info error"></span>');
                                 tippy(stat.find('span')[0], tippyOptions);
                             }
