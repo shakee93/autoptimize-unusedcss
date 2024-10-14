@@ -122,7 +122,7 @@ const PerformanceGears: React.FC = () => {
 
     const getIcon = useMemo(() => (level: PerformanceGear) => {
         const iconProps = {
-            cls: `w-16 h-16 ${activeLevel === level ? 'text-purple-600' : 'text-gray-400'}`
+            cls: `w-12 h-12 ${activeLevel === level ? 'text-purple-600' : 'text-gray-400'}`
         };
         switch (level) {
             case 'starter': return <Starter {...iconProps} />;
@@ -142,7 +142,7 @@ const PerformanceGears: React.FC = () => {
         <div
             key={level}
             className={cn(
-                'hover:bg-brand-100/50 relative flex flex-col gap-3 font-normal cursor-pointer w-[155px] h-[155px] rounded-3xl items-center justify-center',
+                'hover:bg-brand-100/50 relative flex flex-col gap-3 font-normal cursor-pointer w-[135px] h-[135px] rounded-3xl items-center justify-center',
                 activeLevel === level ? 'text-brand-600 border-[3px] border-[#592d8d]' : ' border border-brand-200 dark:border-brand-700'
             )}
             onClick={() => startOptimization(level)}
@@ -208,8 +208,8 @@ const PerformanceGears: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col gap-2">
-            <div className="flex flex-col p-4 text-md gap-4 bg-white rounded-b-3xl border w-full overflow-hidden">
+        <div className="flex flex-col gap-2 items-center justify-between">
+            <div className="flex flex-col p-6 text-md gap-4 bg-white rounded-b-3xl border w-full overflow-hidden">
                 <h4 className="text-lg font-semibold flex text-brand-400 gap-1">
                     You’ve activated <span className="capitalize text-brand-950 ">{activeLevel} Gear</span>
                 </h4>
@@ -218,7 +218,7 @@ const PerformanceGears: React.FC = () => {
                         {boosterLevels.map(renderBoosterLevel)}
                     </div>
                 </div>
-                <div className="">
+                <div className="px-2">
                     <GearDisplay activeGear={activeGear} />
                 </div>
                 {/*<hr className="h-[1px] bg-gray-200"/>*/}
