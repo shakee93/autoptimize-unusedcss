@@ -354,9 +354,22 @@ const SpeedSettings = ({ }) => {
         (item) => item.category === activeCategory
     );
 
+    const [enableFlags, setEnableFlags] = useState({ cpcss: false, uucss: false });
 
+    const updateEnableFlags = useCallback(() => {
+        const cpcssEnabled = settings.some(item => item.inputs.find(input => input.key === 'uucss_enable_cpcss')?.value);
+        const uucssEnabled = settings.some(item => item.inputs.find(input => input.key === 'uucss_enable_uucss')?.value);
 
+        setEnableFlags({ cpcss: cpcssEnabled, uucss: uucssEnabled });
+    }, [settings]);
 
+    useEffect(() => {
+        updateEnableFlags();
+    }, [settings, updateEnableFlags]);
+
+    useEffect(() => {
+        dispatch(setCommonState('uucssError', enableFlags.cpcss && enableFlags.uucss));
+    }, [enableFlags, dispatch]);
 
     return <div className='dark:bg-brand-800/40 bg-brand-200 px-9 py-8 mt-2 rounded-3xl'>
         <SettingsStraightLine />

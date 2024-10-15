@@ -134,7 +134,7 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
         return <></>
     }
 
-    const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
+    const { dispatch, uucssError } = useCommonDispatch()
     const { mode, options } = useAppContext()
     const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = useState(false)
@@ -245,7 +245,6 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
     }, []);
 
 
-
     return (
         <>
             <div
@@ -328,15 +327,30 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
                                     )}
                                 </Mode>
 
-                                {showStatus && (
+                                {uucssError && mainInput.key === 'uucss_enable_uucss' ? (
                                     <div className='px-1'>
-                                        <Status status={settings.status} />
+                                        <div
+                                            className='flex gap-1 items-center text-xs	border border-rose-600 w-fit rounded-lg px-1 py-py'>
+                                            <Indicator className='fill-rose-600'>
+                                                <div className='flex flex-col gap-0.5'>
+                            <span className='flex gap-2 items-center'>
+                                Unused CSS and Critical CSS optimization options cannot be enabled simultaneously. <br /> This approach helps conserve server resources and ensures more efficient.
+                            </span>
+                                                </div>
+                                            </Indicator>
+                                            Failed
+                                        </div>
+                                    </div>
+                                ) : showStatus && (
+                                    <div className='px-1'>
+                                        <Status status={settings.status}/>
                                     </div>
                                 )}
 
                                 <Mode mode='onboard'>
-                                    <TooltipText text={<><span className='text-purple-750 font-medium'>PRO</span> feature</>}>
-                                        <Lock className='w-4 text-brand-400' />
+                                    <TooltipText
+                                        text={<><span className='text-purple-750 font-medium'>PRO</span> feature</>}>
+                                        <Lock className='w-4 text-brand-400'/>
                                     </TooltipText>
                                 </Mode>
                             </>
