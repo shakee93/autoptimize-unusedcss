@@ -101,7 +101,7 @@ class UnusedCSS_Enqueue
 
         $node->setAttribute('id', 'rapidload-frontend-js');
         $node->setAttribute('type', 'text/javascript');
-        $node->setAttribute('norapidload','');
+        $node->setAttribute('norapidload',true);
         $body->appendChild($node);
 
         if($this->dom && $this->inject){
