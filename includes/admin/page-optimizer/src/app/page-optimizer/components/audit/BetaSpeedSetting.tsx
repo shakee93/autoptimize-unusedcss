@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowPathIcon, CheckCircleIcon, Cog8ToothIcon, XCircleIcon } from "@heroicons/react/24/solid";
+import { ArrowPathIcon, CheckCircleIcon, Cog8ToothIcon, XCircleIcon  } from "@heroicons/react/24/solid";
+import { InformationCircleIcon  } from "@heroicons/react/24/outline";
+
 import {
     CSSDelivery,
     JavascriptDelivery,
@@ -335,15 +337,9 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
                                 {uucssError && mainInput.key === 'uucss_enable_uucss' ? (
                                     <div className='px-1'>
                                         <div
-                                            className='flex gap-1 items-center text-xs	border border-rose-600 w-fit rounded-lg px-1 py-py'>
-                                            <Indicator className='fill-rose-600'>
-                                                <div className='flex flex-col gap-0.5'>
-                            <span className='flex gap-2 items-center'>
-                                Unused CSS and Critical CSS optimization options cannot be enabled simultaneously. <br /> This approach helps conserve server resources and ensures more efficient.
-                            </span>
-                                                </div>
-                                            </Indicator>
-                                            Failed
+                                            className='flex gap-1 items-center text-xs	border border-amber-600 bg-amber-300/30 w-fit rounded-lg px-1 py-py'>
+                                            <InformationCircleIcon className="h-5 w-5 text-amber-600" />
+                                            Unused CSS and Critical CSS optimization options cannot be enabled simultaneously.
                                         </div>
                                     </div>
                                 ) : showStatus && (
