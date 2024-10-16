@@ -22,7 +22,7 @@ const PerformanceWidget: React.FC = () => {
                 className="flex items-center justify-center text-md gap-2 bg-white rounded-t-3xl border border-b-0 w-full overflow-hidden relative">
                 <div className="flex justify-center p-4 max-w-xl mx-auto w-full relative">
                     {/* Before Results */}
-                    <div className="flex flex-col items-center gap-2 px-10 py-4 rounded-2xl w-[230px]">
+                    <div className="flex flex-col items-center gap-2 px-10 py-4 rounded-2xl w-[230px]" >
                         <div className="text-lg font-semibold">Before Results</div>
                         <div className="">
                             <PerformanceProgressBar

@@ -9,117 +9,65 @@ import {Skeleton} from "components/ui/skeleton"
 import PerformanceProgressBar from "components/performance-progress-bar";
 
 const CDNSummary = () => {
-    const [isVisible, setIsVisible] = useState(true);
-    const email = "azeez@freshpixl.com";
-    const expdate = "Oct 24";
-    const license = "Professional";
+    const SectionHeader = ({ title }) => (
+        <div className="flex gap-2 items-center">
+            <div className="text-base font-semibold dark:text-brand-300">{title}</div>
+            <InformationCircleIcon className="h-[18px] w-[18px]" />
+        </div>
+    );
 
-    const toggleVisibility = () => {
-        setIsVisible(!isVisible);
-    };
+    const UsageBar = ({ label, usage, progressWidth, note }) => (
+        <div className="flex flex-col gap-1 py-2">
 
-    return ( <>
-
-        <div className='w-full flex flex-col gap-4'>
-            <Card data-tour='license-widget'
-                  className={cn(
-                      'overflow-hidden border border-transparent flex flex-col sm:flex-row lg:flex-col justify-around border-brand-200 dark:border-brand-800',
-                  )}>
-
-                <div className="content flex w-full sm:w-1/2 lg:w-full flex-col px-6 py-6">
-                    <div className='flex gap-2 items-center'>
-                        <div className="text-base font-semibold dark:text-brand-300">Usage Summary</div>
-                        <InformationCircleIcon className="h-[18px] w-[18px]" />
+                <div className="flex items-center text-sm dark:text-brand-300 justify-between">
+                    <div className="flex gap-2 items-baseline">
+                        <span className="font-semibold">{label}</span>
+                        <span className="text-brand-400 text-xs">{usage}</span>
                     </div>
-
-                    <div className='my-2 mb-4'>
-
-
-                    <div className='flex items-center py-2'>
-                        <div className="text-sm dark:text-brand-300 gap-2 flex">
-                            <span className="font-semibold">CDN</span>
-                            <span className="text-brand-400">2.2GB / 10GB</span>
-                        </div>
+                    <div className="text-[10px] font-normal dark:text-brand-300 text-brand-500">
+                        {note}
                     </div>
-                    <div className='relative w-full mx-auto h-2.5 bg-violet-100 overflow-hidden rounded'>
-                        <div className='will-change absolute  h-2.5 w-40 bg-[#7F54B3] rounded'></div>
-                    </div>
-                    <div className="text-xs font-normal dark:text-brand-300 text-brand-500 mt-1">Limits will be updated on July 5</div>
-
-                    <div className='flex justify-between items-center py-2'>
-                        <div className="text-sm dark:text-brand-300 gap-2 flex">
-                            <span className="text-brand-400">Additional Usage</span>
-                        </div>
-                        <div className='flex gap-2.5 items-center'>
-                            <div className='flex items-center gap-1'>
-                                <div className="text-sm font-semibold dark:text-brand-300">Metering</div>
-                                <InformationCircleIcon className="h-[18px] w-[18px]" />
-                            </div>
-
-                            <Switch
-                                checked={true}
-                            />
-                        </div>
-
-                    </div>
-                    <div className='relative w-full mx-auto h-2.5 bg-violet-100 overflow-hidden rounded'>
-                        <div className='will-change absolute  h-2.5 w-24 bg-[#7F54B3] rounded'></div>
-                    </div>
-
-                    </div>
-                    {/*<div className='flex gap-2 items-center mt-5'>*/}
-                    {/*    <div className="text-sm font-semibold dark:text-brand-300">Images</div>*/}
-                    {/*    <InformationCircleIcon className="h-[18px] w-[18px]" />*/}
-                    {/*</div>*/}
-                    <div className='my-2 mb-4'>
-                    <div className='flex justify-between items-center py-2'>
-                        <div className="text-sm dark:text-brand-300 gap-2 flex">
-                            <span className="font-semibold">Images</span>
-                            <span className="text-brand-400">2.2GB / 10GB</span>
-                        </div>
-
-                    </div>
-                    <div className='relative w-full mx-auto h-2.5 bg-violet-100 overflow-hidden rounded'>
-                        <div className='will-change absolute  h-2.5 w-52 bg-[#7F54B3] rounded'></div>
-                    </div>
-                    <div className="text-xs font-normal dark:text-brand-300 text-brand-500 mt-1">Limits will be updated on July 5</div>
-
-                    <div className='flex justify-between items-center py-2'>
-                        <div className="text-sm dark:text-brand-300 gap-2 flex">
-                            <span className="text-brand-400">Additional Usage</span>
-                        </div>
-                        <div className='flex gap-2.5 items-center'>
-                            <div className='flex items-center gap-1'>
-                                <div className="text-///sm font-semibold dark:text-brand-300">Metering</div>
-                                <InformationCircleIcon className="h-[18px] w-[18px]" />
-                            </div>
-
-                            <Switch
-                                checked={true}
-                            />
-                        </div>
-
-                    </div>
-                    <div className='relative w-full mx-auto h-2.5 bg-violet-100 overflow-hidden rounded'>
-                        <div className='will-change absolute  h-2.5 w-24 bg-[#7F54B3] rounded'></div>
-                    </div>
-                    </div>
-
-                    <div className="flex justify-end">
-                        <button
-                            className="mt-2 justify-center cursor-pointer transition duration-300 bg-violet-950 text-sm font-semibold text-white py-1.5 px-4 border border-violet-950  rounded-lg">
-                            Manage your usage
-                        </button>
-                    </div>
-
                 </div>
-
-            </Card>
-
-
+            <div className="relative w-full h-2.5 bg-brand-100 overflow-hidden rounded outline outline-1 outline-brand-200">
+                <div
+                    className="absolute h-2.5 bg-brand-950 rounded"
+                    style={{width: progressWidth}}
+                ></div>
+            </div>
 
         </div>
-    </>
+    );
+
+    const UsageNote = ({note}) => (
+        <div className="text-xs font-normal dark:text-brand-300 text-brand-500">
+            {note}
+        </div>
+    );
+
+
+    return (
+        <Card data-tour="license-widget" className="border flex flex-col">
+            <div className="p-6 border-b">
+                <SectionHeader title="Usage Summary" />
+
+                <UsageBar label="CDN" usage="2.2GB / 10GB" progressWidth="40%" note="Limits will be updated on July 5"/>
+
+                <UsageBar label="Additional Usage" progressWidth="24%" />
+            </div>
+
+            <div className="p-6 pt-4">
+                <UsageBar label="Images" usage="2.2GB / 10GB" progressWidth="52%" note="Limits will be updated on July 5"/>
+
+                <UsageBar label="Additional Usage" progressWidth="24%" />
+            </div>
+
+            <div className="flex justify-end p-6 pt-0 text-sm font-semibold">
+                <button className="cursor-pointer bg-brand-100/90 text-brand-950 py-1.5 px-4 rounded-lg">
+                    Manage your usage
+                </button>
+            </div>
+        </Card>
+
     );
 };
 

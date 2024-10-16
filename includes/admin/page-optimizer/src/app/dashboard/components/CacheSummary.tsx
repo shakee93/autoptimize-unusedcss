@@ -41,73 +41,52 @@ const CacheSummary = () => {
         ]
     };
 
-    return ( <>
+    const CacheItem = ({ label, size }) => (
+        <div className="flex justify-between items-center py-1.5">
+            <div className="text-sm font-semibold dark:text-brand-300 text-brand-500">{label}</div>
+            <div className="text-sm font-semibold dark:text-brand-300">{size}</div>
+        </div>
+    );
 
-        <div className='w-full flex flex-col gap-4'>
-            <Card data-tour='license-widget'
-                  className={cn(
-                      'overflow-hidden border border-transparent flex flex-col sm:flex-row lg:flex-col justify-around border-brand-200 dark:border-brand-800',
-                  )}>
+    const cacheData = [
+        { label: 'HTML cache', size: '1.02 MB' },
+        { label: 'CSS cache', size: '0.03 MB' },
+        { label: 'Javascript cache', size: '3.45 MB' }
+    ];
 
-                <div className="content flex w-full sm:w-1/2 lg:w-full flex-col px-6 py-6">
-                    <div className='flex gap-2 items-center'>
-                        <div className="text-base font-semibold dark:text-brand-300">Cache summary</div>
-                        <InformationCircleIcon className="h-[18px] w-[18px]" />
-                    </div>
-                    {/*<div className='flex justify-between items-center'>*/}
-                    {/*    <div className="text-sm font-semibold dark:text-brand-300 text-brand-500">Total cache size:</div>*/}
-                    {/*    <div className="text-sm font-semibold dark:text-brand-300">4.63 MB</div>*/}
-                    {/*</div>*/}
 
-                    <div className="grid grid-cols-2 gap-2 px-6 py-6 dark:bg-brand-900 bg-brand-100/90 rounded-3xl my-2">
-                        <div className="content-around ">
-                            <div className="text-sm font-semibold dark:text-brand-300 text-brand-500">Total cache size</div>
-                            <div className="text-[27px] font-bold">4.63 MB</div>
-                        </div>
-                        <div className="grid justify-center">
-                            <DoughnutChart data={chartData} options={chartOptions}/>
-                        </div>
-                    </div>
-
-                    <div className='flex justify-between items-center py-1.5'>
-                        <div className='flex gap-2 items-center'>
-                            <div className="h-2 w-2 rounded-full bg-[#7446FB]"></div>
-                            <div className="text-sm font-semibold dark:text-brand-300 text-brand-500">HTML cache</div>
-                        </div>
-
-                        <div className="text-sm font-semibold dark:text-brand-300">1.02 MB</div>
-                    </div>
-                    <div className='flex justify-between items-center py-1.5'>
-                        <div className='flex gap-2 items-center'>
-                            <div className="h-2 w-2 rounded-full bg-[#AB46FB]"></div>
-                            <div className="text-sm font-semibold dark:text-brand-300 text-brand-500">CSS cache</div>
-                        </div>
-
-                        <div className="text-sm font-semibold dark:text-brand-300">0.03 MB</div>
-                    </div>
-                    <div className='flex justify-between items-center py-1.5'>
-                        <div className='flex gap-2 items-center'>
-                            <div className="h-2 w-2 rounded-full bg-[#44BAFB]"></div>
-                            <div className="text-sm font-semibold dark:text-brand-300 text-brand-500">Javascript cache</div>
-                        </div>
-
-                        <div className="text-sm font-semibold dark:text-brand-300">3.45 MB</div>
-                    </div>
-                    <div className="flex justify-end">
-                        <button
-                            className="mt-3 justify-center cursor-pointer transition duration-300 bg-purple-750/10 text-sm font-semibold text-purple-750 py-1.5 px-8 border border-purple-750 border-1 rounded-lg">
-                            Clear Cache
-                        </button>
-                    </div>
-
+    return (
+        <Card data-tour="license-widget" className="border flex flex-col">
+            <div className="flex flex-col px-6 py-6 gap-4">
+                <div className="flex gap-2 items-center">
+                    <div className="text-base font-semibold dark:text-brand-300">Cache summary</div>
+                    <InformationCircleIcon className="h-[18px] w-[18px]" />
                 </div>
 
-            </Card>
+                {/* Placeholder for chart, uncomment when ready to use */}
+                {/* <div className="grid justify-center">
+          <DoughnutChart data={chartData} options={chartOptions} />
+        </div> */}
 
+                <div className="p-6 border rounded-3xl text-center">
+                    <div className="text-sm font-semibold dark:text-brand-300 text-brand-500">Total cache size</div>
+                    <div className="text-[27px] font-bold">4.63 MB</div>
+                </div>
 
+                <div>
+                    {cacheData.map(({ label, size }) => (
+                        <CacheItem key={label} label={label} size={size} />
+                    ))}
+                </div>
 
-        </div>
-    </>
+                <div className="flex justify-end text-sm font-semibold">
+                    <button className="bg-brand-100/90 text-brand-950 py-1.5 px-4 rounded-lg">
+                        Clear Cache
+                    </button>
+                </div>
+            </div>
+        </Card>
+
     );
 };
 

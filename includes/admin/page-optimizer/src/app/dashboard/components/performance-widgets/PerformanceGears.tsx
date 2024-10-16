@@ -9,6 +9,18 @@ import useCommonDispatch from "hooks/useCommonDispatch";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
 import {CustomCheckIcon} from "../icons/icon-svg";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "components/ui/dialog";
+import {PlusIcon} from "@heroicons/react/24/outline";
+import ComparisonTable from "components/ui/compare-table";
+import AppButton from "components/ui/app-button";
 
 const boosterLevels: PerformanceGear[] = ['starter', 'accelerate', 'turboMax'];
 
@@ -61,7 +73,7 @@ const PerformanceGears: React.FC = () => {
     const [isOptimizing, setIsOptimizing] = useState(false);
     const [OptimizationSteps, setOptimizationSteps] = useState(Steps);
     const { dispatch} = useCommonDispatch()
-
+    const [open, setOpen] = useState(false);
 
     const startOptimization = useCallback((level: PerformanceGear) => {
 
@@ -110,11 +122,10 @@ const PerformanceGears: React.FC = () => {
     };
 
 
-    useEffect(() => {
-        console.log(settings);
-        const newOptions = getFilteredOptions(settings, OptimizationSteps);
-        console.log(newOptions);
-    }, [OptimizationSteps]);
+    // useEffect(() => {
+    //     const newOptions = getFilteredOptions(settings, OptimizationSteps);
+    //     console.log(newOptions);
+    // }, [OptimizationSteps]);
 
     const toggleAccordion = useCallback(() => {
         setIsAccordionOpen(prev => !prev);
@@ -143,7 +154,7 @@ const PerformanceGears: React.FC = () => {
             key={level}
             className={cn(
                 'hover:bg-brand-100/50 relative flex flex-col gap-3 font-normal cursor-pointer w-[135px] h-[135px] rounded-3xl items-center justify-center',
-                activeLevel === level ? 'text-brand-600 border-[3px] border-[#592d8d]' : ' border border-brand-200 dark:border-brand-700'
+                activeLevel === level ? 'text-brand-600 border-[3px] border-[#592d8d]' : ' border border-brand-200 dark:border-brand-700 opacity-40'
             )}
             onClick={() => startOptimization(level)}
         >
@@ -208,13 +219,13 @@ const PerformanceGears: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col gap-2 items-center justify-between">
-            <div className="flex flex-col p-6 text-md gap-4 bg-white rounded-b-3xl border w-full overflow-hidden">
+        <div className="flex flex-col items-center justify-between">
+            <div className="flex flex-col p-6 pb-4 text-md gap-4 bg-white border-b-0 border w-full overflow-hidden">
                 <h4 className="text-lg font-semibold flex text-brand-400 gap-1">
                     You’ve activated <span className="capitalize text-brand-950 ">{activeLevel} Gear</span>
                 </h4>
                 <div className="flex flex-col w-full">
-                    <div className="flex gap-3 w-full">
+                    <div className="flex gap-3 w-full pointer-events-none	">
                         {boosterLevels.map(renderBoosterLevel)}
                     </div>
                 </div>
@@ -289,6 +300,40 @@ const PerformanceGears: React.FC = () => {
                 {/*        )}*/}
                 {/*    </AnimatePresence>*/}
                 {/*</div>*/}
+            </div>
+            <div className="flex flex-col p-6 text-md gap-4 bg-white rounded-b-3xl border w-full overflow-hidden">
+                <div className="flex gap-6 justify-end">
+
+                    <Dialog open={open} onOpenChange={setOpen}>
+                        <DialogTrigger asChild>
+                            <button
+                                className="cursor-pointer transition duration-300 text-sm font-semibold text-brand-500 py-1.5">
+                                Compare performance gears
+                            </button>
+                        </DialogTrigger>
+                        <DialogTitle/>
+                        <DialogContent className="sm:max-w-[650px] sm:rounded-3xl gap-0">
+                            <DialogHeader className='px-10 pt-6'>
+                                <DialogTitle>Compare Performance Gears</DialogTitle>
+                                <DialogDescription>
+                                    Here is our Gear Mode Comparison Table, providing a clear and concise overview at a glance.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="pt-2">
+                                <ComparisonTable/>
+                            </div>
+                            <DialogFooter className="p-6">
+                                <AppButton onClick={() => setOpen(false)} variant='outline' className='text-sm'>
+                                    Close
+                                </AppButton>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+                    <button onClick={() => (window.location.hash = '#/optimize')}
+                        className="cursor-pointer transition duration-300 bg-brand-100/90 text-sm font-semibold py-1.5 px-4 rounded-lg">
+                        Change Gear
+                    </button>
+                </div>
             </div>
         </div>
     );
