@@ -338,7 +338,7 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
                                     <div className='px-1'>
                                         <div
                                             className='flex gap-1 items-center text-xs	border border-amber-600 bg-amber-300/30 w-fit rounded-lg px-1 py-[2px] leading-3'>
-                                            <InformationCircleIcon className="h-5 w-5 text-amber-600" />
+                                            <InformationCircleIcon className="h-[18px] w-[18px] text-amber-600" />
                                             Unused CSS and Critical CSS optimization options cannot be enabled simultaneously.
                                         </div>
                                     </div>
