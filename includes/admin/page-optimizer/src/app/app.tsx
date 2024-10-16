@@ -32,7 +32,14 @@ import ThemeSwitcher from "components/ui/theme-switcher";
 import TooltipText from "components/ui/tooltip-text";
 import {optimizerData} from "../store/app/appSelector";
 import TestModeNotification from "components/ui/test-mode-notification";
-import {Circle} from "lucide-react";
+import {Circle, MoreVertical} from "lucide-react";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator, DropdownMenuTrigger,
+} from "components/ui/dropdown-menu";
 
 const App = ({popup, _showOptimizer = false}: {
     popup?: HTMLElement | null,
@@ -230,6 +237,28 @@ const App = ({popup, _showOptimizer = false}: {
                                         {/*        <ThemeSwitcher></ThemeSwitcher>*/}
                                         {/*    </div>*/}
                                         {/*</TooltipText>*/}
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger className='w-8 h-12 flex items-center justify-center'>
+                                                <TooltipText className='flex items-center justify-center' asChild={true} text='Add Optimization'>
+                                                    <MoreVertical className={cn(
+                                                        'h-5 w-5 dark:text-brand-300 text-brand-600 transition-opacity',
+                                                    )} />
+                                                </TooltipText>
+                                            </DropdownMenuTrigger>
+                                        <DropdownMenuContent style={{
+                                            width: 200
+                                        }} align='end'  sideOffset={6}
+                                                             className='z-[110000] relative min-w-[200px]'>
+                                            <DropdownMenuLabel>Additional Options</DropdownMenuLabel>
+                                            <DropdownMenuItem onClick={() => {  }}>
+                                                Optimization
+                                            </DropdownMenuItem>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuItem onClick={() => { }}>
+                                                View Table
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                            </DropdownMenu>
                                     </div>
                                 </div>
 
