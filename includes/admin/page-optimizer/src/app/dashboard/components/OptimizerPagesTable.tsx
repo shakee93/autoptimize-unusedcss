@@ -183,7 +183,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
 
     return (
         <div className='w-full flex flex-col gap-4'>
-            <Card className={cn('px-3 py-3 overflow-hidden border border-transparent flex flex-col sm:flex-row lg:flex-col justify-around border-brand-200 dark:border-brand-800')}>
+            <Card className={cn('rounded-xl px-3 py-3 overflow-hidden border border-transparent flex flex-col sm:flex-row lg:flex-col justify-around border-brand-200 dark:border-brand-800')}>
                 <div className="content flex w-full sm:w-1/2 lg:w-full flex-col px-3 py-3">
                     <div className='flex gap-2 items-center justify-between'>
                         <div className='grid dark:text-brand-300 select-none'>
@@ -231,7 +231,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                     <div className="flex flex-col mt-4">
                         <div className="-m-1.5 overflow-x-auto">
                             <div className=' p-1.5 min-w-full inline-block align-middle'>
-                                <div ref={tableContainerRef}  className="max-h-[600px] overflow-y-auto border rounded-2xl overflow-hidden">
+                                <div ref={tableContainerRef}  className="max-h-[600px] overflow-y-auto border rounded-[10px] overflow-hidden">
                                     <table className="min-w-full divide-y divide-gray-200 dark:divide-brand-950">
                                         <thead className="dark:bg-brand-900 sticky top-0 z-10 bg-brand-0">
                                         <tr>

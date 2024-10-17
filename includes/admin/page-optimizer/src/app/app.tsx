@@ -244,7 +244,7 @@ const App = ({popup, _showOptimizer = false}: {
                                 <div className="flex gap-6 items-center">
                                     <TestModeSwitcher/>
 
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-1.5">
                                         <GeneralSettingsTrigger open={open.generalSettings} onOpenChange={(isOpen) => handleOpenChange("generalSettings", isOpen)}/>
                                         {/*<TooltipText text="Theme">*/}
                                         {/*    <div onClick={e => changeTheme()}>*/}

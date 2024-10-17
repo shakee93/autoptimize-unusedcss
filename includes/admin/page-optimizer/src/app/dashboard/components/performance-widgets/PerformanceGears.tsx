@@ -220,7 +220,7 @@ const PerformanceGears: React.FC = () => {
 
     return (
         <div className="flex flex-col items-center justify-between">
-            <div className="flex flex-col p-6 pb-4 text-md gap-4 bg-white border-b-0 border w-full overflow-hidden">
+            <div className="flex flex-col p-6 pb-4 text-md gap-4 bg-white border-b-0 border-t-0 border w-full overflow-hidden relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white">
                 <h4 className="text-lg font-semibold flex text-brand-400 gap-1">
                     You’ve activated <span className="capitalize text-brand-950 ">{activeLevel} Gear</span>
                 </h4>
@@ -301,7 +301,7 @@ const PerformanceGears: React.FC = () => {
                 {/*    </AnimatePresence>*/}
                 {/*</div>*/}
             </div>
-            <div className="flex flex-col p-6 text-md gap-4 bg-white rounded-b-3xl border w-full overflow-hidden">
+            <div className="flex flex-col p-6 text-md gap-4 bg-white rounded-b-3xl border border-t-0 w-full overflow-hidden relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white">
                 <div className="flex gap-6 justify-end">
 
                     <Dialog open={open} onOpenChange={setOpen}>

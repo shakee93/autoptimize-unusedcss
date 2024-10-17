@@ -91,7 +91,7 @@ const LicenseWidget = () => {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                    <div className="flex gap-6 justify-end border-t p-6 text-sm font-semibold ">
+                    <div className="flex gap-6 justify-end p-6 text-sm font-semibold relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white">
                         <button
                             className="cursor-pointer text-brand-500 py-1.5">
                             View My Account
