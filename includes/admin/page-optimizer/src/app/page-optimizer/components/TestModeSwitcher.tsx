@@ -11,6 +11,7 @@ import {useTestModeUtils} from "hooks/testModeUtils";
 import {useAppContext} from "../../../context/app";
 import {optimizerData} from "../../../store/app/appSelector";
 import {cn} from "lib/utils";
+import {Switch} from "components/ui/switch";
 
 const TestModeSwitcher = () => {
 
@@ -38,57 +39,70 @@ const TestModeSwitcher = () => {
 
 
     return <div>
-        <div className='flex gap-6 justify-center'>
+        <div className='flex gap-4 justify-center'>
             {loadingStatus &&
-                <TooltipText text={ `Turning ${testModeStatus ? 'on Test Mode' : 'on Live Mode'}`} className="dark:bg-brand-930/90">
+                <TooltipText text={`Turning ${testModeStatus ? 'on Test Mode' : 'on Live Mode'}`}
+                             className="dark:bg-brand-930/90">
                     <Loader className='w-5 animate-spin'/>
                 </TooltipText>
             }
-            <div className='w-fit'>
-                <div
-                    data-tour='test-mode'
-                    className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[4px] rounded-2xl cursor-pointer bg-brand-200/80 overflow-hidden'
-                >
-                    <div
-                        className={`absolute top-1 bottom-1 left-1 dark:bg-brand-700 rounded-xl transition-all duration-300 ease-in-out transform ${
-                            testMode ? "translate-x-[60%] w-[60%] bg-amber-500 " : "translate-x-0  w-[40%] bg-white"
-                        }`}
-                    ></div>
-
-                    {/* Live Button */}
-                    <div
-                        onClick={async () => {
-                            if (testMode) {
-                                await handleSwitchChange(false);
-                            }
-                        }}
-                        className={`relative z-10 items-center text-sm flex gap-2 px-3 h-10 font-medium rounded-2xl ${
-                            testMode ? 'text-brand-500 ' : ''
-                        }`}
-                    >
-                        <Circle
-                            className={cn(`w-1.5 stroke-0 ${testMode ? 'fill-brand-300' : 'fill-green-600'} animate-ping absolute inline-flex opacity-75`)}
-                        />
-                        <Circle
-                            className={cn(`w-1.5 stroke-0 ${testMode ? 'fill-brand-300' : 'fill-green-600'} relative inline-flex`)}
-                        />
-                        Live
-                    </div>
-
-                    <div
-                        onClick={async () => {
-                            if (!testMode) {
-                                await handleSwitchChange(true);
-                            }
-                        }}
-                        className={`relative justify-center items-center z-10 text-sm flex pl-6 pr-5 h-10 whitespace-nowrap font-medium rounded-2xl ${
-                            testMode ? '' : 'text-brand-500'
-                        }`}
-                    >
-                        Test Mode
-                    </div>
-                </div>
+            <div className={cn('flex items-center gap-2 justify-between p-2 px-4 rounded-xl text-sm font-medium transition-all duration-300', testMode ? 'bg-[#FFAA34] text-brand-0': 'bg-brand-200/60')}>
+            <div className="flex flex-col">
+                {testMode ? "Switch to Live" : "Switch to Test Mode"}
             </div>
+            <Switch
+                checked={!!testMode}
+                onCheckedChange={async () => {
+                    await handleSwitchChange(!testMode);
+                }}
+                className="self-center data-[state=checked]:bg-[#6B3F02]"
+            />
+            </div>
+            {/*<div className='w-fit'>*/}
+            {/*    <div*/}
+            {/*        data-tour='test-mode'*/}
+            {/*        className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[4px] rounded-2xl cursor-pointer bg-brand-200/80 overflow-hidden'*/}
+            {/*    >*/}
+            {/*        <div*/}
+            {/*            className={`absolute top-1 bottom-1 left-1 dark:bg-brand-700 rounded-xl transition-all duration-300 ease-in-out transform ${*/}
+            {/*                testMode ? "translate-x-[60%] w-[60%] bg-amber-500 " : "translate-x-0  w-[40%] bg-white"*/}
+            {/*            }`}*/}
+            {/*        ></div>*/}
+
+            {/*        /!* Live Button *!/*/}
+            {/*        <div*/}
+            {/*            onClick={async () => {*/}
+            {/*                if (testMode) {*/}
+            {/*                    await handleSwitchChange(false);*/}
+            {/*                }*/}
+            {/*            }}*/}
+            {/*            className={`relative z-10 items-center text-sm flex gap-2 px-3 h-10 font-medium rounded-2xl ${*/}
+            {/*                testMode ? 'text-brand-500 ' : ''*/}
+            {/*            }`}*/}
+            {/*        >*/}
+            {/*            <Circle*/}
+            {/*                className={cn(`w-1.5 stroke-0 ${testMode ? 'fill-brand-300' : 'fill-green-600'} animate-ping absolute inline-flex opacity-75`)}*/}
+            {/*            />*/}
+            {/*            <Circle*/}
+            {/*                className={cn(`w-1.5 stroke-0 ${testMode ? 'fill-brand-300' : 'fill-green-600'} relative inline-flex`)}*/}
+            {/*            />*/}
+            {/*            Live*/}
+            {/*        </div>*/}
+
+            {/*        <div*/}
+            {/*            onClick={async () => {*/}
+            {/*                if (!testMode) {*/}
+            {/*                    await handleSwitchChange(true);*/}
+            {/*                }*/}
+            {/*            }}*/}
+            {/*            className={`relative justify-center items-center z-10 text-sm flex pl-6 pr-5 h-10 whitespace-nowrap font-medium rounded-2xl ${*/}
+            {/*                testMode ? '' : 'text-brand-500'*/}
+            {/*            }`}*/}
+            {/*        >*/}
+            {/*            Test Mode*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
 
 
             {/*<TooltipText text={loadingStatus ? "loading" : "Preview"} className="dark:bg-brand-930/90">*/}

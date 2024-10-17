@@ -28,6 +28,8 @@ import {PlusIcon} from "@heroicons/react/24/outline";
 import {ContentSelector} from "components/ui/content-selector";
 import AppButton from "components/ui/app-button";
 import GeneralSettingsTrigger from "app/dashboard/components/GeneralSettingsTrigger";
+import OptimzePagesTrigger from "app/dashboard/components/OptimzePagesTrigger";
+import OptimizerTableTrigger from "app/dashboard/components/OptimizerTableTrigger";
 import ThemeSwitcher from "components/ui/theme-switcher";
 import TooltipText from "components/ui/tooltip-text";
 import {optimizerData} from "../store/app/appSelector";
@@ -40,6 +42,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator, DropdownMenuTrigger,
 } from "components/ui/dropdown-menu";
+import OptimizerPagesTable from "app/dashboard/components/OptimizerPagesTable";
 
 const App = ({popup, _showOptimizer = false}: {
     popup?: HTMLElement | null,
@@ -51,10 +54,14 @@ const App = ({popup, _showOptimizer = false}: {
     const [shadowRoot, setShadowRoot] = useState<ShadowRoot | null>(null);
     const [mounted, setMounted] = useState(false)
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
-    const {activeReport} = useSelector((state: RootState) => state.app);
+    const {activeReport, allPosts} = useSelector((state: RootState) => state.app);
     const {isDark } = useRootContext()
     const initialTestMode = window.rapidload_optimizer ? toBoolean(window.rapidload_optimizer.test_mode) : false;
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState({
+        generalSettings: false,
+        optimizerTable: false,
+        optimizePages: false
+    });
     const { headerUrl } = useCommonDispatch();
     const { changeTheme } = useRootContext()
     const {testMode} = useSelector(optimizerData);
@@ -164,7 +171,18 @@ const App = ({popup, _showOptimizer = false}: {
         }
     }, [activeRoute]);
 
+    const optimizerTable = {
+        title: "Optimize Pages",
+        description: "Check out your Optimized Pages details in here.",
+        total_jobs: 1000,
+    };
 
+    const handleOpenChange = (key: string, isOpen: boolean) => {
+        setOpen(prev => ({
+            ...prev,
+            [key]: isOpen
+        }));
+    };
 
     return (
         <AnimatePresence>
@@ -189,10 +207,6 @@ const App = ({popup, _showOptimizer = false}: {
                                         <img className='w-10'
                                              src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/new-logo.svg`) : '/new-logo.svg'}
                                              alt='RapidLoad - #1 to unlock breakneck page speed'/>
-                                        {/*{version && (*/}
-                                        {/*    <span*/}
-                                        {/*        className='absolute text-xxs w-[200px] left-[90px] top-[1px] dark:text-brand-500 text-brand-400'>v{version}</span>*/}
-                                        {/*)}*/}
                                     </div>
                                     <div className='flex px-2'>
                                         <div
@@ -231,7 +245,7 @@ const App = ({popup, _showOptimizer = false}: {
                                     <TestModeSwitcher/>
 
                                     <div className="flex items-center gap-3">
-                                        <GeneralSettingsTrigger open={open} onOpenChange={setOpen}/>
+                                        <GeneralSettingsTrigger open={open.generalSettings} onOpenChange={(isOpen) => handleOpenChange("generalSettings", isOpen)}/>
                                         {/*<TooltipText text="Theme">*/}
                                         {/*    <div onClick={e => changeTheme()}>*/}
                                         {/*        <ThemeSwitcher></ThemeSwitcher>*/}
@@ -250,17 +264,40 @@ const App = ({popup, _showOptimizer = false}: {
                                         }} align='end'  sideOffset={6}
                                                              className='z-[110000] relative min-w-[200px]'>
                                             <DropdownMenuLabel>Additional Options</DropdownMenuLabel>
-                                            <DropdownMenuItem onClick={() => {  }}>
+                                            <DropdownMenuItem onClick={() => {
+                                                setTimeout(() => {
+                                                    handleOpenChange("optimizePages", true)
+                                                }, 100)
+                                            }}>
                                                 Optimization
                                             </DropdownMenuItem>
                                             <DropdownMenuSeparator />
-                                            <DropdownMenuItem onClick={() => { }}>
+                                            <DropdownMenuItem onClick={() => {
+                                                setTimeout(() => {
+                                                    handleOpenChange("optimizerTable", true)
+                                                }, 100)
+                                            }}>
                                                 View Table
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                             </DropdownMenu>
+
+                                        <OptimzePagesTrigger
+                                            open={open.optimizePages}
+                                            onOpenChange={(isOpen: boolean) => handleOpenChange("optimizePages", isOpen)}
+                                            data={allPosts} />
+                                        <OptimizerTableTrigger
+                                            open={open.optimizerTable}
+                                            onOpenChange={(isOpen: boolean) => handleOpenChange("optimizerTable", isOpen)}
+                                            settings={optimizerTable} />
                                     </div>
+
+
+
                                 </div>
+
+
+
 
                             </header>
 

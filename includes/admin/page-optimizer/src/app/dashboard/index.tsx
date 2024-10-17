@@ -178,19 +178,20 @@ export default function Dashboard() {
                         {/*    </div>*/}
                         {/*</div>*/}
                     </div>
-                    <div className="col-span-3">
-                        <div className="widgets gap-4 grid">
-                            <OptimizerPagesTable
-                                settings={
-                                    {
-                                        title: "Optimize Pages",
-                                        description: "Check out you Optimized Pages details in here.",
-                                            total_jobs: 1000,
-                                        }
-                                    }
-                                />
-                            </div>
-                        </div>
+
+                    {/*<div className="col-span-3">*/}
+                    {/*    <div className="widgets gap-4 grid">*/}
+                    {/*        <OptimizerPagesTable*/}
+                    {/*            settings={*/}
+                    {/*                {*/}
+                    {/*                    title: "Optimize Pages",*/}
+                    {/*                    description: "Check out you Optimized Pages details in here.",*/}
+                    {/*                        total_jobs: 1000,*/}
+                    {/*                    }*/}
+                    {/*                }*/}
+                    {/*            />*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
 
                 </section>
             </div>
