@@ -54,6 +54,8 @@ class UnusedCSS_Enqueue
 
     function update_content($state){
 
+        self::debug_log('doing unused css');
+
         if(isset($state['dom'])){
             $this->dom = $state['dom'];
         }
@@ -99,7 +101,7 @@ class UnusedCSS_Enqueue
 
         $node->setAttribute('id', 'rapidload-frontend-js');
         $node->setAttribute('type', 'text/javascript');
-        $node->setAttribute('norapidload','');
+        $node->setAttribute('norapidload',true);
         $body->appendChild($node);
 
         if($this->dom && $this->inject){

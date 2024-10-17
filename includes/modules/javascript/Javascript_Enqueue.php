@@ -61,6 +61,8 @@ class Javascript_Enqueue
 
     public function update_content($state){
 
+        self::debug_log('doing js optimization');
+
         global $wp_scripts;
 
         $this->global_scripts = $wp_scripts;
@@ -176,7 +178,7 @@ class Javascript_Enqueue
 
         if(isset($this->options['preload_internal_links']) && $this->options['preload_internal_links'] == "1"){
             $body = $this->dom->find('body', 0);
-            $node = $this->dom->createElement('script', "(function(){const link=document.createElement('link'),connection=navigator?.connection?.saveData||'2g'==navigator?.connection?.effectiveType,support_prefetch=link?.relList?.supports('prefetch');if(connection||!support_prefetch){return}const loaded_links=new Set;const load_link=link=>{if(!loaded_links.has(link)&&!link.includes('?')&&link.startsWith(window.location.origin)&&window.location.href!=link){const new_link=document.createElement('link');new_link.rel='prefetch';new_link.href=link;document.head.appendChild(new_link);loaded_links.add(link)}};let timeout;const preload_link=event=>{const anchor=event.target.closest('a');anchor&&anchor.href&&clearTimeout(timeout)},params={capture:!0,passive:!0};document.addEventListener('mouseover',event=>{const anchor=event.target.closest('a');anchor&&anchor.href&&(timeout=setTimeout(()=>load_link(anchor.href),50))},params);document.addEventListener('touchstart',event=>{const anchor=event.target.closest('a');anchor&&anchor.href&&load_link(anchor.href)},params);document.addEventListener('mouseout',preload_link,params)})();");
+            $node = $this->dom->createElement('script', "(function(){const link=document.createElement('link'),connection=navigator?.connection?.saveData||navigator?.connection?.effectiveType==='2g',support_prefetch=link?.relList?.supports?.('prefetch');if(connection||!support_prefetch){return}const loaded_links=new Set();const load_link=link=>{if(!loaded_links.has(link)&&!link.includes('?')&&link.startsWith(window.location.origin)&&window.location.href!==link){const new_link=document.createElement('link');new_link.rel='prefetch';new_link.href=link;document.head.appendChild(new_link);loaded_links.add(link)}};let lastX=null,lastY=null,animationFrameId=null;const handleProximityPreload=(x,y)=>{document.querySelectorAll('a[href]').forEach(anchor=>{const rect=anchor.getBoundingClientRect(),distanceX=Math.min(Math.abs(x-rect.left),Math.abs(x-rect.right)),distanceY=Math.min(Math.abs(y-rect.top),Math.abs(y-rect.bottom)),distance=Math.hypot(distanceX,distanceY);if(distance<200){load_link(anchor.href)}})};const throttleMouseMove=event=>{if(animationFrameId){cancelAnimationFrame(animationFrameId)}animationFrameId=requestAnimationFrame(()=>{const{clientX:x,clientY:y}=event;if(lastX===null||lastY===null||Math.hypot(x-lastX,y-lastY)>100){lastX=x;lastY=y;handleProximityPreload(x,y)}})};const handleTouchStart=event=>{const anchor=event.target.closest('a');if(anchor&&anchor.href){load_link(anchor.href)}};const params={capture:!0,passive:!0};document.addEventListener('mousemove',throttleMouseMove,params);document.addEventListener('touchstart',handleTouchStart,params)})();");
             $node->id = "rapidload-preload-links";
             $node->setAttribute('type', 'text/javascript');
             $body->appendChild($node);
@@ -575,7 +577,6 @@ class Javascript_Enqueue
         return apply_filters('rapidload/defer/exclusions/js', $list);
     }
 
-
     public function analyzeJavaScriptCode($jsSnippet, $script)
     {
         try {
@@ -617,87 +618,44 @@ class Javascript_Enqueue
 
             })->traverse($parsedAst)->render(new PrettyPrint());
 
+            // Check if there are only variable or function declarations
             if (count(array_filter($rootStatements, function ($statement) {
-                    return $statement->type == 'VariableDeclaration';
+                    return $statement->type == 'VariableDeclaration' || $statement->type == 'FunctionDeclaration';
                 })) === count($rootStatements)) {
+                // No need to delay, return the original snippet
                 return $updatedSnippet;
             }
 
             $snippets = '';
 
-            // To be checked
-
-            $should_not_wrap = false;
-
-            /*if (count(array_filter($rootStatements, function ($statement) {
-                    return $statement->type == 'ExpressionStatement';
-                })) === count($rootStatements)) {
-
-                foreach ($rootStatements as $rootStatement){
-
-                    $inner_content = $rootStatement->node->render(new Compact()) . ";";
-
-                    $pattern = "/document\.addEventListener\((?:'|\")DOMContentLoaded(?:'|\")|window\.addEventListener/";
-
-                    if(preg_match($pattern, $inner_content)){
-                        $should_not_wrap = true;
-                        break;
-                    }
-
-                }
-
-                if($should_not_wrap){
-                    return $updatedSnippet;
-                }
-            }*/
-
-            if (count(array_filter($rootStatements, function ($statement) {
-                    return $statement->type == 'ExpressionStatement';
-                })) === count($rootStatements)) {
-
-                foreach ($rootStatements as $rootStatement){
-
-                    $inner_content = $rootStatement->node->render(new Compact()) . ";";
-
-                    $pattern = "/document\.addEventListener\((?:'|\")DOMContentLoaded(?:'|\")|window\.addEventListener/";
-
-                    if(preg_match($pattern, $inner_content)){
-
-                        $snippets .= str_replace("DOMContentLoaded",$eventToBind,$inner_content) . "\n";
-
-                    }else{
-
-                        $snippets .= $this->wrapWithJavaScriptEvent($eventToBind, $inner_content) . "\n";
-
-                    }
-
-                }
-
-                return $snippets;
-            }
-
-
+            // Traverse again to wrap only function calls (CallExpression)
             foreach ($rootStatements as $rootStatement){
-                if($rootStatement->type == "FunctionDeclaration" || $rootStatement->type == "VariableDeclaration"){
-                    $statements = $this->assignWindow($rootStatement->node);
-                    foreach ($statements as $statement){
-                        $snippets .= $statement . "\n";
+
+                $inner_content = $rootStatement->node->render(new Compact()) . ";";
+
+                $pattern = "/document\.addEventListener\((?:'|\")DOMContentLoaded(?:'|\")|window\.addEventListener/";
+
+                if(preg_match($pattern, $inner_content)){
+
+                    $snippets .= str_replace("DOMContentLoaded",$eventToBind,$inner_content) . "\n";
+
+                } else {
+                    // Delay only function calls (CallExpression)
+                    if ($rootStatement->type === 'ExpressionStatement' && $this->containsFunctionCall($rootStatement->node)) {
+                        $snippets .= $this->wrapWithJavaScriptEvent($eventToBind, $inner_content) . "\n";
+                    } else {
+                        // Leave the declarations alone
+                        $snippets .= $inner_content . "\n";
                     }
-                }elseif($rootStatement->type == "ExpressionStatement") {
-                    $snippets .= $rootStatement->node->render(new Compact()) . ";";
-                }else{
-                    $snippets .= $rootStatement->node->render(new Compact()) . "\n";
                 }
             }
 
-            $snippets = apply_filters('uucss/enqueue/before/wrap-inline-js', $snippets);
-            // Return the original JavaScript snippet
-            return $this->wrapWithJavaScriptEvent($eventToBind, $snippets);
+            return $snippets;
+
         } catch (Exception $exception) {
             // Log any exceptions that occur
             error_log('RapidLoad:Error in JS Optimization: ' . $exception->getMessage());
             return $this->wrapWithJavaScriptEvent($eventToBind, $jsSnippet);
-
         }
     }
 
@@ -706,6 +664,54 @@ class Javascript_Enqueue
         // Wrap the given code snippet in a JavaScript event listener
         return "document.addEventListener('$event', function(){ " . $codeSnippet . "});";
     }
+
+    private function containsFunctionCall($node) {
+        // Check if the node itself is a CallExpression
+        if ($node->getType() === 'CallExpression') {
+            //self::debug_log('found CallExpression', $node->render(new PrettyPrint()));
+            return true;
+        }
+
+        // Manually traverse children if they exist
+        if (method_exists($node, 'getExpression')) {
+            $expression = $node->getExpression();
+            if ($expression && $this->containsFunctionCall($expression)) {
+                //self::debug_log('found getExpression', $expression->render(new PrettyPrint()));
+                return true;
+            }
+        }
+
+        if (method_exists($node, 'getDeclarations')) {
+            $declarations = $node->getDeclarations();
+            foreach ($declarations as $declaration) {
+                if ($this->containsFunctionCall($declaration)) {
+                    //self::debug_log('found getDeclarations', $declaration->render(new PrettyPrint()));
+                    return true;
+                }
+            }
+        }
+
+        if (method_exists($node, 'getArguments')) {
+            $arguments = $node->getArguments();
+            foreach ($arguments as $arg) {
+                if ($this->containsFunctionCall($arg)) {
+                    //self::debug_log('found getArguments', $arg->render(new PrettyPrint()));
+                    return true;
+                }
+            }
+        }
+
+        if (method_exists($node, 'getCallee')) {
+            $callee = $node->getCallee();
+            if ($callee && $this->containsFunctionCall($callee)) {
+                //self::debug_log('found getCallee', $callee->render(new PrettyPrint()));
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     public function assignWindow($node)
     {
@@ -733,7 +739,6 @@ class Javascript_Enqueue
 
         }
 
-
         if (!$id) {
             return [$node->render(new Compact())];
         }
@@ -741,9 +746,10 @@ class Javascript_Enqueue
         $renderedFunction = $node->render(new Compact());
 
         $updatedAst = Peast::latest( $defineWindow . $renderedFunction)->parse();
-        //return $updatedAst->getBody()[0] ? $updatedAst->getBody()[0] : null;
         return array_merge([$updatedAst->render(new Compact())], $additionalSnippets);
     }
+
+
 
 
 }

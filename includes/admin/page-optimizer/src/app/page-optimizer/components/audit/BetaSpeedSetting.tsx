@@ -167,10 +167,15 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
     )
 
 
-    const update = useCallback((val: any, key: string) => {
+    const update = useCallback((val: any, key: string, immediate: boolean = false) => {
         let changed = updates.find(i => i.key === key);
 
         if (changed) {
+
+            if (immediate) {
+                updateValue(settings, val, key);
+            }
+
             setUpdates(
                 updates.map(_i => {
                     if (_i.key === key) {

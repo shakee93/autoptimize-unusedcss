@@ -27,6 +27,8 @@ class RapidLoad_Image_Enqueue
 
     public function update_content($state){
 
+        self::debug_log('doing image optimization');
+
         if(isset($state['dom'])){
             $this->dom = $state['dom'];
         }
@@ -393,7 +395,7 @@ class RapidLoad_Image_Enqueue
 
                 if ($iframe->srcdoc) {
 
-                    if($this->is_file_excluded($iframe->srcdoc, 'uucss_exclude_images_from_lazy_load')){
+                    if($this->is_file_excluded($iframe->srcdoc, 'uucss_exclude_iframes_from_lazy_load')){
                         continue;
                     }
 

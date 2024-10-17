@@ -34,6 +34,8 @@ class CriticalCSS_Enqueue
 
     function update_content($state){
 
+        self::debug_log('doing critical css');
+
         if(isset($state['dom'])){
             $this->dom = $state['dom'];
         }
