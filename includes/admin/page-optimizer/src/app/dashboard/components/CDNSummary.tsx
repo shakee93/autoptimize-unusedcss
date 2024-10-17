@@ -21,7 +21,7 @@ const CDNSummary = () => {
 
                 <div className="flex items-center text-sm dark:text-brand-300 justify-between">
                     <div className="flex gap-2 items-baseline">
-                        <span className="font-semibold">{label}</span>
+                        <span className={`font-semibold ${label === 'Additional Usage' && 'text-brand-400'}`}>{label}</span>
                         <span className="text-brand-400 text-xs">{usage}</span>
                     </div>
                     <div className="text-[10px] font-normal dark:text-brand-300 text-brand-500">
