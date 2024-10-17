@@ -52,9 +52,9 @@ const LicenseWidget = () => {
                                           onClick={toggleVisibility}/>
                         )}
                     </div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 text-sm">
                         <span>Email ID:</span>
-                        <span className="text-sm font-semibold">
+                        <span className="font-semibold">
                                 {isVisible ? (
                                     license?.email
                                 ) : (
