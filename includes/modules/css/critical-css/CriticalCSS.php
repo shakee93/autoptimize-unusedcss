@@ -73,7 +73,7 @@ class CriticalCSS
         add_action('rapidload/cpcss/job/handle', [$this, 'initiate_cpcss_job'], 10, 3);
     }
 
-    public function add_admin_clear_action($wp_admin_bar){self::debug_log("added from cpcss");
+    public function add_admin_clear_action($wp_admin_bar){
         $wp_admin_bar->add_node( array(
             'id'    => 'rapidload-clear-css-cache',
             'title' => '<span class="ab-label">' . __( 'Clear CSS Optimizations', 'clear_optimization' ) . '</span>',
