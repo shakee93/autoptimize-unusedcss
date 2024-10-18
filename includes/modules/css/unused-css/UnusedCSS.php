@@ -98,7 +98,8 @@ class UnusedCSS
         RapidLoad_CDN::update_cdn_url_in_cached_files(self::$base_dir, $args);
     }
 
-    public function add_admin_clear_action($wp_admin_bar){
+    public function add_admin_clear_action($wp_admin_bar){self::debug_log("added from uucss");
+
         $wp_admin_bar->add_node( array(
             'id'    => 'rapidload-clear-css-cache',
             'title' => '<span class="ab-label">' . __( 'Clear CSS Optimizations', 'clear_optimization' ) . '</span>',

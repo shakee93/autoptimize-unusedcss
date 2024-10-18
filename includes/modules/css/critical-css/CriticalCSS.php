@@ -68,7 +68,24 @@ class CriticalCSS
 
         }
 
+        add_action('rapidload/admin-bar-actions', [$this, 'add_admin_clear_action']);
+
         add_action('rapidload/cpcss/job/handle', [$this, 'initiate_cpcss_job'], 10, 3);
+    }
+
+    public function add_admin_clear_action($wp_admin_bar){self::debug_log("added from cpcss");
+        $wp_admin_bar->add_node( array(
+            'id'    => 'rapidload-clear-css-cache',
+            'title' => '<span class="ab-label">' . __( 'Clear CSS Optimizations', 'clear_optimization' ) . '</span>',
+            //'href'  => admin_url( 'admin.php?page=rapidload&action=rapidload_purge_all' ),
+            'href'   => wp_nonce_url( add_query_arg( array(
+                '_action' => 'rapidload_purge_all',
+                'job_type' => 'css',
+                'clear' => true,
+            ) ), 'uucss_nonce', 'nonce' ),
+            'meta'  => array( 'class' => 'rapidload-clear-all', 'title' => 'RapidLoad will clear cached css files' ),
+            'parent' => 'rapidload'
+        ));
     }
 
     public function initiate_cpcss_job($job, $first_arg, $second_arg = null){
