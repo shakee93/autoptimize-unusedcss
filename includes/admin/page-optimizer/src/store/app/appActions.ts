@@ -158,7 +158,7 @@ const transformSettings = (data: any) => {
                     inputs: input.inputs.map(i => {
                         return {
                             ...i,
-                            value: i.control_type === 'checkbox' ? input.value === '1' || input.value === true : i.value
+                            value: i.control_type === 'checkbox' ? i.value === '1' || i.value === true : i.value
                         }
                     })
                 }),

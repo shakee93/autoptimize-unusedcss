@@ -1,6 +1,6 @@
-import {AnimatePresence, m, motion} from "framer-motion";
+import { AnimatePresence, m, motion } from "framer-motion";
 import React from "react";
-import {cn, isAdminPage} from "lib/utils";
+import { cn, isAdminPage } from "lib/utils";
 
 function TestModeNotification() {
 
@@ -8,10 +8,10 @@ function TestModeNotification() {
 
         <AnimatePresence>
             <motion.div
-                initial={{borderWidth: '0px'}}
-                animate={{borderWidth: '5px'}}
-                exit={{borderWidth: '0px'}}
-                transition={{duration: 0.5}}
+                initial={{ borderWidth: '0px' }}
+                animate={{ borderWidth: '5px' }}
+                exit={{ borderWidth: '0px' }}
+                transition={{ duration: 0.5 }}
                 className={cn(
                     'inset-0 z-[110002] pointer-events-none fixed',
                     'border-solid border-[#f7b250] rounded-none',
@@ -20,12 +20,12 @@ function TestModeNotification() {
                 <div className={cn(
                     'absolute -inset-[3px] rounded-xl',
                     'border-[3px] border-[#f7b250]'
-                )}/>
+                )} />
             </motion.div>
             <motion.div
-                initial={{opacity: 0, y: -10}}
-                animate={{opacity: 1, y: 0}}
-                exit={{opacity: 0, y: -10}}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
                 transition={{
                     ease: 'easeInOut',
                     duration: 0.5,

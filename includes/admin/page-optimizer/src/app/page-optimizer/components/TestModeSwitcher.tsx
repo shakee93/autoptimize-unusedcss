@@ -1,26 +1,26 @@
 import { m } from "framer-motion";
-import React, {useEffect, useState} from "react";
-import {useSelector} from "react-redux";
-import {setCommonState} from "../../../store/common/commonActions";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { setCommonState } from "../../../store/common/commonActions";
 import TooltipText from "components/ui/tooltip-text";
-import {Circle, Loader} from "lucide-react";
-import {ArrowTopRightOnSquareIcon} from "@heroicons/react/24/outline";
-import {TestModeLine} from "app/page-optimizer/components/icons/line-icons";
+import { Circle, Loader } from "lucide-react";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
+import { TestModeLine } from "app/page-optimizer/components/icons/line-icons";
 import useCommonDispatch from "hooks/useCommonDispatch";
-import {useTestModeUtils} from "hooks/testModeUtils";
-import {useAppContext} from "../../../context/app";
-import {optimizerData} from "../../../store/app/appSelector";
-import {cn} from "lib/utils";
-import {Switch} from "components/ui/switch";
+import { useTestModeUtils } from "hooks/testModeUtils";
+import { useAppContext } from "../../../context/app";
+import { optimizerData } from "../../../store/app/appSelector";
+import { cn } from "lib/utils";
+import { Switch } from "components/ui/switch";
 
 const TestModeSwitcher = () => {
 
-    const {testMode} = useSelector(optimizerData);
+    const { testMode } = useSelector(optimizerData);
     const [loadingStatus, setLoadingStatus] = useState(false);
-    const {testModeStatus, testModeLoading, dispatch} = useCommonDispatch();
-    const {handleTestModeSwitchChange} = useTestModeUtils();
-    const {options} = useAppContext();
-    const { revisions} = useSelector(optimizerData);
+    const { testModeStatus, testModeLoading, dispatch } = useCommonDispatch();
+    const { handleTestModeSwitchChange } = useTestModeUtils();
+    const { options } = useAppContext();
+    const { revisions } = useSelector(optimizerData);
 
     useEffect(() => {
         if (testMode) {
@@ -42,21 +42,21 @@ const TestModeSwitcher = () => {
         <div className='flex gap-4 justify-center'>
             {loadingStatus &&
                 <TooltipText text={`Turning ${testModeStatus ? 'on Test Mode' : 'on Live Mode'}`}
-                             className="dark:bg-brand-930/90">
-                    <Loader className='w-5 animate-spin'/>
+                    className="dark:bg-brand-930/90">
+                    <Loader className='w-5 animate-spin' />
                 </TooltipText>
             }
-            <div className={cn('flex items-center gap-2 justify-between p-2 px-4 rounded-xl text-sm font-medium transition-all duration-300', testMode ? 'bg-[#FFAA34] text-brand-0': 'bg-brand-200/60')}>
-            <div className="flex flex-col">
-                {testMode ? "Switch to Live" : "Switch to Test Mode"}
-            </div>
-            <Switch
-                checked={!!testMode}
-                onCheckedChange={async () => {
-                    await handleSwitchChange(!testMode);
-                }}
-                className="self-center data-[state=checked]:bg-[#6B3F02]"
-            />
+            <div className={cn('flex items-center gap-2 justify-between p-2 px-4 rounded-xl text-sm font-medium transition-all duration-300', testMode ? 'bg-[#FFAA34] text-brand-0' : 'bg-brand-200/60')}>
+                <div className="flex flex-col">
+                    {testMode ? "Switch to Live" : "Switch to Test Mode"}
+                </div>
+                <Switch
+                    checked={!!testMode}
+                    onCheckedChange={async () => {
+                        await handleSwitchChange(!testMode);
+                    }}
+                    className="self-center data-[state=checked]:bg-[#6B3F02]"
+                />
             </div>
             {/*<div className='w-fit'>*/}
             {/*    <div*/}

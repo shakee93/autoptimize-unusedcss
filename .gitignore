@@ -10,3 +10,5 @@ includes/admin/.DS_Store
 includes/admin/page-optimizer/.DS_Store
 
 .vscode
+
+*.code-workspace

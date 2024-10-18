@@ -2,35 +2,29 @@ import {
     ArrowTopRightOnSquareIcon,
     DevicePhoneMobileIcon
 } from "@heroicons/react/24/outline";
-import React, {useEffect, useState} from "react";
-import {useAppContext} from "../../../context/app";
+import React, { useEffect, useState } from "react";
+import { useAppContext } from "../../../context/app";
 import TooltipText from "components/ui/tooltip-text";
-import {ThunkDispatch} from "redux-thunk";
-import {AppAction, RootState} from "../../../store/app/appTypes";
-import {useDispatch, useSelector} from "react-redux";
-import {changeReport, fetchReport} from "../../../store/app/appActions";
-import {optimizerData} from "../../../store/app/appSelector";
+import { ThunkDispatch } from "redux-thunk";
+import { AppAction, RootState } from "../../../store/app/appTypes";
+import { useDispatch, useSelector } from "react-redux";
+import { changeReport, fetchReport } from "../../../store/app/appActions";
+import { optimizerData } from "../../../store/app/appSelector";
 import AppButton from "components/ui/app-button";
-import {cn, isAdminPage} from "lib/utils";
-import {
-    Loader,
-    LogOut,
-    Monitor,
-    RefreshCw
-} from "lucide-react";
+import { cn, isAdminPage } from "lib/utils";
 import useCommonDispatch from "hooks/useCommonDispatch";
-import {AnimatePresence, motion} from "framer-motion";
-import {setCommonState} from "../../../store/common/commonActions";
+import { AnimatePresence, motion } from "framer-motion";
+import { setCommonState } from "../../../store/common/commonActions";
 import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
 import UrlPreview from "app/page-optimizer/components/footer/url-preview";
 import SaveChanges from "app/page-optimizer/components/footer/save-changes";
-import {useRootContext} from "../../../context/root";
+import { useRootContext } from "../../../context/root";
 
 
-const Header = ({ url }: { url: string}) => {
+const Header = ({ url }: { url: string }) => {
 
     const {
-        setShowOptimizer ,
+        setShowOptimizer,
         options,
         version,
         mode,
@@ -42,7 +36,7 @@ const Header = ({ url }: { url: string}) => {
         testMode,
         reanalyze
     } = useSelector(optimizerData);
-    const {inProgress } = useCommonDispatch()
+    const { inProgress } = useCommonDispatch()
     const {
         dispatch: commonDispatch
     } = useCommonDispatch()
@@ -51,7 +45,7 @@ const Header = ({ url }: { url: string}) => {
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const { isDark } = useRootContext();
 
-// State to manage header visibility based on scroll
+    // State to manage header visibility based on scroll
     const [scrolled, setScrolled] = useState(false);
 
     // Monitor scroll position
@@ -103,7 +97,7 @@ const Header = ({ url }: { url: string}) => {
                 // exit={{ y: -100 }}
                 // transition={{ ease: "easeInOut", duration: 1 }}
                 // ${scrolled ? '-top-0' : '-bottom-[70px]'}
-                className={`z-[110000] ${scrolled ? 'fixed ' : 'absolute top-[76px] '} ${isAdminPage ? 'top-8': 'top-0'} px-2 py-2 flex gap-3 justify-between dark:bg-brand-930/80 rounded-3xl`}>
+                className={`z-[110000] ${scrolled ? 'fixed ' : 'absolute top-[76px] '} ${isAdminPage ? 'top-8' : 'top-0'} px-2 py-2 flex gap-3 justify-between dark:bg-brand-930/80 rounded-3xl`}>
                 <div className={`flex gap-12 items-center rounded-3xl bg-brand-0 border-[3px] border-brand-200 transition-all duration-500 ${scrolled && 'shadow-xl'}`}>
                     <div className='flex flex-column items-center gap-3 '>
                         {/*<div className="border-r border-accent px-2">*/}
