@@ -22,17 +22,11 @@ class CriticalCSS
     {
         $this->options = RapidLoad_Base::get_merged_options();
 
-        add_action('uucss/options/css', [$this, 'render_options']);
-
         $this->file_system = new RapidLoad_FileSystem();
 
         add_action('wp_ajax_cpcss_purge_url', [$this, 'cpcss_purge_url']);
 
-        add_action('cpcss_async_queue', [$this, 'init_async_store'], 10, 2);
-
         self::$cpcss_other_plugins = apply_filters('cpcss/other-plugins', []);
-
-        new CriticalCSS_Queue();
 
         if( ! $this->initFileSystem() ){
             return;
@@ -40,6 +34,16 @@ class CriticalCSS
 
         if(!isset($this->options['uucss_enable_css']) || !isset($this->options['uucss_enable_cpcss']) || $this->options['uucss_enable_css'] != "1" || $this->options['uucss_enable_cpcss'] != "1" || !empty(self::$cpcss_other_plugins)){
             return;
+        }
+
+        new CriticalCSS_Queue();
+
+        add_action('uucss/options/css', [$this, 'render_options']);
+
+        add_action('cpcss_async_queue', [$this, 'init_async_store'], 10, 2);
+
+        if ((!isset($this->options['enable_uucss_on_cpcss']) || isset($this->options['enable_uucss_on_cpcss']) && $this->options['enable_uucss_on_cpcss'] != "1" ) && !defined('RAPIDLOAD_CPCSS_ENABLED')) {
+            define('RAPIDLOAD_CPCSS_ENABLED', true);
         }
 
         add_action('rapidload/vanish', [ $this, 'vanish' ]);
@@ -62,6 +66,42 @@ class CriticalCSS
 
             $this->cache_trigger_hooks();
 
+        }
+
+        add_action('rapidload/admin-bar-actions', [$this, 'add_admin_clear_action']);
+
+        add_action('rapidload/cpcss/job/handle', [$this, 'initiate_cpcss_job'], 10, 3);
+    }
+
+    public function add_admin_clear_action($wp_admin_bar){
+        $wp_admin_bar->add_node( array(
+            'id'    => 'rapidload-clear-css-cache',
+            'title' => '<span class="ab-label">' . __( 'Clear CSS Optimizations', 'clear_optimization' ) . '</span>',
+            //'href'  => admin_url( 'admin.php?page=rapidload&action=rapidload_purge_all' ),
+            'href'   => wp_nonce_url( add_query_arg( array(
+                '_action' => 'rapidload_purge_all',
+                'job_type' => 'css',
+                'clear' => true,
+            ) ), 'uucss_nonce', 'nonce' ),
+            'meta'  => array( 'class' => 'rapidload-clear-all', 'title' => 'RapidLoad will clear cached css files' ),
+            'parent' => 'rapidload'
+        ));
+    }
+
+    public function initiate_cpcss_job($job, $first_arg, $second_arg = null){
+
+        if(!isset($job)){
+            return;
+        }
+
+        $job_data = new RapidLoad_Job_Data($job, 'cpcss');
+        if(!isset($job_data->id)){
+            $job_data->save();
+        }
+
+        do_action('cpcss_async_queue', $job_data, $first_arg);
+        if(isset($second_arg)){
+            do_action('cpcss_async_queue', $job_data, $second_arg);
         }
     }
 
@@ -307,6 +347,11 @@ class CriticalCSS
                 if(isset($job_data->id)){
 
                     $link['cpcss'] = (array) $job_data;
+                    if($job->rule != 'is_url'){
+                        $link['rule_status'] = $job_data->status;
+                        $link['rule_hits'] = $job_data->hits;
+                        $link['applied_links'] = count($job->get_urls());
+                    }
 
                 }
 

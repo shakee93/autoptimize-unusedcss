@@ -20,13 +20,7 @@ class UnusedCSS
     {
         $this->options = RapidLoad_Base::get_merged_options();
 
-        new UnusedCSS_Queue();
-
         $this->file_system = new RapidLoad_FileSystem();
-
-        add_action('rapidload/job/purge', [$this, 'cache_uucss'], 10, 2);
-
-        add_action('uucss_async_queue', [$this, 'init_async_store'], 10, 2);
 
         if( ! $this->initFileSystem() ){
             return;
@@ -35,6 +29,20 @@ class UnusedCSS
         if(!isset($this->options['uucss_enable_css']) || !isset($this->options['uucss_enable_uucss']) || $this->options['uucss_enable_css'] != "1" || $this->options['uucss_enable_uucss'] != "1"){
             return;
         }
+
+        if(defined('RAPIDLOAD_CPCSS_ENABLED')){
+            return;
+        }
+
+        if (!defined('RAPIDLOAD_UUCSS_ENABLED')) {
+            define('RAPIDLOAD_UUCSS_ENABLED', true);
+        }
+
+        new UnusedCSS_Queue();
+
+        add_action('rapidload/job/purge', [$this, 'cache_uucss'], 10, 2);
+
+        add_action('uucss_async_queue', [$this, 'init_async_store'], 10, 2);
 
         if(apply_filters('uucss/enable/notfound_fallback', true)){
             add_action( 'template_redirect', [$this, 'uucss_notfound_fallback'] );
@@ -68,6 +76,22 @@ class UnusedCSS
         add_action('rapidload/admin-bar-actions', [$this, 'add_admin_clear_action']);
 
         add_action('rapidload/cdn/validated', [$this, 'update_cdn_url_in_cached_files']);
+
+        add_action('rapidload/uucss/job/handle', [$this, 'initiate_uucss_job'], 10, 2);
+    }
+
+    public function initiate_uucss_job($job, $args){
+
+        if(!isset($job)){
+            return;
+        }
+
+        $job_data = new RapidLoad_Job_Data($job, 'uucss');
+        if(!isset($job_data->id)){
+            $job_data->save();
+        }
+
+        do_action('uucss_async_queue', $job_data, $args);
     }
 
     public function update_cdn_url_in_cached_files($args) {
@@ -75,6 +99,7 @@ class UnusedCSS
     }
 
     public function add_admin_clear_action($wp_admin_bar){
+
         $wp_admin_bar->add_node( array(
             'id'    => 'rapidload-clear-css-cache',
             'title' => '<span class="ab-label">' . __( 'Clear CSS Optimizations', 'clear_optimization' ) . '</span>',
@@ -247,9 +272,9 @@ class UnusedCSS
                 if(isset($job_data->id)){
 
                     if($job->rule != 'is_url'){
-                        $link['rule_status'] = $job_data->status;
-                        $link['rule_hits'] = $job_data->hits;
-                        $link['applied_links'] = count($job->get_urls());
+                        //$link['rule_status'] = $job_data->status;
+                       // $link['rule_hits'] = $job_data->hits;
+                        //$link['applied_links'] = count($job->get_urls());
                     }
 
                     if(!isset($link['status'])){
