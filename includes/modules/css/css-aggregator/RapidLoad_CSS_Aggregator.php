@@ -73,7 +73,7 @@ class RapidLoad_CSS_Aggregator
             return false;
         }
 
-        new RapidLoad_CSS_Aggregator_Enqueue($job);
+        new RapidLoad_LinkPreload_Enqueue($job);
 
     }
 

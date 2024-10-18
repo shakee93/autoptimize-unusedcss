@@ -110,13 +110,24 @@ class RapidLoad_Font
     }
 
     public function add_display_swap_to_inline_styles($content){
+        return self::add_display_swap($content);
+    }
 
-        $content = preg_replace(
-            '/font-display:\s?(auto|block|fallback|optional)/',
-            'font-display:swap',
-            $content
-        );
-        return preg_replace('/@font-face\s*{/', '@font-face{font-display:swap;', $content);
+    public static function add_display_swap($content){
+        $content = preg_replace_callback('/@font-face\s*{[^}]*}/', function($matches) {
+            $font_face_block = $matches[0];
+            if (preg_match('/font-display\s*:/', $font_face_block)) {
+                $font_face_block = preg_replace(
+                    '/font-display\s*:\s*(auto|block|fallback|optional|swap)/',
+                    'font-display:swap',
+                    $font_face_block
+                );
+            } else {
+                $font_face_block = preg_replace('/(@font-face\s*{)/', '$1font-display:swap;', $font_face_block);
+            }
+            return $font_face_block;
+        }, $content);
+        return $content;
     }
 
     public function initFileSystem() {
