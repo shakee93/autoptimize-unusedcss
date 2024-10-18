@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {setCommonState} from "../../../store/common/commonActions";
 import { CheckCircleIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import {Circle} from "lucide-react";
@@ -36,6 +36,7 @@ const AuditSettingsItem: React.FC<AuditSettingsItemProps> = ({item, itemIndex, u
             document.getElementById(`audit-${audit.id}`)?.scrollIntoView({ behavior: 'smooth' });
         }, 10);
     };
+
 
     return (
         <div className="w-full mb-3.5 px-2.5 py-3 rounded-2xl dark:bg-brand-950 bg-brand-0 dark:hover:border-brand-700/70 hover:border-brand-400/60">

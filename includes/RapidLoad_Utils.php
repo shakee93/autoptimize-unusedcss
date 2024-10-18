@@ -768,16 +768,13 @@ trait RapidLoad_Utils {
     public static function debug_log(...$objects)
     {
         if(defined('RAPIDLOAD_DEBUG_LOG') && RAPIDLOAD_DEBUG_LOG){
-            $currentDateTime = date("Y-m-d H:i:s");
-            error_log("================== LOG START - " . $currentDateTime . " ==================");
             foreach ($objects as $object) {
                 if (gettype($object) == "string") {
-                    error_log($object);
+                    error_log("RapidLoad Log:  " . $object);
                 } else {
-                    error_log(json_encode($object, JSON_PRETTY_PRINT));
+                    error_log("RapidLoad Log:  " . json_encode($object, JSON_PRETTY_PRINT));
                 }
             }
-            error_log("================== LOG END - " . $currentDateTime . " ==================");
         }
     }
 

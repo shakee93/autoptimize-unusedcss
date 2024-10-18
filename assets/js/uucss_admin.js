@@ -504,8 +504,8 @@
             })
         });
 
-        var auto_refresh = $('#uucss_auto_refresh_frontend-hidden').val() == '1';
-        var auto_refresh_rule = $('#uucss_auto_refresh_frontend-hidden_rule').val() == '1';
+        var auto_refresh = $('#uucss_auto_refresh_frontend-hidden').val() == '0';
+        var auto_refresh_rule = $('#uucss_auto_refresh_frontend-hidden_rule').val() == '0';
         var firstReload = true;
         var firstRuleReload = true;
 
@@ -576,6 +576,9 @@
                     width: '50px',
                     className: 'dt-body-center dt-head-center',
                     render: function (data, type, row, meta) {
+                        if(!data && row.cpcss){
+                            data = row.cpcss.status
+                        }
                         var classNames = 'status ';
                         if(data === 'queued' || data === 'processing'){
                             classNames += 'refresh ';
@@ -632,15 +635,11 @@
 
                         var $cpcss_html = $('<div class="cpcss-status cpcss-status-' + (rowData.cpcss ? rowData.cpcss.status : '') + '"></div>');
 
-                        if (rowData.meta && rowData.meta.stats && (rowData.status === 'success' || rowData.rule_status === 'success')) {
-
-                            if(rowData.cpcss){
-                                if(rowData.cpcss.status === 'success'){
-                                    $cpcss_html.append('<span class="dashicons dashicons-yes-alt" style="color : #009688; width: 16px; height: 16px"></span>');
-                                    $cpcss_html.append('<span style="font-size: 12px; margin-left:2px">Critical css generated ('+ rowData.cpcss.hits + '/' + rowData.cpcss.attempts +')</span>');
-                                }
+                        if(rowData.cpcss){
+                            if(rowData.cpcss.status === 'success'){
+                                $cpcss_html.append('<span class="dashicons dashicons-yes-alt" style="color : #009688; width: 16px; height: 16px"></span>');
+                                $cpcss_html.append('<span style="font-size: 12px; margin-left:2px">Critical css generated ('+ rowData.cpcss.hits + '/' + rowData.cpcss.attempts +')</span>');
                             }
-
                         }
 
                         if(!window.uucss || !window.uucss.uucss_enable_debug){
@@ -691,6 +690,12 @@
                             attemptsString = 'Hits : ' + rowData.success_count + '/' + rowData.attempts
                         }else if(rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count > 0){
                             attemptsString = 'Hits : ' + rowData.meta.stats.success_count + '/' + rowData.attempts
+                        }else if(rowData.cpcss){
+                            if(rowData.cpcss.status === 'success' && rowData.cpcss.hits > 0){
+                                attemptsString = 'Hits : ' + rowData.cpcss.hits + '/' + rowData.cpcss.attempts
+                            }else if(Number(rowData.attempts) !== 0) {
+                                attemptsString = 'Attempts : ' + rowData.attempts
+                            }
                         }else if(Number(rowData.attempts) !== 0) {
                             attemptsString = 'Attempts : ' + rowData.attempts
                         }
@@ -704,7 +709,7 @@
                                 var c = $('<div class="stat-tooltip">' +
                                     '       <div class="progress-bar-wrapper">' +
                                     '           <div class="progress-bar w-100">' +
-                                    '               <span style="width:' + (100 - rowData.meta.stats.reduction) + '%">' + (100 - rowData.meta.stats.reduction).toFixed() + '%' +
+                                    '               <span style="width:' + (100 - (rowData.meta && rowData.meta.stats ? rowData.meta.stats.reduction : 100)) + '%">' + (100 - (rowData.meta && rowData.meta.stats ? rowData.meta.stats.reduction : 100)).toFixed() + '%' +
                                     '               </span>' +
                                     '           </div>' +
                                     '       </div>' +
@@ -721,7 +726,7 @@
                                     '</div>');
 
                                 innerTippy = tippy(c.find('.progress-bar-wrapper')[0], {
-                                    content: 'Without RapidLoad <span class="perc">' + rowData.meta.stats.before + '</span>',
+                                    content: 'Without RapidLoad <span class="perc">' + (rowData.meta && rowData.meta.stats ? rowData.meta.stats.before : 0) + '</span>',
                                     allowHTML: true,
                                     placement: 'bottom-end',
                                     trigger: 'manual',
@@ -735,7 +740,7 @@
                                 })
 
                                 innerTippy2 = tippy(c.find('.progress-bar')[0], {
-                                    content: 'RapidLoad <span class="perc"> ' + rowData.meta.stats.after + '</span>',
+                                    content: 'RapidLoad <span class="perc"> ' + (rowData.meta && rowData.meta.stats ? rowData.meta.stats.after : 0) + '</span>',
                                     allowHTML: true,
                                     placement: 'top-start',
                                     trigger: 'manual',
@@ -798,6 +803,17 @@
                         } else if ((rowData.status === 'success' || rowData.rule_status === 'success') && warnings.length) {
                             stat.find('span').append('<span class="dashicons dashicons-warning"></span>');
                             tippy(stat.find('span')[0], tippyOptions);
+                        } else if(rowData.status === 'failed'){
+                            stat.find('span').append('<span class="dashicons dashicons-info error"></span>');
+                            tippy(stat.find('span')[0], tippyOptions);
+                        } else if (rowData.cpcss){
+                            if(rowData.cpcss.status === 'success'){
+                                stat.find('span').append('<span class="dashicons dashicons-yes-alt"></span>');
+                                tippy(stat.find('span')[0], tippyOptions);
+                            }else if(rowData.cpcss.status === 'failed'){
+                                stat.find('span').append('<span class="dashicons dashicons-info error"></span>');
+                                tippy(stat.find('span')[0], tippyOptions);
+                            }
                         }
 
                     }
@@ -823,7 +839,8 @@
                     visible : false,
                     render: function (data, type, row, meta) {
                         if (data && data.warnings && data.warnings.length > 0) return 'warning';
-                        return data.status;
+                        if(data) return data.status;
+                        if(row.cpcss) return row.cpcss.status
                     }
                 }
             ],
@@ -1220,6 +1237,9 @@
                     width: '50px',
                     className: 'dt-body-center dt-head-center',
                     render: function (data, type, row, meta) {
+                        if(!data && row.cpcss){
+                            data = row.cpcss.status
+                        }
                         var classNames = 'status ';
                         if(data === 'queued' || data === 'processing'){
                             classNames += 'refresh ';
@@ -1304,15 +1324,11 @@
 
                         var $cpcss_html = $('<div class="cpcss-status cpcss-status-' + (rowData.cpcss ? rowData.cpcss.status : '') + '"></div>');
 
-                        if (rowData.meta && rowData.meta.stats && (rowData.status === 'success' || rowData.rule_status === 'success')) {
-
-                            if(rowData.cpcss){
-                                if(rowData.cpcss.status === 'success'){
-                                    $cpcss_html.append('<span class="dashicons dashicons-yes-alt" style="color : #009688; width: 16px; height: 16px"></span>');
-                                    $cpcss_html.append('<span style="font-size: 12px; margin-left:2px">Critical css generated ('+ rowData.cpcss.hits + '/' + rowData.cpcss.attempts +')</span>');
-                                }
+                        if(rowData.cpcss){
+                            if(rowData.cpcss.status === 'success'){
+                                $cpcss_html.append('<span class="dashicons dashicons-yes-alt" style="color : #009688; width: 16px; height: 16px"></span>');
+                                $cpcss_html.append('<span style="font-size: 12px; margin-left:2px">Critical css generated ('+ rowData.cpcss.hits + '/' + rowData.cpcss.attempts +')</span>');
                             }
-
                         }
 
                         if(!window.uucss || !window.uucss.uucss_enable_debug){
@@ -1346,6 +1362,12 @@
                             attemptsString = 'Hits : ' + rowData.success_count + '/' + rowData.attempts;
                         }else if(rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count){
                             attemptsString = 'Hits : ' + rowData.meta.stats.success_count + '/' + rowData.attempts;
+                        }else if(rowData.cpcss){
+                            if(rowData.cpcss.status === 'success' && rowData.cpcss.hits > 0){
+                                attemptsString = 'Hits : ' + rowData.cpcss.hits + '/' + rowData.cpcss.attempts
+                            }else if(Number(rowData.attempts) !== 0) {
+                                attemptsString = 'Attempts : ' + rowData.attempts
+                            }
                         }else if(Number(rowData.attempts) !== 0){
                             attemptsString = 'Attempts : ' + rowData.attempts
                         }
@@ -1359,7 +1381,7 @@
                                 var c = $('<div class="stat-tooltip">' +
                                     '       <div class="progress-bar-wrapper">' +
                                     '           <div class="progress-bar w-100">' +
-                                    '               <span style="width:' + (100 - rowData.meta.stats.reduction) + '%">' + (100 - rowData.meta.stats.reduction).toFixed() + '%' +
+                                    '               <span style="width:' + (100 - (rowData.meta && rowData.meta.stats ? rowData.meta.stats.reduction : 100)) + '%">' + (100 - (rowData.meta && rowData.meta.stats ? rowData.meta.stats.reduction : 100)).toFixed() + '%' +
                                     '               </span>' +
                                     '           </div>' +
                                     '       </div>' +
@@ -1376,7 +1398,7 @@
                                     '</div>');
 
                                 innerTippy = tippy(c.find('.progress-bar-wrapper')[0], {
-                                    content: 'Without RapidLoad <span class="perc">' + rowData.meta.stats.before + '</span>',
+                                    content: 'Without RapidLoad <span class="perc">' + (rowData.meta && rowData.meta.stats ? rowData.meta.stats.before : 0) + '</span>',
                                     allowHTML: true,
                                     placement: 'bottom-end',
                                     trigger: 'manual',
@@ -1390,7 +1412,7 @@
                                 })
 
                                 innerTippy2 = tippy(c.find('.progress-bar')[0], {
-                                    content: 'RapidLoad <span class="perc"> ' + rowData.meta.stats.after + '</span>',
+                                    content: 'RapidLoad <span class="perc"> ' + (rowData.meta && rowData.meta.stats ? rowData.meta.stats.after : 0) + '</span>',
                                     allowHTML: true,
                                     placement: 'top-start',
                                     trigger: 'manual',
@@ -1452,14 +1474,28 @@
                         } else if (rowData.status === 'success' && rowData.meta.warnings.length) {
                             stat.find('span').append('<span class="dashicons dashicons-warning"></span>');
                             tippy(stat.find('span')[0], tippyOptions);
+                        } else if(rowData.status === 'failed'){
+                            stat.find('span').append('<span class="dashicons dashicons-info error"></span>');
+                            tippy(stat.find('span')[0], tippyOptions);
+                        } else if (rowData.cpcss){
+                            if(rowData.cpcss.status === 'success'){
+                                stat.find('span').append('<span class="dashicons dashicons-yes-alt"></span>');
+                                tippy(stat.find('span')[0], tippyOptions);
+                            }else if(rowData.cpcss.status === 'failed'){
+                                stat.find('span').append('<span class="dashicons dashicons-info error"></span>');
+                                tippy(stat.find('span')[0], tippyOptions);
+                            }
                         }
 
                     }
                 },
                 {
-                    "data": "meta",
+                    "data": "status",
                     visible : false,
                     render: function (data, type, row, meta) {
+                        if(!data && row.cpcss){
+                            data = row.cpcss.status
+                        }
                         if (data && data.warnings && data.warnings.length > 0) return 'warning';
                         return data.status;
                     }

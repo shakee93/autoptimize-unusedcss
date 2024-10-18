@@ -40,7 +40,7 @@ class RapidLoad_Optimizer
 
         self::$revision_limit = apply_filters('rapidload/optimizer/revision-limit', 10);
 
-        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 99);
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 90);
 
     }
 
@@ -165,16 +165,16 @@ class RapidLoad_Optimizer
 
         wp_send_json_success([
             'uucss' => [
-                'status' => $job_data_uucss->status,
-                'error' => isset($job_data_uucss->error) ? unserialize($job_data_uucss->error) : null,
-                'warnings' => isset($job_data_uucss->warnings) ? unserialize($job_data_uucss->warnings) : null,
-                'stats' => isset($job_data_uucss->stats) ? unserialize($job_data_uucss->stats) : null
+                'status' => isset($job_data_uucss->id) ? $job_data_uucss->status : null,
+                'error' => isset($job_data_uucss->id) && isset($job_data_uucss->error) ? unserialize($job_data_uucss->error) : null,
+                'warnings' => isset($job_data_uucss->id) && isset($job_data_uucss->warnings) ? unserialize($job_data_uucss->warnings) : null,
+                'stats' => isset($job_data_uucss->id) && isset($job_data_uucss->stats) ? unserialize($job_data_uucss->stats) : null
             ],
             'cpcss' => [
-                'status' => $job_data_cpcss->status,
-                'error' => isset($job_data_cpcss->error) ? unserialize($job_data_cpcss->error) : null,
-                'warnings' => isset($job_data_cpcss->warnings) ? unserialize($job_data_cpcss->warnings) : null,
-                'stats' => isset($job_data_cpcss->stats) ? unserialize($job_data_cpcss->stats) : null
+                'status' => isset($job_data_cpcss->id) ? $job_data_cpcss->status : null,
+                'error' => isset($job_data_cpcss->id) && isset($job_data_cpcss->error) ? unserialize($job_data_cpcss->error) : null,
+                'warnings' => isset($job_data_cpcss->id) && isset($job_data_cpcss->warnings) ? unserialize($job_data_cpcss->warnings) : null,
+                'stats' => isset($job_data_cpcss->id) && isset($job_data_cpcss->stats) ? unserialize($job_data_cpcss->stats) : null
             ],
             'cache' => [
                 'status' => @file_exists($cache_file),
@@ -329,28 +329,19 @@ class RapidLoad_Optimizer
                         }
                         self::$options['uucss_enable_css'] = "1";
                         if($key == "uucss_enable_uucss"){
-                            $job_data = new RapidLoad_Job_Data(self::$job, 'uucss');
-                            if(!isset($job_data->id)){
-                                $job_data->save();
-                            }
-                            do_action('uucss_async_queue', $job_data, [
+                            do_action('rapidload/uucss/job/handle', self::$job, [
                                 'immediate' => true,
                                 'titan' => true,
                             ]);
                         }
                         if($key == "uucss_enable_cpcss"){
-                            $job_data = new RapidLoad_Job_Data(self::$job, 'cpcss');
-                            if(!isset($job_data->id)){
-                                $job_data->save();
-                            }
-                            do_action('cpcss_async_queue', $job_data, [
+                            do_action('rapidload/cpcss/job/handle', self::$job, [
                                 'immediate' => true,
                                 'titan' => true,
                                 'options' => [
                                     'strategy' => self::$strategy
                                 ]
-                            ]);
-                            do_action('cpcss_async_queue', $job_data, [
+                            ], [
                                 'titan' => true,
                                 'options' => [
                                     'strategy' => self::$strategy == "desktop" ? "mobile" : "desktop"
@@ -423,6 +414,7 @@ class RapidLoad_Optimizer
             'rapidload_enable_cpcss_file_chunk',
             'rapidload_cpcss_file_character_length',
             'uucss_excluded_files',
+            'enable_uucss_on_cpcss',
             //js
             'uucss_enable_javascript',
             'minify_js',
@@ -651,6 +643,14 @@ class RapidLoad_Optimizer
                 'control_description' => 'Enable Splits large critical CSS files',
                 'control_values' => array('1', '0'),
                 'default' => '0',
+            ),
+            'enable_uucss_on_cpcss' => array(
+                'control_type' => 'checkbox',
+                'control_label' => 'Enable Remove Unused CSS with Critical CSS',
+                'control_description' => 'Enable Remove Unused CSS with Critical CSS',
+                'control_values' => array('1', '0'),
+                'default' => '0',
+                'global' => true,
             ),
             'uucss_preload_font_urls' => array(
                 'control_type' => 'textarea',
@@ -959,12 +959,12 @@ class RapidLoad_Optimizer
                 'control_description' => 'Your CDN endpoint to store and serve all your resources across the CDN network',
                 'actions' => array(
                     array(
-                        'key' => 'clear_cdn_cache',
+                        'key' => 'copy_cdn_url',
                         'control_type' => 'button',
-                        'control_label' => 'Clear CDN Cache',
-                        'control_icon' => 'rotate-cw',
-                        'control_description' => 'Clear resources caches across the CDN network',
-                        'action' => 'action=purge_rapidload_cdn&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                        'control_label' => 'Copy CDN URL',
+                        'control_icon' => 'clipboard',
+                        'control_description' => 'Copy to clipboard',
+                        'action' => 'clipboard',
                     ),
                     array(
                         'key' => 'validate_cdn_url',
@@ -977,12 +977,12 @@ class RapidLoad_Optimizer
                         'action_response_mutates' => ['uucss_cdn_url'],
                     ),
                     array(
-                        'key' => 'copy_cdn_url',
+                        'key' => 'clear_cdn_cache',
                         'control_type' => 'button',
-                        'control_label' => 'Copy CDN URL',
-                        'control_icon' => 'clipboard',
-                        'control_description' => 'Copy to clipboard',
-                        'action' => 'clipboard',
+                        'control_label' => 'Clear CDN Cache',
+                        'control_icon' => 'rotate-cw',
+                        'control_description' => 'Clear resources caches across the CDN network',
+                        'action' => 'action=purge_rapidload_cdn&nonce=' . wp_create_nonce( 'uucss_nonce' ),
                     ),
                 )
             ),
@@ -1020,6 +1020,14 @@ class RapidLoad_Optimizer
                 'control_label' => 'Setup Policies',
                 'action' => 'update_htaccess_file',
                 'default' => ''
+            ),
+
+            'preload_internal_links' => array(
+                'control_type' => 'checkbox',
+                'control_label' => 'Preload Links',
+                'control_description' => 'Preloads a page to reduce waiting time when you click.',
+                'control_values' => array('1', '0'),
+                'default' => '0'
             ),
 
             //Other settings starts here
@@ -1069,29 +1077,23 @@ class RapidLoad_Optimizer
                     $input['value'] = $options[$input['key']] == "defer" || $options[$input['key']] == "1";
                 }else if($input['key'] == "uucss_enable_uucss"){
                     $data = new RapidLoad_Job_Data(self::$job, 'uucss');
-                    if(!$data->exist()){
-                        $data->save();
-                    }
                     $settings['status'] = [
-                        'status' => $data->status,
-                        'stats' => $data->get_stats(),
-                        'warnings' => $data->get_warnings(),
-                        'error' => $data->get_error()
+                        'status' => isset($data->id) ? $data->status : null,
+                        'stats' =>  isset($data->id) ? $data->get_stats() : null,
+                        'warnings' =>  isset($data->id) ? $data->get_warnings() : null,
+                        'error' =>  isset($data->id) ? $data->get_error() : null
                     ];
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }else if($input['key'] == "update_htaccess_file"){
                     $settings['status'] = RapidLoad_htaccess::has_rapidload_rules();
                 }else if($input['key'] == "uucss_enable_cpcss"){
                     $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
-                    if(!$data->exist()){
-                        $data->save();
-                    }
                     $cpcss_data = $data->get_cpcss_data();
                     $settings['status'] = [
-                        'status' => $data->status,
-                        'error' => $data->get_error(),
-                        'desktop' => isset($cpcss_data['desktop']) && !empty($cpcss_data['desktop']) ? $cpcss_data['desktop'] : null,
-                        'mobile' => isset($cpcss_data['mobile']) && !empty($cpcss_data['mobile']) ? $cpcss_data['mobile'] : null,
+                        'status' => isset($data->id) ? $data->status : null,
+                        'error' => isset($data->id) ? $data->get_error() : null,
+                        'desktop' => isset($data->id) && isset($cpcss_data['desktop']) && !empty($cpcss_data['desktop']) ? $cpcss_data['desktop'] : null,
+                        'mobile' => isset($data->id) && isset($cpcss_data['mobile']) && !empty($cpcss_data['mobile']) ? $cpcss_data['mobile'] : null,
                     ];
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }else if($input['key'] == "uucss_enable_cache"){
@@ -1156,10 +1158,11 @@ class RapidLoad_Optimizer
             ['keys' => ['unsized-images'], 'name' => 'Minify CSS', 'description' => 'Remove unnecessary spaces, lines and comments from CSS files.', 'category' => 'css', 'inputs' => ['uucss_minify', 'uucss_minify_excluded_files']],
             ['keys' => ['unminified-javascript'], 'name' => 'Minify Javascript', 'description' => 'Remove unnecessary spaces, lines and comments from JS files.', 'category' => 'javascript', 'inputs' => ['minify_js', 'uucss_exclude_files_from_minify_js']],
             ['keys' => ['unused-css-rules'], 'name' => 'Remove Unused CSS', 'description' => 'Remove unused CSS for each page and reduce page size.', 'category' => 'css', 'inputs' => ['uucss_enable_uucss', 'uucss_excluded_files','uucss_safelist','uucss_misc_options','rapidload_purge_all']],
-            ['keys' => ['render-blocking-resources'], 'name' => 'Critical CSS', 'description' => 'Extract and prioritize above-the-fold CSS.', 'category' => 'css', 'inputs' => ['uucss_enable_cpcss', 'uucss_enable_cpcss_mobile', 'uucss_additional_css', 'remove_cpcss_on_user_interaction', 'rapidload_enable_cpcss_file_chunk', 'rapidload_cpcss_file_character_length', 'uucss_preload_font_urls', 'cpcss_purge_url']],
+            ['keys' => ['render-blocking-resources'], 'name' => 'Critical CSS', 'description' => 'Extract and prioritize above-the-fold CSS.', 'category' => 'css', 'inputs' => ['uucss_enable_cpcss', 'uucss_enable_cpcss_mobile', 'uucss_additional_css', 'remove_cpcss_on_user_interaction', 'rapidload_enable_cpcss_file_chunk', 'rapidload_cpcss_file_character_length', 'enable_uucss_on_cpcss', 'uucss_preload_font_urls', 'cpcss_purge_url']],
             ['keys' => ['render-blocking-resources'], 'name' => 'Defer Javascript', 'description' => 'Render-blocking JS on website can be resolved with defer JavaScript.', 'category' => 'javascript', 'inputs' => ['uucss_load_js_method', 'uucss_excluded_js_files_from_defer']],
             ['keys' => ['offscreen-images'], 'name' => 'Lazy Load Images', 'description' => 'Delay loading of images until needed.', 'category' => 'image', 'inputs' => ['uucss_lazy_load_images', 'uucss_exclude_images_from_lazy_load']],
             ['keys' => ['lcp-lazy-loaded'], 'name' => 'Exclude Above-the-fold Images from Lazy Load', 'description' => 'Improve your LCP images.', 'category' => 'image', 'inputs' => ['uucss_exclude_above_the_fold_images', 'uucss_exclude_above_the_fold_image_count']],
+            ['keys' => ['server-response-time'], 'name' => 'Preload Links', 'description' => 'Preloads a page to reduce waiting time when you click.', 'category' => 'cache', 'inputs' => ['preload_internal_links']],
             ['keys' => ['bootup-time', 'unused-javascript'], 'name' => 'Delay Javascript', 'description' => 'Loading JS files on user interaction', 'category' => 'javascript', 'inputs' => ['delay_javascript', 'rapidload_js_delay_method', 'uucss_exclude_files_from_delay_js', 'delay_javascript_callback', 'uucss_excluded_js_files','uucss_load_scripts_on_user_interaction']],
             ['keys' => ['server-response-time'], 'name' => 'Page Cache', 'description' => 'Optimize and cache static HTML pages to provide a snappier page experience.', 'category' => 'cache', 'inputs' => ['uucss_enable_cache','cache_expires','cache_expiry_time','mobile_cache','excluded_page_paths']],
             ['keys' => ['third-party-facades'], 'name' => 'Lazy Load Iframes', 'description' => 'Delay loading of iframes until needed.', 'category' => 'image', 'inputs' => ['uucss_lazy_load_iframes', 'uucss_exclude_iframes_from_lazy_load']],
@@ -1372,6 +1375,11 @@ class RapidLoad_Optimizer
 
         if(isset(self::$options['uucss_enable_cache'])){
             self::$global_options['uucss_enable_cache'] = self::$options['uucss_enable_cache'];
+            RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
+        }
+
+        if(isset(self::$options['enable_uucss_on_cpcss'])){
+            self::$global_options['enable_uucss_on_cpcss'] = self::$options['enable_uucss_on_cpcss'];
             RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
         }
 
