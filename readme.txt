@@ -155,6 +155,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.3.5 - 18/10/2024 =
+ * fix: known bugs
+
 = 2.3.4 - 24/09/2024 =
  * fix: flush cache not working in Titan Optimizer
  * fix: Unused CSS misc options save not working
