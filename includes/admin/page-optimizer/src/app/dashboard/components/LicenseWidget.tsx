@@ -29,7 +29,7 @@ const LicenseWidget = () => {
         <div className='w-full flex flex-col gap-4'>
             <Card data-tour='license-widget' className="border flex flex-col gap-4">
                 <div className="flex flex-col p-6 pb-0 gap-2">
-                    <div className="text-lg font-bold text-brand-400 dark:text-brand-300">Welcome back, <span
+                    <div className="text-lg font-bold text-brand-400/50 dark:text-brand-300">Welcome back, <span
                         className="text-brand-950">{license?.name}</span></div>
 
                     <div className="bg-purple-500/10 px-2.5 py-1.5 rounded-xl w-fit">

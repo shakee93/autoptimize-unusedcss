@@ -24,7 +24,7 @@ const CDNSummary = () => {
                         <span className={`font-semibold ${label === 'Additional Usage' && 'text-brand-400'}`}>{label}</span>
                         <span className="text-brand-400 text-xs">{usage}</span>
                     </div>
-                    <div className="text-[10px] font-normal dark:text-brand-300 text-brand-500">
+                    <div className="text-[10px] font-normal dark:text-brand-300 text-brand-400">
                         {note}
                     </div>
                 </div>
