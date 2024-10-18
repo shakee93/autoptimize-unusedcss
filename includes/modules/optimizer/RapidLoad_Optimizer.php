@@ -83,6 +83,8 @@ class RapidLoad_Optimizer
 
     public function update_content($state){
 
+        self::debug_log('doing titan');
+
         if(isset($state['dom']) && isset($_REQUEST['rapidload_preview'])){
 
             /*$head = $state['dom']->find('head', 0);
@@ -220,7 +222,7 @@ class RapidLoad_Optimizer
 
         $strategy = isset($_REQUEST['strategy']) ? $_REQUEST['strategy'] : 'mobile';
 
-        $this->pre_optimizer_function($url, $strategy, null);
+        $this->pre_optimizer_function($url, $strategy, null, false);
 
         if(isset(self::$merged_options['uucss_api_key'])){
             unset(self::$merged_options['uucss_api_key']);
@@ -264,7 +266,8 @@ class RapidLoad_Optimizer
         }
 
         $strategy = isset($_REQUEST['strategy']) ? $_REQUEST['strategy'] : 'mobile';
-        self::$global = isset($_REQUEST['global']) && $_REQUEST['global'];
+
+        self::$global = isset($_REQUEST['global']) && $_REQUEST['global'] || rtrim(site_url(), "/") == rtrim($url, "/");
 
         $this->pre_optimizer_function($url, $strategy, self::$global);
 
@@ -284,11 +287,11 @@ class RapidLoad_Optimizer
 
     }
 
-    public function  pre_optimizer_function($url, $strategy, $global){
+    public function  pre_optimizer_function($url, $strategy, $global, $can_be_saved = false){
         self::$job = new RapidLoad_Job([
             'url' => $this->transform_url($url)
         ]);
-        if(!isset(self::$job->id)){
+        if(!isset(self::$job->id) && $can_be_saved){
             self::$job->save();
         }
 
@@ -298,7 +301,7 @@ class RapidLoad_Optimizer
 
         self::$global = $global;
 
-        self::$options = self::$strategy == "desktop" ? self::$job->get_desktop_options() : self::$job->get_mobile_options();
+        self::$options = self::$strategy == "desktop" ? isset(self::$job->id) ? self::$job->get_desktop_options() : self::$job->get_mobile_options() : self::$global_options;
 
         self::$previous_options = self::$options;
 
@@ -488,7 +491,7 @@ class RapidLoad_Optimizer
         $strategy = isset($_REQUEST['strategy']) ? $_REQUEST['strategy'] : 'mobile';
         $global = isset($_REQUEST['global']) && $_REQUEST['global'];
 
-        $this->pre_optimizer_function($url, $strategy, $global);
+        $this->pre_optimizer_function($url, $strategy, $global, true);
 
         $body = file_get_contents('php://input');
 
@@ -892,6 +895,12 @@ class RapidLoad_Optimizer
                 'control_description' => 'These images will be excluded from lazy-loading.',
                 'default' => ''
             ),
+            'uucss_exclude_iframes_from_lazy_load' => array(
+                'control_type' => 'textarea',
+                'control_label' => 'Exclude Iframes from Lazy Load',
+                'control_description' => 'These iframes will be excluded from lazy-loading.',
+                'default' => ''
+            ),
             'uucss_lazy_load_iframes' => array(
                 'control_type' => 'checkbox',
                 'control_label' => 'Iframes Lazy Load',
@@ -964,6 +973,8 @@ class RapidLoad_Optimizer
                         'control_icon' => 'check-circle',
                         'control_description' => 'Check if the CDN url is working',
                         'action' => 'action=validate_cdn&dashboard_cdn_validator&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                        // this state will be updated in the frontend after response using data.${provided_key}
+                        'action_response_mutates' => ['uucss_cdn_url'],
                     ),
                     array(
                         'key' => 'copy_cdn_url',
@@ -1151,7 +1162,7 @@ class RapidLoad_Optimizer
             ['keys' => ['lcp-lazy-loaded'], 'name' => 'Exclude Above-the-fold Images from Lazy Load', 'description' => 'Improve your LCP images.', 'category' => 'image', 'inputs' => ['uucss_exclude_above_the_fold_images', 'uucss_exclude_above_the_fold_image_count']],
             ['keys' => ['bootup-time', 'unused-javascript'], 'name' => 'Delay Javascript', 'description' => 'Loading JS files on user interaction', 'category' => 'javascript', 'inputs' => ['delay_javascript', 'rapidload_js_delay_method', 'uucss_exclude_files_from_delay_js', 'delay_javascript_callback', 'uucss_excluded_js_files','uucss_load_scripts_on_user_interaction']],
             ['keys' => ['server-response-time'], 'name' => 'Page Cache', 'description' => 'Optimize and cache static HTML pages to provide a snappier page experience.', 'category' => 'cache', 'inputs' => ['uucss_enable_cache','cache_expires','cache_expiry_time','mobile_cache','excluded_page_paths']],
-            ['keys' => ['third-party-facades'], 'name' => 'Lazy Load Iframes', 'description' => 'Delay loading of iframes until needed.', 'category' => 'image', 'inputs' => ['uucss_lazy_load_iframes', 'uucss_exclude_images_from_lazy_load']],
+            ['keys' => ['third-party-facades'], 'name' => 'Lazy Load Iframes', 'description' => 'Delay loading of iframes until needed.', 'category' => 'image', 'inputs' => ['uucss_lazy_load_iframes', 'uucss_exclude_iframes_from_lazy_load']],
             ['keys' => ['uses-long-cache-ttl'], 'name' => 'RapidLoad CDN', 'description' => 'Load resource files faster by using 112 edge locations with only 27ms latency.', 'category' => 'cdn', 'inputs' => ['uucss_enable_cdn','uucss_cdn_url', 'validate_cdn_url', 'clear_cdn_cache']],
             ['keys' => ['uses-long-cache-ttl'], 'name' => 'Cache Policy', 'description' => 'Set up cache-control header to increase the browser cache expiration', 'category' => 'cache', 'inputs' => ['update_htaccess_file',]],
             ['keys' => ['unsized-images'], 'name' => 'Add Width and Height Attributes', 'description' => 'Include width and height attributes for these images.', 'category' => 'image', 'inputs' => ['uucss_set_width_and_height','uucss_exclude_images_from_set_width_and_height']]
@@ -1254,7 +1265,9 @@ class RapidLoad_Optimizer
                                     $rapidload_cache_args['excluded_page_paths'] = "";
                                 }
                             }else{
-                                self::$options[$input->key] = $input->value;
+                                if($input->key != "uucss_cdn_url"){
+                                    self::$options[$input->key] = $input->value;
+                                }
                             }
                         }else if(isset($new_options[$input->key])){
                             unset(self::$options[$input->key]);

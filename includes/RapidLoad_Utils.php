@@ -765,13 +765,40 @@ trait RapidLoad_Utils {
         return ($string == serialize(false) || @unserialize($string) !== false);
     }
 
-    public static function debug_log($object){
+    public static function debug_log(...$objects)
+    {
+        if(defined('RAPIDLOAD_DEBUG_LOG') && RAPIDLOAD_DEBUG_LOG){
+            $currentDateTime = date("Y-m-d H:i:s");
+            error_log("================== LOG START - " . $currentDateTime . " ==================");
+            foreach ($objects as $object) {
+                if (gettype($object) == "string") {
+                    error_log($object);
+                } else {
+                    error_log(json_encode($object, JSON_PRETTY_PRINT));
+                }
+            }
+            error_log("================== LOG END - " . $currentDateTime . " ==================");
+        }
+    }
 
-        if(gettype($object) == "string"){
-            error_log($object);
-        }else{
-            error_log(json_encode($object, JSON_PRETTY_PRINT));
+    public static function log_user_agent() {
+        if (defined('DOING_CRON') && DOING_CRON) {
+            return;
         }
 
+        if (defined('DOING_AJAX') && DOING_AJAX) {
+            return;
+        }
+
+        if (isset($_SERVER['HTTP_USER_AGENT']) && isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '.') === false) {
+            $user_agent = $_SERVER['HTTP_USER_AGENT'];
+            self::debug_log("Request URI: " . $_SERVER['REQUEST_URI'] . " - " . "User Agent: " . $user_agent);
+        } else {
+            if (isset($_SERVER['REQUEST_URI'])) {
+                self::debug_log("Request URI: " . $_SERVER['REQUEST_URI']);
+            }
+            self::debug_log("User Agent: Not available or not an HTML request");
+        }
     }
+    
 }
