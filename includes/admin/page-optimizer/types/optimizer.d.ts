@@ -177,6 +177,7 @@ interface AuditSettingInput {
     control_icon: string;
     control_accordion_name: string;
     control_description: string;
+    control_values_description?: ControlValuesDescription[];
     control_values_suffix: string;
     control_visibility?: {
         key: string, value: string
@@ -203,6 +204,10 @@ interface ControlValue {
 
 type ControlTypes = 'checkbox' | 'textarea' | 'tickbox' | string
 
+type ControlValuesDescription = {
+    value: string;
+    description: string;
+};
 interface Metric {
     id: string;
     title: string;

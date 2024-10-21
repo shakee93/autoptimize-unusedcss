@@ -26,6 +26,8 @@ class RapidLoad_Font_Enqueue
 
     public function update_content($state){
 
+        self::debug_log('doing font optimization');
+
         if(isset($state['dom'])){
             $this->dom = $state['dom'];
         }
@@ -174,7 +176,9 @@ class RapidLoad_Font_Enqueue
                     if($this->font_handler){
                         $content = $this->font_handler->add_display_swap_to_inline_styles($content);
                     }
-                    $inline_style_content = sprintf('<style id="google-font-%s">%s</style>', $version, $content);
+                    $minifier = new \MatthiasMullie\Minify\CSS();
+                    $minifier->add($content);
+                    $inline_style_content = sprintf('<style id="google-font-%s">%s</style>', $version, $minifier->minify());
                     $title_content = $this->dom->find( 'title' )[0]->outertext;
                     $this->dom->find( 'title' )[0]->outertext = $title_content . $inline_style_content;
                 }else{

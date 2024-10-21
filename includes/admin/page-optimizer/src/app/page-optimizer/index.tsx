@@ -1,16 +1,16 @@
-import React, {Dispatch, SetStateAction, useEffect, useRef, useState, lazy} from "react";
+import React, { Dispatch, SetStateAction, useEffect, useRef, useState, lazy } from "react";
 
 import Header from "app/page-optimizer/components/Header";
 import PageSpeedScore from "app/page-optimizer/components/performance-widgets/PageSpeedScore";
-import {useSelector} from "react-redux";
-import {useAppContext} from "../../context/app";
-import {cn} from "lib/utils";
+import { useSelector } from "react-redux";
+import { useAppContext } from "../../context/app";
+import { cn } from "lib/utils";
 import Loading from "components/loading";
 import OptimizerInProgress from "components/optimizer-in-progress";
-import {optimizerData} from "../../store/app/appSelector";
+import { optimizerData } from "../../store/app/appSelector";
 import { Loader } from "lucide-react";
-import {m, AnimatePresence} from "framer-motion";
-import {Toaster} from "components/ui/toaster";
+import { m, AnimatePresence } from "framer-motion";
+import { Toaster } from "components/ui/toaster";
 import usePerformanceColors from "hooks/usePerformanceColors";
 import Performance from "app/page-optimizer/spaces/Performance";
 import SpeedIndex from "app/page-optimizer/spaces/Metrics";
@@ -43,7 +43,7 @@ export default function PageOptimizer() {
     useEffect(() => {
 
         if (savingData) {
-            const content =  document.getElementById('rapidload-page-optimizer-content');
+            const content = document.getElementById('rapidload-page-optimizer-content');
             content?.scrollTo(0, 0)
         }
 
@@ -58,7 +58,7 @@ export default function PageOptimizer() {
             transition={{
                 ease: 'linear',
                 duration: 0.04,
-        }}
+            }}
             id='rapidload-page-optimizer-wrapper'
             translate="no"
             className={cn(
@@ -99,16 +99,38 @@ export default function PageOptimizer() {
                     {/*    </div>*/}
                     {/*)}*/}
 
+                    <div className="col-span-12 w-full">
+                        {/* <AnimatePresence>
+                            {testMode && (
+                                <m.div
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{
+                                        ease: 'easeInOut',
+                                        duration: 0.5,
+                                    }}
+                                    className="text-sm bg-white dark:bg-brand-950 flex flex-col px-6 py-3 rounded-lg border-2"
+                                >
+                                    <span className="font-semibold text-md  dark:text-brand-300">Test Mode Activated</span>
+                                    <span className="capitalize">
+                                        optimizations are safely previewed without affecting your live website. Perfect for experimentation and fine-tuning.
+                                    </span>
+                                </m.div>
+                            )}
+                        </AnimatePresence> */}
+                    </div>
                     <>
+
                         {togglePerformance && (
                             <aside className="col-span-12 lg:col-span-3">
                                 <div className="text-lg ml-5  flex items-center gap-2">
                                     {/*<Circle style={{*/}
                                     {/*    fill: progressbarColor*/}
                                     {/*}} className='w-2 mt-0.5 stroke-0 transition-colors'/>*/}
-                                    Page Insights {togglePerformance && <TogglePerformance/>} </div>
-                                <div   className="widgets pt-4 flex">
-                                    <PageSpeedScore/>
+                                    Page Insights {togglePerformance && <TogglePerformance />} </div>
+                                <div className="widgets pt-4 flex">
+                                    <PageSpeedScore />
                                 </div>
                             </aside>
                         )}
@@ -118,10 +140,10 @@ export default function PageOptimizer() {
 
                             <AnimatePresence initial={true} mode='wait'>
                                 {activeMetric ? (
-                                    <SpeedIndex/>
+                                    <SpeedIndex />
                                 ) : (
                                     <SlideUp uuid='perf'>
-                                        <Performance/>
+                                        <Performance />
                                     </SlideUp>
                                 )}
                             </AnimatePresence>
@@ -130,7 +152,7 @@ export default function PageOptimizer() {
                 </section>
 
             </div>
-            <Toaster/>
+            <Toaster />
         </m.div>
     );
 }
