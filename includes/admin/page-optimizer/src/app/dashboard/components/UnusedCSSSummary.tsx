@@ -4,7 +4,20 @@ import { cn } from "lib/utils";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import PerformanceProgressBar from "components/performance-progress-bar";
 
-const UnusedCSSSummary = ({ settings }) => {
+interface Item{
+    label: string;
+    value: number | string;
+}
+interface Summary {
+    title: string;
+    total_jobs: number;
+    items: Item[];
+}
+interface SettingsProps {
+    settings: Summary[];
+}
+
+const UnusedCSSSummary: React.FC<SettingsProps> = ({settings }) => {
     return (
         <>
             <div className='w-full flex flex-col gap-4'>
@@ -13,7 +26,7 @@ const UnusedCSSSummary = ({ settings }) => {
                               'px-4 py-4 overflow-hidden border border-transparent flex flex-col sm:flex-row lg:flex-col justify-around border-brand-200 dark:border-brand-800',
                           )}>
 
-                        {settings.map((summary, index) => (
+                        {settings.map((summary: Summary, index: number) => (
                         <div key={index} className="content flex w-full sm:w-1/2 lg:w-full flex-col px-2 py-2 ">
                             <div className='flex gap-2 items-center'>
                                 <div className="text-base font-semibold dark:text-brand-300">{summary.title}</div>
@@ -28,7 +41,7 @@ const UnusedCSSSummary = ({ settings }) => {
                                     <div className='will-change absolute  h-2.5 w-40 bg-[#7F54B3] rounded'></div>
                                 </div>
                                 <div className='flex justify-between items-center mt-4'>
-                                    {summary.items.map((item, idx) => (
+                                    {summary.items.map((item: Item, idx: number) => (
                                         <div key={idx} className='flex flex-col items-center'>
                                             <div className="text-xs font-medium dark:text-brand-300 text-brand-500">{item.label}</div>
                                             <div className="text-lg font-semibold">{item.value}</div>

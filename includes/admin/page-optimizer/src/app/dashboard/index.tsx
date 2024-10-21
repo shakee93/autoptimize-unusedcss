@@ -37,6 +37,7 @@ import {ThunkDispatch} from "redux-thunk";
 import PerformanceGears from "./components/performance-widgets/PerformanceGears";
 import PerformanceWidget from './components/performance-widgets/PerformanceWidget';
 import PageSpeedCoach from './components/performance-widgets/PageSpeedCoach';
+import AIBot from "./components/AIBot";
 
 export interface AuditComponentRef {
     notifyHeightChange: () => void;
@@ -113,17 +114,18 @@ export default function Dashboard() {
                     <div className="flex justify-between gap-4">
                         <div className="flex flex-col w-full gap-4">
                             <LicenseWidget/>
-                            <CacheSummary/>
+                            <AIBot/>
                         </div>
                         <div className="flex flex-col w-full gap-4">
                             {/*<PageSpeedCoach/>*/}
-                            <CDNSummary/>
+                            <CacheSummary/>
                             <CDNSummary/>
                         </div>
                         <div className="flex flex-col w-full">
                             <PerformanceWidget/>
                             <PerformanceGears/>
                         </div>
+
                         {/*<div className="flex-col">*/}
                         {/*    <div className="widgets pt-4 gap-4 grid">*/}
                         {/*        <PageSpeedCoach/>*/}

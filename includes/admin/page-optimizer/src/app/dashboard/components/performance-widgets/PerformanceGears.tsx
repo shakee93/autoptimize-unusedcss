@@ -36,14 +36,16 @@ const Steps = [
 
 const GEAR_FEATURES: Record<PerformanceGear, string[]> = {
     turboMax: [
-        "Unlock peak performance potential for test1",
-        "Utilize Accelerator mode test2",
-        "Generate critical CSS for faster rendering test3",
-        "Implement advanced handling methods",
-        "Delay execution for improved speed and efficiency",
+        "Starter + Accelerator Optimizations",
+        "Files served through CDN",
+        "Images served in Next-Gen format",
+        "Images Lazy-loaded",
+        "JavaScript files Deferred",
+        "Critical CSS files generated",
+        "JavaScript files delayed",
     ],
     accelerate: [
-        "Starter Plus",
+        "Starter Optimizations",
         "Files served through CDN",
         "Images served in Next-Gen format",
         "Images Lazy-loaded",
@@ -57,11 +59,11 @@ const GEAR_FEATURES: Record<PerformanceGear, string[]> = {
         "Google Fonts self-hosted",
     ],
     custom: [
-        "Unlock peak performance potential",
-        "Utilize Accelerator mode",
-        "Generate critical CSS for faster rendering",
-        "Implement advanced JavaScript handling methods",
-        "Delay execution for improved speed and efficiency",
+        // "Unlock peak performance potential",
+        // "Utilize Accelerator mode",
+        // "Generate critical CSS for faster rendering",
+        // "Implement advanced JavaScript handling methods",
+        // "Delay execution for improved speed and efficiency",
     ],
 };
 
@@ -106,20 +108,20 @@ const PerformanceGears: React.FC = () => {
     }, [activeLevel]);
 
     // Function to get filtered options
-    const getFilteredOptions = (settings, optimizationSteps) => {
-        return settings
-            .filter((s) => optimizationSteps.includes(s.name)) // Filter based on OptimizationSteps
-            .map((s) => ({
-                category: s.category,
-                name: s.name,
-                inputs: s.inputs[0] ? {
-                    control_label: s.inputs[0].control_label,
-                    control_type: s.inputs[0].control_type,
-                    key: s.inputs[0].key,
-                    value: s.inputs[0].value,
-                } : null
-            }));
-    };
+    // const getFilteredOptions = (settings, optimizationSteps) => {
+    //     return settings
+    //         .filter((s) => optimizationSteps.includes(s.name)) // Filter based on OptimizationSteps
+    //         .map((s) => ({
+    //             category: s.category,
+    //             name: s.name,
+    //             inputs: s.inputs[0] ? {
+    //                 control_label: s.inputs[0].control_label,
+    //                 control_type: s.inputs[0].control_type,
+    //                 key: s.inputs[0].key,
+    //                 value: s.inputs[0].value,
+    //             } : null
+    //         }));
+    // };
 
 
     // useEffect(() => {
@@ -127,9 +129,9 @@ const PerformanceGears: React.FC = () => {
     //     console.log(newOptions);
     // }, [OptimizationSteps]);
 
-    const toggleAccordion = useCallback(() => {
-        setIsAccordionOpen(prev => !prev);
-    }, []);
+    // const toggleAccordion = useCallback(() => {
+    //     setIsAccordionOpen(prev => !prev);
+    // }, []);
 
     const getIcon = useMemo(() => (level: PerformanceGear) => {
         const iconProps = {
@@ -142,12 +144,12 @@ const PerformanceGears: React.FC = () => {
         }
     }, [activeLevel]);
 
-    const getTriggerText = useMemo(() => () => {
-        if (isAccordionOpen) return 'Optimization Progress';
-        if (currentStep === -1) return 'Click a level to start optimization';
-        if (currentStep === OptimizationSteps.length - 1) return 'All Optimizations are completed';
-        return OptimizationSteps[currentStep] + '...';
-    }, [isAccordionOpen, currentStep]);
+    // const getTriggerText = useMemo(() => () => {
+    //     if (isAccordionOpen) return 'Optimization Progress';
+    //     if (currentStep === -1) return 'Click a level to start optimization';
+    //     if (currentStep === OptimizationSteps.length - 1) return 'All Optimizations are completed';
+    //     return OptimizationSteps[currentStep] + '...';
+    // }, [isAccordionOpen, currentStep]);
 
     const renderBoosterLevel = useCallback((level: PerformanceGear) => (
         <div
@@ -170,39 +172,39 @@ const PerformanceGears: React.FC = () => {
         </div>
     ), [activeLevel, getIcon, startOptimization]);
 
-    const renderOptimizationStep = useCallback((step: string, index: number) => (
-        <div key={index} className="flex items-start gap-2 py-1 relative">
-            <div className="w-5 flex flex-col items-center">
-                {index === OptimizationSteps.length - 1 ? (
-                    <CheckCircleIcon className={`w-5 h-5 ${index <= currentStep ? 'text-green-600' : 'text-gray-300'}`} />
-                ) : (
-                    <>
-                        <div className="w-5 h-5 flex items-center justify-center relative z-10">
-                            {index < currentStep && <div className="w-2 h-2 rounded-full bg-[#C1C1C1]" />}
-                            {index === currentStep && isOptimizing && <div className="w-2 h-2 rounded-full bg-green-600 animate-pulse" />}
-                            {index > currentStep && <div className="w-2 h-2 rounded-full bg-[#C1C1C1]" />}
-                        </div>
-                        {index < OptimizationSteps.length - 1 && (
-                            <motion.div
-                                className="w-[1px] bg-[#C1C1C1] absolute top-[1.15rem] left-[.6rem] z-1"
-                                initial={{ height: 0 }}
-                                animate={{ height: index < currentStep ? '125%' : 0 }}
-                                transition={{ duration: 0.25, ease: "easeInOut" }}
-                            />
-                        )}
-                    </>
-                )}
-            </div>
-            <span className={`text-sm transition-colors ${index <= currentStep ? 'text-gray-900' : 'text-gray-400'}`}>{step}</span>
-        </div>
-    ), [currentStep, isOptimizing]);
+    // const renderOptimizationStep = useCallback((step: string, index: number) => (
+    //     <div key={index} className="flex items-start gap-2 py-1 relative">
+    //         <div className="w-5 flex flex-col items-center">
+    //             {index === OptimizationSteps.length - 1 ? (
+    //                 <CheckCircleIcon className={`w-5 h-5 ${index <= currentStep ? 'text-green-600' : 'text-gray-300'}`} />
+    //             ) : (
+    //                 <>
+    //                     <div className="w-5 h-5 flex items-center justify-center relative z-10">
+    //                         {index < currentStep && <div className="w-2 h-2 rounded-full bg-[#C1C1C1]" />}
+    //                         {index === currentStep && isOptimizing && <div className="w-2 h-2 rounded-full bg-green-600 animate-pulse" />}
+    //                         {index > currentStep && <div className="w-2 h-2 rounded-full bg-[#C1C1C1]" />}
+    //                     </div>
+    //                     {index < OptimizationSteps.length - 1 && (
+    //                         <motion.div
+    //                             className="w-[1px] bg-[#C1C1C1] absolute top-[1.15rem] left-[.6rem] z-1"
+    //                             initial={{ height: 0 }}
+    //                             animate={{ height: index < currentStep ? '125%' : 0 }}
+    //                             transition={{ duration: 0.25, ease: "easeInOut" }}
+    //                         />
+    //                     )}
+    //                 </>
+    //             )}
+    //         </div>
+    //         <span className={`text-sm transition-colors ${index <= currentStep ? 'text-gray-900' : 'text-gray-400'}`}>{step}</span>
+    //     </div>
+    // ), [currentStep, isOptimizing]);
 
 
 
     const GearFeatures: React.FC<{ gearName: PerformanceGear; features: string[] }> = ({ gearName, features }) => (
         <div>
-            <h4 className="text-lg font-semibold capitalize">{`${gearName} Features`}</h4>
-            <ul className="space-y-1 py-2">
+            <h4 className="text-base font-semibold capitalize">{gearName} Features</h4>
+            <ul className="space-y-1 py-2 text-sm font-medium">
                 {features.map((feature, index) => (
                     <li key={index} className="flex items-center gap-2">
                         <CustomCheckIcon className="h-3 w-3 text-brand-600" />
@@ -221,7 +223,7 @@ const PerformanceGears: React.FC = () => {
     return (
         <div className="flex flex-col items-center justify-between">
             <div className="flex flex-col p-6 pb-4 text-md gap-4 bg-white border-b-0 border-t-0 border w-full overflow-hidden relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white">
-                <h4 className="text-lg font-semibold flex text-brand-400 gap-1">
+                <h4 className="text-base font-semibold flex text-brand-400 gap-1">
                     You’ve activated <span className="capitalize text-brand-950 ">{activeLevel} Gear</span>
                 </h4>
                 <div className="flex flex-col w-full">

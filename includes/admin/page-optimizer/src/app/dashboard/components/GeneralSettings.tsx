@@ -1,4 +1,4 @@
-import React, { useEffect, useState, FC } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Textarea } from 'components/ui/textarea';
 import { Checkbox } from 'components/ui/checkbox';
 import useCommonDispatch from 'hooks/useCommonDispatch';
@@ -25,8 +25,7 @@ const defaultSettings: GeneralSettings = {
 interface GeneralSettingsProps {
     onClose: (open: boolean) => void;
 }
-
-const GeneralSettings: FC<GeneralSettingsProps> = ({ onClose }) => {
+const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
     const { dispatch } = useCommonDispatch();
     const { options } = useAppContext();
     const [settingsData, setSettingsData] = useState<GeneralSettings>(defaultSettings);

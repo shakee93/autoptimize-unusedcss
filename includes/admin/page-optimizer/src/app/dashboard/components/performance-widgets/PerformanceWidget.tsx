@@ -9,7 +9,8 @@ import usePerformanceColors from "hooks/usePerformanceColors";
 import tinycolor from 'tinycolor2';
 
 const PerformanceWidget: React.FC = () => {
-    const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(40);
+    const performanceScore = 40;
+    const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(performanceScore);
     const lighterColor = tinycolor(progressbarBg).lighten(10).toString();
 
     return (
@@ -49,7 +50,7 @@ const PerformanceWidget: React.FC = () => {
                             <PerformanceProgressBar
                                 className={cn('max-h-[140px]')}
                                 scoreClassName={"text-brand-950"}
-                                performance={40}
+                                performance={performanceScore}
                             />
                         </div>
                         <div className="text-sm text-gray-600">

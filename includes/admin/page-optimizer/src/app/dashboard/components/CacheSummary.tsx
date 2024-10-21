@@ -4,6 +4,12 @@ import {cn} from "lib/utils";
 import { InformationCircleIcon  } from "@heroicons/react/24/outline";
 import DoughnutChart from "app/dashboard/components/charts/doughnut";
 
+type CacheItemProps = {
+    label: string;
+    size: string;
+};
+
+
 const CacheSummary = () => {
 
     const chartOptions = {
@@ -41,10 +47,10 @@ const CacheSummary = () => {
         ]
     };
 
-    const CacheItem = ({ label, size }) => (
-        <div className="flex justify-between items-center py-1.5">
-            <div className="text-sm font-semibold dark:text-brand-300 text-brand-500">{label}</div>
-            <div className="text-sm font-semibold dark:text-brand-300">{size}</div>
+    const CacheItem = ({ label, size }: CacheItemProps) => (
+        <div className="flex justify-between items-center py-1.5 font-medium">
+            <div className="text-sm dark:text-brand-300 text-brand-500">{label}</div>
+            <div className="text-sm dark:text-brand-300">{size}</div>
         </div>
     );
 

@@ -8,15 +8,26 @@ import {Label} from "components/ui/label";
 import {Skeleton} from "components/ui/skeleton"
 import PerformanceProgressBar from "components/performance-progress-bar";
 
+interface SectionHeaderProps {
+    title: string;
+}
+
+interface UsageBarProps {
+    label: string;
+    usage?: string;
+    progressWidth: string;
+    note?: string;
+}
+
 const CDNSummary = () => {
-    const SectionHeader = ({ title }) => (
+    const SectionHeader = ({ title }: SectionHeaderProps) => (
         <div className="flex gap-2 items-center">
             <div className="text-base font-semibold dark:text-brand-300">{title}</div>
             <InformationCircleIcon className="h-[18px] w-[18px]" />
         </div>
     );
 
-    const UsageBar = ({ label, usage, progressWidth, note }) => (
+    const UsageBar = ({ label, usage, progressWidth, note }: UsageBarProps) => (
         <div className="flex flex-col gap-1 py-2">
 
                 <div className="flex items-center text-sm dark:text-brand-300 justify-between">
@@ -35,12 +46,6 @@ const CDNSummary = () => {
                 ></div>
             </div>
 
-        </div>
-    );
-
-    const UsageNote = ({note}) => (
-        <div className="text-xs font-normal dark:text-brand-300 text-brand-500">
-            {note}
         </div>
     );
 
