@@ -1,6 +1,7 @@
 
 interface Window {
     rapidload_optimizer: WordPressOptions;
+    uucss_global: any;
 }
 interface WordPressOptions {
     ajax_url: string

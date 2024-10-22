@@ -1,6 +1,7 @@
 import {isDev, toBoolean} from "lib/utils";
 import store from "../store";
 import { toast } from "components/ui/use-toast";
+import {fetchPages, fetchPosts} from "../store/app/appActions";
 
 class ApiService {
     public baseURL: URL;
@@ -238,6 +239,123 @@ class ApiService {
             this.baseURL.searchParams.append('action', 'rapidload_switch_test_mode');
             this.baseURL.searchParams.append('url', url)
             this.baseURL.searchParams.append('test_mode', mode)
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async getOptimizationData(startFrom: number, limit: number): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', 'rapidload_titan_optimizations_data');
+            this.baseURL.searchParams.append('start_from', startFrom)
+            this.baseURL.searchParams.append('limit', limit)
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+
+    async searchData(action: string, searchFor: string, postType?: string): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', action);
+            this.baseURL.searchParams.append('s', searchFor)
+            this.baseURL.searchParams.append('post_type', postType)
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async deleteOptimizedData(url: string): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', 'rapidload_delete_titan_optimizations');
+            this.baseURL.searchParams.append('url', url)
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async saveGeneralSettings(data: any): Promise<any> {
+        try {
+            console.log(data)
+            const formData = new FormData();
+            this.baseURL.searchParams.append('action', 'update_rapidload_settings');
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type':'multipart/form-data',
+                },
+                body: JSON.stringify(data),
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+
+    async fetchPosts(): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', 'rapidload_fetch_post_types_with_links');
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async getLicense(): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', 'uucss_license');
 
             const response = await fetch(this.baseURL, {
                 method: 'POST',

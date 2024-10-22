@@ -33,6 +33,10 @@ class RapidLoad_Admin
             add_action('wp_ajax_rapidload_titan_feedback', [$this, 'rapidload_titan_feedback']);
             add_action('wp_ajax_rapidload_enable_cdn_metering', [$this, 'rapidload_enable_cdn_metering']);
             add_action('wp_ajax_rapidload_enable_cdn_metering', [$this, 'rapidload_enable_image_metering']);
+            add_action('wp_ajax_rapidload_delete_titan_optimizations', [$this, 'rapidload_delete_titan_optimizations']);
+            add_action('wp_ajax_rapidload_titan_optimizations_data', [$this, 'rapidload_titan_optimizations_data']);
+            add_action('wp_ajax_rapidload_fetch_post_types_with_links', [$this, 'rapidload_fetch_post_types_with_links']);
+            add_action('wp_ajax_rapidload_fetch_post_search_by_title_or_permalink', [$this, 'rapidload_fetch_post_search_by_title_or_permalink']);
 
 
             add_action('wp_ajax_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
@@ -48,6 +52,10 @@ class RapidLoad_Admin
                 add_action('wp_ajax_nopriv_titan_checklist_cron', [$this, 'titan_checklist_cron']);
                 add_action('wp_ajax_nopriv_titan_checklist_plugins', [$this, 'titan_checklist_plugins']);
                 add_action('wp_ajax_nopriv_titan_checklist_status', [$this, 'titan_checklist_status']);
+                add_action('wp_ajax_nopriv_rapidload_delete_titan_optimizations', [$this, 'rapidload_delete_titan_optimizations']);
+                add_action('wp_ajax_nopriv_rapidload_titan_optimizations_data', [$this, 'rapidload_titan_optimizations_data']);
+                add_action('wp_ajax_nopriv_rapidload_fetch_post_types_with_links', [$this, 'rapidload_fetch_post_types_with_links']);
+                add_action('wp_ajax_nopriv_rapidload_fetch_post_search_by_title_or_permalink', [$this, 'rapidload_fetch_post_search_by_title_or_permalink']);
             }
 
         }
@@ -60,6 +68,175 @@ class RapidLoad_Admin
         add_filter('uucss/rules', [$this, 'rapidload_rule_types'], 90 , 1);
         add_action('add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
 
+    }
+
+    function rapidload_fetch_post_types_with_links() {
+        $data = [];
+
+        if ( class_exists( 'WooCommerce' ) ) {
+            $cart_page_id = wc_get_page_id( 'cart' );
+            $checkout_page_id = wc_get_page_id( 'checkout' );
+        } else {
+            $cart_page_id = $checkout_page_id = 0;
+        }
+
+        $post_types = get_post_types( ['public' => true], 'names' );
+
+        foreach ( $post_types as $post_type ) {
+
+            $query = new WP_Query([
+                'post_type'      => $post_type,
+                'posts_per_page' => 10,
+                'orderby'        => 'post_modified',
+                'order'          => 'DESC',
+                'no_found_rows'  => true
+            ]);
+
+            if ( $query->have_posts() ) {
+                $posts_data = [];
+                $unique_urls = [];
+
+                foreach ( $query->posts as $post ) {
+
+                    $post_id = $post->ID;
+
+                    if ( $post_type === 'page' && ( $post_id == $cart_page_id || $post_id == $checkout_page_id ) ) {
+                        continue;
+                    }
+
+                    $permalink = get_permalink( $post_id );
+
+                    $parsed_url = wp_parse_url( $permalink );
+                    $base_url = isset( $parsed_url['scheme'] ) && isset( $parsed_url['host'] )
+                        ? $parsed_url['scheme'] . '://' . $parsed_url['host'] . $parsed_url['path']
+                        : $permalink;
+
+                    if ( !in_array( $base_url, $unique_urls ) ) {
+                        $unique_urls[] = $base_url;
+                        $posts_data[] = [
+                            'title'     => get_the_title( $post_id ),
+                            'permalink' => $permalink,
+                        ];
+                    }
+                }
+
+                $data[] = [
+                    'post_type' => $post_type,
+                    'links'     => $posts_data
+                ];
+            }
+        }
+
+        wp_send_json_success($data);
+    }
+
+    function rapidload_fetch_post_search_by_title_or_permalink() {
+
+        if ( !isset( $_REQUEST['s'] ) ) {
+            wp_send_json_error( 'Search key not found' );
+        }
+
+        $search_term = sanitize_text_field( $_REQUEST['s'] );
+        $search_term_lower = strtolower( $search_term );
+
+        if ( strlen( $search_term ) < 3 ) {
+            wp_send_json_error( 'Search term must be at least 3 characters long' );
+        }
+
+        if ( class_exists( 'WooCommerce' ) ) {
+            $cart_page_id = wc_get_page_id( 'cart' );
+            $checkout_page_id = wc_get_page_id( 'checkout' );
+        } else {
+            $cart_page_id = $checkout_page_id = 0;
+        }
+
+        $post_type = isset( $_REQUEST['post_type'] ) ? sanitize_text_field( $_REQUEST['post_type'] ) : 'any';
+        $posts_per_page = 10;
+        $paged = 1;
+        $data = [];
+
+        do {
+            $args = [
+                'posts_per_page'   => $posts_per_page,
+                'post_type'        => $post_type,
+                'post_status'      => 'publish',
+                'paged'            => $paged,
+                'fields'           => 'ids'
+            ];
+
+            $query = new WP_Query( $args );
+
+            if ( $query->have_posts() ) {
+                foreach ( $query->posts as $post_id ) {
+
+                    if ( $post_type === 'page' && ( $post_id == $cart_page_id || $post_id == $checkout_page_id ) ) {
+                        continue;
+                    }
+
+                    $permalink = get_permalink( $post_id );
+                    $permalink_lower = strtolower( $permalink );
+
+                    if ( stripos( $permalink_lower, $search_term_lower ) !== false || stripos( strtolower( get_the_title( $post_id ) ), $search_term_lower ) !== false ) {
+                        $data[] = [
+                            'id'        => $post_id,
+                            'post_type' => get_post_type( $post_id ),
+                            'title'     => get_the_title( $post_id ),
+                            'permalink' => $permalink,
+                        ];
+                    }
+                }
+            }
+
+            $paged++;
+        } while ( $query->found_posts > count( $data ) && $query->max_num_pages >= $paged );
+
+        if ( empty( $data ) ) {
+            wp_send_json_error( 'No results found' );
+        }
+
+        wp_send_json_success( $data );
+    }
+
+    public function rapidload_titan_optimizations_data(){
+
+        $start_from = 0;
+        $limit = 10;
+        $s = null;
+
+        if(isset($_REQUEST['start_from'])){
+            $start_from = $_REQUEST['start_from'];
+        }
+        if(isset($_REQUEST['limit'])){
+            $limit = $_REQUEST['limit'];
+        }
+        if(isset($_REQUEST['s']) && !empty($_REQUEST['s'])){
+            $s = $_REQUEST['s'];
+        }
+
+        wp_send_json_success(RapidLoad_Job::get_all_optimizations_data_for('desktop', $start_from, $limit, $s));
+
+    }
+
+    public function rapidload_delete_titan_optimizations(){
+
+        if(!isset($_REQUEST['url'])){
+            wp_send_json_error('url required');
+        }
+
+        $url = $_REQUEST['url'];
+
+        $job = new RapidLoad_Job(['url' => $url]);
+
+        if(!isset($job->id)){
+            wp_send_json_error('job not found');
+        }
+
+        $job->delete_all_revisions();
+        $job->set_desktop_options(null);
+        $job->set_mobile_options(null);
+        $job->save();
+
+        wp_send_json_success('successfully deleted all optimizations data');
     }
 
     public function rapidload_enable_cdn_metering(){

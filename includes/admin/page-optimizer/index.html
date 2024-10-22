@@ -19,7 +19,7 @@
 
 
 
-    
+
      // window.rapidload_optimizer = {
      //   "load_optimizer": "1",
      //         "page_optimizer_package_base": "http://rapidload.local/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer/dist",
@@ -118,9 +118,9 @@
   <body>
 
     <div id="rapidload-page-optimizer"></div>
-    <div id='popup'>
+    <!-- <div id='popup'>
       hover me to show popup
-    </div>
+    </div> -->
 
     <script>
       function loadRL() {
@@ -128,8 +128,8 @@
         let popup = document.getElementById('popup')
         new window.RapidLoadOptimizer({
           container,
-          popup,
-          showOptimizer: false,
+          // popup,
+          showOptimizer: true,
 
           shadowRoot:false,
           // global: true,

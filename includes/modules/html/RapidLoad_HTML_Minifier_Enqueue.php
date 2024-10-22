@@ -15,7 +15,7 @@ class RapidLoad_HTML_Minifier_Enqueue
     {
         $this->job = $job;
 
-        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 90);
+        add_filter('uucss/enqueue/content/update', [$this, 'update_content'], 99);
     }
 
     public function update_content($state){

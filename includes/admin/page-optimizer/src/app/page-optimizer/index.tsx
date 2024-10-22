@@ -18,13 +18,14 @@ import TogglePerformance from "components/toggle-performance";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import SlideUp from "components/animation/SlideUp";
 import ErrorFetch from "components/ErrorFetch";
+import TestModeNotification from "components/ui/test-mode-notification";
 
 export interface AuditComponentRef {
     notifyHeightChange: () => void;
 }
 
 export default function PageOptimizer() {
-    const { data, loading, error, testMode } = useSelector(optimizerData);
+    const {data, loading, error, testMode} = useSelector(optimizerData);
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(data?.performance);
     const { dispatch, activeMetric } = useCommonDispatch()
 
@@ -61,56 +62,42 @@ export default function PageOptimizer() {
             id='rapidload-page-optimizer-wrapper'
             translate="no"
             className={cn(
-                " bg-white font-sans overflow-hidden fixed z-[100000] w-screen h-screen top-0 left-0 flex min-h-screen flex-col text-base items-center ",
+                "font-sans flex min-h-screen flex-col text-base items-center ",
                 "dark:text-brand-300 text-brand-800",
-                "notranslate"
+                "notranslate",
+                // !dashboard ? ' z-[100000] top-0 left-0 h-screen overflow-hidden': ''
             )}>
 
-            <AnimatePresence>
-                {testMode &&
-                    <m.div
-                        initial={{ borderWidth: '0px' }}
-                        animate={{ borderWidth: '5px' }}
-                        exit={{ borderWidth: '0px' }}
-                        transition={{ duration: 0.5 }}
-                        className={cn(
-                            'absolute inset-0 z-[110002] pointer-events-none',
-                            'border-solid border-[#f7b250] rounded-none'
-                        )}>
-                        <div className={cn(
-                            'absolute -inset-[3px] rounded-xl',
-                            'border-[3px] border-[#f7b250]'
-                        )} />
-                    </m.div>}
-            </AnimatePresence>
 
+            {/*{testMode &&*/}
+            {/*    <TestModeNotification/>*/}
+            {/*}*/}
 
-            <Header url={url} />
+            <Header url={url}/>
 
             <div
                 id='rapidload-page-optimizer-content'
                 className={cn(
-                    'overflow-y-auto scrollbar-stable w-full h-fit pb-20 -mt-[70px] ',
-                    'dark:bg-brand-900 bg-brand-200/60 min-h-screen',
-                    savingData && 'relative overflow-hidden',
-
-                )}>
+                'overflow-y-auto w-full h-fit pb-20 ',
+                'min-h-screen',
+                savingData && 'relative overflow-hidden'
+            )}>
 
                 <section
                     ref={optimizerContainer}
                     className={cn(
-                        'relative container grid grid-cols-none lg:grid-cols-12 lg:grid-rows-0 gap-6 pt-[72px] mt-4',
+                        'relative container grid grid-cols-none lg:grid-cols-12 lg:grid-rows-none  gap-8 pt-[10px] mt-4',
                     )}>
 
-                    {(savingData || invalidatingCache) && (
-                        <div className='fixed inset-0 flex justify-center items-center z-[110000] bg-brand-50/80 dark:bg-brand-950/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'>
-                            <div className='fixed top-1/2 flex gap-2 items-center justify-center'>
-                                <Loader className='w-5 animate-spin' />
-                                {savingData && 'Saving Changes...'}
-                                {invalidatingCache && 'Flushing Cache...'}
-                            </div>
-                        </div>
-                    )}
+                    {/*{(savingData || invalidatingCache) && (*/}
+                    {/*    <div className='fixed inset-0 flex justify-center items-center z-[110000] bg-brand-50/80 dark:bg-brand-950/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'>*/}
+                    {/*        <div className='fixed top-1/2 flex gap-2 items-center justify-center'>*/}
+                    {/*            <Loader className='w-5 animate-spin'/>*/}
+                    {/*            {savingData && 'Saving Changes...'}*/}
+                    {/*            {invalidatingCache && 'Flushing Cache...'}*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
 
                     <div className="col-span-12 w-full">
                         {/* <AnimatePresence>

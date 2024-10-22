@@ -40,7 +40,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
     mode: RapidLoadOptimizerModes
     modeData?: RapidLoadOptimizerModeData
     initShowOptimizerValue?: boolean,
-    global: boolean
+    global: boolean,
 }) => {
     const isAdminBar = document.getElementById('wpadminbar');
 
@@ -49,6 +49,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
     const [mounted, setMounted] = useState<boolean>(false);
     const [sheetsHidden, setSheetsHidden]= useState(false)
     const [openAudits, setOpenAudits] = useState<string[]>([]);
+
     const [options, setOptions] = useState((
         {
             optimizer_url: 'https://rapidload.io/',

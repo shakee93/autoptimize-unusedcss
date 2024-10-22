@@ -134,13 +134,7 @@ class RapidLoad_Font_Enqueue
 
         $styles = $this->dom->find('style');
         foreach ($styles as $style){
-            $inner_text = $style->innertext;
-            $inner_text = preg_replace(
-                '/font-display:\s?(auto|block|fallback|optional)/',
-                'font-display:swap',
-                $inner_text
-            );
-            $inner_text = preg_replace('/@font-face\s*{/', '@font-face{font-display:swap;', $inner_text);
+            $inner_text = RapidLoad_Font::add_display_swap($style->innertext);
             $style->__set('innertext', $inner_text);
         }
     }

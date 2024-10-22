@@ -16,6 +16,8 @@ export type CommonState = {
         testModeStatus: boolean;
         testModeLoading: boolean;
         auditsReturn: boolean;
+        uucssError: boolean;
+        headerUrl: string;
     }
     desktop : {
         activeTab: AuditTypes;
@@ -29,6 +31,8 @@ export type CommonState = {
         testModeStatus: boolean;
         testModeLoading: boolean;
         auditsReturn: boolean;
+        uucssError: boolean;
+        headerUrl: string;
     }
 
 };

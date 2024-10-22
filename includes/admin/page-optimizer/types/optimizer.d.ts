@@ -239,8 +239,50 @@ interface CSSStatusResponse {
     cpcss: CSSJobStatus;
 }
 
+interface OptimizeTable {
+    id: string
+    created_at: string;
+    first_data: { performance : number };
+    last_data: { performance : number };
+    job_id: string;
+    strategy: string
+    url: string;
+}
+
+interface Link {
+    title: string;
+    permalink: string;
+}
+
+interface posts {
+    post_type: string;
+    links: Link[];
+}
+
+
 interface TestMode {
     status: boolean;
+}
+
+interface License {
+    email: string;
+    licensedDomain: string;
+    name: string;
+    plan: string;
+    next_billing: number;
+    siteUrl: string;
+}
+
+interface GeneralSettings {
+    uucss_excluded_links: string[];
+    rapidload_minify_html: boolean;
+    uucss_query_string: boolean;
+    preload_internal_links: boolean;
+    uucss_enable_debug: boolean;
+    uucss_jobs_per_queue: number;
+    uucss_queue_interval: number;
+    uucss_disable_add_to_queue: boolean;
+    uucss_disable_add_to_re_queue: boolean;
 }
 
 interface Revision {
