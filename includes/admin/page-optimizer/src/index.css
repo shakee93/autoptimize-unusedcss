@@ -178,5 +178,48 @@
 }
 
 .wave-animation {
-  animation: wave 2s infinite ease-out;
+  animation: wave 4s infinite ease-out;
 }
+
+
+.blinking {
+  animation: blink-animation 5s infinite;
+}
+
+@keyframes blink-animation {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 52% {
+    opacity: 0;
+  }
+  53%, 100% {
+    opacity: 1;
+  }
+}
+
+
+.draw-aibot {
+  stroke-dasharray: 67.1428;
+  stroke-dashoffset: 67.1428;
+  animation: draw 2s infinite, reset 10s infinite;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes reset {
+  0% {
+    stroke-dashoffset: 67.1428;
+  }
+  30% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+

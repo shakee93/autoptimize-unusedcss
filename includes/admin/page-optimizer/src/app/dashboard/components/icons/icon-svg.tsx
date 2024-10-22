@@ -22,12 +22,13 @@ export const CustomCheckIcon:FC<SvgProps> = ({className}) => (
 );
 
 export const BotIcon:FC<SvgProps> = ({className}) => (
-    <svg className={`${className}`} width="24" height="14" viewBox="0 0 24 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="1.10714" y="1.10714" width="21.7857" height="11.7857" rx="3.24549" stroke="#673B9B"
+
+    <svg className={`${className}`} width="34" height="24" viewBox="0 0 24 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect className="draw-aibot" x="1.10714" y="1.10714" width="21.7857" height="11.7857" rx="3.24549" stroke="#673B9B"
               strokeWidth="1.78571"/>
         <rect x="5.21512" y="5.21415" width="3.57143" height="3.57143" rx="1.78571" fill="#673B9B" stroke="#673B9B"
               strokeWidth="0.714286"/>
-        <rect x="15.2151" y="5.21415" width="3.57143" height="3.57143" rx="1.78571" fill="#673B9B" stroke="#673B9B"
+        <rect className="blinking" x="15.2151" y="5.21415" width="3.57143" height="3.57143" rx="1.78571" fill="#673B9B" stroke="#673B9B"
               strokeWidth="0.714286"/>
     </svg>
 
