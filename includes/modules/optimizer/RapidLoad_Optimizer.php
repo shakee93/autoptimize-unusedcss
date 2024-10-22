@@ -53,6 +53,8 @@ class RapidLoad_Optimizer
             'rapidload_css_job_status' => 'rapidload_css_job_status',
             'fetch_titan_settings' => 'fetch_titan_settings',
             'update_titan_settings' => 'update_titan_settings',
+            'get_rapidload_cdn_usage' => 'get_rapidload_cdn_usage',
+            'get_rapidload_image_usage' => 'get_rapidload_image_usage',
         ];
 
         foreach ($actions as $action => $method) {
@@ -62,6 +64,48 @@ class RapidLoad_Optimizer
                 add_action("wp_ajax_nopriv_$action", [$this, $method]);
             }
         }
+    }
+
+    public function get_rapidload_cdn_usage(){
+
+        if(!isset(self::$global_options['uucss_cdn_zone_id'])){
+            wp_send_json_error('zone id not found');
+        }
+
+        $api = new RapidLoad_Api();
+
+        $result = $api->post('get_cdn_usage',[
+            'zone_id' => self::$global_options['uucss_cdn_zone_id']
+        ]);
+
+        if(is_wp_error($result)){
+            wp_send_json_error($api->extract_error($result));
+        }
+
+        if(!isset($result->requested_usage)){
+            wp_send_json_error("Requested Usage not found");
+        }
+
+        wp_send_json_success($result->requested_usage);
+    }
+
+    public function get_rapidload_image_usage(){
+
+        $api = new RapidLoad_Api();
+
+        $result = $api->post('get_image_usage',[
+            'url' => site_url()
+        ]);
+
+        if(is_wp_error($result)){
+            wp_send_json_error($api->extract_error($result));
+        }
+
+        if(!isset($result->requested_usage)){
+            wp_send_json_error("Requested Usage not found");
+        }
+
+        wp_send_json_success($result->requested_usage);
     }
 
     public function isOptimizerEnabled()
