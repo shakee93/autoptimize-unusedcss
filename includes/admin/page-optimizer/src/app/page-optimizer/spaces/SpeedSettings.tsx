@@ -359,9 +359,22 @@ const SpeedSettings = ({ }) => {
         (item) => item.category === activeCategory
     );
 
+    const [enableFlags, setEnableFlags] = useState({ cpcss: false, uucss: false });
 
+    const updateEnableFlags = useCallback(() => {
+        const cpcssEnabled = settings.some(item => item.inputs.find(input => input.key === 'uucss_enable_cpcss')?.value);
+        const uucssEnabled = settings.some(item => item.inputs.find(input => input.key === 'uucss_enable_uucss')?.value);
 
+        setEnableFlags({ cpcss: cpcssEnabled, uucss: uucssEnabled });
+    }, [settings]);
 
+    useEffect(() => {
+        updateEnableFlags();
+    }, [settings, updateEnableFlags]);
+
+    useEffect(() => {
+        dispatch(setCommonState('uucssError', enableFlags.cpcss && enableFlags.uucss));
+    }, [enableFlags, dispatch]);
 
     return <AnimatePresence>
         <m.div

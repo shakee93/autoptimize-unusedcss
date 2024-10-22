@@ -16,6 +16,7 @@ export type CommonState = {
         testModeStatus: boolean;
         testModeLoading: boolean;
         auditsReturn: boolean;
+        uucssError: boolean;
         headerUrl: string;
     }
     desktop : {
@@ -30,6 +31,7 @@ export type CommonState = {
         testModeStatus: boolean;
         testModeLoading: boolean;
         auditsReturn: boolean;
+        uucssError: boolean;
         headerUrl: string;
     }
 
