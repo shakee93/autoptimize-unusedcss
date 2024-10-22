@@ -55,6 +55,7 @@ class RapidLoad_Optimizer
             'update_titan_settings' => 'update_titan_settings',
             'get_rapidload_cdn_usage' => 'get_rapidload_cdn_usage',
             'get_rapidload_image_usage' => 'get_rapidload_image_usage',
+            'get_cache_file_size' => 'get_cache_file_size',
         ];
 
         foreach ($actions as $action => $method) {
@@ -64,6 +65,54 @@ class RapidLoad_Optimizer
                 add_action("wp_ajax_nopriv_$action", [$this, $method]);
             }
         }
+    }
+
+    public function get_cache_file_size() {
+
+        $cache_folders = [
+            'page_cache_dir' => RapidLoad_Cache_Store::get_cache_dir(site_url()),
+            'js_cache_dir' => JavaScript::$base_dir,
+            'font_cache_dir' => RapidLoad_Font::$base_dir,
+        ];
+
+        $css_folders = [
+            'cpcss_cache_dir' => CriticalCSS::$base_dir,
+            'uucss_cache_dir' => UnusedCSS::$base_dir,
+            'minified_css_cache_dir' => MinifyCSS::$base_dir,
+        ];
+
+        $folder_sizes = [];
+        $file_system = RapidLoad_Base::get_log_instance();
+
+        foreach ($cache_folders as $key => $folder) {
+            if (file_exists($folder)) {
+                $folder_sizes[$key] = [
+                    'folder_name' => $folder,
+                    'size' => $file_system->get_folder_size($folder)
+                ];
+            } else {
+                $folder_sizes[$key] = [
+                    'folder_name' => $folder,
+                    'size' => 'Directory does not exist'
+                ];
+            }
+        }
+
+        $css_total_size = 0;
+        foreach ($css_folders as $folder) {
+            if (file_exists($folder)) {
+                $css_total_size += $file_system->get_folder_size_in_bytes($folder);
+            }
+        }
+
+        $folder_sizes['css_file_size'] = [
+            'folder_name' => 'CSS Cache Folders (Combined)',
+            'size' => $file_system->format_size_units($css_total_size)
+        ];
+
+        wp_send_json_success([
+            'cache_folders' => $folder_sizes
+        ]);
     }
 
     public function get_rapidload_cdn_usage(){

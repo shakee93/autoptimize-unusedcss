@@ -78,9 +78,9 @@ trait RapidLoad_Utils {
         
     }
 
-    private static function get_log_instance(){
+    public static function get_log_instance(){
 	    if(!self::$log_file_system){
-	        return new RapidLoad_FileSystem();
+            self::$log_file_system = new RapidLoad_FileSystem();
         }
 	    return self::$log_file_system;
     }
