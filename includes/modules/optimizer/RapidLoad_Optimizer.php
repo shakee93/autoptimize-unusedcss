@@ -244,7 +244,7 @@ class RapidLoad_Optimizer
         self::verify_nonce();
 
         $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
-        $types = isset($_REQUEST['types']) ? $_REQUEST['types'] : [];
+        $types = isset($_REQUEST['types']) ? explode(",", $_REQUEST['types']) : [];
 
         $url = $this->transform_url($url);
 
