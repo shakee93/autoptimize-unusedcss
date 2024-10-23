@@ -155,6 +155,8 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.3.6 - 18/10/2024 =
+
 = 2.3.5 - 18/10/2024 =
  * fix: known bugs
 

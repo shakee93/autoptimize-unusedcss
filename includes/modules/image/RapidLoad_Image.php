@@ -44,22 +44,29 @@ class RapidLoad_Image
         self::$instance = $this;
     }
 
-    public function optimize_css_file_images($css){
+    public function optimize_css_file_images($css) {
+        $regex = '/url\(\s*(["\']?)(.*?)\1\s*\)/i';
+        $site_url = site_url();
 
-        $parser = new \Sabberworm\CSS\Parser($css);
-        $cssDocument = $parser->parse();
-        foreach ($cssDocument->getAllValues() as $value) {
-            if( $value instanceof \Sabberworm\CSS\Value\URL){
-                $url = $this->extractUrl($value->getURL()->getString());
-                $urlExt = pathinfo($url, PATHINFO_EXTENSION);
-                if (in_array($urlExt, ["jpg", "jpeg", "png", "webp"])) {
-                    $replace_url = RapidLoad_Image::get_replaced_url($url,self::$image_indpoint);
-                    $value->setURL(new \Sabberworm\CSS\Value\CSSString($replace_url));
+        return preg_replace_callback($regex, function ($matches) use ($site_url) {
+            $url = $matches[2];
+
+            if (preg_match('/^(https?:\/\/|\/\/)/i', $url)) {
+                if (strpos($url, '//') === 0) {
+                    $url = 'https:' . $url;
+                }
+                if (strpos($url, $site_url) === 0) {
+                    $urlExt = pathinfo($url, PATHINFO_EXTENSION);
+
+                    if (in_array(strtolower($urlExt), ["jpg", "jpeg", "png", "webp"])) {
+                        $replace_url = RapidLoad_Image::get_replaced_url($url, self::$image_indpoint);
+                        return 'url("' . $replace_url . '")';
+                    }
                 }
             }
-        }
 
-        return $cssDocument->render();
+            return $matches[0];
+        }, $css);
     }
 
     public function enqueue_frontend_js(){
