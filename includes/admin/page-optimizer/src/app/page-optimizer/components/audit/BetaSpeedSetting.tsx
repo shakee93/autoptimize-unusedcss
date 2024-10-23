@@ -255,7 +255,7 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
 
     useEffect(() => {
 
-        if (!settings.status) return;
+        if (!settings.status || !mainInput.value) return;
 
         const isStatusValid = ['processing', 'queued'].includes(settings.status.status);
         const cssStatusKey = {
