@@ -248,8 +248,10 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
     useEffect(() => {
         if ((settings.status && mainInput.value) || (settings?.status && mainInput.control_type === 'button')) {
             setShowStatus(true)
+        }else{
+            setShowStatus(false)
         }
-    }, []);
+    }, [settings]);
 
     const [settingsStatus, setSettingsStatus] = useState(settings.status);
 
