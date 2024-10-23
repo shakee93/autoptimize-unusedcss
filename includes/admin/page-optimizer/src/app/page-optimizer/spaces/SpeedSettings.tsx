@@ -374,34 +374,6 @@ const SpeedSettings = ({ }) => {
 
 
 
-    // useEffect(() => {
-    //     intervalRef.current = setInterval(() => {
-    //         const statusNeedsUpdate = filteredSettings?.some(setting => {
-    //             if ((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status !== 'success') ||
-    //                 (includesStatusSettings(setting.name, ['Unused CSS']) && cssStatus?.uucss?.status !== 'success')) {
-    //                 return true;
-    //             }
-    //             return false;
-    //         });
-    //
-    //         if (statusNeedsUpdate && !statusSent) {
-    //             dispatch(getCSSStatus(options, url, ['uucss', 'cpcss']));
-    //             setStatusSent(true);
-    //
-    //             setTimeout(() => {
-    //                 setStatusSent(false);
-    //             }, 9000);
-    //         }
-    //     }, 10000);
-    //
-    //     return () => {
-    //         if (intervalRef?.current) {
-    //             clearInterval(intervalRef?.current);
-    //         }
-    //     };
-    // }, [dispatch, cssStatus, filteredSettings, options, url, statusSent]);
-
-
     return <div className='dark:bg-brand-800/40 bg-brand-200 px-9 py-8 mt-2 rounded-3xl'>
         <SettingsStraightLine />
         <div className="pb-4">

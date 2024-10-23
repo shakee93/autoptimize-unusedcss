@@ -72,7 +72,7 @@ export const Status = React.memo(({ status }: { status: AuditSetting['status'] }
 
     // status.status = 'processing';
 
-    if (status.status === 'failed') {
+    if (status.status === 'failed' || status.status === 'Miss') {
         return (
             <>
                 <div className='flex gap-1 items-center text-xs	border border-rose-600 w-fit rounded-lg px-1 py-py'>
@@ -85,7 +85,7 @@ export const Status = React.memo(({ status }: { status: AuditSetting['status'] }
                             <span className='text-brand-500 ml-4'>{status.error?.message ? status.error?.message : 'Failed to Optimize'}</span>
                         </div>
                     </Indicator>
-                    Failed
+                    <span className="capitalize">{status.status}</span>
                 </div>
             </>
         );
@@ -115,7 +115,7 @@ export const Status = React.memo(({ status }: { status: AuditSetting['status'] }
         )
     }
 
-    if (status.status === 'success') {
+    if (status.status === 'success' || status.status === 'Hit') {
         return (
             <>
                 <div className=' flex gap-1.5 items-center text-xs w-fit rounded-lg'>
@@ -254,36 +254,42 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
     const [settingsStatus, setSettingsStatus] = useState(settings.status);
 
     useEffect(() => {
-        console.log(settings)
-        if(settings.status?.status === 'success'){
-            return;
-        }
-        if (settings.status) {
-            const validStatuses = ['processing', 'queued', 'failed', 'success'];
-            const cssStatusMap: { [key: string]: string[] } = {
-                'Critical CSS': ['cpcss'],
-                'Remove Unused CSS': ['uucss'],
-                'Page Cache': ['cache'],
-                'Cache Policy': ['cache_policy']
-            };
 
-            const status = settings.status.status as string;
-            if (validStatuses.includes(status)) {
-                const cssStatusArray = cssStatusMap[settings.name as string] || [];
+        if (!settings.status) return;
 
-                dispatch(getCSSStatus(options, options?.optimizer_url, cssStatusArray))
-                    .then((status) => {
-                        const cssStatusKey = cssStatusArray[0];
-                        setSettingsStatus(status[cssStatusKey])
-                        console.log(settings.name, status[cssStatusKey]);
-                    })
-                    .catch((error) => {
-                        console.error('Error while dispatching getCSSStatus:', error);
-                    });
+        const isStatusValid = ['processing', 'queued'].includes(settings.status.status);
+        const cssStatusKey = {
+            'Critical CSS': 'cpcss',
+            'Remove Unused CSS': 'uucss',
+            'Page Cache': 'cache',
+            'Cache Policy': 'cache_policy',
+        }[settings.name];
+
+        if (!isStatusValid || !cssStatusKey) return;
+
+        const fetchStatus = async () => {
+            try {
+                const status = await dispatch(getCSSStatus(options, options?.optimizer_url, [cssStatusKey]));
+                const currentStatus = status[cssStatusKey];
+
+                setSettingsStatus(currentStatus);
+
+                if (['success', 'failed', 'Miss'].includes(currentStatus.status)) {
+                    clearInterval(intervalId);
+                }
+            } catch (error) {
+                console.error('Error fetching CSS status:', error);
+                clearInterval(intervalId);
             }
-        }
+        };
 
-    }, [settings]);
+        fetchStatus();
+        const intervalId = setInterval(fetchStatus, 5000);
+
+        return () => clearInterval(intervalId);
+
+
+    }, [settings, options, dispatch]);
 
     return (
         <>
