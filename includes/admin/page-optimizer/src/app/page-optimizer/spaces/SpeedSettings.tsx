@@ -354,21 +354,23 @@ const SpeedSettings = ({ }) => {
         (item) => item.category === activeCategory
     );
 
-    const [enableFlags, setEnableFlags] = useState({ cpcss: false, uucss: false });
+    const [enableFlags, setEnableFlags] = useState({ cpcss: false, uucss: false, cpcssuucss: false });
 
     const updateEnableFlags = useCallback(() => {
         const cpcssEnabled = settings.some(item => item.inputs.find(input => input.key === 'uucss_enable_cpcss')?.value);
         const uucssEnabled = settings.some(item => item.inputs.find(input => input.key === 'uucss_enable_uucss')?.value);
+        const cpcssuucssEnabled = settings.some(item => item.inputs.find(input => input.key === 'enable_uucss_on_cpcss')?.value);
 
-        setEnableFlags({ cpcss: cpcssEnabled, uucss: uucssEnabled });
+        setEnableFlags({ cpcss: cpcssEnabled, uucss: uucssEnabled, cpcssuucss: !cpcssuucssEnabled});
     }, [settings]);
 
     useEffect(() => {
         updateEnableFlags();
+        console.log(settings)
     }, [settings, updateEnableFlags]);
 
     useEffect(() => {
-        dispatch(setCommonState('uucssError', enableFlags.cpcss && enableFlags.uucss));
+        dispatch(setCommonState('uucssError', enableFlags.cpcss && enableFlags.uucss && enableFlags.cpcssuucss));
     }, [enableFlags, dispatch]);
 
     return <div className='dark:bg-brand-800/40 bg-brand-200 px-9 py-8 mt-2 rounded-3xl'>
