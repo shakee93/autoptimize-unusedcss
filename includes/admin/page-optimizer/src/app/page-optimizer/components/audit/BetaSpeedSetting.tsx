@@ -19,7 +19,7 @@ import { Checkbox } from "components/ui/checkbox";
 import { ThunkDispatch } from "redux-thunk";
 import { AppAction, AppState, RootState } from "../../../../store/app/appTypes";
 import { useDispatch, useSelector } from "react-redux";
-import { changeGear, updateSettings } from "../../../../store/app/appActions";
+import {changeGear, getCSSStatus, updateSettings} from "../../../../store/app/appActions";
 
 import AppButton from "components/ui/app-button"
 
@@ -251,6 +251,39 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
         }
     }, []);
 
+    const [settingsStatus, setSettingsStatus] = useState(settings.status);
+
+    useEffect(() => {
+        console.log(settings)
+        if(settings.status?.status === 'success'){
+            return;
+        }
+        if (settings.status) {
+            const validStatuses = ['processing', 'queued', 'failed', 'success'];
+            const cssStatusMap: { [key: string]: string[] } = {
+                'Critical CSS': ['cpcss'],
+                'Remove Unused CSS': ['uucss'],
+                'Page Cache': ['cache'],
+                'Cache Policy': ['cache_policy']
+            };
+
+            const status = settings.status.status as string;
+            if (validStatuses.includes(status)) {
+                const cssStatusArray = cssStatusMap[settings.name as string] || [];
+
+                dispatch(getCSSStatus(options, options?.optimizer_url, cssStatusArray))
+                    .then((status) => {
+                        const cssStatusKey = cssStatusArray[0];
+                        setSettingsStatus(status[cssStatusKey])
+                        console.log(settings.name, status[cssStatusKey]);
+                    })
+                    .catch((error) => {
+                        console.error('Error while dispatching getCSSStatus:', error);
+                    });
+            }
+        }
+
+    }, [settings]);
 
     return (
         <>
@@ -344,7 +377,7 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
                                     </div>
                                 ) : showStatus && (
                                     <div className='px-1'>
-                                        <Status status={settings.status}/>
+                                        <Status status={settingsStatus}/>
                                     </div>
                                 )}
 

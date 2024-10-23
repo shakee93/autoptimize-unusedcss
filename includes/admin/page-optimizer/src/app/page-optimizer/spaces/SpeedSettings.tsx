@@ -30,7 +30,7 @@ import { cn } from "lib/utils";
 import { setCommonState } from "../../../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import { BoltIcon, CheckCircleIcon, ChevronRightIcon, ChevronDownIcon, ChevronUpIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/solid";
-import { changeGear, updateSettings } from "../../../store/app/appActions";
+import {changeGear, getCSSStatus, updateSettings} from "../../../store/app/appActions";
 import { m, AnimatePresence } from 'framer-motion';
 import AuditSettingsItem from './AuditSettingsItem';
 import { useAppContext } from "../../../context/app";
@@ -366,12 +366,41 @@ const SpeedSettings = ({ }) => {
 
     useEffect(() => {
         updateEnableFlags();
-        console.log(settings)
     }, [settings, updateEnableFlags]);
 
     useEffect(() => {
         dispatch(setCommonState('uucssError', enableFlags.cpcss && enableFlags.uucss && enableFlags.cpcssuucss));
     }, [enableFlags, dispatch]);
+
+
+
+    // useEffect(() => {
+    //     intervalRef.current = setInterval(() => {
+    //         const statusNeedsUpdate = filteredSettings?.some(setting => {
+    //             if ((includesStatusSettings(setting.name, ['Critical CSS']) && cssStatus?.cpcss?.status !== 'success') ||
+    //                 (includesStatusSettings(setting.name, ['Unused CSS']) && cssStatus?.uucss?.status !== 'success')) {
+    //                 return true;
+    //             }
+    //             return false;
+    //         });
+    //
+    //         if (statusNeedsUpdate && !statusSent) {
+    //             dispatch(getCSSStatus(options, url, ['uucss', 'cpcss']));
+    //             setStatusSent(true);
+    //
+    //             setTimeout(() => {
+    //                 setStatusSent(false);
+    //             }, 9000);
+    //         }
+    //     }, 10000);
+    //
+    //     return () => {
+    //         if (intervalRef?.current) {
+    //             clearInterval(intervalRef?.current);
+    //         }
+    //     };
+    // }, [dispatch, cssStatus, filteredSettings, options, url, statusSent]);
+
 
     return <div className='dark:bg-brand-800/40 bg-brand-200 px-9 py-8 mt-2 rounded-3xl'>
         <SettingsStraightLine />
