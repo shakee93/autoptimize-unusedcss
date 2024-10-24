@@ -210,7 +210,7 @@ const PerformanceGears: React.FC = () => {
             ? settings.filter(data => data.inputs[0]?.value).map(data => data.name)
             : features;
 
-        const initialDisplayCount = 7;
+        const initialDisplayCount = 8;
         const shouldShowSeeMore = displayFeatures.length > initialDisplayCount;
 
         const handleSeeMoreClick = () => {
@@ -228,27 +228,29 @@ const PerformanceGears: React.FC = () => {
                         </li>
                     ))}
                 </ul>
-                {/* Show "See More" if there are more features than initialDisplayCount */}
                 {shouldShowSeeMore && (
-                    <button
-                        onClick={handleSeeMoreClick}
-                        className="text-brand-950 text-sm text-center absolute justify-center"
-                    >
-                        {isExpanded ? "See Less" : "See More"}
-                    </button>
+                    <div className={cn('w-full ' , isExpanded ? 'py-1' : 'py-4 absolute bg-gradient-to-b from-transparent to-brand-0 -mt-10')}>
+                        <button
+                            onClick={handleSeeMoreClick}
+                            className="text-brand-950 text-sm mx-auto block underline"
+                        >
+                            {isExpanded ? "See Less" : "See More"}
+                        </button>
+                    </div>
+
                 )}
             </div>
         );
     };
 
-    const GearDisplay: React.FC<{ activeGear: PerformanceGear }> = ({ activeGear }) => {
+    const GearDisplay: React.FC<{ activeGear: PerformanceGear }> = ({activeGear}) => {
         const features = GEAR_FEATURES[activeGear] || [];
         return <GearFeatures gearName={activeGear} features={features} />;
     };
 
     return (
         <div className="flex flex-col items-center justify-between">
-            <div className="flex flex-col p-6 pb-4 text-md gap-4 bg-white border-b-0 border-t-0 border w-full overflow-hidden relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white">
+            <div className="flex flex-col p-6 pb-0 text-md gap-4 bg-white border-b-0 border-t-0 border w-full overflow-hidden relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white">
                 <h4 className="text-base font-semibold flex text-brand-400 gap-1">
                     You’ve activated <span className="capitalize text-brand-950 ">{activeGear} Gear</span>
                 </h4>
