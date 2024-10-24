@@ -229,15 +229,17 @@ const PerformanceGears: React.FC = () => {
                     ))}
                 </ul>
                 {shouldShowSeeMore && (
-                    <div className={cn('w-full ' , isExpanded ? 'py-1' : 'py-4 absolute bg-gradient-to-b from-transparent to-brand-0 -mt-10')}>
-                        <button
-                            onClick={handleSeeMoreClick}
-                            className="text-brand-950 text-sm mx-auto block underline"
-                        >
-                            {isExpanded ? "See Less" : "See More"}
-                        </button>
+                    // <div className={cn('w-full ' , isExpanded ? 'py-1' : 'py-4 absolute bg-gradient-to-b from-transparent to-brand-0 -mt-10')}>
+                    //     <button
+                    //         onClick={handleSeeMoreClick}
+                    //         className="text-brand-950 text-sm mx-auto block underline"
+                    //     >
+                    //         {isExpanded ? "See Less" : "See More"}
+                    //     </button>
+                    // </div>
+                    <div className="z-10 absolute w-full h-1/2 bg-red-400 transform -translate-y-1/2">Bottom
+                        Div
                     </div>
-
                 )}
             </div>
         );
