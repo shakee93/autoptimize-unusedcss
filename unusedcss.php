@@ -3,7 +3,7 @@
 Plugin Name: RapidLoad - Optimize Web Vitals Automatically
 Plugin URI:  https://rapidload.io/
 Description: Makes your site even faster and lighter by automatically removing Unused CSS from your website.
-Version:     2.3.5
+Version:     2.4.0
 Author:      RapidLoad
 Author URI:  https://rapidload.io/
 */
