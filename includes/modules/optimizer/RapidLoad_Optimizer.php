@@ -244,6 +244,7 @@ class RapidLoad_Optimizer
         self::verify_nonce();
 
         $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
+        $types = isset($_REQUEST['types']) ? explode(",", $_REQUEST['types']) : [];
 
         $url = $this->transform_url($url);
 
@@ -251,30 +252,54 @@ class RapidLoad_Optimizer
             'url' => $url
         ]);
 
-        $job_data_uucss = new RapidLoad_Job_Data($job,'uucss');
-        $job_data_cpcss = new RapidLoad_Job_Data($job,'cpcss');
+        $response = [];
 
-        $cache_file = RapidLoad_Cache_Store::get_cache_file($url);
+        foreach ($types as $type){
+            switch ($type){
+                case 'uucss' :{
+                    $job_data_uucss = new RapidLoad_Job_Data($job,'uucss');
+                    $response[$type] = [
+                        'status' => isset($job_data_uucss->id) ? $job_data_uucss->status : null,
+                        'error' => isset($job_data_uucss->id) && isset($job_data_uucss->error) ? unserialize($job_data_uucss->error) : null,
+                        'warnings' => isset($job_data_uucss->id) && isset($job_data_uucss->warnings) ? unserialize($job_data_uucss->warnings) : null,
+                        'stats' => isset($job_data_uucss->id) && isset($job_data_uucss->stats) ? unserialize($job_data_uucss->stats) : null
+                    ];
+                    break;
+                }
+                case 'cpcss' :{
+                    $job_data_cpcss = new RapidLoad_Job_Data($job,'cpcss');
+                    $response[$type] = [
+                        'status' => isset($job_data_cpcss->id) ? $job_data_cpcss->status : null,
+                        'error' => isset($job_data_cpcss->id) && isset($job_data_cpcss->error) ? unserialize($job_data_cpcss->error) : null,
+                        'warnings' => isset($job_data_cpcss->id) && isset($job_data_cpcss->warnings) ? unserialize($job_data_cpcss->warnings) : null,
+                        'stats' => isset($job_data_cpcss->id) && isset($job_data_cpcss->stats) ? unserialize($job_data_cpcss->stats) : null
+                    ];
+                    break;
+                }
+                case 'cache' :{
 
-        wp_send_json_success([
-            'uucss' => [
-                'status' => isset($job_data_uucss->id) ? $job_data_uucss->status : null,
-                'error' => isset($job_data_uucss->id) && isset($job_data_uucss->error) ? unserialize($job_data_uucss->error) : null,
-                'warnings' => isset($job_data_uucss->id) && isset($job_data_uucss->warnings) ? unserialize($job_data_uucss->warnings) : null,
-                'stats' => isset($job_data_uucss->id) && isset($job_data_uucss->stats) ? unserialize($job_data_uucss->stats) : null
-            ],
-            'cpcss' => [
-                'status' => isset($job_data_cpcss->id) ? $job_data_cpcss->status : null,
-                'error' => isset($job_data_cpcss->id) && isset($job_data_cpcss->error) ? unserialize($job_data_cpcss->error) : null,
-                'warnings' => isset($job_data_cpcss->id) && isset($job_data_cpcss->warnings) ? unserialize($job_data_cpcss->warnings) : null,
-                'stats' => isset($job_data_cpcss->id) && isset($job_data_cpcss->stats) ? unserialize($job_data_cpcss->stats) : null
-            ],
-            'cache' => [
-                'status' => @file_exists($cache_file),
-                'file' => $cache_file,
-                'size' => @file_exists($cache_file) ? $this->formatSize(@filesize($cache_file)) : null
-            ]
-        ]);
+                    $cache_file = RapidLoad_Cache_Store::get_cache_file($url);
+                    $cache_file_exist = @file_exists($cache_file);
+
+                    $response[$type] = [
+                        'status' => $cache_file_exist ? 'Hit' : 'processing',
+                        'file' => $cache_file,
+                        'size' => $cache_file_exist ? $this->formatSize(@filesize($cache_file)) : null,
+                        'error' => [
+                            'code' => $cache_file_exist ? null : 422,
+                            'message' => $cache_file_exist ? null : 'Cache file not found',
+                        ],
+                    ];
+                    break;
+                }
+                case 'cache_policy':{
+
+                    $response[$type] = RapidLoad_htaccess::has_rapidload_rules();
+                }
+            }
+        }
+
+        wp_send_json_success($response);
 
     }
 
@@ -1193,7 +1218,7 @@ class RapidLoad_Optimizer
                     $cache_file = RapidLoad_Cache_Store::get_cache_file($url);
                     $cache_file_exist = @file_exists($cache_file);
                     $settings['status'] = [
-                        'status' => $cache_file_exist ? 'success' : 'failed',
+                        'status' => $cache_file_exist ? 'Hit' : 'processing',
                         'file' => $cache_file,
                         'size' => $cache_file_exist ? $this->formatSize(@filesize($cache_file)) : null,
                         'error' => [

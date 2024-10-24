@@ -168,7 +168,7 @@ const transformSettings = (data: any) => {
 }
 
 
-export const getCSSStatus = (options: WordPressOptions, url: string, types: string[]): ThunkAction<void, RootState, unknown, AnyAction> => {
+export const getCSSStatus = (options: WordPressOptions, url: string, types: string[]): ThunkAction<Promise<any>, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
@@ -180,6 +180,7 @@ export const getCSSStatus = (options: WordPressOptions, url: string, types: stri
                 type: GET_CSS_STATUS_SUCCESS,
                 payload : cssJobStatusResult.data
             })
+            return cssJobStatusResult?.data;
 
         } catch (error) {
             console.error('Error fetching CSS job status:', error);

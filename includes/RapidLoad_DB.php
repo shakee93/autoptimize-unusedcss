@@ -551,7 +551,7 @@ abstract class RapidLoad_DB
 
         $status_column = "CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE uucss.status END AS status,";
         if(defined('RAPIDLOAD_CPCSS_ENABLED') && RAPIDLOAD_CPCSS_ENABLED){
-            $status_column = "CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE CASE WHEN uucss.status is null THEN cpcss.status ELSE NULL END END AS status,";
+            $status_column = "CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE cpcss.status END AS status,";
         }
 
         global $wpdb;
