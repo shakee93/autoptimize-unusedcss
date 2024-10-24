@@ -291,7 +291,7 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
         return () => clearInterval(intervalId);
 
 
-    }, [settings, options, dispatch]);
+    }, [settings, options, dispatch, open]);
 
     return (
         <>
