@@ -77,35 +77,35 @@ const PerformanceGears: React.FC = () => {
     const { dispatch} = useCommonDispatch()
     const [open, setOpen] = useState(false);
 
-    const startOptimization = useCallback((level: PerformanceGear) => {
-
-        if (level !== activeLevel) {
-
-            dispatch(changeGear(
-                level as BasePerformanceGear
-            )).then((options : any) => {
-                setOptimizationSteps(options)
-            });
-
-            setActiveLevel(level);
-            setIsOptimizing(true);
-            setCurrentStep(0);
-
-            // Simulate optimization steps
-            const simulateSteps = (step: number) => {
-                if (step < OptimizationSteps.length) {
-                    setTimeout(() => {
-                        setCurrentStep(step);
-                        simulateSteps(step + 1);
-                    }, 2000);
-                } else {
-                    setIsOptimizing(false);
-                }
-            };
-
-            simulateSteps(0);
-        }
-    }, [activeLevel]);
+    // const startOptimization = useCallback((level: PerformanceGear) => {
+    //
+    //     if (level !== activeLevel) {
+    //
+    //         dispatch(changeGear(
+    //             level as BasePerformanceGear
+    //         )).then((options : any) => {
+    //             setOptimizationSteps(options)
+    //         });
+    //
+    //         setActiveLevel(level);
+    //         setIsOptimizing(true);
+    //         setCurrentStep(0);
+    //
+    //         // Simulate optimization steps
+    //         const simulateSteps = (step: number) => {
+    //             if (step < OptimizationSteps.length) {
+    //                 setTimeout(() => {
+    //                     setCurrentStep(step);
+    //                     simulateSteps(step + 1);
+    //                 }, 2000);
+    //             } else {
+    //                 setIsOptimizing(false);
+    //             }
+    //         };
+    //
+    //         simulateSteps(0);
+    //     }
+    // }, [activeLevel]);
 
     // Function to get filtered options
     // const getFilteredOptions = (settings, optimizationSteps) => {
@@ -135,14 +135,14 @@ const PerformanceGears: React.FC = () => {
 
     const getIcon = useMemo(() => (level: PerformanceGear) => {
         const iconProps = {
-            cls: `w-12 h-12 ${activeLevel === level ? 'text-purple-600' : 'text-gray-400'}`
+            cls: `w-12 h-12 ${activeGear === level ? 'text-purple-600' : 'text-gray-400'}`
         };
         switch (level) {
             case 'starter': return <Starter {...iconProps} />;
             case 'accelerate': return <Accelerate {...iconProps} />;
             case 'turboMax': return <TurboMax {...iconProps} />;
         }
-    }, [activeLevel]);
+    }, [activeGear]);
 
     // const getTriggerText = useMemo(() => () => {
     //     if (isAccordionOpen) return 'Optimization Progress';
@@ -156,13 +156,12 @@ const PerformanceGears: React.FC = () => {
             key={level}
             className={cn(
                 'hover:bg-brand-100/50 relative flex flex-col gap-3 font-normal cursor-pointer w-[135px] h-[135px] rounded-3xl items-center justify-center',
-                activeLevel === level ? 'text-brand-600 border-[3px] border-[#592d8d]' : ' border border-brand-200 dark:border-brand-700 opacity-40'
+                activeGear === level ? 'text-brand-600 border-[3px] border-[#592d8d]' : ' border border-brand-200 dark:border-brand-700 opacity-40'
             )}
-            onClick={() => startOptimization(level)}
         >
             <div>
                 {getIcon(level)}
-                {activeLevel === level && (
+                {activeGear === level && (
                     <div className="absolute top-2.5 right-2.5">
                         <CheckCircleIcon className="w-6 h-6 text-purple-800" />
                     </div>
@@ -170,7 +169,9 @@ const PerformanceGears: React.FC = () => {
             </div>
             <span className="capitalize">{level}</span>
         </div>
-    ), [activeLevel, getIcon, startOptimization]);
+    ), [activeGear, getIcon]);
+
+
 
     // const renderOptimizationStep = useCallback((step: string, index: number) => (
     //     <div key={index} className="flex items-start gap-2 py-1 relative">
@@ -201,19 +202,44 @@ const PerformanceGears: React.FC = () => {
 
 
 
-    const GearFeatures: React.FC<{ gearName: PerformanceGear; features: string[] }> = ({ gearName, features }) => (
-        <div>
-            <h4 className="text-base font-semibold capitalize">{gearName} Features</h4>
-            <ul className="space-y-1 py-2 text-sm font-medium">
-                {features.map((feature, index) => (
-                    <li key={index} className="flex items-center gap-2">
-                        <CustomCheckIcon className="h-3 w-3 text-brand-600" />
-                        {feature}
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
+    const GearFeatures: React.FC<{ gearName: PerformanceGear; features: string[] }> = ({ gearName, features }) => {
+        // State to track if "See More" is clicked
+        const [isExpanded, setIsExpanded] = useState(false);
+
+        const displayFeatures = gearName === "custom"
+            ? settings.filter(data => data.inputs[0]?.value).map(data => data.name)
+            : features;
+
+        const initialDisplayCount = 7;
+        const shouldShowSeeMore = displayFeatures.length > initialDisplayCount;
+
+        const handleSeeMoreClick = () => {
+            setIsExpanded(!isExpanded);
+        };
+
+        return (
+            <div className="relative">
+                <h4 className="text-base font-semibold capitalize">{gearName} Features</h4>
+                <ul className="space-y-1 py-2 text-sm font-medium">
+                    {displayFeatures.slice(0, isExpanded ? displayFeatures.length : initialDisplayCount).map((feature, index) => (
+                        <li key={index} className="flex items-center gap-2">
+                            <CustomCheckIcon className="h-3 w-3 text-brand-600" />
+                            {feature}
+                        </li>
+                    ))}
+                </ul>
+                {/* Show "See More" if there are more features than initialDisplayCount */}
+                {shouldShowSeeMore && (
+                    <button
+                        onClick={handleSeeMoreClick}
+                        className="text-brand-950 text-sm text-center absolute justify-center"
+                    >
+                        {isExpanded ? "See Less" : "See More"}
+                    </button>
+                )}
+            </div>
+        );
+    };
 
     const GearDisplay: React.FC<{ activeGear: PerformanceGear }> = ({ activeGear }) => {
         const features = GEAR_FEATURES[activeGear] || [];
@@ -224,7 +250,7 @@ const PerformanceGears: React.FC = () => {
         <div className="flex flex-col items-center justify-between">
             <div className="flex flex-col p-6 pb-4 text-md gap-4 bg-white border-b-0 border-t-0 border w-full overflow-hidden relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white">
                 <h4 className="text-base font-semibold flex text-brand-400 gap-1">
-                    You’ve activated <span className="capitalize text-brand-950 ">{activeLevel} Gear</span>
+                    You’ve activated <span className="capitalize text-brand-950 ">{activeGear} Gear</span>
                 </h4>
                 <div className="flex flex-col w-full">
                     <div className="flex gap-3 w-full pointer-events-none	">
