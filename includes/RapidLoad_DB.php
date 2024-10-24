@@ -551,7 +551,7 @@ abstract class RapidLoad_DB
 
         $status_column = "CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE uucss.status END AS status,";
         if(defined('RAPIDLOAD_CPCSS_ENABLED') && RAPIDLOAD_CPCSS_ENABLED){
-            $status_column = "CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE CASE WHEN uucss.status is null THEN cpcss.status ELSE NULL END END AS status,";
+            $status_column = "CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE cpcss.status END AS status,";
         }
 
         global $wpdb;
@@ -566,6 +566,8 @@ abstract class RapidLoad_DB
         from (select (case when rule_id is not null then rule_id else id end) as id , id as job_id, url, rule, regex, rule_id, rule_note, status, created_at from {$wpdb->prefix}rapidload_job) as job
         left join (select * from {$wpdb->prefix}rapidload_job_data where job_type = 'uucss') as uucss on job.id = uucss.job_id
         left join (select * from {$wpdb->prefix}rapidload_job_data where job_type = 'cpcss') as cpcss on job.id = cpcss.job_id) as dervied_table {$where} ORDER BY {$order_by} LIMIT {$start_from},{$limit}";
+
+        error_log($query);
 
         $data = $wpdb->get_results($query, OBJECT);
 

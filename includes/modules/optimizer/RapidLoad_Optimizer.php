@@ -282,7 +282,7 @@ class RapidLoad_Optimizer
                     $cache_file_exist = @file_exists($cache_file);
 
                     $response[$type] = [
-                        'status' => $cache_file_exist ? 'Hit' : 'Miss',
+                        'status' => $cache_file_exist ? 'Hit' : 'processing',
                         'file' => $cache_file,
                         'size' => $cache_file_exist ? $this->formatSize(@filesize($cache_file)) : null,
                         'error' => [
@@ -1218,7 +1218,7 @@ class RapidLoad_Optimizer
                     $cache_file = RapidLoad_Cache_Store::get_cache_file($url);
                     $cache_file_exist = @file_exists($cache_file);
                     $settings['status'] = [
-                        'status' => $cache_file_exist ? 'Hit' : 'Miss',
+                        'status' => $cache_file_exist ? 'Hit' : 'processing',
                         'file' => $cache_file,
                         'size' => $cache_file_exist ? $this->formatSize(@filesize($cache_file)) : null,
                         'error' => [
