@@ -33,3 +33,31 @@ export const BotIcon:FC<SvgProps> = ({className}) => (
     </svg>
 
 );
+
+export const AIBotIcon:FC<SvgProps> = ({className}) => (
+
+    <div className="relative w-28 h-14 flex items-center justify-center mt-12">
+        <div
+            className="absolute w-40 h-40 border-2 border-purple-500 rounded-full wave-animation"
+            style={{animationDelay: '0s'}}
+        ></div>
+        <div
+            className="absolute w-40 h-40 border-2 border-purple-500 rounded-full wave-animation"
+            style={{animationDelay: '1s'}}
+        ></div>
+        <div
+            className="absolute w-40 h-40 border-2 border-purple-500 rounded-full wave-animation"
+            style={{animationDelay: '2s'}}
+        ></div>
+        <div
+            className="absolute w-40 h-40 border-2 border-purple-500 rounded-full wave-animation"
+            style={{animationDelay: '3s'}}
+        ></div>
+        {/* Icon */}
+        <div
+            className="absolute w-24 h-24 flex items-center justify-center">
+            <BotIcon className="w-24"/>
+        </div>
+    </div>
+
+);

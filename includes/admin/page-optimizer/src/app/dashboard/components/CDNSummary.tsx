@@ -57,18 +57,18 @@ const CDNSummary = () => {
 
                 <UsageBar label="CDN" usage="2.2GB / 10GB" progressWidth="40%" note="Limits will be updated on July 5"/>
 
-                <UsageBar label="Additional Usage" progressWidth="24%" />
+                {/*<UsageBar label="Additional Usage" progressWidth="24%" />*/}
             </div>
 
             <div className="p-6 pt-4 relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white">
                 <UsageBar label="Images" usage="2.2GB / 10GB" progressWidth="52%" note="Limits will be updated on July 5"/>
 
-                <UsageBar label="Additional Usage" progressWidth="24%" />
+                {/*<UsageBar label="Additional Usage" progressWidth="24%" />*/}
             </div>
 
             <div className="flex justify-end p-6 pt-0 text-sm font-semibold">
                 <button className="cursor-pointer bg-brand-100/90 text-brand-950 py-1.5 px-4 rounded-lg">
-                    Manage your usage
+                    Manage usage
                 </button>
             </div>
         </Card>

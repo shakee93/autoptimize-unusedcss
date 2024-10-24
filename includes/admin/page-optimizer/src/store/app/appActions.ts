@@ -235,7 +235,7 @@ export const getTitanOptimizationData = (options: WordPressOptions, startFrom: n
             })
             const hasMoreData = fetchOptimizationData?.data && fetchOptimizationData.data.length > 0;
 
-            console.log(fetchOptimizationData )
+            // console.log(fetchOptimizationData )
             return { success: true, hasMoreData: hasMoreData };
         } catch (error: any) {
             console.error('Error on fetchOptimizationData:', error);
