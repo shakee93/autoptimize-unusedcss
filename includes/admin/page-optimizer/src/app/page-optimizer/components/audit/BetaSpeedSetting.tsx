@@ -121,7 +121,7 @@ export const Status = React.memo(({ status }: { status: AuditSetting['status'] }
                 <div className=' flex gap-1.5 items-center text-xs w-fit rounded-lg'>
                     <Circle className={cn(
                         'animate-pulse w-2.5 fill-green-600 stroke-0 -mt-[1px]'
-                    )} />{status?.message || 'Optimized'}
+                    )} />{status?.message || status.status === 'Hit'? 'Hit' : 'Optimized'}
                 </div>
             </>
         )
