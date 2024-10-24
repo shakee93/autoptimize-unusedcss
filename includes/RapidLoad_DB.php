@@ -567,8 +567,6 @@ abstract class RapidLoad_DB
         left join (select * from {$wpdb->prefix}rapidload_job_data where job_type = 'uucss') as uucss on job.id = uucss.job_id
         left join (select * from {$wpdb->prefix}rapidload_job_data where job_type = 'cpcss') as cpcss on job.id = cpcss.job_id) as dervied_table {$where} ORDER BY {$order_by} LIMIT {$start_from},{$limit}";
 
-        error_log($query);
-
         $data = $wpdb->get_results($query, OBJECT);
 
         $data = array_map(function ($job){
