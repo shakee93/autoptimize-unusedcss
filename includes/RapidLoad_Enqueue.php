@@ -11,6 +11,7 @@ class RapidLoad_Enqueue {
     private $rule;
     private $group;
     public static $job;
+    public static $test_mode;
 
     public static $frontend_debug = false;
 
@@ -35,10 +36,14 @@ class RapidLoad_Enqueue {
             }
 
             $this->url = $this->get_current_url();
-            self::debug_log("current url", $this->url);
 
             $this->url = $this->transform_url($this->url);
-            self::debug_log("transformed url", $this->url);
+
+            self::$test_mode = isset($this->options['rapidload_test_mode']) && $this->options['rapidload_test_mode'] == "1";
+
+            if(self::$test_mode){
+                self::debug_log("test mode enabled");
+            }
 
             if($this->enabled($this->url)){
 
