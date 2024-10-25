@@ -922,7 +922,7 @@ class RapidLoad_Cache_Store
         }
 
         if(isset($_REQUEST['rapidload_preview'])){
-            $cache_keys['preview'] = '-preview';
+            //$cache_keys['preview'] = '-preview';
         }
 
         return $cache_keys;
