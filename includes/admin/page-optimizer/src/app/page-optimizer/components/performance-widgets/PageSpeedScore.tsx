@@ -64,34 +64,6 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
 
     const { dispatch, hoveredMetric, activeMetric } = useCommonDispatch()
 
-    //Test Mode
-    const { options } = useAppContext();
-    const { settingsMode, testModeStatus, testModeLoading } = useCommonDispatch();
-    const { testMode } = useSelector((state: RootState) => state.app);
-    const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
-    const [localSwitchState, setLocalSwitchState] = useState<boolean>(testMode?.status || false);
-    const [loadingStatus, setLoadingStatus] = useState(false);
-
-    const { handleTestModeSwitchChange } = useTestModeUtils();
-
-    let url = options?.optimizer_url;
-
-    useEffect(() => {
-        if (testMode) {
-            dispatch(setCommonState('testModeStatus', testMode.status || false));
-        }
-
-    }, [testMode]);
-
-
-    const handleSwitchChange = async (isChecked: boolean) => {
-        await handleTestModeSwitchChange(isChecked);
-    };
-
-    useEffect(() => {
-        setLocalSwitchState(testModeStatus);
-        setLoadingStatus(testModeLoading);
-    }, [testModeStatus, testModeLoading]);
 
     const handleCoreWebClick = useCallback(() => {
         setCoreWebIsClicked(!isCoreWebClicked);

@@ -53,7 +53,7 @@ const initialState: AppState = {
             }
         },
         general: {
-            test_mode: true,
+            test_mode: false,
             performance_gear: 'accelerate'
         },
         actions: []
