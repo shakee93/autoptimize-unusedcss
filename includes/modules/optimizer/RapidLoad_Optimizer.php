@@ -73,15 +73,38 @@ class RapidLoad_Optimizer
         $cache_folders = [
             'page_cache_dir' => [
                 'path' => RapidLoad_Cache_Store::get_cache_dir(site_url()),
-                'label' => 'Page Cache'
+                'label' => 'Page Cache',
+                'action' => [
+                    'href' => wp_nonce_url( add_query_arg( array(
+                        '_cache'  => 'rapidload-cache',
+                        '_action' => 'clear',
+                    ) ), 'rapidload_cache_clear_cache_nonce' ),
+                    'label' => 'Clear Page Cache'
+                ]
             ],
             'js_cache_dir' => [
                 'path' => JavaScript::$base_dir,
-                'label' => 'JavaScript Cache'
+                'label' => 'JavaScript Cache',
+                'action' => [
+                    'href' => wp_nonce_url( add_query_arg( array(
+                        '_action' => 'rapidload_purge_all',
+                        'job_type' => 'js',
+                        'clear' => true,
+                    ) ), 'uucss_nonce', 'nonce' ),
+                    'label' => 'Clear JavaScript Cache'
+                ]
             ],
             'font_cache_dir' => [
                 'path' => RapidLoad_Font::$base_dir,
-                'label' => 'Font Cache'
+                'label' => 'Font Cache',
+                'action' => [
+                    'href' => wp_nonce_url( add_query_arg( array(
+                        '_action' => 'rapidload_purge_all',
+                        'job_type' => 'fonts',
+                        'clear' => true,
+                    ) ), 'uucss_nonce', 'nonce' ),
+                    'label' => 'Clear Font Cache'
+                ]
             ]
         ];
 
@@ -111,6 +134,14 @@ class RapidLoad_Optimizer
                     'size' => [
                         'folder_name' => $folder['path'],
                         'size' => $file_system->get_folder_size($folder['path'])
+                    ],
+                    'action' => [
+                        'href' => wp_nonce_url( add_query_arg( array(
+                            '_action' => 'rapidload_purge_all',
+                            'job_type' => 'css',
+                            'clear' => true,
+                        ) ), 'uucss_nonce', 'nonce' ),
+                        'label' => 'Clear CSS Cache'
                     ]
                 ];
             } else {
