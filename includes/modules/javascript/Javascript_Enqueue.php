@@ -176,14 +176,6 @@ class Javascript_Enqueue
 
         }
 
-        if(isset($this->options['preload_internal_links']) && $this->options['preload_internal_links'] == "1"){
-            $body = $this->dom->find('body', 0);
-            $node = $this->dom->createElement('script', "(function(){const link=document.createElement('link'),connection=navigator?.connection?.saveData||navigator?.connection?.effectiveType==='2g',support_prefetch=link?.relList?.supports?.('prefetch');if(connection||!support_prefetch){return}const loaded_links=new Set();const load_link=link=>{if(!loaded_links.has(link)&&!link.includes('?')&&link.startsWith(window.location.origin)&&window.location.href!==link){const new_link=document.createElement('link');new_link.rel='prefetch';new_link.href=link;document.head.appendChild(new_link);loaded_links.add(link)}};let lastX=null,lastY=null,animationFrameId=null;const handleProximityPreload=(x,y)=>{document.querySelectorAll('a[href]').forEach(anchor=>{const rect=anchor.getBoundingClientRect(),distanceX=Math.min(Math.abs(x-rect.left),Math.abs(x-rect.right)),distanceY=Math.min(Math.abs(y-rect.top),Math.abs(y-rect.bottom)),distance=Math.hypot(distanceX,distanceY);if(distance<200){load_link(anchor.href)}})};const throttleMouseMove=event=>{if(animationFrameId){cancelAnimationFrame(animationFrameId)}animationFrameId=requestAnimationFrame(()=>{const{clientX:x,clientY:y}=event;if(lastX===null||lastY===null||Math.hypot(x-lastX,y-lastY)>100){lastX=x;lastY=y;handleProximityPreload(x,y)}})};const handleTouchStart=event=>{const anchor=event.target.closest('a');if(anchor&&anchor.href){load_link(anchor.href)}};const params={capture:!0,passive:!0};document.addEventListener('mousemove',throttleMouseMove,params);document.addEventListener('touchstart',handleTouchStart,params)})();");
-            $node->id = "rapidload-preload-links";
-            $node->setAttribute('type', 'text/javascript');
-            $body->appendChild($node);
-        }
-
         add_filter('rapidload/optimizer/frontend/data', function ($data){
             return array_merge($data,$this->frontend_data);
         });

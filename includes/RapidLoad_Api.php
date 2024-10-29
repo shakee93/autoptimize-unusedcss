@@ -21,7 +21,7 @@ class RapidLoad_Api
 		}
 
 		$key          = isset( RapidLoad_Base::fetch_options()['uucss_api_key'] ) ? RapidLoad_Base::fetch_options()['uucss_api_key'] : null;
-		$this->apiKey = $key;
+		$this->apiKey = defined( 'UUCSS_API_KEY' ) ? UUCSS_API_KEY : $key;
 	}
 
 	static function get_key() {

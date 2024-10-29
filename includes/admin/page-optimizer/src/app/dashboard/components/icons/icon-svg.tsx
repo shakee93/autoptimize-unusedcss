@@ -22,13 +22,42 @@ export const CustomCheckIcon:FC<SvgProps> = ({className}) => (
 );
 
 export const BotIcon:FC<SvgProps> = ({className}) => (
-    <svg className={`${className}`} width="24" height="14" viewBox="0 0 24 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="1.10714" y="1.10714" width="21.7857" height="11.7857" rx="3.24549" stroke="#673B9B"
+
+    <svg className={`${className}`} width="34" height="24" viewBox="0 0 24 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect className="draw-aibot" x="1.10714" y="1.10714" width="21.7857" height="11.7857" rx="3.24549" stroke="#673B9B"
               strokeWidth="1.78571"/>
         <rect x="5.21512" y="5.21415" width="3.57143" height="3.57143" rx="1.78571" fill="#673B9B" stroke="#673B9B"
               strokeWidth="0.714286"/>
-        <rect x="15.2151" y="5.21415" width="3.57143" height="3.57143" rx="1.78571" fill="#673B9B" stroke="#673B9B"
+        <rect className="blinking" x="15.2151" y="5.21415" width="3.57143" height="3.57143" rx="1.78571" fill="#673B9B" stroke="#673B9B"
               strokeWidth="0.714286"/>
     </svg>
+
+);
+
+export const AIBotIcon:FC<SvgProps> = ({className}) => (
+
+    <div className="relative w-28 h-14 flex items-center justify-center mt-12">
+        <div
+            className="absolute w-40 h-40 border-2 border-purple-500 rounded-full wave-animation"
+            style={{animationDelay: '0s'}}
+        ></div>
+        <div
+            className="absolute w-40 h-40 border-2 border-purple-500 rounded-full wave-animation"
+            style={{animationDelay: '1s'}}
+        ></div>
+        <div
+            className="absolute w-40 h-40 border-2 border-purple-500 rounded-full wave-animation"
+            style={{animationDelay: '2s'}}
+        ></div>
+        <div
+            className="absolute w-40 h-40 border-2 border-purple-500 rounded-full wave-animation"
+            style={{animationDelay: '3s'}}
+        ></div>
+        {/* Icon */}
+        <div
+            className="absolute w-24 h-24 flex items-center justify-center">
+            <BotIcon className="w-24"/>
+        </div>
+    </div>
 
 );

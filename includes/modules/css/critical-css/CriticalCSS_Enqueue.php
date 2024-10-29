@@ -149,17 +149,29 @@ class CriticalCSS_Enqueue
                 continue;
             }
 
+            if(isset($sheet->href) && $this->str_contains($sheet->href, 'fonts.googleapis.com')){
+                continue;
+            }
+
+            if(!isset($sheet->{'data-href'}) && isset($sheet->{'href'})){
+                $sheet->{'data-href'} = $sheet->{'href'};
+            }
+
             if(!$this->is_mobile && apply_filters('rapidload/cpcss/set-preload-css', true)){
-                $sheet->onload = "this.onload=null;this.rel='stylesheet'";
-                $sheet->rel = "preload";
-                $sheet->as = "style";
+                if(defined('RAPIDLOAD_CPCSS_ENABLED') && RAPIDLOAD_CPCSS_ENABLED){
+                    if(isset($sheet->href)){
+                        unset($sheet->href);
+                    }
+                }else{
+                    $sheet->onload = "this.onload=null;this.rel='stylesheet'";
+                    $sheet->rel = "preload";
+                    $sheet->as = "style";
+                }
             }else{
                 if(!apply_filters('rapidload/frontend/do-not-load/original-css', false) && isset($sheet->{'data-href'}) && !apply_filters('rapidload/cpcss/disable/unset-href-mobile',false)){
                     unset($sheet->href);
                 }
             }
-
-
 
         }
     }
@@ -206,6 +218,28 @@ class CriticalCSS_Enqueue
             $this->dom->find( 'title' )[0]->__set('outertext', $title_content . $critical_css_with_tag);
 
             $this->update_noscript();
+
+            if(!defined('RAPIDLOAD_UUCSS_ENABLED')){
+
+                $body = $this->dom->find('body', 0);
+
+                $content = "(function(){var RapidLoadCPCSS=function(){var fired=false;var load_css=function(){var files=document.querySelectorAll('link[data-href]');var loaded_files_count=0;if(!files.length||fired)return;files.forEach(function(file){var link=file.cloneNode();link.href=file.dataset.href;link.rel='stylesheet';link.as='style';link.removeAttribute('data-href');link.removeAttribute('data-media');link.addEventListener('load',function(){file.remove();loaded_files_count++;if(loaded_files_count===files.length){window.dispatchEvent(new Event('resize'))}});link.addEventListener('error',function(){loaded_files_count++;if(loaded_files_count===files.length){window.dispatchEvent(new Event('resize'))}});file.parentNode.insertBefore(link,file.nextSibling)});fired=true};this.add_events=function(){['mousemove','touchstart','keydown'].forEach(function(event){var listener=function(){load_css();removeEventListener(event,listener)};addEventListener(event,listener)});setTimeout(function(){const scrollTop=document.documentElement.scrollTop;if(scrollTop>100){console.log('loading css for scroll top - '+scrollTop);load_css()}},800)};this.add_events()};document.addEventListener('DOMContentLoaded',function(){new RapidLoadCPCSS})})();";
+
+                if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG === true || defined('RAPIDLOAD_DEV_MODE') && RAPIDLOAD_DEV_MODE === true) {
+                    $filePath = RAPIDLOAD_PLUGIN_DIR . '/assets/js/rapidload.cpcss.frontend.js';
+
+                    if (file_exists($filePath)) {
+                        $content = file_get_contents($filePath);
+                    }
+                }
+
+                $node = $this->dom->createElement('script', "" . $content . "");
+
+                $node->setAttribute('id', 'rapidload-cpcss-frontend-js');
+                $node->setAttribute('type', 'text/javascript');
+                $node->setAttribute('norapidload',true);
+                $body->appendChild($node);
+            }
 
         }
 

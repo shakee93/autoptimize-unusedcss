@@ -3,8 +3,8 @@ Contributors: shakee93, futtta
 Donate link:
 Tags: unusedcss, criticalcss, rapidload, image optimization, minify js
 Requires at least: 5.0
-Tested up to: 6.6
-Stable tag: 2.3.4
+Tested up to: 6.6.2
+Stable tag: 2.3.5
 Requires PHP: 5.4
 License: GPLv3
 License URI: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
@@ -155,7 +155,10 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
-= 2.3.5 - 24/09/2024 =
+= 2.3.6 - 18/10/2024 =
+
+= 2.3.5 - 18/10/2024 =
+ * fix: known bugs
 
 = 2.3.4 - 24/09/2024 =
  * fix: flush cache not working in Titan Optimizer
