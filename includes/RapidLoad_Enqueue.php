@@ -197,6 +197,8 @@ class RapidLoad_Enqueue {
             }
         }
 
+        header('X-Optimized-By: RapidLoad v' . UUCSS_VERSION);
+
         return apply_filters('uucss/enqueue/content/after', $html);
     }
 

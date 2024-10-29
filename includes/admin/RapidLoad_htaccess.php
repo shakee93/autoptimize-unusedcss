@@ -56,10 +56,6 @@ class RapidLoad_htaccess
         $content .= self::get_htaccess_mod_expires();
         $content .= self::get_htaccess_mod_deflate();
 
-       /* if ( \WP_Rocket\Buffer\Cache::can_generate_caching_files() && ! is_rocket_generate_caching_mobile_files() ) {
-            $marker .= get_rocket_htaccess_mod_rewrite();
-        }*/
-
         $content .= apply_filters( 'after_rapidload_htaccess_rules', '' );
 
         $content .= '# END RapidLoad' . PHP_EOL;
