@@ -3,14 +3,30 @@ import Card from "components/ui/card";
 import {cn} from "lib/utils";
 import { InformationCircleIcon  } from "@heroicons/react/24/outline";
 import DoughnutChart from "app/dashboard/components/charts/doughnut";
+import {useSelector} from "react-redux";
+import {optimizerData} from "../../../store/app/appSelector";
+import {getSummary} from "../../../store/app/appActions";
+import useCommonDispatch from "hooks/useCommonDispatch";
+import {useAppContext} from "../../../context/app";
+import TableSkeleton from "components/ui/TableSkeleton";
+import {Skeleton} from "components/ui/skeleton";
+import SkeletonList from 'components/ui/listSkelton';
 
-type CacheItemProps = {
+type CacheUsageItem = {
     label: string;
-    size: string;
+    size: {
+        folder_name: string;
+        size: string;
+    };
 };
 
 
 const CacheSummary = () => {
+
+    const {dispatch} = useCommonDispatch();
+    const {options} = useAppContext();
+
+    const {cacheUsage} = useSelector(optimizerData);
 
     const chartOptions = {
         plugins: {
@@ -47,18 +63,22 @@ const CacheSummary = () => {
         ]
     };
 
-    const CacheItem = ({ label, size }: CacheItemProps) => (
+
+
+    useEffect(() => {
+        dispatch(getSummary(options, 'get_cache_file_size'));
+
+    }, [dispatch]);
+
+
+
+    const CacheItem = ({ label, size }: CacheUsageItem) => (
         <div className="flex justify-between items-center py-1.5 font-medium">
             <div className="text-sm dark:text-brand-300 text-brand-500">{label}</div>
-            <div className="text-sm dark:text-brand-300">{size}</div>
+            <div className="text-sm dark:text-brand-300">{size.size}</div>
         </div>
     );
 
-    const cacheData = [
-        { label: 'HTML cache', size: '1.02 MB' },
-        { label: 'CSS cache', size: '0.03 MB' },
-        { label: 'Javascript cache', size: '3.45 MB' }
-    ];
 
 
     return (
@@ -80,9 +100,13 @@ const CacheSummary = () => {
                 </div>
 
                 <div>
-                    {cacheData.map(({ label, size }) => (
-                        <CacheItem key={label} label={label} size={size} />
-                    ))}
+                    {cacheUsage === null ? (
+                       <SkeletonList count={4} />
+                    ) : (
+                        cacheUsage.map(({ label, size }) => (
+                            <CacheItem key={label} label={label} size={size} />
+                        ))
+                    )}
                 </div>
 
                 <div className="flex justify-end text-sm font-semibold">

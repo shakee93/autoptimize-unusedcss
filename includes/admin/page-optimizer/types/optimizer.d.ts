@@ -262,19 +262,28 @@ interface posts {
 interface cdnUsage {
     additional_usage_gb: number;
     allowed_gb: number;
+    used_gb: number;
     cdn_url: string;
     origin: string;
-    used_gb: number;
     zone_id: string;
 }
 
 interface imageUsage {
-    host: string;
+    additional_usage_gb: number;
+    allowed_gb: number;
     used_gb: number;
+    host: string;
+}
+
+interface cacheSize {
+    folder_name: string;
+    size: string;
 }
 
 interface cacheUsage {
-    data: any;
+    key: string;
+    label: string;
+    size: cacheSize;
 }
 
 interface TestMode {

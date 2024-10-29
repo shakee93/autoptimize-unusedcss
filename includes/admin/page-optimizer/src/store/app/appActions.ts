@@ -228,7 +228,6 @@ export const getSummary = (options: WordPressOptions, action: string): ThunkActi
 
         try {
             const getUsage = await api.getSummary(action);
-            //console.log(getUsage)
             const actionType = action === 'get_rapidload_cdn_usage' ? GET_CDN_USAGE : action === 'get_rapidload_image_usage' ? GET_IMAGE_USAGE: GET_CACHE_USAGE;
             dispatch({
                 type: actionType,
@@ -248,7 +247,6 @@ export const getSummary = (options: WordPressOptions, action: string): ThunkActi
             }
             return { success: false, error: errorMessage };
         }
-
 
     }
 }

@@ -65,8 +65,20 @@ const initialState: AppState = {
         },
         actions: []
     },
-    cdnUsage: null,
-    imageUsage: null,
+    cdnUsage: {
+        additional_usage_gb: 0,
+        allowed_gb: 0,
+        used_gb: 0,
+        cdn_url: '',
+        origin: '',
+        zone_id: '',
+    },
+    imageUsage: {
+        additional_usage_gb: 0,
+        allowed_gb: 0,
+        used_gb: 0,
+        host: '',
+    },
     cacheUsage: null,
 };
 
