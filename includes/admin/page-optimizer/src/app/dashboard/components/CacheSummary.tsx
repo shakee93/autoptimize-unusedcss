@@ -8,8 +8,6 @@ import {optimizerData} from "../../../store/app/appSelector";
 import {getSummary} from "../../../store/app/appActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {useAppContext} from "../../../context/app";
-import TableSkeleton from "components/ui/TableSkeleton";
-import {Skeleton} from "components/ui/skeleton";
 import SkeletonList from 'components/ui/listSkelton';
 
 type CacheUsageItem = {
