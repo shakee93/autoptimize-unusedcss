@@ -254,6 +254,24 @@ class ApiService {
         }
     }
 
+    async getSummary(action: string): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', action);
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
     async getOptimizationData(startFrom: number, limit: number): Promise<any> {
         try {
             this.baseURL.searchParams.append('action', 'rapidload_titan_optimizations_data');

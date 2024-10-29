@@ -13,7 +13,11 @@ import {
     UPDATE_FILE_ACTION,
     UPDATE_SETTINGS,
     UPDATE_TEST_MODE,
-    UPDATE_OPTIMIZE_TABLE, FETCH_POSTS
+    UPDATE_OPTIMIZE_TABLE,
+    FETCH_POSTS,
+    GET_CDN_USAGE,
+    GET_IMAGE_USAGE,
+    GET_CACHE_USAGE
 } from "./appTypes";
 
 const blankReport =  {
@@ -56,16 +60,32 @@ const initialState: AppState = {
             }
         },
         general: {
-            test_mode: true,
+            test_mode: false,
             performance_gear: 'accelerate'
         },
         actions: []
-    }
+    },
+    cdnUsage: null,
+    imageUsage: null,
+    cacheUsage: null,
 };
 
 const appReducer = (state = initialState, action: AppAction): AppState => {
 
     switch (action.type) {
+        case GET_CDN_USAGE:
+            return {
+                ...state,
+                cdnUsage: action.payload
+            };
+        case GET_IMAGE_USAGE:
+            return {
+                ...state, imageUsage: action.payload
+            };
+        case GET_CACHE_USAGE:
+            return {
+                ...state, cacheUsage: action.payload
+            };
         case FETCH_POSTS:
             return {
                 ...state,

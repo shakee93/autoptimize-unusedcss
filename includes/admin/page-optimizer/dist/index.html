@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -50,6 +51,60 @@
      // }
     </script>
 
+=======
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" >
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" >
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <title>RapidLoad Page Optimizer</title>
+
+    <script>
+
+      window.rapidload_optimizer = {
+        page_optimizer_package_base: window.location.origin,
+        rapidload_version: '2.2.26',
+        optimizer_url : 'https://staging.rapidload.io/',
+        ajax_url : 'http://rapidload.local/wp-admin/admin-ajax.php',
+        api_root: 'https://api.rapidload.io/api/v1'.includes('VITE') ? 'https://api.rapidload.io/api/v1' : 'https://api.rapidload.io/api/v1'
+      };
+
+
+
+
+     // window.rapidload_optimizer = {
+     //   "load_optimizer": "1",
+     //         "page_optimizer_package_base": "http://rapidload.local/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer/dist",
+     //         "page_optimizer_base": "http://rapidload.local/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer/dist",
+     //         "plugin_url": "http://rapidload.local/wp-content/plugins/autoptimize-unusedcss/",
+     //         "ajax_url": "http://rapidload.local/wp-admin/admin-ajax.php",
+     //         "dashboard_url": "http://rapidload.local/wp-admin/admin.php?page=rapidload",
+     //         "optimizer_url": "http://rapidload.local/",
+     //         "nonce": "ba619ab406",
+     //         "timezone": "",
+     //         "actions": [
+     //   {
+     //     "tooltip": "Clear Site Cache",
+     //     "href": "/?_cache=rapidload-cache&amp;_action=clear&amp;_wpnonce=12379ab23b",
+     //     "icon": "clear_cache"
+     //   },
+     //   {
+     //     "tooltip": "Clear Page Cache",
+     //     "href": "/?_cache=rapidload-cache&amp;_action=clear&amp;_url=http%3A%2F%2Frapidload.local%2F&amp;_wpnonce=12379ab23b",
+     //     "icon": "clear_page_cache"
+     //   },
+     //   {
+     //     "tooltip": "Clear CSS/JS/Font Optimizations",
+     //     "href": "/?_action=rapidload_purge_all&amp;nonce=ba619ab406",
+     //     "icon": "clear_optimization"
+     //   }
+     // ]
+     // }
+    </script>
+
+>>>>>>> fd2e6a7c8638d54f44a3199227cde03c9cf71d0b
     <style>
       :root {
         --wp--preset--color--black: #000000;
@@ -106,6 +161,7 @@
         --wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);
         --wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);
         --wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);
+<<<<<<< HEAD
       }
 
       body {
@@ -174,3 +230,73 @@ document.getElementsByTagName(item.parentTagName)[0].appendChild(childNode);
     </script>
   </body>
 </html>
+=======
+      }
+
+      body {
+        /*background: var(--wp--preset--gradient--primary-secondary-tertiary);*/
+        /*background: #002836;*/
+      }
+
+    </style>
+    
+    
+    
+    
+    
+    <script>
+(function(){
+var preloads = [{"parentTagName":"head","tagName":"link","attrs":{"rel":"manifest","href":"/manifest.webmanifest"}},{"parentTagName":"head","tagName":"script","attrs":{"type":"module","crossorigin":"","src":"/assets/index.hau8ySiZ.js"}},{"parentTagName":"head","tagName":"link","attrs":{"rel":"modulepreload","crossorigin":"","href":"/assets/core-vendor.a21Wwx5s.js"}},{"parentTagName":"head","tagName":"link","attrs":{"rel":"modulepreload","crossorigin":"","href":"/assets/vendor.CXNWAZBW.js"}},{"parentTagName":"head","tagName":"link","attrs":{"rel":"modulepreload","crossorigin":"","href":"/assets/animations.Dn9xTlWT.js"}},{"parentTagName":"head","tagName":"link","attrs":{"rel":"stylesheet","crossorigin":"","href":"/assets/index.DA5E62di.css"}}];
+function setAttribute(target, attrs) {
+for (var key in attrs) {
+  target.setAttribute(key, attrs[key]);
+}
+return target;
+};
+for(var i = 0; i < preloads.length; i++){
+var item = preloads[i]
+var childNode = document.createElement(item.tagName);
+setAttribute(childNode, item.attrs)
+if( window.rapidload_optimizer.page_optimizer_package_base) {
+  if(item.tagName == 'link') {
+    setAttribute(childNode, { href:  window.rapidload_optimizer.page_optimizer_package_base + item.attrs.href })
+  } else if (item.tagName == 'script') {
+    setAttribute(childNode, { src:  window.rapidload_optimizer.page_optimizer_package_base + item.attrs.src })
+  }
+}
+document.getElementsByTagName(item.parentTagName)[0].appendChild(childNode);
+}
+})();
+</script>
+</head>
+
+  <body>
+
+    <div id="rapidload-page-optimizer"></div>
+    <!-- <div id='popup'>
+      hover me to show popup
+    </div> -->
+
+    <script>
+      function loadRL() {
+        let container = document.getElementById('rapidload-page-optimizer')
+        let popup = document.getElementById('popup')
+        new window.RapidLoadOptimizer({
+          container,
+          // popup,
+          showOptimizer: true,
+
+          shadowRoot:false,
+          // global: true,
+          // mode: 'onboard',
+          modeData: {
+            connect_url: 'http://localhost:5174/',
+            target: '_blank'
+          },
+        });
+      }
+
+    </script>
+  </body>
+</html>
+>>>>>>> fd2e6a7c8638d54f44a3199227cde03c9cf71d0b

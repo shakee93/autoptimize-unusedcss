@@ -18,6 +18,7 @@ interface OptimizerContextProps {
     showOptimizer: boolean;
     setShowOptimizer: Dispatch<SetStateAction<boolean>>;
     options: WordPressOptions,
+    uucssGlobal: uucssGlobal,
     version: string,
     mode: RapidLoadOptimizerModes
     modeData?: RapidLoadOptimizerModeData
@@ -66,6 +67,29 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
             ...(
                 window.rapidload_optimizer ? window.rapidload_optimizer : {}
             ),
+        }
+    ))
+
+    const [uucssGlobal, setUucssGlobal] = useState((
+        {
+            active_modules: {
+                general: {
+                    options: {
+                        uucss_excluded_links: [],
+                        rapidload_minify_html: false,
+                        uucss_query_string: false,
+                        preload_internal_links: false,
+                        uucss_enable_debug: false,
+                        uucss_jobs_per_queue: 0,
+                        uucss_queue_interval: 0,
+                        uucss_disable_add_to_queue: false,
+                        uucss_disable_add_to_re_queue: false
+                    }
+                }
+            },
+            ...(
+                window.uucss_global ? window.uucss_global : {}
+            )
         }
     ))
     const [type, setType] = useState<ReportType>('desktop');
@@ -133,6 +157,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
             showOptimizer,
             setShowOptimizer : _setShowOptimizer,
             options,
+            uucssGlobal,
             openAudits,
             setOpenAudits,
             version: __OPTIMIZER_VERSION__,

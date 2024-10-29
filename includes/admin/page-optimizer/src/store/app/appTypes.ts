@@ -48,6 +48,9 @@ export interface AppState {
         },
         actions: AuditSettingInput[]
     },
+    cdnUsage: cdnUsage | null;
+    imageUsage: imageUsage | null;
+    cacheUsage: cacheUsage | null;
 }
 
 export const FETCH_REPORT_REQUEST = 'FETCH_REPORT_REQUEST';
@@ -64,6 +67,23 @@ export const GET_CSS_STATUS_SUCCESS = 'GET_CSS_STATUS_SUCCESS';
 export const UPDATE_TEST_MODE = 'UPDATE_TEST_MODE';
 export const UPDATE_OPTIMIZE_TABLE = 'UPDATE_OPTIMIZE_TABLE';
 export const FETCH_POSTS = 'FETCH_POSTS';
+export const GET_CDN_USAGE = 'GET_CDN_USAGE';
+export const GET_IMAGE_USAGE = 'GET_IMAGE_USAGE';
+export const GET_CACHE_USAGE = 'GET_CACHE_USAGE';
+
+interface CacheUsage {
+    type: typeof GET_CACHE_USAGE,
+    payload : cacheUsage,
+}
+interface ImageUsage {
+    type: typeof GET_IMAGE_USAGE,
+    payload : imageUsage,
+}
+interface GetCDNUsage {
+    type: typeof GET_CDN_USAGE,
+    payload : cdnUsage,
+}
+
 
 interface FetchPosts {
     type: typeof FETCH_POSTS,
@@ -159,5 +179,5 @@ interface UpdateFileActionAction {
 // Define the combined action type
 export type AppAction = FetchDataRequestAction | FetchDataSuccessAction | FetchDataFailureAction |
     FetchSettingsRequestAction | FetchSettingsSuccessAction | FetchSettingsFailureAction | ChangeGearAction|
-    UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode | UpdateOptimizeTable | FetchPosts;
+    UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode | UpdateOptimizeTable | FetchPosts | GetCDNUsage | ImageUsage | CacheUsage;
 
