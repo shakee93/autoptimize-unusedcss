@@ -259,6 +259,23 @@ interface posts {
     links: Link[];
 }
 
+interface cdnUsage {
+    additional_usage_gb: number;
+    allowed_gb: number;
+    cdn_url: string;
+    origin: string;
+    used_gb: number;
+    zone_id: string;
+}
+
+interface imageUsage {
+    host: string;
+    used_gb: number;
+}
+
+interface cacheUsage {
+    data: any;
+}
 
 interface TestMode {
     status: boolean;
@@ -271,18 +288,6 @@ interface License {
     plan: string;
     next_billing: number;
     siteUrl: string;
-}
-
-interface GeneralSettings {
-    uucss_excluded_links: string[];
-    rapidload_minify_html: boolean;
-    uucss_query_string: boolean;
-    preload_internal_links: boolean;
-    uucss_enable_debug: boolean;
-    uucss_jobs_per_queue: number;
-    uucss_queue_interval: number;
-    uucss_disable_add_to_queue: boolean;
-    uucss_disable_add_to_re_queue: boolean;
 }
 
 interface Revision {
@@ -321,3 +326,5 @@ type CssErrorKeys = 'Critical CSS' | 'Unused CSS';
 
 type BasePerformanceGear = 'starter' | 'accelerate' | 'turboMax';
 type PerformanceGear = BasePerformanceGear | 'custom' ;
+
+

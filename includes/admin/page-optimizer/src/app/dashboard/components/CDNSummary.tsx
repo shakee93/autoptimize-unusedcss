@@ -1,4 +1,4 @@
-import React, {Suspense, useState} from 'react';
+import React, {Suspense, useEffect, useState} from 'react';
 import Card from "components/ui/card";
 import {cn} from "lib/utils";
 import PerformanceIcons from "app/page-optimizer/components/performance-widgets/PerformanceIcons";
@@ -7,6 +7,12 @@ import {Switch} from "components/ui/switch";
 import {Label} from "components/ui/label";
 import {Skeleton} from "components/ui/skeleton"
 import PerformanceProgressBar from "components/performance-progress-bar";
+import {getSummary, saveGeneralSettings} from "../../../store/app/appActions";
+import useCommonDispatch from "../../../hooks/useCommonDispatch";
+import {useAppContext} from "../../../context/app";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../store/app/appTypes";
+import {optimizerData} from "../../../store/app/appSelector";
 
 interface SectionHeaderProps {
     title: string;
@@ -20,6 +26,11 @@ interface UsageBarProps {
 }
 
 const CDNSummary = () => {
+
+    const { dispatch } = useCommonDispatch();
+    const { options } = useAppContext();
+    const {cdnUsage, imageUsage, cacheUsage} = useSelector(optimizerData);
+
     const SectionHeader = ({ title }: SectionHeaderProps) => (
         <div className="flex gap-2 items-center">
             <div className="text-base font-semibold dark:text-brand-300">{title}</div>
@@ -49,7 +60,18 @@ const CDNSummary = () => {
         </div>
     );
 
+    useEffect(() => {
+        dispatch(getSummary(options, 'get_rapidload_cdn_usage'));
+        dispatch(getSummary(options, 'get_rapidload_image_usage'));
+        dispatch(getSummary(options, 'get_cache_file_size'));
 
+    }, [dispatch]);
+
+    useEffect(() => {
+        cdnUsage && console.log('CDN Summary', cdnUsage)
+        imageUsage && console.log('Image Usage', imageUsage)
+        cacheUsage && console.log('Cache Usage', cacheUsage)
+    }, [cdnUsage, imageUsage, cacheUsage]);
     return (
         <Card data-tour="license-widget" className="border flex flex-col">
             <div className="p-6">

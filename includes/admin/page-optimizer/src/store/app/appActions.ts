@@ -9,8 +9,8 @@ import {
     FETCH_REPORT_SUCCESS,
     FETCH_SETTING_FAILURE,
     FETCH_SETTING_REQUEST,
-    FETCH_SETTING_SUCCESS,
-    GET_CSS_STATUS_SUCCESS,
+    FETCH_SETTING_SUCCESS, GET_CACHE_USAGE, GET_CDN_USAGE,
+    GET_CSS_STATUS_SUCCESS, GET_IMAGE_USAGE,
     RootState,
     UPDATE_FILE_ACTION, UPDATE_OPTIMIZE_TABLE,
     UPDATE_SETTINGS,
@@ -202,6 +202,39 @@ export const getTestModeStatus = (options: WordPressOptions, url: string, mode?:
                 type: UPDATE_TEST_MODE,
                 payload : fetchTestModeData?.data
             })
+            return { success: true };
+        } catch (error: any) {
+            console.error('Error on Test Mode:', error);
+            let errorMessage: string;
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            } else {
+                errorMessage = 'An unknown error occurred';
+            }
+            return { success: false, error: errorMessage };
+        }
+
+
+    }
+}
+
+export const getSummary = (options: WordPressOptions, action: string): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string }> => {
+
+        try {
+            const getUsage = await api.getSummary(action);
+            //console.log(getUsage)
+            const actionType = action === 'get_rapidload_cdn_usage' ? GET_CDN_USAGE : action === 'get_rapidload_image_usage' ? GET_IMAGE_USAGE: GET_CACHE_USAGE;
+            dispatch({
+                type: actionType,
+                payload: getUsage?.data
+            });
+
             return { success: true };
         } catch (error: any) {
             console.error('Error on Test Mode:', error);

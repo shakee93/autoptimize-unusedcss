@@ -10,45 +10,20 @@ import {ChevronRightIcon} from "@heroicons/react/24/solid";
 import Accordion from "components/accordion";
 import {Label} from "components/ui/label";
 
-const defaultSettings: GeneralSettings = {
-    uucss_excluded_links: [],
-    rapidload_minify_html: false,
-    uucss_query_string: false,
-    preload_internal_links: false,
-    uucss_enable_debug: false,
-    uucss_jobs_per_queue: 0,
-    uucss_queue_interval: 0,
-    uucss_disable_add_to_queue: false,
-    uucss_disable_add_to_re_queue: false,
-};
 
 interface GeneralSettingsProps {
     onClose: (open: boolean) => void;
 }
 const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
     const { dispatch } = useCommonDispatch();
-    const { options } = useAppContext();
-    const [settingsData, setSettingsData] = useState<GeneralSettings>(defaultSettings);
+    const { options, uucssGlobal } = useAppContext();
+    const [settingsData, setSettingsData] = useState<GeneralSettings>(    (uucssGlobal as Required<typeof uucssGlobal>).active_modules.general.options);
     const [jobCount, setJobCount] = useState('1 Job');
     const [timeInterval, setTimeInterval] = useState('10 Minutes');
 
     useEffect(() => {
-        const GeneralSettings = window.uucss_global?.active_modules?.general?.options;
-        if (GeneralSettings) {
-            setSettingsData({
-                uucss_excluded_links: GeneralSettings.uucss_excluded_links || [],
-                rapidload_minify_html: !!GeneralSettings.rapidload_minify_html,
-                uucss_query_string: !!GeneralSettings.uucss_query_string,
-                preload_internal_links: !!GeneralSettings.preload_internal_links,
-                uucss_enable_debug: !!GeneralSettings.uucss_enable_debug,
-                uucss_jobs_per_queue: GeneralSettings.uucss_jobs_per_queue || 0,
-                uucss_queue_interval: GeneralSettings.uucss_queue_interval || 0,
-                uucss_disable_add_to_queue: !!GeneralSettings.uucss_disable_add_to_queue,
-                uucss_disable_add_to_re_queue: !!GeneralSettings.uucss_disable_add_to_re_queue,
-            });
-        }
-        }, []);
-
+       console.log(uucssGlobal)
+    }, [uucssGlobal]);
     const handleCheckboxChange = (key: keyof GeneralSettings) => {
         setSettingsData(prev => ({ ...prev, [key]: !prev[key] }));
     };
