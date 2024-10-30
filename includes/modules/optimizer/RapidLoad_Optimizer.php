@@ -145,7 +145,7 @@ class RapidLoad_Optimizer
                         'folder_name' => $folder['path'],
                         'size' => '0 KB'
                     ],
-                    'action' => null
+                    'action' => $folder['action']
                 ];
             }
         }
