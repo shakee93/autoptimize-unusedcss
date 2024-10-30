@@ -164,7 +164,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                 )}>
                 {/*Report Switch*/}
                 <div
-                    className="flex px-2 py-2 mb-3 justify-between ">
+                    className="flex px-2 py-2 justify-between ">
                     <div data-tour='switch-report-strategy'
                         className='select-none relative flex dark:bg-brand-800 py-0.5 bg-[#E8E8E8] rounded-2xl cursor-pointer'>
                         <div className={cn(
@@ -247,9 +247,12 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                     </div>
                 </div>
 
-                <div className="flex flex-col items-center text-center py-2">
-                    <UrlPreview />
-                </div>
+
+                {!error &&
+                    <div className="flex flex-col items-center text-center py-2">
+                        <UrlPreview />
+                    </div>
+                }
 
                 <div className={cn(
                     "content px-4 relative flex w-full sm:w-1/2 lg:w-full flex-col justify-center items-center gap-3  py-2.5",
@@ -314,39 +317,42 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
 
                 </div>
 
-                <div className='border-t'>
-                    <AppButton
-                        onClick={e => !loading && setExpanded(p => !p)}
-                        variant='outline'
-                        className={cn(
-                            'select-none border-b border-l-0 border-t-0 border-r-0 rounded-none bg-transparent hover:bg-transparent text-center text-xs text-brand-600 py-2',
-                            expanded && 'border-b-0'
-                        )}
-                        data-tour="expand-metrics">
-                        {expanded ? 'Collapse' : 'Expand'} Metrics
-                    </AppButton>
+                {data?.metrics &&
+                    <div className='border-t'>
+                        <AppButton
+                            onClick={e => !loading && setExpanded(p => !p)}
+                            variant='outline'
+                            className={cn(
+                                'select-none border-b border-l-0 border-t-0 border-r-0 rounded-none bg-transparent hover:bg-transparent text-center text-xs text-brand-600 py-2',
+                                expanded && 'border-b-0'
+                            )}
+                            data-tour="expand-metrics">
+                            {expanded ? 'Collapse' : 'Expand'} Metrics
+                        </AppButton>
 
-                    {(data?.metrics && !expanded) && (
-                        <>
-                            <div className='flex justify-around my-2  px-2'
-                                onMouseLeave={() => dispatch(setCommonState('hoveredMetric', null))}
-                            >
-                                {data.metrics.map(metric => (
-                                    <div key={metric.id}
-                                        onMouseEnter={() => dispatch(setCommonState('hoveredMetric', metric))}
+                        {(!expanded) && (
+                            <>
+                                <div className='flex justify-around my-2  px-2'
+                                    onMouseLeave={() => dispatch(setCommonState('hoveredMetric', null))}
+                                >
+                                    {data.metrics.map(metric => (
+                                        <div key={metric.id}
+                                            onMouseEnter={() => dispatch(setCommonState('hoveredMetric', metric))}
 
-                                        className='text-xs text-center flex flex-col
+                                            className='text-xs text-center flex flex-col
                              gap-0.5 px-2 py-2 bg-brand-100/20 hover:bg-brand-100 cursor-default rounded-[14px]'>
-                                        <div className='font-medium tracking-wider '>{metric.refs.acronym}</div>
-                                        <MetricValue metric={metric} />
-                                    </div>
-                                ))}
-                            </div>
+                                            <div className='font-medium tracking-wider '>{metric.refs.acronym}</div>
+                                            <MetricValue metric={metric} />
+                                        </div>
+                                    ))}
+                                </div>
 
-                        </>
-                    )}
+                            </>
+                        )}
 
-                </div>
+                    </div>
+                }
+
 
                 {(data?.metrics && expanded) && (
                     <div className={cn(
