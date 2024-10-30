@@ -150,7 +150,7 @@ class RapidLoad_Optimizer
                     'label' => $folder['label'], 
                     'size' => [
                         'folder_name' => $folder['path'],
-                        'size' => 'Directory does not exist'
+                        'size' => '0 KB'
                     ]
                 ];
             }
