@@ -135,14 +135,7 @@ class RapidLoad_Optimizer
                         'folder_name' => $folder['path'],
                         'size' => $file_system->get_folder_size($folder['path'])
                     ],
-                    'action' => [
-                        'href' => wp_nonce_url( add_query_arg( array(
-                            '_action' => 'rapidload_purge_all',
-                            'job_type' => 'css',
-                            'clear' => true,
-                        ) ), 'uucss_nonce', 'nonce' ),
-                        'label' => 'Clear CSS Cache'
-                    ]
+                    'action' => $folder['action']
                 ];
             } else {
                 $folder_sizes[] = [
@@ -151,7 +144,8 @@ class RapidLoad_Optimizer
                     'size' => [
                         'folder_name' => $folder['path'],
                         'size' => '0 KB'
-                    ]
+                    ],
+                    'action' => null
                 ];
             }
         }
@@ -169,6 +163,14 @@ class RapidLoad_Optimizer
             'size' => [
                 'folder_name' => 'CSS Cache Folders (Combined)',
                 'size' => $file_system->format_size_units($css_total_size)
+            ],
+            'action' => [
+                'href' => wp_nonce_url( add_query_arg( array(
+                    '_action' => 'rapidload_purge_all',
+                    'job_type' => 'css',
+                    'clear' => true,
+                ) ), 'uucss_nonce', 'nonce' ),
+                'label' => 'Clear CSS Cache'
             ]
         ];
 
