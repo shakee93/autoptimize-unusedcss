@@ -201,7 +201,7 @@ const App = ({ popup, _showOptimizer = false }: {
                             </AppTour>
                         </Suspense>
 
-
+                        {activeRoute !== "/onboard" && (
                         <div className='justify-center flex container'>
                             <header
                                 className={cn('container px-2 py-2 flex gap-3 mt-4 justify-between dark:bg-brand-930/80  bg-brand-0 rounded-2xl', testMode && 'ring-2 ring-[#f7b250] ring-offset-0')}>
@@ -313,7 +313,7 @@ const App = ({ popup, _showOptimizer = false }: {
                             </header>
 
                         </div>
-
+                        )}
 
                         <SlideUp uuid={activeRoute || routes[0].id}>
                             {routes.find(route => route.id === activeRoute)?.component || routes[0].component}
