@@ -537,4 +537,62 @@ class RapidLoad_Job{
         return $data;
     }
 
+    public static function get_latest_and_oldest_optimization_data_by_url($strategy, $url) {
+        global $wpdb;
+        $data = [];
+
+        // Query for the latest (most recent) record for the given URL and strategy
+        $latest_query = "
+        SELECT t1.id, t1.job_id, t3.url, t1.strategy, t1.data AS last_data, t1.created_at 
+        FROM {$wpdb->prefix}rapidload_job_optimizations t1 
+        LEFT JOIN {$wpdb->prefix}rapidload_job t3 ON t1.job_id = t3.id 
+        WHERE t1.strategy = %s AND t3.url LIKE %s
+        ORDER BY t1.created_at DESC 
+        LIMIT 1;
+    ";
+
+        // Query for the oldest (earliest) record for the given URL and strategy
+        $oldest_query = "
+        SELECT t1.id, t1.job_id, t3.url, t1.strategy, t1.data AS first_data, t1.created_at 
+        FROM {$wpdb->prefix}rapidload_job_optimizations t1 
+        LEFT JOIN {$wpdb->prefix}rapidload_job t3 ON t1.job_id = t3.id 
+        WHERE t1.strategy = %s AND t3.url LIKE %s
+        ORDER BY t1.created_at ASC 
+        LIMIT 1;
+    ";
+
+        // Prepare and execute the queries
+        $latest_result = $wpdb->get_row($wpdb->prepare($latest_query, $strategy, '%' . $wpdb->esc_like($url) . '%'), OBJECT);
+        $oldest_result = $wpdb->get_row($wpdb->prepare($oldest_query, $strategy, '%' . $wpdb->esc_like($url) . '%'), OBJECT);
+
+        // Process the latest result
+        if ($latest_result) {
+            $last_data = json_decode($latest_result->last_data);
+            $data['latest'] = [
+                'id' => $latest_result->id,
+                'job_id' => $latest_result->job_id,
+                'url' => $latest_result->url,
+                'strategy' => $latest_result->strategy,
+                'performance' => $last_data->performance ?? null,
+                'created_at' => $latest_result->created_at,
+            ];
+        }
+
+        // Process the oldest result
+        if ($oldest_result) {
+            $first_data = json_decode($oldest_result->first_data);
+            $data['oldest'] = [
+                'id' => $oldest_result->id,
+                'job_id' => $oldest_result->job_id,
+                'url' => $oldest_result->url,
+                'strategy' => $oldest_result->strategy,
+                'performance' => $first_data->performance ?? null,
+                'created_at' => $oldest_result->created_at,
+            ];
+        }
+
+        return $data;
+    }
+
+
 }

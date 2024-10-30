@@ -35,6 +35,7 @@ class RapidLoad_Admin
             add_action('wp_ajax_rapidload_enable_cdn_metering', [$this, 'rapidload_enable_image_metering']);
             add_action('wp_ajax_rapidload_delete_titan_optimizations', [$this, 'rapidload_delete_titan_optimizations']);
             add_action('wp_ajax_rapidload_titan_optimizations_data', [$this, 'rapidload_titan_optimizations_data']);
+            add_action('wp_ajax_rapidload_titan_home_page_performance', [$this, 'rapidload_titan_home_page_performance']);
             add_action('wp_ajax_rapidload_fetch_post_types_with_links', [$this, 'rapidload_fetch_post_types_with_links']);
             add_action('wp_ajax_rapidload_fetch_post_search_by_title_or_permalink', [$this, 'rapidload_fetch_post_search_by_title_or_permalink']);
 
@@ -214,6 +215,14 @@ class RapidLoad_Admin
         }
 
         wp_send_json_success(RapidLoad_Job::get_all_optimizations_data_for('desktop', $start_from, $limit, $s));
+
+    }
+
+    public function rapidload_titan_home_page_performance(){
+
+        $url = $this->transform_url(site_url());
+
+        wp_send_json_success(RapidLoad_Job::get_latest_and_oldest_optimization_data_by_url('desktop', $url));
 
     }
 
