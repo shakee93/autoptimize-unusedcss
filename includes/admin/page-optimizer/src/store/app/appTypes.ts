@@ -48,9 +48,9 @@ export interface AppState {
         },
         actions: AuditSettingInput[]
     },
-    cdnUsage: cdnUsage | null;
-    imageUsage: imageUsage | null;
-    cacheUsage: cacheUsage | null;
+    cdnUsage: cdnUsage;
+    imageUsage: imageUsage;
+    cacheUsage: cacheUsage[] | null;
 }
 
 export const FETCH_REPORT_REQUEST = 'FETCH_REPORT_REQUEST';
