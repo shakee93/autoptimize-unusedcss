@@ -1,15 +1,15 @@
-import React, {ReactNode, Suspense, useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, { ReactNode, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PerformanceIcons from 'app/page-optimizer/components/performance-widgets/PerformanceIcons';
-import {useSelector} from "react-redux";
-import {optimizerData} from "../../../../store/app/appSelector";
-import {useAppContext} from "../../../../context/app";
-import {Skeleton} from "components/ui/skeleton"
-import {cn, timeAgo} from "lib/utils";
+import { useSelector } from "react-redux";
+import { optimizerData } from "../../../../store/app/appSelector";
+import { useAppContext } from "../../../../context/app";
+import { Skeleton } from "components/ui/skeleton"
+import { cn, timeAgo } from "lib/utils";
 import Card from "components/ui/card";
 import PerformanceProgressBar from "components/performance-progress-bar";
 import Metrics from "app/page-optimizer/components/performance-widgets/Metrics";
 import useCommonDispatch from "hooks/useCommonDispatch";
-import {setCommonRootState, setCommonState} from "../../../../store/common/commonActions";
+import { setCommonRootState, setCommonState } from "../../../../store/common/commonActions";
 import {
     Circle, GraduationCapIcon,
     Hash, History,
@@ -29,8 +29,8 @@ interface PageSpeedScoreProps {
     dashboardMode?: boolean;
 }
 
-const MetricValue = ({ metric }: {metric: Metric}) => {
-    const [x,y,z, progressBarColorCode] = xusePerformanceColors(metric.score)
+const MetricValue = ({ metric }: { metric: Metric }) => {
+    const [x, y, z, progressBarColorCode] = xusePerformanceColors(metric.score)
 
     return <div
         style={{
@@ -42,17 +42,17 @@ const MetricValue = ({ metric }: {metric: Metric}) => {
 }
 
 
-const PageSpeedWidget = ({pagespeed, priority = true, dashboardMode = false }: PageSpeedScoreProps) => {
+const PageSpeedWidget = ({ pagespeed, priority = true, dashboardMode = false }: PageSpeedScoreProps) => {
     const [isCoreWebClicked, setCoreWebIsClicked] = useState(false);
     const [expanded, setExpanded] = useState(false)
 
 
 
-    const {data, error, loading, revisions} = useSelector(optimizerData);
+    const { data, error, loading, revisions } = useSelector(optimizerData);
     const [performance, setPerformance] = useState<number>(0)
     const [on, setOn] = useState<boolean>(false)
 
-    const { dispatch, hoveredMetric, activeMetric} = useCommonDispatch()
+    const { dispatch, hoveredMetric, activeMetric } = useCommonDispatch()
 
     const handleCoreWebClick = useCallback(() => {
         setCoreWebIsClicked(!isCoreWebClicked);
@@ -105,21 +105,21 @@ const PageSpeedWidget = ({pagespeed, priority = true, dashboardMode = false }: P
 
     return <>
 
-        <div className={cn('w-full flex flex-col gap-4 ', dashboardMode? 'w-min min-w-[350px]' : '')}>
+        <div className={cn('w-full flex flex-col gap-4 ', dashboardMode ? 'w-min min-w-[350px]' : '')}>
             <Card data-tour='speed-insights'
-                  className={cn(
-                      'overflow-hidden  border-transparent flex flex-col sm:flex-row lg:flex-col justify-around',
-                      expanded && 'border-brand-200 dark:border-brand-800',
-                      dashboardMode? '' : 'border'
-                  )}>
+                className={cn(
+                    'overflow-hidden  border-transparent flex flex-col sm:flex-row lg:flex-col justify-around',
+                    expanded && 'border-brand-200 dark:border-brand-800',
+                    dashboardMode ? '' : 'border'
+                )}>
                 <div
                     className="content flex w-full sm:w-1/2 lg:w-full flex-col justify-center items-center gap-3 px-4 lg:px-4 lg:pb-0 xl:px-8 py-2.5">
 
                     <div className='flex gap-6'>
                         <div className='flex flex-col gap-3 px-4 items-center'>
-                            <div className= {`${dashboardMode? 'mt-3.5':'mt-6'}`}>
+                            <div className={`${dashboardMode ? 'mt-3.5' : 'mt-6'}`}>
                                 {loading || on ? (
-                                    <Skeleton className="w-44 h-44 rounded-full"/>
+                                    <Skeleton className="w-44 h-44 rounded-full" />
                                 ) : (
                                     <PerformanceProgressBar
 
@@ -146,41 +146,44 @@ const PageSpeedWidget = ({pagespeed, priority = true, dashboardMode = false }: P
                             Values are estimated and may vary with Google Page Speed Insights.
                         </div>
                     </div>
-                    <div className={`flex justify-around text-sm gap-4 font-normal w-full text-brand-700 dark:text-brand-300 ${dashboardMode? '': 'mb-5 '}`}>
+                    <div className={`flex justify-around text-sm gap-4 font-normal w-full text-brand-700 dark:text-brand-300 ${dashboardMode ? '' : 'mb-5 '}`}>
                         <div className="flex lg:flex-col xl:flex-row items-center gap-1">
-                            <PerformanceIcons icon={'fail'}/>
+                            <PerformanceIcons icon={'fail'} />
                             0-49
                         </div>
                         <div className="flex lg:flex-col xl:flex-row items-center gap-1">
-                            <PerformanceIcons icon={'average'}/>
+                            <PerformanceIcons icon={'average'} />
                             50-89
                         </div>
                         <div className="flex lg:flex-col xl:flex-row items-center gap-1">
-                            <PerformanceIcons icon={'pass'}/>
+                            <PerformanceIcons icon={'pass'} />
                             89-100
                         </div>
                     </div>
                 </div>
 
-                <AppButton
-                    onClick={e => setExpanded(p => !p)}
-                    variant='outline' className='select-none border-none bg-transparent dark:bg-brand-950 hover:bg-transparent text-center text-xs text-brand-600 py-2'>
-                    {expanded ? 'Collapse' : 'Expand' } Metrics
-                </AppButton>
+                {data?.metrics &&
+                    <AppButton
+                        onClick={e => setExpanded(p => !p)}
+                        variant='outline' className='select-none border-none bg-transparent dark:bg-brand-950 hover:bg-transparent text-center text-xs text-brand-600 py-2'>
+                        {expanded ? 'Collapse' : 'Expand'} Metrics
+                    </AppButton>
+                }
+
 
                 {(data?.metrics && !expanded) && (
                     <>
                         <div className={`flex justify-around ${dashboardMode ? '' : 'mb-3 px-2 '}`}
-                             onMouseLeave={() => dispatch(setCommonState('hoveredMetric',null))}
+                            onMouseLeave={() => dispatch(setCommonState('hoveredMetric', null))}
                         >
                             {data.metrics.map(metric => (
                                 <div key={metric.id}
-                                     onMouseEnter={() => dispatch(setCommonState('hoveredMetric',metric))}
+                                    onMouseEnter={() => dispatch(setCommonState('hoveredMetric', metric))}
 
-                                     className='text-xs border text-center flex flex-col
+                                    className='text-xs border text-center flex flex-col
                              gap-0.5 px-3 py-2 bg-brand-100/20 dark:hover:bg-brand-600 hover:bg-brand-100 cursor-default rounded-[14px]'>
                                     <div className='font-medium tracking-wider '>{metric.refs.acronym}</div>
-                                    <MetricValue metric={metric}/>
+                                    <MetricValue metric={metric} />
                                 </div>
                             ))}
                         </div>
@@ -190,31 +193,31 @@ const PageSpeedWidget = ({pagespeed, priority = true, dashboardMode = false }: P
 
 
 
-                {(data?.metrics && expanded ) && (
+                {(data?.metrics && expanded) && (
                     <div className={cn(
                         'sticky top-0 w-full sm:w-1/2 lg:w-full border-l lg:border-l-0'
                     )
                     } data-tour='metrics'>
                         <div
-                            onClick={e => dispatch(setCommonState('activeMetric', null)) }
+                            onClick={e => dispatch(setCommonState('activeMetric', null))}
                             className={cn(
                                 'flex gap-3 items-center font-medium dark:hover:bg-brand-900/70  px-6 py-3 border-b lg:border-b-0 lg:border-t cursor-pointer text-sm',
                                 !activeMetric && 'bg-brand-100/80 dark:bg-brand-900/80 '
                             )
                             }>
-                            <span><Hash className='w-4 text-brand-400'/></span> All Audits
+                            <span><Hash className='w-4 text-brand-400' /></span> All Audits
                         </div>
-                        <Metrics performance={data?.performance} metrics={data.metrics}/>
+                        <Metrics performance={data?.performance} metrics={data.metrics} />
                     </div>
                 )}
             </Card>
 
             {!dashboardMode && (
                 <>
-                    <SideBarActions/>
+                    <SideBarActions />
 
                     <Suspense>
-                        <Feedback key={key}/>
+                        <Feedback key={key} />
                     </Suspense>
                 </>
             )}

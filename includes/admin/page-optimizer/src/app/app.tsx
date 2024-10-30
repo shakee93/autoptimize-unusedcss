@@ -1,40 +1,40 @@
-import React, {Suspense, useEffect, useState} from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import PageOptimizer from "app/page-optimizer";
 import dashboard from "app/dashboard";
 import SpeedPopover from "app/speed-popover";
-import {useAppContext} from "../context/app";
-import {ThunkDispatch} from "redux-thunk";
-import {useDispatch, useSelector} from "react-redux";
-import {AppAction, RootState} from "../store/app/appTypes";
-import {fetchPosts, fetchReport, fetchSettings, getTestModeStatus} from "../store/app/appActions";
-import {Toaster} from "components/ui/toaster";
-import {AnimatePresence, m} from "framer-motion";
-import {useRootContext} from "../context/root";
+import { useAppContext } from "../context/app";
+import { ThunkDispatch } from "redux-thunk";
+import { useDispatch, useSelector } from "react-redux";
+import { AppAction, RootState } from "../store/app/appTypes";
+import { fetchPosts, fetchReport, fetchSettings, getTestModeStatus } from "../store/app/appActions";
+import { Toaster } from "components/ui/toaster";
+import { AnimatePresence, m } from "framer-motion";
+import { useRootContext } from "../context/root";
 import Header from "app/page-optimizer/components/Header";
-import {cn} from "lib/utils";
-import {setCommonState} from "../store/common/commonActions";
+import { cn } from "lib/utils";
+import { setCommonState } from "../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
-import {toBoolean} from "lib/utils";
+import { toBoolean } from "lib/utils";
 import Bugsnag from "@bugsnag/js";
 import Dashboard from "app/dashboard";
 import TestModeSwitcher from "app/page-optimizer/components/TestModeSwitcher";
 
-const AppTour = React.lazy(() => import( 'components/tour'))
+const AppTour = React.lazy(() => import('components/tour'))
 const InitTour = React.lazy(() => import('components/tour/InitTour'))
-import {isDev, isAdminPage, getOptimizeUrl} from "lib/utils";
-import {Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger} from "components/ui/dialog";
-import {PlusIcon} from "@heroicons/react/24/outline";
-import {ContentSelector} from "components/ui/content-selector";
+import { isDev, isAdminPage, getOptimizeUrl } from "lib/utils";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from "components/ui/dialog";
+import { PlusIcon } from "@heroicons/react/24/outline";
+import { ContentSelector } from "components/ui/content-selector";
 import AppButton from "components/ui/app-button";
 import GeneralSettingsTrigger from "app/dashboard/components/GeneralSettingsTrigger";
 import OptimzePagesTrigger from "app/dashboard/components/OptimzePagesTrigger";
 import OptimizerTableTrigger from "app/dashboard/components/OptimizerTableTrigger";
 import ThemeSwitcher from "components/ui/theme-switcher";
 import TooltipText from "components/ui/tooltip-text";
-import {optimizerData} from "../store/app/appSelector";
+import { optimizerData } from "../store/app/appSelector";
 import TestModeNotification from "components/ui/test-mode-notification";
-import {Circle, MoreVertical} from "lucide-react";
+import { Circle, MoreVertical } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -43,19 +43,20 @@ import {
     DropdownMenuSeparator, DropdownMenuTrigger,
 } from "components/ui/dropdown-menu";
 import OptimizerPagesTable from "app/dashboard/components/OptimizerPagesTable";
+import SlideUp from "components/animation/SlideUp";
 
-const App = ({popup, _showOptimizer = false}: {
+const App = ({ popup, _showOptimizer = false }: {
     popup?: HTMLElement | null,
     _showOptimizer?: boolean
 }) => {
 
     const [popupNode, setPopupNode] = useState<HTMLElement | null>(null);
-    const {showOptimizer, version, setShowOptimizer, mode, options} = useAppContext()
+    const { showOptimizer, version, setShowOptimizer, mode, options } = useAppContext()
     const [shadowRoot, setShadowRoot] = useState<ShadowRoot | null>(null);
     const [mounted, setMounted] = useState(false)
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
-    const {activeReport, allPosts} = useSelector((state: RootState) => state.app);
-    const {isDark } = useRootContext()
+    const { activeReport, allPosts } = useSelector((state: RootState) => state.app);
+    const { isDark } = useRootContext()
     const initialTestMode = window.rapidload_optimizer ? toBoolean(window.rapidload_optimizer.test_mode) : false;
     const [open, setOpen] = useState({
         generalSettings: false,
@@ -64,7 +65,7 @@ const App = ({popup, _showOptimizer = false}: {
     });
     const { headerUrl } = useCommonDispatch();
     const { changeTheme } = useRootContext()
-    const {testMode} = useSelector(optimizerData);
+    const { testMode } = useSelector(optimizerData);
 
     useEffect(() => {
 
@@ -104,42 +105,42 @@ const App = ({popup, _showOptimizer = false}: {
         const optimizeUrl = getOptimizeUrl();
         dispatch(setCommonState('headerUrl', optimizeUrl));
         dispatch(fetchSettings(options, headerUrl ? headerUrl : options.optimizer_url, false));
-        dispatch(fetchReport(options, headerUrl ? headerUrl :options.optimizer_url, false));
+        dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, false));
         dispatch(setCommonState('testModeStatus', initialTestMode));
         dispatch(fetchPosts(options));
     }, [dispatch, activeReport]);
 
 
 
-   // const hash = window.location.hash.replace("#", "");
-   //  const [activeRoute, setActiveRoute] = useState( hash.length > 0 ? hash : '/');
-   //  const [routes, setRoutes] = useState( [
-   //      {
-   //          title: "Dashboard",
-   //          id: "/",
-   //          component: <Dashboard />
-   //      },
-   //      {
-   //          title: "Optimize",
-   //          id: "/optimize",
-   //          component: <PageOptimizer/>
-   //      }
-   //  ])
-   //
-   //
-   //  useEffect(() => {
-   //      window.location.hash = '#' + activeRoute
-   //  }, [activeRoute])
-   //
-   //  useEffect(() => {
-   //      const validRoute = routes.some(route => route.id === window.location.hash.replace('#', ''))
-   //
-   //
-   //      if (!validRoute) {
-   //          setActiveRoute('/')
-   //      }
-   //
-   //  }, [])
+    // const hash = window.location.hash.replace("#", "");
+    //  const [activeRoute, setActiveRoute] = useState( hash.length > 0 ? hash : '/');
+    //  const [routes, setRoutes] = useState( [
+    //      {
+    //          title: "Dashboard",
+    //          id: "/",
+    //          component: <Dashboard />
+    //      },
+    //      {
+    //          title: "Optimize",
+    //          id: "/optimize",
+    //          component: <PageOptimizer/>
+    //      }
+    //  ])
+    //
+    //
+    //  useEffect(() => {
+    //      window.location.hash = '#' + activeRoute
+    //  }, [activeRoute])
+    //
+    //  useEffect(() => {
+    //      const validRoute = routes.some(route => route.id === window.location.hash.replace('#', ''))
+    //
+    //
+    //      if (!validRoute) {
+    //          setActiveRoute('/')
+    //      }
+    //
+    //  }, [])
 
     const [activeRoute, setActiveRoute] = useState(window.location.hash.replace("#", "") || "/");
     const [routes, setRoutes] = useState([
@@ -194,29 +195,28 @@ const App = ({popup, _showOptimizer = false}: {
                     <div className='dark:text-brand-300 text-brand-800 dark:bg-brand-900 bg-brand-200/60 '>
                         <Suspense>
                             <AppTour isDark={isDark}>
-                                <InitTour mode={mode}/>
+                                <InitTour mode={mode} />
                             </AppTour>
                         </Suspense>
 
 
-                        <div className=' z-[1000000] justify-center flex container'>
+                        <div className='justify-center flex container'>
                             <header
-                                className={cn(' z-[110000] container px-2 py-2 flex gap-3 mt-4 justify-between dark:bg-brand-930/80  bg-brand-0 rounded-2xl', testMode && 'ring-2 ring-[#f7b250] ring-offset-0')}>
+                                className={cn('container px-2 py-2 flex gap-3 mt-4 justify-between dark:bg-brand-930/80  bg-brand-0 rounded-2xl', testMode && 'ring-2 ring-[#f7b250] ring-offset-0')}>
                                 <div className='flex items-center'>
                                     <div className='relative px-2'>
                                         <img className='w-10'
-                                             src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/new-logo.svg`) : '/new-logo.svg'}
-                                             alt='RapidLoad - #1 to unlock breakneck page speed'/>
+                                            src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/new-logo.svg`) : '/new-logo.svg'}
+                                            alt='RapidLoad - #1 to unlock breakneck page speed' />
                                     </div>
-                                    <div className='flex px-2'>
+                                    <div className='flex'>
                                         <div
                                             data-tour='app-switch'
                                             className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[8px] rounded-2xl cursor-pointer overflow-hidden'
                                         >
                                             <div
-                                                className={`absolute top-1 bottom-1 left-1 bg-brand-200/60 border dark:bg-brand-700 rounded-xl transition-all duration-300 ease-in-out transform ${
-                                                    activeRoute === routes[1].id ? "translate-x-[115%] w-[45%]" : "translate-x-0 w-[55%]"
-                                                }`}
+                                                className={`absolute top-1 bottom-1 left-1 bg-brand-200/60 border dark:bg-brand-700 rounded-xl transition-all duration-300 ease-in-out transform ${activeRoute === routes[1].id ? "translate-x-[115%] w-[45%]" : "translate-x-0 w-[55%]"
+                                                    }`}
                                             >
 
                                             </div>
@@ -242,10 +242,10 @@ const App = ({popup, _showOptimizer = false}: {
 
 
                                 <div className="flex gap-6 items-center">
-                                    <TestModeSwitcher/>
+                                    <TestModeSwitcher />
 
                                     <div className="flex items-center gap-1.5">
-                                        <GeneralSettingsTrigger open={open.generalSettings} onOpenChange={(isOpen) => handleOpenChange("generalSettings", isOpen)}/>
+                                        <GeneralSettingsTrigger open={open.generalSettings} onOpenChange={(isOpen) => handleOpenChange("generalSettings", isOpen)} />
                                         {/*<TooltipText text="Theme">*/}
                                         {/*    <div onClick={e => changeTheme()}>*/}
                                         {/*        <ThemeSwitcher></ThemeSwitcher>*/}
@@ -259,28 +259,28 @@ const App = ({popup, _showOptimizer = false}: {
                                                     )} />
                                                 </TooltipText>
                                             </DropdownMenuTrigger>
-                                        <DropdownMenuContent style={{
-                                            width: 200
-                                        }} align='end'  sideOffset={6}
-                                                             className='z-[110000] relative min-w-[200px]'>
-                                            <DropdownMenuLabel>Additional Options</DropdownMenuLabel>
-                                            <DropdownMenuItem onClick={() => {
-                                                setTimeout(() => {
-                                                    handleOpenChange("optimizePages", true)
-                                                }, 100)
-                                            }}>
-                                                Optimization
-                                            </DropdownMenuItem>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuItem onClick={() => {
-                                                setTimeout(() => {
-                                                    handleOpenChange("optimizerTable", true)
-                                                }, 100)
-                                            }}>
-                                                View Table
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                            </DropdownMenu>
+                                            <DropdownMenuContent style={{
+                                                width: 200
+                                            }} align='end' sideOffset={6}
+                                                className='z-[110000] relative min-w-[200px]'>
+                                                <DropdownMenuLabel>Additional Options</DropdownMenuLabel>
+                                                <DropdownMenuItem onClick={() => {
+                                                    setTimeout(() => {
+                                                        handleOpenChange("optimizePages", true)
+                                                    }, 100)
+                                                }}>
+                                                    Optimization
+                                                </DropdownMenuItem>
+                                                <DropdownMenuSeparator />
+                                                <DropdownMenuItem onClick={() => {
+                                                    setTimeout(() => {
+                                                        handleOpenChange("optimizerTable", true)
+                                                    }, 100)
+                                                }}>
+                                                    View Table
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
 
                                         <OptimzePagesTrigger
                                             open={open.optimizePages}
@@ -303,7 +303,11 @@ const App = ({popup, _showOptimizer = false}: {
 
                         </div>
 
-                        {routes.find(route => route.id === activeRoute)?.component || routes[0].component}
+
+                        <SlideUp uuid={activeRoute || routes[0].id}>
+                            {routes.find(route => route.id === activeRoute)?.component || routes[0].component}
+                        </SlideUp>
+
                         {version && (
                             <div className='text-right px-6 py-2'>
                                 <span className='text-xxs dark:text-brand-500 text-black'>© 2024 RapidLoad v{version}</span>

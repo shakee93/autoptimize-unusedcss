@@ -96,9 +96,9 @@ const Performance = () => {
     return (
 
         <div data-tour='audits'>
-            <h2 className="text-lg ml-5 mb-4 flex gap-2 font-normal items-center">
+            {/* <h2 className="text-lg ml-5 mb-4 flex gap-2 font-normal items-center">
                 {!togglePerformance && <TogglePerformance />}
-                Fix Performance Issues</h2>
+                Fix Performance Issues</h2> */}
             <div ref={navbarRef} style={{ height: '1px' }}></div>
             <div className={cn(
                 'tabs flex sticky -top-1 dark:bg-brand-800/40 bg-brand-200 px-2.5 py-2.5 pb-1 rounded-t-3xl',

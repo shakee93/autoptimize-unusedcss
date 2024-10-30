@@ -1,4 +1,4 @@
-import React, {Dispatch, SetStateAction, useEffect, useRef, useState, lazy} from "react";
+import React, { Dispatch, SetStateAction, useEffect, useRef, useState, lazy } from "react";
 import PageSpeedWidget from "app/dashboard/components/performance-widgets/PageSpeedWidget";
 import LicenseWidget from "app/dashboard/components/LicenseWidget";
 import UnusedCSSSummary from "app/dashboard/components/UnusedCSSSummary";
@@ -8,18 +8,18 @@ import OptimizerPagesTable from "app/dashboard/components/OptimizerPagesTable";
 import GeneralSettings from "app/dashboard/components/GeneralSettings";
 import Header from "app/page-optimizer/components/Header";
 
-import {useDispatch, useSelector} from "react-redux";
-import {useAppContext} from "../../context/app";
-import {cn} from "lib/utils";
+import { useDispatch, useSelector } from "react-redux";
+import { useAppContext } from "../../context/app";
+import { cn } from "lib/utils";
 import Audit from "app/page-optimizer/components/audit/Audit";
 import Footer from "app/page-optimizer/components/Footer";
 import Loading from "components/loading";
-import {optimizerData} from "../../store/app/appSelector";
-import {ArrowLeftToLine, ArrowRightToLine, Circle, Loader, ThumbsUp} from "lucide-react";
+import { optimizerData } from "../../store/app/appSelector";
+import { ArrowLeftToLine, ArrowRightToLine, Circle, Loader, ThumbsUp } from "lucide-react";
 import TooltipText from "components/ui/tooltip-text";
-import {m, AnimatePresence} from "framer-motion";
-import {ExclamationCircleIcon} from "@heroicons/react/20/solid";
-import {Toaster} from "components/ui/toaster";
+import { m, AnimatePresence } from "framer-motion";
+import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
+import { Toaster } from "components/ui/toaster";
 import usePerformanceColors from "hooks/usePerformanceColors";
 import Indicator from "components/indicator";
 import Performance from "app/page-optimizer/spaces/Performance";
@@ -27,13 +27,13 @@ import SpeedIndex from "app/page-optimizer/spaces/Metrics";
 import TogglePerformance from "components/toggle-performance";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import SlideUp from "components/animation/SlideUp";
-import {JsonView} from "react-json-view-lite";
+import { JsonView } from "react-json-view-lite";
 import ErrorFetch from "components/ErrorFetch";
 import SpeedInsights from "../speed-popover/components/speed-insights";
-import {ContentSelector} from "components/ui/content-selector";
-import {AppAction, RootState} from "../../store/app/appTypes";
-import {fetchPosts} from "../../store/app/appActions";
-import {ThunkDispatch} from "redux-thunk";
+import { ContentSelector } from "components/ui/content-selector";
+import { AppAction, RootState } from "../../store/app/appTypes";
+import { fetchPosts } from "../../store/app/appActions";
+import { ThunkDispatch } from "redux-thunk";
 import PerformanceGears from "./components/performance-widgets/PerformanceGears";
 import PerformanceWidget from './components/performance-widgets/PerformanceWidget';
 import PageSpeedCoach from './components/performance-widgets/PageSpeedCoach';
@@ -44,7 +44,7 @@ export interface AuditComponentRef {
 }
 
 export default function Dashboard() {
-    const {data, loading, error} = useSelector(optimizerData);
+    const { data, loading, error } = useSelector(optimizerData);
 
     const {
         options,
@@ -61,7 +61,7 @@ export default function Dashboard() {
     useEffect(() => {
 
         if (savingData) {
-            const content =  document.getElementById('rapidload-page-optimizer-content');
+            const content = document.getElementById('rapidload-page-optimizer-content');
             content?.scrollTo(0, 0)
         }
 
@@ -88,7 +88,7 @@ export default function Dashboard() {
             <div
                 id='rapidload-page-optimizer-content'
                 className={cn(
-                    'overflow-y-auto w-full pb-20 min-h-[780px] mt-4 flex items-center',
+                    'overflow-y-auto w-full pb-20 min-h-[780px] flex items-center',
                     'dark:bg-brand-900',
                     // 'dark:bg-brand-930 bg-brand-50 min-h-screen',
                     savingData && 'relative overflow-hidden'
@@ -113,17 +113,17 @@ export default function Dashboard() {
 
                     <div className="flex justify-between gap-4">
                         <div className="flex flex-col w-full gap-4">
-                            <LicenseWidget/>
-                            <AIBot/>
+                            <LicenseWidget />
+                            <AIBot />
                         </div>
                         <div className="flex flex-col w-full gap-4">
                             {/*<PageSpeedCoach/>*/}
-                            <CacheSummary/>
-                            <CDNSummary/>
+                            <CacheSummary />
+                            <CDNSummary />
                         </div>
                         <div className="flex flex-col w-full">
-                            <PerformanceWidget/>
-                            <PerformanceGears/>
+                            <PerformanceWidget />
+                            <PerformanceGears />
                         </div>
 
                         {/*<div className="flex-col">*/}
@@ -200,7 +200,7 @@ export default function Dashboard() {
             {/*{!error && (*/}
             {/*    <Footer />*/}
             {/*)}*/}
-            <Toaster/>
+            <Toaster />
         </m.div>
     </>;
 }

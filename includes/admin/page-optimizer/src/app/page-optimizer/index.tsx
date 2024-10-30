@@ -25,7 +25,7 @@ export interface AuditComponentRef {
 }
 
 export default function PageOptimizer() {
-    const {data, loading, error, testMode} = useSelector(optimizerData);
+    const { data, loading, error, testMode } = useSelector(optimizerData);
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(data?.performance);
     const { dispatch, activeMetric } = useCommonDispatch()
 
@@ -73,20 +73,20 @@ export default function PageOptimizer() {
             {/*    <TestModeNotification/>*/}
             {/*}*/}
 
-            <Header url={url}/>
+            {/* <Header url={url} /> */}
 
             <div
                 id='rapidload-page-optimizer-content'
                 className={cn(
-                'overflow-y-auto w-full h-fit pb-20 ',
-                'min-h-screen',
-                savingData && 'relative overflow-hidden'
-            )}>
+                    'overflow-y-auto w-full h-fit pb-20 ',
+                    'min-h-screen',
+                    savingData && 'relative overflow-hidden'
+                )}>
 
                 <section
                     ref={optimizerContainer}
                     className={cn(
-                        'relative container grid grid-cols-none lg:grid-cols-12 lg:grid-rows-none  gap-8 pt-[10px] mt-4',
+                        'relative container grid grid-cols-none lg:grid-cols-12 lg:grid-rows-none  gap-5 pt-[10px] mt-2',
                     )}>
 
                     {/*{(savingData || invalidatingCache) && (*/}
@@ -99,8 +99,8 @@ export default function PageOptimizer() {
                     {/*    </div>*/}
                     {/*)}*/}
 
-                    <div className="col-span-12 w-full">
-                        {/* <AnimatePresence>
+                    {/* <div className="col-span-12 w-full"> */}
+                    {/* <AnimatePresence>
                             {testMode && (
                                 <m.div
                                     initial={{ opacity: 0, y: -10 }}
@@ -119,21 +119,21 @@ export default function PageOptimizer() {
                                 </m.div>
                             )}
                         </AnimatePresence> */}
-                    </div>
+                    {/* </div> */}
+
                     <>
 
                         {togglePerformance && (
                             <aside className="col-span-12 lg:col-span-3">
-                                <div className="text-lg ml-5  flex items-center gap-2">
-                                    {/*<Circle style={{*/}
-                                    {/*    fill: progressbarColor*/}
-                                    {/*}} className='w-2 mt-0.5 stroke-0 transition-colors'/>*/}
-                                    Page Insights {togglePerformance && <TogglePerformance />} </div>
-                                <div className="widgets pt-4 flex">
+                                {/* <div className="text-lg ml-5  flex items-center gap-2">
+                                    Page Insights {togglePerformance && <TogglePerformance />} </div> */}
+
+                                <div className="widgets pt-0.5 flex">
                                     <PageSpeedScore />
                                 </div>
                             </aside>
                         )}
+
                         <article className={cn(
                             togglePerformance ? 'col-span-12 lg:col-span-9' : 'col-span-12',
                         )}>

@@ -21,9 +21,12 @@ class RapidLoad_Cache
 
         $cache_module_enabled = RapidLoad_Base::get_option('rapidload_module_cache');
 
+        error_log('RapidLoad_Cache::__construct');
         if(!isset($cache_module_enabled) || $cache_module_enabled != "1" ){
             return;
         }
+
+        error_log('RapidLoad_Cache_Engine::start');
 
         RapidLoad_Cache_Engine::start();
 
