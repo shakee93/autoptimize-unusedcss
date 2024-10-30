@@ -284,6 +284,10 @@ interface cacheUsage {
     key: string;
     label: string;
     size: cacheSize;
+    action: {
+        label: string;
+        href: string;
+    }
 }
 
 interface TestMode {

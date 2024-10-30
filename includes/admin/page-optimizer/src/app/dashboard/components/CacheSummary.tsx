@@ -1,7 +1,7 @@
-import React, {Suspense, useState, useEffect, useRef} from 'react';
+import React, {useEffect} from 'react';
 import Card from "components/ui/card";
 import {cn} from "lib/utils";
-import { InformationCircleIcon  } from "@heroicons/react/24/outline";
+import { InformationCircleIcon, TrashIcon  } from "@heroicons/react/24/outline";
 import DoughnutChart from "app/dashboard/components/charts/doughnut";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
@@ -9,6 +9,7 @@ import {getSummary} from "../../../store/app/appActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {useAppContext} from "../../../context/app";
 import SkeletonList from 'components/ui/listSkelton';
+import TooltipText from "components/ui/tooltip-text";
 
 type CacheUsageItem = {
     label: string;
@@ -16,6 +17,10 @@ type CacheUsageItem = {
         folder_name: string;
         size: string;
     };
+    action: {
+        href: string;
+        label: string;
+    }
 };
 
 
@@ -68,16 +73,33 @@ const CacheSummary = () => {
 
     }, [dispatch]);
 
+    const clearCache= (href: string) => {
+        console.log(href)
+        dispatch(getSummary(options, href));
+    }
 
+    useEffect(() => {
+       console.log(cacheUsage)
 
-    const CacheItem = ({ label, size }: CacheUsageItem) => (
+    }, [cacheUsage]);
+
+    const CacheItem = ({ label, size, action }: CacheUsageItem) => (
         <div className="flex justify-between items-center py-1.5 font-medium">
             <div className="text-sm dark:text-brand-300 text-brand-500">{label}</div>
-            <div className="text-sm dark:text-brand-300">{size.size}</div>
+            <div className="flex gap-1">
+                <div className="text-sm dark:text-brand-300">{size.size}</div>
+                {action ? (
+                    <TooltipText className='flex items-center justify-center' text={action.label}>
+                        <TrashIcon onClick={() => clearCache(action.href)} className="cursor-pointer h-5 w-5 text-gray-500" />
+                    </TooltipText>
+                ):(
+                    <TrashIcon className="h-5 w-5 text-gray-500" />
+                    )
+                }
+            </div>
+
         </div>
     );
-
-
 
     return (
         <Card data-tour="license-widget" className="border flex flex-col">
@@ -101,8 +123,8 @@ const CacheSummary = () => {
                     {cacheUsage === null ? (
                        <SkeletonList count={4} />
                     ) : (
-                        cacheUsage.map(({ label, size }) => (
-                            <CacheItem key={label} label={label} size={size} />
+                        cacheUsage.map(({ label, size, action }) => (
+                            <CacheItem key={label} label={label} size={size} action={action}/>
                         ))
                     )}
                 </div>
