@@ -25,26 +25,26 @@ const StepOne = () => {
 
     return (
         <div className='w-full flex flex-col gap-4'>
-            <div className="bg-brand-0 border flex flex-col gap-8 p-6 items-center rounded-3xl">
+            <div className="bg-brand-0 border flex flex-col gap-8 p-16 items-center rounded-3xl">
                 <div className='px-2'>
                     <img className='w-22'
                          src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'}
                          alt='RapidLoad - #1 to unlock breakneck page speed'/>
                 </div>
-                <div className='flex gap-2'>
+                <div className='flex flex-col gap-2 text-center'>
                     <h1 className='text-4xl font-bold'>Welcome to RapidLoad</h1>
+                    <span className='font-medium text-base text-zinc-600 dark:text-brand-300'>
+                        We have analyzed your entire site and this is the current results.
+                    </span>
                 </div>
-                <span className='font-medium text-base text-zinc-600 dark:text-brand-300'>
-                    We have analyzed your entire site and this is the current results.
-                </span>
 
-                <div className='border rounded-xl p-4 flex items-center gap-4'>
+
+                <div className='border rounded-xl p-2 flex items-center gap-4'>
                     <div className='p-2 bg-brand-200/60 rounded-lg'>
-                        <InformationCircleIcon className='w-10 h-10 text-purple-700/90'/>
+                    <InformationCircleIcon className='w-10 h-10 text-purple-700/90'/>
                     </div>
-
-                    <span className='font-medium text-sm text-zinc-600 dark:text-brand-300'>
-                        Your website (https://example.com/) uses caching. We bypass it to <br/> reveal the unoptimized performance, showing RapidLoad's full <br/> impact.
+                    <span className='font-medium text-xs text-zinc-600 dark:text-brand-300'>
+                        Your website ({options?.optimizer_url}) uses caching. We bypass it to <br/> reveal the unoptimized performance, showing RapidLoad's full <br/> impact.
                     </span>
                 </div>
                 <div className='bg-brand-100/30 border rounded-3xl p-2'>

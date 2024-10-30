@@ -29,7 +29,7 @@ export default function Onboard() {
                 >
                     <section
                         className={cn(
-                            "relative container flex flex-col mt-4 gap-4",
+                            "relative container flex flex-col p-16 gap-4",
                         )}
                     >
                         <StepOne/>
