@@ -18,6 +18,7 @@ import useCommonDispatch from "hooks/useCommonDispatch";
 import { toBoolean } from "lib/utils";
 import Bugsnag from "@bugsnag/js";
 import Dashboard from "app/dashboard";
+import Onboard from "app/onboard";
 import TestModeSwitcher from "app/page-optimizer/components/TestModeSwitcher";
 
 const AppTour = React.lazy(() => import('components/tour'))
@@ -146,6 +147,7 @@ const App = ({ popup, _showOptimizer = false }: {
     const [routes, setRoutes] = useState([
         { title: "Dashboard", id: "/", component: <Dashboard /> },
         { title: "Optimize", id: "/optimize", component: <PageOptimizer /> },
+        { title: "Onboard", id: "/onboard", component: <Onboard /> },
     ]);
 
     // Effect to listen for hash changes
@@ -221,21 +223,30 @@ const App = ({ popup, _showOptimizer = false }: {
 
                                             </div>
 
-                                            {routes.map((route, i) => (
-                                                <button
-                                                    key={i}
-                                                    onClick={() => setActiveRoute(route.id)}
-                                                    className={cn(
-                                                        'flex h-10 text-sm z-10 font-medium items-center px-3 gap-2',
-                                                        activeRoute === route.id ? 'text-black dark:text-white' : 'text-gray-500'
-                                                    )}
-                                                >
-                                                    <Circle
-                                                        className={cn(`w-2 stroke-0 transition-all fill-purple-800 relative inline-flex`, activeRoute === route.id ? 'delay-200 ' : 'opacity-0')}
-                                                    />
-                                                    {route.title}
-                                                </button>
-                                            ))}
+                                            {routes.map((route, i) => {
+                                                if (route.id === '/onboard') {
+                                                    return null;
+                                                }
+                                                return (
+                                                    <button
+                                                        key={i}
+                                                        onClick={() => setActiveRoute(route.id)}
+                                                        className={cn(
+                                                            'flex h-10 text-sm z-10 font-medium items-center px-3 gap-2',
+                                                            activeRoute === route.id ? 'text-black dark:text-white' : 'text-gray-500'
+                                                        )}
+                                                    >
+                                                        <Circle
+                                                            className={cn(
+                                                                `w-2 stroke-0 transition-all fill-purple-800 relative inline-flex`,
+                                                                activeRoute === route.id ? 'delay-200' : 'opacity-0'
+                                                            )}
+                                                        />
+                                                        {route.title}
+                                                    </button>
+                                                );
+                                            })}
+
                                         </div>
                                     </div>
                                 </div>
