@@ -622,7 +622,7 @@
                             return '<span class="job-file-size">-</span>';
                         }
 
-                        return '0 KB'
+                        return '-'
                     },
                     createdCell: function (td, cellData, rowData) {
 
@@ -1311,7 +1311,7 @@
                             return '<span class="job-file-size">-</span>';
                         }
 
-                        return '0 KB'
+                        return '-'
                     },
                     createdCell: function (td, cellData, rowData) {
 
