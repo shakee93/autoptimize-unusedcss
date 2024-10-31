@@ -10,7 +10,7 @@ import {
     useState
 } from 'react';
 import useCommonDispatch from "hooks/useCommonDispatch";
-import {setCommonRootState} from "../store/common/commonActions";
+import { setCommonRootState } from "../store/common/commonActions";
 
 interface OptimizerContextProps {
     openAudits: string[],
@@ -18,6 +18,7 @@ interface OptimizerContextProps {
     showOptimizer: boolean;
     setShowOptimizer: Dispatch<SetStateAction<boolean>>;
     options: WordPressOptions,
+    setOptions: Dispatch<SetStateAction<WordPressOptions>>,
     version: string,
     mode: RapidLoadOptimizerModes
     modeData?: RapidLoadOptimizerModeData
@@ -35,7 +36,7 @@ interface OptimizerContextProps {
 export const AppContext = createContext<OptimizerContextProps | null>(null)
 
 
-export const AppProvider = ({ children, initShowOptimizerValue, global, mode, modeData } : {
+export const AppProvider = ({ children, initShowOptimizerValue, global, mode, modeData }: {
     children: ReactNode
     mode: RapidLoadOptimizerModes
     modeData?: RapidLoadOptimizerModeData
@@ -47,7 +48,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
     const [showOptimizer, setShowOptimizer] = useState<boolean>(false);
     const [manipulatingStyles, setManipulatingStyles] = useState<boolean>(false);
     const [mounted, setMounted] = useState<boolean>(false);
-    const [sheetsHidden, setSheetsHidden]= useState(false)
+    const [sheetsHidden, setSheetsHidden] = useState(false)
     const [openAudits, setOpenAudits] = useState<string[]>([]);
     const [options, setOptions] = useState((
         {
@@ -70,7 +71,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
     const [type, setType] = useState<ReportType>('desktop');
     const [savingData, setSavingData] = useState<boolean>(false)
     const [togglePerformance, setTogglePerformance] = useState(true);
-    const optimizerContainer = useRef<HTMLElement|null>(null);
+    const optimizerContainer = useRef<HTMLElement | null>(null);
     const [invalidatingCache, setInvalidatingCache] = useState<boolean>(false)
     const { dispatch } = useCommonDispatch()
 
@@ -84,7 +85,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
         };
 
         window.addEventListener('rapidLoad:set-optimizer', updateData);
-        
+
         setMounted(true)
 
         if (mode) {
@@ -112,7 +113,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
         } else {
             document.documentElement.classList.remove('rapidload-optimizer-open')
         }
-        
+
     }, [showOptimizer])
 
     const _setShowOptimizer = (value: SetStateAction<boolean>) => {
@@ -130,8 +131,9 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
     return (
         <AppContext.Provider value={{
             showOptimizer,
-            setShowOptimizer : _setShowOptimizer,
+            setShowOptimizer: _setShowOptimizer,
             options,
+            setOptions,
             openAudits,
             setOpenAudits,
             version: __OPTIMIZER_VERSION__,

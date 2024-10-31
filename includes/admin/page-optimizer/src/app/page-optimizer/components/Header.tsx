@@ -12,13 +12,16 @@ import { optimizerData } from "../../../store/app/appSelector";
 import AppButton from "components/ui/app-button";
 import { cn } from "lib/utils";
 import {
+    Link2,
     LogOut,
     Monitor,
-    RefreshCw
+    RefreshCw,
+    Rocket,
+    UserCircle
 } from "lucide-react";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import { AnimatePresence, motion } from "framer-motion";
-import { setCommonState } from "../../../store/common/commonActions";
+import { setCommonRootState, setCommonState } from "../../../store/common/commonActions";
 import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
 import UrlPreview from "app/page-optimizer/components/footer/url-preview";
 import SaveChanges from "app/page-optimizer/components/footer/save-changes";
@@ -114,24 +117,49 @@ const Header = ({ url }: { url: string }) => {
                                     commonDispatch(setCommonState('openAudits', []))
 
                                 }}>
-                                <TooltipText
-                                    text='Analyze the page'>
-                                    <AppButton asChild={true} data-tour='analyze'
 
-                                        className={cn(
-                                            'transition-none rounded-none h-12 px-3 pr-3.5 ' +
-                                            'border-r-0 border-l border-t-0 border-b-0 bg-transparent ',
-                                        )}
-                                        variant='outline'>
-                                        <div className={`flex flex-col gap-[1px] items-center`}>
-                                            <RefreshCw className={cn(
-                                                'w-4 -mt-0.5',
-                                                loading && 'animate-spin'
-                                            )} />
-                                            <span className='text-xxs font-normal text-brand-500'>Analyze </span>
-                                        </div>
-                                    </AppButton>
-                                </TooltipText>
+
+                                <div className="flex">
+                                    <TooltipText
+                                        text='Analyze the page'>
+                                        <AppButton asChild={true} data-tour='analyze'
+
+                                            className={cn(
+                                                'transition-none rounded-none h-12 px-3 pr-3.5 ' +
+                                                'border-r-0 border-l border-t-0 border-b-0 bg-transparent ',
+                                            )}
+                                            variant='outline'>
+                                            <div className={`flex flex-col gap-[1px] items-center`}>
+                                                <RefreshCw className={cn(
+                                                    'w-4 -mt-0.5',
+                                                    loading && 'animate-spin'
+                                                )} />
+                                                <span className='text-xxs font-normal text-brand-500'>Analyze </span>
+                                            </div>
+                                        </AppButton>
+                                    </TooltipText>
+
+                                    <TooltipText text='Change URL'>
+                                        <AppButton
+                                            onClick={() => {
+                                                commonDispatch(setCommonRootState('showDemo', false))
+                                            }}
+                                            asChild={true} data-tour='demo-url'
+
+                                            className={cn(
+                                                'transition-none rounded-none h-12 px-3 pr-3.5 ' +
+                                                'border-r-0 border-l border-t-0 border-b-0 bg-transparent ',
+                                            )}
+                                            variant='outline'>
+                                            <div className={`flex flex-col gap-[1px] items-center`}>
+                                                <Link2 className={cn(
+                                                    'w-4 -mt-0.5',
+                                                )} />
+                                                <span className='text-xxs font-normal text-brand-500'>Change</span>
+                                            </div>
+                                        </AppButton>
+                                    </TooltipText>
+                                </div>
                             </UnsavedChanges>
                         </div>
                     </div>
@@ -141,21 +169,10 @@ const Header = ({ url }: { url: string }) => {
                 <div className='flex relative gap-4 items-center'>
 
                     <>
-                        <SaveChanges />
-                        <UnsavedChanges
-                            onCancel={() => {
-                                setShowOptimizer(false)
-                            }}
-                            cancel='Discard & Leave'
-                            onClick={() => {
-                                setShowOptimizer(false);
-                            }}>
-                            <TooltipText text='Close Optimizer'>
-                                <LogOut className={cn(
-                                    'h-5 w-5 dark:text-brand-300 text-brand-600 transition-opacity',
-                                )} />
-                            </TooltipText>
-                        </UnsavedChanges>
+                        <AppButton className='text-sm flex overflow-hidden justify-between select-none relative text-sm gap-2 h-12 rounded-[14px]'>
+                            <Rocket className='w-5 mr-0.5' />
+                            Speed Up My Site Now
+                        </AppButton>
                     </>
 
                 </div>
@@ -176,6 +193,7 @@ const Header = ({ url }: { url: string }) => {
                         optimizations are safely previewed without affecting your live website. Perfect for experimentation and fine-tuning.
                     </motion.div>
                 )}
+
             </AnimatePresence>
         </>
     )

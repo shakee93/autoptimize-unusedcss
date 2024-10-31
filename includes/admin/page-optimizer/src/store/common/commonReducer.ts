@@ -1,9 +1,11 @@
-import {CommonAction, CommonState, SET_ROOT_STATE, SET_STATE} from "./commonTypes";
+import { CommonAction, CommonState, SET_ROOT_STATE, SET_STATE } from "./commonTypes";
 
 const initialState: CommonState = {
     optimizerRoot: null,
     mode: "normal",
     isTourOpen: false,
+    url: new URLSearchParams(window.location.search).get('url') || '',
+    showDemo: false,
     mobile: {
         activeTab: 'configurations',
         openAudits: [],
@@ -26,10 +28,10 @@ const commonReducer = (state = initialState, action: CommonAction): CommonState 
         case SET_STATE:
             return {
                 ...state,
-                [action.payload.activeReport] : {
+                [action.payload.activeReport]: {
                     ...state[action.payload.activeReport],
                     ... {
-                        [action.payload.key] : action.payload.value
+                        [action.payload.key]: action.payload.value
                     }
                 }
             };
@@ -37,7 +39,7 @@ const commonReducer = (state = initialState, action: CommonAction): CommonState 
             return {
                 ...state,
                 ... {
-                    [action.payload.key] : action.payload.value
+                    [action.payload.key]: action.payload.value
                 }
             };
         default:

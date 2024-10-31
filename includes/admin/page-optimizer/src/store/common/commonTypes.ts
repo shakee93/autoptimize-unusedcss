@@ -3,14 +3,15 @@ export type CommonState = {
     mode: RapidLoadOptimizerModes,
     modeData?: RapidLoadOptimizerModeData
     isTourOpen: boolean
-
-    mobile : {
+    url: string
+    showDemo: boolean
+    mobile: {
         activeTab: AuditTypes;
         activeMetric?: Metric | null;
         hoveredMetric?: Metric | null;
         openAudits: string[];
         openCategory?: SettingsCategory | '';
-        storePassedAudits?:string[];
+        storePassedAudits?: string[];
         inProgress: boolean;
         settingsMode: PerformanceGear | null;
         testModeStatus: boolean;
@@ -18,13 +19,13 @@ export type CommonState = {
         auditsReturn: boolean;
         uucssError: boolean;
     }
-    desktop : {
+    desktop: {
         activeTab: AuditTypes;
         activeMetric?: Metric | null;
         hoveredMetric?: Metric | null;
         openAudits: string[];
         openCategory?: SettingsCategory | '';
-        storePassedAudits?:string[];
+        storePassedAudits?: string[];
         inProgress: boolean;
         settingsMode: PerformanceGear | null;
         testModeStatus: boolean;

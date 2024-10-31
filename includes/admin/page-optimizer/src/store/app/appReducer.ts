@@ -15,7 +15,7 @@ import {
     UPDATE_TEST_MODE
 } from "./appTypes";
 
-const blankReport =  {
+const blankReport = {
     original: null,
     changes: {
         files: []
@@ -53,7 +53,7 @@ const initialState: AppState = {
             }
         },
         general: {
-            test_mode: true,
+            test_mode: false,
             performance_gear: 'accelerate'
         },
         actions: []
@@ -76,7 +76,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                     ...state.settings,
                     general: {
                         ...state.settings.general,
-                        test_mode : action.payload.status 
+                        test_mode: action.payload.status
                     }
                 }
             };
@@ -85,7 +85,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 ...state,
                 report: {
                     ...state.report,
-                    [state.activeReport] : {
+                    [state.activeReport]: {
                         ...state.report[state.activeReport],
                         loading: true,
                         error: null
@@ -98,7 +98,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 ...state,
                 report: {
                     ...state.report,
-                    [action.payload.activeReport] : {
+                    [action.payload.activeReport]: {
                         ...state.report[action.payload.activeReport],
                         // original: JSON.parse(JSON.stringify(action.payload.data.data)),
                         data: action.payload.data.data,
@@ -115,7 +115,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                 ...state,
                 report: {
                     ...state.report,
-                    [state.activeReport] : {
+                    [state.activeReport]: {
                         error: action.error,
                         loading: false
                     }
@@ -128,7 +128,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                     ...state.settings,
                     performance: {
                         ...state.settings.performance,
-                        [state.activeReport] : {
+                        [state.activeReport]: {
                             ...state.settings.performance[state.activeReport],
                             loading: true,
                             error: null
@@ -145,7 +145,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                     actions: action.payload.data.actions,
                     performance: {
                         ...state.settings.performance,
-                        [action.payload.activeReport] : {
+                        [action.payload.activeReport]: {
                             ...state.settings.performance[action.payload.activeReport],
                             original: JSON.parse(JSON.stringify(action.payload.data.data)),
                             state: action.payload.data.data,
@@ -162,7 +162,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                     ...state.settings,
                     performance: {
                         ...state.settings.performance,
-                        [state.activeReport] : {
+                        [state.activeReport]: {
                             error: action.error,
                             loading: false
                         }
@@ -176,7 +176,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                     ...state.settings,
                     performance: {
                         ...state.settings.performance,
-                        [state.activeReport] : {
+                        [state.activeReport]: {
                             ...state.settings.performance[state.activeReport],
                             state: action.payload.settings,
                         },
@@ -194,7 +194,7 @@ const appReducer = (state = initialState, action: AppAction): AppState => {
                     },
                     performance: {
                         ...state.settings.performance,
-                        [state.activeReport] : {
+                        [state.activeReport]: {
                             ...state.settings.performance[state.activeReport],
                             state: action.payload.settings,
                         }

@@ -1,6 +1,7 @@
-import {isDev, toBoolean} from "lib/utils";
+import { isDev, toBoolean } from "lib/utils";
 import store from "../store";
 import { toast } from "components/ui/use-toast";
+import { mockSettings } from "./mock/data";
 
 class ApiService {
     public baseURL: URL;
@@ -65,61 +66,32 @@ class ApiService {
         }
     }
 
-    async fetchPageSpeed(url: string, activeReport: string, reload: boolean): Promise<any>  {
+    async fetchPageSpeed(url: string, activeReport: string, reload: boolean): Promise<any> {
 
         try {
-            let fresh = reload
-            let data = null
+            let data = await this.analyzeViaAPI(url, activeReport);
 
-            if (reload) {
-                data = await this.analyzeViaAPI(url, activeReport);
-
-                if(data?.errors) {
-                    if (Array.isArray(data?.errors)) {
-                        throw new Error(
-                            `[Code:${data.errors[0].code}] ${data.errors[0].detail}`
-                        );
-                    }
-
+            if (data?.errors) {
+                if (Array.isArray(data?.errors)) {
                     throw new Error(
-                        `Oops! Something went wrong :(`
+                        `[Code:${data.errors[0].code}] ${data.errors[0].detail}`
                     );
                 }
+
+                throw new Error(
+                    `Oops! Something went wrong :(`
+                );
             }
 
-            const query = new URLSearchParams();
 
-            this.baseURL.searchParams.append('action', 'fetch_page_speed')
-            this.baseURL.searchParams.append('url', url)
-            this.baseURL.searchParams.append('strategy', activeReport)
-            this.baseURL.searchParams.append('new', reload as unknown as string)
-            this.baseURL.searchParams.append('is_dev', isDev as unknown as string)
-            // this.baseURL.searchParams.append('settingsMode', settingsMode || '')
 
-            const response = await fetch(this.baseURL, {
-                method: data ? "POST": "GET",
-                headers: {
-                    "Content-Type": "application/json",
+            return {
+                data: {
+                    page_speed: data,
+                    revisions: []
                 },
-                ...(
-                    data ? {
-                            body : JSON.stringify( {
-                                page_speed: data
-                            })
-                    } : {}
-                )
-            });
-
-
-            let responseData = await this.throwIfError(response, {
-                fresh: reload
-            });
-
-            if (responseData?.reload) {
-                return await this.fetchPageSpeed(url, activeReport, true);
+                success: true
             }
-
-            return responseData
 
         } catch (error) {
             console.error(error);
@@ -127,91 +99,63 @@ class ApiService {
         }
     }
 
-    async fetchSettings(url: string, activeReport: string, reload: boolean): Promise<any>  {
+    async fetchSettings(url: string, activeReport: string, reload: boolean): Promise<any> {
 
         try {
-            let fresh = reload
-            let data = null
-
-            const query = new URLSearchParams();
-
-            this.baseURL.searchParams.append('action', 'fetch_titan_settings')
-            this.baseURL.searchParams.append('url', url)
-            this.baseURL.searchParams.append('strategy', activeReport)
-            this.baseURL.searchParams.append('new', reload as unknown as string)
-            this.baseURL.searchParams.append('is_dev', isDev as unknown as string)
-            // this.baseURL.searchParams.append('settingsMode', settingsMode || '')
-
-            const response = await fetch(this.baseURL, {
-                method: data ? "POST": "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            });
-
-
-            let responseData = await this.throwIfError(response, {
-                fresh: reload
-            });
-
-            if (responseData?.reload) {
-                return await this.fetchPageSpeed(url, activeReport, true);
-            }
-
-            return responseData
+            return mockSettings
 
         } catch (error) {
             console.error(error);
             toast({
-                    description: 'Failed to fetch RapidLoad settings!',
-                    variant: 'destructive',
-                })
+                description: 'Failed to fetch RapidLoad settings!',
+                variant: 'destructive',
+            })
             throw error;
         }
     }
 
     async analyzeViaAPI(url: string, strategy: string) {
 
-       try {
-           const state = store.getState()
-           const data = state.app.report[state.app.activeReport]
-           const settings = state.app.settings.performance[state.app.activeReport]
-           const testModeStatus = state.app.testMode?.status ?? state.app.settings.general.test_mode ?? false;
-           const previewUrl = testModeStatus ? '?rapidload_preview': '';
+        try {
+            const state = store.getState()
+            const data = state.app.report[state.app.activeReport]
+            const settings = state.app.settings.performance[state.app.activeReport]
+            const testModeStatus = state.app.testMode?.status ?? state.app.settings.general.test_mode ?? false;
+            const previewUrl = testModeStatus ? '?rapidload_preview' : '';
 
-           const api_root = this.options?.api_root || 'https://api.rapidload.io/api/v1';
-           const pageSpeedURL = new URL(`${api_root}/page-speed`);
+            const api_root = this.options?.api_root || 'https://api.rapidload.io/api/v1';
+            const pageSpeedURL = new URL(`${api_root}/page-speed`);
 
-           pageSpeedURL.searchParams.append('url', url + previewUrl)
-           pageSpeedURL.searchParams.append('strategy', state.app.activeReport)
-           pageSpeedURL.searchParams.append('plugin_version', this.options.rapidload_version)
-           pageSpeedURL.searchParams.append('titan_version', __OPTIMIZER_VERSION__)
+            pageSpeedURL.searchParams.append('url', url + previewUrl)
+            pageSpeedURL.searchParams.append('strategy', state.app.activeReport)
+            pageSpeedURL.searchParams.append('plugin_version', this.options.rapidload_version)
+            pageSpeedURL.searchParams.append('titan_version', __OPTIMIZER_VERSION__)
 
-           if (this.options.license_key) {
-               pageSpeedURL.searchParams.append('api_key', this.options.license_key);
-           }
+            if (this.options.license_key) {
+                pageSpeedURL.searchParams.append('api_key', this.options.license_key);
+            }
 
-           const pageSpeed = await fetch(pageSpeedURL, {
-               method: "POST",
-               headers: {
-                   "Content-Type": "application/json",
-               },
-               body: JSON.stringify({
-                   settings: settings.state?.
-                   flatMap(t =>
-                       t.inputs
-                           .filter(({ value }) => value != null)
-                           .map(({ key, value }) => ({ key, value, status: t.status  })))
-                       || []
-               })
-           });
+            const pageSpeed = await fetch(pageSpeedURL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    settings: settings.state?.
+                        flatMap(t =>
+                            t.inputs
+                                .filter(({ value }) => value != null)
+                                .map(({ key, value }) => ({ key, value, status: t.status })))
+                        || []
+                })
+            });
 
-           return await pageSpeed.json()
+            return await pageSpeed.json()
 
-       } catch (error) {
-           console.error(error);
-           throw error;
-       }
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     }
 
     async getCSSJobStatus(url: string, types: string[]): Promise<any> {
@@ -264,8 +208,8 @@ class ApiService {
 
             this.baseURL.searchParams.append('action', 'update_titan_settings');
 
-            if(global) this.baseURL.searchParams.append('global', 'true')
-            if(analyze) this.baseURL.searchParams.append('analyze', 'true')
+            if (global) this.baseURL.searchParams.append('global', 'true')
+            if (analyze) this.baseURL.searchParams.append('analyze', 'true')
 
             this.baseURL.searchParams.append('url', url)
             this.baseURL.searchParams.append('strategy', activeReport)
@@ -279,7 +223,7 @@ class ApiService {
                 body: JSON.stringify({
                     settings: {
                         general: {
-                          performance_gear: data.activeGear
+                            performance_gear: data.activeGear
                         },
                         performance: data.settings
                     },
@@ -295,11 +239,11 @@ class ApiService {
         }
     }
 
-    async post(action : string | null = null, queryParams: {[p: string] : string} = {}) {
+    async post(action: string | null = null, queryParams: { [p: string]: string } = {}) {
 
         try {
 
-            if(action) {
+            if (action) {
                 if (this.baseURL.searchParams.get('action')) {
                     this.baseURL.searchParams.delete('action')
                 }
@@ -327,8 +271,8 @@ class ApiService {
     }
 
     async request(endpoint: string,
-                  params:{[p: string] : string} = {},
-                  type: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET'
+        params: { [p: string]: string } = {},
+        type: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET'
     ) {
 
         let base = new URL(this.options.rest_url);

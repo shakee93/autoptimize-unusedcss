@@ -85,25 +85,10 @@ const TestModeSwitcher = () => {
                     </div>
                 </div>
             </div>
-            <TooltipText text={loadingStatus ? "loading" : "Preview"} className="dark:bg-brand-930/90">
-                <div
-                    onClick={() => {
 
-                        {
-                            !loadingStatus && window.open(options.optimizer_url + '?rapidload_preview', '_blank');
-                        }
-
-                    }}
-                    className={`flex gap-2 items-center text-sm h-12 rounded-[14px] bg-brand-0 dark:bg-brand-930/90 px-4 py-2 ${revisions?.length > 0
-                        ? '' : ''}`} data-tour="preview-button">
-
-                    {loadingStatus ? <Loader className='w-5 animate-spin' /> :
-                        <ArrowTopRightOnSquareIcon className='w-5 text-gray-500' />}
-                </div>
-            </TooltipText>
         </div>
         <div className="relative mt-4 -mb-2 rotate-180 ">
-            <TestModeLine width={testMode ? 110 : 200} />
+            <TestModeLine width={testMode ? 90 : 150} />
         </div>
     </div>
 }

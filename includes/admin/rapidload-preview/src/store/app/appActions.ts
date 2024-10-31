@@ -1,5 +1,5 @@
-import {ThunkAction, ThunkDispatch} from 'redux-thunk';
-import {AnyAction} from 'redux';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from 'redux';
 import {
     AppAction,
     CHANGE_REPORT_TYPE,
@@ -16,7 +16,7 @@ import ApiService from "../../services/api";
 import Audit from "app/page-optimizer/components/audit/Audit";
 
 
-const transformAudit = (audit: Audit, metrics : Metric[]) => {
+const transformAudit = (audit: Audit, metrics: Metric[]) => {
 
     audit.metrics = metrics.filter(m => m?.refs?.relevantAudits?.includes(audit.id))
 
@@ -24,7 +24,7 @@ const transformAudit = (audit: Audit, metrics : Metric[]) => {
 
         if (audit?.files?.items?.length > 0) {
 
-            audit.files.grouped_items = audit.files.items.reduce((result: GroupedAuditResource[] , item) => {
+            audit.files.grouped_items = audit.files.items.reduce((result: GroupedAuditResource[], item) => {
 
                 let key = 'unknown'
 
@@ -52,7 +52,7 @@ const transformAudit = (audit: Audit, metrics : Metric[]) => {
         }
 
     }
-    
+
     return audit
 }
 
@@ -62,10 +62,10 @@ const transformData = (data: any) => {
         ...metric,
         potentialGain: metric.refs ? (metric.refs?.weight - (metric.refs?.weight / 100) * metric.score) : 0
     }))
-    
-    let audits : Audit[] = data.data.page_speed.audits
+
+    let audits: Audit[] = data.data.page_speed.audits
         .sort((a: Audit, b: Audit) => a.score - b.score)
-        .map( (a: Audit) => transformAudit(a, metrics))
+        .map((a: Audit) => transformAudit(a, metrics))
 
     const sortAuditsWithActions = (a: Audit, b: Audit) => {
         const aFirstCondition = a.settings.filter(s => s.inputs[0].value).length > 0;
@@ -88,26 +88,26 @@ const transformData = (data: any) => {
 
         return 0;
     }
-    
+
     let _data = {
         data: {
-            performance:  data.data.page_speed.performance ? parseFloat(data.data?.page_speed?.performance.toFixed(0)) : 0,
+            performance: data.data.page_speed.performance ? parseFloat(data.data?.page_speed?.performance.toFixed(0)) : 0,
 
             ...data.data.page_speed,
-            grouped : {
+            grouped: {
                 passed_audits: audits.filter(audit => audit.type === 'passed_audit').sort(
                     sortAuditsWithActions
                 ),
                 opportunities: audits.filter(audit => audit.type === 'opportunity'),
-                diagnostics:  audits.filter(audit => audit.type === "diagnostics")
+                diagnostics: audits.filter(audit => audit.type === "diagnostics")
                     .sort((a, b) => (a.scoreDisplayMode === 'informative' ? 1 : -1)),
             },
-            metrics : metrics,
+            metrics: metrics,
         },
 
         success: data.success,
         settings: initiateSettings(audits),
-        revisions: data.data.revisions,
+        revisions: [],
         individual_file_actions: data.data['individual-file-actions'],
         state: data.state
     };
@@ -151,7 +151,7 @@ export const getCSSStatus = (options: WordPressOptions, url: string, types: stri
             const cssJobStatusResult = await api.getCSSJobStatus(url, types);
             dispatch({
                 type: GET_CSS_STATUS_SUCCESS,
-                payload : cssJobStatusResult.data
+                payload: cssJobStatusResult.data
             })
 
         } catch (error) {
@@ -172,7 +172,7 @@ export const getTestModeStatus = (options: WordPressOptions, url: string, mode?:
             const fetchTestModeData = await api.getTestMode(url, mode || '');
             dispatch({
                 type: UPDATE_TEST_MODE,
-                payload : fetchTestModeData?.data
+                payload: fetchTestModeData?.data
             })
 
         } catch (error) {
@@ -183,52 +183,44 @@ export const getTestModeStatus = (options: WordPressOptions, url: string, mode?:
     }
 }
 
-export const fetchData = (options: WordPressOptions, url : string, reload: boolean = false, inprogress: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
+export const fetchData = (options: WordPressOptions, url: string, reload: boolean = false, inprogress: boolean = false): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
 
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
-        try {
-            const currentState = getState(); // Access the current state
-            const activeReport = currentState.app.activeReport;
-            const activeReportData = currentState.app[activeReport]
+        const currentState = getState(); // Access the current state
+        const activeReport = currentState.app.activeReport;
+        const activeReportData = currentState.app[activeReport]
 
-            // TODO: don't let people bam on keyboard while waiting to laod the page speed
-            // if(activeReportData.loading && activeReportData.data ) {
-            //     console.log('don\'t bam the mouse! we are loading your page speed details 😉');
-            //     return;
-            // }
-           
-            if (activeReportData.loading) {
-                return;
-            }
+        // TODO: don't let people bam on keyboard while waiting to laod the page speed
+        // if(activeReportData.loading && activeReportData.data ) {
+        //     console.log('don\'t bam the mouse! we are loading your page speed details 😉');
+        //     return;
+        // }
 
-            if (activeReportData.data && !reload && !inprogress) {
-                return;
-            }
+        if (activeReportData.loading) {
+            return;
+        }
 
-            dispatch({ type: FETCH_DATA_REQUEST, activeReport });
+        if (activeReportData.data && !reload && !inprogress) {
+            return;
+        }
 
-            const response = await api.fetchPageSpeed(
-                url,
-                activeReport,
-                reload,
-            );
-            
-            dispatch({ type: FETCH_DATA_SUCCESS, payload: {
+        dispatch({ type: FETCH_DATA_REQUEST, activeReport });
+
+        const response = await api.fetchPageSpeed(
+            url,
+            activeReport,
+            reload,
+        );
+
+        dispatch({
+            type: FETCH_DATA_SUCCESS, payload: {
                 activeReport,
                 data: transformData(response)
-            }});
-
-
-        } catch (error) {
-            if (error instanceof Error) {
-                dispatch({ type: FETCH_DATA_FAILURE, error: error.message });
-            } else {
-                dispatch({ type: FETCH_DATA_FAILURE, error: 'Unknown error occurred' });
             }
-        }
+        });
     };
 };
 
@@ -238,14 +230,14 @@ export const updateSettings = (
     key: string, // key of the input
     payload: any, // changed value
 
- ): ThunkAction<void, RootState, unknown, AnyAction> => {
+): ThunkAction<void, RootState, unknown, AnyAction> => {
 
-    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState)  => {
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
         const currentState = getState(); // Access the current state
         const deviceType = currentState?.app?.activeReport;
 
         // @ts-ignore
-        let newOptions : AuditSetting[] = currentState?.app?.[deviceType]?.settings?.map((s: AuditSetting) => {
+        let newOptions: AuditSetting[] = currentState?.app?.[deviceType]?.settings?.map((s: AuditSetting) => {
 
             if (s.name === setting.name) {
 
@@ -271,16 +263,16 @@ export const updateSettings = (
 
         newData.audits = newData.audits.map((a: Audit) => {
 
-           a.settings = a.settings.map(s => {
+            a.settings = a.settings.map(s => {
 
-               s.inputs = s.inputs.map(input => {
+                s.inputs = s.inputs.map(input => {
 
-                   if (input.key === key) {
-                       input.value = payload
-                   }
+                    if (input.key === key) {
+                        input.value = payload
+                    }
 
-                   return input;
-               })
+                    return input;
+                })
 
                 return s;
             })
@@ -289,16 +281,18 @@ export const updateSettings = (
         });
 
 
-        dispatch({ type: UPDATE_SETTINGS , payload : {
+        dispatch({
+            type: UPDATE_SETTINGS, payload: {
                 settings: newOptions,
                 data: newData
-        } });
+            }
+        });
     }
 }
 
 export const changeReport = (
     type: ReportType
-):  ThunkAction<void, RootState, unknown, AnyAction> => {
+): ThunkAction<void, RootState, unknown, AnyAction> => {
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
         dispatch({
             type: CHANGE_REPORT_TYPE,
@@ -312,11 +306,11 @@ export const updateFileAction = (
     file: string,
     value: any,
     prev: any
-):  ThunkAction<void, RootState, unknown, AnyAction> => {
+): ThunkAction<void, RootState, unknown, AnyAction> => {
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
-        
+
         dispatch({
-            type: UPDATE_FILE_ACTION, payload : {
+            type: UPDATE_FILE_ACTION, payload: {
                 audit: audit,
                 file: file,
                 value: value,

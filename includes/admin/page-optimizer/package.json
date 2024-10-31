@@ -107,6 +107,7 @@
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "underscore": "^1.13.7",
+    "validator": "^13.12.0",
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
