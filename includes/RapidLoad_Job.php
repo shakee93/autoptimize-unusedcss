@@ -573,7 +573,7 @@ class RapidLoad_Job{
                 'job_id' => $latest_result->job_id,
                 'url' => $latest_result->url,
                 'strategy' => $latest_result->strategy,
-                'performance' => $last_data->performance ?? null,
+                'performance' => $last_data->performance,
                 'created_at' => $latest_result->created_at,
             ];
         }
@@ -586,7 +586,7 @@ class RapidLoad_Job{
                 'job_id' => $oldest_result->job_id,
                 'url' => $oldest_result->url,
                 'strategy' => $oldest_result->strategy,
-                'performance' => $first_data->performance ?? null,
+                'performance' => $first_data->performance,
                 'created_at' => $oldest_result->created_at,
             ];
         }
