@@ -77,6 +77,11 @@ const PerformanceGears: React.FC = () => {
     const { dispatch} = useCommonDispatch()
     const [open, setOpen] = useState(false);
 
+    useEffect(() => {
+        console.log(activeGear)
+
+    }, [activeGear]);
+
     // const startOptimization = useCallback((level: PerformanceGear) => {
     //
     //     if (level !== activeLevel) {

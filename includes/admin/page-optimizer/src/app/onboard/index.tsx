@@ -2,6 +2,7 @@ import React from "react";
 import { m } from "framer-motion";
 import { cn } from "lib/utils";
 import StepOne from "app/onboard/components/StepOne";
+import StepTwo from "app/onboard/components/StepTwo";
 
 
 export default function Onboard() {
@@ -29,10 +30,10 @@ export default function Onboard() {
                 >
                     <section
                         className={cn(
-                            "relative container flex flex-col p-16 gap-4",
+                            "relative container flex flex-col p-6 gap-4",
                         )}
                     >
-                        <StepOne/>
+                        <StepTwo/>
                     </section>
                 </div>
             </m.div>

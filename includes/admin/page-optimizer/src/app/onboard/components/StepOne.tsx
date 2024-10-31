@@ -25,7 +25,7 @@ const StepOne = () => {
 
     return (
         <div className='w-full flex flex-col gap-4'>
-            <div className="bg-brand-0 border flex flex-col gap-8 p-16 items-center rounded-3xl">
+            <div className="bg-brand-0 flex flex-col gap-8 p-16 items-center rounded-3xl">
                 <div className='px-2'>
                     <img className='w-22'
                          src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'}
@@ -49,25 +49,25 @@ const StepOne = () => {
                 </div>
                 <div className='bg-brand-100/30 border rounded-3xl p-2'>
                     <div
-                        className="flex px-2 py-2 justify-between ">
+                        className="flex px-2 pt-2 justify-between ">
                         <div data-tour='switch-report-strategy'
-                             className='select-none relative flex dark:bg-brand-800 py-0.5 bg-[#E8E8E8] rounded-2xl cursor-pointer'>
+                             className='select-none relative flex dark:bg-brand-800 py-0.5 bg-[#E8E8E8] rounded-xl cursor-pointer'>
                             <div className={cn(
-                                'absolute shadow-md translate-x-0 left-0.5 w-[48px] rounded-[15px] -z-1 duration-300 h-10 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',
-                                activeReport === 'desktop' && 'w-[51px] -translate-x-1 left-1/2'
+                                'absolute shadow-md translate-x-0 left-0.5 w-[42px] rounded-[12px] -z-1 duration-300 h-9 text-sm flex flex-column gap-2 px-2.5 py-3 font-medium dark:bg-brand-950 bg-brand-0',
+                                activeReport === 'desktop' && 'w-[45px] -translate-x-1 left-1/2'
                             )}>
                             </div>
 
                             <TooltipText text="Mobile">
                                 <div onClick={() => dispatch(changeReport('mobile'))}
-                                     className={`relative z-1 text-sm flex flex-column gap-2 pl-[18px] px-5 py-3 font-medium rounded-xl`}>
+                                     className={`relative z-1 text-sm flex flex-column gap-2 pl-[14px] px-4 py-2.5 font-medium rounded-lg`}>
                                     <DevicePhoneMobileIcon className="w-4 font-medium dark:text-brand-500"/>
                                 </div>
                             </TooltipText>
 
                             <TooltipText text='Desktop'>
                                 <div onClick={() => dispatch(changeReport('desktop'))}
-                                     className={`relative z-1 text-sm flex flex-column gap-2 pl-2 px-5 py-1 font-medium rounded-xl`}>
+                                     className={`relative z-1 text-sm flex flex-column gap-2 pl-2 px-4 py-1 font-medium rounded-lg`}>
                                     <Monitor className="w-4 font-medium dark:text-brand-500 "/>
                                 </div>
                             </TooltipText>
@@ -76,12 +76,12 @@ const StepOne = () => {
                     </div>
                     <div
                         className="flex items-center justify-center text-md gap-2 overflow-hidden relative">
-                        <div className="flex justify-center px-4 py-0 max-w-xl mx-auto w-full relative">
+                        <div className="flex justify-center px-4 py-2 max-w-xl mx-auto w-full relative">
                             {/* Before Results */}
-                            <div className="flex flex-col items-center gap-4 px-6 py-4 rounded-2xl w-[230px]">
+                            <div className="flex flex-col items-center gap-4 px-6 rounded-2xl w-[230px]">
                                 <div className="">
                                     <PerformanceProgressBar
-                                        className={cn('max-h-[140px]')}
+                                        className={cn('max-h-[170px]')}
                                         performance={57}
                                     />
                                 </div>
@@ -90,11 +90,11 @@ const StepOne = () => {
                             </div>
 
                             {/* Optimized Score */}
-                            <div className="flex flex-col items-center gap-4 px-6 py-4 rounded-2xl w-[230px]">
+                            <div className="flex flex-col items-center gap-4 px-6 rounded-2xl w-[230px]">
 
                                 <div className="">
                                     <PerformanceProgressBar
-                                        className={cn('max-h-[140px]')}
+                                        className={cn('max-h-[170px]')}
                                         scoreClassName={"text-brand-950"}
                                         performance={performanceScore}
                                     />
@@ -112,7 +112,7 @@ const StepOne = () => {
                 </div>
 
                 <button
-                    className="flex items-center bg-gradient-to-r from-brand-900/80 to-brand-950 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2 shadow-[inset_0px_2px_5px_rgba(0,0,0,0.5),_0px_3px_6px_rgba(0,0,0,0.5)]">
+                    className="flex items-center bg-gradient-to-r from-brand-900/90 to-brand-950 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2 ">
                     Let’s improve this score
                     <ArrowLongRightIcon className="w-6 h-6"/>
                 </button>
