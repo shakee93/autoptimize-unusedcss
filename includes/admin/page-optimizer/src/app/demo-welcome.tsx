@@ -39,10 +39,10 @@ const DemoWelcome = ({ children }: { children: ReactNode }) => {
         dispatch(setCommonRootState('showDemo', true))
     }
 
-    // useEffect(() => {
-    //     if (isValidUrl(url))
-    //         handleAnalyze()
-    // }, [])
+    useEffect(() => {
+        if (isValidUrl(url))
+            handleAnalyze()
+    }, [])
 
     const isValidUrl = (url: string): boolean => {
         const isValid = validator.isURL(url, {
