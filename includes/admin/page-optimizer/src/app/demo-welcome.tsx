@@ -12,6 +12,9 @@ import { useDispatch } from "react-redux";
 import { fetchReport, fetchSettings } from "../store/app/appActions";
 import { useRootContext } from "src/context/root";
 import validator from 'validator';
+import LogoIcon from '../../public/logo-icon.svg'
+import { Monitor } from "lucide-react";
+
 const DemoWelcome = ({ children }: { children: ReactNode }) => {
 
     const [isUrlSet, setIsUrlSet] = useState(false)
@@ -63,23 +66,26 @@ const DemoWelcome = ({ children }: { children: ReactNode }) => {
         <>
 
             {showDemo ? children :
-                <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-slate-900 to-purple-950">
-                    <section className="bg-white flex items-center justify-center rounded-[20px] shadow-lg p-5 h-[calc(100vh-40px)] w-[calc(100%-40px)] m-5">
+                <div className="flex items-center h-screen justify-center min-h-[700px] bg-gradient-to-b from-[#e3e3e3] to-[#dedede]">
+                    <section className="bg-white flex items-center justify-center rounded-[20px] p-1 md:p-5 min-h-[660px] h-screen w-screen md:h-[calc(100vh-40px)] md:w-[calc(100%-40px)] md:m-5">
                         <div className="px-4 justify-center items-center text-center gap-3 w-full flex flex-col">
-                            <div className="flex gap-2 justify-center mb-2">
-                                <span className="px-2.5 py-1 text-xs font-medium border border-green-800 text-green-800 rounded">New</span>
-                                <span className="px-2.5 py-1 text-xs font-medium border border-blue-800 text-blue-800 rounded">Live</span>
-                                <span className="px-2.5 py-1 text-xs font-medium border border-purple-800 text-purple-800 rounded">Interactive</span>
-                                <span className="px-2.5 py-1 text-xs font-medium border border-orange-800 text-orange-800 rounded">Realtime</span>
+
+                            <img src={LogoIcon} alt="RapidLoad" width={42} height={42} />
+
+                            <div className="flex gap-2 justify-center mt-6 mb-2">
+                                <span className="px-3.5 py-1 text-xs font-medium border rounded-full">New</span>
+                                <span className="px-3.5 hidden md:block py-1 text-xs font-medium border rounded-full">Live</span>
+                                <span className="px-3.5 py-1 text-xs font-medium border rounded-full">Interactive</span>
+                                <span className="px-3.5 hidden md:block py-1 text-xs font-medium border rounded-full">Realtime</span>
                             </div>
-                            <h1 className="text-3xl text-purple-900 font-extrabold tracking-tight sm:text-5xl md:text-6xl">
+                            <h1 className="text-3xl text-slate-800 font-extrabold tracking-tight sm:text-5xl md:text-6xl">
                                 Experience RapidLoad
                             </h1>
 
                             <p className="mt-4 text-md text-gray-600 max-w-2xl mx-auto">
-                                RapidLoad is a powerful plugin designed to optimize your website's performance, ensuring faster load times, improved user experience, and higher search engine rankings – all with minimal effort on your part.
+                                RapidLoad is a powerful plugin designed to optimize your wordpress website's performance, ensuring faster load times, improved user experience, and higher search engine rankings – all with minimal effort on your part.
                             </p>
-                            <div className="mt-10 max-w-xl min-w-[500px]">
+                            <div className="mt-10 max-w-xl md:min-w-[500px] w-full">
                                 <div className="flex flex-col gap-4">
                                     <div className="flex flex-col sm:flex-row gap-2">
                                         <div className="flex-grow flex flex-col gap-1">
@@ -97,13 +103,23 @@ const DemoWelcome = ({ children }: { children: ReactNode }) => {
                                             )}
                                         </div>
                                         <Button
-                                            className="w-full bg-purple-900 h-11.5 mt-0 border-none sm:w-fit whitespace-nowrap"
+                                            className="w-full bg-[#1b1a1f] h-11.5 mt-0 border-none sm:w-fit whitespace-nowrap"
                                             onClick={handleAnalyze}
                                             disabled={!validUrl}
                                         >Start Demo</Button>
                                     </div>
                                 </div>
                             </div>
+                            <div className="border border-amber-500 bg-white md:hidden mt-4 flex flex-col items-center gap-2 text-center p-4 rounded-xl">
+                                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-amber-100">
+                                    <Monitor className="w-5 h-5 text-amber-600" />
+                                </div>
+                                <h3 className="font-semibold text-slate-800">Best Experienced on Desktop</h3>
+                                <p className="text-sm text-slate-600 max-w-[280px]">
+                                    For the optimal experience of RapidLoad's features and interface, we recommend using a desktop browser.
+                                </p>
+                            </div>
+
                         </div>
                     </section>
                 </div>

@@ -148,14 +148,28 @@ module.exports = {
           '60%': {
             transform: 'translateX(3px)'   // Reduced horizontal distance for subtleness
           }
-        }
+        },
+        'gradient-x': {
+          '0%, 100%': {
+            'background-size': '200% 200%',
+            'background-position': 'left center'
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center'
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         'rl-scale-in': 'rl-scale-in 0.1s ease-out',
         'rl-loading-loop': 'rl-loading-loop 1.8s ease-out infinite',
-        'bounce-horizontal': 'bounce-horizontal 1.5s infinite'
+        'bounce-horizontal': 'bounce-horizontal 1.5s infinite',
+        'gradient-x': 'gradient-x 3s ease-in-out infinite',
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       },
     },
   },
