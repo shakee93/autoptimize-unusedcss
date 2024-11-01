@@ -15,7 +15,6 @@
       rapidload_version: '2.2.26',
       optimizer_url: new URLSearchParams(window.location.search).get('url'),
       ajax_url: '%VITE_SERVER_ROOT%wp-admin/admin-ajax.php',
-      load_optimizer: true,
       api_root: '%VITE_API_ROOT%/api/v1'.includes('VITE') ? 'https://api.rapidload.io/api/v1' : '%VITE_API_ROOT%/api/v1'
     };
 
@@ -118,7 +117,29 @@
 </head>
 
 <body>
+
   <div id="rapidload-page-optimizer"></div>
+  <script>
+    function loadRL() {
+      let container = document.getElementById('rapidload-page-optimizer')
+      let popup = document.getElementById('popup')
+      new window.RapidLoadOptimizer({
+        container,
+        popup,
+        showOptimizer: true,
+
+        shadowRoot: false,
+        // global: true,
+        // mode: 'onboard',
+        modeData: {
+          connect_url: 'http://localhost:5174/',
+          target: '_blank'
+        },
+      });
+    }
+
+    window.addEventListener('rapidLoad:loaded', loadRL);
+  </script>
   <script id="rapidload-page-optimizer-script" type="module" src="/src/main.tsx"></script>
 </body>
 

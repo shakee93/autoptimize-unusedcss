@@ -163,7 +163,6 @@ document.addEventListener('DOMContentLoaded', () => {
             container,
             popup,
             mode: 'normal',
-            showOptimizer: true
         });
     }
 
@@ -192,3 +191,8 @@ function replaceParentWithDiv(childElement: HTMLElement) {
     return newDiv
 }
 
+const event = new CustomEvent('rapidLoad:loaded');
+
+window.dispatchEvent(event);
+
+console.log('loaded');
