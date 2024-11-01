@@ -42,7 +42,10 @@ const DemoWelcome = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         if (isValidUrl(url))
             handleAnalyze()
-    }, [])
+    }, []) 
+
+
+    
 
     const isValidUrl = (url: string): boolean => {
         const isValid = validator.isURL(url, {
