@@ -14,6 +14,7 @@ import { useRootContext } from "src/context/root";
 import validator from 'validator';
 import LogoIcon from '../../public/logo-icon.svg'
 import { Monitor } from "lucide-react";
+import BrowserPreview from "../components/BrowserPreview"
 
 const DemoWelcome = ({ children }: { children: ReactNode }) => {
 
@@ -42,10 +43,10 @@ const DemoWelcome = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         if (isValidUrl(url))
             handleAnalyze()
-    }, []) 
+    }, [])
 
 
-    
+
 
     const isValidUrl = (url: string): boolean => {
         const isValid = validator.isURL(url, {
@@ -68,9 +69,20 @@ const DemoWelcome = ({ children }: { children: ReactNode }) => {
     return (
         <>
 
-            {showDemo ? children :
+            {showDemo ? (
+                <div className="h-screen bg-gradient-to-b from-[#e3e3e3] to-[#dedede] p-8">
+                    {/* <BrowserPreview
+                        url={url}
+                        className="w-full h-full"
+                    >
+                      
+                    </BrowserPreview> */}
+
+                    {children}
+                </div>
+            ) : (
                 <div className="flex items-center h-screen justify-center min-h-[700px] bg-gradient-to-b from-[#e3e3e3] to-[#dedede]">
-                    <section className="bg-white flex items-center justify-center rounded-[20px] p-1 md:p-5 min-h-[660px] h-screen w-screen md:h-[calc(100vh-40px)] md:w-[calc(100%-40px)] md:m-5">
+                    <section className="bg-white flex items-center justify-center p-1 md:p-5 min-h-[660px] h-screen w-screen">
                         <div className="px-4 justify-center items-center text-center gap-3 w-full flex flex-col">
 
                             <img src={LogoIcon} alt="RapidLoad" width={42} height={42} />
@@ -126,7 +138,7 @@ const DemoWelcome = ({ children }: { children: ReactNode }) => {
                         </div>
                     </section>
                 </div>
-            }
+            )}
         </>
     )
 }
