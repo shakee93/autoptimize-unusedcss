@@ -1,4 +1,4 @@
-import React, {ReactNode, Suspense} from "react";
+import React, { ReactNode, Suspense } from "react";
 import "./index.css";
 import stylesUrl from './index.css?url';
 import App from "app/app";
@@ -6,14 +6,14 @@ import 'react-circular-progressbar/dist/styles.css';
 
 import "@fontsource-variable/inter";
 
-import {createRoot} from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 import ShadowRoot from "components/shadow-dom";
 import SpeedPopover from "app/speed-popover";
-import {isDev} from "lib/utils";
+import { isDev } from "lib/utils";
 import Providers from "./Providers";
 
 import Bugsnag from '@bugsnag/js'
-import BugsnagPluginReact, {BugsnagPluginReactResult} from '@bugsnag/plugin-react'
+import BugsnagPluginReact, { BugsnagPluginReactResult } from '@bugsnag/plugin-react'
 
 if (!isDev) {
     Bugsnag.start({
@@ -75,7 +75,7 @@ const ApplicationCrashed = () => {
         <div className='rpo-app-crashed' style={containerStyles}>
             <div className='rpo-error'>
                 RapidLoad Titan Optimizer crashed :( <button style={errorStyle}
-                                                             onClick={e => window.location.reload()}>Reload</button>
+                    onClick={e => window.location.reload()}>Reload</button>
             </div>
         </div>
     )
@@ -87,7 +87,7 @@ interface ApplicationErrorBoundaryProps {
     children: ReactNode
 }
 
-const ApplicationErrorBoundary = ({fallback, onError, children}: ApplicationErrorBoundaryProps) => {
+const ApplicationErrorBoundary = ({ fallback, onError, children }: ApplicationErrorBoundaryProps) => {
 
     if (isDev) {
         return <div>{children}</div>
@@ -98,36 +98,36 @@ const ApplicationErrorBoundary = ({fallback, onError, children}: ApplicationErro
 
 export class RapidLoadOptimizer {
     constructor({
-                    mode = 'normal',
-                    container,
-                    showOptimizer = false,
-                    popup = null,
-                    modeData,
-                    global = false,
-                    shadowRoot = true,
-                }: initRapidLoadOptimizerProps) {
+        mode = 'normal',
+        container,
+        showOptimizer = false,
+        popup = null,
+        modeData,
+        global = false,
+        shadowRoot = true,
+    }: initRapidLoadOptimizerProps) {
         const optimizer = createRoot(container);
         optimizer.render(
-               <ApplicationErrorBoundary fallback={<ApplicationCrashed/>} onError={logError}>
+            <ApplicationErrorBoundary fallback={<ApplicationCrashed />} onError={logError}>
 
-                   <Providers
-                       mode={mode}
-                       modeData={modeData}
-                       popup={popup}
-                       global={global}
-                       showOptimizer={showOptimizer} >
-                       {popup && (
-                           <ShadowRoot disabled={!shadowRoot} node={popup} styles={stylesUrl}>
-                               <SpeedPopover/>
-                           </ShadowRoot>
-                       )}
+                <Providers
+                    mode={mode}
+                    modeData={modeData}
+                    popup={popup}
+                    global={global}
+                    showOptimizer={showOptimizer} >
+                    {popup && (
+                        <ShadowRoot disabled={!shadowRoot} node={popup} styles={stylesUrl}>
+                            <SpeedPopover />
+                        </ShadowRoot>
+                    )}
 
-                       <ShadowRoot disabled={!shadowRoot} styles={stylesUrl}>
-                           <App _showOptimizer={showOptimizer} popup={popup}/>
-                       </ShadowRoot>
-                   </Providers>
+                    <ShadowRoot disabled={!shadowRoot} styles={stylesUrl}>
+                        <App _showOptimizer={showOptimizer} popup={popup} />
+                    </ShadowRoot>
+                </Providers>
 
-               </ApplicationErrorBoundary>
+            </ApplicationErrorBoundary>
         );
     }
 
@@ -162,7 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
         new RapidLoadOptimizer({
             container,
             popup,
-            mode: 'normal'
+            mode: 'normal',
+            showOptimizer: true
         });
     }
 
