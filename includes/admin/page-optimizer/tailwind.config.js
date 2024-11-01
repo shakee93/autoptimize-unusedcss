@@ -2,6 +2,8 @@
 const colors = require('tailwindcss/colors')
 const defaultTheme = require('tailwindcss/defaultTheme')
 let plugin = require('tailwindcss/plugin')
+import typography from '@tailwindcss/typography';
+
 function rem2px(input, fontSize = 16) {
   if (input == null) {
     return input;
@@ -178,5 +180,7 @@ module.exports = {
       // Add a `third` variant, ie. `third:pb-0`
       addVariant('kids', '&>*')
     }),
-      require("tailwindcss-animate")],
+    require("tailwindcss-animate"),
+    typography,
+  ],
 }
