@@ -17,9 +17,6 @@
       api_root: '%VITE_API_ROOT%/api/v1'.includes('VITE') ? 'https://api.rapidload.io/api/v1' : '%VITE_API_ROOT%/api/v1'
     };
 
-
-
-
     // window.rapidload_optimizer = {
     //   "load_optimizer": "1",
     //         "page_optimizer_package_base": "http://rapidload.local/wp-content/plugins/autoptimize-unusedcss/includes/admin/page-optimizer/dist",
@@ -50,14 +47,22 @@
     // }
   </script>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G376JVXZP3"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
+    if ('%MODE%' !== 'development') {
+      const script = document.createElement('script');
+      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-G376JVXZP3';
+      script.async = true;
+      document.head.appendChild(script);
+    }
+  </script>
+  <script>
+    if ('%MODE%' !== 'development') {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-G376JVXZP3');
+    }
 
-    gtag('config', 'G-G376JVXZP3');
   </script>
 
   <style>
