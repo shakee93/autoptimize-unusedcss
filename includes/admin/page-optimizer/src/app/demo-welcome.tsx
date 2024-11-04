@@ -25,7 +25,7 @@ const DemoWelcome = ({ children }: { children: ReactNode }) => {
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const handleAnalyze = () => {
 
-        if (!url)
+        if (!url || !isValidUrl(url))
             return
 
         setOptions({
@@ -109,7 +109,7 @@ const DemoWelcome = ({ children }: { children: ReactNode }) => {
                                                 placeholder="Enter your website URL"
                                                 value={url || ""}
                                                 onChange={(e) => dispatch(setCommonRootState('url', e.target.value))}
-                                                className={`h-12 border-purple-300 px-6 flex-grow ${!validUrl && url ? 'border-red-500' : ''}`}
+                                                className={`h-12 border-zinc-400 px-6 flex-grow ${!validUrl && url ? 'border-red-500' : ''}`}
                                             />
                                             {!validUrl && url && (
                                                 <span className="text-red-500 text-sm text-left ml-3">
@@ -120,7 +120,6 @@ const DemoWelcome = ({ children }: { children: ReactNode }) => {
                                         <Button
                                             className="w-full bg-[#1b1a1f] h-11.5 mt-0 border-none sm:w-fit whitespace-nowrap"
                                             onClick={handleAnalyze}
-                                            disabled={!validUrl}
                                         >Start Demo</Button>
                                     </div>
                                 </div>
