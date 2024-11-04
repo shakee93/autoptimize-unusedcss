@@ -75,7 +75,7 @@ const DemoWelcome = ({ children }: { children: ReactNode }) => {
                         url={url}
                         className="w-full h-full"
                     >
-                      
+
                     </BrowserPreview> */}
 
                     {children}

@@ -11,7 +11,12 @@ import ShadowRoot from "components/shadow-dom";
 import SpeedPopover from "app/speed-popover";
 import { isDev } from "lib/utils";
 import Providers from "./Providers";
+import Hotjar from '@hotjar/browser';
 
+const siteId = 5194296;
+const hotjarVersion = 6;
+
+Hotjar.init(siteId, hotjarVersion);
 import Bugsnag from '@bugsnag/js'
 import BugsnagPluginReact, { BugsnagPluginReactResult } from '@bugsnag/plugin-react'
 
