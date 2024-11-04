@@ -173,24 +173,20 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                                 <div className='relative flex flex-col gap-3 px-4 items-center'>
 
                                     <div className='mt-6'>
-                                        {!data || on ? (
-                                            <Skeleton className="w-44 h-44 rounded-full" />
-                                        ) : (
-                                            <PerformanceProgressBar
-                                                loading={reanalyze}
-                                                    performance={(data?.performance && gain && metric) ?
-                                                        (data.performance + gain >= 99) ? 99 :
-                                                            data.performance + gain : data?.performance}>
-                                                {!!(metric && gain) && (
-                                                    <div className='flex gap-1 flex-col text-xxs font-normal'>
-                                                        <span>
-                                                            {metric?.title}
-                                                        </span>
-                                                        <span className='text-sm text-green-600 -ml-1'>+{gain}</span>
-                                                    </div>
-                                                )}
-                                            </PerformanceProgressBar>
-                                        )}
+                                        <PerformanceProgressBar
+                                            loading={loading}
+                                            performance={(data?.performance && gain && metric) ?
+                                                (data.performance + gain >= 99) ? 99 :
+                                                    data.performance + gain : data?.performance}>
+                                            {!!(metric && gain) && (
+                                                <div className='flex gap-1 flex-col text-xxs font-normal'>
+                                                    <span>
+                                                        {metric?.title}
+                                                    </span>
+                                                    <span className='text-sm text-green-600 -ml-1'>+{gain}</span>
+                                                </div>
+                                            )}
+                                        </PerformanceProgressBar>
                                     </div>
                                 </div>
                             </div>

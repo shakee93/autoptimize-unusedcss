@@ -191,14 +191,18 @@ export const getCSSStatus = (options: WordPressOptions, url: string, types: stri
 }
 // : ThunkAction<void, RootState, unknown, AnyAction> =>
 
-export const getTestModeStatus = (options: WordPressOptions, url: string, mode?: string): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+export const getTestModeStatus = (options: WordPressOptions, url: string, mode?: boolean): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string }> => {
 
+
         try {
-            const fetchTestModeData = await api.getTestMode(url, mode || '');
+            const fetchTestModeData = await api.getTestMode(url, mode || false);
+
+            console.log('fetchTestModeData', fetchTestModeData)
+
             dispatch({
                 type: UPDATE_TEST_MODE,
                 payload: fetchTestModeData?.data
@@ -245,8 +249,6 @@ export const fetchReport = (options: WordPressOptions, url: string, reload = fal
                 return;
             }
 
-
-            console.log('fetching report', url)
 
             dispatch({ type: FETCH_REPORT_REQUEST, activeReport });
 

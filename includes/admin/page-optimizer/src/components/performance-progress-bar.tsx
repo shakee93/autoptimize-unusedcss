@@ -39,7 +39,7 @@ const PerformanceProgressBar: React.FC<PerformanceProgressBarProps> = ({
     const [score, setScore] = useState(animate ? 0 : performance || 0);
     const [message, setMessage] = useState(-1); // Change initial state to -1
 
-    const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(performance);
+    const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(performance, loading);
 
     const animateScore = useCallback(() => {
         if (performance && animate) {
@@ -93,7 +93,7 @@ const PerformanceProgressBar: React.FC<PerformanceProgressBarProps> = ({
         >
             <AnimatePresence initial={false}>
                 <div
-                    style={{ color: progressbarColor }}
+                    style={{ color: !loading ? progressbarColor : '#777777' }}
                     className={cn(
                         'w-full flex flex-col items-center text-center text-4xl transition-all ease-out duration-300 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold',
                         scoreClassName,

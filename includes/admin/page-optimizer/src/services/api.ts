@@ -177,11 +177,19 @@ class ApiService {
         }
     }
 
-    async getTestMode(url: string, mode: string): Promise<any> {
+    async getTestMode(url: string, mode: boolean): Promise<any> {
         try {
+
+            return {
+                success: true,
+                data: {
+                    status: mode
+                }
+            }
+
             this.baseURL.searchParams.append('action', 'rapidload_switch_test_mode');
             this.baseURL.searchParams.append('url', url)
-            this.baseURL.searchParams.append('test_mode', mode)
+            this.baseURL.searchParams.append('test_mode', mode ? 'true' : 'false')
 
             const response = await fetch(this.baseURL, {
                 method: 'POST',

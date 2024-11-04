@@ -1,14 +1,24 @@
-import {useCallback, useEffect, useState} from "react";
+import { useCallback, useEffect, useState } from "react";
 
-const usePerformanceColors = (performance?: number) => {
+const usePerformanceColors = (performance?: number, loading?: boolean = false) => {
 
     const [performanceIcon, setPerformanceIcon] = useState('fail');
     const [progressbarColor, setProgressbarColor] = useState('transparent');
     const [progressbarBg, setProgressbarBg] = useState('transparent');
 
-    const progressBarColorCode = useCallback<any>( (_perf = null) => {
+    const progressBarColorCode = useCallback<any>((_perf = null) => {
         const bgOpacity = 0.08
         const _performance = _perf ? _perf : performance
+        const _loading = loading
+
+
+
+        if (_loading) {
+            setProgressbarColor('#e4e4e7');
+            setProgressbarBg('transparent');
+            setPerformanceIcon('average')
+            return;
+        }
 
         if (!_performance || _performance < 50) {
             setProgressbarColor('#ff4e43');
@@ -33,7 +43,7 @@ const usePerformanceColors = (performance?: number) => {
 
     useEffect(() => {
         progressBarColorCode()
-    }, [performance])
+    }, [performance, loading])
 
     return [performanceIcon, progressbarColor, progressbarBg, progressBarColorCode]
 }
