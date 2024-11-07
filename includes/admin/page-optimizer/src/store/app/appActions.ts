@@ -201,8 +201,6 @@ export const getTestModeStatus = (options: WordPressOptions, url: string, mode?:
         try {
             const fetchTestModeData = await api.getTestMode(url, mode || false);
 
-            console.log('fetchTestModeData', fetchTestModeData)
-
             dispatch({
                 type: UPDATE_TEST_MODE,
                 payload: fetchTestModeData?.data

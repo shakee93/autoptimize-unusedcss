@@ -17,6 +17,8 @@ import Bugsnag from "@bugsnag/js";
 import { Input } from "components/ui/input";
 import { Button } from "components/ui/button";
 import DemoWelcome from "./demo-welcome";
+import DemoHero from "./demo-hero";
+import DemoDefaultLoad from "./demo-default-load";
 
 const AppTour = React.lazy(() => import('components/tour'))
 const InitTour = React.lazy(() => import('components/tour/InitTour'))

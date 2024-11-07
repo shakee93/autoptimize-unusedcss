@@ -129,16 +129,16 @@ Performance Score: ${activeGear}
                                 >
                                     {isLoading ?
                                         'AI is analyzing your page speed to provide personalized optimization recommendations...' :
-                                        'Analysis complete'}
+                                        'Our AI-powered speed intelligence feature is coming soon! Get ready for personalized insights.'}
                                 </motion.div>
                             </div>
                         </div>
-                        <div>
-                            <AppButton size="sm" onClick={() => {
+                        {/* <div>
+                            <AppButton disabled={true} size="sm" onClick={() => {
                                 submit(systemMessage)
                                 complete(systemMessage)
-                            }}>Run AI Analysis</AppButton>
-                        </div>
+                            }}>Coming Soon</AppButton>
+                        </div> */}
                     </div>
 
 
@@ -205,7 +205,8 @@ Performance Score: ${activeGear}
 
                     {/* {completion && <div className='relative px-5 py-4 text-slate-700 prose prose-sm max-w-none'>
                         <ReactMarkdown>{completion}</ReactMarkdown>
-                    </div>} */}
+                    </div>
+                    } */}
 
                 </div>
             </div>

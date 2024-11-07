@@ -272,10 +272,10 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                 )}
             </Card>
             <SideBarActions />
-
+            {/* 
             <Suspense>
                 <Feedback key={key} />
-            </Suspense>
+            </Suspense> */}
 
         </div>
     </>

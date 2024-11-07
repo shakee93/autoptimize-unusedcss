@@ -1,7 +1,7 @@
 import { isDev, toBoolean } from "lib/utils";
 import store from "../store";
 import { toast } from "components/ui/use-toast";
-import { mockSettings } from "./mock/data";
+import { mockPageSpeed, mockSettings } from "./mock/data";
 
 class ApiService {
     public baseURL: URL;
@@ -126,6 +126,11 @@ class ApiService {
             const api_root = this.options?.api_root || 'https://api.rapidload.io/api/v1';
             const pageSpeedURL = new URL(`${api_root}/page-speed`);
 
+
+            if (url.includes('demo.rapidload.io')) {
+                return mockPageSpeed.data.page_speed
+            }
+
             pageSpeedURL.searchParams.append('url', url + previewUrl)
             pageSpeedURL.searchParams.append('strategy', state.app.activeReport)
             pageSpeedURL.searchParams.append('plugin_version', this.options.rapidload_version)
@@ -150,7 +155,9 @@ class ApiService {
                 })
             });
 
-            return await pageSpeed.json()
+            const data_ = await pageSpeed.json()
+            console.log(data_)
+            return data_
 
         } catch (error) {
             console.error(error);

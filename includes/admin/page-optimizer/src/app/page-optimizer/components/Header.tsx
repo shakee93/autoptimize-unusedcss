@@ -165,7 +165,7 @@ const Header = ({ url }: { url: string }) => {
                     </div>
                 </div>
 
-
+                {/* 
                 <div className='flex relative gap-4 items-center'>
 
                     <>
@@ -175,7 +175,7 @@ const Header = ({ url }: { url: string }) => {
                         </AppButton>
                     </>
 
-                </div>
+                </div> */}
             </header>
             <AnimatePresence>
                 {testMode && (

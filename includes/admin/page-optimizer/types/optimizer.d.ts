@@ -1,6 +1,6 @@
 
 
-interface OptimizerResults  {
+interface OptimizerResults {
     performance: number
     job_id?: string;
     audits: Audit[]
@@ -15,7 +15,7 @@ interface OptimizerResults  {
         attention_required: Audit[],
     }
     meta: {
-        controls : {
+        controls: {
             dropdown_options: {
                 type: string
                 options: string[]
@@ -27,6 +27,7 @@ interface OptimizerResults  {
 interface LoadingExperience {
     id: string
     initial_url: string
+    demo: boolean
     overall_category: string,
     timestamp: number,
     metrics: {
@@ -44,7 +45,7 @@ interface LoadingExperience {
 
 type AuditTypes = keyof OptimizerResults['grouped'] | 'configurations'
 
-interface AuditFileBase  {
+interface AuditFileBase {
     overallSavingsBytes: number;
     type: 'list' | 'table' | 'opportunity' | 'criticalrequestchain';
     headings?: AuditHeadings[];
@@ -66,9 +67,9 @@ interface TableItems extends AuditFileBase {
 interface CriticalRequestChainItems extends AuditFileBase {
     type: 'criticalrequestchain'
     chains: {
-        [key: string] : CriticalChainTreeNodeType
+        [key: string]: CriticalChainTreeNodeType
     };
-    longestChain : {
+    longestChain: {
         transferSize: number
         duration: number
         length: number
@@ -78,8 +79,8 @@ interface CriticalRequestChainItems extends AuditFileBase {
 }
 
 interface GroupedAuditResource {
- type: string;
- items: AuditTableResource[]
+    type: string;
+    items: AuditTableResource[]
 }
 
 type FileTypes = 'css' | 'js' | 'image' | 'font' | string
@@ -171,7 +172,7 @@ interface AuditSetting {
 
 interface AuditSettingInput {
     control_type: ControlTypes;
-    control_values:  ControlValue[] | string [] ;
+    control_values: ControlValue[] | string[];
     control_payload: string;
     control_label: string;
     control_icon: string;
@@ -278,4 +279,4 @@ type CssErrorKeys = 'Critical CSS' | 'Unused CSS';
 
 
 type BasePerformanceGear = 'starter' | 'accelerate' | 'turboMax';
-type PerformanceGear = BasePerformanceGear | 'custom' ;
+type PerformanceGear = BasePerformanceGear | 'custom';

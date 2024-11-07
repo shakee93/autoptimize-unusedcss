@@ -40,7 +40,7 @@ const UrlPreview = () => {
                         <>
                             {data?.loadingExperience?.timestamp &&
                                 <>
-                                    Last analyzed <TimeAgo timestamp={data.loadingExperience.timestamp}/>
+                                    Last analyzed <TimeAgo timestamp={data.loadingExperience.demo ? Date.now() : data.loadingExperience.timestamp}/>
                                 </>
                             }
 

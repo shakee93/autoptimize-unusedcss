@@ -240,7 +240,7 @@ const Performance = () => {
 
             </div>
 
-            {/* <AIDemoMessage /> */}
+            <AIDemoMessage />
 
         </div>
 

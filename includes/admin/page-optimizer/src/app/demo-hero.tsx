@@ -1,6 +1,7 @@
 import { Input } from "components/ui/input";
 import { Button } from "components/ui/button";
 import { ReactNode, useEffect, useMemo } from "react";
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { setCommonRootState, setCommonState } from "../store/common/commonActions";
 import { useAppContext } from "../context/app";
@@ -13,31 +14,40 @@ import { fetchReport, fetchSettings } from "../store/app/appActions";
 import { useRootContext } from "src/context/root";
 import validator from 'validator';
 import LogoIcon from '../../public/logo-icon.svg'
-import { Monitor } from "lucide-react";
+import { Monitor, Mouse, MousePointerClick } from "lucide-react";
 import BrowserPreview from "../components/BrowserPreview"
 
 const DemoWelcome = ({ children }: { children: ReactNode }) => {
 
-    const [isUrlSet, setIsUrlSet] = useState(false)
     const { options, setOptions, setShowOptimizer, showOptimizer } = useAppContext()
     const { url, showDemo } = useCommonDispatch()
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const handleAnalyze = () => {
 
-        if (!url || !isValidUrl(url))
-            return
+
+
+        const params = new URLSearchParams(window.location.search)
+        const embed = params.get('embed')
+
+
+        console.log(embed, url)
+
+        if (embed && (!isValidUrl(url) || !url)) {
+            dispatch(setCommonRootState('showDemo', true))
+        }
 
         setOptions({
             ...options,
             optimizer_url: url
         })
 
+        dispatch(setCommonRootState('url', url))
         setShowOptimizer(true)
         dispatch(fetchSettings(options, url, false));
         dispatch(fetchReport(options, url, false));
         dispatch(setCommonState('testModeStatus', false));
-        dispatch(setCommonRootState('showDemo', true))
+
     }
 
     useEffect(() => {
@@ -71,11 +81,18 @@ const DemoWelcome = ({ children }: { children: ReactNode }) => {
 
             {showDemo ? (
                 <div className="h-screen bg-gradient-to-b from-[#e3e3e3] to-[#dedede] p-8">
+                    {/* <BrowserPreview
+                        url={url}
+                        className="w-full h-full"
+                    >
+
+                    </BrowserPreview> */}
+                    hello
                     {children}
                 </div>
             ) : (
-                <div className="flex items-center h-screen justify-center min-h-[700px] bg-gradient-to-b from-[#e3e3e3] to-[#dedede]">
-                    <section className="bg-white flex items-center justify-center p-1 md:p-5 min-h-[660px] h-screen w-screen">
+                <div className="flex flex-col items-center bg-gradient-to-b from-[#e3e3e3] to-[#dedede]">
+                    <section className="bg-white flex flex-col items-center justify-center p-1 md:p-5 min-h-[660px] h-screen w-screen">
                         <div className="px-4 justify-center items-center text-center gap-3 w-full flex flex-col">
 
                             <img src={LogoIcon} alt="RapidLoad" width={42} height={42} />
@@ -101,7 +118,7 @@ const DemoWelcome = ({ children }: { children: ReactNode }) => {
                                                 type="url"
                                                 placeholder="Enter your website URL"
                                                 value={url || ""}
-                                                onChange={(e) => dispatch(setCommonRootState('url', e.target.value))}
+                                                onChange={(e) => setCommonRootState('url', e.target.value)}
                                                 className={`h-12 border-zinc-400 px-6 flex-grow ${!validUrl && url ? 'border-red-500' : ''}`}
                                             />
                                             {!validUrl && url && (
@@ -113,7 +130,7 @@ const DemoWelcome = ({ children }: { children: ReactNode }) => {
                                         <Button
                                             className="w-full bg-[#1b1a1f] h-11.5 mt-0 border-none sm:w-fit whitespace-nowrap"
                                             onClick={handleAnalyze}
-                                        >Start Demo</Button>
+                                        >See it in Action</Button>
                                     </div>
                                 </div>
                             </div>
@@ -128,8 +145,47 @@ const DemoWelcome = ({ children }: { children: ReactNode }) => {
                             </div>
 
                         </div>
+
+
+                        <div className="group pt-12 w-full h-[67%] [transform:translateY(-25%)_perspective(2000px)_rotateY(0deg)_rotateX(40deg)_scale(0.7)] transition-transform duration-500 hover:[transform:translateY(-50px)_translateZ(0px)_perspective(2000px)_rotateY(0deg)_rotateX(0deg)_scale(0.9)]">
+                            <BrowserPreview
+                                url={url}
+                                className="w-full h-full shadow-2xl"
+                            >
+                            </BrowserPreview>
+
+                            <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex gap-2 items-center px-3 text-center border border-[#6c21a8] rounded-lg mt-4 w-full py-4 bg-gradient-to-t from-transparent to-white">
+
+                                <div className="flex items-center justify-center px-3">
+                                    <motion.div
+                                        animate={{
+                                            x: [3, 10, 3],
+                                            y: [10, -5, 10]
+                                        }}
+                                        transition={{
+                                            duration: 3,
+                                            repeat: Infinity,
+                                            ease: "easeInOut"
+                                        }}
+                                    >
+                                        <MousePointerClick className="w-6 h-6 text-[#6c21a8]" />
+                                    </motion.div>
+                                </div>
+                                <div className="text-sm text-left text-slate-600 flex flex-col gap-1">
+                                    <h3 className="font-semibold text-slate-800">Experience RapidLoad in Action</h3>
+                                    <p className="text-slate-600">
+                                        Get hands-on with our interface! This interactive demo lets you experience RapidLoad's features and settings in real-time. <br /> Note: this demo is a preview and does not optimize your website.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </section>
-                </div>
+                    <section className="flex flext-col items-center justify-center h-screen">
+                        hello
+                        hello
+                        hello
+                    </section>
+                </div >
             )}
         </>
     )

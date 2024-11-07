@@ -19,7 +19,7 @@ const BrowserPreview = ({ children, url, className }: BrowserPreviewProps) => {
         <div
             ref={browserRef}
             className={cn(
-                "rounded-lg shadow-2xl bg-[#2A2A2A] overflow-hidden",
+                "rounded-lg shadow-2xl overflow-hidden",
                 isFullscreen && "fixed inset-0 z-50 rounded-none",
                 className
             )}
@@ -38,7 +38,7 @@ const BrowserPreview = ({ children, url, className }: BrowserPreviewProps) => {
                     <div className="bg-[#1C1C1C] rounded-md h-7 flex items-center px-3 max-w-xl">
                         <div className="w-4 h-4 rounded-full bg-[#404040]"></div>
                         <div className="ml-2 text-xs text-gray-400 truncate font-mono">
-                            https://demo.rapidload.io/
+                            {url}
                         </div>
                     </div>
 
@@ -60,7 +60,7 @@ const BrowserPreview = ({ children, url, className }: BrowserPreviewProps) => {
             {/* Content Area */}
             <div className="bg-white w-full h-[calc(100%-3rem)]">
                 <iframe
-                    src={"https://demo.rapidload.io/"}
+                    src={`https://demo.rapidload.io/?embed&url=${url}`}
                     className="w-full h-full border-0"
                     title="Website Preview"
                 />

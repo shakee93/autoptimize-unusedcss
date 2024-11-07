@@ -90,7 +90,7 @@ export default function PageOptimizer() {
             <div
                 id='rapidload-page-optimizer-content'
                 className={cn(
-                    'overflow-y-auto scrollbar-stable w-full h-fit pb-20 -mt-[70px] ',
+                    'overflow-y-auto scrollbar-stable w-full h-fit pb-10 -mt-[70px] ',
                     'dark:bg-brand-900 bg-brand-200/60 min-h-screen',
                     savingData && 'relative overflow-hidden',
 
