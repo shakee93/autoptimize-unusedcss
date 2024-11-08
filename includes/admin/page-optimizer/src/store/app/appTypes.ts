@@ -51,6 +51,7 @@ export interface AppState {
     cdnUsage: cdnUsage;
     imageUsage: imageUsage;
     cacheUsage: cacheUsage[] | null;
+    license: License | null;
 }
 
 export const FETCH_REPORT_REQUEST = 'FETCH_REPORT_REQUEST';
@@ -70,7 +71,12 @@ export const FETCH_POSTS = 'FETCH_POSTS';
 export const GET_CDN_USAGE = 'GET_CDN_USAGE';
 export const GET_IMAGE_USAGE = 'GET_IMAGE_USAGE';
 export const GET_CACHE_USAGE = 'GET_CACHE_USAGE';
+export const LICENSE_INFORMATION = 'LICENSE_INFORMATION';
 
+interface LicenseInformation {
+    type: typeof LICENSE_INFORMATION,
+    payload : License,
+}
 interface CacheUsage {
     type: typeof GET_CACHE_USAGE,
     payload : cacheUsage,
@@ -179,5 +185,5 @@ interface UpdateFileActionAction {
 // Define the combined action type
 export type AppAction = FetchDataRequestAction | FetchDataSuccessAction | FetchDataFailureAction |
     FetchSettingsRequestAction | FetchSettingsSuccessAction | FetchSettingsFailureAction | ChangeGearAction|
-    UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode | UpdateOptimizeTable | FetchPosts | GetCDNUsage | ImageUsage | CacheUsage;
+    UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode | UpdateOptimizeTable | FetchPosts | GetCDNUsage | ImageUsage | CacheUsage | LicenseInformation;
 

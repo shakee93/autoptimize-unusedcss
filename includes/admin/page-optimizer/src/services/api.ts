@@ -1,7 +1,7 @@
 import {isDev, toBoolean} from "lib/utils";
 import store from "../store";
 import { toast } from "components/ui/use-toast";
-import {fetchPages, fetchPosts} from "../store/app/appActions";
+import {fetchPages, fetchPosts, updateLicense} from "../store/app/appActions";
 
 class ApiService {
     public baseURL: URL;
@@ -337,13 +337,18 @@ class ApiService {
             console.log(data)
             const formData = new FormData();
             this.baseURL.searchParams.append('action', 'update_rapidload_settings');
-
+            Object.keys(data).forEach(key => {
+                if (Array.isArray(data[key])) {
+                    data[key].forEach((item: any, index: number) => {
+                        formData.append(`${key}[${index}]`, item);
+                    });
+                } else {
+                    formData.append(key, data[key]);
+                }
+            });
             const response = await fetch(this.baseURL, {
                 method: 'POST',
-                headers: {
-                    'Content-Type':'multipart/form-data',
-                },
-                body: JSON.stringify(data),
+                body: formData,
             });
             return this.throwIfError(response);
         } catch (error) {
@@ -352,6 +357,43 @@ class ApiService {
         }
     }
 
+    // async updateLicense(data?: any): Promise<any> {
+    //     try {
+    //         this.baseURL.searchParams.append('action', data? 'uucss_connect': 'uucss_license');
+    //
+    //         const formData = new FormData();
+    //         formData.append('license_key', data);
+    //
+    //         const response = await fetch(this.baseURL, {
+    //             method: 'POST',
+    //             body: formData,
+    //         });
+    //         return this.throwIfError(response);
+    //     } catch (error) {
+    //         console.error(error);
+    //         throw error;
+    //     }
+    // }
+
+    async updateLicense(data?: any): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', data ? 'uucss_connect' : 'uucss_license');
+
+            const formData = new FormData();
+            formData.append('license_key', data);
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                body: formData,
+            });
+
+            const responseData = await response.json();
+            return responseData;
+        } catch (error) {
+            console.error('Error in updateLicense:', error);
+            return { success: false, data: "An unknown error occurred" };
+        }
+    }
 
     async fetchPosts(): Promise<any> {
         try {

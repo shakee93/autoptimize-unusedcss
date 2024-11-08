@@ -1,36 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import Card from "components/ui/card";
-import { cn } from "lib/utils";
+import { useSelector } from "react-redux";
 import { CheckBadgeIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import {optimizerData} from "../../../store/app/appSelector";
 
 const LicenseWidget = () => {
     const [isVisible, setIsVisible] = useState(true);
-    const [license, setLicense] = useState<License | null>(null);
+    const [licenseInfo, setLicenseInfo] = useState<License | null>(null);
+    const { license } = useSelector(optimizerData);
 
     useEffect(() => {
-        // Retrieve license data from localStorage
+        if(license){
+            localStorage.setItem('rapidLoadLicense', JSON.stringify(license));
+        }
         const storedLicense = localStorage.getItem('rapidLoadLicense');
-
         if (storedLicense) {
             try {
                 const parsedLicense = JSON.parse(storedLicense);
-                setLicense(parsedLicense[0]);
+                setLicenseInfo(parsedLicense);
             } catch (error) {
                 console.error("Error parsing license data", error);
             }
         }
-    }, []);
+    }, [license]);
+
 
     const toggleVisibility = () => {
         setIsVisible(!isVisible);
     };
+
 
     return (
         <div className='w-full flex flex-col gap-4'>
             <Card data-tour='license-widget' className="border flex flex-col gap-4">
                 <div className="flex flex-col p-6 pb-0 gap-2">
                     <div className="text-lg font-bold text-brand-400/50 dark:text-brand-300">Welcome back, <span
-                        className="text-brand-950">{license?.name}</span></div>
+                        className="text-brand-950">{licenseInfo?.name}</span></div>
 
                     <div className="bg-purple-500/10 px-2.5 py-1.5 rounded-xl w-fit">
                         <div className="flex gap-2 items-center">
@@ -56,9 +61,9 @@ const LicenseWidget = () => {
                         <span>Email ID:</span>
                         <span className="font-semibold">
                                 {isVisible ? (
-                                    license?.email
+                                    licenseInfo?.email
                                 ) : (
-                                    '*'.repeat((license?.email || '').length)
+                                    '*'.repeat((licenseInfo?.email || '').length)
                                 )}
                                 </span>
                     </div>
@@ -68,9 +73,9 @@ const LicenseWidget = () => {
                             Exp. date:
                             <span className="text-sm font-semibold">
                                 {isVisible ? (
-                                    license?.next_billing ? new Date(license.next_billing * 1000).toLocaleDateString() : ''
+                                    licenseInfo?.next_billing ? new Date(licenseInfo.next_billing * 1000).toLocaleDateString() : ''
                                 ) : (
-                                    '*'.repeat((license?.next_billing ?? '').toString().length)
+                                    '*'.repeat((licenseInfo?.next_billing ?? '').toString().length)
                                 )}
                                 </span>
                         </div>
@@ -81,9 +86,9 @@ const LicenseWidget = () => {
                             License:
                             <span className="text-sm font-semibold">
                                  {isVisible ? (
-                                     license?.plan
+                                     licenseInfo?.plan
                                  ) : (
-                                     '*'.repeat((license?.plan || '').length)
+                                     '*'.repeat((licenseInfo?.plan || '').length)
                                  )}
                                 </span>
                         </div>
@@ -93,11 +98,14 @@ const LicenseWidget = () => {
                 <div className="flex flex-col gap-2">
                     <div className="flex gap-6 justify-end p-6 text-sm font-semibold relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white">
                         <button
-                            className="cursor-pointer text-brand-500 py-1.5">
+                            className="cursor-pointer text-brand-500 py-1.5"
+                            onClick={() => window.open('https://app.rapidload.io/profile', 'blank')}>
                             View My Account
                         </button>
                         <button
-                            className="cursor-pointer bg-brand-100/90 text-brand-950 py-1.5 px-4 rounded-lg">
+                            className="cursor-pointer bg-brand-100/90 text-brand-950 py-1.5 px-4 rounded-lg"
+                            onClick={() => window.open('https://app.rapidload.io/', 'blank')}
+                        >
                             Upgrade
                         </button>
                     </div>

@@ -339,5 +339,3 @@ type CssErrorKeys = 'Critical CSS' | 'Unused CSS';
 
 type BasePerformanceGear = 'starter' | 'accelerate' | 'turboMax';
 type PerformanceGear = BasePerformanceGear | 'custom' ;
-
-

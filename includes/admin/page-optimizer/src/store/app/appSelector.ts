@@ -50,6 +50,7 @@ export const optimizerData = createSelector(
         const cdnUsage = state.cdnUsage
         const imageUsage = state.imageUsage
         const cacheUsage = state.cacheUsage
+        const license = state.license
 
         return {
             ...report,
@@ -62,6 +63,7 @@ export const optimizerData = createSelector(
             cdnUsage,
             imageUsage,
             cacheUsage,
+            license,
             touched: !equal(settings.original, settings.state) || !!optimizeChangesFiles(report.changes).find(i => i?.changed),
             fresh : report?.state?.fresh,
             reanalyze: report.data !== null && report.loading

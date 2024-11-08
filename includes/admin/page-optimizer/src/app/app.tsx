@@ -7,7 +7,7 @@ import { useAppContext } from "../context/app";
 import { ThunkDispatch } from "redux-thunk";
 import { useDispatch, useSelector } from "react-redux";
 import { AppAction, RootState } from "../store/app/appTypes";
-import { fetchPosts, fetchReport, fetchSettings, getTestModeStatus } from "../store/app/appActions";
+import {fetchPosts, fetchReport, fetchSettings, getTestModeStatus, updateLicense} from "../store/app/appActions";
 import { Toaster } from "components/ui/toaster";
 import { AnimatePresence, m } from "framer-motion";
 import { useRootContext } from "../context/root";
@@ -66,7 +66,7 @@ const App = ({ popup, _showOptimizer = false }: {
     });
     const { headerUrl } = useCommonDispatch();
     const { changeTheme } = useRootContext()
-    const { testMode } = useSelector(optimizerData);
+    const { testMode, license } = useSelector(optimizerData);
 
     useEffect(() => {
 
@@ -110,6 +110,16 @@ const App = ({ popup, _showOptimizer = false }: {
         dispatch(setCommonState('testModeStatus', initialTestMode));
         dispatch(fetchPosts(options));
     }, [dispatch, activeReport]);
+
+
+
+    useEffect(() => {
+        const updateLicenseAndStore = async () => {
+            await dispatch(updateLicense(options));
+        };
+        updateLicenseAndStore();
+
+    }, [dispatch]);
 
 
 

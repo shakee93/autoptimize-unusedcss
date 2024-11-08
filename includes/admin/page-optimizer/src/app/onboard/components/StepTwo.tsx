@@ -1,8 +1,8 @@
-import React, { useMemo, useCallback } from 'react';
+import React, {useMemo, useCallback, useState, useEffect} from 'react';
 import { cn } from "lib/utils";
 import { useAppContext } from "../../../context/app";
 import { CheckCircleIcon, InformationCircleIcon, ArrowLongRightIcon } from "@heroicons/react/24/solid";
-import { changeGear } from "../../../store/app/appActions";
+import {changeGear, updateLicense} from "../../../store/app/appActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import { useSelector } from "react-redux";
 import { optimizerData } from "../../../store/app/appSelector";
@@ -11,10 +11,16 @@ import {useTestModeUtils} from "hooks/testModeUtils";
 import { Starter, Accelerate, TurboMax } from "app/page-optimizer/components/icons/gear-icons";
 import {CustomCheckIcon} from "app/dashboard/components/icons/icon-svg";
 import {AIButtonIcon} from "app/onboard/components/icons/icon-svg";
+import {Input} from "components/ui/input";
+import { AnimatePresence, motion } from 'framer-motion';
+import {Loader} from "lucide-react";
+import ComparisonDialog from "app/dashboard/components/ComparisonDialog";
 
 type PerformanceGear = 'starter' | 'accelerate' | 'turboMax';
 
 const boosterLevels: PerformanceGear[] = ['starter', 'accelerate', 'turboMax'];
+
+type InputChangeHandler = React.ChangeEventHandler<HTMLInputElement>;
 
 const GEAR_FEATURES: Record<PerformanceGear, string[]> = {
     turboMax: [
@@ -51,11 +57,41 @@ const GEAR_FEATURES: Record<PerformanceGear, string[]> = {
 
 };
 const StepTwo = () => {
-    const { options } = useAppContext();
+    const { options, uucssGlobal } = useAppContext();
     const { dispatch } = useCommonDispatch();
-    const { activeGear } = useSelector(optimizerData);
+    const { activeGear, license } = useSelector(optimizerData);
     const { submitSettings } = useSubmitSettings();
     const { handleTestModeSwitchChange } = useTestModeUtils();
+    const [inputLicense, setInputLicense] = useState("");
+    const [showInput, setShowInput] = useState(false);
+    const [licenseMessage, setLicenseMessage] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [isFadingOut, setIsFadingOut] = useState(false);
+    const [open, setOpen] = useState(false);
+    const LicenseInputChange: InputChangeHandler =
+        (event) => {
+        setInputLicense(event.target.value);
+    };
+    const connectRapidloadLicense = async () => {
+        setLoading(true);
+        const response = await dispatch(updateLicense(options, inputLicense));
+        setLoading(false);
+        if (response.success) {
+            dispatch(updateLicense(options));
+            setIsFadingOut(true);
+
+            setTimeout(() => {
+                window.location.hash = '#/';
+            }, 300);
+        }else{
+            setLicenseMessage(response?.error?? '');
+        }
+    };
+
+
+    useEffect(() => {
+        setLicenseMessage("");
+    },[inputLicense]);
 
     const getIcon = useMemo(() => (level: PerformanceGear) => {
         const iconProps = {
@@ -146,7 +182,11 @@ const StepTwo = () => {
 
 
     return (
-        <div className="w-full flex flex-col gap-4">
+        <motion.div
+            initial={{ opacity: 1 }}
+            animate={{ opacity: isFadingOut ? 0 : 1 }}
+            transition={{ duration: 0.3 }}
+            className="w-full flex flex-col gap-4">
             <div className="bg-brand-0 flex flex-col gap-8 p-16 items-center rounded-3xl">
                 <div className="px-2">
                     <img
@@ -173,23 +213,95 @@ const StepTwo = () => {
                 <div className="flex flex-col gap-6">
                 <h6 className="text-base font-semibold capitalize text-center">Connect Your Account to Optimize </h6>
 
-                <div className="flex gap-4 items-center">
-                    <button
-                        className="items-center bg-brand-300 text-brand-950 hover:bg-brand-900/90 hover:text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2"
-                    >
-                        Connect with License key
-                    </button>
-                    <span className="font-semibold">or</span>
-                    <button
-                        className="items-center bg-brand-900/90 text-white font-medium py-2 px-4 rounded-lg hover:bg-brand-300 hover:text-brand-950 transition-all gap-2"
-                    >
-                        Connect Account
-                    </button>
-                </div>
-                <h6 className="text-base font-semibold capitalize text-center">Compare Performance Gears</h6>
+                    <AnimatePresence mode="wait">
+                    {showInput ? (
+                        <motion.div
+                            key="inputDiv"
+                            initial={{opacity: 0, y: -20}}
+                            animate={{opacity: 1, y: 0}}
+                            exit={{opacity: 0, y: -20}}
+                            transition={{duration: 0.2}}
+                            className="flex flex-col border rounded-2xl w-[500px]"
+                        >
+                            <div className="flex justify-between items-center bg-brand-100/60 px-4 py-2 rounded-t-2xl">
+                                {licenseMessage.length > 0 ? (
+                                    <h3 className="text-sm font-medium text-amber-700">{licenseMessage}</h3>
+                                ): loading ?
+                                  (
+                                      <div className="flex gap-2 items-center">
+                                          <Loader className='w-5 animate-spin'/><h3 className="text-sm font-medium">Connecting please wait...</h3>
+                                      </div>
+                                  )
+                                 :(
+                                    <h3 className="text-sm font-medium">Connect with License key</h3>
+                                )}
+
+                                <button
+                                    className="items-center text-amber-700 font-medium text-sm py-2 px-4 rounded-lg"
+                                    onClick={() => setShowInput(false)}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+
+                            <div className="flex gap-4 bg-brand-0 px-4 py-2 rounded-b-2xl">
+                                <Input
+                                    id="licenseKey"
+                                    type="text"
+                                    placeholder={'Enter you license key'}
+                                    className="text-sm flex-grow border-none focus:outline-none focus-visible:ring-0 dark:text-brand-300 focus-visible:ring-offset-0"
+                                    value={inputLicense}
+                                    onChange={LicenseInputChange}
+                                />
+                                {inputLicense.length > 0 &&
+                                    <button
+                                        className="items-center text-sm text-brand-950 font-medium py-2 px-4 rounded-lg"
+                                        onClick={connectRapidloadLicense}
+                                    >
+                                        Connect
+                                    </button>
+                                }
+                            </div>
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            key="connectDiv"
+                            initial={{opacity: 0, y: 20}}
+                            animate={{opacity: 1, y: 0}}
+                            exit={{opacity: 0, y: 20}}
+                            transition={{duration: 0.2}}
+                            className="flex gap-4 items-center"
+                        >
+                            <button
+                                className="items-center bg-brand-300 text-brand-950 hover:bg-brand-900/90 hover:text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2"
+                                onClick={() => setShowInput(true)}
+                            >
+                                Connect with License key
+                            </button>
+                            <span className="font-semibold">or</span>
+                            <button
+                                className="items-center bg-brand-900/90 text-white font-medium py-2 px-4 rounded-lg hover:bg-brand-300 hover:text-brand-950 transition-all gap-2"
+                                onClick={() => window.location.href = uucssGlobal?.activation_url}
+                            >
+                                Connect Account
+                            </button>
+                            {/*<button*/}
+                            {/*    className="items-center bg-brand-300 text-brand-950 hover:bg-brand-900/90 hover:text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2"*/}
+                            {/*    onClick={GetLicense}*/}
+                            {/*>*/}
+                            {/*    Get License Details*/}
+                            {/*</button>*/}
+                        </motion.div>
+                    )}
+                    </AnimatePresence>
+
+                    <button className="text-base font-semibold capitalize text-center"
+                        onClick={() => setOpen(true)}
+                    >Compare Performance Gears</button>
+                    <ComparisonDialog open={open} setOpen={setOpen} />
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 };
 

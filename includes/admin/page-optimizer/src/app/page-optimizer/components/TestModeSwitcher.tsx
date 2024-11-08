@@ -48,7 +48,8 @@ const TestModeSwitcher = () => {
             }
             <div className={cn('flex items-center gap-2 justify-between p-2 px-4 rounded-xl text-sm font-medium transition-all duration-300', testMode ? 'bg-[#FFAA34] text-brand-0' : 'bg-brand-200/60')}>
                 <div className="flex flex-col">
-                    {testMode ? "Switch to Live" : "Switch to Test Mode"}
+                    {/*{testMode ? "Turn Off Test Mode" : "Turn On Test Mode"}*/}
+                    Test Mode
                 </div>
                 <Switch
                     checked={!!testMode}

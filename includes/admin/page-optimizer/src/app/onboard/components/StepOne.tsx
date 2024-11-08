@@ -16,7 +16,11 @@ import PerformanceProgressBar from "components/performance-progress-bar";
 import usePerformanceColors from "hooks/usePerformanceColors";
 import {AIButtonIcon} from "app/onboard/components/icons/icon-svg";
 
-const StepOne = () => {
+interface StepOneProps {
+    onNext: () => void;
+}
+
+const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
     const { options } = useAppContext()
     const { dispatch} = useCommonDispatch()
     const { activeReport } = useSelector(optimizerData);
@@ -112,7 +116,9 @@ const StepOne = () => {
                 </div>
 
                 <button
-                    className="flex items-center bg-gradient-to-r from-brand-900/90 to-brand-950 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2 ">
+                    className="flex items-center bg-gradient-to-r from-brand-900/90 to-brand-950 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2 "
+                    onClick={onNext}
+                >
                     Let’s improve this score
                     <ArrowLongRightIcon className="w-6 h-6"/>
                 </button>

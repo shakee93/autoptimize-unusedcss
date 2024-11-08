@@ -10,7 +10,7 @@ import {
     FETCH_SETTING_FAILURE,
     FETCH_SETTING_REQUEST,
     FETCH_SETTING_SUCCESS, GET_CACHE_USAGE, GET_CDN_USAGE,
-    GET_CSS_STATUS_SUCCESS, GET_IMAGE_USAGE,
+    GET_CSS_STATUS_SUCCESS, GET_IMAGE_USAGE, LICENSE_INFORMATION,
     RootState,
     UPDATE_FILE_ACTION, UPDATE_OPTIMIZE_TABLE,
     UPDATE_SETTINGS,
@@ -368,6 +368,33 @@ export const saveGeneralSettings = (options: WordPressOptions, data: any): Thunk
 
     };
 };
+
+export const updateLicense = (options: WordPressOptions, data?: any): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string }> => {
+
+        try {
+            const connectLicense = await api.updateLicense(data);
+            if (connectLicense.success) {
+                dispatch({
+                    type: LICENSE_INFORMATION,
+                    payload: connectLicense.data,
+                });
+                return connectLicense;
+            } else {
+                return { success: false, error: connectLicense.data || "License update failed" };
+            }
+        } catch (error: any) {
+            console.error('Error on connecting:', error);
+            // Fallback error message handling
+            const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+            return { success: false, error: errorMessage };
+        }
+    };
+};
+
 
 export const fetchPosts = (options: WordPressOptions): ThunkAction<void, RootState, unknown, AnyAction> => {
     const api = new ApiService(options);

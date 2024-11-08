@@ -1,11 +1,16 @@
-import React from "react";
+import React, {useState} from "react";
 import { m } from "framer-motion";
 import { cn } from "lib/utils";
 import StepOne from "app/onboard/components/StepOne";
 import StepTwo from "app/onboard/components/StepTwo";
-
+import { AnimatePresence, motion } from 'framer-motion';
 
 export default function Onboard() {
+
+    const [showStepTwo, setShowStepTwo] = useState(false);
+
+    const handleNextStep = () => setShowStepTwo(true);
+
     return (
         <>
             <m.div
@@ -33,7 +38,31 @@ export default function Onboard() {
                             "relative container flex flex-col p-6 gap-4",
                         )}
                     >
-                        <StepTwo/>
+                        <AnimatePresence mode="wait">
+
+
+                            {showStepTwo ? (
+                                <motion.div
+                                    key="stepTwo"
+                                    initial={{ x: 100, opacity: 0 }}
+                                    animate={{ x: 0, opacity: 1 }}
+                                    exit={{ x: 100, opacity: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    <StepTwo />
+                                </motion.div>
+                            ): (
+                                <motion.div
+                                    key="stepOne"
+                                    initial={{x: 0, opacity: 1}}
+                                    animate={{x: showStepTwo ? -100 : 0, opacity: 1}}
+                                    exit={{x: -100, opacity: 0}}
+                                    transition={{duration: 0.2}}
+                                >
+                                    <StepOne onNext={handleNextStep}/>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </section>
                 </div>
             </m.div>

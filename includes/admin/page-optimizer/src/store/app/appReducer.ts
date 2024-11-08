@@ -17,7 +17,7 @@ import {
     FETCH_POSTS,
     GET_CDN_USAGE,
     GET_IMAGE_USAGE,
-    GET_CACHE_USAGE
+    GET_CACHE_USAGE, LICENSE_INFORMATION
 } from "./appTypes";
 
 const blankReport =  {
@@ -80,11 +80,17 @@ const initialState: AppState = {
         host: '',
     },
     cacheUsage: null,
+    license: null,
 };
 
 const appReducer = (state = initialState, action: AppAction): AppState => {
 
     switch (action.type) {
+        case LICENSE_INFORMATION:
+            return {
+                ...state,
+                license: action.payload
+            };
         case GET_CDN_USAGE:
             return {
                 ...state,
