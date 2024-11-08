@@ -4,15 +4,26 @@ import { cn } from "lib/utils";
 import StepOne from "app/onboard/components/StepOne";
 import StepTwo from "app/onboard/components/StepTwo";
 import { AnimatePresence, motion } from 'framer-motion';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "components/ui/dialog";
+import AppButton from "components/ui/app-button";
 
 export default function Onboard() {
-
+    const [open, setOpen] = useState(false);
     const [showStepTwo, setShowStepTwo] = useState(false);
 
     const handleNextStep = () => setShowStepTwo(true);
 
     return (
         <>
+
             <m.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -21,7 +32,7 @@ export default function Onboard() {
                     ease: 'linear',
                     duration: 0.04,
                 }}
-                id="onboard-wrapper"
+                id="rapidload-page-optimizer-wrapper"
                 className={cn(
                     "h-fit font-sans overflow-hidden flex flex-col text-base items-center"
                 )}

@@ -119,7 +119,7 @@ const StepTwo = () => {
                 {activeGear === level && (
                     level === 'turboMax' ? (
                         <div
-                            className="absolute right-1.5 top-2 gap-1 text-[10px] items-center font-semibold bg-purple-100 rounded-3xl p-1 pl-2 flex">
+                            className="absolute right-[7px] top-2 gap-1 text-[10px] items-center font-semibold bg-purple-100 rounded-3xl p-1 pl-2 flex">
                             <AIButtonIcon/> AI Recommended <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
                         </div>
                     ) : (

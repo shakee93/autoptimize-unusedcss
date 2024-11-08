@@ -346,6 +346,31 @@ const PerformanceGears: React.FC = () => {
                         Compare performance gears
                     </button>
                     <ComparisonDialog open={open} setOpen={setOpen} />
+                    {/*<Dialog open={open} onOpenChange={setOpen}>*/}
+                    {/*    <DialogTrigger asChild>*/}
+                    {/*        <button*/}
+                    {/*            className="cursor-pointer transition duration-300 text-sm font-semibold text-brand-500 py-1.5">*/}
+                    {/*            Compare performance gears*/}
+                    {/*        </button>*/}
+                    {/*    </DialogTrigger>*/}
+                    {/*    <DialogTitle/>*/}
+                    {/*    <DialogContent className="sm:max-w-[650px] sm:rounded-3xl gap-0">*/}
+                    {/*        <DialogHeader className='px-10 pt-6'>*/}
+                    {/*            <DialogTitle>Compare Performance Gears</DialogTitle>*/}
+                    {/*            <DialogDescription>*/}
+                    {/*                Here is our Gear Mode Comparison Table, providing a clear and concise overview at a glance.*/}
+                    {/*            </DialogDescription>*/}
+                    {/*        </DialogHeader>*/}
+                    {/*        <div className="pt-2">*/}
+                    {/*            <ComparisonTable/>*/}
+                    {/*        </div>*/}
+                    {/*        <DialogFooter className="p-6">*/}
+                    {/*            <AppButton onClick={() => setOpen(false)} variant='outline' className='text-sm'>*/}
+                    {/*                Close*/}
+                    {/*            </AppButton>*/}
+                    {/*        </DialogFooter>*/}
+                    {/*    </DialogContent>*/}
+                    {/*</Dialog>*/}
                     <button onClick={() => (window.location.hash = '#/optimize')}
                             className="cursor-pointer transition duration-300 bg-brand-100/90 text-sm font-semibold py-1.5 px-4 rounded-lg">
                         Change Gear
