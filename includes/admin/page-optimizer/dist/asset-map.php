@@ -10,7 +10,7 @@ define('RAPIDLOAD_ASSET_MAP', [
     'assets/index.css' => 'assets/index.ChlP1lpW.css',
     'assets/index.js' => 'assets/index.DpB0RVvh.js',
     'assets/InitTour.js' => 'assets/InitTour.K_pSoDWz.js',
-    'assets/animations.js' => 'assets/animations.CWk52Myu.js',
     'assets/core-vendor.js' => 'assets/core-vendor.a21Wwx5s.js',
+    'assets/animations.js' => 'assets/animations.CWk52Myu.js',
     'assets/vendor.js' => 'assets/vendor.C2Ge5RaU.js'
 ]);
