@@ -395,6 +395,28 @@ export const updateLicense = (options: WordPressOptions, data?: any): ThunkActio
     };
 };
 
+export const getHomePagePerformance = (options: WordPressOptions, data?: any): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string }> => {
+
+        try {
+            const getPerformance = await api.homePagePerformance();
+            console.log(getPerformance)
+            // dispatch({
+            //     type: LICENSE_INFORMATION,
+            //     payload: connectLicense.data,
+            // });
+            return { success: true};
+        } catch (error: any) {
+            console.error('Error on fetching:', error);
+            // Fallback error message handling
+            const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+            return { success: false, error: errorMessage };
+        }
+    };
+};
 
 export const fetchPosts = (options: WordPressOptions): ThunkAction<void, RootState, unknown, AnyAction> => {
     const api = new ApiService(options);

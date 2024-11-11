@@ -73,6 +73,13 @@ export const GET_IMAGE_USAGE = 'GET_IMAGE_USAGE';
 export const GET_CACHE_USAGE = 'GET_CACHE_USAGE';
 export const LICENSE_INFORMATION = 'LICENSE_INFORMATION';
 
+export const HOME_PAGE_PERFORMANCE = 'HOME_PAGE_PERFORMANCE';
+
+interface homePagePerformance {
+    type: typeof HOME_PAGE_PERFORMANCE,
+    payload : License,
+}
+
 interface LicenseInformation {
     type: typeof LICENSE_INFORMATION,
     payload : License,
@@ -185,5 +192,5 @@ interface UpdateFileActionAction {
 // Define the combined action type
 export type AppAction = FetchDataRequestAction | FetchDataSuccessAction | FetchDataFailureAction |
     FetchSettingsRequestAction | FetchSettingsSuccessAction | FetchSettingsFailureAction | ChangeGearAction|
-    UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode | UpdateOptimizeTable | FetchPosts | GetCDNUsage | ImageUsage | CacheUsage | LicenseInformation;
+    UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode | UpdateOptimizeTable | FetchPosts | GetCDNUsage | ImageUsage | CacheUsage | LicenseInformation | homePagePerformance;
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { GaugeCircle } from 'lucide-react';
 import {Skeleton} from "components/ui/skeleton";
 import PerformanceProgressBar from "components/performance-progress-bar";
@@ -7,11 +7,21 @@ import {CircularProgressbarWithChildren} from "react-circular-progressbar";
 import { BoltIcon } from "@heroicons/react/24/solid";
 import usePerformanceColors from "hooks/usePerformanceColors";
 import tinycolor from 'tinycolor2';
+import useCommonDispatch from "hooks/useCommonDispatch";
+import {getHomePagePerformance, updateLicense} from "../../../../store/app/appActions";
+import {useAppContext} from "../../../../context/app";
 
 const PerformanceWidget: React.FC = () => {
     const performanceScore = 40;
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(performanceScore);
     const lighterColor = tinycolor(progressbarBg).lighten(10).toString();
+    const { dispatch} = useCommonDispatch()
+    const { options } = useAppContext();
+
+    useEffect(() => {
+        dispatch(getHomePagePerformance(options));
+
+    }, [dispatch]);
 
     return (
 

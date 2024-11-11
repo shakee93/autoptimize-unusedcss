@@ -413,6 +413,24 @@ class ApiService {
         }
     }
 
+    async homePagePerformance(): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', 'rapidload_titan_home_page_performance');
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
     async getLicense(): Promise<any> {
         try {
             this.baseURL.searchParams.append('action', 'uucss_license');
