@@ -21,6 +21,10 @@ class RapidLoad_Cache
 
         $cache_module_enabled = RapidLoad_Base::get_option('rapidload_module_cache');
 
+        if(isset(self::$options['uucss_disable_wp_emoji']) && self::$options['uucss_disable_wp_emoji'] == "1"){
+            $this->disable_wp_emojis();
+        }
+
         if(!isset($cache_module_enabled) || $cache_module_enabled != "1" ){
             return;
         }
@@ -79,6 +83,21 @@ class RapidLoad_Cache
         });
 
         //$this->display_admin_notice_for_directory_permission_issue();
+    }
+
+    public function disable_wp_emojis(){
+        remove_action('wp_head', 'print_emoji_detection_script', 7);
+        remove_action('admin_print_scripts', 'print_emoji_detection_script');
+        remove_action('wp_print_styles', 'print_emoji_styles');
+        remove_action('admin_print_styles', 'print_emoji_styles');
+
+        remove_filter('the_content_feed', 'wp_staticize_emoji');
+        remove_filter('comment_text_rss', 'wp_staticize_emoji');
+        remove_filter('wp_mail', 'wp_staticize_emoji_for_email');
+
+        add_filter('tiny_mce_plugins', function($plugins) {
+            return is_array($plugins) ? array_diff($plugins, ['wpemoji']) : [];
+        });
     }
 
     public function clear_cache_on_cdn_url_validate(){
