@@ -57,6 +57,7 @@ class RapidLoad_Optimizer
             'get_rapidload_image_usage' => 'get_rapidload_image_usage',
             'get_cache_file_size' => 'get_cache_file_size',
             'update_titan_performance_gear' => 'update_titan_performance_gear',
+            'rapidload_titan_home_page_performance' => 'rapidload_titan_home_page_performance',
         ];
 
         foreach ($actions as $action => $method) {
@@ -66,6 +67,13 @@ class RapidLoad_Optimizer
                 add_action("wp_ajax_nopriv_$action", [$this, $method]);
             }
         }
+    }
+
+    public function rapidload_titan_home_page_performance(){
+
+        $performance_data = RapidLoad_Job::get_first_and_last_optimization_score($this->transform_url(site_url()), 'desktop');
+
+        wp_send_json_success($performance_data);
     }
 
     public function get_cache_file_size() {
