@@ -10,7 +10,7 @@ import {
     FETCH_SETTING_FAILURE,
     FETCH_SETTING_REQUEST,
     FETCH_SETTING_SUCCESS, GET_CACHE_USAGE, GET_CDN_USAGE,
-    GET_CSS_STATUS_SUCCESS, GET_IMAGE_USAGE, LICENSE_INFORMATION,
+    GET_CSS_STATUS_SUCCESS, GET_IMAGE_USAGE, HOME_PAGE_PERFORMANCE, LICENSE_INFORMATION,
     RootState,
     UPDATE_FILE_ACTION, UPDATE_OPTIMIZE_TABLE,
     UPDATE_SETTINGS,
@@ -403,11 +403,10 @@ export const getHomePagePerformance = (options: WordPressOptions, data?: any): T
 
         try {
             const getPerformance = await api.homePagePerformance();
-            console.log(getPerformance)
-            // dispatch({
-            //     type: LICENSE_INFORMATION,
-            //     payload: connectLicense.data,
-            // });
+            dispatch({
+                type: HOME_PAGE_PERFORMANCE,
+                payload: getPerformance.data,
+            });
             return { success: true};
         } catch (error: any) {
             console.error('Error on fetching:', error);

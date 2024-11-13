@@ -52,6 +52,7 @@ export interface AppState {
     imageUsage: imageUsage;
     cacheUsage: cacheUsage[] | null;
     license: License | null;
+    homePerformance: HomePerformance
 }
 
 export const FETCH_REPORT_REQUEST = 'FETCH_REPORT_REQUEST';
@@ -72,12 +73,11 @@ export const GET_CDN_USAGE = 'GET_CDN_USAGE';
 export const GET_IMAGE_USAGE = 'GET_IMAGE_USAGE';
 export const GET_CACHE_USAGE = 'GET_CACHE_USAGE';
 export const LICENSE_INFORMATION = 'LICENSE_INFORMATION';
-
 export const HOME_PAGE_PERFORMANCE = 'HOME_PAGE_PERFORMANCE';
 
 interface homePagePerformance {
     type: typeof HOME_PAGE_PERFORMANCE,
-    payload : License,
+    payload : HomePerformance,
 }
 
 interface LicenseInformation {

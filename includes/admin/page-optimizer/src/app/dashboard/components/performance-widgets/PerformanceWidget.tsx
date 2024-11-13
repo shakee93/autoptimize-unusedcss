@@ -10,6 +10,8 @@ import tinycolor from 'tinycolor2';
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {getHomePagePerformance, updateLicense} from "../../../../store/app/appActions";
 import {useAppContext} from "../../../../context/app";
+import {useSelector} from "react-redux";
+import {optimizerData} from "../../../../store/app/appSelector";
 
 const PerformanceWidget: React.FC = () => {
     const performanceScore = 40;
@@ -17,11 +19,17 @@ const PerformanceWidget: React.FC = () => {
     const lighterColor = tinycolor(progressbarBg).lighten(10).toString();
     const { dispatch} = useCommonDispatch()
     const { options } = useAppContext();
+    const { homePerformance } = useSelector(optimizerData);
 
     useEffect(() => {
         dispatch(getHomePagePerformance(options));
 
     }, [dispatch]);
+
+    useEffect(() => {
+        console.log(homePerformance)
+
+    }, [homePerformance]);
 
     return (
 
@@ -38,7 +46,7 @@ const PerformanceWidget: React.FC = () => {
                         <div className="">
                             <PerformanceProgressBar
                                 className={cn('max-h-[140px]')}
-                                performance={57}
+                                performance={homePerformance.first_entry}
                             />
                         </div>
                         <div className="text-sm text-gray-600">
@@ -60,7 +68,7 @@ const PerformanceWidget: React.FC = () => {
                             <PerformanceProgressBar
                                 className={cn('max-h-[140px]')}
                                 scoreClassName={"text-brand-950"}
-                                performance={performanceScore}
+                                performance={homePerformance.last_entry}
                             />
                         </div>
                         <div className="text-sm text-gray-600">

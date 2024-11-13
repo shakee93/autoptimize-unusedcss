@@ -17,7 +17,7 @@ import {
     FETCH_POSTS,
     GET_CDN_USAGE,
     GET_IMAGE_USAGE,
-    GET_CACHE_USAGE, LICENSE_INFORMATION
+    GET_CACHE_USAGE, LICENSE_INFORMATION, HOME_PAGE_PERFORMANCE
 } from "./appTypes";
 
 const blankReport =  {
@@ -81,11 +81,20 @@ const initialState: AppState = {
     },
     cacheUsage: null,
     license: null,
+    homePerformance: {
+        first_entry: 0,
+        last_entry: 0
+    }
 };
 
 const appReducer = (state = initialState, action: AppAction): AppState => {
 
     switch (action.type) {
+        case HOME_PAGE_PERFORMANCE:
+            return {
+                ...state,
+                homePerformance: action.payload
+            };
         case LICENSE_INFORMATION:
             return {
                 ...state,
