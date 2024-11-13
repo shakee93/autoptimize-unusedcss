@@ -294,6 +294,11 @@ interface TestMode {
     status: boolean;
 }
 
+interface HomePerformance{
+    first_entry: number;
+    last_entry: number;
+}
+
 interface License {
     email: string;
     licensedDomain: string;
