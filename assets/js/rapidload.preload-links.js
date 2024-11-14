@@ -6,7 +6,7 @@
             this.prerenderSet = new Set();
             this.prefetchQueue = [];
             this.prerenderQueue = [];
-            this.batchSize = 5; // Limit to 5 URLs per batch
+            this.batchSize = 3;
             this.prefetching = false;
             this.prerendering = false;
         }
@@ -52,14 +52,18 @@
         }
 
         enqueuePrefetch(url) {
+            url = this.cleanURL(url)
             if (this.shouldPrefetch(url)) {
+                this.prefetchSet.add(url);
                 this.prefetchQueue.push(url);
                 this.processPrefetchQueue();
             }
         }
 
         enqueuePrerender(url) {
+            url = this.cleanURL(url)
             if (this.shouldPrerender(url)) {
+                this.prerenderSet.add(url);
                 this.prerenderQueue.push(url);
                 this.processPrerenderQueue();
             }
@@ -73,9 +77,7 @@
 
             urlsToPrefetch.forEach(url => {
                 this.createLinkElement("prefetch", url);
-                this.prefetchSet.add(url);
             });
-
             setTimeout(() => {
                 this.prefetching = false;
                 this.processPrefetchQueue();
@@ -90,7 +92,6 @@
 
             urlsToPrerender.forEach(url => {
                 this.createLinkElement("prerender", url);
-                this.prerenderSet.add(url);
             });
 
             setTimeout(() => {
