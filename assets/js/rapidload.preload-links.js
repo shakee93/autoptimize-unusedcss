@@ -1,10 +1,14 @@
 (function () {
 
-    // Helper class for handling link prefetching and prerendering
     class LinkHandler {
         constructor() {
             this.prefetchSet = new Set();
             this.prerenderSet = new Set();
+            this.prefetchQueue = [];
+            this.prerenderQueue = [];
+            this.batchSize = 3;
+            this.prefetching = false;
+            this.prerendering = false;
         }
 
         cleanURL(url) {
@@ -40,7 +44,6 @@
                 url.startsWith(window.location.origin);
         }
 
-        // Create a link element (for prefetch or prerender)
         createLinkElement(rel, href) {
             const link = document.createElement("link");
             link.rel = rel;
@@ -48,30 +51,56 @@
             document.head.appendChild(link);
         }
 
-        // Prefetch the resource
-        prefetchResource(url) {
+        enqueuePrefetch(url) {
+            url = this.cleanURL(url)
             if (this.shouldPrefetch(url)) {
-                this.createLinkElement("prefetch", url);
                 this.prefetchSet.add(url);
+                this.prefetchQueue.push(url);
+                this.processPrefetchQueue();
             }
         }
 
-        // Prerender the resource
-        prerenderResource(anchorElement) {
-            const href = anchorElement.href;
-            // Add a condition to check if the URL should be prerendered
-            const prerenderTimeout = setTimeout(() => {
-                if (this.shouldPrerender(href)) {  // Use a new shouldPrerender method
-                    this.createLinkElement("prerender", href);
-                    this.prerenderSet.add(href);
-                }
-            }, 200);
+        enqueuePrerender(url) {
+            url = this.cleanURL(url)
+            if (this.shouldPrerender(url)) {
+                this.prerenderSet.add(url);
+                this.prerenderQueue.push(url);
+                this.processPrerenderQueue();
+            }
+        }
 
-            anchorElement.addEventListener("mouseleave", () => clearTimeout(prerenderTimeout), { once: true });
+        processPrefetchQueue() {
+            if (this.prefetching || this.prefetchQueue.length === 0) return;
+
+            this.prefetching = true;
+            const urlsToPrefetch = this.prefetchQueue.splice(0, this.batchSize);
+
+            urlsToPrefetch.forEach(url => {
+                this.createLinkElement("prefetch", url);
+            });
+            setTimeout(() => {
+                this.prefetching = false;
+                this.processPrefetchQueue();
+            }, 200); // Delay between batches
+        }
+
+        processPrerenderQueue() {
+            if (this.prerendering || this.prerenderQueue.length === 0) return;
+
+            this.prerendering = true;
+            const urlsToPrerender = this.prerenderQueue.splice(0, this.batchSize);
+
+            urlsToPrerender.forEach(url => {
+                this.createLinkElement("prerender", url);
+            });
+
+            setTimeout(() => {
+                this.prerendering = false;
+                this.processPrerenderQueue();
+            }, 200); // Delay between batches
         }
     }
 
-    // Class to handle mouse movement and link proximity on desktop devices
     class DesktopLinkObserver {
         constructor(linkHandler) {
             this.linkHandler = linkHandler;
@@ -84,7 +113,6 @@
             this.animationFrame = requestAnimationFrame(() => {
                 const { clientX, clientY } = event;
 
-                // Ignore small mouse movements
                 if (this.lastMousePos.x !== null && this.lastMousePos.y !== null &&
                     Math.hypot(clientX - this.lastMousePos.x, clientY - this.lastMousePos.y) < 100) {
                     return;
@@ -98,11 +126,13 @@
                     const distanceToTop = Math.min(Math.abs(clientY - boundingBox.top), Math.abs(clientY - boundingBox.bottom));
 
                     if (Math.hypot(distanceToLeft, distanceToTop) < 200) {
-                        this.linkHandler.prefetchResource(anchorElement.href);
+                        this.linkHandler.enqueuePrefetch(anchorElement.href);
                     }
 
                     anchorElement.addEventListener("mouseenter", () => {
-                        this.linkHandler.prerenderResource(anchorElement);
+                        setTimeout(() => {
+                            this.linkHandler.enqueuePrerender(anchorElement.href);
+                        }, 200); // Delay to ensure user intent
                     }, { once: true });
                 });
             });
@@ -116,7 +146,6 @@
         }
     }
 
-    // Class to handle link visibility and user touch events on mobile devices
     class MobileLinkObserver {
         constructor(linkHandler) {
             this.linkHandler = linkHandler;
@@ -129,7 +158,7 @@
         handleIntersection(entries) {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    this.linkHandler.prefetchResource(entry.target.href);
+                    this.linkHandler.enqueuePrefetch(entry.target.href);
                     this.observer.unobserve(entry.target);
                 }
             });
@@ -139,13 +168,14 @@
             document.querySelectorAll("a[href]").forEach(anchorElement => {
                 this.observer.observe(anchorElement);
                 anchorElement.addEventListener("touchstart", () => {
-                    this.linkHandler.prerenderResource(anchorElement);
+                    setTimeout(() => {
+                        this.linkHandler.enqueuePrerender(anchorElement.href);
+                    }, 200); // Delay for mobile user intent
                 }, { passive: true });
             });
         }
     }
 
-    // Main initialization function
     function init() {
         if (isSaveDataEnabled() || !supportsPrefetch()) return;
 
@@ -160,7 +190,6 @@
         }
     }
 
-    // Utility functions
     function isSaveDataEnabled() {
         const connection = navigator.connection;
         return connection?.saveData || connection?.effectiveType === "2g";
@@ -175,7 +204,6 @@
         return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
     }
 
-    // Execute the main initialization
     init();
 
 })();
