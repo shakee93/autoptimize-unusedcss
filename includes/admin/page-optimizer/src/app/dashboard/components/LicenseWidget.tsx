@@ -110,7 +110,7 @@ const LicenseWidget = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="relative mt-1"
+            className="relative"
         >
             {licenseMessage && (
                 <h3 className="text-sm font-medium text-amber-700 absolute -top-6 right-0">{licenseMessage}</h3>
