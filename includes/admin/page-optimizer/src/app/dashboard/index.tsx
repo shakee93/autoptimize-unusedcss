@@ -45,7 +45,7 @@ export interface AuditComponentRef {
 
 export default function Dashboard() {
     const { data, loading, error } = useSelector(optimizerData);
-
+    const { license } = useSelector(optimizerData);
     const {
         options,
         savingData,
@@ -69,6 +69,10 @@ export default function Dashboard() {
 
 
     return <>
+        {!license?.licensedDomain && (
+
+            <div className="fixed inset-0 bg-black opacity-30 pointer-events-none z-50"></div>
+        )}
 
 
         <m.div
@@ -81,7 +85,8 @@ export default function Dashboard() {
             }}
             id='rapidload-page-optimizer-wrapper'
             className={cn(
-                "h-fit font-sans overflow-hidden flex flex-col text-base items-center "
+                "h-fit font-sans overflow-hidden flex flex-col text-base items-center ",
+                !license?.licensedDomain && 'pointer-events-none'
             )}>
 
 
@@ -113,8 +118,10 @@ export default function Dashboard() {
 
                     <div className="flex justify-between gap-4">
                         <div className="flex flex-col w-full gap-4">
-                            <LicenseWidget />
-                            <AIBot />
+                            <div className={!license?.licensedDomain ? "pointer-events-auto z-50" : ""}>
+                                <LicenseWidget/>
+                            </div>
+                            <AIBot/>
                         </div>
                         <div className="flex flex-col w-full gap-4">
                             {/*<PageSpeedCoach/>*/}
