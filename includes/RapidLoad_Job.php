@@ -540,10 +540,8 @@ class RapidLoad_Job{
     public static function get_first_and_last_optimization_score($url, $strategy) {
         global $wpdb;
 
-        // Fetch the job ID associated with the given URL
         $job_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}rapidload_job WHERE url = '" . esc_sql($url) . "' LIMIT 1");
 
-        // If job ID doesn't exist, return an empty object
         if (!$job_id) {
             return (object)[
                 'first_entry' => 0,
@@ -551,19 +549,16 @@ class RapidLoad_Job{
             ];
         }
 
-        // Fetch the first optimization entry
         $first_data = $wpdb->get_results("SELECT id, data FROM {$wpdb->prefix}rapidload_job_optimizations 
                                   WHERE strategy = '" . esc_sql($strategy) . "' 
                                   AND job_id = " . intval($job_id) . " 
                                   ORDER BY id ASC LIMIT 1", OBJECT);
 
-        // Fetch the last optimization entry
         $last_data = $wpdb->get_results("SELECT id,data FROM {$wpdb->prefix}rapidload_job_optimizations 
                                  WHERE strategy = '" . esc_sql($strategy) . "' 
                                  AND job_id = " . intval($job_id) . " 
                                  ORDER BY id DESC LIMIT 1", OBJECT);
 
-        // Check if data exists and decode it
         $first_entry = isset($first_data[0]) ? $first_data[0] : false;
 
         $last_entry = $last_data[0] && $first_data[0]->id != $last_data[0]->id ? $last_data[0] : false;
