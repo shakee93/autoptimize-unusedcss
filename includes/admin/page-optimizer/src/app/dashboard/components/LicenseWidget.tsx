@@ -8,6 +8,7 @@ import { updateLicense } from "../../../store/app/appActions";
 import { useAppContext } from "../../../context/app";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import { AnimatePresence, motion } from 'framer-motion';
+import {Loader} from "lucide-react";
 
 type InputChangeHandler = React.ChangeEventHandler<HTMLInputElement>;
 
@@ -109,7 +110,11 @@ const LicenseWidget = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
+            className="relative mt-1"
         >
+            {licenseMessage && (
+                <h3 className="text-sm font-medium text-amber-700 absolute -top-6 right-0">{licenseMessage}</h3>
+            )}
             <Input
                 id="licenseKey"
                 type="text"
@@ -118,18 +123,16 @@ const LicenseWidget = () => {
                 value={inputLicense}
                 onChange={handleLicenseInputChange}
             />
-            {licenseMessage && (
-                <h3 className="text-sm font-medium text-amber-700">{licenseMessage}</h3>
-            )}
+
         </motion.div>
     );
 
     const renderConnectButton = () => (
         <button
-            className="cursor-pointer bg-brand-100/90 text-brand-950 py-1.5 px-4 rounded-lg"
+            className="flex gap-2 items-center cursor-pointer bg-brand-100/90 text-brand-950 px-4 rounded-lg"
             onClick={() => (showInput ? connectRapidloadLicense() : window.open('https://app.rapidload.io/', '_blank'))}
         >
-            Connect
+            {loading && <Loader className='w-4 animate-spin'/> } Connect
         </button>
     );
 
