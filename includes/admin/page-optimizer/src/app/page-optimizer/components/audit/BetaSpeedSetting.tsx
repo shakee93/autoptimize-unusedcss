@@ -259,7 +259,7 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
 
         if (!settings.status || !mainInput.value) return;
 
-        const isStatusValid = ['processing', 'queued'].includes(settings.status.status);
+        const isStatusValid = ['processing', 'queued', 'success'].includes(settings.status.status);
         const cssStatusKey = {
             'Critical CSS': 'cpcss',
             'Remove Unused CSS': 'uucss',
