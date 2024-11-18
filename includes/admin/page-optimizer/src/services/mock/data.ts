@@ -922,14 +922,14 @@ export const mockSettings = {
 			}
 		],
 		"actions": [
-			{
-				"control_type": "button",
-				"category": "general",
-				"control_label": "Flush Cache",
-				"control_icon": "clear_page_cache",
-				"control_description": "Clear Page Cache",
-				"action": "/wp-admin/admin-ajax.php?action=fetch_titan_settings&amp;url=https%3A%2F%2Fstaging.rapidload.io%2F&amp;strategy=desktop&amp;new=false&amp;is_dev=true&amp;_cache=rapidload-cache&amp;_action=clear&amp;_wpnonce=1ced9ac23b"
-			}
+			// {
+			// 	"control_type": "button",
+			// 	"category": "general",
+			// 	"control_label": "Flush Cache",
+			// 	"control_icon": "clear_page_cache",
+			// 	"control_description": "Clear Page Cache",
+			// 	"action": "/wp-admin/admin-ajax.php?action=fetch_titan_settings&amp;url=https%3A%2F%2Fstaging.rapidload.io%2F&amp;strategy=desktop&amp;new=false&amp;is_dev=true&amp;_cache=rapidload-cache&amp;_action=clear&amp;_wpnonce=1ced9ac23b"
+			// }
 		]
 	}
 }

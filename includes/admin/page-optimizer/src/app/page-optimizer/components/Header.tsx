@@ -17,6 +17,7 @@ import {
     Monitor,
     RefreshCw,
     Rocket,
+    TextCursor,
     UserCircle
 } from "lucide-react";
 import useCommonDispatch from "hooks/useCommonDispatch";
@@ -26,6 +27,7 @@ import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes
 import UrlPreview from "app/page-optimizer/components/footer/url-preview";
 import SaveChanges from "app/page-optimizer/components/footer/save-changes";
 import { useRootContext } from "../../../context/root";
+import { MousePointerClick } from "lucide-react";
 
 const Header = ({ url }: { url: string }) => {
 
@@ -56,27 +58,23 @@ const Header = ({ url }: { url: string }) => {
 
             <header
                 className='z-[110000] w-full px-6 py-3 flex gap-3 justify-between border-b backdrop-blur-sm dark:bg-brand-930/80 bg-brand-50/75 '>
-                <div className='flex gap-12 items-center'>
+                <div className='flex gap-6 items-center'>
                     <div className='relative'>
                         <img
-                            className='w-36'
+                            className='w-8'
                             src={isDark
                                 ? options?.page_optimizer_base
                                     ? `${options?.page_optimizer_base}/dark-logo.svg`
                                     : '/dark-logo.svg'
                                 : options?.page_optimizer_base
-                                    ? `${options?.page_optimizer_base}/logo.svg`
-                                    : '/logo.svg'
+                                    ? `${options?.page_optimizer_base}/logo-icon.svg`
+                                    : '/logo-icon.svg'
                             }
                             alt='RapidLoad - #1 to unlock breakneck page speed'
                         />
-                        {version && (
-                            <span
-                                className='absolute text-xxs w-[200px] left-[72px] top-[1px] dark:text-brand-500 text-brand-400'>TITAN v{version}</span>
-                        )}
                     </div>
                     <div className='flex flex-column items-center gap-3'>
-                        <div data-tour='switch-report-strategy'
+                        {/* <div data-tour='switch-report-strategy'
                             className='select-none relative  flex dark:bg-brand-800 py-0.5 bg-brand-200/80 rounded-2xl cursor-pointer'>
                             <div className={cn(
                                 'absolute shadow-md translate-x-0 left-0.5 w-[55px] rounded-[14px] -z-1 duration-300 h-11 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',
@@ -97,7 +95,7 @@ const Header = ({ url }: { url: string }) => {
                                     <Monitor className="h-5 w-5 font-medium dark:text-brand-500 " />
                                 </div>
                             </TooltipText>
-                        </div>
+                        </div> */}
                         <div className='flex overflow-hidden border rounded-2xl shadow' data-tour="current-url">
                             <UrlPreview />
                             <UnsavedChanges
@@ -139,7 +137,7 @@ const Header = ({ url }: { url: string }) => {
                                         </AppButton>
                                     </TooltipText>
 
-                                    <TooltipText text='Change URL'>
+                                    {/* <TooltipText text='Change URL'>
                                         <AppButton
                                             onClick={() => {
                                                 commonDispatch(setCommonRootState('showDemo', false))
@@ -158,7 +156,7 @@ const Header = ({ url }: { url: string }) => {
                                                 <span className='text-xxs font-normal text-brand-500'>Change</span>
                                             </div>
                                         </AppButton>
-                                    </TooltipText>
+                                    </TooltipText> */}
                                 </div>
                             </UnsavedChanges>
                         </div>
@@ -176,6 +174,35 @@ const Header = ({ url }: { url: string }) => {
                     </>
 
                 </div> */}
+
+
+                <div className='flex gap-4 items-center'>
+                    <p className='text-sm text-brand-500 flex gap-4 items-center'>
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{
+                                opacity: 1,
+                                scale: [0.8, 1.2, 1],
+                                x: [0, -5, 5, 0]
+                            }}
+                            transition={{
+                                duration: 1.5,
+                                repeat: Infinity,
+                                repeatType: "reverse",
+                                ease: "easeInOut"
+                            }}
+                        >
+                            <MousePointerClick className='w-5 h-5 text-[#6e23ad]' />
+                        </motion.div>
+                        <motion.span
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.3 }}
+                        >
+                            This is an <span className='text-[#6e23ad]'>interactive demo</span>, try it out!
+                        </motion.span>
+                    </p>
+                </div>
             </header>
             <AnimatePresence>
                 {testMode && (

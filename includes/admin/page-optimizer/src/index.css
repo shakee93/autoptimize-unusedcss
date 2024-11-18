@@ -170,7 +170,7 @@
   animation: fadeInFromTop 3s ease forwards;
 }
 
-
+.demo-hero
 
 .demo-active {
   transform: translateY(-50px) translateZ(0px) perspective(2000px) rotateY(0deg) rotateX(0deg) scale(1);

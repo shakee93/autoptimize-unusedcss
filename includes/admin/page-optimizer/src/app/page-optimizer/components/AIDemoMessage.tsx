@@ -109,7 +109,7 @@ Performance Score: ${activeGear}
                 </AnimatePresence>
 
                 {/* Content */}
-                <div className="relative bg-white rounded-xl text-sm flex flex-col items-start">
+                <div className="relative bg-white/90 dark:bg-brand-930/80 rounded-xl text-sm flex flex-col items-start">
                     <div className={cn(
                         'flex items-center justify-between gap-4 px-5 py-4 w-full',
                         object && 'border-b'
@@ -208,6 +208,7 @@ Performance Score: ${activeGear}
                     </div>
                     } */}
 
+                    
                 </div>
             </div>
         </div>

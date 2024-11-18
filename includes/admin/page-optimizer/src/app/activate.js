@@ -1,10 +1,8 @@
 // js file for activating the demo hero
 
 document.addEventListener('DOMContentLoaded', () => {
-    const demoHero = document.querySelector('.demo-hero');
-    
     window.addEventListener('scroll', () => {
-const demoHero = document.querySelector('.demo-hero');
+        const demoHero = document.querySelector('.demo-hero');
         const scrollPosition = window.scrollY;
         if (scrollPosition > 80) {
             demoHero.classList.remove('demo-inactive');
