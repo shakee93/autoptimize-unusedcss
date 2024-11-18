@@ -3,8 +3,8 @@ Contributors: shakee93, futtta
 Donate link:
 Tags: unusedcss, criticalcss, rapidload, image optimization, minify js
 Requires at least: 5.0
-Tested up to: 6.6.2
-Stable tag: 2.4.0
+Tested up to: 6.7
+Stable tag: 2.4.1
 Requires PHP: 5.4
 License: GPLv3
 License URI: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
@@ -154,6 +154,10 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 3. RapidLoad Dashboard.
 
 == Changelog ==
+
+= 2.4.1 - 24/10/2024 =
+ * feat: add feat to disable WP-Emojis
+ * fix: known bugs
 
 = 2.4.0 - 24/10/2024 =
  * feat: add pre-rendering feature
