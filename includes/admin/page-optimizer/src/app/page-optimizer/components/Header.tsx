@@ -199,7 +199,7 @@ const Header = ({ url }: { url: string }) => {
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.3 }}
                         >
-                            This is an <span className='text-[#6e23ad]'>interactive demo</span>, try it out!
+                            This is an <span className='text-[#6e23ad]'>interactive demo</span> of the plugin, try it out!
                         </motion.span>
                     </p>
                 </div>
