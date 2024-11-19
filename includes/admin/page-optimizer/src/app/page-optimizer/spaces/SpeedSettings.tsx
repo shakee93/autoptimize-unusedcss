@@ -30,7 +30,7 @@ import { cn } from "lib/utils";
 import { setCommonState } from "../../../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import { BoltIcon, CheckCircleIcon, ChevronRightIcon, ChevronDownIcon, ChevronUpIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/solid";
-import { changeGear, updateSettings } from "../../../store/app/appActions";
+import {changeGear, getCSSStatus, updateSettings} from "../../../store/app/appActions";
 import { m, AnimatePresence } from 'framer-motion';
 import AuditSettingsItem from './AuditSettingsItem';
 import { useAppContext } from "../../../context/app";
@@ -359,13 +359,14 @@ const SpeedSettings = ({ }) => {
         (item) => item.category === activeCategory
     );
 
-    const [enableFlags, setEnableFlags] = useState({ cpcss: false, uucss: false });
+    const [enableFlags, setEnableFlags] = useState({ cpcss: false, uucss: false, cpcssuucss: false });
 
     const updateEnableFlags = useCallback(() => {
-        const cpcssEnabled = settings?.some(item => item.inputs.find(input => input.key === 'uucss_enable_cpcss')?.value);
-        const uucssEnabled = settings?.some(item => item.inputs.find(input => input.key === 'uucss_enable_uucss')?.value);
+        const cpcssEnabled = settings.some(item => item.inputs.find(input => input.key === 'uucss_enable_cpcss')?.value);
+        const uucssEnabled = settings.some(item => item.inputs.find(input => input.key === 'uucss_enable_uucss')?.value);
+        const cpcssuucssEnabled = settings.some(item => item.inputs.find(input => input.key === 'enable_uucss_on_cpcss')?.value);
 
-        setEnableFlags({ cpcss: cpcssEnabled, uucss: uucssEnabled });
+        setEnableFlags({ cpcss: cpcssEnabled, uucss: uucssEnabled, cpcssuucss: !cpcssuucssEnabled});
     }, [settings]);
 
     useEffect(() => {
@@ -373,7 +374,7 @@ const SpeedSettings = ({ }) => {
     }, [settings, updateEnableFlags]);
 
     useEffect(() => {
-        dispatch(setCommonState('uucssError', enableFlags.cpcss && enableFlags.uucss));
+        dispatch(setCommonState('uucssError', enableFlags.cpcss && enableFlags.uucss && enableFlags.cpcssuucss));
     }, [enableFlags, dispatch]);
 
     return <AnimatePresence>

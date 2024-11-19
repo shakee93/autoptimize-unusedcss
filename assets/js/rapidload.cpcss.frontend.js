@@ -34,7 +34,7 @@
         };
 
         this.add_events = function () {
-            ['mousemove', 'touchstart', 'keydown'].forEach(function (event) {
+            ['mousemove', 'touchstart', 'keydown','scroll'].forEach(function (event) {
                 var listener = function () {
                     load_css();
                     removeEventListener(event, listener);

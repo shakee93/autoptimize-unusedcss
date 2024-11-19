@@ -551,7 +551,7 @@ abstract class RapidLoad_DB
 
         $status_column = "CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE uucss.status END AS status,";
         if(defined('RAPIDLOAD_CPCSS_ENABLED') && RAPIDLOAD_CPCSS_ENABLED){
-            $status_column = "CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE CASE WHEN uucss.status is null THEN cpcss.status ELSE NULL END END AS status,";
+            $status_column = "CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE cpcss.status END AS status,";
         }
 
         global $wpdb;
@@ -594,6 +594,7 @@ abstract class RapidLoad_DB
         $data['created_at'] = isset( $link->job_created_at ) ? $link->job_created_at : null;
         $data['hits'] = isset( $link->hits ) ? $link->hits : null;
         $data['applied_successful_links'] = isset( $link->applied_successful_links ) ? $link->applied_successful_links : 0;
+        $data['applied_links'] = isset( $link->applied_successful_links ) ? $link->applied_successful_links : 0;
         $data['time'] = isset( $link->created_at ) ? strtotime( $link->created_at ) * 1000 : null;
 
         if(isset($data['rule_id'])){

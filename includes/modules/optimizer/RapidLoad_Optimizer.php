@@ -314,6 +314,7 @@ class RapidLoad_Optimizer
         self::verify_nonce();
 
         $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : site_url();
+        $types = isset($_REQUEST['types']) ? explode(",", $_REQUEST['types']) : [];
 
         $url = $this->transform_url($url);
 
@@ -321,30 +322,54 @@ class RapidLoad_Optimizer
             'url' => $url
         ]);
 
-        $job_data_uucss = new RapidLoad_Job_Data($job,'uucss');
-        $job_data_cpcss = new RapidLoad_Job_Data($job,'cpcss');
+        $response = [];
 
-        $cache_file = RapidLoad_Cache_Store::get_cache_file($url);
+        foreach ($types as $type){
+            switch ($type){
+                case 'uucss' :{
+                    $job_data_uucss = new RapidLoad_Job_Data($job,'uucss');
+                    $response[$type] = [
+                        'status' => isset($job_data_uucss->id) ? $job_data_uucss->status : null,
+                        'error' => isset($job_data_uucss->id) && isset($job_data_uucss->error) ? unserialize($job_data_uucss->error) : null,
+                        'warnings' => isset($job_data_uucss->id) && isset($job_data_uucss->warnings) ? unserialize($job_data_uucss->warnings) : null,
+                        'stats' => isset($job_data_uucss->id) && isset($job_data_uucss->stats) ? unserialize($job_data_uucss->stats) : null
+                    ];
+                    break;
+                }
+                case 'cpcss' :{
+                    $job_data_cpcss = new RapidLoad_Job_Data($job,'cpcss');
+                    $response[$type] = [
+                        'status' => isset($job_data_cpcss->id) ? $job_data_cpcss->status : null,
+                        'error' => isset($job_data_cpcss->id) && isset($job_data_cpcss->error) ? unserialize($job_data_cpcss->error) : null,
+                        'warnings' => isset($job_data_cpcss->id) && isset($job_data_cpcss->warnings) ? unserialize($job_data_cpcss->warnings) : null,
+                        'stats' => isset($job_data_cpcss->id) && isset($job_data_cpcss->stats) ? unserialize($job_data_cpcss->stats) : null
+                    ];
+                    break;
+                }
+                case 'cache' :{
 
-        wp_send_json_success([
-            'uucss' => [
-                'status' => isset($job_data_uucss->id) ? $job_data_uucss->status : null,
-                'error' => isset($job_data_uucss->id) && isset($job_data_uucss->error) ? unserialize($job_data_uucss->error) : null,
-                'warnings' => isset($job_data_uucss->id) && isset($job_data_uucss->warnings) ? unserialize($job_data_uucss->warnings) : null,
-                'stats' => isset($job_data_uucss->id) && isset($job_data_uucss->stats) ? unserialize($job_data_uucss->stats) : null
-            ],
-            'cpcss' => [
-                'status' => isset($job_data_cpcss->id) ? $job_data_cpcss->status : null,
-                'error' => isset($job_data_cpcss->id) && isset($job_data_cpcss->error) ? unserialize($job_data_cpcss->error) : null,
-                'warnings' => isset($job_data_cpcss->id) && isset($job_data_cpcss->warnings) ? unserialize($job_data_cpcss->warnings) : null,
-                'stats' => isset($job_data_cpcss->id) && isset($job_data_cpcss->stats) ? unserialize($job_data_cpcss->stats) : null
-            ],
-            'cache' => [
-                'status' => @file_exists($cache_file),
-                'file' => $cache_file,
-                'size' => @file_exists($cache_file) ? $this->formatSize(@filesize($cache_file)) : null
-            ]
-        ]);
+                    $cache_file = RapidLoad_Cache_Store::get_cache_file($url);
+                    $cache_file_exist = @file_exists($cache_file);
+
+                    $response[$type] = [
+                        'status' => $cache_file_exist ? 'Hit' : 'processing',
+                        'file' => $cache_file,
+                        'size' => $cache_file_exist ? $this->formatSize(@filesize($cache_file)) : null,
+                        'error' => [
+                            'code' => $cache_file_exist ? null : 422,
+                            'message' => $cache_file_exist ? null : 'Cache file not found',
+                        ],
+                    ];
+                    break;
+                }
+                case 'cache_policy':{
+
+                    $response[$type] = RapidLoad_htaccess::has_rapidload_rules();
+                }
+            }
+        }
+
+        wp_send_json_success($response);
 
     }
 
@@ -690,6 +715,8 @@ class RapidLoad_Optimizer
             'uucss_enable_font_optimization',
             'uucss_self_host_google_fonts',
             'uucss_preload_font_urls',
+            //cache
+            'uucss_disable_wp_emoji'
 
         ];
 
@@ -1267,11 +1294,17 @@ class RapidLoad_Optimizer
                 'action' => 'update_htaccess_file',
                 'default' => ''
             ),
-
             'preload_internal_links' => array(
                 'control_type' => 'checkbox',
                 'control_label' => 'Preload Links',
                 'control_description' => 'Intelligent preload and pre-render pages to faster page load times.',
+                'control_values' => array('1', '0'),
+                'default' => '0'
+            ),
+            'uucss_disable_wp_emoji' => array(
+                'control_type' => 'checkbox',
+                'control_label' => 'Disable WP-Emojis',
+                'control_description' => 'Prevents WordPress from displaying emojis, smiley faces and other icons',
                 'control_values' => array('1', '0'),
                 'default' => '0'
             ),
@@ -1346,7 +1379,7 @@ class RapidLoad_Optimizer
                     $cache_file = RapidLoad_Cache_Store::get_cache_file($url);
                     $cache_file_exist = @file_exists($cache_file);
                     $settings['status'] = [
-                        'status' => $cache_file_exist ? 'success' : 'failed',
+                        'status' => $cache_file_exist ? 'Hit' : 'processing',
                         'file' => $cache_file,
                         'size' => $cache_file_exist ? $this->formatSize(@filesize($cache_file)) : null,
                         'error' => [
@@ -1408,6 +1441,7 @@ class RapidLoad_Optimizer
             ['keys' => ['render-blocking-resources'], 'name' => 'Defer Javascript', 'description' => 'Render-blocking JS on website can be resolved with defer JavaScript.', 'category' => 'javascript', 'inputs' => ['uucss_load_js_method', 'uucss_excluded_js_files_from_defer']],
             ['keys' => ['offscreen-images'], 'name' => 'Lazy Load Images', 'description' => 'Delay loading of images until needed.', 'category' => 'image', 'inputs' => ['uucss_lazy_load_images', 'uucss_exclude_images_from_lazy_load']],
             ['keys' => ['lcp-lazy-loaded'], 'name' => 'Exclude Above-the-fold Images from Lazy Load', 'description' => 'Improve your LCP images.', 'category' => 'image', 'inputs' => ['uucss_exclude_above_the_fold_images', 'uucss_exclude_above_the_fold_image_count']],
+            ['keys' => ['server-response-time'], 'name' => 'Disable WP-Emojis', 'description' => 'Prevents WordPress from displaying emojis, smiley faces and other icons', 'category' => 'cache', 'inputs' => ['uucss_disable_wp_emoji']],
             ['keys' => ['server-response-time'], 'name' => 'Preload Links', 'description' => 'Intelligent preload and pre-render pages to faster page load times.', 'category' => 'cache', 'inputs' => ['preload_internal_links']],
             ['keys' => ['bootup-time', 'unused-javascript'], 'name' => 'Delay Javascript', 'description' => 'Loading JS files on user interaction', 'category' => 'javascript', 'inputs' => ['delay_javascript', 'rapidload_js_delay_method', 'uucss_exclude_files_from_delay_js', 'delay_javascript_callback', 'uucss_excluded_js_files','uucss_load_scripts_on_user_interaction']],
             ['keys' => ['server-response-time'], 'name' => 'Page Cache', 'description' => 'Optimize and cache static HTML pages to provide a snappier page experience.', 'category' => 'cache', 'inputs' => ['uucss_enable_cache','cache_expires','cache_expiry_time','mobile_cache','excluded_page_paths']],
