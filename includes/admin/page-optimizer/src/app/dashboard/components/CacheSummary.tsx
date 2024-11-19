@@ -74,12 +74,12 @@ const CacheSummary = () => {
     }, [dispatch]);
 
     const clearCache= (href: string) => {
-        console.log(href)
+        //console.log(href)
         dispatch(getSummary(options, href));
     }
 
     useEffect(() => {
-       console.log(cacheUsage)
+       //console.log(cacheUsage)
 
     }, [cacheUsage]);
 

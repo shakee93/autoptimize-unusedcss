@@ -69,10 +69,10 @@ export default function Dashboard() {
 
 
     return <>
-        {!license?.licensedDomain && (
+        {/*{!license?.licensedDomain && (*/}
 
-            <div className="fixed inset-0 bg-black opacity-30 pointer-events-none z-50"></div>
-        )}
+        {/*    <div className="fixed inset-0 bg-black opacity-30 pointer-events-none z-50"></div>*/}
+        {/*)}*/}
 
 
         <m.div
@@ -86,7 +86,7 @@ export default function Dashboard() {
             id='rapidload-page-optimizer-wrapper'
             className={cn(
                 "h-fit font-sans overflow-hidden flex flex-col text-base items-center ",
-                !license?.licensedDomain && 'pointer-events-none'
+                // !license?.licensedDomain && 'pointer-events-none'
             )}>
 
 

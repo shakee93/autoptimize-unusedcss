@@ -369,11 +369,11 @@ export const saveGeneralSettings = (options: WordPressOptions, data: any): Thunk
     };
 };
 
-export const updateLicense = (options: WordPressOptions, data?: any): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+export const updateLicense = (options: WordPressOptions, data?: any): ThunkAction<Promise<{ success: boolean, error?: string, data?: any }>, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
-    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string }> => {
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string, data?: any }> => {
 
         try {
             const connectLicense = await api.updateLicense(data);
@@ -382,7 +382,7 @@ export const updateLicense = (options: WordPressOptions, data?: any): ThunkActio
                     type: LICENSE_INFORMATION,
                     payload: connectLicense.data,
                 });
-                return connectLicense;
+                return { success: true, data: connectLicense.data};
             } else {
                 return { success: false, error: connectLicense.data || "License update failed" };
             }

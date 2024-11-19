@@ -27,7 +27,7 @@ const PerformanceWidget: React.FC = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        console.log(homePerformance)
+        //console.log(homePerformance)
 
     }, [homePerformance]);
 
@@ -46,6 +46,8 @@ const PerformanceWidget: React.FC = () => {
                         <div className="">
                             <PerformanceProgressBar
                                 className={cn('max-h-[140px]')}
+                                background={false}
+                                stroke={6}
                                 performance={homePerformance.first_entry}
                             />
                         </div>
@@ -61,13 +63,16 @@ const PerformanceWidget: React.FC = () => {
                     </div>
 
                     {/* Optimized Score */}
-                    <div className="flex flex-col items-center gap-2 px-10 py-4 rounded-2xl w-[230px]"
-                         style={{ background: progressbarBg}}>
+                    {/*<div className="flex flex-col items-center gap-2 px-10 py-4 rounded-2xl w-[230px]"*/}
+                    {/*     style={{ background: progressbarBg}}>*/}
+                        <div className="flex flex-col items-center gap-2 px-10 py-4 rounded-2xl w-[230px]">
                         <div className="text-lg font-semibold">Optimized Score</div>
                         <div className="">
                             <PerformanceProgressBar
                                 className={cn('max-h-[140px]')}
                                 scoreClassName={"text-brand-950"}
+                                background={false}
+                                stroke={6}
                                 performance={homePerformance.last_entry}
                             />
                         </div>

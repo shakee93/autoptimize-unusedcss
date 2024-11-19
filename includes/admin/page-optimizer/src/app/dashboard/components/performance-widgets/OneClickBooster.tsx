@@ -79,9 +79,9 @@ const OneClickBooster: React.FC = () => {
 
 
     useEffect(() => {
-        console.log(settings);
+        //console.log(settings);
         const newOptions = getFilteredOptions(settings, OptimizationSteps);
-        console.log(newOptions);
+        //console.log(newOptions);
     }, [OptimizationSteps]);
 
     const toggleAccordion = useCallback(() => {

@@ -43,9 +43,7 @@ const LicenseWidget = () => {
     };
 
     useEffect(() => {
-        if (license?.licensedDomain) {
-            localStorage.setItem('rapidLoadLicense', JSON.stringify(license));
-        }
+
         const storedLicense = localStorage.getItem('rapidLoadLicense');
         if (storedLicense) {
             try {
@@ -53,13 +51,16 @@ const LicenseWidget = () => {
             } catch (error) {
                 console.error("Error parsing license data", error);
             }
+        }else if(license){
+            setLicenseInfo(license);
         }
+
     }, [license]);
 
     const toggleVisibility = () => setIsVisible(!isVisible);
 
     const renderLicenseStatus = () => {
-        const isActivated = !!license?.licensedDomain;
+        const isActivated = !!licenseInfo?.licensedDomain;
         const Icon = isActivated ? CheckBadgeIcon : XCircleIcon;
         const textColor = isActivated ? "text-purple-800" : "text-red-600";
         const bgColor = isActivated ? "bg-purple-700" : "bg-red-600";
@@ -142,7 +143,7 @@ const LicenseWidget = () => {
             <Card data-tour="license-widget" className="border flex flex-col gap-4">
                 <div className="flex flex-col p-6 pb-0 gap-2">
                     <div className="text-lg font-bold">
-                        {license?.licensedDomain ? (
+                        {licenseInfo?.licensedDomain ? (
                             <span className="text-brand-400/50 dark:text-brand-300">Welcome back, <span className="text-brand-950">{licenseInfo?.name}</span></span>
                         ) : (
                             <span className="text-brand-400/90 dark:text-brand-300">Connect your license</span>
@@ -152,7 +153,7 @@ const LicenseWidget = () => {
                 </div>
 
                     <div className="grid gap-4 px-8 text-sm relative">
-                        {!license?.licensedDomain ? (
+                        {!licenseInfo?.licensedDomain ? (
                             <>
                                 <span>Slow load times are the #1 reason for high bounce rates and one of the root causes of poor Google Rankings.</span>
                                 {showInput ? renderLicenseInput() : (
@@ -180,7 +181,7 @@ const LicenseWidget = () => {
                 <div className="flex flex-col gap-2">
                     <div
                         className="flex gap-6 justify-end p-6 text-sm font-semibold relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white">
-                        {license?.licensedDomain ? (
+                        {licenseInfo?.licensedDomain ? (
                             <>
                                 <button className="cursor-pointer text-brand-500 py-1.5" onClick={() => window.open('https://app.rapidload.io/profile', 'blank')}>View My Account</button>
                                 <button className="cursor-pointer bg-brand-100/90 text-brand-950 py-1.5 px-4 rounded-lg" onClick={() => window.open('https://app.rapidload.io/', 'blank')}>Upgrade</button>

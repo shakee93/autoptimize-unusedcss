@@ -22,7 +22,7 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
     const [timeInterval, setTimeInterval] = useState('10 Minutes');
 
     useEffect(() => {
-       console.log(uucssGlobal)
+       //console.log(uucssGlobal)
     }, [uucssGlobal]);
     const handleCheckboxChange = (key: keyof GeneralSettings) => {
         setSettingsData(prev => ({ ...prev, [key]: !prev[key] }));

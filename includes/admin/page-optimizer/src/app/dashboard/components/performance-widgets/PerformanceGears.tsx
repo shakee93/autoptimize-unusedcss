@@ -79,7 +79,7 @@ const PerformanceGears: React.FC = () => {
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
-        console.log(activeGear)
+        //console.log(activeGear)
 
     }, [activeGear]);
 

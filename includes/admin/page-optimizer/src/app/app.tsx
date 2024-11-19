@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppAction, RootState } from "../store/app/appTypes";
 import {fetchPosts, fetchReport, fetchSettings, getTestModeStatus, updateLicense} from "../store/app/appActions";
 import { Toaster } from "components/ui/toaster";
-import { AnimatePresence, m } from "framer-motion";
+import {AnimatePresence, m, motion} from "framer-motion";
 import { useRootContext } from "../context/root";
 import Header from "app/page-optimizer/components/Header";
 import { cn } from "lib/utils";
@@ -45,6 +45,7 @@ import {
 } from "components/ui/dropdown-menu";
 import OptimizerPagesTable from "app/dashboard/components/OptimizerPagesTable";
 import SlideUp from "components/animation/SlideUp";
+import StepTwo from "app/onboard/components/StepTwo";
 
 const App = ({ popup, _showOptimizer = false }: {
     popup?: HTMLElement | null,
@@ -111,11 +112,17 @@ const App = ({ popup, _showOptimizer = false }: {
         dispatch(fetchPosts(options));
     }, [dispatch, activeReport]);
 
-
+    const [showStepTwo, setShowStepTwo] = useState(false);
 
     useEffect(() => {
         const updateLicenseAndStore = async () => {
-            await dispatch(updateLicense(options));
+           const response = await dispatch(updateLicense(options));
+            //const isLicensed = response.data?.licensedDomain;
+            const isLicensed = true;
+            if(!isLicensed ){
+                localStorage.removeItem('rapidLoadLicense');
+                setShowStepTwo(true);
+            }
         };
         updateLicenseAndStore();
 
@@ -123,6 +130,32 @@ const App = ({ popup, _showOptimizer = false }: {
 
 
 
+    useEffect(() => {
+        if (license?.licensedDomain) {
+            localStorage.setItem('rapidLoadLicense', JSON.stringify(license));
+        }
+        const storedLicense = localStorage.getItem('rapidLoadLicense');
+        if(storedLicense){
+           setShowStepTwo(false)
+        }
+
+    }, [license]);
+
+    const renderStepTwo = () => {
+        return (
+            <div className='bg-transparent p-6'>
+            <motion.div
+                key="stepTwo"
+                initial={{x: 100, opacity: 0}}
+                animate={{x: 0, opacity: 1}}
+                exit={{x: 100, opacity: 0}}
+                transition={{duration: 0.2}}
+            >
+                <StepTwo reconnect={true}/>
+            </motion.div>
+            </div>
+        );
+    }
     // const hash = window.location.hash.replace("#", "");
     //  const [activeRoute, setActiveRoute] = useState( hash.length > 0 ? hash : '/');
     //  const [routes, setRoutes] = useState( [
@@ -199,19 +232,22 @@ const App = ({ popup, _showOptimizer = false }: {
 
     return (
         <AnimatePresence>
+
             {(mounted && showOptimizer) &&
                 <>
+
                     {/*{testMode &&*/}
                     {/*    <TestModeNotification/>*/}
                     {/*}*/}
                     <div className='dark:text-brand-300 text-brand-800 dark:bg-brand-900 bg-brand-200/60 '>
+
                         <Suspense>
                             <AppTour isDark={isDark}>
                                 <InitTour mode={mode} />
                             </AppTour>
                         </Suspense>
 
-                        {activeRoute !== "/onboard" && (
+                        {activeRoute !== "/onboard" && !showStepTwo && (
                         <div className='justify-center flex container'>
                             <header
                                 className={cn('container px-2 py-2 flex gap-3 mt-4 justify-between dark:bg-brand-930/80  bg-brand-0 rounded-2xl', testMode && 'ring-2 ring-[#f7b250] ring-offset-0')}>
@@ -324,10 +360,12 @@ const App = ({ popup, _showOptimizer = false }: {
 
                         </div>
                         )}
+                        {showStepTwo ? (renderStepTwo()):(
+                            <SlideUp uuid={activeRoute || routes[0].id}>
+                                {routes.find(route => route.id === activeRoute)?.component || routes[0].component}
+                            </SlideUp>
+                        )}
 
-                        <SlideUp uuid={activeRoute || routes[0].id}>
-                            {routes.find(route => route.id === activeRoute)?.component || routes[0].component}
-                        </SlideUp>
 
                         {version && (
                             <div className='text-right px-6 py-2'>

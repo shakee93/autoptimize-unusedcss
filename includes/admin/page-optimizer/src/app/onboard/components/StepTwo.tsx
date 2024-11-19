@@ -56,7 +56,12 @@ const GEAR_FEATURES: Record<PerformanceGear, string[]> = {
     ],
 
 };
-const StepTwo = () => {
+
+interface StepTwoProps {
+    reconnect?: boolean;
+}
+
+const StepTwo: React.FC<StepTwoProps> = ({ reconnect }) => {
     const { options, uucssGlobal } = useAppContext();
     const { dispatch } = useCommonDispatch();
     const { activeGear, license } = useSelector(optimizerData);
@@ -92,6 +97,10 @@ const StepTwo = () => {
     useEffect(() => {
         setLicenseMessage("");
     },[inputLicense]);
+
+    useEffect(() => {
+     console.log("i am working now")
+    },[]);
 
     const getIcon = useMemo(() => (level: PerformanceGear) => {
         const iconProps = {
@@ -138,7 +147,7 @@ const StepTwo = () => {
     ), [activeGear, getIcon]);
 
     const settingsModeOnChange = async (level: PerformanceGear) => {
-        console.log("Setting mode to:", level);
+
         dispatch(changeGear(level));
         submitSettings(true);
         await handleTestModeSwitchChange(level === 'turboMax');
@@ -195,34 +204,47 @@ const StepTwo = () => {
                         alt="RapidLoad - #1 to unlock breakneck page speed"
                     />
                 </div>
-                <div className="flex flex-col gap-2 text-center">
-                    <h1 className="text-4xl font-bold">Select a Performance Gear</h1>
-                    <span className="font-medium text-base text-zinc-600 dark:text-brand-300">
+                { !reconnect ? (
+                    <>
+                    <div className="flex flex-col gap-2 text-center">
+                        <h1 className="text-4xl font-bold">Select a Performance Gear</h1>
+                        <span className="font-medium text-base text-zinc-600 dark:text-brand-300">
                         Pick your Performance Mode: Starter, Accelerate or TurboMax to fine-tune your site's speed.
                     </span>
-                </div>
-
-                <div className="flex flex-col">
-                    <div className="flex gap-3 w-full">
-                        {boosterLevels.map(renderBoosterLevel)}
                     </div>
-                </div>
 
-                <GearDisplay activeGear={activeGear as PerformanceGear}/>
+                    <div className="flex flex-col">
+                        <div className="flex gap-3 w-full">
+                            {boosterLevels.map(renderBoosterLevel)}
+                        </div>
+                    </div>
+
+                    <GearDisplay activeGear={activeGear as PerformanceGear}/>
+                    </>
+                ): (
+                    <div className="flex flex-col gap-2 text-center">
+                        <h1 className="text-4xl font-bold">Connect Your Account</h1>
+                        <span className="font-medium text-base text-zinc-600 dark:text-brand-300">
+                        Pick your Performance Mode: Starter, Accelerate or TurboMax to fine-tune your site's speed.
+                    </span>
+                    </div>
+                )}
+
 
                 <div className="flex flex-col gap-6">
-                <h6 className="text-base font-semibold capitalize text-center">Connect Your Account to Optimize </h6>
+                    <h6 className="text-base font-semibold capitalize text-center">Connect Your Account to
+                        Optimize </h6>
 
                     <AnimatePresence mode="wait">
-                    {showInput ? (
-                        <motion.div
-                            key="inputDiv"
-                            initial={{opacity: 0, y: -20}}
-                            animate={{opacity: 1, y: 0}}
-                            exit={{opacity: 0, y: -20}}
-                            transition={{duration: 0.2}}
-                            className="flex flex-col border rounded-2xl w-[500px]"
-                        >
+                        {showInput ? (
+                            <motion.div
+                                key="inputDiv"
+                                initial={{opacity: 0, y: -20}}
+                                animate={{opacity: 1, y: 0}}
+                                exit={{opacity: 0, y: -20}}
+                                transition={{duration: 0.2}}
+                                className="flex flex-col border rounded-2xl w-[500px]"
+                            >
                             <div className="flex justify-between items-center bg-brand-100/60 px-4 py-2 rounded-t-2xl">
                                 {licenseMessage.length > 0 ? (
                                     <h3 className="text-sm font-medium text-amber-700">{licenseMessage}</h3>
@@ -285,24 +307,26 @@ const StepTwo = () => {
                             >
                                 Connect Account
                             </button>
-                            {/*<button*/}
-                            {/*    className="items-center bg-brand-300 text-brand-950 hover:bg-brand-900/90 hover:text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2"*/}
-                            {/*    onClick={GetLicense}*/}
-                            {/*>*/}
-                            {/*    Get License Details*/}
-                            {/*</button>*/}
                         </motion.div>
                     )}
                     </AnimatePresence>
 
-                    <button className="text-base font-semibold capitalize text-center"
-                        onClick={() => setOpen(true)}
-                    >Compare Performance Gears</button>
-                    <ComparisonDialog open={open} setOpen={setOpen} />
+                    {!reconnect &&
+                        <>
+                            <button className="text-base font-semibold capitalize text-center"
+                                    onClick={() => setOpen(true)}
+                            >Compare Performance Gears
+                            </button>
+                            <ComparisonDialog open={open} setOpen={setOpen}/>
+                        </>
+
+                    }
+
                 </div>
             </div>
         </motion.div>
-    );
+    )
+        ;
 };
 
 export default StepTwo;
