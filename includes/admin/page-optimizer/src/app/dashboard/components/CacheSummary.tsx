@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Card from "components/ui/card";
 import {cn} from "lib/utils";
 import { InformationCircleIcon, TrashIcon  } from "@heroicons/react/24/outline";
@@ -28,7 +28,7 @@ const CacheSummary = () => {
 
     const {dispatch} = useCommonDispatch();
     const {options} = useAppContext();
-
+    const [totalCacheSize, setTotalCacheSize] = useState('0 MB');
     const {cacheUsage} = useSelector(optimizerData);
 
     const chartOptions = {
@@ -74,15 +74,31 @@ const CacheSummary = () => {
     }, [dispatch]);
 
     const clearCache= (href: string) => {
-        //console.log(href)
+        console.log(href)
         dispatch(getSummary(options, href));
     }
 
     useEffect(() => {
-       //console.log(cacheUsage)
+        if (cacheUsage) {
+            const totalSizeInBytes = cacheUsage.reduce((total, item) => {
+                const sizeString = item.size.size.toLowerCase();
+                let sizeInBytes = 0;
 
+                if (sizeString.endsWith('kb')) {
+                    sizeInBytes = parseFloat(sizeString) * 1024;
+                } else if (sizeString.endsWith('mb')) {
+                    sizeInBytes = parseFloat(sizeString) * 1024 * 1024;
+                } else if (sizeString.endsWith('gb')) {
+                    sizeInBytes = parseFloat(sizeString) * 1024 * 1024 * 1024;
+                }
+
+                return total + sizeInBytes;
+            }, 0);
+
+            const totalSizeInMB = (totalSizeInBytes / (1024 * 1024)).toFixed(2);
+            setTotalCacheSize(`${totalSizeInMB} MB`);
+        }
     }, [cacheUsage]);
-
     const CacheItem = ({ label, size, action }: CacheUsageItem) => (
         <div className="flex justify-between items-center py-1.5 font-medium">
             <div className="text-sm dark:text-brand-300 text-brand-500">{label}</div>
@@ -116,7 +132,7 @@ const CacheSummary = () => {
 
                 <div className="p-6 border rounded-3xl text-center">
                     <div className="text-sm dark:text-brand-300 text-brand-400">Total cache size</div>
-                    <div className="text-[27px] font-bold">4.63 MB</div>
+                    <div className="text-[27px] font-bold">{totalCacheSize}</div>
                 </div>
 
                 <div>
