@@ -95,7 +95,7 @@
                 return;
             }
 
-            ['mousemove', 'touchstart', 'keydown'].forEach(function (event) {
+            ['mousemove', 'touchstart', 'keydown','scroll'].forEach(function (event) {
                 var listener = function () {
                     load_css(window.rapidload.files)
                     load_inline_css(window.rapidload.files)
