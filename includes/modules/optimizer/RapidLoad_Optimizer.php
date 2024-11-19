@@ -95,10 +95,10 @@ class RapidLoad_Optimizer
                 'label' => 'JavaScript Cache',
                 'action' => [
                     'href' => wp_nonce_url( add_query_arg( array(
-                        '_action' => 'rapidload_purge_all',
+                        'action' => 'rapidload_purge_all',
                         'job_type' => 'js',
                         'clear' => true,
-                    ) , admin_url('admin.php')), 'uucss_nonce', 'nonce' ),
+                    ) , admin_url( 'admin-ajax.php' )), 'uucss_nonce', 'nonce' ),
                     'label' => 'Clear JavaScript Cache'
                 ]
             ],
@@ -107,10 +107,10 @@ class RapidLoad_Optimizer
                 'label' => 'Font Cache',
                 'action' => [
                     'href' => wp_nonce_url( add_query_arg( array(
-                        '_action' => 'rapidload_purge_all',
+                        'action' => 'rapidload_purge_all',
                         'job_type' => 'fonts',
                         'clear' => true,
-                    ) , admin_url('admin.php')), 'uucss_nonce', 'nonce' ),
+                    ) , admin_url('admin-ajax.php')), 'uucss_nonce', 'nonce' ),
                     'label' => 'Clear Font Cache'
                 ]
             ]
@@ -174,10 +174,10 @@ class RapidLoad_Optimizer
             ],
             'action' => [
                 'href' => wp_nonce_url( add_query_arg( array(
-                    '_action' => 'rapidload_purge_all',
+                    'action' => 'rapidload_purge_all',
                     'job_type' => 'css',
                     'clear' => true,
-                ) , admin_url('admin.php')), 'uucss_nonce', 'nonce' ),
+                ) , admin_url('admin-ajax.php')), 'uucss_nonce', 'nonce' ),
                 'label' => 'Clear CSS Cache'
             ]
         ];
