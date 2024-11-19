@@ -1,7 +1,7 @@
 //!injected by RapidLoad \n
 (function () {
     var totalScripts = prepareScripts();
-    const events = ['click', 'mousemove', 'touchstart', 'keydown'];
+    const events = ['click', 'mousemove', 'touchstart', 'keydown','scroll'];
     let userInteracted = false;
 
     function rpDebug(method = 'log', ...args) {
