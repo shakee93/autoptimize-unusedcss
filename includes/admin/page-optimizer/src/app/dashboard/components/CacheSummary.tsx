@@ -10,6 +10,8 @@ import useCommonDispatch from "hooks/useCommonDispatch";
 import {useAppContext} from "../../../context/app";
 import SkeletonList from 'components/ui/listSkelton';
 import TooltipText from "components/ui/tooltip-text";
+import {toast} from "components/ui/use-toast";
+import {CheckCircleIcon} from "lucide-react";
 
 type CacheUsageItem = {
     label: string;
@@ -73,9 +75,14 @@ const CacheSummary = () => {
 
     }, [dispatch]);
 
-    const clearCache= (href: string) => {
+    const clearCache= async (href: string) => {
         console.log(href)
-        dispatch(getSummary(options, href));
+        // dispatch(getSummary(options, href));
+         await fetch(href.replace(/&amp;/g, '&'));
+        toast({
+            duration: 10,
+            description: <div className='flex w-full gap-2 text-center items-center'>Successfully Cleared <CheckCircleIcon className='w-5 text-green-600' /> </div>
+        })
     }
 
     useEffect(() => {
