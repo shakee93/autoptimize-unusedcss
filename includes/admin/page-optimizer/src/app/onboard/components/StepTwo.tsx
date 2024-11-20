@@ -153,7 +153,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect }) => {
             >
                 <div>
                     {isActive && isSaving ? (
-                        <div className="w-16 h-16 border-4 border-t-transparent border-purple-500 rounded-full animate-spin"></div>
+                        <div className="w-14 h-14 border-4 mt-3 border-t-transparent border-purple-500 rounded-full animate-spin"></div>
                     ) : (
                         getIcon(level)
                     )}
@@ -166,7 +166,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect }) => {
                 </div>
                 <div className="items-center flex flex-col">
                     {isActive && isSaving ? (
-                        <p className="font-semibold capitalize z-[110000]">Loading...</p>
+                        <p className="font-semibold capitalize z-[110000] mt-2">Loading...</p>
                     ) : (
                         <span className="capitalize font-semibold">{level}</span>
                     )}
