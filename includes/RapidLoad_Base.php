@@ -372,7 +372,7 @@ class RapidLoad_Base
             $data = array(
                 'ajax_url'          => admin_url( 'admin-ajax.php' ),
                 'setting_url'       => admin_url( 'options-general.php?page=uucss_legacy' ),
-                'on_board_complete' => apply_filters('uucss/on-board/complete', false),
+                'on_board_complete' => apply_filters('uucss/on-board/complete', RapidLoad_Onboard::on_board_completed()),
                 'home_url' => home_url(),
                 'api_url' => RapidLoad_Api::get_key(),
                 'nonce' => wp_create_nonce( 'uucss_nonce' ),

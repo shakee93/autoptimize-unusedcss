@@ -102,7 +102,7 @@ class RapidLoad_Onboard{
         }
     }
 
-    static function on_board_completed(){
+    public static function on_board_completed(){
         return RapidLoad_Base::is_api_key_verified();
     }
 
