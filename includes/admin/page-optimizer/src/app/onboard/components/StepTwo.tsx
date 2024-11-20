@@ -15,8 +15,9 @@ import {Input} from "components/ui/input";
 import { AnimatePresence, motion } from 'framer-motion';
 import {Loader} from "lucide-react";
 import ComparisonDialog from "app/dashboard/components/ComparisonDialog";
+import {CircularProgressbarWithChildren} from "react-circular-progressbar";
 
-type PerformanceGear = 'starter' | 'accelerate' | 'turboMax';
+// type PerformanceGear = 'starter' | 'accelerate' | 'turboMax';
 
 const boosterLevels: PerformanceGear[] = ['starter', 'accelerate', 'turboMax'];
 
@@ -54,6 +55,13 @@ const GEAR_FEATURES: Record<PerformanceGear, string[]> = {
         "Page Cache Generated",
         "Google Fonts self-hosted",
     ],
+    custom: [
+        // "Unlock peak performance potential",
+        // "Utilize Accelerator mode",
+        // "Generate critical CSS for faster rendering",
+        // "Implement advanced JavaScript handling methods",
+        // "Delay execution for improved speed and efficiency",
+    ],
 
 };
 
@@ -62,9 +70,10 @@ interface StepTwoProps {
 }
 
 const StepTwo: React.FC<StepTwoProps> = ({ reconnect }) => {
-    const { options, uucssGlobal } = useAppContext();
+    const { options, uucssGlobal, savingData, invalidatingCache } = useAppContext();
     const { dispatch } = useCommonDispatch();
     const { activeGear, license } = useSelector(optimizerData);
+    const [activeLevel, setActiveLevel] = useState<PerformanceGear>(activeGear || 'turboMax');
     const { submitSettings } = useSubmitSettings();
     const { handleTestModeSwitchChange } = useTestModeUtils();
     const [inputLicense, setInputLicense] = useState("");
@@ -98,9 +107,22 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect }) => {
         setLicenseMessage("");
     },[inputLicense]);
 
+    const settingsModeOnChange = (mode: PerformanceGear) => {
+        dispatch(changeGear(mode as BasePerformanceGear));
+    };
+
     useEffect(() => {
-     console.log("i am working now")
-    },[]);
+
+        if(!activeGear){
+            settingsModeOnChange('turboMax')
+        }
+        const handleSave = async () => {
+            submitSettings(true);
+            await handleTestModeSwitchChange(activeGear === 'turboMax');
+        };
+
+        handleSave();
+    }, [activeGear]);
 
     const getIcon = useMemo(() => (level: PerformanceGear) => {
         const iconProps = {
@@ -113,45 +135,48 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect }) => {
         }
     }, [activeGear]);
 
-    const renderBoosterLevel = useCallback((level: PerformanceGear) => (
-        <div
-            key={level}
-            className={cn(
-                'relative hover:bg-brand-100/50 flex flex-col gap-3.5 font-normal cursor-pointer w-[166px] h-[166px] rounded-3xl items-center justify-center',
-                level === activeGear ? 'text-brand-600 border-[3px] border-[#592d8d]' : 'border border-brand-200 dark:border-brand-700',
-                activeGear === 'turboMax' && level === 'turboMax' && 'gap-1 pt-4'
-            )}
-            onClick={() => settingsModeOnChange(level)}
-        >
-            <div>
-                {getIcon(level)}
-                {activeGear === level && (
-                    level === 'turboMax' ? (
-                        <div
-                            className="absolute right-[7px] top-2 gap-1 text-[10px] items-center font-semibold bg-purple-100 rounded-3xl p-1 pl-2 flex">
-                            <AIButtonIcon/> AI Recommended <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
-                        </div>
-                    ) : (
-                        <div className="absolute top-2.5 right-2.5">
-                            <CheckCircleIcon className="w-6 h-6 text-purple-800"/>
-                        </div>
-                    )
+    const renderBoosterLevel = useCallback((level: PerformanceGear) => {
+        const isActive = activeGear === level;
+        const isSaving = savingData || invalidatingCache;
+        const opacityClass = isSaving ? "opacity-50" : "opacity-100";
+
+        return (
+            <div
+                key={level}
+                className={cn(
+                    'relative hover:bg-brand-100/50 flex flex-col gap-3.5 font-normal w-[166px] h-[166px] rounded-3xl items-center justify-center',
+                    isActive ? 'text-brand-600 border-[3px] border-[#592d8d]' : 'border border-brand-200 dark:border-brand-700',
+                    activeGear === 'turboMax' && level === 'turboMax' && 'gap-1 pt-4',
+                    isSaving ? 'cursor-not-allowed opacity-90 pointer-events-none' : 'cursor-pointer'
                 )}
+                onClick={() => settingsModeOnChange(level)}
+            >
+                <div>
+                    {isActive && isSaving ? (
+                        <div className="w-16 h-16 border-4 border-t-transparent border-purple-500 rounded-full animate-spin"></div>
+                    ) : (
+                        getIcon(level)
+                    )}
+                    {isActive && (
+                        <div className={cn("absolute", level === "turboMax" ? "right-[7px] top-2 gap-1 text-[10px] items-center font-semibold bg-purple-100 rounded-3xl p-1 pl-2 flex" : "top-2.5 right-2.5")}>
+                            {level === 'turboMax' && (<><AIButtonIcon />  AI Recommended </>)}
+                            <CheckCircleIcon className={`w-6 h-6 text-purple-800 ${opacityClass}`} />
+                        </div>
+                    )}
+                </div>
+                <div className="items-center flex flex-col">
+                    {isActive && isSaving ? (
+                        <p className="font-semibold capitalize z-[110000]">Loading...</p>
+                    ) : (
+                        <span className="capitalize font-semibold">{level}</span>
+                    )}
+                    {level === 'turboMax' && (<span className="font-normal text-[10px] leading-none">Test Mode Recommended</span>)}
+                </div>
             </div>
-            <div className="items-center flex flex-col">
-                <span className="capitalize font-semibold">{level}</span>
-                {level === 'turboMax' && (<span className="font-normal text-[10px] leading-none">Test Mode Recommended</span>)}
-            </div>
+        );
+    }, [activeGear, getIcon, savingData, invalidatingCache]);
 
-        </div>
-    ), [activeGear, getIcon]);
 
-    const settingsModeOnChange = async (level: PerformanceGear) => {
-
-        dispatch(changeGear(level));
-        submitSettings(true);
-        await handleTestModeSwitchChange(level === 'turboMax');
-    };
 
 
     const GearFeatures: React.FC<{ gearName: PerformanceGear; features: string[] }> = ({gearName, features}) => {
@@ -206,22 +231,22 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect }) => {
                 </div>
                 { !reconnect ? (
                     <>
-                    <div className="flex flex-col gap-2 text-center">
-                        <h1 className="text-4xl font-bold">Select a Performance Gear</h1>
-                        <span className="font-medium text-base text-zinc-600 dark:text-brand-300">
+                        <div className="flex flex-col gap-2 text-center">
+                            <h1 className="text-4xl font-bold">Select a Performance Gear</h1>
+                            <span className="font-medium text-base text-zinc-600 dark:text-brand-300">
                         Pick your Performance Mode: Starter, Accelerate or TurboMax to fine-tune your site's speed.
                     </span>
-                    </div>
-
-                    <div className="flex flex-col">
-                        <div className="flex gap-3 w-full">
-                            {boosterLevels.map(renderBoosterLevel)}
                         </div>
-                    </div>
 
-                    <GearDisplay activeGear={activeGear as PerformanceGear}/>
+                        <div className="flex flex-col">
+                            <div className="flex gap-3 w-full">
+                                {boosterLevels.map(renderBoosterLevel)}
+                            </div>
+                        </div>
+
+                        <GearDisplay activeGear={activeGear as PerformanceGear}/>
                     </>
-                ): (
+                ) : (
                     <div className="flex flex-col gap-2 text-center">
                         <h1 className="text-4xl font-bold">Connect Your Account</h1>
                         <span className="font-medium text-base text-zinc-600 dark:text-brand-300">
@@ -245,62 +270,66 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect }) => {
                                 transition={{duration: 0.2}}
                                 className="flex flex-col border rounded-2xl w-[500px]"
                             >
-                            <div className="flex justify-between items-center bg-brand-100/60 px-4 py-2 rounded-t-2xl">
-                                {licenseMessage.length > 0 ? (
-                                    <h3 className="text-sm font-medium text-amber-700">{licenseMessage}</h3>
-                                ): loading ?
-                                  (
-                                      <div className="flex gap-2 items-center">
-                                          <Loader className='w-5 animate-spin'/><h3 className="text-sm font-medium">Connecting please wait...</h3>
-                                      </div>
-                                  )
-                                 :(
-                                    <h3 className="text-sm font-medium">Connect with License key</h3>
-                                )}
+                                <div
+                                    className="flex justify-between items-center bg-brand-100/60 px-4 py-2 rounded-t-2xl">
+                                    {licenseMessage.length > 0 ? (
+                                        <h3 className="text-sm font-medium text-amber-700">{licenseMessage}</h3>
+                                    ) : loading ?
+                                        (
+                                            <div className="flex gap-2 items-center">
+                                                <Loader className='w-5 animate-spin'/><h3
+                                                className="text-sm font-medium">Connecting please wait...</h3>
+                                            </div>
+                                        )
+                                        : (
+                                            <h3 className="text-sm font-medium">Connect with License key</h3>
+                                        )}
 
-                                <button
-                                    className="items-center text-amber-700 font-medium text-sm py-2 px-4 rounded-lg"
-                                    onClick={() => setShowInput(false)}
-                                >
-                                    Cancel
-                                </button>
-                            </div>
-
-                            <div className="flex gap-4 bg-brand-0 px-4 py-2 rounded-b-2xl">
-                                <Input
-                                    id="licenseKey"
-                                    type="text"
-                                    placeholder={'Enter you license key'}
-                                    className="text-sm flex-grow border-none focus:outline-none focus-visible:ring-0 dark:text-brand-300 focus-visible:ring-offset-0"
-                                    value={inputLicense}
-                                    onChange={LicenseInputChange}
-                                />
-                                {inputLicense.length > 0 &&
                                     <button
-                                        className="items-center text-sm text-brand-950 font-medium py-2 px-4 rounded-lg"
-                                        onClick={connectRapidloadLicense}
+                                        className="items-center text-amber-700 font-medium text-sm py-2 px-4 rounded-lg"
+                                        onClick={() => setShowInput(false)}
                                     >
-                                        Connect
+                                        Cancel
                                     </button>
-                                }
-                            </div>
-                        </motion.div>
-                    ) : (
-                        <motion.div
-                            key="connectDiv"
-                            initial={{opacity: 0, y: 20}}
-                            animate={{opacity: 1, y: 0}}
-                            exit={{opacity: 0, y: 20}}
-                            transition={{duration: 0.2}}
-                            className="flex gap-4 items-center"
-                        >
-                            <button
-                                className="items-center bg-brand-300 text-brand-950 hover:bg-brand-900/90 hover:text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2"
-                                onClick={() => setShowInput(true)}
+                                </div>
+
+                                <div className="flex gap-4 bg-brand-0 px-4 py-2 rounded-b-2xl">
+                                    <Input
+                                        id="licenseKey"
+                                        type="text"
+                                        placeholder={'Enter you license key'}
+                                        className="text-sm flex-grow border-none focus:outline-none focus-visible:ring-0 dark:text-brand-300 focus-visible:ring-offset-0"
+                                        value={inputLicense}
+                                        onChange={LicenseInputChange}
+                                    />
+                                    {inputLicense.length > 0 &&
+                                        <button
+                                            className="items-center text-sm text-brand-950 font-medium py-2 px-4 rounded-lg"
+                                            onClick={connectRapidloadLicense}
+                                        >
+                                            Connect
+                                        </button>
+                                    }
+                                </div>
+                            </motion.div>
+                        ) : (
+                            <motion.div
+                                key="connectDiv"
+                                initial={{opacity: 0, y: 20}}
+                                animate={{opacity: 1, y: 0}}
+                                exit={{opacity: 0, y: 20}}
+                                transition={{duration: 0.2}}
+                                className="flex gap-4 items-center"
                             >
-                                Connect with License key
-                            </button>
-                            <span className="font-semibold">or</span>
+                                <button
+                                    className="items-center bg-brand-300 text-brand-950 hover:bg-brand-900/90 hover:text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2"
+                                    onClick={() => {
+                                        setShowInput(true)
+                                    }}
+                                >
+                                    Connect with License key
+                                </button>
+                                <span className="font-semibold">or</span>
                             <button
                                 className="items-center bg-brand-900/90 text-white font-medium py-2 px-4 rounded-lg hover:bg-brand-300 hover:text-brand-950 transition-all gap-2"
                                 onClick={() => window.location.href = uucssGlobal?.activation_url}

@@ -52,6 +52,7 @@ interface Help{
 
 interface uucssGlobal {
     activation_url: string;
+    on_board_complete: string;
     active_modules: {
         general: {
             options: GeneralSettings;

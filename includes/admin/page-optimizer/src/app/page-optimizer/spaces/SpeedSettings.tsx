@@ -246,13 +246,17 @@ const SpeedSettings = ({ }) => {
                 mode as BasePerformanceGear
             ))
 
-            submitSettings(true);
+          //  submitSettings(true);
 
             if (!notPassedAudits) {
                 return;
             }
         }
     };
+
+    useEffect(() => {
+        submitSettings(true);
+    }, [activeGear]);
 
     const handleTestModeSettingsChange = (gearSettingsMode: string,) => {
         let toastInstance: ReturnType<typeof toast> | undefined;
@@ -423,31 +427,10 @@ const SpeedSettings = ({ }) => {
                                 )}
 
                                 {activeGear === mode && (savingData || invalidatingCache) ? (
-                                    // <GearLoading options={options} />
-                                    // <Loader className='w-24 animate-spin'/>
-                                    <CircularProgressbarWithChildren
-                                        strokeWidth={6}
-                                        background={false}
-                                        value={80}
-                                        className={cn(
-                                            'max-h-[54px] relative w-full align-middle animate-spin mt-4',
-                                        )}
-                                        styles={{
-                                            path: {
-                                                stroke: '#7E22CE',
-                                                strokeLinecap: 'round',
-                                                transition: 'stroke-dashoffset 0.5s ease 0s',
-                                            },
-                                            trail: {
-                                                stroke: 'transparent',
-                                            },
-                                        }}
-
-                                    />
-
-                                ) : (
+                                        <div className="w-16 h-16 border-4 border-t-transparent border-[#7E22CE] rounded-full animate-spin"></div>
+                                    ) : (
                                     <>
-                                        {mode === 'starter' && <Starter cls={'px-2 py-2'} />}
+                                {mode === 'starter' && <Starter cls={'px-2 py-2'} />}
                                         {mode === 'accelerate' && <Accelerate cls={'px-2 py-2'} />}
                                         {mode === 'turboMax' && <TurboMax cls={'px-2 py-2'} />}
                                     </>

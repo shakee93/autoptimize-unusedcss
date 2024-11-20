@@ -53,7 +53,7 @@ const App = ({ popup, _showOptimizer = false }: {
 }) => {
 
     const [popupNode, setPopupNode] = useState<HTMLElement | null>(null);
-    const { showOptimizer, version, setShowOptimizer, mode, options } = useAppContext()
+    const { showOptimizer, version, setShowOptimizer, mode, options, uucssGlobal } = useAppContext()
     const [shadowRoot, setShadowRoot] = useState<ShadowRoot | null>(null);
     const [mounted, setMounted] = useState(false)
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
@@ -117,11 +117,13 @@ const App = ({ popup, _showOptimizer = false }: {
     useEffect(() => {
         const updateLicenseAndStore = async () => {
            const response = await dispatch(updateLicense(options));
-            //const isLicensed = response.data?.licensedDomain;
-            const isLicensed = true;
-            if(!isLicensed ){
+            const isLicensed = response.data?.licensedDomain;
+           // const isLicensed = true;
+            if(!isLicensed && uucssGlobal?.on_board_complete == '1'){
                 localStorage.removeItem('rapidLoadLicense');
                 setShowStepTwo(true);
+            }else if(uucssGlobal?.on_board_complete == ''){
+                window.location.hash = '#/onboard'
             }
         };
         updateLicenseAndStore();
