@@ -1139,6 +1139,11 @@ class RapidLoad_Admin
             }
         }
 
+        $options['uucss_api_key_verified'] = 1;
+        $options['uucss_api_key']          = $license_key;
+
+        RapidLoad_Base::update_option( 'autoptimize_uucss_settings', $options );
+
         wp_send_json_success([
             'success' => true,
             'message' => 'License Key verification success',
