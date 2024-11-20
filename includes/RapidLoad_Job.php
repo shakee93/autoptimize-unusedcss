@@ -545,7 +545,9 @@ class RapidLoad_Job{
         if (!$job_id) {
             return (object)[
                 'first_entry' => 0,
-                'last_entry' => 0
+                'last_entry' => 0,
+                'first_response_time' => 0,
+                'last_response_time' => 0
             ];
         }
 
@@ -554,19 +556,33 @@ class RapidLoad_Job{
                                   AND job_id = " . intval($job_id) . " 
                                   ORDER BY id ASC LIMIT 1", OBJECT);
 
-        $last_data = $wpdb->get_results("SELECT id,data FROM {$wpdb->prefix}rapidload_job_optimizations 
+        $last_data = $wpdb->get_results("SELECT id, data FROM {$wpdb->prefix}rapidload_job_optimizations 
                                  WHERE strategy = '" . esc_sql($strategy) . "' 
                                  AND job_id = " . intval($job_id) . " 
                                  ORDER BY id DESC LIMIT 1", OBJECT);
 
         $first_entry = isset($first_data[0]) ? $first_data[0] : false;
-
         $last_entry = $last_data[0] && $first_data[0]->id != $last_data[0]->id ? $last_data[0] : false;
+
+        $get_response_time = function ($data) {
+            $decoded_data = json_decode($data);
+            if (isset($decoded_data->audits)) {
+                foreach ($decoded_data->audits as $audit) {
+                    if (isset($audit->id) && $audit->id === 'server-response-time') {
+                        return isset($audit->displayValue) ? trim(str_replace("Root document took","", $audit->displayValue)) : 0;
+                    }
+                }
+            }
+            return 0;
+        };
 
         return (object)[
             'first_entry' => $first_entry ? json_decode($first_entry->data)->performance : 0,
-            'last_entry' => $last_entry ? json_decode($last_entry->data)->performance : 0
+            'last_entry' => $last_entry ? json_decode($last_entry->data)->performance : 0,
+            'first_response_time' => $first_entry ? $get_response_time($first_entry->data) : 0,
+            'last_response_time' => $last_entry ? $get_response_time($last_entry->data) : 0
         ];
     }
+
 
 }
