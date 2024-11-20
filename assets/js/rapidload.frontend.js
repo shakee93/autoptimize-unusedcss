@@ -21,7 +21,7 @@
                 })
 
                 if (!original) {
-                    return;
+                    continue;
                 }
 
                 let link = file.cloneNode()
