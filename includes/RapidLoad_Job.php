@@ -569,7 +569,7 @@ class RapidLoad_Job{
             if (isset($decoded_data->audits)) {
                 foreach ($decoded_data->audits as $audit) {
                     if (isset($audit->id) && $audit->id === 'server-response-time') {
-                        return isset($audit->displayValue) ? trim(str_replace("Root document took","", $audit->displayValue)) : 0;
+                        return isset($audit->displayValue) ? trim(str_replace("Root document took","", $audit->displayValue)) : "0 ms";
                     }
                 }
             }
