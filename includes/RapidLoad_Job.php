@@ -562,7 +562,7 @@ class RapidLoad_Job{
                                  ORDER BY id DESC LIMIT 1", OBJECT);
 
         $first_entry = isset($first_data[0]) ? $first_data[0] : false;
-        $last_entry = $last_data[0] && $first_data[0]->id != $last_data[0]->id ? $last_data[0] : false;
+        $last_entry = isset($last_data[0]) && $first_entry && $first_data[0]->id != $last_data[0]->id ? $last_data[0] : false;
 
         $get_response_time = function ($data) {
             $decoded_data = json_decode($data);

@@ -37,7 +37,7 @@ class RapidLoad_Queue
             self::$job_count = 1;
         }
 
-        add_action('uucss_cron_queue', [$this, 'cache'], 2 , 1);
+        //add_action('uucss_cron_queue', [$this, 'cache'], 2 , 1);
 
         add_filter( 'cron_schedules', [$this, 'uucss_process_queue_schedule'] );
 
