@@ -297,6 +297,9 @@ interface TestMode {
 interface HomePerformance{
     first_entry: number;
     last_entry: number;
+    first_response_time: string;
+    last_response_time: string;
+
 }
 
 interface License {

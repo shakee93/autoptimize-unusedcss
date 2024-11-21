@@ -52,7 +52,7 @@ const PerformanceWidget: React.FC = () => {
                             />
                         </div>
                         <div className="text-sm text-gray-600">
-                            Loading time: 1.8s
+                            Loading time: {homePerformance.first_response_time}
                         </div>
                     </div>
                     {/* Divider with BoltIcon */}
@@ -77,7 +77,7 @@ const PerformanceWidget: React.FC = () => {
                             />
                         </div>
                         <div className="text-sm text-gray-600">
-                            Loading time: 0.5s
+                            Loading time: {homePerformance.last_response_time}
                         </div>
                     </div>
 
