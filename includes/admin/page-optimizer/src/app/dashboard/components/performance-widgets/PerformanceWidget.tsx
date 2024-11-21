@@ -45,7 +45,6 @@ const PerformanceWidget: React.FC = () => {
                         <div className="text-lg font-semibold">Before Results</div>
                         <div className="">
                             <PerformanceProgressBar
-                                loading={homePerformance.first_entry < 1}
                                 className={cn('max-h-[140px]')}
                                 background={false}
                                 stroke={6}
@@ -70,7 +69,6 @@ const PerformanceWidget: React.FC = () => {
                         <div className="text-lg font-semibold">Optimized Score</div>
                         <div className="">
                             <PerformanceProgressBar
-                                loading={homePerformance.last_entry < 1}
                                 className={cn('max-h-[140px]')}
                                 scoreClassName={"text-brand-950"}
                                 background={false}
