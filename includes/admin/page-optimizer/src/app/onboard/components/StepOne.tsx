@@ -15,6 +15,7 @@ import {optimizerData} from "../../../store/app/appSelector";
 import PerformanceProgressBar from "components/performance-progress-bar";
 import usePerformanceColors from "hooks/usePerformanceColors";
 import {AIButtonIcon} from "app/onboard/components/icons/icon-svg";
+import {Skeleton} from "components/ui/skeleton";
 
 interface StepOneProps {
     onNext: () => void;
@@ -23,7 +24,7 @@ interface StepOneProps {
 const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
     const { options } = useAppContext()
     const { dispatch} = useCommonDispatch()
-    const { activeReport } = useSelector(optimizerData);
+    const { activeReport, data } = useSelector(optimizerData);
     const performanceScore = 40;
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(performanceScore);
 
@@ -52,42 +53,48 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                     </span>
                 </div>
                 <div className='bg-brand-100/30 border rounded-3xl p-2'>
-                    <div
-                        className="flex px-2 pt-2 justify-between ">
-                        <div data-tour='switch-report-strategy'
-                             className='select-none relative flex dark:bg-brand-800 py-0.5 bg-[#E8E8E8] rounded-xl cursor-pointer'>
-                            <div className={cn(
-                                'absolute shadow-md translate-x-0 left-0.5 w-[42px] rounded-[12px] -z-1 duration-300 h-9 text-sm flex flex-column gap-2 px-2.5 py-3 font-medium dark:bg-brand-950 bg-brand-0',
-                                activeReport === 'desktop' && 'w-[45px] -translate-x-1 left-1/2'
-                            )}>
-                            </div>
+                    {/*<div*/}
+                    {/*    className="flex px-2 pt-2 justify-between ">*/}
+                    {/*    <div data-tour='switch-report-strategy'*/}
+                    {/*         className='select-none relative flex dark:bg-brand-800 py-0.5 bg-[#E8E8E8] rounded-xl cursor-pointer'>*/}
+                    {/*        <div className={cn(*/}
+                    {/*            'absolute shadow-md translate-x-0 left-0.5 w-[42px] rounded-[12px] -z-1 duration-300 h-9 text-sm flex flex-column gap-2 px-2.5 py-3 font-medium dark:bg-brand-950 bg-brand-0',*/}
+                    {/*            activeReport === 'desktop' && 'w-[45px] -translate-x-1 left-1/2'*/}
+                    {/*        )}>*/}
+                    {/*        </div>*/}
 
-                            <TooltipText text="Mobile">
-                                <div onClick={() => dispatch(changeReport('mobile'))}
-                                     className={`relative z-1 text-sm flex flex-column gap-2 pl-[14px] px-4 py-2.5 font-medium rounded-lg`}>
-                                    <DevicePhoneMobileIcon className="w-4 font-medium dark:text-brand-500"/>
-                                </div>
-                            </TooltipText>
+                    {/*        <TooltipText text="Mobile">*/}
+                    {/*            <div onClick={() => dispatch(changeReport('mobile'))}*/}
+                    {/*                 className={`relative z-1 text-sm flex flex-column gap-2 pl-[14px] px-4 py-2.5 font-medium rounded-lg`}>*/}
+                    {/*                <DevicePhoneMobileIcon className="w-4 font-medium dark:text-brand-500"/>*/}
+                    {/*            </div>*/}
+                    {/*        </TooltipText>*/}
 
-                            <TooltipText text='Desktop'>
-                                <div onClick={() => dispatch(changeReport('desktop'))}
-                                     className={`relative z-1 text-sm flex flex-column gap-2 pl-2 px-4 py-1 font-medium rounded-lg`}>
-                                    <Monitor className="w-4 font-medium dark:text-brand-500 "/>
-                                </div>
-                            </TooltipText>
-                        </div>
+                    {/*        <TooltipText text='Desktop'>*/}
+                    {/*            <div onClick={() => dispatch(changeReport('desktop'))}*/}
+                    {/*                 className={`relative z-1 text-sm flex flex-column gap-2 pl-2 px-4 py-1 font-medium rounded-lg`}>*/}
+                    {/*                <Monitor className="w-4 font-medium dark:text-brand-500 "/>*/}
+                    {/*            </div>*/}
+                    {/*        </TooltipText>*/}
+                    {/*    </div>*/}
 
-                    </div>
+                    {/*</div>*/}
                     <div
                         className="flex items-center justify-center text-md gap-2 overflow-hidden relative">
                         <div className="flex justify-center px-4 py-2 max-w-xl mx-auto w-full relative">
                             {/* Before Results */}
                             <div className="flex flex-col items-center gap-4 px-6 rounded-2xl w-[230px]">
                                 <div className="">
-                                    <PerformanceProgressBar
-                                        className={cn('max-h-[170px]')}
-                                        performance={57}
-                                    />
+                                    {!data? (
+                                        <Skeleton className="w-44 h-44 rounded-full" />
+                                    ):(
+                                        <PerformanceProgressBar
+                                            className={cn('max-h-44')}
+                                            performance={data?.performance}
+                                            loading={!data}
+                                        />
+                                    )}
+
                                 </div>
                                 <div className="text-sm font-semibold border rounded-3xl p-2 py-1">Your Current Score
                                 </div>
@@ -97,11 +104,16 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                             <div className="flex flex-col items-center gap-4 px-6 rounded-2xl w-[230px]">
 
                                 <div className="">
-                                    <PerformanceProgressBar
-                                        className={cn('max-h-[170px]')}
-                                        scoreClassName={"text-brand-950"}
-                                        performance={performanceScore}
-                                    />
+                                    {!data? (
+                                        <Skeleton className="w-44 h-44 rounded-full" />
+                                    ):(
+                                        <PerformanceProgressBar
+                                            className={cn('max-h-44')}
+                                            scoreClassName={"text-brand-950"}
+                                            performance={performanceScore}
+                                        />
+                                    )}
+
                                 </div>
                                 <div
                                     className="items-center gap-1 text-sm font-semibold bg-purple-100 rounded-3xl p-2 py-1 flex">

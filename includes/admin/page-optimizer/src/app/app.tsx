@@ -122,8 +122,6 @@ const App = ({ popup, _showOptimizer = false }: {
             if(!isLicensed && uucssGlobal?.on_board_complete == '1'){
                 localStorage.removeItem('rapidLoadLicense');
                 setShowStepTwo(true);
-            }else if(uucssGlobal?.on_board_complete == ''){
-                window.location.hash = '#/onboard'
             }
         };
         updateLicenseAndStore();
@@ -131,6 +129,13 @@ const App = ({ popup, _showOptimizer = false }: {
     }, [dispatch]);
 
 
+    // useEffect(() => {
+    //     console.log(uucssGlobal?.on_board_complete)
+    //     if (uucssGlobal?.on_board_complete === undefined || uucssGlobal?.on_board_complete === "") {
+    //         setActiveRoute('/onboard');
+    //         window.location.hash = "#/onboard";
+    //     }
+    // }, [uucssGlobal]);
 
     useEffect(() => {
         if (license?.licensedDomain) {
@@ -215,9 +220,14 @@ const App = ({ popup, _showOptimizer = false }: {
 
     useEffect(() => {
         if (isAdminPage || isDev) {
-            window.location.hash = activeRoute;
+            if (uucssGlobal?.on_board_complete === undefined || uucssGlobal?.on_board_complete === "") {
+                window.location.hash = "#/onboard";
+            }else{
+                window.location.hash = activeRoute;
+            }
         }
     }, [activeRoute]);
+
 
     const optimizerTable = {
         title: "Optimize Pages",

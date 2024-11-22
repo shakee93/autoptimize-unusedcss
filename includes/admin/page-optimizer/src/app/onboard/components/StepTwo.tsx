@@ -16,6 +16,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {Loader} from "lucide-react";
 import ComparisonDialog from "app/dashboard/components/ComparisonDialog";
 import {CircularProgressbarWithChildren} from "react-circular-progressbar";
+import LettersPullUp from "components/ui/letterUpAnimation";
 
 // type PerformanceGear = 'starter' | 'accelerate' | 'turboMax';
 
@@ -70,12 +71,10 @@ interface StepTwoProps {
 }
 
 const StepTwo: React.FC<StepTwoProps> = ({ reconnect }) => {
-    const { options, uucssGlobal, savingData, invalidatingCache } = useAppContext();
+    const { options, uucssGlobal} = useAppContext();
     const { dispatch } = useCommonDispatch();
     const { activeGear, license } = useSelector(optimizerData);
-    const [activeLevel, setActiveLevel] = useState<PerformanceGear>(activeGear || 'turboMax');
-    const { submitSettings } = useSubmitSettings();
-    const { handleTestModeSwitchChange } = useTestModeUtils();
+    const [activeLevel, setActiveLevel] = useState<PerformanceGear>('turboMax');
     const [inputLicense, setInputLicense] = useState("");
     const [showInput, setShowInput] = useState(false);
     const [licenseMessage, setLicenseMessage] = useState("");
@@ -108,73 +107,52 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect }) => {
     },[inputLicense]);
 
     const settingsModeOnChange = (mode: PerformanceGear) => {
-        dispatch(changeGear(mode as BasePerformanceGear));
+        setActiveLevel(mode)
+        localStorage.setItem('rapidLoadGear', JSON.stringify(mode));
     };
 
-    useEffect(() => {
-
-        if(!activeGear){
-            settingsModeOnChange('turboMax')
-        }
-        const handleSave = async () => {
-            submitSettings(true);
-            await handleTestModeSwitchChange(activeGear === 'turboMax');
-        };
-
-        handleSave();
-    }, [activeGear]);
 
     const getIcon = useMemo(() => (level: PerformanceGear) => {
         const iconProps = {
-            cls: `w-16 h-16 mt-[16px] ${activeGear === level ? 'text-purple-600' : 'text-gray-400'}`
+            cls: `w-16 h-16 mt-[16px] ${activeLevel === level ? 'text-purple-600' : 'text-gray-400'}`
         };
         switch (level) {
             case 'starter': return <Starter {...iconProps} />;
             case 'accelerate': return <Accelerate {...iconProps} />;
             case 'turboMax': return <TurboMax {...iconProps} />;
         }
-    }, [activeGear]);
+    }, [activeLevel]);
 
     const renderBoosterLevel = useCallback((level: PerformanceGear) => {
-        const isActive = activeGear === level;
-        const isSaving = savingData || invalidatingCache;
-        const opacityClass = isSaving ? "opacity-50" : "opacity-100";
-
+        const isActive = activeLevel === level;
+        const isTurboMax = activeLevel === 'turboMax' && level === 'turboMax';
         return (
             <div
                 key={level}
                 className={cn(
-                    'relative hover:bg-brand-100/50 flex flex-col gap-3.5 font-normal w-[166px] h-[166px] rounded-3xl items-center justify-center',
+                    'relative hover:bg-brand-100/50 flex flex-col gap-3.5 font-normal w-[166px] h-[166px] cursor-pointer rounded-3xl items-center justify-center',
                     isActive ? 'text-brand-600 border-[3px] border-[#592d8d]' : 'border border-brand-200 dark:border-brand-700',
-                    activeGear === 'turboMax' && level === 'turboMax' && 'gap-1 pt-4',
-                    isSaving ? 'cursor-not-allowed opacity-90 pointer-events-none' : 'cursor-pointer'
+                    isTurboMax && 'gap-1 pt-4',
                 )}
                 onClick={() => settingsModeOnChange(level)}
             >
                 <div>
-                    {isActive && isSaving ? (
-                        <div className="w-14 h-14 border-4 mt-3 border-t-transparent border-purple-500 rounded-full animate-spin"></div>
-                    ) : (
-                        getIcon(level)
-                    )}
+                    {getIcon(level)}
                     {isActive && (
                         <div className={cn("absolute", level === "turboMax" ? "right-[7px] top-2 gap-1 text-[10px] items-center font-semibold bg-purple-100 rounded-3xl p-1 pl-2 flex" : "top-2.5 right-2.5")}>
                             {level === 'turboMax' && (<><AIButtonIcon />  AI Recommended </>)}
-                            <CheckCircleIcon className={`w-6 h-6 text-purple-800 ${opacityClass}`} />
+                            <CheckCircleIcon className={`w-6 h-6 text-purple-800 `} />
                         </div>
                     )}
                 </div>
                 <div className="items-center flex flex-col">
-                    {isActive && isSaving ? (
-                        <p className="font-semibold capitalize z-[110000] mt-2">Loading...</p>
-                    ) : (
-                        <span className="capitalize font-semibold">{level}</span>
-                    )}
-                    {level === 'turboMax' && (<span className="font-normal text-[10px] leading-none">Test Mode Recommended</span>)}
+                    <span className="capitalize font-semibold">{level}</span>
+                    {level === 'turboMax' && (
+                        <span className="font-normal text-[10px] leading-none">Test Mode Recommended</span>)}
                 </div>
             </div>
         );
-    }, [activeGear, getIcon, savingData, invalidatingCache]);
+    }, [activeLevel, getIcon]);
 
 
 
@@ -197,7 +175,8 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect }) => {
                                 {chunk.map((feature, index) => (
                                     <li key={index} className="flex items-center gap-2 truncate">
                                         <CustomCheckIcon className="h-3 w-3 text-brand-600" />
-                                        <span className="whitespace-nowrap">{feature}</span>
+                                        {/*<LettersPullUp text={feature} />*/}
+                                       <span className="whitespace-nowrap">{feature}</span>
                                     </li>
                                 ))}
                             </ul>
@@ -244,7 +223,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect }) => {
                             </div>
                         </div>
 
-                        <GearDisplay activeGear={activeGear as PerformanceGear}/>
+                        <GearDisplay activeGear={activeLevel as PerformanceGear}/>
                     </>
                 ) : (
                     <div className="flex flex-col gap-2 text-center">
