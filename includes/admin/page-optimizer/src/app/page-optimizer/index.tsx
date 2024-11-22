@@ -26,7 +26,7 @@ export interface AuditComponentRef {
 export default function PageOptimizer() {
     const { data, loading, error, testMode } = useSelector(optimizerData);
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(data?.performance);
-    const { dispatch, activeMetric } = useCommonDispatch()
+    const { dispatch, activeMetric, testModeStatus } = useCommonDispatch()
 
     const {
         options,
@@ -67,7 +67,7 @@ export default function PageOptimizer() {
             )}>
 
             <AnimatePresence>
-                {testMode &&
+                {testModeStatus &&
                     <m.div
                         initial={{ borderWidth: '0px' }}
                         animate={{ borderWidth: '5px' }}

@@ -37,7 +37,7 @@ const Header = ({ url }: { url: string }) => {
         testMode,
         reanalyze
     } = useSelector(optimizerData);
-    const { inProgress } = useCommonDispatch()
+    const { inProgress, testModeStatus } = useCommonDispatch()
     const {
         dispatch: commonDispatch
     } = useCommonDispatch()
@@ -161,7 +161,7 @@ const Header = ({ url }: { url: string }) => {
                 </div>
             </header>
             <AnimatePresence>
-                {testMode && (
+                {testModeStatus && (
                     <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
