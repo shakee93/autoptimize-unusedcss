@@ -97,6 +97,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
             // setTimeout(() => {
             //     window.location.hash = '#/';
             // }, 300);
+            onNext();
         }else{
             setLicenseMessage(response?.error?? '');
         }
