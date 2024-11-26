@@ -14,12 +14,14 @@ import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
 
 const PerformanceWidget: React.FC = () => {
-    const performanceScore = 40;
+
+    const { homePerformance } = useSelector(optimizerData);
+    const performanceScore = homePerformance.last_entry;
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(performanceScore);
     const lighterColor = tinycolor(progressbarBg).lighten(10).toString();
     const { dispatch} = useCommonDispatch()
     const { options } = useAppContext();
-    const { homePerformance } = useSelector(optimizerData);
+
 
     useEffect(() => {
         dispatch(getHomePagePerformance(options));

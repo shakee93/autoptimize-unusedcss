@@ -68,11 +68,12 @@ const GEAR_FEATURES: Record<PerformanceGear, string[]> = {
 
 interface StepTwoProps {
     reconnect?: boolean;
+    onNext?: () => void;
 }
 
-const StepTwo: React.FC<StepTwoProps> = ({ reconnect }) => {
+const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
     const { options, uucssGlobal} = useAppContext();
-    const { dispatch } = useCommonDispatch();
+    const { dispatch, settingsMode } = useCommonDispatch();
     const { activeGear, license } = useSelector(optimizerData);
     const [activeLevel, setActiveLevel] = useState<PerformanceGear>('turboMax');
     const [inputLicense, setInputLicense] = useState("");
@@ -91,11 +92,11 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect }) => {
         setLoading(false);
         if (response.success) {
             dispatch(updateLicense(options));
-            setIsFadingOut(true);
-
-            setTimeout(() => {
-                window.location.hash = '#/';
-            }, 300);
+            // setIsFadingOut(true);
+            //
+            // setTimeout(() => {
+            //     window.location.hash = '#/';
+            // }, 300);
         }else{
             setLicenseMessage(response?.error?? '');
         }
@@ -106,9 +107,16 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect }) => {
         setLicenseMessage("");
     },[inputLicense]);
 
+    useEffect(() => {
+        console.log('Mode : ',activeGear)
+    },[activeGear]);
+
     const settingsModeOnChange = (mode: PerformanceGear) => {
         setActiveLevel(mode)
         localStorage.setItem('rapidLoadGear', JSON.stringify(mode));
+        dispatch(changeGear(
+            mode as BasePerformanceGear
+        ))
     };
 
 
@@ -235,7 +243,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect }) => {
                 )}
 
 
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 items-center">
                     <h6 className="text-base font-semibold capitalize text-center">Connect Your Account to
                         Optimize </h6>
 
@@ -326,6 +334,13 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect }) => {
                             >Compare Performance Gears
                             </button>
                             <ComparisonDialog open={open} setOpen={setOpen}/>
+                            <button
+                                className="flex bg-gradient-to-r from-brand-900/90 to-brand-950 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2 w-fit"
+                                onClick={onNext}
+                            >
+                                Next Step
+                                <ArrowLongRightIcon className="w-6 h-6"/>
+                            </button>
                         </>
 
                     }

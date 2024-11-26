@@ -104,10 +104,14 @@ const App = ({ popup, _showOptimizer = false }: {
 
     useEffect(() => {
         // load initial data
+        dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, false));
+
+        if(activeRoute === '/onboard'){
+            return;
+        }
         const optimizeUrl = getOptimizeUrl();
         dispatch(setCommonState('headerUrl', optimizeUrl));
         dispatch(fetchSettings(options, headerUrl ? headerUrl : options.optimizer_url, false));
-        dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, false));
         dispatch(setCommonState('testModeStatus', initialTestMode));
         dispatch(fetchPosts(options));
     }, [dispatch, activeReport]);
@@ -115,6 +119,10 @@ const App = ({ popup, _showOptimizer = false }: {
     const [showStepTwo, setShowStepTwo] = useState(false);
 
     useEffect(() => {
+        if(activeRoute === '/onboard'){
+            return;
+        }
+
         const updateLicenseAndStore = async () => {
            const response = await dispatch(updateLicense(options));
             const isLicensed = response.data?.licensedDomain;
@@ -128,14 +136,6 @@ const App = ({ popup, _showOptimizer = false }: {
 
     }, [dispatch]);
 
-
-    // useEffect(() => {
-    //     console.log(uucssGlobal?.on_board_complete)
-    //     if (uucssGlobal?.on_board_complete === undefined || uucssGlobal?.on_board_complete === "") {
-    //         setActiveRoute('/onboard');
-    //         window.location.hash = "#/onboard";
-    //     }
-    // }, [uucssGlobal]);
 
     useEffect(() => {
         if (license?.licensedDomain) {
@@ -222,6 +222,7 @@ const App = ({ popup, _showOptimizer = false }: {
         if (isAdminPage || isDev) {
             if (uucssGlobal?.on_board_complete === undefined || uucssGlobal?.on_board_complete === "") {
                 window.location.hash = "#/onboard";
+                setActiveRoute("/onboard");
             }else{
                 window.location.hash = activeRoute;
             }

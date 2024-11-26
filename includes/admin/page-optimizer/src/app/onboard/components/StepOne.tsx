@@ -134,6 +134,7 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                     Let’s improve this score
                     <ArrowLongRightIcon className="w-6 h-6"/>
                 </button>
+
             </div>
         </div>
     );
