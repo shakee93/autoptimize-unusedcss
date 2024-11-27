@@ -111,15 +111,13 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
     },[inputLicense]);
 
     useEffect(() => {
-        console.log('Mode : ',activeGear)
-    },[activeGear]);
+        dispatch(changeGear(
+            activeLevel as BasePerformanceGear
+        ))
+    },[activeLevel]);
 
     const settingsModeOnChange = (mode: PerformanceGear) => {
         setActiveLevel(mode)
-        localStorage.setItem('rapidLoadGear', JSON.stringify(mode));
-        dispatch(changeGear(
-            mode as BasePerformanceGear
-        ))
     };
 
 
@@ -334,13 +332,6 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
                             >Compare Performance Gears
                             </button>
                             <ComparisonDialog open={open} setOpen={setOpen}/>
-                            <button
-                                className="flex bg-gradient-to-r from-brand-900/90 to-brand-950 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2 w-fit"
-                                onClick={onNext}
-                            >
-                                Next Step
-                                <ArrowLongRightIcon className="w-6 h-6"/>
-                            </button>
                         </>
 
                     }
