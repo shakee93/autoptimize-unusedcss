@@ -5,7 +5,7 @@ import {BoltIcon, InformationCircleIcon} from "@heroicons/react/24/solid";
 import TooltipText from "components/ui/tooltip-text";
 import {changeReport, fetchReport} from "../../../store/app/appActions";
 import {ArrowTopRightOnSquareIcon, DevicePhoneMobileIcon, ArrowLongRightIcon} from "@heroicons/react/24/outline";
-import {Monitor, RefreshCw} from "lucide-react";
+import {Loader, Monitor, RefreshCw} from "lucide-react";
 import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
 import {setCommonState} from "../../../store/common/commonActions";
 import AppButton from "components/ui/app-button";
@@ -25,6 +25,7 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
     const { options } = useAppContext()
     const { dispatch} = useCommonDispatch()
     const { activeReport, data } = useSelector(optimizerData);
+    const [predictedLoading, setPredictedLoading]= useState(true)
     const performanceScore = 40;
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(performanceScore);
 
@@ -85,15 +86,11 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                             {/* Before Results */}
                             <div className="flex flex-col items-center gap-4 px-6 rounded-2xl w-[230px]">
                                 <div className="">
-                                    {!data? (
-                                        <Skeleton className="w-44 h-44 rounded-full" />
-                                    ):(
-                                        <PerformanceProgressBar
-                                            className={cn('max-h-44')}
-                                            performance={data?.performance}
-                                            loading={!data}
-                                        />
-                                    )}
+                                    <PerformanceProgressBar
+                                        className={cn('max-h-44')}
+                                        performance={data? data?.performance: 80}
+                                        loading={!data}
+                                    />
 
                                 </div>
                                 <div className="text-sm font-semibold border rounded-3xl p-2 py-1">Your Current Score
@@ -104,8 +101,20 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                             <div className="flex flex-col items-center gap-4 px-6 rounded-2xl w-[230px]">
 
                                 <div className="">
-                                    {!data? (
-                                        <Skeleton className="w-44 h-44 rounded-full" />
+                                    {predictedLoading? (
+                                            // <Skeleton className="w-44 h-44 rounded-full"/>
+
+                                        <div
+                                            className="bg-gradient-to-br from-purple-100  to-purple-100/30 relative flex items-center justify-center w-44 h-44  rounded-full"
+                                        >
+                                            <div className="flex flex-col items-center justify-center text-center text-brand-950">
+                                                <AIButtonIcon className='w-10 h-10 animate-pulse'/>
+                                                <p className="text-lg">AI Analyzing</p>
+                                                <p className="text-lg">your site...</p>
+                                            </div>
+                                        </div>
+
+
                                     ):(
                                         <PerformanceProgressBar
                                             className={cn('max-h-44')}
@@ -117,7 +126,13 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                                 </div>
                                 <div
                                     className="items-center gap-1 text-sm font-semibold bg-purple-100 rounded-3xl p-2 py-1 flex">
-                                    <AIButtonIcon/> AI Predicted Score
+                                    {predictedLoading ?
+                                        (
+                                            <><Loader className='w-4 animate-spin'/> Hold on tight</>
+                                      ):(
+                                          <><AIButtonIcon/> AI Predicted Score</>
+                                        )
+                                    }
                                 </div>
                             </div>
 
@@ -128,7 +143,8 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                 </div>
 
                 <button
-                    className="flex items-center bg-gradient-to-r from-brand-900/90 to-brand-950 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2 "
+                    className={cn('flex items-center bg-gradient-to-r from-brand-900/90 to-brand-950 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2 hover:bg-gradient-to-br hover:from-[rgba(94,92,92,0.55)]  hover:to-brand-900/90 bg-brand-900/90',
+                        predictedLoading && 'pointer-events-none cursor-default opacity-30')}
                     onClick={onNext}
                 >
                     Let’s improve this score

@@ -1,5 +1,5 @@
 import React, {useMemo, useCallback, useState, useEffect} from 'react';
-import { cn } from "lib/utils";
+import { cn, isDev } from "lib/utils";
 import { useAppContext } from "../../../context/app";
 import { CheckCircleIcon, InformationCircleIcon, ArrowLongRightIcon, ChevronLeftIcon } from "@heroicons/react/24/solid";
 import {changeGear, updateLicense} from "../../../store/app/appActions";
@@ -334,6 +334,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
                             >Compare Performance Gears
                             </button>
                             <ComparisonDialog open={open} setOpen={setOpen}/>
+                            {isDev && <button onClick={onNext}>Next</button>}
                         </>
 
                     }

@@ -22,7 +22,12 @@ const usePerformanceColors = (performance?: number) => {
             setProgressbarColor('#09B42F');
             setProgressbarBg(`rgb(9, 180, 4, ${bgOpacity})`);
             setPerformanceIcon('pass')
+        }else if (_performance < 110) {
+            setProgressbarColor('#c1c1c1');
+            setProgressbarBg(`rgb(9, 180, 4, ${bgOpacity})`);
+            setPerformanceIcon('pass')
         }
+
 
         return [performanceIcon, progressbarColor, progressbarBg]
     }, [performance]);

@@ -3,16 +3,12 @@ import { cn } from "lib/utils";
 import { useAppContext } from "../../../context/app";
 import Lottie from 'lottie-react';
 import rocketAnimation from 'components/animation/rocket.json';
-import {CheckCircleIcon, InformationCircleIcon, ArrowLongRightIcon, BoltIcon} from "@heroicons/react/24/solid";
-import saveChanges from "app/page-optimizer/components/footer/save-changes";
 import useSubmitSettings from "hooks/useSubmitSettings";
 import {getHomePagePerformance} from "../../../store/app/appActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
-import {Circle, Loader} from "lucide-react";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
-import PerformanceProgressBar from "components/performance-progress-bar";
-import usePerformanceColors from "hooks/usePerformanceColors";
+
 
 const steps = [
     {
@@ -74,15 +70,33 @@ const StepThree: React.FC<StepThreeProps> = ({ onNext }) => {
         }, 2000); // seconds for each detail
 
         // Change steps seconds, but loop only after Step 3
+        // const stepInterval = setInterval(() => {
+        //     setCurrentStep((prevStep) => {
+        //         if (prevStep === 2) {
+        //             setIsCompleted(true); // Mark as completed after the last step
+        //             return prevStep; // Keep Step 3
+        //         }
+        //         return (prevStep + 1) % steps.length;
+        //     });
+        //     setCurrentDetail(0);
+        // }, 10000);
+
         const stepInterval = setInterval(() => {
-            setCurrentStep((prevStep) => {
-                if (prevStep === 2) {
-                    setIsCompleted(true); // Mark as completed after the last step
-                    return prevStep; // Keep Step 3
-                }
-                return (prevStep + 1) % steps.length;
-            });
-            setCurrentDetail(0);
+            if (savingData || invalidatingCache) {
+                setCurrentStep(1);
+                setCurrentDetail(0);
+                setIsCompleted(true);  // Mark as completed
+                clearInterval(stepInterval);  // Stop the step interval
+            } else {
+                setCurrentStep((prevStep) => {
+                    if (prevStep === 2) {
+                        setIsCompleted(true); // Mark as completed after the last step
+                        return prevStep; // Keep Step 3
+                    }
+                    return (prevStep + 1) % steps.length;
+                });
+                setCurrentDetail(0);
+            }
         }, 10000);
 
         return () => {
@@ -101,7 +115,6 @@ const StepThree: React.FC<StepThreeProps> = ({ onNext }) => {
             dispatch(getHomePagePerformance(options));
         }
     }, [isCompleted, onNext]);
-
 
     return (
         <div className='w-full flex flex-col gap-4'>
