@@ -775,7 +775,7 @@ class RapidLoad_Optimizer
             'uucss_ignore_inlined_styles' => array(
                 'control_type' => 'checkbox',
                 'control_label' => 'Include inline styles',
-                'control_description' => 'Include inline styles',
+                'control_description' => 'Essential inline CSS for optimizing above-the-fold content',
                 'control_values' => array('1', '0'),
                 'default' => '0',
                 'global' => true,
