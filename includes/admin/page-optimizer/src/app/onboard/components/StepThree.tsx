@@ -71,9 +71,9 @@ const StepThree: React.FC<StepThreeProps> = ({ onNext }) => {
             setCurrentDetail((prevDetail) =>
                 (prevDetail + 1) % steps[currentStep].details.length
             );
-        }, 2000); // 4 seconds for each detail
+        }, 2000); // seconds for each detail
 
-        // Change steps after 40 seconds, but loop only after Step 3
+        // Change steps seconds, but loop only after Step 3
         const stepInterval = setInterval(() => {
             setCurrentStep((prevStep) => {
                 if (prevStep === 2) {

@@ -105,8 +105,8 @@ const App = ({ popup, _showOptimizer = false }: {
     useEffect(() => {
         // load initial data
         dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, false));
-
-        if(activeRoute === '/onboard'){
+        //console.log(activeRoute)
+        if(!uucssGlobal?.on_board_complete){
             return;
         }
         const optimizeUrl = getOptimizeUrl();
@@ -119,7 +119,7 @@ const App = ({ popup, _showOptimizer = false }: {
     const [showStepTwo, setShowStepTwo] = useState(false);
 
     useEffect(() => {
-        if(activeRoute === '/onboard'){
+        if(!uucssGlobal?.on_board_complete){
             return;
         }
 
@@ -238,7 +238,7 @@ const App = ({ popup, _showOptimizer = false }: {
             return;
         }
 
-        if (!uucssGlobal?.on_board_complete) {
+        if (!uucssGlobal?.on_board_complete && !isDev) {
             window.location.hash = "#/onboard";
             setActiveRoute("/onboard");
             return;

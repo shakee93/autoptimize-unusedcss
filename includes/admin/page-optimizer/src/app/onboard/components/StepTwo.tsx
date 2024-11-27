@@ -1,7 +1,7 @@
 import React, {useMemo, useCallback, useState, useEffect} from 'react';
 import { cn } from "lib/utils";
 import { useAppContext } from "../../../context/app";
-import { CheckCircleIcon, InformationCircleIcon, ArrowLongRightIcon } from "@heroicons/react/24/solid";
+import { CheckCircleIcon, InformationCircleIcon, ArrowLongRightIcon, ChevronLeftIcon } from "@heroicons/react/24/solid";
 import {changeGear, updateLicense} from "../../../store/app/appActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import { useSelector } from "react-redux";
@@ -253,10 +253,22 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
                                 animate={{opacity: 1, y: 0}}
                                 exit={{opacity: 0, y: -20}}
                                 transition={{duration: 0.2}}
-                                className="flex flex-col border rounded-2xl w-[500px]"
+                                className="flex flex-col w-[500px] gap-4"
                             >
+                                <div className='border-2 rounded-2xl px-2 py-1'>
+                                    <Input
+                                        id="licenseKey"
+                                        type="text"
+                                        placeholder={'Enter you license key'}
+                                        className="text-sm flex-grow border-none focus:outline-none focus-visible:ring-0 dark:text-brand-300 focus-visible:ring-offset-0"
+                                        value={inputLicense}
+                                        onChange={LicenseInputChange}
+                                    />
+                                </div>
+
+
                                 <div
-                                    className="flex justify-between items-center bg-brand-100/60 px-4 py-2 rounded-t-2xl">
+                                    className="flex justify-between items-center pl-1">
                                     {licenseMessage.length > 0 ? (
                                         <h3 className="text-sm font-medium text-amber-700">{licenseMessage}</h3>
                                     ) : loading ?
@@ -267,35 +279,25 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
                                             </div>
                                         )
                                         : (
-                                            <h3 className="text-sm font-medium">Connect with License key</h3>
+                                            <h3 className="text-sm font-medium"></h3>
                                         )}
-
-                                    <button
-                                        className="items-center text-amber-700 font-medium text-sm py-2 px-4 rounded-lg"
-                                        onClick={() => setShowInput(false)}
-                                    >
-                                        Cancel
-                                    </button>
-                                </div>
-
-                                <div className="flex gap-4 bg-brand-0 px-4 py-2 rounded-b-2xl">
-                                    <Input
-                                        id="licenseKey"
-                                        type="text"
-                                        placeholder={'Enter you license key'}
-                                        className="text-sm flex-grow border-none focus:outline-none focus-visible:ring-0 dark:text-brand-300 focus-visible:ring-offset-0"
-                                        value={inputLicense}
-                                        onChange={LicenseInputChange}
-                                    />
-                                    {inputLicense.length > 0 &&
+                                    <div className='flex gap-2 '>
                                         <button
-                                            className="items-center text-sm text-brand-950 font-medium py-2 px-4 rounded-lg"
+                                            className="flex items-center bg-brand-200 text-brand-950 hover:shadow-[inset_0_0_0_2px_rgba(0,0,0,1)] font-medium py-2 px-4 rounded-lg hover:bg-transparent transition-all gap-1"
+                                            onClick={() => setShowInput(false)}
+                                        >
+                                            <ChevronLeftIcon className="h-4 w-4 text-brand-60"/> Back
+                                        </button>
+                                        <button
+                                            className="items-center hover:bg-gradient-to-br hover:from-[rgba(94,92,92,0.55)]  hover:to-brand-900/90 bg-brand-900/90  text-white font-medium py-2 px-4 rounded-lg transition-all gap-2"
                                             onClick={connectRapidloadLicense}
                                         >
                                             Connect
                                         </button>
-                                    }
+                                    </div>
+
                                 </div>
+
                             </motion.div>
                         ) : (
                             <motion.div
@@ -307,7 +309,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
                                 className="flex gap-4 items-center"
                             >
                                 <button
-                                    className="items-center bg-brand-300 text-brand-950 hover:bg-brand-900/90 hover:text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2"
+                                    className="items-center bg-brand-200 text-brand-950 hover:shadow-[inset_0_0_0_2px_rgba(0,0,0,1)] font-medium py-2 px-4 rounded-lg hover:bg-transparent transition-all gap-2"
                                     onClick={() => {
                                         setShowInput(true)
                                     }}
@@ -315,19 +317,19 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
                                     Connect with License key
                                 </button>
                                 <span className="font-semibold">or</span>
-                            <button
-                                className="items-center bg-brand-900/90 text-white font-medium py-2 px-4 rounded-lg hover:bg-brand-300 hover:text-brand-950 transition-all gap-2"
-                                onClick={() => window.location.href = uucssGlobal?.activation_url}
-                            >
-                                Connect Account
-                            </button>
-                        </motion.div>
-                    )}
+                                <button
+                                    className="items-center hover:bg-gradient-to-br hover:from-[rgba(94,92,92,0.55)]  hover:to-brand-900/90 bg-brand-900/90  text-white font-medium py-2 px-4 rounded-lg transition-all gap-2"
+                                    onClick={() => window.location.href = uucssGlobal?.activation_url}
+                                >
+                                    Connect Account
+                                </button>
+                            </motion.div>
+                        )}
                     </AnimatePresence>
 
                     {!reconnect &&
                         <>
-                            <button className="text-base font-semibold capitalize text-center"
+                            <button className="text-base font-semibold capitalize text-center underline"
                                     onClick={() => setOpen(true)}
                             >Compare Performance Gears
                             </button>
