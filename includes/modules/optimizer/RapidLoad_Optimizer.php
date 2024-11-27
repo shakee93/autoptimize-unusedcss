@@ -925,6 +925,14 @@ class RapidLoad_Optimizer
                 'default' => '0',
                 'global' => true,
             ),
+            'uucss_ignore_inlined_styles' => array(
+                'control_type' => 'checkbox',
+                'control_label' => 'Include inline styles',
+                'control_description' => 'Include inline styles',
+                'control_values' => array('1', '0'),
+                'default' => '0',
+                'global' => true,
+            ),
             'uucss_preload_font_urls' => array(
                 'control_type' => 'textarea',
                 'control_label' => 'Preload Fonts',
@@ -1437,7 +1445,7 @@ class RapidLoad_Optimizer
             ['keys' => ['unsized-images'], 'name' => 'Minify CSS', 'description' => 'Remove unnecessary spaces, lines and comments from CSS files.', 'category' => 'css', 'inputs' => ['uucss_minify', 'uucss_minify_excluded_files']],
             ['keys' => ['unminified-javascript'], 'name' => 'Minify Javascript', 'description' => 'Remove unnecessary spaces, lines and comments from JS files.', 'category' => 'javascript', 'inputs' => ['minify_js', 'uucss_exclude_files_from_minify_js']],
             ['keys' => ['unused-css-rules'], 'name' => 'Remove Unused CSS', 'description' => 'Remove unused CSS for each page and reduce page size.', 'category' => 'css', 'inputs' => ['uucss_enable_uucss', 'uucss_excluded_files','uucss_safelist','uucss_misc_options','rapidload_purge_all']],
-            ['keys' => ['render-blocking-resources'], 'name' => 'Critical CSS', 'description' => 'Extract and prioritize above-the-fold CSS.', 'category' => 'css', 'inputs' => ['uucss_enable_cpcss', 'uucss_enable_cpcss_mobile', 'uucss_additional_css', 'remove_cpcss_on_user_interaction', 'rapidload_enable_cpcss_file_chunk', 'rapidload_cpcss_file_character_length', 'enable_uucss_on_cpcss', 'uucss_preload_font_urls', 'cpcss_purge_url']],
+            ['keys' => ['render-blocking-resources'], 'name' => 'Critical CSS', 'description' => 'Extract and prioritize above-the-fold CSS.', 'category' => 'css', 'inputs' => ['uucss_enable_cpcss', 'uucss_enable_cpcss_mobile', 'uucss_additional_css', 'remove_cpcss_on_user_interaction', 'uucss_ignore_inlined_styles', 'rapidload_enable_cpcss_file_chunk', 'rapidload_cpcss_file_character_length', 'enable_uucss_on_cpcss', 'uucss_preload_font_urls', 'cpcss_purge_url']],
             ['keys' => ['render-blocking-resources'], 'name' => 'Defer Javascript', 'description' => 'Render-blocking JS on website can be resolved with defer JavaScript.', 'category' => 'javascript', 'inputs' => ['uucss_load_js_method', 'uucss_excluded_js_files_from_defer']],
             ['keys' => ['offscreen-images'], 'name' => 'Lazy Load Images', 'description' => 'Delay loading of images until needed.', 'category' => 'image', 'inputs' => ['uucss_lazy_load_images', 'uucss_exclude_images_from_lazy_load']],
             ['keys' => ['lcp-lazy-loaded'], 'name' => 'Exclude Above-the-fold Images from Lazy Load', 'description' => 'Improve your LCP images.', 'category' => 'image', 'inputs' => ['uucss_exclude_above_the_fold_images', 'uucss_exclude_above_the_fold_image_count']],
