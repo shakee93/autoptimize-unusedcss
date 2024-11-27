@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { cn } from "lib/utils";
 import { useAppContext } from "../../../context/app";
 import {ArrowLongRightIcon } from "@heroicons/react/24/solid";
@@ -8,6 +8,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {Circle, Loader} from "lucide-react";
 import PerformanceProgressBar from "components/performance-progress-bar";
 import usePerformanceColors from "hooks/usePerformanceColors";
+import useCommonDispatch from "hooks/useCommonDispatch";
+import {setCommonRootState, setCommonState} from "../../../store/common/commonActions";
 
 const StepFour= () => {
     const { options} = useAppContext()
@@ -15,6 +17,7 @@ const StepFour= () => {
     const beforeColor = usePerformanceColors(homePerformance.first_entry);
     const afterColor = usePerformanceColors(homePerformance.last_entry);
     const [isFadingOut, setIsFadingOut] = useState(false);
+    const { dispatch} = useCommonDispatch()
 
     const gotoDashbaord = () => {
         setIsFadingOut(true);
@@ -23,6 +26,10 @@ const StepFour= () => {
             window.location.hash = '#/';
         }, 300);
     }
+    useEffect(() => {
+        dispatch(setCommonRootState('onboardCompleted', true));
+    },[dispatch]);
+
 
     return (
         <motion.div

@@ -4,6 +4,7 @@ const initialState: CommonState = {
     optimizerRoot: null,
     mode: "normal",
     isTourOpen: false,
+    onboardCompleted: false,
     mobile: {
         activeTab: 'configurations',
         openAudits: [],

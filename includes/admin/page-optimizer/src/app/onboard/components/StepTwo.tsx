@@ -80,7 +80,6 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
     const [showInput, setShowInput] = useState(false);
     const [licenseMessage, setLicenseMessage] = useState("");
     const [loading, setLoading] = useState(false);
-    const [isFadingOut, setIsFadingOut] = useState(false);
     const [open, setOpen] = useState(false);
     const LicenseInputChange: InputChangeHandler =
         (event) => {
@@ -207,10 +206,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
 
 
     return (
-        <motion.div
-            initial={{ opacity: 1 }}
-            animate={{ opacity: isFadingOut ? 0 : 1 }}
-            transition={{ duration: 0.3 }}
+        <div
             className="w-full flex flex-col gap-4">
             <div className="bg-brand-0 flex flex-col gap-8 p-16 items-center rounded-3xl">
                 <div className="px-2">
@@ -351,7 +347,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
 
                 </div>
             </div>
-        </motion.div>
+        </div>
     )
         ;
 };

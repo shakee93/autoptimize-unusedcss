@@ -3,6 +3,7 @@ export type CommonState = {
     mode: RapidLoadOptimizerModes,
     modeData?: RapidLoadOptimizerModeData
     isTourOpen: boolean
+    onboardCompleted: boolean
 
     mobile : {
         activeTab: AuditTypes;

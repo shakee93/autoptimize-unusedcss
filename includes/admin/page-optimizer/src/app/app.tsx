@@ -65,7 +65,7 @@ const App = ({ popup, _showOptimizer = false }: {
         optimizerTable: false,
         optimizePages: false
     });
-    const { headerUrl } = useCommonDispatch();
+    const { headerUrl, onboardCompleted } = useCommonDispatch();
     const { changeTheme } = useRootContext()
     const { testMode, license } = useSelector(optimizerData);
 
@@ -220,14 +220,16 @@ const App = ({ popup, _showOptimizer = false }: {
 
     useEffect(() => {
         if (isAdminPage || isDev) {
-            if (uucssGlobal?.on_board_complete === undefined || uucssGlobal?.on_board_complete === "") {
+            if (onboardCompleted) {
+                window.location.hash = activeRoute;
+            } else if (uucssGlobal?.on_board_complete === undefined || uucssGlobal?.on_board_complete === "") {
                 window.location.hash = "#/onboard";
                 setActiveRoute("/onboard");
-            }else{
+            } else {
                 window.location.hash = activeRoute;
             }
         }
-    }, [activeRoute]);
+    }, [activeRoute, onboardCompleted]);
 
 
     const optimizerTable = {
