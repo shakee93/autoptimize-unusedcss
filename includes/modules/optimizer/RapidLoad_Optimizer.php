@@ -1518,6 +1518,11 @@ class RapidLoad_Optimizer
             RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
         }
 
+        if(isset(self::$options['uucss_ignore_inlined_styles'])){
+            self::$global_options['uucss_ignore_inlined_styles'] = self::$options['uucss_ignore_inlined_styles'];
+            RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
+        }
+
         self::post_optimizer_function($result);
 
     }
