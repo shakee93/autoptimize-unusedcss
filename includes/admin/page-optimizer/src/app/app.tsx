@@ -218,17 +218,32 @@ const App = ({ popup, _showOptimizer = false }: {
         };
     }, [routes]);
 
+    // useEffect(() => {
+    //     if (isAdminPage || isDev) {
+    //         if (onboardCompleted) {
+    //             window.location.hash = activeRoute;
+    //         } else if (uucssGlobal?.on_board_complete === undefined || uucssGlobal?.on_board_complete === "") {
+    //             window.location.hash = "#/onboard";
+    //             setActiveRoute("/onboard");
+    //         } else {
+    //             window.location.hash = activeRoute;
+    //         }
+    //     }
+    // }, [activeRoute, onboardCompleted]);
     useEffect(() => {
-        if (isAdminPage || isDev) {
-            if (onboardCompleted) {
-                window.location.hash = activeRoute;
-            } else if (uucssGlobal?.on_board_complete === undefined || uucssGlobal?.on_board_complete === "") {
-                window.location.hash = "#/onboard";
-                setActiveRoute("/onboard");
-            } else {
-                window.location.hash = activeRoute;
-            }
+        if (!(isAdminPage || isDev)) return;
+
+        if (onboardCompleted) {
+            window.location.hash = activeRoute;
+            return;
         }
+
+        if (!uucssGlobal?.on_board_complete) {
+            window.location.hash = "#/onboard";
+            setActiveRoute("/onboard");
+            return;
+        }
+        window.location.hash = activeRoute;
     }, [activeRoute, onboardCompleted]);
 
 
