@@ -967,7 +967,7 @@ class RapidLoad_Cache_Store
         $new_cache_file_dir  = dirname( $new_cache_file );
         $new_cache_file_name = basename( $new_cache_file );
 
-        if ( RapidLoad_Cache_Engine::$settings['minify_html'] ) {
+        if ( RapidLoad_Cache_Engine::$settings['minify_html'] && apply_filters('rapidload/page-cache/minify/enabled', true)) {
             $page_contents = self::minify_html( $page_contents );
         }
 
