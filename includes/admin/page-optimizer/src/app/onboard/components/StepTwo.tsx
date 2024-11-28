@@ -2,7 +2,7 @@ import React, {useMemo, useCallback, useState, useEffect} from 'react';
 import { cn, isDev } from "lib/utils";
 import { useAppContext } from "../../../context/app";
 import { CheckCircleIcon, InformationCircleIcon, ArrowLongRightIcon, ChevronLeftIcon } from "@heroicons/react/24/solid";
-import {changeGear, updateLicense} from "../../../store/app/appActions";
+import {changeGear, fetchSettings, updateLicense} from "../../../store/app/appActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import { useSelector } from "react-redux";
 import { optimizerData } from "../../../store/app/appSelector";
@@ -73,7 +73,7 @@ interface StepTwoProps {
 
 const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
     const { options, uucssGlobal} = useAppContext();
-    const { dispatch, settingsMode } = useCommonDispatch();
+    const { dispatch, headerUrl, settingsMode } = useCommonDispatch();
     const { activeGear, license } = useSelector(optimizerData);
     const [activeLevel, setActiveLevel] = useState<PerformanceGear>('turboMax');
     const [inputLicense, setInputLicense] = useState("");
@@ -96,9 +96,9 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
             // setTimeout(() => {
             //     window.location.hash = '#/';
             // }, 300);
-            if(onNext){
-                onNext();
-            }
+            // if(onNext){
+            //     onNext();
+            // }
 
         }else{
             setLicenseMessage(response?.error?? '');
@@ -111,6 +111,8 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
     },[inputLicense]);
 
     useEffect(() => {
+        dispatch(fetchSettings(options, headerUrl ? headerUrl : options.optimizer_url, false));
+
         dispatch(changeGear(
             activeLevel as BasePerformanceGear
         ))
@@ -119,6 +121,10 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
     const settingsModeOnChange = (mode: PerformanceGear) => {
         setActiveLevel(mode)
     };
+
+    useEffect(() => {
+       console.log("Active Gear: ",activeGear)
+    },[activeGear]);
 
 
     const getIcon = useMemo(() => (level: PerformanceGear) => {
@@ -334,6 +340,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
                             >Compare Performance Gears
                             </button>
                             <ComparisonDialog open={open} setOpen={setOpen}/>
+                            {/*<button onClick={onNext}>Next</button>*/}
                             {isDev && <button onClick={onNext}>Next</button>}
                         </>
 

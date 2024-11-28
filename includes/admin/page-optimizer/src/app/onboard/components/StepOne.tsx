@@ -25,7 +25,7 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
     const { options } = useAppContext()
     const { dispatch} = useCommonDispatch()
     const { activeReport, data } = useSelector(optimizerData);
-    const [predictedLoading, setPredictedLoading]= useState(true)
+    const [predictedLoading, setPredictedLoading]= useState(false)
     const performanceScore = 40;
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(performanceScore);
 
