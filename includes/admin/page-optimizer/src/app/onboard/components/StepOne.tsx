@@ -105,9 +105,10 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                                             // <Skeleton className="w-44 h-44 rounded-full"/>
 
                                         <div
-                                            className="bg-gradient-to-br from-purple-100  to-purple-100/30 relative flex items-center justify-center w-44 h-44  rounded-full"
+                                            className="bg-gradient-to-r from-purple-100 via-purple-60 to-purple-100/10 relative flex items-center justify-center w-44 h-44 rounded-full"
                                         >
-                                            <div className="flex flex-col items-center justify-center text-center text-brand-950">
+                                            <div
+                                                className="flex flex-col items-center justify-center text-center text-brand-950">
                                                 <AIButtonIcon className='w-10 h-10 animate-pulse'/>
                                                 <p className="text-lg">AI Analyzing</p>
                                                 <p className="text-lg">your site...</p>
@@ -115,7 +116,7 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                                         </div>
 
 
-                                    ):(
+                                    ) : (
                                         <PerformanceProgressBar
                                             className={cn('max-h-44')}
                                             scoreClassName={"text-brand-950"}

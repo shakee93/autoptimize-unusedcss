@@ -167,3 +167,8 @@ export const getFromLocalStorage = (key) => {
     return null;
   }
 };
+
+export function hasQueryParam(param: string) {
+  const params = new URLSearchParams(window.location.search);
+  return params.has(param);
+}

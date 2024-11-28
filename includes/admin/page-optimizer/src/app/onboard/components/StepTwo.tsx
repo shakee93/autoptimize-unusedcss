@@ -96,35 +96,35 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
             // setTimeout(() => {
             //     window.location.hash = '#/';
             // }, 300);
-            // if(onNext){
-            //     onNext();
-            // }
+            if(onNext){
+                onNext();
+            }
 
         }else{
             setLicenseMessage(response?.error?? '');
         }
     };
 
+    useEffect(() => {
+        dispatch(fetchSettings(options, headerUrl ? headerUrl : options.optimizer_url, false));
+    },[dispatch]);
 
     useEffect(() => {
         setLicenseMessage("");
     },[inputLicense]);
 
     useEffect(() => {
-        dispatch(fetchSettings(options, headerUrl ? headerUrl : options.optimizer_url, false));
-
         dispatch(changeGear(
             activeLevel as BasePerformanceGear
         ))
+
     },[activeLevel]);
 
     const settingsModeOnChange = (mode: PerformanceGear) => {
         setActiveLevel(mode)
     };
 
-    useEffect(() => {
-       console.log("Active Gear: ",activeGear)
-    },[activeGear]);
+
 
 
     const getIcon = useMemo(() => (level: PerformanceGear) => {
@@ -277,28 +277,29 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
                                     className="flex justify-between items-center pl-1">
                                     {licenseMessage.length > 0 ? (
                                         <h3 className="text-sm font-medium text-amber-700">{licenseMessage}</h3>
-                                    ) : loading ?
-                                        (
-                                            <div className="flex gap-2 items-center">
-                                                <Loader className='w-5 animate-spin'/><h3
-                                                className="text-sm font-medium">Connecting please wait...</h3>
-                                            </div>
-                                        )
-                                        : (
+                                    ) : (
                                             <h3 className="text-sm font-medium"></h3>
                                         )}
                                     <div className='flex gap-2 '>
                                         <button
-                                            className="flex items-center bg-brand-200 text-brand-950 hover:shadow-[inset_0_0_0_2px_rgba(0,0,0,1)] font-medium py-2 px-4 rounded-lg hover:bg-transparent transition-all gap-1"
+                                            className={cn('flex items-center bg-brand-200 text-brand-950 hover:shadow-[inset_0_0_0_2px_rgba(0,0,0,1)] font-medium py-2 px-4 rounded-lg hover:bg-transparent transition-all gap-1',
+                                            loading && 'pointer-events-none cursor-default opacity-30')}
                                             onClick={() => setShowInput(false)}
                                         >
                                             <ChevronLeftIcon className="h-4 w-4 text-brand-60"/> Back
                                         </button>
                                         <button
-                                            className="items-center hover:bg-gradient-to-br hover:from-[rgba(94,92,92,0.55)]  hover:to-brand-900/90 bg-brand-900/90  text-white font-medium py-2 px-4 rounded-lg transition-all gap-2"
+                                            className={cn('flex items-center hover:bg-gradient-to-br hover:from-[rgba(94,92,92,0.55)]  hover:to-brand-900/90 bg-brand-900/90  text-white font-medium py-2 px-4 rounded-lg transition-all gap-1',
+                                            loading && 'pointer-events-none cursor-default opacity-30')}
                                             onClick={connectRapidloadLicense}
                                         >
-                                            Connect
+                                            {loading ? (
+                                                <>
+                                                    <Loader className='w-5 animate-spin' /> Connecting
+                                                </>
+                                            ) : (
+                                                'Connect'
+                                            )}
                                         </button>
                                     </div>
 
@@ -318,6 +319,9 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
                                     className="items-center bg-brand-200 text-brand-950 hover:shadow-[inset_0_0_0_2px_rgba(0,0,0,1)] font-medium py-2 px-4 rounded-lg hover:bg-transparent transition-all gap-2"
                                     onClick={() => {
                                         setShowInput(true)
+                                        if (localStorage.getItem('rapidLoadGear')) {
+                                            localStorage.removeItem('rapidLoadGear');
+                                        }
                                     }}
                                 >
                                     Connect with License key
@@ -325,7 +329,10 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
                                 <span className="font-semibold">or</span>
                                 <button
                                     className="items-center hover:bg-gradient-to-br hover:from-[rgba(94,92,92,0.55)]  hover:to-brand-900/90 bg-brand-900/90  text-white font-medium py-2 px-4 rounded-lg transition-all gap-2"
-                                    onClick={() => window.location.href = uucssGlobal?.activation_url}
+                                    onClick={() => {
+                                        localStorage.setItem('rapidLoadGear', activeLevel);
+                                        window.location.href = uucssGlobal?.activation_url
+                                    }}
                                 >
                                     Connect Account
                                 </button>

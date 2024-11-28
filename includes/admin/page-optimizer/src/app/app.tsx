@@ -12,7 +12,7 @@ import { Toaster } from "components/ui/toaster";
 import {AnimatePresence, m, motion} from "framer-motion";
 import { useRootContext } from "../context/root";
 import Header from "app/page-optimizer/components/Header";
-import { cn } from "lib/utils";
+import { cn, hasQueryParam } from "lib/utils";
 import { setCommonState } from "../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import { toBoolean } from "lib/utils";
@@ -231,6 +231,8 @@ const App = ({ popup, _showOptimizer = false }: {
     //     }
     // }, [activeRoute, onboardCompleted]);
     useEffect(() => {
+        const hasNonce = hasQueryParam("nonce");
+
         if (!(isAdminPage || isDev)) return;
 
         if (onboardCompleted) {
@@ -238,9 +240,9 @@ const App = ({ popup, _showOptimizer = false }: {
             return;
         }
 
-        if (!uucssGlobal?.on_board_complete && !isDev) {
+        if (!uucssGlobal?.on_board_complete) {
             window.location.hash = "#/onboard";
-            setActiveRoute("/onboard");
+            setActiveRoute( "/onboard");
             return;
         }
         window.location.hash = activeRoute;

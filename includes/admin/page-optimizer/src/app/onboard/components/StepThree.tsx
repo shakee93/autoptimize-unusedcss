@@ -4,7 +4,7 @@ import { useAppContext } from "../../../context/app";
 import Lottie from 'lottie-react';
 import rocketAnimation from 'components/animation/rocket.json';
 import useSubmitSettings from "hooks/useSubmitSettings";
-import {getHomePagePerformance} from "../../../store/app/appActions";
+import {changeGear, fetchSettings, getHomePagePerformance} from "../../../store/app/appActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
@@ -58,7 +58,7 @@ const StepThree: React.FC<StepThreeProps> = ({ onNext }) => {
     const [currentDetail, setCurrentDetail] = useState(0);
     const [isCompleted, setIsCompleted] = useState(false);
     const { submitSettings } = useSubmitSettings()
-    const { dispatch} = useCommonDispatch()
+    const { dispatch, headerUrl} = useCommonDispatch()
 
 
     useEffect(() => {
@@ -106,6 +106,13 @@ const StepThree: React.FC<StepThreeProps> = ({ onNext }) => {
     }, [currentStep]);
 
     useEffect(() => {
+        const localGear = localStorage.getItem('rapidLoadGear')
+        if (localGear) {
+            dispatch(changeGear(
+                localGear as BasePerformanceGear
+            ))
+            localStorage.removeItem('rapidLoadGear');
+        }
         submitSettings(true);
     },[]);
 
@@ -113,6 +120,7 @@ const StepThree: React.FC<StepThreeProps> = ({ onNext }) => {
         if (isCompleted && onNext) {
             onNext();
             dispatch(getHomePagePerformance(options));
+
         }
     }, [isCompleted, onNext]);
 

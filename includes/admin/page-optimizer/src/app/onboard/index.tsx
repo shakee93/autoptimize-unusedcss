@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { m } from "framer-motion";
-import { cn } from "lib/utils";
+import {cn, hasQueryParam} from "lib/utils";
 import StepOne from "app/onboard/components/StepOne";
 import StepTwo from "app/onboard/components/StepTwo";
 import StepThree from "app/onboard/components/StepThree";
@@ -11,6 +11,12 @@ import { AnimatePresence, motion } from "framer-motion";
 export default function Onboard() {
     const [currentStep, setCurrentStep] = useState(0);
 
+    useEffect(() => {
+        const hasNonce = hasQueryParam("nonce");
+        if (hasNonce) {
+            setCurrentStep(2);
+        }
+    }, []);
 
     const steps = [
         { component: <StepOne onNext={() => setCurrentStep(1)} />, key: "stepOne" },
@@ -18,8 +24,11 @@ export default function Onboard() {
         { component: <StepThree onNext={() => setCurrentStep(3)}/>, key: "stepThree" },
         { component: <StepFour />, key: "stepFour" },
     ];
+    // Update URL when currentStep changes
     useEffect(() => {
-        // navigate(`#/onboard/${currentStep + 1}`);
+        const stepInUrl = currentStep + 1;
+        const newUrl = `#/onboard/${stepInUrl}`;
+        window.history.replaceState(null, "", newUrl);
     }, [currentStep]);
 
     return (
