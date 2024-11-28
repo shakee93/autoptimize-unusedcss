@@ -74,7 +74,7 @@ interface StepTwoProps {
 const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
     const { options, uucssGlobal} = useAppContext();
     const { dispatch, headerUrl, settingsMode } = useCommonDispatch();
-    const { activeGear, license } = useSelector(optimizerData);
+    const { activeGear, license, settings } = useSelector(optimizerData);
     const [activeLevel, setActiveLevel] = useState<PerformanceGear>('turboMax');
     const [inputLicense, setInputLicense] = useState("");
     const [showInput, setShowInput] = useState(false);
@@ -118,12 +118,16 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
             activeLevel as BasePerformanceGear
         ))
 
-    },[activeLevel]);
+    },[activeLevel, activeGear]);
+
 
     const settingsModeOnChange = (mode: PerformanceGear) => {
         setActiveLevel(mode)
     };
+    useEffect(() => {
+       console.log(activeGear)
 
+    },[activeGear]);
 
 
 
