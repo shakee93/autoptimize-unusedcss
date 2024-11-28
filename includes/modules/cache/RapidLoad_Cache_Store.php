@@ -57,34 +57,50 @@ class RapidLoad_Cache_Store
             return false;
         }
 
-        if ( $set ) {
-            $default_wp_config_file = ( strpos( $wp_config_file_contents, '/** Sets up WordPress vars and included files. */' ) !== false );
+        $found_wp_cache_constant = preg_match( '#define\s*\(\s*[\'\"]WP_CACHE[\'\"]\s*,\s*(true|false)\s*\);#', $wp_config_file_contents, $matches );
 
-            if ( ! $default_wp_config_file ) {
-                return false;
+        if ( $found_wp_cache_constant ) {
+
+            if($set){
+                $new_wp_config_file_contents = preg_replace(
+                    '#define\s*\(\s*[\'\"]WP_CACHE[\'\"]\s*,\s*false\s*\);#',
+                    "define( 'WP_CACHE', true );",
+                    $wp_config_file_contents
+                );
+            }else{
+                $new_wp_config_file_contents = preg_replace(
+                    '#define\s*\(\s*[\'\"]WP_CACHE[\'\"]\s*,\s*true\s*\);#',
+                    "define( 'WP_CACHE', false );",
+                    $wp_config_file_contents
+                );
             }
 
-            $found_wp_cache_constant = preg_match( '#define\s*\(\s*[\'\"]WP_CACHE[\'\"]\s*,.+\);#', $wp_config_file_contents );
+        }else{
 
-            if ( $found_wp_cache_constant ) {
-                return false;
+            if ( $set ) {
+
+                $default_wp_config_file = ( strpos( $wp_config_file_contents, '/** Sets up WordPress vars and included files. */' ) !== false );
+
+                if ( ! $default_wp_config_file ) {
+                    return false;
+                }
+
+                $new_wp_config_lines  = '/** Enables page caching for RapidLoad. */' . PHP_EOL;
+                $new_wp_config_lines .= "if ( ! defined( 'WP_CACHE' ) ) {" . PHP_EOL;
+                $new_wp_config_lines .= "\tdefine( 'WP_CACHE', true );" . PHP_EOL;
+                $new_wp_config_lines .= '}' . PHP_EOL;
+                $new_wp_config_lines .= PHP_EOL;
+
+                $new_wp_config_file_contents = preg_replace( '#(/\*\* Sets up WordPress vars and included files\. \*/)#', $new_wp_config_lines . '$1', $wp_config_file_contents );
+
+            } else { // Unset.
+                $new_wp_config_file_contents = preg_replace(
+                    '#define\s*\(\s*[\'\"]WP_CACHE[\'\"]\s*,\s*true\s*\);#',
+                    "define( 'WP_CACHE', false );",
+                    $wp_config_file_contents
+                );
             }
 
-            $new_wp_config_lines  = '/** Enables page caching for RapidLoad. */' . PHP_EOL;
-            $new_wp_config_lines .= "if ( ! defined( 'WP_CACHE' ) ) {" . PHP_EOL;
-            $new_wp_config_lines .= "\tdefine( 'WP_CACHE', true );" . PHP_EOL;
-            $new_wp_config_lines .= '}' . PHP_EOL;
-            $new_wp_config_lines .= PHP_EOL;
-
-            $new_wp_config_file_contents = preg_replace( '#(/\*\* Sets up WordPress vars and included files\. \*/)#', $new_wp_config_lines . '$1', $wp_config_file_contents );
-        } else { // Unset.
-            if ( strpos( $wp_config_file_contents, '/** Enables page caching for RapidLoad. */' ) !== false ) {
-                $new_wp_config_file_contents = preg_replace( '#/\*\* Enables page caching for RapidLoad\. \*/' . PHP_EOL . '.+' . PHP_EOL . '.+' . PHP_EOL . '\}' . PHP_EOL . PHP_EOL . '#', '', $wp_config_file_contents );
-            } elseif ( strpos( $wp_config_file_contents, '// Added by RapidLoad' ) !== false ) { // < 1.5.0
-                $new_wp_config_file_contents = preg_replace( '#.+Added by RapidLoad\r\n#', '', $wp_config_file_contents );
-            } else {
-                return false; // Not previously set by the plugin.
-            }
         }
 
         if ( ! is_string( $new_wp_config_file_contents ) || empty( $new_wp_config_file_contents ) ) {
@@ -951,7 +967,7 @@ class RapidLoad_Cache_Store
         $new_cache_file_dir  = dirname( $new_cache_file );
         $new_cache_file_name = basename( $new_cache_file );
 
-        if ( RapidLoad_Cache_Engine::$settings['minify_html'] ) {
+        if ( RapidLoad_Cache_Engine::$settings['minify_html'] && apply_filters('rapidload/page-cache/minify/enabled', true)) {
             $page_contents = self::minify_html( $page_contents );
         }
 

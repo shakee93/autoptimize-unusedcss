@@ -928,7 +928,7 @@ class RapidLoad_Optimizer
             'uucss_ignore_inlined_styles' => array(
                 'control_type' => 'checkbox',
                 'control_label' => 'Include inline styles',
-                'control_description' => 'Include inline styles',
+                'control_description' => 'Essential inline CSS for optimizing above-the-fold content',
                 'control_values' => array('1', '0'),
                 'default' => '0',
                 'global' => true,
@@ -1668,6 +1668,11 @@ class RapidLoad_Optimizer
 
         if(isset(self::$options['enable_uucss_on_cpcss'])){
             self::$global_options['enable_uucss_on_cpcss'] = self::$options['enable_uucss_on_cpcss'];
+            RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
+        }
+
+        if(isset(self::$options['uucss_ignore_inlined_styles'])){
+            self::$global_options['uucss_ignore_inlined_styles'] = self::$options['uucss_ignore_inlined_styles'];
             RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
         }
 
