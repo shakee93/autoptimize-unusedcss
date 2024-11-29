@@ -797,5 +797,13 @@ trait RapidLoad_Utils {
             self::debug_log("User Agent: Not available or not an HTML request");
         }
     }
+
+    public static function create_nonce($nonce_name)
+    {
+        if(current_user_can('manage_options')){
+            return wp_create_nonce( $nonce_name );
+        }
+        return '';
+    }
     
 }
