@@ -122,7 +122,7 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
 
                                 </div>
                                 <div
-                                    className="items-center gap-1 text-sm font-semibold bg-purple-100 rounded-3xl p-2 py-1 flex">
+                                    className="items-center gap-1 text-sm font-semibold bg-brand-200/60 rounded-3xl p-2 py-1 flex">
                                     {predictedLoading ?
                                         (
                                             <><Loader className='w-4 animate-spin'/> Hold on tight</>
