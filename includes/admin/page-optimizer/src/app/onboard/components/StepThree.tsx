@@ -8,7 +8,7 @@ import {changeGear, fetchSettings, getHomePagePerformance} from "../../../store/
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
-
+import CountdownTimer from "components/ui/CountdownTimer";
 
 const steps = [
     {
@@ -48,6 +48,7 @@ const steps = [
     },
 ];
 
+
 interface StepThreeProps {
     onNext?: () => void;
 }
@@ -59,7 +60,8 @@ const StepThree: React.FC<StepThreeProps> = ({ onNext }) => {
     const [isCompleted, setIsCompleted] = useState(false);
     const { submitSettings } = useSubmitSettings()
     const { dispatch, headerUrl} = useCommonDispatch()
-
+    const [update, setUpdate] = useState(false)
+    const { settings, activeGear } = useSelector(optimizerData);
 
     useEffect(() => {
         // Change details within the current step
@@ -111,10 +113,17 @@ const StepThree: React.FC<StepThreeProps> = ({ onNext }) => {
             dispatch(changeGear(
                 localGear as BasePerformanceGear
             ))
-            localStorage.removeItem('rapidLoadGear');
+           // localStorage.removeItem('rapidLoadGear');
         }
-        submitSettings(true);
-    },[]);
+    },[activeGear]);
+
+    useEffect(() => {
+        settings.length > 0 && setUpdate(true);
+    },[settings]);
+
+    useEffect(() => {
+        update && submitSettings(true);
+    },[update]);
 
     useEffect(() => {
         if (isCompleted && onNext) {
@@ -149,7 +158,7 @@ const StepThree: React.FC<StepThreeProps> = ({ onNext }) => {
                 </div>
 
                 <div className="flex flex-col items-center justify-center gap-2">
-                    <p className="text-gray-600/50 font-bold">10s</p>
+                    <div className="text-gray-600/50 font-bold"><CountdownTimer timerOnly={true}/></div>
                     <h4 className="text-xl font-bold capitalize text-center">{steps[currentStep].description}</h4>
                     <p className="text-gray-600 mb-2">
                         {steps[currentStep].details[currentDetail]}

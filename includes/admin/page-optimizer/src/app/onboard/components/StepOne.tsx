@@ -4,11 +4,8 @@ import {useAppContext} from "../../../context/app";
 import {BoltIcon, InformationCircleIcon} from "@heroicons/react/24/solid";
 import TooltipText from "components/ui/tooltip-text";
 import {changeReport, fetchReport} from "../../../store/app/appActions";
-import {ArrowTopRightOnSquareIcon, DevicePhoneMobileIcon, ArrowLongRightIcon} from "@heroicons/react/24/outline";
+import {ArrowLongRightIcon} from "@heroicons/react/24/outline";
 import {Loader, Monitor, RefreshCw} from "lucide-react";
-import UnsavedChanges from "app/page-optimizer/components/footer/unsaved-changes";
-import {setCommonState} from "../../../store/common/commonActions";
-import AppButton from "components/ui/app-button";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
@@ -25,9 +22,8 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
     const { options } = useAppContext()
     const { dispatch} = useCommonDispatch()
     const { activeReport, data } = useSelector(optimizerData);
-    const [predictedLoading, setPredictedLoading]= useState(false)
+    const [predictedLoading, setPredictedLoading]= useState(true)
     const performanceScore = 40;
-    const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(performanceScore);
 
     return (
         <div className='w-full flex flex-col gap-4'>

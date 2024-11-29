@@ -240,7 +240,7 @@ const App = ({ popup, _showOptimizer = false }: {
             return;
         }
 
-        if (!uucssGlobal?.on_board_complete) {
+        if (!uucssGlobal?.on_board_complete || hasNonce) {
             window.location.hash = "#/onboard";
             setActiveRoute( "/onboard");
             return;
