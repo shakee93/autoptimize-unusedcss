@@ -237,7 +237,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
 
                     {(data?.metrics && !expanded) && (
                         <>
-                            <div className='flex justify-around my-2  px-2'
+                            <div className='flex justify-around my-2 px-2'
                                 onMouseLeave={() => dispatch(setCommonState('hoveredMetric', null))}
                             >
                                 {data.metrics.map(metric => (
