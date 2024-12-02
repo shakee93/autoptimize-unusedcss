@@ -1045,7 +1045,7 @@ class RapidLoad_Admin_Frontend
 
         $data = array(
             'api' => RapidLoad_Api::get_key(),
-            'nonce' => self::_create_nonce( 'uucss_nonce' ),
+            'nonce' => self::create_nonce( 'uucss_nonce' ),
             'url' => site_url(),
             'ajax_url'          => admin_url( 'admin-ajax.php' ),
             'setting_url'       => admin_url( 'options-general.php?page=uucss_legacy' ),
