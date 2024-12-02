@@ -418,7 +418,7 @@ class RapidLoad_Admin_Frontend
 
         if($url_regex == 'false' && $url_filter){
 
-            $filters[] = " url LIKE '%". $url_filter . "%' ";
+            $filters[] = " url LIKE '%%". $url_filter . "%%' ";
 
         }
 
