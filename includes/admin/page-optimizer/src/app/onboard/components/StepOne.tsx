@@ -22,7 +22,7 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
     const { options } = useAppContext()
     const { dispatch} = useCommonDispatch()
     const { activeReport, data } = useSelector(optimizerData);
-    const [predictedLoading, setPredictedLoading]= useState(true)
+    const [predictedLoading, setPredictedLoading]= useState(false)
     const performanceScore = 40;
 
     return (
@@ -110,7 +110,6 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                                                 <p className="text-lg">your site...</p>
                                             </div>
                                         </div>
-
 
                                     ) : (
                                         <PerformanceProgressBar

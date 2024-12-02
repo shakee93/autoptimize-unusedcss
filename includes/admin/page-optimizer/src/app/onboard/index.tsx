@@ -32,14 +32,7 @@ export default function Onboard() {
     }, [currentStep]);
 
     return (
-        <m.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{
-                ease: "linear",
-                duration: 0.04,
-            }}
+        <div
             id="rapidload-page-optimizer-wrapper"
             className={cn(
                 "h-fit font-sans overflow-hidden flex flex-col text-base items-center"
@@ -70,6 +63,6 @@ export default function Onboard() {
                     </AnimatePresence>
                 </section>
             </div>
-        </m.div>
+        </div>
     );
 }
