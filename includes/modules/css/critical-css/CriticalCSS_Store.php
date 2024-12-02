@@ -63,6 +63,7 @@ class CriticalCSS_Store
                         'service' => true,
                         'mobile_device' => isset($this->options['uucss_enable_cpcss_mobile']) && $this->options['uucss_enable_cpcss_mobile'] == "1",
                         "cacheBusting"          => apply_filters('uucss/cache/bust',[]),
+                        "ignoreInlinedStyles" => isset($this->options['uucss_ignore_inlined_styles']) ? !($this->options['uucss_ignore_inlined_styles'] == "1") : true
                     ]
                 ) );
 
@@ -112,6 +113,7 @@ class CriticalCSS_Store
                         'hook_end_point' => trailingslashit(get_site_url()),
                         'immediate' => true,
                         "cacheBusting"          => apply_filters('uucss/cache/bust',[]),
+                        "ignoreInlinedStyles" => isset($this->options['uucss_ignore_inlined_styles']) ? !($this->options['uucss_ignore_inlined_styles'] == "1") : true
                     ]
 
                 ) );
@@ -226,6 +228,8 @@ class CriticalCSS_Store
         $uucss_api = new RapidLoad_Api();
 
         $result = $uucss_api->get( 's/criticalcss/' . $this->job_data->queue_job_id);
+
+        error_log("fetching result for queue job id " . $this->job_data->queue_job_id);
 
         if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
 
