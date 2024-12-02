@@ -677,7 +677,7 @@ trait RapidLoad_Utils {
             return true;
         }
 
-        if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], $nonce ) ) {
+        if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], $nonce ) || !current_user_can('manage_options')) {
             wp_send_json_error( 'RapidLoad - Malformed Request Detected, Contact Support.' );
         }
     }
