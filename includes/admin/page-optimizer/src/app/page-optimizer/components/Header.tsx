@@ -1,13 +1,13 @@
 import {
     DevicePhoneMobileIcon
 } from "@heroicons/react/24/outline";
-import React from "react";
+import React, {useEffect} from "react";
 import { useAppContext } from "../../../context/app";
 import TooltipText from "components/ui/tooltip-text";
 import { ThunkDispatch } from "redux-thunk";
 import { AppAction, RootState } from "../../../store/app/appTypes";
 import { useDispatch, useSelector } from "react-redux";
-import { changeReport, fetchReport } from "../../../store/app/appActions";
+import {changeReport, fetchReport, fetchSettings} from "../../../store/app/appActions";
 import { optimizerData } from "../../../store/app/appSelector";
 import AppButton from "components/ui/app-button";
 import { cn } from "lib/utils";
@@ -35,7 +35,8 @@ const Header = ({ url }: { url: string }) => {
     const { activeReport,
         loading,
         testMode,
-        reanalyze
+        reanalyze,
+         settings, settingsOriginal
     } = useSelector(optimizerData);
     const { inProgress, testModeStatus } = useCommonDispatch()
     const {
@@ -46,7 +47,9 @@ const Header = ({ url }: { url: string }) => {
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const { isDark } = useRootContext();
 
-
+    useEffect(() => {
+        !loading && dispatch(fetchSettings(options, options.optimizer_url, true))
+    }, [loading]);
 
     return (
         <>

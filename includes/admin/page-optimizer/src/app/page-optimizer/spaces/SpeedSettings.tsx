@@ -377,9 +377,9 @@ const SpeedSettings = ({ }) => {
     return <div className='dark:bg-brand-800/40 bg-brand-200 px-9 py-8 mt-2 rounded-3xl'>
         <SettingsStraightLine />
         <div className="pb-4">
-            {settingsLoading &&
-                <div>loading...</div>
-            }
+            {/*{settingsLoading &&*/}
+            {/*    <div>loading...</div>*/}
+            {/*}*/}
             <h3 className="font-semibold text-lg">Performance Gears</h3>
             <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
         </div>

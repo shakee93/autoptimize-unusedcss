@@ -52,10 +52,12 @@ export const optimizerData = createSelector(
             ...report,
             activeReport: state.activeReport,
             settings: settings.state,
+            settingsOriginal: settings.original,
             settingsLoading: settings.loading,
             actions,
             activeGear,
             testMode,
+            // touched: !equal(settings.original, settings.state) || !!optimizeChangesFiles(report.changes).find(i => i?.changed),
             touched: !equal(settings.original, settings.state) || !!optimizeChangesFiles(report.changes).find(i => i?.changed),
             fresh : report?.state?.fresh,
             reanalyze: report.data !== null && report.loading
