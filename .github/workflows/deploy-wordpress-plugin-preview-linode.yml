@@ -269,8 +269,8 @@ jobs:
             sudo docker exec -u root -i ${WP_CONTAINER} sh -c "
               if [ -d ${PLUGIN_PATH} ]; then
                 echo 'Plugin directory exists. Running git pull...'
-                sudo docker exec -u root \$WP_CONTAINER git config --global --add safe.directory /bitnami/wordpress/wp-content/plugins/autoptimize-unusedcss
                 cd ${PLUGIN_PATH}
+                git config --global --add safe.directory /bitnami/wordpress/wp-content/plugins/autoptimize-unusedcss
                 git clean -f
                 git reset --hard HEAD
                 git pull origin ${{ github.head_ref }}
