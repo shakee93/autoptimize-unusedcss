@@ -36,7 +36,7 @@ class RapidLoad_Cache_Store
 
     public static function get_page_cache_errors()
     {
-        if ( file_exists( ABSPATH . 'wp-config.php' ) ) {
+        if ( !file_exists( ABSPATH . 'wp-config.php' ) ) {
             return 'wp-config.php file missing';
         }
 
