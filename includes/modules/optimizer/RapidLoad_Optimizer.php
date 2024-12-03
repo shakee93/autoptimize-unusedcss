@@ -281,13 +281,15 @@ class RapidLoad_Optimizer
                     $cache_file = RapidLoad_Cache_Store::get_cache_file($url);
                     $cache_file_exist = @file_exists($cache_file);
 
+                    $status = RapidLoad_Cache_Store::get_page_cache_errors();
+
                     $response[$type] = [
-                        'status' => $cache_file_exist ? 'Hit' : RapidLoad_Cache_Store::get_page_cache_errors(),
+                        'status' => $cache_file_exist ? 'Hit' : ($status == 'Hit' ? $status : 'failed'),
                         'file' => $cache_file,
                         'size' => $cache_file_exist ? $this->formatSize(@filesize($cache_file)) : null,
                         'error' => [
                             'code' => $cache_file_exist ? null : 422,
-                            'message' => $cache_file_exist ? 'Hit' : RapidLoad_Cache_Store::get_page_cache_errors(),
+                            'message' => $cache_file_exist ? 'Hit' : $status,
                         ],
                     ];
                     break;
