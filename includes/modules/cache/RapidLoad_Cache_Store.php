@@ -54,6 +54,12 @@ class RapidLoad_Cache_Store
             return 'WP_CACHE constant not found or set to false';
         }
 
+        $cache_dir = self::get_cache_dir( site_url() );
+
+        if ( ! is_dir( $cache_dir ) || !is_writable( $cache_dir )) {
+            return 'no permission for cache directory';
+        }
+
         return 'Hit';
     }
 
