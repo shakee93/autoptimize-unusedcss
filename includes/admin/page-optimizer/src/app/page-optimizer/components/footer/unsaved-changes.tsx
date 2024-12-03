@@ -43,7 +43,6 @@ const UnsavedChanges = ({children , onClick, title, description, action = 'Save 
         }
     }
 
-
     const submit = async () => {
 
         //await submitSettings(action === 'Save & Analyze');

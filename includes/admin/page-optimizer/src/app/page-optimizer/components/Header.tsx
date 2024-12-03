@@ -55,10 +55,24 @@ const Header = ({ url }: { url: string }) => {
         }
     }, [savingData, invalidatingCache]);
 
-    useEffect(() => {
-        console.log(settings[0]?.inputs[0]?.value)
-        console.log(settingsOriginal[0]?.inputs[0]?.value)
-    }, [settings, settingsOriginal]);
+    // useEffect(() => {
+    //     if (settings && settingsOriginal) {
+    //         settings.forEach((setting, settingIndex) => {
+    //             const originalSetting = settingsOriginal[settingIndex];
+    //
+    //             setting.inputs.forEach((input, inputIndex) => {
+    //                 const originalInput = originalSetting.inputs[inputIndex];
+    //
+    //                 if (input.value !== originalInput.value) {
+    //                     console.log(`Difference found in object index ${settingIndex}, input index ${inputIndex}:`);
+    //                     console.log(`Key: ${input.key}`, `Name: ${setting.name}` , `control_label: ${input.control_label}`);
+    //                     console.log(`Current Value: ${input.value}, Original Value: ${originalInput.value}`);
+    //                 }
+    //             });
+    //         });
+    //     }
+    // }, [settings, settingsOriginal]);
+
 
     return (
         <>
