@@ -287,7 +287,7 @@ class RapidLoad_Optimizer
                         'size' => $cache_file_exist ? $this->formatSize(@filesize($cache_file)) : null,
                         'error' => [
                             'code' => $cache_file_exist ? null : 422,
-                            'message' => $cache_file_exist ? null : 'Cache file not found',
+                            'message' => $cache_file_exist ? 'Hit' : RapidLoad_Cache_Store::get_page_cache_errors(),
                         ],
                     ];
                     break;
