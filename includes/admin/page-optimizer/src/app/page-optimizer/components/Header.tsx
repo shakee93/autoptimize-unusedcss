@@ -31,7 +31,8 @@ const Header = ({ url }: { url: string }) => {
         options,
         version,
         savingData,
-        invalidatingCache
+        invalidatingCache,
+        mode
     } = useAppContext()
 
     const { activeReport,
@@ -123,7 +124,33 @@ const Header = ({ url }: { url: string }) => {
                         </div>
                         <div className='flex overflow-hidden border rounded-2xl shadow' data-tour="current-url">
                             <UrlPreview />
-                            <UnsavedChanges
+                            {
+                                mode === 'onboard' ? (
+                                        <TooltipText text='Analyze the page'>
+                                            <AppButton asChild={true} data-tour='analyze'
+                                                       className={cn(
+                                                           'transition-none rounded-none h-12 px-3 pr-3.5 ' +
+                                                           'border-r-0 border-l border-t-0 border-b-0 bg-transparent ',
+                                                       )}
+                                                       variant='outline'
+                                                       onClick={() => {
+                                                           if (!inProgress || !loading) {
+                                                               dispatch(fetchReport(options, url, true));
+                                                               commonDispatch(setCommonState('openAudits', []));
+                                                           }
+                                                       }}
+                                            >
+                                                <div className={`flex flex-col gap-[1px] items-center`}>
+                                                    <RefreshCw className={cn(
+                                                        'w-4 -mt-0.5',
+                                                        loading && 'animate-spin'
+                                                    )} />
+                                                    <span className='text-xxs font-normal text-brand-500'>Analyze </span>
+                                                </div>
+                                            </AppButton>
+                                        </TooltipText>
+                                    ) : (
+                                    <UnsavedChanges
                                 title='Analyze without applying optimization?'
                                 description="Your changes are not saved yet. If you analyze now, your recent edits won't be included."
                                 action='Apply Optimization'
@@ -159,6 +186,7 @@ const Header = ({ url }: { url: string }) => {
                                     </AppButton>
                                 </TooltipText>
                             </UnsavedChanges>
+                                    )}
                         </div>
                     </div>
                 </div>
