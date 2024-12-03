@@ -63,7 +63,7 @@ global $post;
             window.uucss = {}
         }
 
-        window.uucss.nonce = '<?php echo wp_create_nonce( 'uucss_nonce' ); ?>';
+        window.uucss.nonce = '<?php echo current_user_can('manage_options') ? wp_create_nonce( 'uucss_nonce' ) : ''; ?>';
     </script>
     <a class="rapidload" href="<?php echo admin_url( 'options-general.php?page=rapidload' ) ?>">RapidLoad</a>
     <div class="uucss-stats__stats">

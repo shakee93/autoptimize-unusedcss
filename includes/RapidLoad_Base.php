@@ -375,7 +375,7 @@ class RapidLoad_Base
                 'on_board_complete' => apply_filters('uucss/on-board/complete', false),
                 'home_url' => home_url(),
                 'api_url' => RapidLoad_Api::get_key(),
-                'nonce' => wp_create_nonce( 'uucss_nonce' ),
+                'nonce' => self::create_nonce( 'uucss_nonce' ),
                 'active_modules' => (array)self::get()->modules()->active_modules(),
                 'notifications' => apply_filters('uucss/notifications', []),
                 'activation_url' => self::activation_url('authorize' ),
