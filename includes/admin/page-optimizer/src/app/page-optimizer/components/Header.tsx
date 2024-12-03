@@ -30,6 +30,8 @@ const Header = ({ url }: { url: string }) => {
         setShowOptimizer,
         options,
         version,
+        savingData,
+        invalidatingCache
     } = useAppContext()
 
     const { activeReport,
@@ -48,8 +50,10 @@ const Header = ({ url }: { url: string }) => {
     const { isDark } = useRootContext();
 
     useEffect(() => {
-        !loading && dispatch(fetchSettings(options, options.optimizer_url, true))
-    }, [loading]);
+        if(!savingData && !invalidatingCache){
+            dispatch(fetchSettings(options, options.optimizer_url, true))
+        }
+    }, [savingData, invalidatingCache]);
 
     return (
         <>
