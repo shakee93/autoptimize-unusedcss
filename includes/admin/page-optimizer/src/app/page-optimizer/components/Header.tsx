@@ -55,6 +55,11 @@ const Header = ({ url }: { url: string }) => {
         }
     }, [savingData, invalidatingCache]);
 
+    useEffect(() => {
+        console.log(settings[0]?.inputs[0]?.value)
+        console.log(settingsOriginal[0]?.inputs[0]?.value)
+    }, [settings, settingsOriginal]);
+
     return (
         <>
 

@@ -327,7 +327,7 @@ const SaveChanges = () => {
                                                     </Card>
                                                 </li>
                                             ))}
-                                            {data && !!dialogData.balance && (
+                                            {data && !!dialogData.balance && dialogData.balance > 0 && (
                                                 <li className='text-center text-muted-foreground mt-3'>and {dialogData.balance} more audit{dialogData.balance > 1 && 's'}...</li>
                                             )}
                                         </ul>
