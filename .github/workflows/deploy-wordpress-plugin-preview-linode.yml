@@ -357,7 +357,7 @@ jobs:
             WP_CONTAINER=\$(sudo docker ps -q --filter "name=wordpress_\${INSTANCE_ID}")
 
             # Create cache folder if it doesn't exist and grant 755 permissions
-            sudo docker exec -u root ${WP_CONTAINER} chown -R daemon:daemon /bitnami/wordpress
+            sudo docker exec -u root \$WP_CONTAINER sh -c 'chown -R daemon:daemon /bitnami/wordpress'
           EOF
 
       - name: Clean up old Docker containers and volumes
