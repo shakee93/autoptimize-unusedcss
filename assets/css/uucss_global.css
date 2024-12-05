@@ -1033,3 +1033,7 @@ a.toplevel_page_rapidload img{
 #wp-admin-bar-rapidload .rl-icon img{
     width: 16px;
 }
+
+body.rl-page-optimizer-loaded #wpbody-content>.notice{
+    display:none!important;
+}

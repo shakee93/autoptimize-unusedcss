@@ -43,3 +43,11 @@ export const TurboMax:FC<SvgProps> = ({cls}) => (
         <path fillRule="evenodd" clipRule="evenodd" d="M73.1907 11.7255L68.4433 16.5382H68.2795L68.1158 16.3778C67.9521 15.7361 67.7884 15.0944 67.461 14.6131C67.1336 14.1319 66.8062 13.6506 66.3151 13.1693C66.1514 13.1693 66.1514 13.0089 66.1514 12.8485C66.1514 12.8485 66.1514 12.8485 66.3151 12.688L73.027 11.0838C73.1907 11.0838 73.1907 11.0838 73.1907 11.2442C73.3544 11.5651 73.3544 11.7255 73.1907 11.7255Z" fill="#5B3786"/>
     </svg>
 );
+
+export const GearLoading = ({options}) => (
+    <div className='px-2 py-4 -mt-6'>
+            <img className='w-[90px]'
+                 src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/gearLoading.gif`) : '/gearLoading.gif'}
+                 alt='RapidLoad - #1 to unlock breakneck page speed'/>
+    </div>
+);

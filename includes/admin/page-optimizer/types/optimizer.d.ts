@@ -239,8 +239,76 @@ interface CSSStatusResponse {
     cpcss: CSSJobStatus;
 }
 
+interface OptimizeTable {
+    id: string
+    created_at: string;
+    first_data: { performance : number };
+    last_data: { performance : number };
+    job_id: string;
+    strategy: string
+    url: string;
+}
+
+interface Link {
+    title: string;
+    permalink: string;
+}
+
+interface posts {
+    post_type: string;
+    links: Link[];
+}
+
+interface cdnUsage {
+    additional_usage_gb: number;
+    allowed_gb: number;
+    used_gb: number;
+    cdn_url: string;
+    origin: string;
+    zone_id: string;
+}
+
+interface imageUsage {
+    additional_usage_gb: number;
+    allowed_gb: number;
+    used_gb: number;
+    host: string;
+}
+
+interface cacheSize {
+    folder_name: string;
+    size: string;
+}
+
+interface cacheUsage {
+    key: string;
+    label: string;
+    size: cacheSize;
+    action: {
+        label: string;
+        href: string;
+    }
+}
+
 interface TestMode {
     status: boolean;
+}
+
+interface HomePerformance{
+    first_entry: number;
+    last_entry: number;
+    first_response_time: string;
+    last_response_time: string;
+
+}
+
+interface License {
+    email: string;
+    licensedDomain: string;
+    name: string;
+    plan: string;
+    next_billing: number;
+    siteUrl: string;
 }
 
 interface Revision {

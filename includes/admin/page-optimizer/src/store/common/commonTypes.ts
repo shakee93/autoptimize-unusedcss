@@ -3,6 +3,7 @@ export type CommonState = {
     mode: RapidLoadOptimizerModes,
     modeData?: RapidLoadOptimizerModeData
     isTourOpen: boolean
+    onboardCompleted: boolean
 
     mobile : {
         activeTab: AuditTypes;
@@ -17,6 +18,7 @@ export type CommonState = {
         testModeLoading: boolean;
         auditsReturn: boolean;
         uucssError: boolean;
+        headerUrl: string;
     }
     desktop : {
         activeTab: AuditTypes;
@@ -31,6 +33,7 @@ export type CommonState = {
         testModeLoading: boolean;
         auditsReturn: boolean;
         uucssError: boolean;
+        headerUrl: string;
     }
 
 };

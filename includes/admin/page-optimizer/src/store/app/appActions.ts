@@ -3,16 +3,16 @@ import {AnyAction} from 'redux';
 import {
     AppAction,
     CHANGE_GEAR,
-    CHANGE_REPORT_TYPE,
+    CHANGE_REPORT_TYPE, FETCH_POSTS,
     FETCH_REPORT_FAILURE,
     FETCH_REPORT_REQUEST,
     FETCH_REPORT_SUCCESS,
     FETCH_SETTING_FAILURE,
     FETCH_SETTING_REQUEST,
-    FETCH_SETTING_SUCCESS,
-    GET_CSS_STATUS_SUCCESS,
+    FETCH_SETTING_SUCCESS, GET_CACHE_USAGE, GET_CDN_USAGE,
+    GET_CSS_STATUS_SUCCESS, GET_IMAGE_USAGE, HOME_PAGE_PERFORMANCE, LICENSE_INFORMATION,
     RootState,
-    UPDATE_FILE_ACTION,
+    UPDATE_FILE_ACTION, UPDATE_OPTIMIZE_TABLE,
     UPDATE_SETTINGS,
     UPDATE_TEST_MODE
 } from "./appTypes";
@@ -221,6 +221,228 @@ export const getTestModeStatus = (options: WordPressOptions, url: string, mode?:
     }
 }
 
+export const getSummary = (options: WordPressOptions, action: string): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string }> => {
+
+        try {
+            const getUsage = await api.getSummary(action);
+            const actionType = action === 'get_rapidload_cdn_usage' ? GET_CDN_USAGE : action === 'get_rapidload_image_usage' ? GET_IMAGE_USAGE: GET_CACHE_USAGE;
+            dispatch({
+                type: actionType,
+                payload: getUsage?.data
+            });
+
+            return { success: true };
+        } catch (error: any) {
+            console.error('Error on Test Mode:', error);
+            let errorMessage: string;
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            } else {
+                errorMessage = 'An unknown error occurred';
+            }
+            return { success: false, error: errorMessage };
+        }
+
+    }
+}
+
+
+export const getTitanOptimizationData = (options: WordPressOptions, startFrom: number, limit: number): ThunkAction<Promise<{ hasMoreData?: boolean, success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ hasMoreData?: boolean, success: boolean, error?: string }> => {
+
+        try {
+            const fetchOptimizationData = await api.getOptimizationData(startFrom, limit);
+            dispatch({
+                type: UPDATE_OPTIMIZE_TABLE,
+                payload : fetchOptimizationData?.data
+            })
+            const hasMoreData = fetchOptimizationData?.data && fetchOptimizationData.data.length > 0;
+
+            // console.log(fetchOptimizationData )
+            return { success: true, hasMoreData: hasMoreData };
+        } catch (error: any) {
+            console.error('Error on fetchOptimizationData:', error);
+            let errorMessage: string;
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            } else {
+                errorMessage = 'An unknown error occurred';
+            }
+            return { success: false, error: errorMessage };
+        }
+
+
+    }
+}
+
+export const searchData = (options: WordPressOptions, action: string, searchFor: string, postType?: string): ThunkAction<Promise<{ data: any, success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ data: any, success: boolean, error?: string }> => {
+
+        try {
+            const searchForData = await api.searchData(action, searchFor, postType);
+
+            return searchForData;
+        } catch (error: any) {
+
+            let errorMessage: string;
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            } else {
+                errorMessage = 'An unknown error occurred';
+            }
+            return { data: null, success: false, error: errorMessage };
+        }
+
+
+    };
+};
+
+
+export const deleteOptimizedData = (options: WordPressOptions,url: string): ThunkAction<Promise<{ url: any, success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ url: any, success: boolean, error?: string }> => {
+
+        try {
+            const deleteData = await api.deleteOptimizedData(url);
+
+            return deleteData;
+        } catch (error: any) {
+
+            let errorMessage: string;
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            } else {
+                errorMessage = 'An unknown error occurred';
+            }
+            return { url: null, success: false, error: errorMessage };
+        }
+
+
+    };
+};
+
+
+export const saveGeneralSettings = (options: WordPressOptions, data: any): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string }> => {
+
+        try {
+            const saveGeneralSettings = await api.saveGeneralSettings(data);
+
+            console.log(saveGeneralSettings);
+            return { success: true };
+        } catch (error: any) {
+            console.error('Error on saving General Settings:', error);
+            let errorMessage: string;
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            } else {
+                errorMessage = 'An unknown error occurred';
+            }
+            return { success: false, error: errorMessage };
+        }
+
+
+    };
+};
+
+export const updateLicense = (options: WordPressOptions, data?: any): ThunkAction<Promise<{ success: boolean, error?: string, data?: any }>, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string, data?: any }> => {
+
+        try {
+            const connectLicense = await api.updateLicense(data);
+            if (connectLicense.success) {
+                dispatch({
+                    type: LICENSE_INFORMATION,
+                    payload: connectLicense.data,
+                });
+                return { success: true, data: connectLicense.data};
+            } else {
+                return { success: false, error: connectLicense.data || "License update failed" };
+            }
+        } catch (error: any) {
+            console.error('Error on connecting:', error);
+            // Fallback error message handling
+            const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+            return { success: false, error: errorMessage };
+        }
+    };
+};
+
+export const getHomePagePerformance = (options: WordPressOptions, data?: any): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string }> => {
+
+        try {
+            const getPerformance = await api.homePagePerformance();
+            dispatch({
+                type: HOME_PAGE_PERFORMANCE,
+                payload: getPerformance.data,
+            });
+            return { success: true};
+        } catch (error: any) {
+            console.error('Error on fetching:', error);
+            // Fallback error message handling
+            const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+            return { success: false, error: errorMessage };
+        }
+    };
+};
+
+export const fetchPosts = (options: WordPressOptions): ThunkAction<void, RootState, unknown, AnyAction> => {
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AnyAction>) => {
+        try {
+            const fetchPostsPages = await api.fetchPosts();
+            dispatch({
+                type: FETCH_POSTS,
+                payload: fetchPostsPages?.data,
+            });
+        } catch (error: any) {
+            let errorMessage: string;
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            } else {
+                errorMessage = 'An unknown error occurred';
+            }
+            console.error(errorMessage);
+
+        }
+    };
+};
+
 export const fetchReport = (options: WordPressOptions, url : string, reload = false, inprogress = false): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
@@ -363,7 +585,7 @@ export const updateSettings = (
 
 export const changeGear = (
     mode: BasePerformanceGear | PerformanceGear,
-): ThunkAction<void, RootState, unknown, AnyAction> => {
+): ThunkAction<Promise<string[] | undefined>, RootState, unknown, AnyAction> => {
 
     const starter = ['Remove Unused CSS', 'Minify CSS', 'Minify Javascript', 'Page Cache', 'Self Host Google Fonts'];
     const accelerate = [...starter, 'RapidLoad CDN', 'Serve next-gen Images', 'Lazy Load Iframes', 'Lazy Load Images', 'Exclude LCP image from Lazy Load', 'Add Width and Height Attributes', 'Defer Javascript'];
@@ -384,6 +606,7 @@ export const changeGear = (
             [key in BasePerformanceGear] : string[]
         } = {starter, accelerate, turboMax};
 
+        //console.log(modes[mode])
         // excluding perf gear from updates.
         const newOptions: AuditSetting[] = settings
             ?.map((s: AuditSetting) => ({
@@ -399,12 +622,17 @@ export const changeGear = (
             }))
         })) || [];
 
+        // Check if mode is a valid key in modes
+        const options = mode in modes ? modes[mode as keyof typeof modes] : undefined;
+
         dispatch({
             type: CHANGE_GEAR, payload: {
                 settings: newOptions,
                 mode
             }
         });
+
+        return Promise.resolve(options);
     }
 }
 

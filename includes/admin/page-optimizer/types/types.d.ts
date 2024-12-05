@@ -1,6 +1,7 @@
 
 interface Window {
     rapidload_optimizer: WordPressOptions;
+    uucss_global: uucssGlobal;
 }
 interface WordPressOptions {
     ajax_url: string
@@ -47,6 +48,28 @@ interface Help{
     help: boolean,
     title : string,
     content: string,
+}
+
+interface uucssGlobal {
+    activation_url: string;
+    on_board_complete: string;
+    active_modules: {
+        general: {
+            options: GeneralSettings;
+        }
+    }
+}
+
+interface GeneralSettings {
+    uucss_excluded_links: string[];
+    rapidload_minify_html: boolean;
+    uucss_query_string: boolean;
+    preload_internal_links: boolean;
+    uucss_enable_debug: boolean;
+    uucss_jobs_per_queue: number;
+    uucss_queue_interval: number;
+    uucss_disable_add_to_queue: boolean;
+    uucss_disable_add_to_re_queue: boolean;
 }
 
 type SettingsCategory = 'cache' | 'cdn' | 'image' | 'javascript' | 'js' | 'font' | 'css';

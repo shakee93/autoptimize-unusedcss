@@ -89,7 +89,7 @@ class RapidLoad_Admin_Bar {
 
         $data = array(
             'titan_stylesheet_url' => $package .  $indexCSS,
-            'load_optimizer' => !(is_admin() && $page === 'rapidload'),
+            'load_optimizer' => true,
             'page_optimizer_package_base' => $package,
             'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist',
             'plugin_url' => UUCSS_PLUGIN_URL,
@@ -174,11 +174,11 @@ class RapidLoad_Admin_Bar {
                     margin: 0 !important;
                 }
 
-                html.rapidload-optimizer-open,
+                /*html.rapidload-optimizer-open,
                 .rapidload-optimizer-open body,
                 body.rapidload-optimizer-open {
                     overflow: hidden !important;
-                }
+                }*/
 
                 .rpo-loaded\:with-popup #wp-admin-bar-rapidload .ab-sub-wrapper {
                     display: none !important;
@@ -186,6 +186,10 @@ class RapidLoad_Admin_Bar {
 
                 #wp-admin-bar-rapidload .ab-item {
                     padding: 0 8px 0 7px;
+                }
+
+                #rapidload-page-optimizer{
+                    margin-left: -20px
                 }
 
                 /*.rl-page-optimizer-loaded #wp-admin-bar-rapidload *,*/
