@@ -284,6 +284,7 @@ class RapidLoad_Module
                     'uucss_disable_add_to_queue' => isset($options['uucss_disable_add_to_queue']) && $options['uucss_disable_add_to_queue'] == "1" ? true : false,
                     'uucss_disable_add_to_re_queue' => isset($options['uucss_disable_add_to_re_queue']) && $options['uucss_disable_add_to_re_queue'] == "1" ? true : false,
                     'preload_internal_links' => isset($options['preload_internal_links']) && $options['preload_internal_links'] == "1" ? true : false,
+                    'uucss_disable_error_tracking' => isset($options['uucss_disable_error_tracking']) && $options['uucss_disable_error_tracking'] == "1" ? true : false,
                 ]
             ],
             'css' => [
