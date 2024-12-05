@@ -5,7 +5,7 @@ import {
     AlertDialogHeader, AlertDialogTitle,
     AlertDialogTrigger
 } from "components/ui/alert-dialog";
-import {ReactNode} from "react";
+import {ReactNode, useEffect} from "react";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
 import useSubmitSettings from "hooks/useSubmitSettings";
@@ -17,6 +17,7 @@ import {ThunkDispatch} from "redux-thunk";
 import {AppAction, RootState} from "../../../../store/app/appTypes";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {useAppContext} from "../../../../context/app";
+import {fetchSettings} from "../../../../store/app/appActions";
 
 interface Props {
     children: ReactNode
@@ -31,18 +32,16 @@ interface Props {
 
 const UnsavedChanges = ({children , onClick, title, description, action = 'Save & Exit', onCancel, cancel, performanceGear }: Props) => {
 
-    const { touched, fresh } = useSelector(optimizerData)
+    const { touched, fresh, settings, settingsOriginal } = useSelector(optimizerData)
     const { submitSettings } = useSubmitSettings()
-    const {showInprogress} = useAppContext()
 
     if(!performanceGear){
-        if (!(fresh ? true : touched) || showInprogress) {
+        if (!(fresh ? true : touched)) {
             return <div onClick={e => onClick()} >
                 {children}
             </div>
         }
     }
-
 
     const submit = async () => {
 
@@ -52,7 +51,14 @@ const UnsavedChanges = ({children , onClick, title, description, action = 'Save 
         }
         onClick();
 
+
     }
+
+    // useEffect(() => {
+    //    if(!loading){
+    //        dispatch(fetchSettings(options, options.optimizer_url, true))
+    //    }
+    // }, [loading]);
 
     return (
         <AlertDialog>

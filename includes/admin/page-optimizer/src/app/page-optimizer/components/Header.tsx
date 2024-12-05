@@ -1,13 +1,13 @@
 import {
     DevicePhoneMobileIcon
 } from "@heroicons/react/24/outline";
-import React from "react";
+import React, {useEffect} from "react";
 import { useAppContext } from "../../../context/app";
 import TooltipText from "components/ui/tooltip-text";
 import { ThunkDispatch } from "redux-thunk";
 import { AppAction, RootState } from "../../../store/app/appTypes";
 import { useDispatch, useSelector } from "react-redux";
-import { changeReport, fetchReport } from "../../../store/app/appActions";
+import {changeReport, fetchReport, fetchSettings} from "../../../store/app/appActions";
 import { optimizerData } from "../../../store/app/appSelector";
 import AppButton from "components/ui/app-button";
 import { cn } from "lib/utils";
@@ -30,14 +30,18 @@ const Header = ({ url }: { url: string }) => {
         setShowOptimizer,
         options,
         version,
+        savingData,
+        invalidatingCache,
+        mode
     } = useAppContext()
 
     const { activeReport,
         loading,
         testMode,
-        reanalyze
+        reanalyze,
+         settings, settingsOriginal
     } = useSelector(optimizerData);
-    const { inProgress } = useCommonDispatch()
+    const { inProgress, testModeStatus } = useCommonDispatch()
     const {
         dispatch: commonDispatch
     } = useCommonDispatch()
@@ -46,6 +50,29 @@ const Header = ({ url }: { url: string }) => {
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const { isDark } = useRootContext();
 
+    useEffect(() => {
+        if(!savingData && !invalidatingCache){
+            dispatch(fetchSettings(options, options.optimizer_url, true))
+        }
+    }, [savingData, invalidatingCache]);
+
+    // useEffect(() => {
+    //     if (settings && settingsOriginal) {
+    //         settings.forEach((setting, settingIndex) => {
+    //             const originalSetting = settingsOriginal[settingIndex];
+    //
+    //             setting.inputs.forEach((input, inputIndex) => {
+    //                 const originalInput = originalSetting.inputs[inputIndex];
+    //
+    //                 if (input.value !== originalInput.value) {
+    //                     console.log(`Difference found in object index ${settingIndex}, input index ${inputIndex}:`);
+    //                     console.log(`Key: ${input.key}`, `Name: ${setting.name}` , `control_label: ${input.control_label}`);
+    //                     console.log(`Current Value: ${input.value}, Original Value: ${originalInput.value}`);
+    //                 }
+    //             });
+    //         });
+    //     }
+    // }, [settings, settingsOriginal]);
 
 
     return (
@@ -97,7 +124,33 @@ const Header = ({ url }: { url: string }) => {
                         </div>
                         <div className='flex overflow-hidden border rounded-2xl shadow' data-tour="current-url">
                             <UrlPreview />
-                            <UnsavedChanges
+                            {
+                                mode === 'onboard' ? (
+                                        <TooltipText text='Analyze the page'>
+                                            <AppButton asChild={true} data-tour='analyze'
+                                                       className={cn(
+                                                           'transition-none rounded-none h-12 px-3 pr-3.5 ' +
+                                                           'border-r-0 border-l border-t-0 border-b-0 bg-transparent ',
+                                                       )}
+                                                       variant='outline'
+                                                       onClick={() => {
+                                                           if (!inProgress || !loading) {
+                                                               dispatch(fetchReport(options, url, true));
+                                                               commonDispatch(setCommonState('openAudits', []));
+                                                           }
+                                                       }}
+                                            >
+                                                <div className={`flex flex-col gap-[1px] items-center`}>
+                                                    <RefreshCw className={cn(
+                                                        'w-4 -mt-0.5',
+                                                        loading && 'animate-spin'
+                                                    )} />
+                                                    <span className='text-xxs font-normal text-brand-500'>Analyze </span>
+                                                </div>
+                                            </AppButton>
+                                        </TooltipText>
+                                    ) : (
+                                    <UnsavedChanges
                                 title='Analyze without applying optimization?'
                                 description="Your changes are not saved yet. If you analyze now, your recent edits won't be included."
                                 action='Apply Optimization'
@@ -133,6 +186,7 @@ const Header = ({ url }: { url: string }) => {
                                     </AppButton>
                                 </TooltipText>
                             </UnsavedChanges>
+                                    )}
                         </div>
                     </div>
                 </div>
@@ -161,7 +215,7 @@ const Header = ({ url }: { url: string }) => {
                 </div>
             </header>
             <AnimatePresence>
-                {testMode && (
+                {testModeStatus && (
                     <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}

@@ -34,6 +34,35 @@ class RapidLoad_Cache_Store
 
     }
 
+    public static function get_page_cache_errors()
+    {
+        if ( !file_exists( ABSPATH . 'wp-config.php' ) ) {
+            return 'wp-config.php file missing';
+        }
+
+        $wp_config_file = ABSPATH . 'wp-config.php';
+
+        if(!is_writable( $wp_config_file )){
+            return 'wp-config.php file has no write permission';
+        }
+
+        $wp_config_file_contents = file_get_contents( $wp_config_file );
+
+        $found_wp_cache_constant = preg_match( '#define\s*\(\s*[\'\"]WP_CACHE[\'\"]\s*,\s*true\s*\);#', $wp_config_file_contents, $matches );
+
+        if(!$found_wp_cache_constant){
+            return 'WP_CACHE constant not found or set to false';
+        }
+
+        $cache_dir = self::get_cache_dir( site_url() );
+
+        if ( ! is_dir( $cache_dir ) || !is_writable( $cache_dir )) {
+            return 'no permission for cache directory';
+        }
+
+        return 'Hit';
+    }
+
     public static function set_wp_cache_constant( $set = true ) {
 
         if ( file_exists( ABSPATH . 'wp-config.php' ) ) {
@@ -967,7 +996,7 @@ class RapidLoad_Cache_Store
         $new_cache_file_dir  = dirname( $new_cache_file );
         $new_cache_file_name = basename( $new_cache_file );
 
-        if ( RapidLoad_Cache_Engine::$settings['minify_html'] ) {
+        if ( RapidLoad_Cache_Engine::$settings['minify_html'] && apply_filters('rapidload/page-cache/minify/enabled', true)) {
             $page_contents = self::minify_html( $page_contents );
         }
 

@@ -104,6 +104,19 @@ export const Status = React.memo(({ status }: { status: AuditSetting['status'] }
         )
     }
 
+    if (status.status === 'waiting') {
+        return (
+            <>
+                <div className='flex gap-2 items-center text-xs w-fit rounded-lg'>
+                    <Circle className={cn(
+                        'animate-pulse w-2.5 fill-amber-500 stroke-0'
+                    )} />
+                    Waiting
+                </div>
+            </>
+        )
+    }
+
     if (status.status === 'processing') {
         return (
             <>
@@ -126,6 +139,8 @@ export const Status = React.memo(({ status }: { status: AuditSetting['status'] }
             </>
         )
     }
+
+
     return <></>;
 })
 

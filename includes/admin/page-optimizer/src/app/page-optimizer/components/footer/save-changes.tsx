@@ -295,10 +295,11 @@ const SaveChanges = () => {
         <Mode mode='onboard'>
             <Dialog>
                 <div>
-                    <DialogTrigger>
-                        <AppButton className='text-sm'>
+                    <DialogTrigger className={cn('pointer-events-none opacity-50 cursor-not-allowed ', dialogData && dialogData.count > 0 && 'pointer-events-auto opacity-100 cursor-pointer' )}>
+                        <AppButton className="text-sm">
                             {savingData ? <ArrowPathIcon className='w-5 mr-0.5 animate-spin'/> : <UserCircle className='w-5 mr-0.5'/>}
                             Connect your Account</AppButton>
+
                     </DialogTrigger>
                     <DialogContent className='px-6 py-6'>
                         <DialogHeader>
@@ -326,7 +327,7 @@ const SaveChanges = () => {
                                                     </Card>
                                                 </li>
                                             ))}
-                                            {data && !!dialogData.balance && (
+                                            {data && !!dialogData.balance && dialogData.balance > 0 && (
                                                 <li className='text-center text-muted-foreground mt-3'>and {dialogData.balance} more audit{dialogData.balance > 1 && 's'}...</li>
                                             )}
                                         </ul>

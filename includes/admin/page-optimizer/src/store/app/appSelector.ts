@@ -52,6 +52,7 @@ export const optimizerData = createSelector(
             ...report,
             activeReport: state.activeReport,
             settings: settings.state,
+            settingsOriginal: settings.original,
             settingsLoading: settings.loading,
             actions,
             activeGear,

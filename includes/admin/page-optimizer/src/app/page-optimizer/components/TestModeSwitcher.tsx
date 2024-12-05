@@ -18,13 +18,17 @@ const TestModeSwitcher = () => {
     const [loadingStatus, setLoadingStatus] = useState(false);
     const { testModeStatus, testModeLoading, dispatch } = useCommonDispatch();
     const { handleTestModeSwitchChange } = useTestModeUtils();
-    const { options } = useAppContext();
+    const { options, mode } = useAppContext();
     const { revisions } = useSelector(optimizerData);
 
     useEffect(() => {
-        if (testMode) {
+        if (testMode && mode === 'onboard') {
+            dispatch(setCommonState('testModeStatus', false));
+        }
+        else {
             dispatch(setCommonState('testModeStatus', testMode));
         }
+
 
     }, [testMode, dispatch]);
 
@@ -52,7 +56,7 @@ const TestModeSwitcher = () => {
                         layoutId="bubble"
                         className={cn(
                             'absolute w-[78px] rounded-[14px] border-2 border-brand-200/80 text-black  -z-1 h-[44px] text-sm flex flex-col gap-2 px-3 py-2.5 font-medium dark:bg-brand-950',
-                            testMode && 'w-[110px] right-0.5  border-amber-500/80'
+                            testModeStatus && 'w-[110px] right-0.5  border-amber-500/80'
                         )}
                         style={{ borderRadius: 14 }}
                         transition={{ type: "spring", bounce: 0, duration: 0.6 }}
@@ -60,26 +64,26 @@ const TestModeSwitcher = () => {
 
                     <div
                         onClick={async () => {
-                            if (testMode) {
+                            if (testModeStatus) {
                                 await handleSwitchChange(false);
                             }
                         }}
-                        className={`relative z-1 items-center text-sm flex gap-2 px-3 py-2.5 font-medium rounded-2xl ${testMode ? 'text-brand-500' : ''}`}
+                        className={`relative z-1 items-center text-sm flex gap-2 px-3 py-2.5 font-medium rounded-2xl ${testModeStatus ? 'text-brand-500' : ''}`}
                     >
                         <Circle
-                            className={cn(`w-1.5 stroke-0 ${testMode ? 'fill-brand-300' : 'fill-green-600'} animate-ping absolute inline-flex opacity-75`)} />
+                            className={cn(`w-1.5 stroke-0 ${testModeStatus ? 'fill-brand-300' : 'fill-green-600'} animate-ping absolute inline-flex opacity-75`)} />
                         <Circle
-                            className={cn(`w-1.5 stroke-0 ${testMode ? 'fill-brand-300' : 'fill-green-600'} relative inline-flex`)} />
+                            className={cn(`w-1.5 stroke-0 ${testModeStatus ? 'fill-brand-300' : 'fill-green-600'} relative inline-flex`)} />
                         Live
                     </div>
 
                     <div
                         onClick={async () => {
-                            if (!testMode) {
+                            if (!testModeStatus) {
                                 await handleSwitchChange(true);
                             }
                         }}
-                        className={`relative justify-center items-center z-1 text-sm flex pl-6 pr-5 py-2.5 whitespace-nowrap font-medium rounded-2xl ${testMode ? 'text-brand-500' : 'text-brand-500'}`}
+                        className={`relative justify-center items-center z-1 text-sm flex pl-6 pr-5 py-2.5 whitespace-nowrap font-medium rounded-2xl ${testModeStatus ? 'text-brand-500' : 'text-brand-500'}`}
                     >
                         Test Mode
                     </div>
