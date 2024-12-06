@@ -161,7 +161,7 @@
               </div>
               <div>
                 <h1 @click="onData.uucss_disable_error_tracking = !onData.uucss_disable_error_tracking" class="font-normal text-base text-black-font cursor-pointer">Disable Error Tracking</h1>
-                <p class="text-sm text-gray-font">Disable Error Tracking</p>
+                <p class="text-sm text-gray-font">Enable to stop tracking with Bugsnag.</p>
               </div>
             </div>
           </div>
