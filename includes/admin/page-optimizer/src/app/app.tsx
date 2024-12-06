@@ -12,7 +12,7 @@ import {AnimatePresence} from "framer-motion";
 import {useRootContext} from "../context/root";
 import {setCommonState} from "../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
-import {toBoolean} from "lib/utils";
+import {toBoolean, isDev, disableDebugReport} from "lib/utils";
 import Bugsnag from "@bugsnag/js";
 
 const AppTour = React.lazy(() => import( 'components/tour'))
@@ -51,16 +51,16 @@ const App = ({popup, _showOptimizer = false}: {
             setMounted(true)
         }, 50);
 
-        Bugsnag.leaveBreadcrumb('Titan Loaded')
+        !isDev && !disableDebugReport && Bugsnag.leaveBreadcrumb('Titan Loaded')
 
     }, []);
 
     useEffect(() => {
 
         if (showOptimizer) {
-            Bugsnag.leaveBreadcrumb('Titan Opened');
+            !isDev && !disableDebugReport && Bugsnag.leaveBreadcrumb('Titan Opened');
         } else {
-            Bugsnag.leaveBreadcrumb('Titan Closed');
+            !isDev && !disableDebugReport && Bugsnag.leaveBreadcrumb('Titan Closed');
         }
 
     }, [showOptimizer])

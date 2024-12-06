@@ -9,13 +9,11 @@ import "@fontsource-variable/inter";
 import {createRoot} from 'react-dom/client';
 import ShadowRoot from "components/shadow-dom";
 import SpeedPopover from "app/speed-popover";
-import {isDev} from "lib/utils";
+import {isDev, disableDebugReport} from "lib/utils";
 import Providers from "./Providers";
 
 import Bugsnag from '@bugsnag/js'
 import BugsnagPluginReact, {BugsnagPluginReactResult} from '@bugsnag/plugin-react'
-
-const disableDebugReport = window.rapidload_optimizer && window.rapidload_optimizer.uucss_disable_error_tracking == '1';
 
 if (!isDev && !disableDebugReport) {
     Bugsnag.start({
