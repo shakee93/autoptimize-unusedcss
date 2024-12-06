@@ -350,8 +350,6 @@ export const saveGeneralSettings = (options: WordPressOptions, data: any): Thunk
 
         try {
             const saveGeneralSettings = await api.saveGeneralSettings(data);
-
-            console.log(saveGeneralSettings);
             return { success: true };
         } catch (error: any) {
             console.error('Error on saving General Settings:', error);
@@ -417,6 +415,32 @@ export const getHomePagePerformance = (options: WordPressOptions, data?: any): T
         }
     };
 };
+
+export const getAiPrediction = (options: WordPressOptions, url: string, score: number, audits: any, metrics: any): ThunkAction<Promise<{ success: boolean, error?: string, data?: any }>, RootState, unknown, AnyAction> => {
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string, data?: any }> => {
+        try {
+            const aiPredictionResult = await api.getAiPrediction(url, score, audits, metrics);
+            
+            return { 
+                success: true, 
+                data: aiPredictionResult?.data 
+            };
+        } catch (error: any) {
+            console.error('Error on AI Prediction:', error);
+            let errorMessage: string;
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            } else {
+                errorMessage = 'An unknown error occurred';
+            }
+            return { success: false, error: errorMessage };
+        }
+    }
+}
 
 export const fetchPosts = (options: WordPressOptions): ThunkAction<void, RootState, unknown, AnyAction> => {
     const api = new ApiService(options);

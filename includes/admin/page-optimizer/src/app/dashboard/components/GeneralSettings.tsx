@@ -9,6 +9,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectL
 import {ChevronRightIcon} from "@heroicons/react/24/solid";
 import Accordion from "components/accordion";
 import {Label} from "components/ui/label";
+import { Button } from 'components/ui/button';
 
 
 interface GeneralSettingsProps {
@@ -82,7 +83,7 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
                 {renderCheckbox('Preload Links', 'Preload internal links for faster navigation.', 'preload_internal_links')}
                 {renderCheckbox('Debug Mode', 'Enable debug logs for RapidLoad.', 'uucss_enable_debug')}
 
-
+                
                 <div className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60 my-2">
                     <div className="flex items-center justify-between cursor-pointer " onClick={toggleIsOpen} >
                         <div className="flex flex-col">
@@ -159,7 +160,16 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
 
                 {renderTextarea('Exclude URLs', 'URLs that need to be excluded from RapidLoad optimization.', 'uucss_excluded_links')}
 
-
+                <div className="flex m-2 ml-0 text-left w-full">
+                    <Button  
+                        className='flex gap-2' 
+                        onClick={() => {
+                            window.location.href = '/wp-admin/admin.php?page=rapidload-legacy-dashboard#/';
+                        }}
+                        variant='outline'>
+                        Legacy Dashboard
+                    </Button>
+                </div>
             </div>
             <div className="border-t flex justify-end mt-4 px-4 pt-4 gap-2">
                 <AppButton

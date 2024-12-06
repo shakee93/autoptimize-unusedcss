@@ -5,6 +5,7 @@ const initialState: CommonState = {
     mode: "normal",
     isTourOpen: false,
     onboardCompleted: false,
+    aiPredictionResult: null,
     mobile: {
         activeTab: 'configurations',
         openAudits: [],

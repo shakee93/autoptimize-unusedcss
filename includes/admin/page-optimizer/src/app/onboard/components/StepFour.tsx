@@ -10,14 +10,17 @@ import PerformanceProgressBar from "components/performance-progress-bar";
 import usePerformanceColors from "hooks/usePerformanceColors";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {setCommonRootState, setCommonState} from "../../../store/common/commonActions";
+import { AIButtonIcon } from './icons/icon-svg';
 
 const StepFour= () => {
     const { options} = useAppContext()
     const { activeReport, data, homePerformance } = useSelector(optimizerData);
-    const beforeColor = usePerformanceColors(homePerformance.first_entry);
-    const afterColor = usePerformanceColors(homePerformance.last_entry);
+    const [performance, setPerformance] = useState(homePerformance);
+    const beforeColor = usePerformanceColors(performance.first_entry);
+    const afterColor = usePerformanceColors(performance.last_entry);
     const [isFadingOut, setIsFadingOut] = useState(false);
-    const { dispatch} = useCommonDispatch()
+    const { dispatch, aiPredictionResult} = useCommonDispatch()
+    const [aiMessage, setAiMessage] = useState(false)
 
     const gotoDashbaord = () => {
         setIsFadingOut(true);
@@ -29,6 +32,16 @@ const StepFour= () => {
     useEffect(() => {
         dispatch(setCommonRootState('onboardCompleted', true));
     },[dispatch]);
+
+    useEffect(() => {
+        if(homePerformance.last_entry < homePerformance.first_entry || homePerformance.last_entry < 1) {   
+            setAiMessage(true)
+            console.log(aiPredictionResult)
+        }else{
+            setPerformance(homePerformance)
+            setAiMessage(false)
+        }
+    },[homePerformance]);
 
 
     return (
@@ -51,52 +64,86 @@ const StepFour= () => {
                     </span>
                     </div>
                     <div className="flex justify-center p-4 max-w-xl mx-auto w-full relative items-center gap-4">
-                        {/* Before Results */}
-                        <div
-                            className="flex flex-col items-center gap-2 px-10 py-4 rounded-2xl w-[230px] bg-brand-100/30">
-                            <div className="text-lg font-semibold">Before Score</div>
-                            <div className="">
-                                <PerformanceProgressBar
-                                    className={cn('max-h-[180px]')}
-                                    background={false}
-                                    stroke={6}
-                                    performance={homePerformance.first_entry}
-                                />
-                            </div>
-                            <div className="text-sm font-semibold flex items-center gap-1">
-                                <Circle
-                                    className={cn(
-                                        `w-2 stroke-0 transition-all relative inline-flex`,
-                                    )}
-                                    style={{fill: afterColor[1]}}
-                                /> Performance Score
-                            </div>
-                        </div>
-                        {/* Divider with BoltIcon */}
-                        <ArrowLongRightIcon className="w-6 h-6"/>
-
-
-                        <div
-                            className="flex flex-col items-center gap-2 px-10 py-4 rounded-2xl w-[230px] bg-brand-100/30">
-                            <div className="text-lg font-semibold">Current Score</div>
-                            <div className="">
-                                <PerformanceProgressBar
-                                    className={cn('max-h-[180px]')}
-                                    scoreClassName={"text-brand-950"}
-                                    background={false}
-                                    stroke={6}
-                                    performance={homePerformance.last_entry}
-                                />
-                            </div>
-                            <div className="text-sm font-semibold flex items-center gap-1">
-                                <Circle
-                                    className={cn(
-                                        `w-2 stroke-0 transition-all relative inline-flex`,
-                                    )}
-                                    style={{fill: beforeColor[1]}}
-                                /> Performance Score
+                        {aiMessage ? (
+                        <div className='flex flex-col items-center gap-2 px-10 py-4 rounded-2xl min-w-[500px] bg-brand-100/30'>
+                            <div className="text-lg font-semibold flex items-center gap-2"><AIButtonIcon/> AI Analysis</div>
+                            
+                            <div className="flex flex-col gap-4 w-full">
+                                {/* Opportunities Section */}
+                                <div className="flex flex-col gap-2">
+                                    <div className="text-sm font-semibold text-brand-900">Opportunities</div>
+                                    {aiPredictionResult?.currentScore?.opportunities.map((opp: any, index: number) => (
+                                        <div key={index} className="text-xs text-brand-600 flex justify-between">
+                                            <span>{opp.description}</span>
+                                            <span className="font-medium">{opp.potentialSavings}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                        
+                                {/* Diagnostics Section */}
+                                <div className="flex flex-col gap-2">
+                                    <div className="text-sm font-semibold text-brand-900">Diagnostics</div>
+                                    {aiPredictionResult?.currentScore?.diagnostics.map((diag: any, index: number) => (
+                                        <div key={index} className="text-xs text-brand-600 flex justify-between">
+                                            <span>{diag.description}</span>
+                                            <span className="font-medium">{diag.elements} elements</span>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
+                        ) : (
+                            <> 
+                            {/* Before Results */}
+                        <div className="flex flex-col items-center gap-2 px-10 py-4 rounded-2xl w-[230px] bg-brand-100/30">
+                        <div className="text-lg font-semibold">Before Score</div>
+                        <div className="">
+                            <PerformanceProgressBar
+                                className={cn('max-h-[180px]')}
+                                background={false}
+                                stroke={6}
+                                loading={performance.first_entry < 1}
+                                performance={performance.first_entry > 1 ? performance.first_entry : 80 }
+                            />
+                        </div>
+                        <div className="text-sm font-semibold flex items-center gap-1">
+                            <Circle
+                                className={cn(
+                                    `w-2 stroke-0 transition-all relative inline-flex`,
+                                )}
+                                style={{fill: beforeColor[1]}}
+                            /> Performance Score
+                        </div>
+                    </div>
+                    {/* Divider with BoltIcon */}
+                    <ArrowLongRightIcon className="w-6 h-6"/>
+
+
+                    <div
+                        className="flex flex-col items-center gap-2 px-10 py-4 rounded-2xl w-[230px] bg-brand-100/30">
+                        <div className="text-lg font-semibold">Current Score</div>
+                        <div className="">
+                            <PerformanceProgressBar
+                                className={cn('max-h-[180px]')}
+                                scoreClassName={"text-brand-950"}
+                                background={false}
+                                stroke={6}
+                                loading={performance.last_entry < 1}
+                                performance={performance.last_entry > 1 ? performance.last_entry : 80 }
+                            />
+                        </div>
+                        <div className="text-sm font-semibold flex items-center gap-1">
+                            <Circle
+                                className={cn(
+                                    `w-2 stroke-0 transition-all relative inline-flex`,
+                                )}
+                                style={{fill: afterColor[1]}}
+                            /> Performance Score
+                        </div>
+                    </div>
+                    </>
+                        )}
+                        
 
                     </div>
                     <button

@@ -50,15 +50,6 @@ interface Help{
     content: string,
 }
 
-interface uucssGlobal {
-    activation_url: string;
-    on_board_complete: string;
-    active_modules: {
-        general: {
-            options: GeneralSettings;
-        }
-    }
-}
 
 interface GeneralSettings {
     uucss_excluded_links: string[];

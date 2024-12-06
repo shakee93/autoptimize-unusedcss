@@ -9,6 +9,7 @@ import { ArrowDown, ArrowUp, Dot } from "lucide-react";
 import { AppState, RootState } from "../../../../store/app/appTypes";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import { saveGeneralSettings } from "../../../../store/app/appActions";
+import TooltipText from "components/ui/tooltip-text";
 
 const UrlPreview = () => {
 
@@ -33,13 +34,19 @@ const UrlPreview = () => {
         ? (initialUrl === headerUrl ? initialUrl : headerUrl || url)
         : (headerUrl || url);
 
-    return <div className='flex flex-row flex-1 gap-3 items-center dark:bg-brand-800'>
-        <div>
+        const truncateUrl = (url: string, maxLength: number = 30) => {
+            return url.length > maxLength ? `${url.substring(0, maxLength)}...` : url;
+        };
+
+    return <div className='flex flex-row flex-1 gap-3 items-center justify-center dark:bg-brand-800'>
+        <div className='flex flex-col items-center justify-center'>
             <div
-                className='text-sm items-center cursor-default text-ellipsis truncate md:max-w-sm lg:max-w-xl'>
-                {
-                    finalUrl
-                }
+                className='text-sm items-center cursor-default text-ellipsis truncate md:max-w-sm lg:max-w-xl '>
+                    <TooltipText text={finalUrl}>
+                    {
+                        truncateUrl(finalUrl)
+                    }
+                    </TooltipText>
             </div>
 
             {!error &&

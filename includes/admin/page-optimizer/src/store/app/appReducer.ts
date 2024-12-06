@@ -83,7 +83,9 @@ const initialState: AppState = {
     license: null,
     homePerformance: {
         first_entry: 0,
-        last_entry: 0
+        last_entry: 0,
+        first_response_time: '0ms',
+        last_response_time: '0ms'
     }
 };
 

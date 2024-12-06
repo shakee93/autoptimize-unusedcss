@@ -58,6 +58,7 @@ class RapidLoad_Optimizer
             'get_cache_file_size' => 'get_cache_file_size',
             'update_titan_performance_gear' => 'update_titan_performance_gear',
             'rapidload_titan_home_page_performance' => 'rapidload_titan_home_page_performance',
+            'get_ai_prediction' => 'handle_ai_prediction',
         ];
 
         foreach ($actions as $action => $method) {
@@ -1732,4 +1733,58 @@ class RapidLoad_Optimizer
 
         wp_send_json_success($result);
     }
+
+    public function handle_ai_prediction() {
+        self::verify_nonce();
+    
+        // header("Access-Control-Allow-Origin: *");
+        // header("Access-Control-Allow-Methods: POST, GET");
+        // header("Access-Control-Allow-Headers: Content-Type");
+    
+        // if (!isset($_REQUEST['url']) || !isset($_REQUEST['score']) || !isset($_REQUEST['audits']) || !isset($_REQUEST['metrics'])) {
+        //     wp_send_json_error('Missing required parameters');
+        // }
+    
+        // $url = sanitize_text_field($_REQUEST['url']);
+        // $score = floatval($_REQUEST['score']);
+        // $audits = json_decode(stripslashes($_REQUEST['audits']), true);
+        // $metrics = json_decode(stripslashes($_REQUEST['metrics']), true);
+    
+        // $query_params = [
+        //     'url' => $url,
+        //     'score' => $score,
+        //     'audits' => json_encode($audits),
+        //     'metrics' => json_encode($metrics),
+        // ];
+    
+        // $body = file_get_contents('php://input');
+
+        // $result = ($body) ? json_decode($body) : null;
+
+        // wp_send_json_error($result);
+    
+        $api_url = 'https://rapidload-ai-faq-manager.vercel.app/api/score?' . http_build_query($query_params);
+    
+        try {
+            $response = wp_remote_get($api_url, [
+                'timeout' => 30,
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+            ]);
+    
+            if (is_wp_error($response)) {
+                wp_send_json_error($response->get_error_message());
+            }
+    
+            $body = wp_remote_retrieve_body($response);
+            $data = json_decode($body, true);
+    
+            wp_send_json_success($data);
+        } catch (Exception $e) {
+            wp_send_json_error($e->getMessage());
+        }
+    }
+    
+    
 }

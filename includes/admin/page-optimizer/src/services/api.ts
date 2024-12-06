@@ -215,6 +215,38 @@ class ApiService {
        }
     }
 
+    async getAiPrediction(url: string, score: number, audits: any, metrics: any): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', 'get_ai_prediction');
+            // this.baseURL.searchParams.append('url', url);
+            // this.baseURL.searchParams.append('score', score.toString());
+            // this.baseURL.searchParams.append('audits', JSON.stringify(audits));
+            // this.baseURL.searchParams.append('metrics', JSON.stringify(metrics));
+
+            const response = await fetch(this.baseURL, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                // body: JSON.stringify({
+                //    audits,
+                //    metrics  
+                // })
+            });
+
+            if (!response.ok) {
+                throw new Error('AI prediction request failed');
+            }
+
+            const data = await response.json();
+            return data;
+
+        } catch (error) {
+            console.error('AI Prediction Error:', error);
+            throw error;
+        }
+    }
+
     async getCSSJobStatus(url: string, types: string[]): Promise<any> {
         try {
             this.baseURL.searchParams.append('action', 'rapidload_css_job_status');
@@ -334,7 +366,6 @@ class ApiService {
 
     async saveGeneralSettings(data: any): Promise<any> {
         try {
-            console.log(data)
             const formData = new FormData();
             this.baseURL.searchParams.append('action', 'update_rapidload_settings');
             Object.keys(data).forEach(key => {

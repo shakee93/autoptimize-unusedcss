@@ -1,5 +1,3 @@
-
-
 interface OptimizerResults  {
     performance: number
     job_id?: string;
@@ -347,3 +345,13 @@ type CssErrorKeys = 'Critical CSS' | 'Unused CSS';
 
 type BasePerformanceGear = 'starter' | 'accelerate' | 'turboMax';
 type PerformanceGear = BasePerformanceGear | 'custom' ;
+
+interface uucssGlobal {
+    activation_url?: string;
+    on_board_complete?: string;
+    active_modules: {
+        general: {
+            options: GeneralSettings;
+        };
+    };
+}

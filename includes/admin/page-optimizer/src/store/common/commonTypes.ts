@@ -4,7 +4,7 @@ export type CommonState = {
     modeData?: RapidLoadOptimizerModeData
     isTourOpen: boolean
     onboardCompleted: boolean
-
+    aiPredictionResult: any | null,
     mobile : {
         activeTab: AuditTypes;
         activeMetric?: Metric | null;

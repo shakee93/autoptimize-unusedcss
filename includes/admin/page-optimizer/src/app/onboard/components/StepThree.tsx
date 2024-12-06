@@ -4,11 +4,13 @@ import { useAppContext } from "../../../context/app";
 import Lottie from 'lottie-react';
 import rocketAnimation from 'components/animation/rocket.json';
 import useSubmitSettings from "hooks/useSubmitSettings";
-import {changeGear, fetchSettings, getHomePagePerformance} from "../../../store/app/appActions";
+import {changeGear, fetchSettings, getCSSStatus, getHomePagePerformance} from "../../../store/app/appActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../store/app/appSelector";
 import CountdownTimer from "components/ui/CountdownTimer";
+import {Skeleton} from "components/ui/skeleton";
+import ComparisonTable from 'components/ui/compare-table';
 
 const steps = [
     {
@@ -61,51 +63,11 @@ const StepThree: React.FC<StepThreeProps> = ({ onNext }) => {
     const { submitSettings } = useSubmitSettings()
     const { dispatch, headerUrl} = useCommonDispatch()
     const [update, setUpdate] = useState(false)
-    const { settings, activeGear } = useSelector(optimizerData);
+    const { settings, activeGear, cssStatus, touched } = useSelector(optimizerData);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [currentDetailIndex, setCurrentDetailIndex] = useState(0);
 
-    useEffect(() => {
-        // Change details within the current step
-        const detailInterval = setInterval(() => {
-            setCurrentDetail((prevDetail) =>
-                (prevDetail + 1) % steps[currentStep].details.length
-            );
-        }, 2000); // seconds for each detail
-
-        // Change steps seconds, but loop only after Step 3
-        // const stepInterval = setInterval(() => {
-        //     setCurrentStep((prevStep) => {
-        //         if (prevStep === 2) {
-        //             setIsCompleted(true); // Mark as completed after the last step
-        //             return prevStep; // Keep Step 3
-        //         }
-        //         return (prevStep + 1) % steps.length;
-        //     });
-        //     setCurrentDetail(0);
-        // }, 10000);
-
-        const stepInterval = setInterval(() => {
-            if (savingData || invalidatingCache) {
-                setCurrentStep(1);
-                setCurrentDetail(0);
-                setIsCompleted(true);  // Mark as completed
-                clearInterval(stepInterval);  // Stop the step interval
-            } else {
-                setCurrentStep((prevStep) => {
-                    if (prevStep === 2) {
-                        setIsCompleted(true); // Mark as completed after the last step
-                        return prevStep; // Keep Step 3
-                    }
-                    return (prevStep + 1) % steps.length;
-                });
-                setCurrentDetail(0);
-            }
-        }, 10000);
-
-        return () => {
-            clearInterval(detailInterval);
-            clearInterval(stepInterval);
-        };
-    }, [currentStep]);
+    const currentStepData = useMemo(() => steps[currentStep - 1] || steps[0], [currentStep]);
 
     useEffect(() => {
         const localGear = localStorage.getItem('rapidLoadGear')
@@ -122,16 +84,63 @@ const StepThree: React.FC<StepThreeProps> = ({ onNext }) => {
     },[settings]);
 
     useEffect(() => {
-        update && submitSettings(true);
+        if (update) {
+            setIsSubmitting(true);
+            submitSettings(true)
+                .then(() => {
+                    setIsSubmitting(false);
+                    setCurrentStep(1);
+                    const url = options?.optimizer_url;
+                    if (url) {
+                        dispatch(getCSSStatus(options, url, ['uucss', 'cpcss']));
+                    }
+                    
+                })
+                .catch((error) => {
+                    setIsSubmitting(false);
+                    console.error('Submit settings failed:', error);
+                });
+        }
     },[update]);
 
     useEffect(() => {
-        if (isCompleted && onNext) {
-            onNext();
-            dispatch(getHomePagePerformance(options));
+        if (isCompleted && !isSubmitting && onNext) {
+            const timer = setTimeout(() => {
+                onNext();
+            }, 10000);
 
+            return () => clearTimeout(timer);
         }
-    }, [isCompleted, onNext]);
+    }, [isCompleted, isSubmitting, onNext]);
+
+
+    useEffect(() => {
+
+        if(cssStatus != null) {
+            setCurrentStep(2);
+            dispatch(getHomePagePerformance(options)).then(() => {
+                setCurrentStep(3);
+                setIsCompleted(true);
+            }).catch((error) => {
+                console.error('Fetching home page performance failed:', error);
+            });
+        }
+    }, [cssStatus, savingData, invalidatingCache]);
+
+    useEffect(() => {
+        setCurrentDetailIndex(0);
+
+        const rotateDetails = setInterval(() => {
+            setCurrentDetailIndex((prevIndex) => {
+                if (prevIndex >= (currentStepData.details.length - 1)) {
+                    return 0;
+                }
+                return prevIndex + 1;
+            });
+        }, 2000);
+
+        return () => clearInterval(rotateDetails);
+    }, [currentStep, currentStepData]);
 
     return (
         <div className='w-full flex flex-col gap-4'>
@@ -159,24 +168,34 @@ const StepThree: React.FC<StepThreeProps> = ({ onNext }) => {
 
                 <div className="flex flex-col items-center justify-center gap-2">
                     <div className="text-gray-600/50 font-bold"><CountdownTimer timerOnly={true}/></div>
-                    <h4 className="text-xl font-bold capitalize text-center">{steps[currentStep].description}</h4>
-                    <p className="text-gray-600 mb-2">
-                        {steps[currentStep].details[currentDetail]}
+                    <h4 className="text-xl font-bold capitalize text-center">
+                        {currentStepData.description}
+                    </h4>
+                    <p className="text-gray-600 mb-2 text-center">
+                        {currentStepData.details[currentDetailIndex]}
                     </p>
                     {/* Progress bar */}
                     <div className="flex items-center w-64">
                         {[0, 1, 2].map(step => (
-                            <div key={step} className="h-2 flex-grow bg-gray-300 rounded-lg mr-2">
-                                <div
-                                    className="h-2 bg-purple-600 rounded-lg"
-                                    style={{width: currentStep >= step ? '100%' : '0%'}}
-                                ></div>
-                            </div>
+                            currentStep > step ? (
+                                <div key={step} className="h-2 flex-grow bg-gray-300 rounded-lg mr-2">
+                                    <div
+                                        className="h-2 bg-purple-600 rounded-lg"
+                                        style={{width: '100%'}}
+                                    ></div>
+                                </div>
+                            ) : (
+                                <Skeleton
+                                    key={step}
+                                    className="h-2 flex-grow bg-gray-300 rounded-lg mr-2"
+                                >
+                                </Skeleton>
+                            )
                         ))}
                     </div>
 
 
-                    <p className="text-sm text-gray-500 mt-2">Step {currentStep + 1} of 3</p>
+                    <p className="text-sm text-gray-500 mt-2">Step {Math.min(currentStep + 1, 3)} of 3</p>
                     {/*{(savingData || invalidatingCache) && (*/}
                     {/*    <div className='fixed inset-0 flex justify-center items-center z-[110000] bg-brand-50/80 dark:bg-brand-950/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'>*/}
                     {/*        <div className='fixed top-1/2 flex gap-2 items-center justify-center'>*/}
