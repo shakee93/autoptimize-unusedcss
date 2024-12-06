@@ -155,6 +155,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 2.4.4 - 06/12/2024 =
+ * feat: add option to disable Bugsnag debug
+
 = 2.4.3 - 05/12/2024 =
  * fix: improved security
  * fix: known bugs
