@@ -125,28 +125,6 @@
             </div>
           </div>
 
-          <div class="grid">
-            <div class="mb-5">
-              <div class="flex">
-                <div class="pr-1">
-                  <div class="flex items-center mr-4 mt-3">
-                    <div @click="onData.uucss_disable_error_tracking = !onData.uucss_disable_error_tracking" :class="onData.uucss_disable_error_tracking? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="onData.uucss_disable_error_tracking" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
-                           class="transform scale-125">
-                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <h1 @click="onData.uucss_disable_error_tracking = !onData.uucss_disable_error_tracking" class="font-normal text-base text-black-font cursor-pointer">Disable Error Tracking</h1>
-                  <p class="text-sm text-gray-font">Disable Error Tracking</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
             <div class="mb-5">
               <div class="flex">
                 <div class="pr-1">
@@ -167,6 +145,26 @@
                 </div>
               </div>
             </div>
+
+          <div class="mb-5">
+            <div class="flex">
+              <div class="pr-1">
+                <div class="flex items-center mr-4 mt-3">
+                  <div @click="onData.uucss_disable_error_tracking = !onData.uucss_disable_error_tracking" :class="onData.uucss_disable_error_tracking? 'bg-purple':''"
+                       class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
+                    <svg v-if="onData.uucss_disable_error_tracking" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"
+                         class="transform scale-125">
+                      <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h1 @click="onData.uucss_disable_error_tracking = !onData.uucss_disable_error_tracking" class="font-normal text-base text-black-font cursor-pointer">Disable Error Tracking</h1>
+                <p class="text-sm text-gray-font">Disable Error Tracking</p>
+              </div>
+            </div>
+          </div>
 
 
           <div class="flex mt-5 pb-1 transition duration-300 hover:cursor-pointer rounded" @click="onData.queue_option.default=!onData.queue_option.default">
