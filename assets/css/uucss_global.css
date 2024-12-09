@@ -1037,3 +1037,20 @@ a.toplevel_page_rapidload img{
 body.rl-page-optimizer-loaded #wpbody-content>.notice{
     display:none!important;
 }
+
+#wpadminbar .rl-input-wrapper-test-mode {
+    margin-left: 3px;
+    background-color: #ffaa34;
+    width: 69px;
+    border-radius: 5px;
+    margin-top: 4px;
+    max-height: 17px;
+    display: flex;
+    justify-content: center;
+    padding: 3px;
+}
+
+#wpadminbar .rl-input-test-mode{
+    line-height: 18px;
+    font-size: 13px;
+}
