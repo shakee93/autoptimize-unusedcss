@@ -394,10 +394,9 @@ abstract class RapidLoad_DB
 
                 case 'rule':{
                     if(isset($args['rule']) && isset($args['regex'])){
-                        $rule = sanitize_text_field($args['rule']);  // Sanitize rule input
-                        $regex = sanitize_text_field($args['regex']); // Sanitize regex input
+                        $rule = sanitize_text_field($args['rule']);
+                        $regex = sanitize_text_field($args['regex']);
 
-                        // Get the rule ID
                         $id = $wpdb->get_var( $wpdb->prepare("SELECT id FROM {$wpdb->prefix}rapidload_job WHERE rule = %s AND regex = %s LIMIT 1", $rule, $regex));
 
                         if(!empty($id)){
@@ -493,7 +492,7 @@ abstract class RapidLoad_DB
         global $wpdb;
 
         if (!empty($where)) {
-            $sql = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}rapidload_job {$where} ORDER BY id DESC");
+            $sql = "SELECT * FROM {$wpdb->prefix}rapidload_job {$where} ORDER BY id DESC";
         } else {
             $sql = "SELECT * FROM {$wpdb->prefix}rapidload_job ORDER BY id DESC";
         }
@@ -840,7 +839,8 @@ abstract class RapidLoad_DB
         ];
 
         foreach ($tableArray as $tablename) {
-            $wpdb->query($wpdb->prepare("DELETE FROM $tablename"));
+            $tablename = sanitize_key($tablename);
+            $wpdb->query("DELETE FROM {$tablename}");
         }
 
         $option_table = $table_prefix . "options";
@@ -869,7 +869,7 @@ abstract class RapidLoad_DB
 
         global $wpdb;
 
-        $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->prefix}rapidload_job"));
+        $count = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}rapidload_job");
 
         $error = $wpdb->last_error;
 
