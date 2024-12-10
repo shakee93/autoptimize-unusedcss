@@ -79,6 +79,10 @@ class RapidLoad_Admin_Bar {
         $indexJS = '/' . ltrim($indexJS, '/');
         $indexCSS = '/' . ltrim($indexCSS, '/');
 
+        add_action('wp_head', function()use ($package ,  $indexCSS){
+           // echo '<link rel="preload" href="' . $package .  $indexCSS . '" as="style" type="text/css"/>';
+        });
+
         wp_register_script( 'rapidload_page_optimizer', $package . $indexJS,[], UUCSS_VERSION);
 
         $current_url = isset($_SERVER['REQUEST_URI']) ? home_url($_SERVER['REQUEST_URI']) : $this->get_current_url();
@@ -212,9 +216,16 @@ class RapidLoad_Admin_Bar {
 
                 do_action('rapidload/admin-bar-actions', $wp_admin_bar);
 
-                $wp_admin_bar->add_node( array(
+                $options = RapidLoad_Base::fetch_options();
+
+                $wp_admin_bar->add_node(array(
                     'id'    => 'rapidload',
-                    'title' => '<div id="rl-node-wrapper" class="rl-node-wrapper"><span class="rl-icon"><img src="'. UUCSS_PLUGIN_URL .'/assets/images/logo-icon-light.svg" alt="" style="max-width: 100%"></span><span class="rl-label">'.__( 'RapidLoad', 'rapidload' ) . '</span></div>',
+                    'title' => '<div id="rl-node-wrapper" class="'. ( isset($options['rapidload_test_mode']) && $options['rapidload_test_mode'] == "1" ? 'rl-node-wrapper rl-test-mode-on' : 'rl-node-wrapper') .'" >
+                                    <span class="rl-icon">
+                                        <img src="'. UUCSS_PLUGIN_URL .'/assets/images/logo-icon-light.svg" alt="" style="max-width: 100%">
+                                    </span>
+                                    <span class="rl-label">'.__( 'RapidLoad', 'rapidload' ) . '</span>
+                                    '. ( isset($options['rapidload_test_mode']) && $options['rapidload_test_mode'] == "1" ? ' <span class="rl-input-wrapper-test-mode"><span class="rl-input-test-mode">Test Mode</span></span>' : '' ) . '</div>',
                     'href'  => admin_url( 'admin.php?page=rapidload' ),
                     'meta'  => array( 'class' => '' ),
                 ));

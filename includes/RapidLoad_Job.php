@@ -566,10 +566,10 @@ class RapidLoad_Job{
 
         $get_response_time = function ($data) {
             $decoded_data = json_decode($data);
-            if (isset($decoded_data->audits)) {
-                foreach ($decoded_data->audits as $audit) {
-                    if (isset($audit->id) && $audit->id === 'server-response-time') {
-                        return isset($audit->displayValue) ? trim(str_replace("Root document took","", $audit->displayValue)) : "0 ms";
+            if (isset($decoded_data->metrics)) {
+                foreach ($decoded_data->metrics as $metric) {
+                    if (isset($metric->id) && $metric->id === 'speed-index') {
+                        return isset($metric->displayValue) ? $metric->displayValue : "0 ms";
                     }
                 }
             }
