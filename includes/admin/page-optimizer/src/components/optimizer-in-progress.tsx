@@ -23,12 +23,11 @@ import {Label} from "./ui/label";
 
 const OptimizerInProgress = () => {
 
-    const {data, loading, error, settings} = useSelector(optimizerData);
+    const {data, loading, error, settings, cssStatus} = useSelector(optimizerData);
     const [fetchCalled, setFetchCalled] = useState(false);
     const {options, savingData} = useAppContext();
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
     const url = options?.optimizer_url;
-    const {activeReport, cssStatus} = useSelector((state: RootState) => state.app);
     const {inProgress, settingsMode} = useCommonDispatch()
     const loadingStatuses = ['failed', 'queued', 'processing'];
     const intervalRef = useRef<any | null>(null);

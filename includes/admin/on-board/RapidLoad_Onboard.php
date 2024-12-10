@@ -102,7 +102,7 @@ class RapidLoad_Onboard{
         }
     }
 
-    static function on_board_completed(){
+    public static function on_board_completed(){
         return RapidLoad_Base::is_api_key_verified();
     }
 
@@ -112,7 +112,7 @@ class RapidLoad_Onboard{
             wp_redirect( admin_url( 'admin.php?page=rapidload' ) );
         } else if ( RapidLoad_Base::get_option( 'rapidload_do_activation_redirect' ) ) {
             RapidLoad_Base::delete_option( 'rapidload_do_activation_redirect' );
-            wp_redirect( '/wp-admin/options-general.php?page=rapidload' );
+            wp_redirect( '/wp-admin/options-general.php?page=rapidload#/onboard' );
         }
     }
 

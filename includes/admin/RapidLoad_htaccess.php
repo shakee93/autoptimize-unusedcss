@@ -8,7 +8,10 @@ class RapidLoad_htaccess
         global $is_apache;
 
         if ( ! $is_apache || ( apply_filters( 'rapidload_disable_htaccess', false ) && ! $remove ) ) {
-            return false;
+            wp_send_json_error([
+                'status' => 'failed',
+                'error' => 'server not supported'
+            ]);
         }
 
         $htaccess_file = get_home_path() . '.htaccess';
@@ -16,13 +19,19 @@ class RapidLoad_htaccess
         $file_system = new RapidLoad_FileSystem();
 
         if(!$file_system->is_writable($htaccess_file)){
-            wp_send_json_error('no access');
+            wp_send_json_error([
+                'status' => 'failed',
+                'error' => '.htaccess file has no write permission'
+            ]);
         }
 
         $htaccess_content = $file_system->get_contents( $htaccess_file );
 
         if ( false === $htaccess_content ) {
-            return false;
+            wp_send_json_error([
+                'status' => 'failed',
+                'error' => '.htaccess file not found'
+            ]);
         }
 
         $has_wp_rules = self::has_wp_rules( $htaccess_content );
@@ -35,12 +44,18 @@ class RapidLoad_htaccess
         }
 
         if ( $has_wp_rules && ! self::has_wp_rules( $htaccess_content ) ) {
-            return false;
+            wp_send_json_success([
+                'status' => 'success',
+            ]);
         }
 
         $file_system->copy(get_home_path() . '.htaccess', get_home_path() . '.htaccess-backup');
 
-        return $file_system->put_contents( $htaccess_file, $htaccess_content );
+        $file_system->put_contents( $htaccess_file, $htaccess_content );
+
+        wp_send_json_success([
+            'status' => 'success',
+        ]);
     }
 
     public static function get_htaccess_marker(){

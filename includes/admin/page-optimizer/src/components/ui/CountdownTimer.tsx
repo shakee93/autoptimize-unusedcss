@@ -2,13 +2,14 @@ import React, {useState, useEffect, ReactNode} from 'react';
 import {cn} from "lib/utils";
 
 interface CountdownTimerProps {
-    text: string
-    className: string
+    text?: string
+    className?: string
+    timerOnly?: boolean
 }
 
-const CountdownTimer: React.FC<CountdownTimerProps> = ({ text, className }) => {
+const CountdownTimer: React.FC<CountdownTimerProps> = ({ text, className, timerOnly }) => {
 
-    const [countdown, setCountdown] = useState<number>(getRandomNumber(30, 40));
+    const [countdown, setCountdown] = useState<number>(getRandomNumber(60, 65));
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -34,7 +35,8 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ text, className }) => {
             ' select-none',
             className
         )}>
-            {text} — just {countdown} seconds to completion. Hang tight!
+            {timerOnly ? `${countdown}s` : `${text} — just ${countdown} seconds to completion. Hang tight!`}
+
         </p>
     );
 };
