@@ -23,6 +23,7 @@ interface UsageBarProps {
     usage?: number;
     allowedUsage?: number;
     note?: string;
+    used_gb_formatted?: string;
 }
 
 const CDNSummary = () => {
@@ -38,7 +39,7 @@ const CDNSummary = () => {
         </div>
     );
 
-    const UsageBar = ({label, usage = 0, allowedUsage = 0, note}: UsageBarProps) => {
+    const UsageBar = ({label, usage = 0, allowedUsage = 0, note, used_gb_formatted}: UsageBarProps) => {
 
     const progressWidth = allowedUsage ? `${(usage / allowedUsage) * 100}` : "0";
 
@@ -49,7 +50,7 @@ const CDNSummary = () => {
                 <div className="flex gap-2 items-baseline">
                     <span className={`font-semibold ${label === 'Additional Usage' && 'text-brand-400'}`}>{label}</span>
                     <span
-                        className="text-brand-400 text-xs">{usage} {allowedUsage ? ` / ${allowedUsage}` : allowedUsage}</span>
+                        className="text-brand-400 text-xs">{usage < 1 ? used_gb_formatted? used_gb_formatted : 0 + ' MB' : usage} / {allowedUsage ? allowedUsage : 30} GB</span>
                 </div>
                 <div className="text-[10px] font-normal dark:text-brand-300 text-brand-400">
                     {note}
@@ -86,7 +87,7 @@ const CDNSummary = () => {
             <div className="p-6">
                 <SectionHeader title="Usage Summary"/>
 
-                <UsageBar label="CDN" usage={cdnUsage.used_gb} allowedUsage={cdnUsage.allowed_gb} note="Limits will be updated on July 5"/>
+                <UsageBar label="CDN" usage={cdnUsage.used_gb} allowedUsage={cdnUsage.allowed_gb} note="Limits will be updated on July 5" used_gb_formatted={cdnUsage.used_gb_formatted}/>
                 {cdnUsage.additional_usage_gb > 0 &&
                     <UsageBar label="Additional Usage" usage={cdnUsage.additional_usage_gb} />
                 }
@@ -94,7 +95,7 @@ const CDNSummary = () => {
 
             <div
                 className="p-6 pt-4 relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white">
-                <UsageBar label="Images" usage={imageUsage.used_gb} allowedUsage={imageUsage.allowed_gb} note="Limits will be updated on July 5"/>
+                <UsageBar label="Images" usage={imageUsage.used_gb} allowedUsage={imageUsage.allowed_gb} note="Limits will be updated on July 5" used_gb_formatted={imageUsage.used_gb_formatted}/>
                 {imageUsage.additional_usage_gb > 0 &&
                     <UsageBar label="Additional Usage" usage={imageUsage.additional_usage_gb}/>
                 }

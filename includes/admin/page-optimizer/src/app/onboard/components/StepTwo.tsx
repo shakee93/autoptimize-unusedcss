@@ -166,8 +166,8 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
                 </div>
                 <div className="items-center flex flex-col">
                     <span className="capitalize font-semibold">{level}</span>
-                    {level === 'turboMax' && (
-                        <span className="font-normal text-[10px] leading-none">Test Mode Recommended</span>)}
+                    {/* {level === 'turboMax' && (
+                        <span className="font-normal text-[10px] leading-none">Test Mode Recommended</span>)} */}
                 </div>
             </div>
         );

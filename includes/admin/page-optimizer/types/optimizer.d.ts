@@ -1,3 +1,5 @@
+
+
 interface OptimizerResults  {
     performance: number
     job_id?: string;
@@ -261,6 +263,7 @@ interface cdnUsage {
     additional_usage_gb: number;
     allowed_gb: number;
     used_gb: number;
+    used_gb_formatted: string;
     cdn_url: string;
     origin: string;
     zone_id: string;
@@ -270,6 +273,7 @@ interface imageUsage {
     additional_usage_gb: number;
     allowed_gb: number;
     used_gb: number;
+    used_gb_formatted: string;
     host: string;
 }
 

@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {setCommonState} from "../../../store/common/commonActions";
-import { CheckCircleIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import { CheckCircleIcon, ChevronRightIcon, InformationCircleIcon } from '@heroicons/react/24/solid';
 import {Circle} from "lucide-react";
 import { cn } from 'lib/utils';
 import BetaSpeedSetting from 'app/page-optimizer/components/audit/BetaSpeedSetting';
@@ -20,7 +20,7 @@ interface AuditSettingsItemProps {
 
 
 const AuditSettingsItem: React.FC<AuditSettingsItemProps> = ({item, itemIndex, updateValue, actionRequired }) => {
-    const { dispatch, openCategory } = useCommonDispatch();
+    const { dispatch, openCategory, uucssError } = useCommonDispatch();
 
     const handleAuditClick = (audit: Audit) => {
 
@@ -89,6 +89,15 @@ const AuditSettingsItem: React.FC<AuditSettingsItemProps> = ({item, itemIndex, u
                     ))}
                 </ul>
             }
+           {uucssError && item.inputs[0].key === 'uucss_enable_uucss' && (
+                                    <div className='px-1.5 pt-3 ml-9'>
+                                        <div
+                                            className='flex gap-1 items-center text-xs	border border-amber-600 bg-amber-300/30 w-fit rounded-lg px-1 py-[2px] leading-3'>
+                                            <InformationCircleIcon className="h-[18px] w-[18px] text-amber-600" />
+                                            Unused CSS and Critical CSS optimization options cannot be enabled simultaneously.
+                                        </div>
+                                    </div>
+                                )}
         </div>
     );
 };

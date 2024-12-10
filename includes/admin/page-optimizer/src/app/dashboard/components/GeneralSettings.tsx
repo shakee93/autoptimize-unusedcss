@@ -6,10 +6,12 @@ import { saveGeneralSettings } from '../../../store/app/appActions';
 import { useAppContext } from '../../../context/app';
 import AppButton from "components/ui/app-button";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectGroup, SelectLabel, SelectItem } from 'components/ui/select';
-import {ChevronRightIcon} from "@heroicons/react/24/solid";
+import {CheckCircleIcon, ChevronRightIcon, XCircleIcon} from "@heroicons/react/24/solid";
 import Accordion from "components/accordion";
 import {Label} from "components/ui/label";
 import { Button } from 'components/ui/button';
+import { useToast } from "components/ui/use-toast"
+import { Loader } from 'lucide-react';
 
 
 interface GeneralSettingsProps {
@@ -21,6 +23,8 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
     const [settingsData, setSettingsData] = useState<GeneralSettings>(    (uucssGlobal as Required<typeof uucssGlobal>).active_modules.general.options);
     const [jobCount, setJobCount] = useState('1 Job');
     const [timeInterval, setTimeInterval] = useState('10 Minutes');
+    const { toast } = useToast();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
        //console.log(uucssGlobal)
@@ -29,8 +33,39 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
         setSettingsData(prev => ({ ...prev, [key]: !prev[key] }));
     };
 
-    const handleSaveSettings = () => {
-        dispatch(saveGeneralSettings(options, settingsData));
+    const handleSaveSettings = async () => {
+        setLoading(true);
+        try {
+            const response = await dispatch(saveGeneralSettings(options, settingsData));
+            
+            if (response.success) {
+                toast({
+                    description: (
+                        <div className='flex w-full gap-2 text-center'>
+                            Settings saved successfully <CheckCircleIcon className='w-5 text-green-600' />
+                        </div>
+                    ),
+                });
+            } else {
+                toast({
+                    description: (
+                        <div className='flex w-full gap-2 text-center'>
+                            {response.error || "Failed to save settings. Please try again."} <XCircleIcon className='w-5 text-red-600' />
+                        </div>
+                    ),
+                });
+            }
+        } catch (error) {
+            toast({
+                description: (
+                    <div className='flex w-full gap-2 text-center'>
+                        {typeof error === 'string' ? error : "Error on Saving general settings"}  <XCircleIcon className='w-5 text-red-600' />
+                    </div>
+                ),
+            });
+        } finally {
+            setLoading(false);
+        }
     };
 
     const renderCheckbox = (label: string, description: string, key: keyof GeneralSettings) => {
@@ -176,7 +211,7 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
                     onClick={handleSaveSettings}
                     className="text-sm font-semibold text-white py-1.5 px-4 rounded-lg"
                 >
-                    Save Changes
+                    {loading && <Loader className='w-4 animate-spin '/> } Save Changes
                 </AppButton>
                 <AppButton onClick={() => onClose(false)}
                            className='mr-2 text-sm text-gray-500 bg-brand-0 hover:bg-accent border border-input'>

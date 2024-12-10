@@ -63,7 +63,7 @@ const StepThree: React.FC<StepThreeProps> = ({ onNext }) => {
     const { submitSettings } = useSubmitSettings()
     const { dispatch, headerUrl} = useCommonDispatch()
     const [update, setUpdate] = useState(false)
-    const { settings, activeGear, cssStatus, touched } = useSelector(optimizerData);
+    const { settings, activeGear, cssStatus, touched, loading } = useSelector(optimizerData);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [currentDetailIndex, setCurrentDetailIndex] = useState(0);
 
@@ -104,28 +104,31 @@ const StepThree: React.FC<StepThreeProps> = ({ onNext }) => {
     },[update]);
 
     useEffect(() => {
-        if (isCompleted && !isSubmitting && onNext) {
+        if (isCompleted && !isSubmitting && !loading && onNext) {
             const timer = setTimeout(() => {
                 onNext();
-            }, 10000);
+            }, 5000);
 
             return () => clearTimeout(timer);
         }
-    }, [isCompleted, isSubmitting, onNext]);
+    }, [isCompleted, isSubmitting, onNext, loading]);
 
 
     useEffect(() => {
 
         if(cssStatus != null) {
             setCurrentStep(2);
-            dispatch(getHomePagePerformance(options)).then(() => {
-                setCurrentStep(3);
-                setIsCompleted(true);
-            }).catch((error) => {
-                console.error('Fetching home page performance failed:', error);
-            });
+            if(!loading) {
+                dispatch(getHomePagePerformance(options)).then(() => {
+                    setCurrentStep(3);
+                    setIsCompleted(true);
+                }).catch((error) => {
+                    console.error('Fetching home page performance failed:', error);
+                });
+            }
+           
         }
-    }, [cssStatus, savingData, invalidatingCache]);
+    }, [cssStatus, savingData, invalidatingCache, loading]);
 
     useEffect(() => {
         setCurrentDetailIndex(0);

@@ -271,7 +271,7 @@ const App = ({ popup, _showOptimizer = false }: {
                     {/*{testMode &&*/}
                     {/*    <TestModeNotification/>*/}
                     {/*}*/}
-                    <div className='dark:text-brand-300 text-brand-800 dark:bg-brand-900 bg-brand-200/40 '>
+                    <div className='dark:text-brand-300 text-brand-800 dark:bg-brand-900 bg-[#F0F0F1] '>
 
                         <Suspense>
                             <AppTour isDark={isDark}>
@@ -407,12 +407,12 @@ const App = ({ popup, _showOptimizer = false }: {
                                         className='text-sm dark:text-brand-500 text-brand-400'>Copyright © {new Date().getFullYear()} RapidLoad v{version}</span>
                                     </div>
                                     <div>
-                                        <AppButton
+                                        {/* <AppButton
                                             onClick={e => changeTheme()}
                                             className='transition-none h-12 px-3 rounded-2xl border-none bg-transparent'
                                             variant='outline'>
                                             <ThemeSwitcher></ThemeSwitcher>
-                                        </AppButton>
+                                        </AppButton> */}
                                     </div>
                                 </div>
 
