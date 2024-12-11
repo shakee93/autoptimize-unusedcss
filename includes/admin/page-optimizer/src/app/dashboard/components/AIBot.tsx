@@ -35,36 +35,14 @@ const AIBot = () => {
                         className="flex gap-1 m-6 my-0 right-0 absolute cursor-pointer border text-brand-950 py-1.5 px-2 rounded-lg text-xs font-medium">
                         <InboxIcon className="h-4 w-4 text-brand-950 "/>
                     </button>
-                    {/*<div className="relative w-28 h-14 flex items-center justify-center mt-12">*/}
-                    {/*    <div*/}
-                    {/*        className="absolute w-40 h-40 border-2 border-purple-500 rounded-full wave-animation"*/}
-                    {/*        style={{animationDelay: '0s'}}*/}
-                    {/*    ></div>*/}
-                    {/*    <div*/}
-                    {/*        className="absolute w-40 h-40 border-2 border-purple-500 rounded-full wave-animation"*/}
-                    {/*        style={{animationDelay: '1s'}}*/}
-                    {/*    ></div>*/}
-                    {/*    <div*/}
-                    {/*        className="absolute w-40 h-40 border-2 border-purple-500 rounded-full wave-animation"*/}
-                    {/*        style={{animationDelay: '2s'}}*/}
-                    {/*    ></div>*/}
-                    {/*    <div*/}
-                    {/*        className="absolute w-40 h-40 border-2 border-purple-500 rounded-full wave-animation"*/}
-                    {/*        style={{animationDelay: '3s'}}*/}
-                    {/*    ></div>*/}
-                    {/*    /!* Icon *!/*/}
-                    {/*    <div*/}
-                    {/*        className="absolute w-24 h-24 flex items-center justify-center">*/}
-                    {/*        <BotIcon className="w-24"/>*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
+                    
                     <AIBotIcon/>
                     <div className="dark:text-brand-300 text-center flex flex-col gap-2">
                         <h2 className="text-base font-semibold">Hi, I am Speed Coach. <br/> Your AI Companion</h2>
-                        <span className="text-brand-400 font-normal text-xs leading-4">AI  Speed Coach answers your questions with information and insights from our wide-ranging collection of articles. For generations, knowledge-seekers have turned to Speed Coach for answers they can trust. AI  Speed Coach offers a new way to engage with  Speed Coach -created content.</span>
+                        {/* <span className="text-brand-400 font-normal text-xs leading-4">AI  Speed Coach answers your questions with information and insights from our wide-ranging collection of articles. For generations, knowledge-seekers have turned to Speed Coach for answers they can trust. AI  Speed Coach offers a new way to engage with  Speed Coach -created content.</span> */}
                     </div>
                 </div>
-                <div className="w-full max-w-md mx-auto p-6">
+                <div className="w-full max-w-md mx-auto p-6 pt-0">
                     <h2 className="text-sm font-semibold mb-2">Suggested Questions</h2>
                     <div className="grid grid-cols-2 gap-4 mb-4">
                         {questions.map((question, index) => (

@@ -157,7 +157,7 @@ const CacheSummary = () => {
           <DoughnutChart data={chartData} options={chartOptions} />
         </div> */}
 
-                <div className="p-6 border rounded-3xl text-center">
+                <div className="p-6 py-10 border rounded-3xl text-center">
                     <div className="text-sm dark:text-brand-300 text-brand-400">Total cache size</div>
                     <div className="text-[27px] font-bold">{totalCacheSize}</div>
                 </div>
