@@ -37,7 +37,10 @@ const OptimizerInProgress = () => {
     
 
     const filteredSettings = settings?.filter(setting => {
-        return setting.inputs.some(input => input.control_type === "checkbox" && input.value === true);
+       
+        return setting.inputs.some(input => (input.key === 'uucss_enable_cpcss' || input.key === 'uucss_enable_uucss' || input.key === 'uucss_enable_cache') && input.control_type === "checkbox" && input.value === true);
+        
+       // return setting.inputs.some(input => input.control_type === "checkbox" && input.value === true);
     });
 
     const includesStatusSettings = (string: string, substrings: string[]): boolean => {
@@ -51,24 +54,10 @@ const OptimizerInProgress = () => {
     }, [dispatch]);
 
     useEffect(() => {
+        console.log(settings)
     }, [cssStatus]);
 
-    // useEffect(() => {
-
-    //     if (!filteredSettings) return;
-
-    //     const interval = setInterval(() => {
-    //         setCurrentIndex(prevIndex => {
-    //             if (prevIndex === filteredSettings.length - 1) {
-    //                 clearInterval(interval);
-    //                 return prevIndex;
-    //             }
-    //             return prevIndex + 1;
-    //         });
-    //     }, 1);
-
-    //     return () => clearInterval(interval);
-    // }, [filteredSettings]);
+   
 
     const [statusSent, setStatusSent] = useState(false);
 
@@ -217,8 +206,8 @@ const OptimizerInProgress = () => {
                 duration: 0.5,
             }}>
 
-                        <div className="inline-block border-b w-full">
-                            <div className="space-y-5 px-2 py-6">
+                        {/* <div className="inline-block w-full">
+                            <div className="space-y-5 px-2">
                                 <div className="flex gap-4 items-center">
                         <span
                             className="inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50">
@@ -233,10 +222,22 @@ const OptimizerInProgress = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
-                        <div className="flex flex-col gap-3 px-2 pb-8 pt-5">
-
+                        <div className="flex flex-col gap-3 p-2 ">
+                            <div className="flex gap-4 items-center">
+                            <span
+                                className="inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50">
+                                {checkCircleCount == filteredSettings?.length ?
+                                <><CheckCircleIcon className="w-7 h-7 fill-green-600"/></> : (
+                                    <Loader className='w-5 animate-spin'/>
+                                )}
+                            </span>
+                                    <div className='flex flex-col '>
+                                        <h3 className="text-base">
+                                            {Math.round((checkCircleCount / (filteredSettings?.length || 1)) * 100)}% of Optimizations Completed</h3>
+                                    </div>
+                            </div>
                             {filteredSettings?.map((setting, index: number) => (
                                 <AnimatePresence key={index}>
                                     
@@ -273,7 +274,7 @@ const OptimizerInProgress = () => {
                                                 setting.name.includes(key) && cssErrors[key].status === 'failed' && (
                                                     <>
                                                     <div
-                                                        className="relative grid font-medium text-sm dark:bg-brand-900 border-2 border-red-500 w-fit rounded-xl items-center py-1.5 px-1.5 gap-1 mt-1"
+                                                        className="relative grid font-medium text-sm dark:bg-brand-900 border-2 border-red-500 w-fit rounded-xl items-center py-1.5 px-1.5 gap-1 ml-9"
                                                         key={key}
                                                     >
                                                         <div className="flex justify-between">
@@ -297,15 +298,15 @@ const OptimizerInProgress = () => {
 
 
                                                     </div>
-
+                                                    {cssErrors[key].error?.code === 403 && (
                                                         <div className='flex text-left w-full mt-2 gap-2 ml-9 items-center'>
                                                          
 
-                                                            {/* <span className="text-gray-500 text-xs">
+                                                            <span className="text-gray-500 text-xs">
                                                                 Quick Actions:
-                                                            </span> */}
+                                                            </span>
 
-                                                            {cssErrors[key].error?.code === 403 && (
+                                                           
                                                                 <Button
                                                                     disabled={loadingRegen == cssErrors[key].regenAction}
                                                                     className='flex gap-1 text-gray-500 h-8 text-xs px-2.5 bg-brand-200/50 border-0'
@@ -320,8 +321,9 @@ const OptimizerInProgress = () => {
 
                                                                     {cssErrors[key].buttonText}
                                                                 </Button>
-                                                            )}
+                                                            
                                                         </div>
+                                                        )}
                                                     </>
                                                 )
                                             ))}

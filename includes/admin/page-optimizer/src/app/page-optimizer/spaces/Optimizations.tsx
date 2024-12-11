@@ -62,8 +62,8 @@ const Optimizations = ({ }) => {
                     <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Let’s confirm that all optimizations are working as expected...</span>
                 </div>
 
-                <div className="flex space-x-4">
-                    <div className='w-1/3 bg-brand-0 rounded-lg p-4'>
+                <div className="grid grid-cols-5 gap-4">
+                    <div className='col-span-2 bg-brand-0 rounded-2xl p-4'>
                     
                         <div className="flex flex-col pt-1 gap-2 w-full">
                             {/* {getFilteredSettings(settings).map(renderOptimizationStep)} */}
@@ -73,7 +73,7 @@ const Optimizations = ({ }) => {
 
                     </div>
                 
-                    <div className='w-2/3 bg-brand-0 rounded-lg p-10 items-center justify-center flex flex-col gap-4 text-center'>
+                    <div className='col-span-3 bg-brand-0 rounded-2xl p-10 items-center justify-center flex flex-col gap-4 text-center'>
                         <h3 className="font-semibold text-lg">Test Your Optimizations</h3>
                         <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Your optimizations are complete! However, changes might not take effect due to factors like caching, conflicts with plugins or themes, or dynamic content. Let’s test to ensure everything is working smoothly and identify any bottlenecks.</span>
                         <AppButton className="rounded-xl px-8 py-4">

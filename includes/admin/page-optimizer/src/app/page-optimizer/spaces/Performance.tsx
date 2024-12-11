@@ -139,66 +139,6 @@ const Performance = () => {
                     )}
                     data-tour="page-speed-insights"> <GaugeCircle className='w-4' />  Page Speed Insights </div>
 
-                {/* <div data-tour='audit-groups'
-                    className={cn(
-                        'dark:bg-brand-930/90 bg-brand-0 flex justify-between items-center select-none p-0 pl-6 pr-3 rounded-[20px] w-full',
-                        isSticky && 'rounded-b-xl rounded-t-none shadow-lg'
-                    )}
-
-                >
-                    <div className='flex'>
-                        {tabs.map((tab) => {
-                            return (
-                                <div
-                                    onClick={() => dispatch(setCommonState('activeTab', tab.key))}
-                                    className={cn(
-                                        `cursor-pointer flex items-center gap-2 px-4 py-3 text-sm font-medium `,
-                                        isSticky && 'py-3',
-                                        activeTab === tab.key ? "font-medium " : "dark:hover:text-brand-300 text-brand-400"
-                                    )}
-                                    key={tab.key}
-                                >
-                                    {tab.name}
-                                    {(tab.key !== 'configurations') && (
-                                        <div className={
-                                            cn(
-                                                'flex  text-xxs items-center justify-center rounded-full w-6 h-6 border-2',
-                                                isSticky && 'w-5 h-5 border',
-                                                (loading && !reanalyze) ? 'bg-zinc-200 border-zinc-300/30 text-zinc-300/30' : cn(
-                                                    tab.color,
-                                                    (activeTab === tab.key) && tab.activeColor,
-                                                )
-                                            )}>
-                                            <div className={cn(
-                                                activeTab === tab.key && ' text-white dark:text-brand-900'
-                                            )}>
-                                                {data?.grouped[`${tab.key}`].length || '-'}
-                                            </div>
-                                        </div>
-                                    )}
-
-                                </div>
-                            )
-                        })}
-                    </div>
-
-                    <div className='flex items-center'>
-                        <AnimatePresence>
-                            {openAudits.length > 1 &&
-                                <ScaleUp>
-                                    <div
-                                        onClick={e => dispatch(setCommonState('openAudits', []))}
-                                        className='dark:hover:bg-brand-700 hover:bg-brand-100 w-9 h-9 rounded-full flex items-center justify-center'>
-                                        <TooltipText text='Collpase all Audits'>
-                                            <FoldVertical className='w-5 text-brand-500 dark:text-brand-200' />
-                                        </TooltipText>
-                                    </div>
-                                </ScaleUp>
-                            }
-                        </AnimatePresence>
-
-                    </div>
-                </div> */}
             </div>
 
             <div className="audits flex mb-24 dark:bg-brand-800/40 bg-brand-200 rounded-b-3xl">
