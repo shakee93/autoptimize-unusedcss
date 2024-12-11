@@ -246,17 +246,23 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
 
     const [showStatus, setShowStatus] = useState(false);
     useEffect(() => {
-        if ((settings.status && mainInput.value) || (settings?.status && mainInput.control_type === 'button')) {
-            setShowStatus(true)
-        }else{
-            setShowStatus(false)
+        if (!settings.status) return;
+        
+        if (settings.name === 'Cache Policy') {
+            return;
         }
-    }, [settings]);
+        
+        if (mainInput.value || mainInput.control_type === 'button') {
+            setShowStatus(true);
+        } else {
+            setShowStatus(false);
+        }
+    }, [settings, loading]);
 
     const [settingsStatus, setSettingsStatus] = useState(settings.status);
 
     useEffect(() => {
-
+    
         if (!settings.status || !mainInput.value) return;
 
         const isStatusValid = ['processing', 'queued', 'success'].includes(settings.status.status);
@@ -290,7 +296,7 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
 
         return () => clearInterval(intervalId);
 
-
+        
     }, [settings, options, dispatch, open]);
 
     return (
@@ -332,8 +338,17 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
                                 {mainInput && (
                                     <>
                                         {mainInput.control_type === 'button' && (
-                                            <Button loading={loading} disabled={loading} onClick={e => buttonAction(mainInput)}
-                                                className='flex -mr-0.5 gap-1 py-1 px-2.5 h-auto rounded-[8px]'>
+                                            <Button 
+                                                loading={loading} 
+                                                disabled={loading} 
+                                                onClick={async (e) => {
+                                                    await buttonAction(mainInput);
+                                                    if (settings.name === 'Cache Policy') {
+                                                        setShowStatus(true);
+                                                    }
+                                                }}
+                                                className='flex -mr-0.5 gap-1 py-1 px-2.5 h-auto rounded-[8px]'
+                                            >
                                                 <span className='text-xs py-1 px-0.5'>{mainInput.control_label}</span>
                                             </Button>
                                         )}
@@ -375,15 +390,7 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
                                     )}
                                 </Mode>
 
-                                {uucssError && mainInput.key === 'uucss_enable_uucss' ? (
-                                    <div className='px-1'>
-                                        <div
-                                            className='flex gap-1 items-center text-xs	border border-amber-600 bg-amber-300/30 w-fit rounded-lg px-1 py-[2px] leading-3'>
-                                            <InformationCircleIcon className="h-[18px] w-[18px] text-amber-600" />
-                                            Unused CSS and Critical CSS optimization options cannot be enabled simultaneously.
-                                        </div>
-                                    </div>
-                                ) : showStatus && (
+                                {showStatus && (
                                     <div className='px-1'>
                                         <Status status={settingsStatus}/>
                                     </div>

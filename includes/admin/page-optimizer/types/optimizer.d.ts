@@ -42,7 +42,7 @@ interface LoadingExperience {
     }
 }
 
-type AuditTypes = keyof OptimizerResults['grouped'] | 'configurations'
+type AuditTypes = keyof OptimizerResults['grouped'] | 'configurations' | 'optimizations' | 'insights'
 
 interface AuditFileBase  {
     overallSavingsBytes: number;
@@ -239,8 +239,78 @@ interface CSSStatusResponse {
     cpcss: CSSJobStatus;
 }
 
+interface OptimizeTable {
+    id: string
+    created_at: string;
+    first_data: { performance : number };
+    last_data: { performance : number };
+    job_id: string;
+    strategy: string
+    url: string;
+}
+
+interface Link {
+    title: string;
+    permalink: string;
+}
+
+interface posts {
+    post_type: string;
+    links: Link[];
+}
+
+interface cdnUsage {
+    additional_usage_gb: number;
+    allowed_gb: number;
+    used_gb: number;
+    used_gb_formatted: string;
+    cdn_url: string;
+    origin: string;
+    zone_id: string;
+}
+
+interface imageUsage {
+    additional_usage_gb: number;
+    allowed_gb: number;
+    used_gb: number;
+    used_gb_formatted: string;
+    host: string;
+}
+
+interface cacheSize {
+    folder_name: string;
+    size: string;
+}
+
+interface cacheUsage {
+    key: string;
+    label: string;
+    size: cacheSize;
+    action: {
+        label: string;
+        href: string;
+    }
+}
+
 interface TestMode {
     status: boolean;
+}
+
+interface HomePerformance{
+    first_entry: number;
+    last_entry: number;
+    first_response_time: string;
+    last_response_time: string;
+
+}
+
+interface License {
+    email: string;
+    licensedDomain: string;
+    name: string;
+    plan: string;
+    next_billing: number;
+    siteUrl: string;
 }
 
 interface Revision {
@@ -279,3 +349,13 @@ type CssErrorKeys = 'Critical CSS' | 'Unused CSS';
 
 type BasePerformanceGear = 'starter' | 'accelerate' | 'turboMax';
 type PerformanceGear = BasePerformanceGear | 'custom' ;
+
+interface uucssGlobal {
+    activation_url?: string;
+    on_board_complete?: string;
+    active_modules: {
+        general: {
+            options: GeneralSettings;
+        };
+    };
+}

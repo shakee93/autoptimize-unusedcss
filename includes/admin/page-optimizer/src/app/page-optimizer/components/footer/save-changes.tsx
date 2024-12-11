@@ -98,20 +98,20 @@ const SaveChanges = () => {
 
     const saveActions =[
         {
-            text: 'Apply Optimization',
+            text: 'Save Changes',
             title: 'Save Changes?',
             description: "You have made changes to your settings. Click 'Save Changes' to apply your modifications or 'Discard' to revert to the previous state.",
             onClick : () => submitSettings(true)
         },
         {
             text: <div className='flex w-full items-center justify-between'>
-                {/*Save & Analyze*/} Apply Optimization
+                {/*Save & Analyze*/} Save Changes
                 {/*<TooltipText text='2 Optimizations are in progess'>*/}
                 {/*    <DropdownMenuShortcut className='flex gap-1.5 items-center'>*/}
                 {/*        <RefreshCcw className='w-3 animate-spin text-orange-500'/>2</DropdownMenuShortcut>*/}
                 {/*</TooltipText>*/}
             </div>,
-            title: 'Do you want to Apply Optimization?',
+            title: 'Do you want to Save?',
             description: <div className=''>
                 {/*{false ?*/}
                 {inProgressSettings.length > 0 ?
@@ -119,41 +119,6 @@ const SaveChanges = () => {
                         <div>
                             You've made changes to your settings. For accurate results, wait for all tasks to complete before saving and re-analyzing.
                         </div>
-                        {/*<div className='flex flex-col gap-4 mb-4'>*/}
-
-                        {/*    <div className='flex gap-3 items-center ml-4'>*/}
-                        {/*        <div>*/}
-                        {/*            <Loader className='animate-spin'/>*/}
-                        {/*        </div>*/}
-                        {/*        <div>*/}
-                        {/*            <button onClick={e => setInProgress(p => !p)} className='font-medium flex gap-1 items-center'>*/}
-                        {/*                Tasks in Progress {!inProgress ? <ChevronDown className='w-4'/> : <ChevronUp className='w-4'/>}*/}
-                        {/*            </button>*/}
-                        {/*            <div className='text-sm text-zinc-400'>*/}
-                        {/*                This could take 1-3 minutes to complete.*/}
-                        {/*            </div>*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-
-                        {/*    <Accordion  isOpen={inProgress}>*/}
-                        {/*        <div className='pl-14'>*/}
-                        {/*            {inProgressSettings.map((i, index) => (*/}
-                        {/*                <div key={index} className='font-medium flex gap-2 items-center'>*/}
-                        {/*                    <div className='mt-0.5'>*/}
-                        {/*                        <CSSDelivery/>*/}
-                        {/*                    </div>*/}
-                        {/*                    <div className='flex text-zinc-700 flex-col'>*/}
-                        {/*                        <div className='flex items-center gap-2'>  {i.name} <Status status={i.status}/></div>*/}
-                        {/*                        {i.status?.status &&*/}
-                        {/*                            <div className='text-xs font-normal opacity-70'>{status[i.status?.status]}</div>*/}
-                        {/*                        }*/}
-                        {/*                    </div>*/}
-                        {/*                </div>*/}
-                        {/*            ))}*/}
-                        {/*        </div>*/}
-                        {/*    </Accordion>*/}
-
-                        {/*</div>*/}
                     </div>
                 :
                     <div>
@@ -164,7 +129,7 @@ const SaveChanges = () => {
             onClick : () => {
                 submitSettings(true)
             },
-            action_text: "Apply Optimization"
+            action_text: "Save Changes"
         },
         {
             text: 'Apply for Entire Site',

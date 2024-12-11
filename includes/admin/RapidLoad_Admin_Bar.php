@@ -79,6 +79,10 @@ class RapidLoad_Admin_Bar {
         $indexJS = '/' . ltrim($indexJS, '/');
         $indexCSS = '/' . ltrim($indexCSS, '/');
 
+        add_action('wp_head', function()use ($package ,  $indexCSS){
+           // echo '<link rel="preload" href="' . $package .  $indexCSS . '" as="style" type="text/css"/>';
+        });
+
         wp_register_script( 'rapidload_page_optimizer', $package . $indexJS,[], UUCSS_VERSION);
 
         $current_url = isset($_SERVER['REQUEST_URI']) ? home_url($_SERVER['REQUEST_URI']) : $this->get_current_url();
@@ -89,7 +93,7 @@ class RapidLoad_Admin_Bar {
 
         $data = array(
             'titan_stylesheet_url' => $package .  $indexCSS,
-            'load_optimizer' => !(is_admin() && $page === 'rapidload'),
+            'load_optimizer' => true,
             'page_optimizer_package_base' => $package,
             'page_optimizer_base' => UUCSS_PLUGIN_URL .  'includes/admin/page-optimizer/dist',
             'plugin_url' => UUCSS_PLUGIN_URL,
@@ -174,11 +178,11 @@ class RapidLoad_Admin_Bar {
                     margin: 0 !important;
                 }
 
-                html.rapidload-optimizer-open,
+                /*html.rapidload-optimizer-open,
                 .rapidload-optimizer-open body,
                 body.rapidload-optimizer-open {
                     overflow: hidden !important;
-                }
+                }*/
 
                 .rpo-loaded\:with-popup #wp-admin-bar-rapidload .ab-sub-wrapper {
                     display: none !important;
@@ -186,6 +190,10 @@ class RapidLoad_Admin_Bar {
 
                 #wp-admin-bar-rapidload .ab-item {
                     padding: 0 8px 0 7px;
+                }
+
+                #rapidload-page-optimizer{
+                    margin-left: -20px
                 }
 
                 /*.rl-page-optimizer-loaded #wp-admin-bar-rapidload *,*/
@@ -208,9 +216,16 @@ class RapidLoad_Admin_Bar {
 
                 do_action('rapidload/admin-bar-actions', $wp_admin_bar);
 
-                $wp_admin_bar->add_node( array(
+                $options = RapidLoad_Base::fetch_options();
+
+                $wp_admin_bar->add_node(array(
                     'id'    => 'rapidload',
-                    'title' => '<div id="rl-node-wrapper" class="rl-node-wrapper"><span class="rl-icon"><img src="'. UUCSS_PLUGIN_URL .'/assets/images/logo-icon-light.svg" alt="" style="max-width: 100%"></span><span class="rl-label">'.__( 'RapidLoad', 'rapidload' ) . '</span></div>',
+                    'title' => '<div id="rl-node-wrapper" class="'. ( isset($options['rapidload_test_mode']) && $options['rapidload_test_mode'] == "1" ? 'rl-node-wrapper rl-test-mode-on' : 'rl-node-wrapper') .'" >
+                                    <span class="rl-icon">
+                                        <img src="'. UUCSS_PLUGIN_URL .'/assets/images/logo-icon-light.svg" alt="" style="max-width: 100%">
+                                    </span>
+                                    <span class="rl-label">'.__( 'RapidLoad', 'rapidload' ) . '</span>
+                                    '. ( isset($options['rapidload_test_mode']) && $options['rapidload_test_mode'] == "1" ? ' <span class="rl-input-wrapper-test-mode"><span class="rl-input-test-mode">Test Mode</span></span>' : '' ) . '</div>',
                     'href'  => admin_url( 'admin.php?page=rapidload' ),
                     'meta'  => array( 'class' => '' ),
                 ));
