@@ -65,10 +65,8 @@ class RapidLoad_Cache_Store
             return 'no permission for cache directory';
         }
 
-        $cache_file = self::get_cache_file( $url );
-
-        if ( !is_writable( $cache_file )) {
-            return 'no permission for cache file';
+        if(defined('DONOTCACHEPAGE') && DONOTCACHEPAGE){
+            return 'DONOTCACHEPAGE constant set to true';
         }
 
         return 'Hit';
