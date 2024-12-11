@@ -40,3 +40,17 @@ export const TitanLogo: FC<SvgProps> = ({cls}) => (
     </svg>
 );
 
+export const OptimizationsIcon: FC<SvgProps> = ({cls}) => (
+    <svg className={`${cls}`} width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g clip-path="url(#clip0_1731_2908)">
+<path d="M12.35 2.13742C10.6568 1.47961 8.78883 1.4241 7.05954 1.98021C5.33024 2.53631 3.84479 3.67021 2.85237 5.19167C1.85996 6.71313 1.42096 8.52959 1.60902 10.3363C1.79707 12.1431 2.60075 13.8302 3.88522 15.1147C5.16969 16.3992 6.85681 17.2028 8.66356 17.3909C10.4703 17.579 12.2868 17.1399 13.8082 16.1475C15.3297 15.1551 16.4636 13.6697 17.0197 11.9404C17.5758 10.2111 17.5203 8.34314 16.8625 6.64992" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M9.50002 11.0832C10.3745 11.0832 11.0834 10.3743 11.0834 9.49984C11.0834 8.62539 10.3745 7.9165 9.50002 7.9165C8.62557 7.9165 7.91669 8.62539 7.91669 9.49984C7.91669 10.3743 8.62557 11.0832 9.50002 11.0832Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M10.6083 8.39183L15.0417 3.9585" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <defs>
+            <clipPath id="clip0_1731_2908">
+                <rect width="19" height="19" fill="white"/>
+            </clipPath>
+        </defs>
+    </svg>
+);

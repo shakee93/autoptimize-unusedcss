@@ -9,12 +9,15 @@ import { cn } from "lib/utils";
 import TogglePerformance from "components/toggle-performance";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import { setCommonState } from "../../../store/common/commonActions";
-import { CopyMinus, FoldVertical, Layers, Loader, SplitSquareVertical } from "lucide-react";
+import { CopyMinus, FoldVertical, GaugeCircle, Layers, Loader, SplitSquareVertical } from "lucide-react";
 import TooltipText from "components/ui/tooltip-text";
 import ScaleUp from "components/animation/ScaleUp";
 import { BoltIcon, MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
 import AuditList from "app/page-optimizer/components/AuditList";
 import SpeedSettings from "app/page-optimizer/spaces/SpeedSettings";
+import { OptimizationsIcon } from "../components/icons/icon-svg";
+import Optimizations from "./Optimizations";
+import PageSpeedInsights from "./PageSpeedInsights";
 
 
 
@@ -95,28 +98,50 @@ const Performance = () => {
 
     return (
 
-        <div data-tour='audits'>
+        <div data-tour='nav-bar'>
             {/* <h2 className="text-lg ml-5 mb-4 flex gap-2 font-normal items-center">
                 {!togglePerformance && <TogglePerformance />}
                 Fix Performance Issues</h2> */}
             <div ref={navbarRef} style={{ height: '1px' }}></div>
             <div className={cn(
-                'tabs flex sticky -top-1 dark:bg-brand-800/40 bg-brand-200 px-2.5 py-2.5 pb-1 rounded-t-3xl',
+                'tabs flex sticky -top-1 dark:bg-brand-800/40 bg-brand-200 px-2.5 py-2.5 pb-1 rounded-t-3xl gap-2',
             )}>
                 <div
 
                     onClick={() => dispatch(setCommonState('activeTab', 'configurations'))}
                     className={cn(
 
-                        `whitespace-nowrap dark:bg-brand-930/90 bg-brand-0 border-r rounded-l-[20px] cursor-pointer w-[200px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+                        `whitespace-nowrap dark:bg-brand-930/90 bg-brand-0 border-r rounded-[20px] cursor-pointer w-[170px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
 
                         activeTab === 'configurations' ? "font-medium " : "text-brand-500 dark:hover:text-brand-300"
                     )}
                     data-tour="speed-settings"> <BoltIcon className='w-4 rounded-[15px]' />  Speed Settings</div>
 
-                <div data-tour='audit-groups'
+                    <div
+
+                    onClick={() => dispatch(setCommonState('activeTab', 'optimizations'))}
                     className={cn(
-                        'dark:bg-brand-930/90 bg-brand-0 flex justify-between items-center select-none p-0 pl-6 pr-3 rounded-r-[20px] w-full',
+
+                        `whitespace-nowrap dark:bg-brand-930/90 bg-brand-0 border-r rounded-[20px] cursor-pointer w-[160px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+
+                        activeTab === 'optimizations' ? "font-medium " : "text-brand-500 dark:hover:text-brand-300"
+                    )}
+                    data-tour="optimizations"> <GaugeCircle className='w-4' />  Optimizations </div>
+
+                      <div
+
+                    onClick={() => dispatch(setCommonState('activeTab', 'insights'))}
+                    className={cn(
+
+                        `whitespace-nowrap dark:bg-brand-930/90 bg-brand-0 border-r rounded-[20px] cursor-pointer w-[200px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+
+                        activeTab === 'insights' || activeTab === 'opportunities'  || activeTab === 'diagnostics' || activeTab === 'passed_audits' ? "font-medium " : "text-brand-500 dark:hover:text-brand-300"
+                    )}
+                    data-tour="page-speed-insights"> <GaugeCircle className='w-4' />  Page Speed Insights </div>
+
+                {/* <div data-tour='audit-groups'
+                    className={cn(
+                        'dark:bg-brand-930/90 bg-brand-0 flex justify-between items-center select-none p-0 pl-6 pr-3 rounded-[20px] w-full',
                         isSticky && 'rounded-b-xl rounded-t-none shadow-lg'
                     )}
 
@@ -173,7 +198,7 @@ const Performance = () => {
                         </AnimatePresence>
 
                     </div>
-                </div>
+                </div> */}
             </div>
 
             <div className="audits flex mb-24 dark:bg-brand-800/40 bg-brand-200 rounded-b-3xl">
@@ -181,20 +206,25 @@ const Performance = () => {
 
                     <AnimatePresence initial={false}>
                         <div key='performance' className='grid grid-cols-12 gap-6 w-full relative '>
-                            <div className='col-span-12 flex flex-col gap-4'>
+                            <div className='col-span-12 flex flex-col gap-2'>
                                 {activeTab === 'configurations' ?
                                     <>
                                         {/*<SetupChecklist/>*/}
                                         <SpeedSettings />
                                     </>
                                     :
-                                    <div className=" px-4 py-4"><AuditList activeTab={activeTab} /></div>
+                                    activeTab === 'optimizations' ?
+                                    <Optimizations />
+                                    :  <>
+                                    <PageSpeedInsights />
+                                    <div className=" px-4 py-4 pt-0"><AuditList activeTab={activeTab} /></div>
+                                    </>
 
                                 }
                             </div>
                         </div>
                         <div key='audit-blank'>
-                            {(activeTab !== 'configurations' && (!data?.grouped[activeTab] || data?.grouped[activeTab].length <= 0)) && (
+                            {(activeTab !== 'configurations' && activeTab!== 'optimizations' && activeTab !== 'insights' && (!data?.grouped[activeTab] || data?.grouped[activeTab].length <= 0)) && (
                                 <m.div
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
