@@ -34,8 +34,13 @@ class RapidLoad_Cache_Store
 
     }
 
-    public static function get_page_cache_errors()
+    public static function get_page_cache_errors($url = null)
     {
+
+        if(!isset($url)){
+            $url = site_url();
+        }
+
         if ( !file_exists( ABSPATH . 'wp-config.php' ) ) {
             return 'wp-config.php file missing';
         }
@@ -54,10 +59,16 @@ class RapidLoad_Cache_Store
             return 'WP_CACHE constant not found or set to false';
         }
 
-        $cache_dir = self::get_cache_dir( site_url() );
+        $cache_dir = self::get_cache_dir( $url );
 
         if ( ! is_dir( $cache_dir ) || !is_writable( $cache_dir )) {
             return 'no permission for cache directory';
+        }
+
+        $cache_file = self::get_cache_file( $url );
+
+        if ( !is_writable( $cache_file )) {
+            return 'no permission for cache file';
         }
 
         return 'Hit';
