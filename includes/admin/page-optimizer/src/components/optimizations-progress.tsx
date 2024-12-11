@@ -225,7 +225,7 @@ const OptimizerInProgress = () => {
                         </div> */}
 
                         <div className="flex flex-col gap-3 p-2 ">
-                            <div className="flex gap-4 items-center">
+                            <div className="flex gap-2 items-center">
                             <span
                                 className="inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50">
                                 {checkCircleCount == filteredSettings?.length ?
@@ -234,7 +234,7 @@ const OptimizerInProgress = () => {
                                 )}
                             </span>
                                     <div className='flex flex-col '>
-                                        <h3 className="text-base">
+                                        <h3 className="text-base font-medium">
                                             {Math.round((checkCircleCount / (filteredSettings?.length || 1)) * 100)}% of Optimizations Completed</h3>
                                     </div>
                             </div>
