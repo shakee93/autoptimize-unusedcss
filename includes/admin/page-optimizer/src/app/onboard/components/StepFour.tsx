@@ -54,41 +54,56 @@ const StepFour= () => {
                 <>
                     <div className='px-2'>
                         <img className='w-22'
-                             src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'}
+                             src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/rapidload-logo.svg`) : '/logo.svg'}
                              alt='RapidLoad - #1 to unlock breakneck page speed'/>
                     </div>
                     <div className='flex flex-col gap-2 text-center'>
-                        <h1 className='text-4xl font-bold'>Your Site is FAST!</h1>
+                        <h1 className='text-4xl font-bold'>{aiMessage ? 'Hermes AI Analyzed Your site' : 'Your Site is FAST!'}</h1>
                         <span className='font-medium text-base text-zinc-600 dark:text-brand-300'>
                         We have analyzed your entire site and this is the current results.
                     </span>
                     </div>
                     <div className="flex justify-center p-4 max-w-xl mx-auto w-full relative items-center gap-4">
                         {aiMessage ? (
-                        <div className='flex flex-col items-center gap-2 px-10 py-4 rounded-2xl min-w-[500px] bg-brand-100/30'>
+                        <div className='flex flex-col items-center gap-2 px-10 py-4 rounded-2xl min-w-[550px] '>
                             <div className="text-lg font-semibold flex items-center gap-2"><AIButtonIcon/> AI Analysis</div>
                             
-                            <div className="flex flex-col gap-4 w-full">
+                            <div className="flex flex-col gap-4 w-full border border-brand-200 rounded-2xl">
                                 {/* Opportunities Section */}
                                 <div className="flex flex-col gap-2">
-                                    <div className="text-sm font-semibold text-brand-900">Opportunities</div>
+                                    
+                                <div className="flex items-center gap-4 text-sm font-semibold text-brand-900 border-b border-brand-200 px-6 py-2">
+                                <span>Opportunities</span>
+                                    <span className="flex text-xxs items-center text-brand-0 justify-center rounded-full w-6 h-6 border-2 border-orange-400 bg-orange-400">
+                                    {aiPredictionResult?.currentScore?.opportunities?.length || 0}
+                                </span>
+                                </div>
+                                <div className='p-6 py-2'>
                                     {aiPredictionResult?.currentScore?.opportunities.map((opp: any, index: number) => (
-                                        <div key={index} className="text-xs text-brand-600 flex justify-between">
+                                        <div key={index} className="text-xs text-brand-600 flex justify-between py-0.5">
                                             <span>{opp.description}</span>
                                             <span className="font-medium">{opp.potentialSavings}</span>
                                         </div>
                                     ))}
                                 </div>
+                                </div>
                         
                                 {/* Diagnostics Section */}
                                 <div className="flex flex-col gap-2">
-                                    <div className="text-sm font-semibold text-brand-900">Diagnostics</div>
+                                <div className="flex items-center gap-4 text-sm font-semibold text-brand-900 border-b border-brand-200 px-6 py-2">
+                                <span>Diagnostics</span>
+                                    <span className="flex text-xxs items-center text-brand-0 justify-center rounded-full w-6 h-6 border-2 border-yellow-400  bg-yellow-400">
+                                    {aiPredictionResult?.currentScore?.diagnostics?.length || 0}
+                                </span>
+                                </div>
+                                <div className='p-6 pt-2'>
                                     {aiPredictionResult?.currentScore?.diagnostics.map((diag: any, index: number) => (
-                                        <div key={index} className="text-xs text-brand-600 flex justify-between">
+                                        <div key={index} className="text-xs text-brand-600 flex justify-between py-0.5">
                                             <span>{diag.description}</span>
                                             <span className="font-medium">{diag.elements} elements</span>
                                         </div>
                                     ))}
+                                </div>
                                 </div>
                             </div>
                         </div>

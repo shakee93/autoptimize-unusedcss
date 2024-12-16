@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { Starter, Accelerate, TurboMax } from '../../../page-optimizer/components/icons/gear-icons';
+import { Starter, Accelerate, TurboMax, Custom } from '../../../page-optimizer/components/icons/gear-icons';
 import { cn } from '../../../../lib/utils';
 import {CursorArrowRaysIcon, CheckCircleIcon, CheckIcon} from '@heroicons/react/24/solid';
 import {ChevronDown, GaugeCircle, LoaderIcon} from 'lucide-react';
@@ -23,7 +23,7 @@ import ComparisonTable from "components/ui/compare-table";
 import AppButton from "components/ui/app-button";
 import ComparisonDialog from '../ComparisonDialog';
 
-const boosterLevels: PerformanceGear[] = ['starter', 'accelerate', 'turboMax'];
+const boosterLevels: PerformanceGear[] = ['starter', 'accelerate', 'turboMax', 'custom'];
 
 const Steps = [
     "Analyze with Google PageSpeed",
@@ -147,6 +147,7 @@ const PerformanceGears: React.FC = () => {
             case 'starter': return <Starter {...iconProps} />;
             case 'accelerate': return <Accelerate {...iconProps} />;
             case 'turboMax': return <TurboMax {...iconProps} />;
+            case 'custom': return <Custom {...iconProps} />;
         }
     }, [activeGear]);
 
@@ -157,25 +158,39 @@ const PerformanceGears: React.FC = () => {
     //     return OptimizationSteps[currentStep] + '...';
     // }, [isAccordionOpen, currentStep]);
 
-    const renderBoosterLevel = useCallback((level: PerformanceGear) => (
-        <div
+    const renderBoosterLevel = useCallback((level: PerformanceGear, index: number) => {
+        // // Don't render custom gear if it's not active
+        // if (level === 'custom' && activeGear !== 'custom') {
+        //     return null;
+        // }
+
+        return (
+            <div
             key={level}
             className={cn(
-                'hover:bg-brand-100/50 relative flex flex-col gap-3 font-normal cursor-pointer w-[135px] h-[135px] rounded-3xl items-center justify-center',
-                activeGear === level ? 'text-brand-600 border-[3px] border-[#592d8d]' : ' border border-brand-200 dark:border-brand-700 opacity-40'
+                'relative flex flex-col gap-3 font-normal cursor-pointer w-[135px] h-[135px] rounded-3xl items-center justify-center',
+                'hover:bg-brand-100/50 bg-brand-0',
+                index !== 0 && '-ml-11',
+                activeGear === level ? 'z-50' : `z-[${boosterLevels.length - index}]`,
+                activeGear === level 
+                    ? 'text-brand-600 border-[3px] border-[#592d8d]' 
+                    : 'border border-brand-200 dark:border-brand-700'
             )}
-        >
-            <div>
-                {getIcon(level)}
-                {activeGear === level && (
-                    <div className="absolute top-2.5 right-2.5">
-                        <CheckCircleIcon className="w-6 h-6 text-purple-800" />
-                    </div>
-                )}
+            >
+                <div className={cn('flex flex-col items-center justify-center', activeGear === level ? 'opacity-100' : 'opacity-20')}>
+                <div>
+                    {getIcon(level)}
+                    {activeGear === level && (
+                        <div className="absolute top-2.5 right-2.5">
+                            <CheckCircleIcon className="w-6 h-6 text-purple-800" />
+                        </div>
+                    )}
+                </div>
+                <span className="capitalize">{level}</span>
+                </div>
             </div>
-            <span className="capitalize">{level}</span>
-        </div>
-    ), [activeGear, getIcon]);
+        );
+    }, [activeGear, getIcon]);
 
 
 

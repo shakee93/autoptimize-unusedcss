@@ -44,6 +44,7 @@ import SaveChanges from "app/page-optimizer/components/footer/save-changes";
 import useSubmitSettings from "hooks/useSubmitSettings";
 import { Loader } from "lucide-react";
 import { buildStyles, CircularProgressbarWithChildren } from "react-circular-progressbar";
+import TooltipText from "components/ui/tooltip-text";
 const capitalizeCategory = (category: string) => {
     if (category === 'css' || category === 'cdn') {
         return category.toUpperCase();
@@ -397,17 +398,20 @@ const SpeedSettings = ({ }) => {
             <div className='border-b border-brand-300 px-11 py-4'>
                 <div className="pb-4">
                     {settingsLoading &&
-                        <div>loading...</div>
+                        <div>Loading...</div>
                     }
                     <h3 className="font-semibold text-lg">Performance Gears</h3>
                     <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
                 </div>
 
-                <div className={`flex gap-4 ${(savingData || invalidatingCache) && 'cursor-not-allowed opacity-90 pointer-events-none'}`} data-tour="settings-gear">
+                
+                
+                <div className={`flex gap-4 `} data-tour="settings-gear">
                     {modes.map((mode, index) => (
+                        <TooltipText text={loading ? "Analyzing your site performance" : savingData || invalidatingCache ? "Please wait while applying optimizations" : null }>
                         <div
                             key={index}
-                            className={`cursor-pointer transition-all flex px-4 py-4 min-w-[166px] min-h-[166px] items-center justify-center w-fit rounded-3xl dark:bg-brand-950 bg-brand-0 dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px]  ${mode === activeGear ? ' border-purple-700 dark:border-purple-700' : ''}`}
+                            className={`${(savingData || invalidatingCache || loading) && 'cursor-not-allowed opacity-90 pointer-events-none'} cursor-pointer transition-all flex px-4 py-4 min-w-[166px] min-h-[166px] items-center justify-center w-fit rounded-3xl dark:bg-brand-950 bg-brand-0 dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px]  ${mode === activeGear ? ' border-purple-700 dark:border-purple-700' : ''}`}
                             onClick={e => {
                                 setTempMode(mode);
                                 settingsModeOnChange(mode);
@@ -447,7 +451,7 @@ const SpeedSettings = ({ }) => {
                                     {activeGear === mode && (savingData || invalidatingCache) ? (
                                         <p className="font-semibold capitalize z-[110000] mt-2"
 
-                                        >Loading...</p>
+                                        >Applying...</p>
                                     ) : (
                                         <>
                                             <p className="font-semibold capitalize"
@@ -462,9 +466,10 @@ const SpeedSettings = ({ }) => {
 
                             </div>
                         </div>
+                        </TooltipText>
                     ))}
                 </div>
-
+                
 
                 <UnsavedChanges
                     title='Modified Customize Settings changes'
@@ -509,7 +514,7 @@ const SpeedSettings = ({ }) => {
                                 `select-none w-fit transition-all rounded-2xl cursor-pointer  
           flex items-center gap-2 px-4 py-2 -ml-1 text-sm font-medium dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px] dark:hover:bg-brand-950 bg-brand-0 dark:bg-brand-950 `,
                                 activeGear === 'custom' && 'border-purple-700',
-                                (savingData || invalidatingCache) && 'cursor-not-allowed opacity-90 pointer-events-none'
+                                (savingData || invalidatingCache || loading) && 'cursor-not-allowed opacity-90 pointer-events-none'
                             )}
                             data-tour="customize-settings"
                         >

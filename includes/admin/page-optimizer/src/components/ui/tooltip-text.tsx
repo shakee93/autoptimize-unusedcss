@@ -15,6 +15,7 @@ interface TooltipTextProps {
 
 const TooltipText = ({ text, children, onClick, className, asChild = false, delay = 500} : TooltipTextProps) => {
     return (
+        text != null ? (
         <TooltipProvider disableHoverableContent={false} delayDuration={delay}>
             <Tooltip  >
                 <TooltipTrigger asChild={asChild} onClick={e => onClick && onClick()} className={cn(
@@ -25,6 +26,7 @@ const TooltipText = ({ text, children, onClick, className, asChild = false, dela
                 <TooltipContent className={className}>{text}</TooltipContent>
             </Tooltip>
         </TooltipProvider>
+    ):(children)
     )
 }
 

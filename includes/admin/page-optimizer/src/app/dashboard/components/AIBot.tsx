@@ -15,6 +15,7 @@ import {
 import ComparisonTable from "components/ui/compare-table";
 import AppButton from "components/ui/app-button";
 import AISpeedCoach from "app/dashboard/components/AISpeedCoach";
+import HermisAIBot from "app/ai-bot";
 
 const AIBot = () => {
     const [open, setOpen] = useState(false);
@@ -78,13 +79,14 @@ const AIBot = () => {
                                     </DialogDescription>
                                 </DialogHeader>
                                 <div className="relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white">
-                                    <AISpeedCoach/>
+                                    {/* <AISpeedCoach/> */}
+                                    <HermisAIBot/>
                                 </div>
-                                <DialogFooter className="p-6">
+                                {/* <DialogFooter className="p-6">
                                     <AppButton onClick={() => setOpen(false)} variant='outline' className='text-sm'>
                                         Close
                                     </AppButton>
-                                </DialogFooter>
+                                </DialogFooter> */}
                             </DialogContent>
                         </Dialog>
 

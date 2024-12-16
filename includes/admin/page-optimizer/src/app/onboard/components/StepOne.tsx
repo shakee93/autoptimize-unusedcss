@@ -59,7 +59,7 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
             <div className="bg-brand-0 flex flex-col gap-8 p-16 items-center rounded-3xl">
                 <div className='px-2'>
                     <img className='w-22'
-                         src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'}
+                         src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/rapidload-logo.svg`) : '/rapidload-logo.svg'}
                          alt='RapidLoad - #1 to unlock breakneck page speed'/>
                 </div>
                 <div className='flex flex-col gap-2 text-center'>

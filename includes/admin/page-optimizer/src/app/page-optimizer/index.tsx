@@ -89,15 +89,15 @@ export default function PageOptimizer() {
                         'relative container grid grid-cols-none lg:grid-cols-12 lg:grid-rows-none  gap-5 pt-[10px] mt-2',
                     )}>
 
-                    {/* {(savingData || invalidatingCache) && (*/}
-                    {/*    <div className='fixed inset-0 flex justify-center items-center z-[110000] bg-brand-50/80 dark:bg-brand-950/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'>*/}
-                    {/*        <div className='fixed top-1/2 flex gap-2 items-center justify-center'>*/}
-                    {/*            <Loader className='w-5 animate-spin'/>*/}
-                    {/*            {savingData && 'Saving Changes...'}*/}
-                    {/*            {invalidatingCache && 'Flushing Cache...'}*/}
-                    {/*        </div>*/}
-                    {/*    </div>*/}
-                    {/*)} */}
+                    {(savingData || invalidatingCache) && (
+                        <div className='fixed inset-0 flex justify-center items-center z-[110000] bg-brand-50/80 dark:bg-brand-950/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0'>
+                            <div className='fixed top-1/2 flex gap-2 items-center justify-center'>
+                                <Loader className='w-5 animate-spin'/>
+                                {savingData && 'Saving Changes...'}
+                                {invalidatingCache && 'Flushing Cache...'}
+                            </div>
+                        </div>
+                    )}
 
                     {/* <div className="col-span-12 w-full"> */}
                     {/* <AnimatePresence>
