@@ -1,34 +1,79 @@
 (function (){
 
-    function getQueryParam(param) {
+    let avif_count = 0;
+
+    function is_rapidload_preview() {
         const urlParams = new URLSearchParams(window.location.search);
-        console.log(urlParams.get(param))
-        return urlParams.get(param);
+        const params = [];
+        urlParams.forEach((value, key) => {
+            params.push(key)
+        });
+        return params.includes("rapidload_preview");
     }
 
-    window.addEventListener('load', function (){
-        if (getQueryParam('rapidload_preview')) {
+    async function monitorNetworkImagesWithMIMECheck() {
+        const observer = new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+    
+            // Filter for image resources
+            const imageEntries = entries.filter((entry) => entry.initiatorType === 'img');
+            
+            // Track unique image URLs and avoid duplicates
+            const processedUrls = new Set();
+            
+            // Process each unique image entry
+            imageEntries.forEach(async (entry) => {
+                if (!processedUrls.has(entry.name)) {
+                    processedUrls.add(entry.name);
+                    
+                    try {
+                        const response = await fetch(entry.name, { method: 'HEAD' });
+                        const contentType = response.headers.get('content-type');
+                        
+                        if (contentType === 'image/avif') {
+                            avif_count++;
+                        }
+                        
+                        if (processedUrls.size === imageEntries.length) {
+                            console.log(`Number of AVIF images: ${avif_count} out of ${processedUrls.size} total images`);
+                        }
+                        
+                    } catch (error) {
+                        console.error(`Failed to fetch headers for: ${entry.name}`, error);
+                    }
+                }
+            });
+        });
+    
+        observer.observe({ type: 'resource', buffered: true });
+    }
+    // Call the function
+    monitorNetworkImagesWithMIMECheck();
+    
+
+    document.addEventListener('DOMContentLoaded', function (){
+        if (is_rapidload_preview()) {
+            // check cache served
             const rapidload_cache_status_div_content = document.querySelector('#rapidload-cache-status');
 
             if (rapidload_cache_status_div_content) {
-                rapidload_cache_status_div_content.style.display = "block";
+                console.log('Page Cache working')
             }
 
-            if(window.rapidload_preview_stats.cpcss){
-                const cpcss_stat_value = document.querySelector('#rapidload-optimizer-stat-container #rapidload-cpcss-stat');
+            const rapidload_cpcss_style_content = document.querySelector('#rapidload-critical-css');
 
-                if(cpcss_stat_value){
-                    cpcss_stat_value.innerHTML = 'enabled ' + window.rapidload_preview_stats.cpcss["data-mode"] + " mode with " +  window.rapidload_preview_stats.cpcss["cpcss-file"]
-                }
+            if(rapidload_cpcss_style_content){
+                console.log('Critical CSS working')
             }
 
             if(window.rapidload_preview_stats.uucss){
-                const uucss_stat_value = document.querySelector('#rapidload-optimizer-stat-container #rapidload-uucss-stat');
-
-                if(uucss_stat_value){
-                    uucss_stat_value.innerHTML = 'total ' + window.rapidload_preview_stats.uucss.length + " css found and " +  window.rapidload_preview_stats.uucss.filter(a => a.new_href).length + " optimized"
-                }
-
+                
+                let found_optimized_css = window.rapidload_preview_stats.uucss.filter(a => a.new_href).length
+                console.log(window.rapidload_preview_stats.uucss.length + ' css files found')
+                console.log(found_optimized_css + ' css files optimized')
+                let not_optimized_css = window.rapidload_preview_stats.uucss.filter(a => !a.new_href).length
+                console.log(not_optimized_css + ' css files not optimized')
+                
             }
 
             if(window.rapidload_preview_stats.minify_css){
@@ -40,66 +85,52 @@
 
             }
 
-            if(window.rapidload_preview_stats.cdn){
-                const cdn_stat_value = document.querySelector('#rapidload-optimizer-stat-container #rapidload-cdn-stat');
+            if(window.rapidload_preview_stats.cdn === 'enabled'){
 
-                if(cdn_stat_value){
-                    cdn_stat_value.innerHTML = 'enabled'
-                }else{
-                    cdn_stat_value.innerHTML = 'not enabled'
-                }
+                console.log('CDN working')
 
             }
 
-            if(window.rapidload_preview_stats.font && window.rapidload_preview_stats.google_font){
-                const font_stat_value = document.querySelector('#rapidload-optimizer-stat-container #rapidload-font-stat');
+            if(window.rapidload_preview_stats.font && window.rapidload_preview_stats.font.google_fonts){
 
-                if(font_stat_value){
-                    font_stat_value.innerHTML = 'total ' + window.rapidload_preview_stats.google_font.length + " css found and " +  window.rapidload_preview_stats.google_font.filter(a => a.new_href).length + " minified"
-                }else{
-                    font_stat_value.innerHTML = 'not found'
-                }
+                console.log(window.rapidload_preview_stats.font.google_fonts.length + ' google font ' + (window.rapidload_preview_stats.font.google_fonts.length === 1 ? 'file' : 'files') + ' inlined')
 
             }
 
             if(window.rapidload_preview_stats.js){
-                const js_stat_value = document.querySelector('#rapidload-optimizer-stat-container #rapidload-js-stat');
-
-                var list = [];
-
-                console.log('running')
 
                 if(window.rapidload_preview_stats.js['defer']){
 
-                    list.push(window.rapidload_preview_stats.js['defer'].length + ' files defered')
+                    console.log(window.rapidload_preview_stats.js['defer'].length + ' files defered')
 
                 }
 
                 if(window.rapidload_preview_stats.js['delay']){
 
-                    list.push(window.rapidload_preview_stats.js['delay'].length + ' files delayed')
+                    console.log(window.rapidload_preview_stats.js['delay'].length + ' files delayed')
 
                 }
 
                 if(window.rapidload_preview_stats.js['minify']){
 
-                    list.push(window.rapidload_preview_stats.js['minify'].length + ' files minified')
+                    console.log(window.rapidload_preview_stats.js['minify'].length + ' files minified')
 
                 }
 
-                if(js_stat_value){
-                    js_stat_value.innerHTML = list.join(", ")
-                }
-
-            }
-
-            const rapidload_optimizer_stat_container_div_content = document.querySelector('#rapidload-optimizer-stat-container');
-
-            if (rapidload_optimizer_stat_container_div_content) {
-                rapidload_optimizer_stat_container_div_content.style.display = "block";
             }
 
         }
+
+
+        setTimeout(() => {
+            window.parent.postMessage(
+                {
+                    type: "RAPIDLOAD_CHECK_RESULTS",
+                    data: window.rapidload_preview_stats,
+                },
+                "*" 
+            );
+        }, 5000);
     })
 
 })()
