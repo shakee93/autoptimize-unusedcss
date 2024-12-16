@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { optimizerData } from "../../../store/app/appSelector";
 import {CheckCircleIcon} from '@heroicons/react/24/solid';
 import OptimizationsProgress from '../../../components/optimizations-progress';
+import { useAppContext } from "../../../context/app";
 
 const Steps = [
     "Analyze with Google PageSpeed",
@@ -27,8 +28,18 @@ const Optimizations = ({ }) => {
     const [isOptimizing, setIsOptimizing] = useState(false);
     const [OptimizationSteps, setOptimizationSteps] = useState(Steps);
     const { dispatch} = useCommonDispatch()
+    const { options} = useAppContext()
+    const optimizerUrl = options?.optimizer_url;
+    const [showIframe, setShowIframe] = useState(false);
 
-    
+    useEffect(() => {
+       
+            window.addEventListener("message", (event) => {
+                if (event.data.type === "RAPIDLOAD_CHECK_RESULTS") {
+                    console.log("Received data from iframe:", event.data);
+                }
+            });
+    }, [window]);
   
     const getFilteredSettings = (settings: any) => {
       return settings.filter((setting: any) => setting.inputs.some((input: any) => input.value === true));
@@ -75,13 +86,47 @@ const Optimizations = ({ }) => {
                 
                     <div className='col-span-3 bg-brand-0 rounded-2xl p-10 items-center justify-center flex flex-col gap-4 text-center'>
                         <h3 className="font-semibold text-lg">Test Your Optimizations</h3>
-                        <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Your optimizations are complete! However, changes might not take effect due to factors like caching, conflicts with plugins or themes, or dynamic content. Let’s test to ensure everything is working smoothly and identify any bottlenecks.</span>
-                        <AppButton className="rounded-xl px-8 py-4">
+                        <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Your optimizations are complete! However, changes might not take effect due to factors like caching, conflicts with plugins or themes, or dynamic content. Let's test to ensure everything is working smoothly and identify any bottlenecks.</span>
+                        <AppButton 
+                            className="rounded-xl px-8 py-4" 
+                            onClick={() => setShowIframe(true)}
+                        >
                             Run Optimization Test
                         </AppButton>
                         <span className="font-normal text-xs text-zinc-600 dark:text-brand-300">Disabled: All Optimizations needs to be completed to run the test</span>
                     </div>
                 </div>
+
+                {/* Iframe Section */}
+                <AnimatePresence>
+                    {showIframe && (
+                        <m.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="mt-6"
+                        >
+                            <div className="relative w-full rounded-xl overflow-hidden bg-white shadow-lg">
+                                <div className="absolute top-4 right-4 z-10">
+                                    <button 
+                                        onClick={() => setShowIframe(false)}
+                                        className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <iframe 
+                                    src={optimizerUrl+'?rapidload_preview'} 
+                                    className="w-full h-[600px] border-0"
+                                    title="Optimization Test"
+                                />
+                            </div>
+                        </m.div>
+                    )}
+                </AnimatePresence>
             </div>
         </m.div>
         </AnimatePresence>
