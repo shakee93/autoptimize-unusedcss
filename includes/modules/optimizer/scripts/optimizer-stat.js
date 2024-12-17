@@ -12,40 +12,25 @@
     }
 
     async function monitorNetworkImagesWithMIMECheck() {
+        // Set to store unique image URLs
+        const processedUrls = new Set();
+        
         const observer = new PerformanceObserver((list) => {
-            const entries = list.getEntries();
-    
-            // Filter for image resources
-            const imageEntries = entries.filter((entry) => entry.initiatorType === 'img');
-            
-            // Track unique image URLs and avoid duplicates
-            const processedUrls = new Set();
-            
-            // Process each unique image entry
-            imageEntries.forEach(async (entry) => {
-                if (!processedUrls.has(entry.name)) {
-                    processedUrls.add(entry.name);
-                    
-                    try {
-                        const response = await fetch(entry.name, { method: 'HEAD' });
-                        const contentType = response.headers.get('content-type');
-                        
-                        if (contentType === 'image/avif') {
-                            avif_count++;
-                        }
-                        
-                        if (processedUrls.size === imageEntries.length) {
-                            console.log(`Number of AVIF images: ${avif_count} out of ${processedUrls.size} total images`);
-                        }
-                        
-                    } catch (error) {
-                        console.error(`Failed to fetch headers for: ${entry.name}`, error);
-                    }
+            const entries = list.getEntriesByType("resource");
+            entries.forEach((entry) => {
+              if (entry.initiatorType === "img") {
+                console.log(`Image loaded: ${entry.name}`);
+                console.log(`Start time: ${entry.startTime}`);
+                console.log(`End time: ${entry.responseEnd}`);
+                console.log(`Redirect time: ${entry.redirectStart ? entry.redirectEnd - entry.redirectStart : 0} ms`);
+                if (entry.redirectStart > 0) {
+                  console.log(`Image request was redirected: ${entry.name}`);
                 }
+              }
             });
         });
-    
-        observer.observe({ type: 'resource', buffered: true });
+        // Start observing resource timing
+        observer.observe({ type: "resource", buffered: true });
     }
     // Call the function
     monitorNetworkImagesWithMIMECheck();
