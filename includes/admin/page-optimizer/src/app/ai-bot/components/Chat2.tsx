@@ -1,13 +1,21 @@
 "use client";
 
 import { useChat } from "ai/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Markdown from "react-markdown";
 import { Send, MessageSquare, MessagesSquare, CpuIcon } from "lucide-react";
 import {ArrowUpIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import {HermesAIBotIcon, NoteBookIcon, StarLockIcon, WorldIcon} from "app/ai-bot/icons/icon-svg";
 import { useSelector } from "react-redux";
 import { optimizerData } from "../../../store/app/appSelector";
+import ChatHistoryPanel from './ChatHistoryPanel';
+
+interface Conversation {
+  id: string;
+  title: string;
+  active: boolean;
+  messages: any[]; // Using 'any' for brevity, but you should define a proper Message type
+}
 
 export default function Chat() {
   const { messages, input, handleInputChange, handleSubmit, setMessages } =
@@ -30,7 +38,86 @@ export default function Chat() {
 
   const messagesEndRef = useRef(null);
 
+  // Modified conversations state with local storage
+  const [conversations, setConversations] = useState<Conversation[]>(() => {
+    const saved = localStorage.getItem('chat-conversations');
+    if (saved) {
+      return JSON.parse(saved);
+    }
+    return [{ id: '1', title: 'New Chat', active: true, messages: [] }];
+  });
+
+  // Save conversations to localStorage whenever they change
   useEffect(() => {
+    localStorage.setItem('chat-conversations', JSON.stringify(conversations));
+  }, [conversations]);
+
+  // Save messages to active conversation
+  useEffect(() => {
+    if (messages.length > 1) { // Only update if we have user messages
+      setConversations(prev => {
+        const updated = prev.map(conv => {
+          if (conv.active) {
+            // Update conversation title based on first user message
+            const firstUserMessage = messages.find(m => m.role === 'user');
+            const title = firstUserMessage 
+              ? firstUserMessage.content.slice(0, 30) + (firstUserMessage.content.length > 30 ? '...' : '')
+              : conv.title;
+            
+            return {
+              ...conv,
+              title,
+              messages: messages
+            };
+          }
+          return conv;
+        });
+        return updated;
+      });
+    }
+  }, [messages]);
+
+  const handleNewChat = () => {
+    const newChat = {
+      id: Date.now().toString(),
+      title: 'New Chat',
+      active: true,
+      messages: [messages[0]] // Keep system message
+    };
+
+    setMessages([messages[0]]); // Reset current chat to only system message
+    setConversations(prev => 
+      prev.map(conv => ({...conv, active: false})).concat(newChat)
+    );
+  };
+
+  const handleSelectConversation = (id: string) => {
+    const selectedConv = conversations.find(conv => conv.id === id);
+    if (selectedConv) {
+      setMessages(selectedConv.messages);
+      setConversations(prev => 
+        prev.map(conv => ({
+          ...conv,
+          active: conv.id === id
+        }))
+      );
+    }
+  };
+
+  const handleDeleteConversation = (id: string) => {
+    setConversations(prev => {
+      const filtered = prev.filter(conv => conv.id !== id);
+      // If we're deleting the active conversation, activate the first remaining one
+      if (prev.find(conv => conv.id === id)?.active && filtered.length > 0) {
+        filtered[0].active = true;
+        setMessages(filtered[0].messages);
+      }
+      return filtered;
+    });
+  };
+
+  useEffect(() => {
+   
     // Format settings into markdown string
     const formatSettings = () => {
       let settingsStr = '';
@@ -107,22 +194,32 @@ export default function Chat() {
   }, [messages]);
 
   return (
-    <div className="chat-container flex flex-col w-full max-w-4xl mx-auto h-[calc(100vh-4rem)] max-h-[750px] py-4 bg-white my-8  rounded-2xl">
-      <div className="px-4 pb-2 flex justify-end">
-        <button
-          onClick={() => (window.location.hash = '#/')}
-          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          aria-label="Close chat"
-        >
-          <XMarkIcon className="h-6 w-6 text-gray-500" />
-        </button>
-      </div>
+    <div className="chat-container flex w-full max-w-6xl mx-auto h-[calc(100vh-4rem)] max-h-[750px] py-4 bg-white my-8 rounded-2xl">
+      {/* Chat History Panel */}
+      <ChatHistoryPanel 
+        conversations={conversations}
+        onSelectConversation={handleSelectConversation}
+        onNewChat={handleNewChat}
+        onDeleteConversation={handleDeleteConversation}
+      />
 
-      <div className="flex-1 overflow-y-auto px-4 bg-white">
-        {messages.length === 1 ? (
-          <div className="flex flex-col items-center justify-center h-full text-gray-500">
-            {/* <MessageSquare size={48} className="mb-2" />
-            <p>No messages yet. Start a conversation!</p> */}
+      {/* Main Chat Area */}
+      <div className="flex-1 flex flex-col">
+        <div className="px-4 pb-2 flex justify-end">
+          <button
+            onClick={() => (window.location.hash = '#/')}
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            aria-label="Close chat"
+          >
+            <XMarkIcon className="h-6 w-6 text-gray-500" />
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto px-4 bg-white">
+          {messages.length === 1 ? (
+            <div className="flex flex-col items-center justify-center h-full text-gray-500">
+              {/* <MessageSquare size={48} className="mb-2" />
+              <p>No messages yet. Start a conversation!</p> */}
 
   <div className="flex flex-col items-center justify-center p-6 bg-white text-gray-800">
       {/* Icon */}
@@ -176,66 +273,67 @@ export default function Chat() {
       </div>
     </div>
 
-          </div>
-        ) : (
-          messages
-            .filter((msg) => msg.role !== "system")
-            .map((m) => (
-              <div key={m.id}>
-                <div
-                  className={`message my-2 flex ${m.role === "user" ? "justify-end" : "justify-start"
-                    }`}
-                >
-                  {m.role === "assistant" && (
-                    <div className="w-8 h-8 rounded-full bg-violet-900 flex items-center justify-center mr-2">
-                      <MessagesSquare size={16} className="text-white" />
-                    </div>
-                  )}
+            </div>
+          ) : (
+            messages
+              .filter((msg) => msg.role !== "system")
+              .map((m) => (
+                <div key={m.id}>
                   <div
-                    className={`max-w-lg px-4 py-2 rounded-lg shadow ${m.role === "user"
-                      ? "bg-violet-900 text-white"
-                      : "bg-gray-100 text-gray-800"
+                    className={`message my-2 flex ${m.role === "user" ? "justify-end" : "justify-start"
                       }`}
                   >
-                    {m.content.length > 0 ? (
-                      <Markdown>{m.content}</Markdown>
-                    ) : (
-                      <span className="italic font-light">
-                        {"calling tool: " + m?.toolInvocations?.[0]?.toolName}
-                      </span>
+                    {m.role === "assistant" && (
+                      <div className="w-8 h-8 rounded-full bg-violet-900 flex items-center justify-center mr-2">
+                        <MessagesSquare size={16} className="text-white" />
+                      </div>
                     )}
-                    <div className="text-xs text-right mt-1 opacity-75">
-                      {new Date(m.createdAt || Date.now()).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                    <div
+                      className={`max-w-lg px-4 py-2 rounded-lg shadow ${m.role === "user"
+                        ? "bg-violet-900 text-white"
+                        : "bg-gray-100 text-gray-800"
+                        }`}
+                    >
+                      {m.content.length > 0 ? (
+                        <Markdown>{m.content}</Markdown>
+                      ) : (
+                        <span className="italic font-light">
+                          {"calling tool: " + m?.toolInvocations?.[0]?.toolName}
+                        </span>
+                      )}
+                      <div className="text-xs text-right mt-1 opacity-75">
+                        {new Date(m.createdAt || Date.now()).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))
-        )}
-        <div ref={messagesEndRef} />
-      </div>
+              ))
+          )}
+          <div ref={messagesEndRef} />
+        </div>
 
-      <form
-        onSubmit={handleSubmit}
-        className="input-container flex items-center px-4 py-2 border-t border-gray-200"
-      >
-        <input
-          className="flex-1 p-2 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          value={input}
-          placeholder="Reply to Hermes AI..."
-          onChange={handleInputChange}
-        />
-        <button
-          type="submit"
-          disabled={input.trim() === ""}
-          className="ml-2 bg-brand-950 text-white p-2 rounded-lg hover:bg-brand-950 disabled:opacity-50 transition-colors"
+        <form
+          onSubmit={handleSubmit}
+          className="input-container flex items-center px-2 py-1 border-t border-gray-200 bg-brand-100 mx-6 rounded-xl"
         >
-          <ArrowUpIcon className="h-6 w-6 text-brand-0" />
-        </button>
-      </form>
+          <input
+            className="flex-1 p-2 bg-brand-100 rounded-lg focus:outline-none focus:border-transparent"
+            value={input}
+            placeholder="Reply to Hermes AI..."
+            onChange={handleInputChange}
+          />
+          <button
+            type="submit"
+            disabled={input.trim() === ""}
+            className="ml-2 bg-brand-950 text-white p-2 rounded-lg hover:bg-brand-950 disabled:opacity-50 transition-colors"
+          >
+            <ArrowUpIcon className="h-4 w-4 text-brand-0" />
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
