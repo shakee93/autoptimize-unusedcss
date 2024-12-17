@@ -12,40 +12,58 @@
     }
 
     async function monitorNetworkImagesWithMIMECheck() {
+        // Set to store unique image URLs
+        const processedUrls = new Set();
+        
         const observer = new PerformanceObserver((list) => {
             const entries = list.getEntries();
     
-            // Filter for image resources
-            const imageEntries = entries.filter((entry) => entry.initiatorType === 'img');
-            
-            // Track unique image URLs and avoid duplicates
-            const processedUrls = new Set();
-            
-            // Process each unique image entry
-            imageEntries.forEach(async (entry) => {
+            // Filter for image resources and check their performance metrics 
+            const imageEntries = entries.filter((entry) => {
+                // Check if it's an image resource
+                if (!/\.(jpg|jpeg|png|gif|webp|avif|svg)$/i.test(entry.name)) {
+                    return false;
+                }
+                
                 if (!processedUrls.has(entry.name)) {
                     processedUrls.add(entry.name);
-                    
-                    try {
-                        const response = await fetch(entry.name, { method: 'HEAD' });
-                        const contentType = response.headers.get('content-type');
-                        
-                        if (contentType === 'image/avif') {
-                            avif_count++;
-                        }
-                        
-                        if (processedUrls.size === imageEntries.length) {
-                            console.log(`Number of AVIF images: ${avif_count} out of ${processedUrls.size} total images`);
-                        }
-                        
-                    } catch (error) {
-                        console.error(`Failed to fetch headers for: ${entry.name}`, error);
+                    console.log('New image downloaded:', entry.name);
+
+                    // Get the initiatorType to determine if it's an image
+                    if (entry.initiatorType === 'img') {
+                        // Fetch the image to check its Content-Type header and redirects
+                        fetch(entry.name, {
+                            headers: {
+                                'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+                                'Access-Control-Allow-Origin': '*'
+                            }
+                        })
+                            .then(response => {
+                                // Check if redirected
+                                if (response.redirected) {
+                                    console.log(`${entry.name} was redirected to: ${response.url}`);
+                                }
+                                
+                                const contentType = response.headers.get('Content-Type');
+                                console.log(`${entry.name} Content-Type:`, contentType);
+                                
+                                if (contentType && contentType.includes('avif')) {
+                                    avif_count++;
+                                    console.log(`${entry.name} is AVIF format`);
+                                }
+                                
+                                console.log(`Total AVIF images: ${avif_count} out of ${processedUrls.size} total images`);
+                            })
+                            .catch(error => {
+                                console.log(`${entry.name} failed to load:`, error);
+                            });
                     }
                 }
+                return true;
             });
         });
     
-        observer.observe({ type: 'resource', buffered: true });
+        observer.observe({ type: 'resource' });
     }
     // Call the function
     monitorNetworkImagesWithMIMECheck();
