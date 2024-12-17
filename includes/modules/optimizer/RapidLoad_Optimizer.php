@@ -1763,7 +1763,7 @@ class RapidLoad_Optimizer
 
         // wp_send_json_error($result);
     
-        $api_url = 'https://rapidload-ai-faq-manager.vercel.app/api/score?' . http_build_query($query_params);
+        $api_url = 'https://rapidload-ai-faq-manager.vercel.app/api/score?' . http_build_query([]);
     
         try {
             $response = wp_remote_get($api_url, [
