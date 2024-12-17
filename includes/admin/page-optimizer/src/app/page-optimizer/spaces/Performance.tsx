@@ -109,7 +109,7 @@ const Performance = () => {
                     onClick={() => dispatch(setCommonState('activeTab', 'configurations'))}
                     className={cn(
 
-                        `whitespace-nowrap dark:bg-brand-930/90 bg-brand-0 border-2 border-transparent rounded-[20px] cursor-pointer w-[200px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+                        `hover:text-brand-900 whitespace-nowrap dark:bg-brand-930/90 bg-brand-0 border-2 border-transparent rounded-[20px] cursor-pointer w-[200px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
 
                         activeTab === 'configurations' ? "font-medium " : "text-brand-500 dark:hover:text-brand-300"
                     )}
@@ -128,7 +128,7 @@ const Performance = () => {
                                 <div
                                     onClick={() => dispatch(setCommonState('activeTab', tab.key))}
                                     className={cn(
-                                        `cursor-pointer flex items-center gap-2 px-4 py-3 text-sm font-medium`,
+                                        `cursor-pointer flex items-center gap-2 px-4 py-3 text-sm font-medium hover:text-brand-700`,
                                         isSticky && 'py-3',
                                         activeTab === tab.key ? "font-medium " : "text-brand-500 dark:hover:text-brand-300"
                                     )}

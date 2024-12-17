@@ -177,7 +177,7 @@ const Header = ({ url }: { url: string }) => {
 
 
                 <div className='flex gap-4 items-center'>
-                    <p className='text-sm text-brand-500 flex gap-4 items-center'>
+                    <div className='text-sm text-brand-500 flex gap-4 items-center'>
                         <motion.div
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{
@@ -195,13 +195,14 @@ const Header = ({ url }: { url: string }) => {
                             <MousePointerClick className='w-5 h-5 text-[#6e23ad]' />
                         </motion.div>
                         <motion.span
+                            className='hidden md:block'
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.3 }}
                         >
-                            This is an <span className='text-[#6e23ad]'>interactive demo</span> of the plugin, try it out!
+                            This is an <span className='text-[#6e23ad]'>interactive live demo</span> of the plugin, try it out!
                         </motion.span>
-                    </p>
+                    </div>
                 </div>
             </header>
             <AnimatePresence>
