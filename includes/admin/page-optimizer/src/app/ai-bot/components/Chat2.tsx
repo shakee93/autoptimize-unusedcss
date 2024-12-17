@@ -3,7 +3,11 @@
 import { useChat } from "ai/react";
 import { useEffect, useRef } from "react";
 import Markdown from "react-markdown";
-import { Send, MessageSquare, MessagesSquare } from "lucide-react";
+import { Send, MessageSquare, MessagesSquare, CpuIcon } from "lucide-react";
+import {ArrowUpIcon, XMarkIcon} from "@heroicons/react/24/outline";
+import {HermesAIBotIcon, NoteBookIcon, StarLockIcon, WorldIcon} from "app/ai-bot/icons/icon-svg";
+import { useSelector } from "react-redux";
+import { optimizerData } from "../../../store/app/appSelector";
 
 export default function Chat() {
   const { messages, input, handleInputChange, handleSubmit, setMessages } =
@@ -15,92 +19,86 @@ export default function Chat() {
     });
     console.log("API Key:", import.meta.env);
 
+  const { 
+    data, 
+    settings, 
+    activeReport,
+    activeGear,
+    testMode,
+    license 
+  } = useSelector(optimizerData);
+
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
+    // Format settings into markdown string
+    const formatSettings = () => {
+      let settingsStr = '';
+      settings?.forEach((setting: AuditSetting) => {
+        settingsStr += `\n- **${setting.name}**:\n`;
+        setting.inputs.forEach((input) => {
+          settingsStr += `    - ${input.control_label}: ${input.value ? 'Enabled' : 'Disabled'}\n`;
+          if (input.inputs) {
+            input.inputs.forEach((subInput) => {
+              settingsStr += `    - ${subInput.control_label}: "${subInput.value}"\n`;
+            });
+          }
+        });
+      });
+      return settingsStr;
+    };
+
+    // Format audits into markdown string
+    const formatAudits = () => {
+      const opportunities = data?.grouped?.opportunities || [];
+      const diagnostics = data?.grouped?.diagnostics || [];
+      const passedAudits = data?.grouped?.passed_audits || [];
+
+      return `
+      - **Opportunities**:
+        ${opportunities.map((audit: Audit) => `- **${audit.name}**: ${audit.displayValue}`).join('\n        ')}
+      - **Diagnostics**:
+        ${diagnostics.map((audit: Audit) => `- **${audit.name}**: ${audit.displayValue}`).join('\n        ')}
+      - **Passed Audits**: Total of ${passedAudits.length}
+      `;
+    };
+
+    const systemMessage = `
+      **User Details:**   
+      - **Name**: ${license?.name || 'Unknown'}
+      - **Website URL**: [${license?.siteUrl || 'Unknown'}](${license?.siteUrl || '#'})
+
+      **Google Page Speed Report Summary:**
+      - **FCP**: ${data?.metrics?.find(m => m.id === 'first-contentful-paint')?.displayValue || 'N/A'}
+      - **SI**: ${data?.metrics?.find(m => m.id === 'speed-index')?.displayValue || 'N/A'}
+      - **TBT**: ${data?.metrics?.find(m => m.id === 'total-blocking-time')?.displayValue || 'N/A'}
+      - **LCP**: ${data?.metrics?.find(m => m.id === 'largest-contentful-paint')?.displayValue || 'N/A'}
+      - **CLS**: ${data?.metrics?.find(m => m.id === 'cumulative-layout-shift')?.displayValue || 'N/A'}
+      - **Performance Score**: ${data?.performance || 'N/A'}
+
+      **Current Page Speed Audits:**
+      ${formatAudits()}
+
+      **${license?.name || 'User'}'s Current RapidLoad Settings:**
+      Optimizing Device: ${activeReport || 'desktop'}
+      Performance Score: ${data?.performance || 'N/A'}
+      Test Mode: ${testMode ? 'Enabled' : 'Disabled'}
+      Performance Gear: ${activeGear || 'custom'}
+
+      **Speed Settings:**
+      ${formatSettings()}
+    `;
+
     setMessages([
       {
         id: "1",
         role: "system",
-        content: `
-            **User Details:**   
-
-              - **Name**: Shakeeb
-              - **Website URL**: [https://rapidload.io/](https://rapidload.io/)
-
-              **Google Page Speed Report Summary:**
-
-              - **FCP**: 0.4 s
-              - **SI**: 0.8 s
-              - **TBT**: 10 ms
-              - **LCP**: 1.0 s
-              - **CLS**: 0.005
-              - **Performance Score**: 98
-
-              **Current Page Speed Audits:**
-
-              - **Opportunities**:
-                - **Reduce unused CSS**: Potential savings of 20 KiB
-              - **Diagnostics**:
-                - **Avoid an excessive DOM size**: 2,156 elements
-              - **Passed Audits**: Total of 34
-
-              **Shakeeb's Current RapidLoad Settings:**
-
-              Optimizing Device: desktop
-              Performance Score: turboMax
-              Test Mode: Enabled
-
-              **Speed Settings:**
-
-              - **Critical CSS**:
-                  - Enable Critical CSS: Enabled
-                  - Mobile Critical CSS: Disabled
-                  - Remove Critical CSS on User Interaction: Disabled
-                  - Enable CSS File Chunck: Disabled
-              - **Defer Javascript**:
-                  - Defer Javascript: Enabled
-                  - Exclude Javascript from Deferring: "sdadasdasdasdasd"
-              - **Serve next-gen Images (AVIF, WEBP)**:
-                  - Serve next-gen Images: Enabled
-                  - Image Optimize Level: "lossless"
-                  - Low Quality Image placeholders (LQIP): Disabled
-                  - Enable adaptive Image delivery: Disabled
-              - **Lazy Load Images**:
-                  - Image Lazy Load: Enabled
-              - **Minify Javascript**:
-                  - Minify Javascript: Enabled
-                  - Exclude Javascript from Minify: "*script-1*"
-              - **Remove Unused CSS**:
-                  - Remove Unused CSS: Enabled
-              - **Delay Javascript**:
-                  - Delay Javascript: Enabled
-                  - Delay Method: "All Files"
-                  - Exclude Javascript: "*script-1*"
-              - **Page Cache**:
-                  - Page Cache: Enabled
-                  - Cache Expiration: "0"
-                  - Mobile Cache: Enabled
-              - **RapidLoad CDN**:
-                  - RapidLoad CDN: Enabled
-                  - CDN Endpoint: "https://rapidload-local.rapidload-cdn.io/"
-              - **Self Host Google Fonts**:
-                  - Self Host Google Fonts: Enabled
-              - **Lazy Load Iframes**:
-                  - Iframes Lazy Load: Enabled
-                  - **Exclude Above-the-fold Images from Lazy Load**:
-                  - Exclude LCP image from Lazy Load: Disabled
-              - **Minify CSS**:
-                  - Minify CSS: Enabled
-              - **Add Width and Height Attributes**:
-                  - Add Width and Height Attributes: Enabled
-            `,
+        content: systemMessage,
         createdAt: new Date(),
       },
     ]);
     
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [data, settings, license, activeReport, activeGear, testMode]);
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -109,12 +107,75 @@ export default function Chat() {
   }, [messages]);
 
   return (
-    <div className="chat-container flex flex-col w-full max-w-4xl mx-auto h-[calc(100vh-8rem)] py-4">
-      <div className="flex-1 overflow-y-auto px-4 bg-white rounded-lg shadow-lg">
+    <div className="chat-container flex flex-col w-full max-w-4xl mx-auto h-[calc(100vh-4rem)] max-h-[750px] py-4 bg-white my-8  rounded-2xl">
+      <div className="px-4 pb-2 flex justify-end">
+        <button
+          onClick={() => (window.location.hash = '#/')}
+          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          aria-label="Close chat"
+        >
+          <XMarkIcon className="h-6 w-6 text-gray-500" />
+        </button>
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-4 bg-white">
         {messages.length === 1 ? (
           <div className="flex flex-col items-center justify-center h-full text-gray-500">
-            <MessageSquare size={48} className="mb-2" />
-            <p>No messages yet. Start a conversation!</p>
+            {/* <MessageSquare size={48} className="mb-2" />
+            <p>No messages yet. Start a conversation!</p> */}
+
+  <div className="flex flex-col items-center justify-center p-6 bg-white text-gray-800">
+      {/* Icon */}
+      <div className="flex items-center justify-center mb-4">
+        <div className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-xl">
+         <HermesAIBotIcon className="w-8 h-8" />
+        </div>
+      </div>
+
+      {/* Title */}
+      <h2 className="text-2xl text-gray-900 mb-3 font-normal">
+      <span className="font-bold ">Hermes AI</span> by RapidLoad
+      </h2>
+
+      {/* Description */}
+      <p className="text-base	font-normal select-none text-center text-gray-500 max-w-xl mb-6 leading-relaxed">
+        A highly intelligent and responsive chatbot built to deliver real-time
+        support, detailed troubleshooting, and personalized optimization tips.
+        It ensures that websites achieve maximum performance and speed, helping
+        users maintain smooth operations with minimal hassle.
+      </p>
+
+      {/* Features List */}
+      <ul className="space-y-2 mb-6 text-gray-700">
+        <li className="flex items-center gap-2">
+          <WorldIcon className="w-6 h-5 text-purple-500"/> Natural Language conversations
+        </li>
+        <li className="flex items-center gap-2  ">
+          <NoteBookIcon className="w-6 h-6 text-purple-500  "/> Knowledge Base
+        </li>
+        <li className="flex items-center gap-2  ">
+          <StarLockIcon className="w-6 h-6 text-purple-500  "/> Personalized Recommendation
+        </li>
+        <li className="flex items-center gap-2  ">
+          <CpuIcon className="w-6 h-6 text-purple-500  "/> Seamless Integration
+        </li>
+      </ul>
+
+      {/* Delivery Tags */} 
+      <div className="flex flex-wrap justify-center gap-2">
+        {["CSS Delivery", "JS Delivery", "Image Delivery", "Font Delivery", "Page Cache", "CDN"].map(
+          (item, index) => (
+            <span
+              key={index}
+              className="px-3 py-1 text-sm rounded-full bg-gray-200 text-gray-700 cursor-pointer"
+            >
+              {item}
+            </span>
+          )
+        )}
+      </div>
+    </div>
+
           </div>
         ) : (
           messages
@@ -164,15 +225,15 @@ export default function Chat() {
         <input
           className="flex-1 p-2 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           value={input}
-          placeholder="Type a message..."
+          placeholder="Reply to Hermes AI..."
           onChange={handleInputChange}
         />
         <button
           type="submit"
           disabled={input.trim() === ""}
-          className="ml-2 bg-violet-900 text-white p-2 rounded-lg hover:bg-violet-600 disabled:opacity-50 transition-colors"
+          className="ml-2 bg-brand-950 text-white p-2 rounded-lg hover:bg-brand-950 disabled:opacity-50 transition-colors"
         >
-          <Send size={24} />
+          <ArrowUpIcon className="h-6 w-6 text-brand-0" />
         </button>
       </form>
     </div>
