@@ -1,6 +1,6 @@
 (function (){
 
-    let diagnose_data = {};
+    window.diagnose_data = {};
 
     function is_rapidload_preview() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -18,9 +18,9 @@
             const rapidload_cache_status_div_content = document.querySelector('#rapidload-cache-status');
 
             if (rapidload_cache_status_div_content) {
-                diagnose_data.cache = true;
+                window.diagnose_data.cache = true;
             }else{
-                diagnose_data.cache = false;
+                window.diagnose_data.cache = false;
             }
 
             // check cpcss
@@ -28,9 +28,9 @@
             const rapidload_cpcss_style_content = document.querySelector('#rapidload-critical-css');
 
             if(rapidload_cpcss_style_content){
-                diagnose_data.cpcss = true;
+                window.diagnose_data.cpcss = true;
             }else{
-                diagnose_data.cpcss = false;
+                window.diagnose_data.cpcss = false;
             }
 
             // check uucss
@@ -39,9 +39,9 @@
             const nonOptimizedStylesheets = Array.from(allStylesheets).filter(sheet => !sheet.hasAttribute('data-rpd-uucss'));
 
             if(nonOptimizedStylesheets.length > 0) {
-                diagnose_data.non_optimized_css = nonOptimizedStylesheets.map(sheet => sheet.href);
+                window.diagnose_data.non_optimized_css = nonOptimizedStylesheets.map(sheet => sheet.href);
             }else{
-                diagnose_data.non_optimized_css = [];
+                window.diagnose_data.non_optimized_css = [];
             }
 
             // check minify
@@ -52,9 +52,9 @@
             });
 
             if(nonMinifiedStylesheets.length > 0) {
-                diagnose_data.non_minified_css = nonMinifiedStylesheets.map(sheet => sheet.href);
+                window.diagnose_data.non_minified_css = nonMinifiedStylesheets.map(sheet => sheet.href);
             }else{
-                diagnose_data.non_minified_css = [];
+                window.diagnose_data.non_minified_css = [];
             }
 
             // check js minify
@@ -66,9 +66,9 @@
             });
 
             if(nonMinifiedScripts.length > 0) {
-                diagnose_data.non_minified_js = nonMinifiedScripts.map(script => script.src);
+                window.diagnose_data.non_minified_js = nonMinifiedScripts.map(script => script.src);
             }else{
-                diagnose_data.non_minified_js = [];
+                window.diagnose_data.non_minified_js = [];
             }
 
             // check non-deferred scripts
@@ -78,9 +78,9 @@
             });
 
             if(nonDeferredScripts.length > 0) {
-                diagnose_data.non_deferred_js = nonDeferredScripts.map(script => script.src);
+                window.diagnose_data.non_deferred_js = nonDeferredScripts.map(script => script.src);
             }else{
-                diagnose_data.non_deferred_js = [];
+                window.diagnose_data.non_deferred_js = [];
             }
 
             // check non-delayed scripts
@@ -89,21 +89,19 @@
             });
 
             if(nonDelayedScripts.length > 0) {
-                diagnose_data.non_delayed_js = nonDelayedScripts.map(script => script.src);
+                window.diagnose_data.non_delayed_js = nonDelayedScripts.map(script => script.src);
             }else{
-                diagnose_data.non_delayed_js = [];
+                window.diagnose_data.non_delayed_js = [];
             }
 
             // check cdn
 
             const preconnectLink = document.querySelector('link[rel="preconnect"][crossorigin][href*=".rapidload-cdn.io"]');
             if(preconnectLink) {
-                diagnose_data.cdn = true;
+                window.diagnose_data.cdn = true;
             }else{
-                diagnose_data.cdn = false;
+                window.diagnose_data.cdn = false;
             }
-
-            
 
         }
 
