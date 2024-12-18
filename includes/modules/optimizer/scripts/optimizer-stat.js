@@ -13,28 +13,38 @@
 
     document.addEventListener('DOMContentLoaded', function (){
         if (is_rapidload_preview()) {
+
             // check cache served
             const rapidload_cache_status_div_content = document.querySelector('#rapidload-cache-status');
 
             if (rapidload_cache_status_div_content) {
-                console.log('Page Cache working')
                 diagnose_data.cache = true;
+            }else{
+                diagnose_data.cache = false;
             }
+
+            // check cpcss
 
             const rapidload_cpcss_style_content = document.querySelector('#rapidload-critical-css');
 
             if(rapidload_cpcss_style_content){
-                console.log('Critical CSS working')
                 diagnose_data.cpcss = true;
+            }else{
+                diagnose_data.cpcss = false;
             }
+
+            // check uucss
 
             const allStylesheets = document.querySelectorAll('link[type="text/css"]');
             const nonOptimizedStylesheets = Array.from(allStylesheets).filter(sheet => !sheet.hasAttribute('data-rpd-uucss'));
 
             if(nonOptimizedStylesheets.length > 0) {
-                console.log('Found ' + nonOptimizedStylesheets.length + ' non-optimized stylesheets:');
                 diagnose_data.non_optimized_css = nonOptimizedStylesheets.map(sheet => sheet.href);
+            }else{
+                diagnose_data.non_optimized_css = [];
             }
+
+            // check minify
 
             const nonMinifiedStylesheets = Array.from(allStylesheets).filter(sheet => {
                 const href = sheet.href || '';
@@ -42,71 +52,68 @@
             });
 
             if(nonMinifiedStylesheets.length > 0) {
-                console.log('Found ' + nonMinifiedStylesheets.length + ' non-minified stylesheets:');
                 diagnose_data.non_minified_css = nonMinifiedStylesheets.map(sheet => sheet.href);
+            }else{
+                diagnose_data.non_minified_css = [];
             }
 
-            if(window.rapidload_preview_stats.uucss){
-                
-                let found_optimized_css = window.rapidload_preview_stats.uucss.filter(a => a.new_href).length
-                console.log(window.rapidload_preview_stats.uucss.length + ' css files found')
-                console.log(found_optimized_css + ' css files optimized')
-                let not_optimized_css = window.rapidload_preview_stats.uucss.filter(a => !a.new_href).length
-                console.log(not_optimized_css + ' css files not optimized')
-                
+            // check js minify
+
+            const allScripts = document.querySelectorAll('script[src]');
+            const nonMinifiedScripts = Array.from(allScripts).filter(script => {
+                const src = script.src || '';
+                return !script.hasAttribute('data-rpd-minify-js') && !src.toString().includes('.min.js');
+            });
+
+            if(nonMinifiedScripts.length > 0) {
+                diagnose_data.non_minified_js = nonMinifiedScripts.map(script => script.src);
+            }else{
+                diagnose_data.non_minified_js = [];
             }
 
-            if(window.rapidload_preview_stats.minify_css){
-                const minify_css_stat_value = document.querySelector('#rapidload-optimizer-stat-container #rapidload-minify-css-stat');
+            // check non-deferred scripts
 
-                if(minify_css_stat_value){
-                    minify_css_stat_value.innerHTML = 'total ' + window.rapidload_preview_stats.uucss.length + " css found and " +  window.rapidload_preview_stats.uucss.filter(a => a.new_href).length + " minified"
-                }
+            const nonDeferredScripts = Array.from(allScripts).filter(script => {
+                return !script.hasAttribute('data-rpd-strategy') && !script.hasAttribute('defer');
+            });
 
+            if(nonDeferredScripts.length > 0) {
+                diagnose_data.non_deferred_js = nonDeferredScripts.map(script => script.src);
+            }else{
+                diagnose_data.non_deferred_js = [];
             }
+
+            // check non-delayed scripts
+            const nonDelayedScripts = Array.from(allScripts).filter(script => {
+                return !script.hasAttribute('data-rpd-strategy') || script.getAttribute('data-rpd-strategy') !== 'delay';
+            });
+
+            if(nonDelayedScripts.length > 0) {
+                diagnose_data.non_delayed_js = nonDelayedScripts.map(script => script.src);
+            }else{
+                diagnose_data.non_delayed_js = [];
+            }
+
+            // check cdn
 
             const preconnectLink = document.querySelector('link[rel="preconnect"][crossorigin][href*=".rapidload-cdn.io"]');
-                if(preconnectLink) {
-                    console.log('CDN working');
-                    diagnose_data.cdn = true;
-                }
-
-            if(window.rapidload_preview_stats.font && window.rapidload_preview_stats.font.google_fonts){
-
-                console.log(window.rapidload_preview_stats.font.google_fonts.length + ' google font ' + (window.rapidload_preview_stats.font.google_fonts.length === 1 ? 'file' : 'files') + ' inlined')
-
+            if(preconnectLink) {
+                diagnose_data.cdn = true;
+            }else{
+                diagnose_data.cdn = false;
             }
 
-            if(window.rapidload_preview_stats.js){
-
-                if(window.rapidload_preview_stats.js['defer']){
-
-                    console.log(window.rapidload_preview_stats.js['defer'].length + ' files defered')
-
-                }
-
-                if(window.rapidload_preview_stats.js['delay']){
-
-                    console.log(window.rapidload_preview_stats.js['delay'].length + ' files delayed')
-
-                }
-
-                if(window.rapidload_preview_stats.js['minify']){
-
-                    console.log(window.rapidload_preview_stats.js['minify'].length + ' files minified')
-
-                }
-
-            }
+            
 
         }
 
 
         setTimeout(() => {
+
             window.parent.postMessage(
                 {
                     type: "RAPIDLOAD_CHECK_RESULTS",
-                    data: window.rapidload_preview_stats,
+                    data: diagnose_data,
                 },
                 "*" 
             );
