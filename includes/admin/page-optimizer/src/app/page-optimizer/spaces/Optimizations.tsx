@@ -33,8 +33,9 @@ const Optimizations = ({ }) => {
     const [showIframe, setShowIframe] = useState(false);
 
     useEffect(() => {
-       
+            console.log('window', window)
             window.addEventListener("message", (event) => {
+                console.log('event', event.data)
                 if (event.data.type === "RAPIDLOAD_CHECK_RESULTS") {
                     console.log("Received data from iframe:", event.data);
                 }
@@ -119,7 +120,7 @@ const Optimizations = ({ }) => {
                                     </button>
                                 </div>
                                 <iframe 
-                                    src={optimizerUrl+'?rapidload_preview'} 
+                                    src={'http://rapidload.local/?rapidload_preview'} 
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                 />
