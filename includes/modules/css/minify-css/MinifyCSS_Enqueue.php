@@ -124,6 +124,7 @@ class MinifyCSS_Enqueue
         }
 
         $link->href = $minified_url;
+        $link->{'data-rpd-minify'} = true;
 
         $_frontend_data['new_href'] = $link->href;
 
@@ -163,7 +164,7 @@ class MinifyCSS_Enqueue
 
     private function is_file_excluded($file) {
 
-        $files = isset( $this->options['uucss_minify_excluded_files'] ) && !empty($options['uucss_minify_excluded_files']) ? explode( "\n", $options['uucss_minify_excluded_files'] ) : [];
+        $files = isset( $this->options['uucss_minify_excluded_files'] ) && !empty($this->options['uucss_minify_excluded_files']) ? explode( "\n", $this->options['uucss_minify_excluded_files'] ) : [];
 
         foreach ( $files as $excluded_file ) {
 

@@ -215,6 +215,7 @@ class UnusedCSS_Enqueue
 
                     $sheet->{'data-href'} = $sheet->href;
                     $sheet->{'data-media'} = $sheet->media;
+                    $sheet->{'data-rpd-uucss'} = true;
 
                     $_frontend_data['new_href'] = $sheet->href;
 

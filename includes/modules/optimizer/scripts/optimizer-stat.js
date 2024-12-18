@@ -1,6 +1,6 @@
 (function (){
 
-    let avif_count = 0;
+    let diagnose_data = {};
 
     function is_rapidload_preview() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -11,31 +11,6 @@
         return params.includes("rapidload_preview");
     }
 
-    async function monitorNetworkImagesWithMIMECheck() {
-        // Set to store unique image URLs
-        const processedUrls = new Set();
-        
-        const observer = new PerformanceObserver((list) => {
-            const entries = list.getEntriesByType("resource");
-            entries.forEach((entry) => {
-              if (entry.initiatorType === "img") {
-                console.log(`Image loaded: ${entry.name}`);
-                console.log(`Start time: ${entry.startTime}`);
-                console.log(`End time: ${entry.responseEnd}`);
-                console.log(`Redirect time: ${entry.redirectStart ? entry.redirectEnd - entry.redirectStart : 0} ms`);
-                if (entry.redirectStart > 0) {
-                  console.log(`Image request was redirected: ${entry.name}`);
-                }
-              }
-            });
-        });
-        // Start observing resource timing
-        observer.observe({ type: "resource", buffered: true });
-    }
-    // Call the function
-    monitorNetworkImagesWithMIMECheck();
-    
-
     document.addEventListener('DOMContentLoaded', function (){
         if (is_rapidload_preview()) {
             // check cache served
@@ -43,12 +18,32 @@
 
             if (rapidload_cache_status_div_content) {
                 console.log('Page Cache working')
+                diagnose_data.cache = true;
             }
 
             const rapidload_cpcss_style_content = document.querySelector('#rapidload-critical-css');
 
             if(rapidload_cpcss_style_content){
                 console.log('Critical CSS working')
+                diagnose_data.cpcss = true;
+            }
+
+            const allStylesheets = document.querySelectorAll('link[type="text/css"]');
+            const nonOptimizedStylesheets = Array.from(allStylesheets).filter(sheet => !sheet.hasAttribute('data-rpd-uucss'));
+
+            if(nonOptimizedStylesheets.length > 0) {
+                console.log('Found ' + nonOptimizedStylesheets.length + ' non-optimized stylesheets:');
+                diagnose_data.non_optimized_css = nonOptimizedStylesheets.map(sheet => sheet.href);
+            }
+
+            const nonMinifiedStylesheets = Array.from(allStylesheets).filter(sheet => {
+                const href = sheet.href || '';
+                return !sheet.hasAttribute('data-rpd-minify') && !href.toString().includes('.min.css');
+            });
+
+            if(nonMinifiedStylesheets.length > 0) {
+                console.log('Found ' + nonMinifiedStylesheets.length + ' non-minified stylesheets:');
+                diagnose_data.non_minified_css = nonMinifiedStylesheets.map(sheet => sheet.href);
             }
 
             if(window.rapidload_preview_stats.uucss){
@@ -70,11 +65,11 @@
 
             }
 
-            if(window.rapidload_preview_stats.cdn === 'enabled'){
-
-                console.log('CDN working')
-
-            }
+            const preconnectLink = document.querySelector('link[rel="preconnect"][crossorigin][href*=".rapidload-cdn.io"]');
+                if(preconnectLink) {
+                    console.log('CDN working');
+                    diagnose_data.cdn = true;
+                }
 
             if(window.rapidload_preview_stats.font && window.rapidload_preview_stats.font.google_fonts){
 
