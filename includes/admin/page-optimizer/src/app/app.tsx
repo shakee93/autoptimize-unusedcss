@@ -46,6 +46,7 @@ import {
 import OptimizerPagesTable from "app/dashboard/components/OptimizerPagesTable";
 import SlideUp from "components/animation/SlideUp";
 import StepTwo from "app/onboard/components/StepTwo";
+import HermesAIBot from "app/ai-bot";
 
 const App = ({ popup, _showOptimizer = false }: {
     popup?: HTMLElement | null,
@@ -198,6 +199,7 @@ const App = ({ popup, _showOptimizer = false }: {
         { title: "Dashboard", id: "/", component: <Dashboard /> },
         { title: "Optimize", id: "/optimize", component: <PageOptimizer /> },
         { title: "Onboard", id: "/onboard", component: <Onboard /> },
+        { title: "Hermes AI", id: "/hermes-ai", component: <HermesAIBot /> },
     ]);
 
     // Effect to listen for hash changes
@@ -302,7 +304,7 @@ const App = ({ popup, _showOptimizer = false }: {
                                             </div>
 
                                             {routes.map((route, i) => {
-                                                if (route.id === '/onboard') {
+                                                if (route.id === '/onboard' || route.id === '/hermes-ai') {
                                                     return null;
                                                 }
                                                 return (

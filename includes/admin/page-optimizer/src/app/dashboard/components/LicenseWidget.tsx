@@ -183,8 +183,8 @@ const LicenseWidget = () => {
                         className="flex gap-6 justify-end p-6 text-sm font-semibold relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white">
                         {licenseInfo?.licensedDomain ? (
                             <>
-                                <button className="cursor-pointer text-brand-500 py-1.5" onClick={() => window.open('https://app.rapidload.io/profile', 'blank')}>View My Account</button>
-                                <button className="cursor-pointer bg-brand-100/90 text-brand-950 py-1.5 px-4 rounded-lg" onClick={() => window.open('https://app.rapidload.io/', 'blank')}>Upgrade</button>
+                                <button className="cursor-pointer text-brand-500 py-1.5" onClick={() => window.open('https://app.rapidload.io/', 'blank')}>View My Account</button>
+                                <button className="cursor-pointer bg-brand-100/90 text-brand-950 py-1.5 px-4 rounded-lg" onClick={() => window.open('https://app.rapidload.io/subscription', 'blank')}>Upgrade</button>
                             </>
                         ) : (
                             <>

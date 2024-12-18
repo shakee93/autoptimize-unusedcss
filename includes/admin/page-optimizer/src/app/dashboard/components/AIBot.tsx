@@ -56,43 +56,18 @@ const AIBot = () => {
                             </button>
                         ))}
                     </div>
-
                     <div className="relative">
-                        <Dialog open={open} onOpenChange={setOpen}>
-                            <DialogTrigger asChild>
-                                <div>
                                     <input
                                         type="text"
+                                        onClick={() => (window.location.hash = '#/hermes-ai')}
                                         placeholder="Ask about anything..."
                                         className="w-full p-2 border border-brand-300 rounded-full focus:outline-none focus:border-black bg-brand-100 pr-10 pl-4"
                                     />
                                     <ArrowUpCircleIcon
                                         className="cursor-pointer h-10 w-10 text-brand-950 absolute right-0 top-1/2 transform -translate-y-1/2 "/>
                                 </div>
-                            </DialogTrigger>
-                            <DialogTitle/>
-                            <DialogContent className="sm:max-w-[650px] sm:rounded-3xl gap-0">
-                                <DialogHeader className='p-6'>
-                                    <DialogTitle>AI Speed Coach</DialogTitle>
-                                    <DialogDescription>
-                                        AI Speed Coach answers your questions with information and insights from our wide-ranging collection of articles.
-                                    </DialogDescription>
-                                </DialogHeader>
-                                <div className="relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white">
-                                    {/* <AISpeedCoach/> */}
-                                    <HermisAIBot/>
-                                </div>
-                                {/* <DialogFooter className="p-6">
-                                    <AppButton onClick={() => setOpen(false)} variant='outline' className='text-sm'>
-                                        Close
-                                    </AppButton>
-                                </DialogFooter> */}
-                            </DialogContent>
-                        </Dialog>
 
-
-
-                    </div>
+                    
                 </div>
             </Card>
         </div>
