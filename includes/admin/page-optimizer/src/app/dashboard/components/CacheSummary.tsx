@@ -11,7 +11,7 @@ import {useAppContext} from "../../../context/app";
 import SkeletonList from 'components/ui/listSkelton';
 import TooltipText from "components/ui/tooltip-text";
 import {toast} from "components/ui/use-toast";
-import {CheckCircleIcon, XCircleIcon} from "lucide-react";
+import {CheckCircleIcon, Loader, XCircleIcon} from "lucide-react";
 
 type CacheUsageItem = {
     label: string;
@@ -25,13 +25,25 @@ type CacheUsageItem = {
     }
 };
 
+interface SectionHeaderProps {
+    title: string;
+    tooltip: string;
+}
 
 const CacheSummary = () => {
 
     const {dispatch} = useCommonDispatch();
     const {options} = useAppContext();
     const [totalCacheSize, setTotalCacheSize] = useState('0 MB');
-    const {cacheUsage} = useSelector(optimizerData);
+    const {cacheUsage, actions} = useSelector(optimizerData);
+    const [loading, setLoading] = useState(false);
+    const [clearAllLoading, setClearAllLoading] = useState(false);
+    const [itemLoading, setItemLoading] = useState<string | null>(null);
+
+    useEffect(() => {
+        console.log(actions);
+        console.log(cacheUsage);
+    }, [actions]);
 
     const chartOptions = {
         plugins: {
@@ -79,29 +91,44 @@ const CacheSummary = () => {
     }, [dispatch]);
 
     const clearCache = async (href?: string) => {
-        if (href) {
-            const response = await fetch(href.replace(/&amp;/g, '&'));
-            if(response.status==200){
-                toast({
-                    duration: 10,
-                    description: (
-                        <div className="flex w-full gap-2 text-center items-center">
-                            Successfully Cleared <CheckCircleIcon className="w-5 text-green-600" />
-                        </div>
-                    ),
-                });
-            }else{
-                toast({
-                    duration: 10,
-                    description: (
-                        <div className="flex w-full gap-2 text-center items-center">
-                            Error Occurred {response.statusText}<XCircleIcon className='w-5 text-red-600' />
-                        </div>
-                    ),
-                });
-            }
+        const isClearAll = href === getPageCacheAction();
+        if (isClearAll) {
+            setClearAllLoading(true);
+        } else {
+            setItemLoading(href || null);
         }
-        fetchCacheSummary();
+
+        try {
+            if (href) {
+                const response = await fetch(href.replace(/&amp;/g, '&'));
+                if(response.status==200){
+                    toast({
+                        duration: 10,
+                        description: (
+                            <div className="flex w-full gap-2 text-center items-center">
+                                Successfully Cleared <CheckCircleIcon className="w-5 text-green-600" />
+                            </div>
+                        ),
+                    });
+                }else{
+                    toast({
+                        duration: 10,
+                        description: (
+                            <div className="flex w-full gap-2 text-center items-center">
+                                Error Occurred {response.statusText}<XCircleIcon className='w-5 text-red-600' />
+                            </div>
+                        ),
+                    });
+                }
+            }
+        } finally {
+            if (isClearAll) {
+                setClearAllLoading(false);
+            } else {
+                setItemLoading(null);
+            }
+            fetchCacheSummary();
+        }
     };
 
 
@@ -133,28 +160,52 @@ const CacheSummary = () => {
                 <div className="text-sm dark:text-brand-300">{size.size}</div>
                 {action ? (
                     <TooltipText className='flex items-center justify-center' text={action.label}>
-                        <TrashIcon onClick={() => clearCache(action.href)} className="cursor-pointer h-5 w-5 text-gray-500" />
+                        {itemLoading === action.href ? (
+                            <Loader className="h-5 w-5 animate-spin text-gray-500" />
+                        ) : (
+                            <TrashIcon onClick={() => clearCache(action.href)} className="cursor-pointer h-5 w-5 text-gray-500" />
+                        )}
                     </TooltipText>
-                ):(
+                ) : (
                     <TrashIcon className="h-5 w-5 text-gray-500" />
-                    )
-                }
+                )}
             </div>
 
         </div>
     );
 
+    const SectionHeader = ({title, tooltip}: SectionHeaderProps) => (
+        <div className="flex gap-2 items-center">
+            <div className="text-base font-semibold dark:text-brand-300">{title}</div>
+        
+            <TooltipText className='max-w-sm' text={tooltip}>
+                <InformationCircleIcon className="h-[18px] w-[18px]"/>
+            </TooltipText>
+        </div>
+    );
+
+    const getPageCacheAction = () => {
+        return actions?.find(action => 
+            action.control_label === "Flush Cache" && 
+            action.control_description === "Clear Page Cache"
+        )?.action;
+    };
+
+    const handleClearAllCache = () => {
+        const pageCacheAction = getPageCacheAction();
+        if (pageCacheAction) {
+            clearCache(pageCacheAction);
+        }
+    };
+
     return (
         <Card data-tour="license-widget" className="border flex flex-col">
             <div className="flex flex-col px-6 py-6 gap-4">
-                <div className="flex gap-2 items-center">
-                    <div className="text-base font-semibold dark:text-brand-300">Cache summary</div>
-                    <InformationCircleIcon className="h-[18px] w-[18px]" />
-                </div>
-
+            <SectionHeader title="Cache summary" tooltip="Comprehensive breakdown of CDN and Image CDN usage allocated through RapidLoad." />
+                
                 {/* Placeholder for chart, uncomment when ready to use */}
                 {/* <div className="grid justify-center">
-          <DoughnutChart data={chartData} options={chartOptions} />
+            <DoughnutChart data={chartData} options={chartOptions} />
         </div> */}
 
                 <div className="p-6 py-10 border rounded-3xl text-center">
@@ -173,8 +224,14 @@ const CacheSummary = () => {
                 </div>
 
                 <div className="flex justify-end text-sm font-semibold">
-                    <button className="bg-brand-100/90 text-brand-950 py-1.5 px-4 rounded-lg">
-                        Clear Cache
+                    <button 
+                        onClick={handleClearAllCache}
+                        className="h-8 bg-brand-100/90 text-brand-950 py-1.5 px-4 rounded-lg flex items-center gap-1"
+                    >
+                        {clearAllLoading ? (
+                            <Loader className='w-4 h-4 animate-spin' />
+                        ) : null}
+                        <span>Clear Cache</span>
                     </button>
                 </div>
             </div>

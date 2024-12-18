@@ -80,7 +80,7 @@ class RapidLoad_Admin_Bar {
         $indexCSS = '/' . ltrim($indexCSS, '/');
 
         add_action('wp_head', function()use ($package ,  $indexCSS){
-           // echo '<link rel="preload" href="' . $package .  $indexCSS . '" as="style" type="text/css"/>';
+            echo '<link rel="preload" href="' . $package .  $indexCSS . '" as="style" type="text/css"/>';
         });
 
         wp_register_script( 'rapidload_page_optimizer', $package . $indexJS,[], UUCSS_VERSION);
