@@ -39,7 +39,7 @@ const CDNSummary = () => {
         <div className="flex gap-2 items-center">
             <div className="text-base font-semibold dark:text-brand-300">{title}</div>
         
-            <TooltipText text={tooltip}>
+            <TooltipText className='max-w-sm' text={tooltip}>
                 <InformationCircleIcon className="h-[18px] w-[18px]"/>
             </TooltipText>
         </div>
