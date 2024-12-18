@@ -106,7 +106,7 @@ const StepFour= () => {
                                 </div>
 
                                 {/* Passed Audits Section */}
-                                <div className="flex flex-col gap-2">
+                                {/* <div className="flex flex-col gap-2">
                                     <div className="flex items-center gap-4 text-sm font-semibold text-brand-900 border-b border-brand-200 px-6 py-2">
                                         <span>Passed Audits</span>
                                         <span className="flex text-xxs items-center text-brand-0 justify-center rounded-full w-6 h-6 border-2 border-green-400 bg-green-400">
@@ -121,7 +121,7 @@ const StepFour= () => {
                                             </div>
                                         ))}
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                         ) : (
