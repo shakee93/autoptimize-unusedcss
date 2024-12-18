@@ -23,7 +23,7 @@ import ComparisonTable from "components/ui/compare-table";
 import AppButton from "components/ui/app-button";
 import ComparisonDialog from '../ComparisonDialog';
 
-const boosterLevels: PerformanceGear[] = ['starter', 'accelerate', 'turboMax', 'custom'];
+const boosterLevels: PerformanceGear[] = ['starter', 'accelerate', 'turboMax'];
 
 const Steps = [
     "Analyze with Google PageSpeed",
@@ -170,8 +170,8 @@ const PerformanceGears: React.FC = () => {
             className={cn(
                 'relative flex flex-col gap-3 font-normal cursor-pointer w-[135px] h-[135px] rounded-3xl items-center justify-center',
                 'hover:bg-brand-100/50 bg-brand-0',
-                index !== 0 && '-ml-11',
-                activeGear === level ? 'z-50' : `z-[${boosterLevels.length - index}]`,
+                // index !== 0 && '-ml-11',
+                // activeGear === level ? 'z-50' : `z-[${boosterLevels.length - index}]`,
                 activeGear === level 
                     ? 'text-brand-600 border-[3px] border-[#592d8d]' 
                     : 'border border-brand-200 dark:border-brand-700'
@@ -272,8 +272,8 @@ const PerformanceGears: React.FC = () => {
     return (
         <div className="flex flex-col items-center justify-between">
             <div className="flex flex-col p-6 pb-0 text-md gap-4 bg-white border-b-0 border-t-0 border w-full overflow-hidden relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white">
-                <h4 className="text-base font-semibold flex text-brand-400 gap-1">
-                    You’ve activated <span className="capitalize text-brand-950 ">{activeGear} Gear</span>
+                <h4 className={cn("text-base font-semibold flex gap-1", activeGear === 'custom' ? 'text-purple-900' : 'text-brand-400')}>
+                    You’ve activated <span className="capitalize text-brand-950 ">{activeGear} {activeGear === 'custom' ? 'Settings' : 'Gear'}</span>
                 </h4>
                 <div className="flex flex-col w-full">
                     <div className="flex gap-3 w-full pointer-events-none	">
@@ -361,31 +361,7 @@ const PerformanceGears: React.FC = () => {
                         Compare performance gears
                     </button>
                     <ComparisonDialog open={open} setOpen={setOpen} />
-                    {/*<Dialog open={open} onOpenChange={setOpen}>*/}
-                    {/*    <DialogTrigger asChild>*/}
-                    {/*        <button*/}
-                    {/*            className="cursor-pointer transition duration-300 text-sm font-semibold text-brand-500 py-1.5">*/}
-                    {/*            Compare performance gears*/}
-                    {/*        </button>*/}
-                    {/*    </DialogTrigger>*/}
-                    {/*    <DialogTitle/>*/}
-                    {/*    <DialogContent className="sm:max-w-[650px] sm:rounded-3xl gap-0">*/}
-                    {/*        <DialogHeader className='px-10 pt-6'>*/}
-                    {/*            <DialogTitle>Compare Performance Gears</DialogTitle>*/}
-                    {/*            <DialogDescription>*/}
-                    {/*                Here is our Gear Mode Comparison Table, providing a clear and concise overview at a glance.*/}
-                    {/*            </DialogDescription>*/}
-                    {/*        </DialogHeader>*/}
-                    {/*        <div className="pt-2">*/}
-                    {/*            <ComparisonTable/>*/}
-                    {/*        </div>*/}
-                    {/*        <DialogFooter className="p-6">*/}
-                    {/*            <AppButton onClick={() => setOpen(false)} variant='outline' className='text-sm'>*/}
-                    {/*                Close*/}
-                    {/*            </AppButton>*/}
-                    {/*        </DialogFooter>*/}
-                    {/*    </DialogContent>*/}
-                    {/*</Dialog>*/}
+                    
                     <button onClick={() => (window.location.hash = '#/optimize')}
                             className="cursor-pointer transition duration-300 bg-brand-100/90 text-sm font-semibold py-1.5 px-4 rounded-lg">
                         Change Gear

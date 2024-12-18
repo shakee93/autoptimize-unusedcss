@@ -13,9 +13,12 @@ import {useAppContext} from "../../../context/app";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../store/app/appTypes";
 import {optimizerData} from "../../../store/app/appSelector";
+import { Tooltip } from 'components/ui/tooltip';
+import TooltipText from 'components/ui/tooltip-text';
 
 interface SectionHeaderProps {
     title: string;
+    tooltip?: string;
 }
 
 interface UsageBarProps {
@@ -32,10 +35,13 @@ const CDNSummary = () => {
     const {options} = useAppContext();
     const {cdnUsage, imageUsage, cacheUsage} = useSelector(optimizerData);
 
-    const SectionHeader = ({title}: SectionHeaderProps) => (
+    const SectionHeader = ({title, tooltip}: SectionHeaderProps) => (
         <div className="flex gap-2 items-center">
             <div className="text-base font-semibold dark:text-brand-300">{title}</div>
-            <InformationCircleIcon className="h-[18px] w-[18px]"/>
+        
+            <TooltipText text={tooltip}>
+                <InformationCircleIcon className="h-[18px] w-[18px]"/>
+            </TooltipText>
         </div>
     );
 
@@ -85,7 +91,7 @@ const CDNSummary = () => {
     return (
         <Card data-tour="license-widget" className="border flex flex-col">
             <div className="p-6">
-                <SectionHeader title="Usage Summary"/>
+                <SectionHeader title="Usage Summary" tooltip="Detailed overview of the total files cached and served by RapidLoad." />
 
                 <UsageBar label="CDN" usage={cdnUsage.used_gb} allowedUsage={cdnUsage.allowed_gb} note="Limits will be updated on July 5" used_gb_formatted={cdnUsage.used_gb_formatted}/>
                 {cdnUsage.additional_usage_gb > 0 &&

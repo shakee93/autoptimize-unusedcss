@@ -25,13 +25,21 @@ type CacheUsageItem = {
     }
 };
 
+interface SectionHeaderProps {
+    title: string;
+    tooltip: string;
+}
 
 const CacheSummary = () => {
 
     const {dispatch} = useCommonDispatch();
     const {options} = useAppContext();
     const [totalCacheSize, setTotalCacheSize] = useState('0 MB');
-    const {cacheUsage} = useSelector(optimizerData);
+    const {cacheUsage, actions} = useSelector(optimizerData);
+
+    useEffect(() => {
+        console.log(actions);
+    }, [actions]);
 
     const chartOptions = {
         plugins: {
@@ -144,14 +152,21 @@ const CacheSummary = () => {
         </div>
     );
 
+    const SectionHeader = ({title, tooltip}: SectionHeaderProps) => (
+        <div className="flex gap-2 items-center">
+            <div className="text-base font-semibold dark:text-brand-300">{title}</div>
+        
+            <TooltipText text={tooltip}>
+                <InformationCircleIcon className="h-[18px] w-[18px]"/>
+            </TooltipText>
+        </div>
+    );
+
     return (
         <Card data-tour="license-widget" className="border flex flex-col">
             <div className="flex flex-col px-6 py-6 gap-4">
-                <div className="flex gap-2 items-center">
-                    <div className="text-base font-semibold dark:text-brand-300">Cache summary</div>
-                    <InformationCircleIcon className="h-[18px] w-[18px]" />
-                </div>
-
+            <SectionHeader title="Cache summary" tooltip="Comprehensive breakdown of CDN and Image CDN usage allocated through RapidLoad." />
+                
                 {/* Placeholder for chart, uncomment when ready to use */}
                 {/* <div className="grid justify-center">
           <DoughnutChart data={chartData} options={chartOptions} />
