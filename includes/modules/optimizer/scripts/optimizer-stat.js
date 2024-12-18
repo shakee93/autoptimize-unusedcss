@@ -1,6 +1,6 @@
 (function (){
 
-    let avif_count = 0;
+    window.diagnose_data = {};
 
     function is_rapidload_preview() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -11,107 +11,107 @@
         return params.includes("rapidload_preview");
     }
 
-    async function monitorNetworkImagesWithMIMECheck() {
-        // Set to store unique image URLs
-        const processedUrls = new Set();
-        
-        const observer = new PerformanceObserver((list) => {
-            const entries = list.getEntriesByType("resource");
-            entries.forEach((entry) => {
-              if (entry.initiatorType === "img") {
-                console.log(`Image loaded: ${entry.name}`);
-                console.log(`Start time: ${entry.startTime}`);
-                console.log(`End time: ${entry.responseEnd}`);
-                console.log(`Redirect time: ${entry.redirectStart ? entry.redirectEnd - entry.redirectStart : 0} ms`);
-                if (entry.redirectStart > 0) {
-                  console.log(`Image request was redirected: ${entry.name}`);
-                }
-              }
-            });
-        });
-        // Start observing resource timing
-        observer.observe({ type: "resource", buffered: true });
-    }
-    // Call the function
-    monitorNetworkImagesWithMIMECheck();
-    
-
     document.addEventListener('DOMContentLoaded', function (){
         if (is_rapidload_preview()) {
+
             // check cache served
             const rapidload_cache_status_div_content = document.querySelector('#rapidload-cache-status');
 
             if (rapidload_cache_status_div_content) {
-                console.log('Page Cache working')
+                window.diagnose_data.cache = true;
+            }else{
+                window.diagnose_data.cache = false;
             }
+
+            // check cpcss
 
             const rapidload_cpcss_style_content = document.querySelector('#rapidload-critical-css');
 
             if(rapidload_cpcss_style_content){
-                console.log('Critical CSS working')
+                window.diagnose_data.cpcss = true;
+            }else{
+                window.diagnose_data.cpcss = false;
             }
 
-            if(window.rapidload_preview_stats.uucss){
-                
-                let found_optimized_css = window.rapidload_preview_stats.uucss.filter(a => a.new_href).length
-                console.log(window.rapidload_preview_stats.uucss.length + ' css files found')
-                console.log(found_optimized_css + ' css files optimized')
-                let not_optimized_css = window.rapidload_preview_stats.uucss.filter(a => !a.new_href).length
-                console.log(not_optimized_css + ' css files not optimized')
-                
+            // check uucss
+
+            const allStylesheets = document.querySelectorAll('link[type="text/css"]');
+            const nonOptimizedStylesheets = Array.from(allStylesheets).filter(sheet => !sheet.hasAttribute('data-rpd-uucss'));
+
+            if(nonOptimizedStylesheets.length > 0) {
+                window.diagnose_data.non_optimized_css = nonOptimizedStylesheets.map(sheet => sheet.href);
+            }else{
+                window.diagnose_data.non_optimized_css = [];
             }
 
-            if(window.rapidload_preview_stats.minify_css){
-                const minify_css_stat_value = document.querySelector('#rapidload-optimizer-stat-container #rapidload-minify-css-stat');
+            // check minify
 
-                if(minify_css_stat_value){
-                    minify_css_stat_value.innerHTML = 'total ' + window.rapidload_preview_stats.uucss.length + " css found and " +  window.rapidload_preview_stats.uucss.filter(a => a.new_href).length + " minified"
-                }
+            const nonMinifiedStylesheets = Array.from(allStylesheets).filter(sheet => {
+                const href = sheet.href || '';
+                return !sheet.hasAttribute('data-rpd-minify') && !href.toString().includes('.min.css');
+            });
 
+            if(nonMinifiedStylesheets.length > 0) {
+                window.diagnose_data.non_minified_css = nonMinifiedStylesheets.map(sheet => sheet.href);
+            }else{
+                window.diagnose_data.non_minified_css = [];
             }
 
-            if(window.rapidload_preview_stats.cdn === 'enabled'){
+            // check js minify
 
-                console.log('CDN working')
+            const allScripts = document.querySelectorAll('script[src]');
+            const nonMinifiedScripts = Array.from(allScripts).filter(script => {
+                const src = script.src || '';
+                return !script.hasAttribute('data-rpd-minify-js') && !src.toString().includes('.min.js');
+            });
 
+            if(nonMinifiedScripts.length > 0) {
+                window.diagnose_data.non_minified_js = nonMinifiedScripts.map(script => script.src);
+            }else{
+                window.diagnose_data.non_minified_js = [];
             }
 
-            if(window.rapidload_preview_stats.font && window.rapidload_preview_stats.font.google_fonts){
+            // check non-deferred scripts
 
-                console.log(window.rapidload_preview_stats.font.google_fonts.length + ' google font ' + (window.rapidload_preview_stats.font.google_fonts.length === 1 ? 'file' : 'files') + ' inlined')
+            const nonDeferredScripts = Array.from(allScripts).filter(script => {
+                return !script.hasAttribute('data-rpd-strategy') && !script.hasAttribute('defer');
+            });
 
+            if(nonDeferredScripts.length > 0) {
+                window.diagnose_data.non_deferred_js = nonDeferredScripts.map(script => script.src);
+            }else{
+                window.diagnose_data.non_deferred_js = [];
             }
 
-            if(window.rapidload_preview_stats.js){
+            // check non-delayed scripts
+            const nonDelayedScripts = Array.from(allScripts).filter(script => {
+                return !script.hasAttribute('data-rpd-strategy') || script.getAttribute('data-rpd-strategy') !== 'delay';
+            });
 
-                if(window.rapidload_preview_stats.js['defer']){
+            if(nonDelayedScripts.length > 0) {
+                window.diagnose_data.non_delayed_js = nonDelayedScripts.map(script => script.src);
+            }else{
+                window.diagnose_data.non_delayed_js = [];
+            }
 
-                    console.log(window.rapidload_preview_stats.js['defer'].length + ' files defered')
+            // check cdn
 
-                }
-
-                if(window.rapidload_preview_stats.js['delay']){
-
-                    console.log(window.rapidload_preview_stats.js['delay'].length + ' files delayed')
-
-                }
-
-                if(window.rapidload_preview_stats.js['minify']){
-
-                    console.log(window.rapidload_preview_stats.js['minify'].length + ' files minified')
-
-                }
-
+            const preconnectLink = document.querySelector('link[rel="preconnect"][crossorigin][href*=".rapidload-cdn.io"]');
+            if(preconnectLink) {
+                window.diagnose_data.cdn = true;
+            }else{
+                window.diagnose_data.cdn = false;
             }
 
         }
 
 
         setTimeout(() => {
+
             window.parent.postMessage(
                 {
                     type: "RAPIDLOAD_CHECK_RESULTS",
-                    data: window.rapidload_preview_stats,
+                    data: diagnose_data,
                 },
                 "*" 
             );
