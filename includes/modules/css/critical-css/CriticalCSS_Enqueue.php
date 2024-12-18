@@ -203,14 +203,6 @@ class CriticalCSS_Enqueue
         $_frontend_data['data-mode'] = $mode;
         $_frontend_data['cpcss-file'] = CriticalCSS::$base_dir . '/' . $cpcss_file;
 
-        if(!empty($_frontend_data)){
-            $this->frontend_data['cpcss'] = $_frontend_data;
-        }
-
-        add_filter('rapidload/optimizer/frontend/data', function ($data){
-            return array_merge($data,$this->frontend_data);
-        });
-
         if(isset($this->dom->find( 'title' )[0])){
 
             $title_content = $this->dom->find( 'title' )[0]->outertext;
@@ -239,6 +231,7 @@ class CriticalCSS_Enqueue
                 $node->setAttribute('type', 'text/javascript');
                 $node->setAttribute('norapidload',true);
                 $body->appendChild($node);
+                $_frontend_data['cpcss_styles_added'] = true;
             }
 
         }
@@ -256,6 +249,14 @@ class CriticalCSS_Enqueue
             $body->appendChild($node);
 
         }
+
+        if(!empty($_frontend_data)){
+            $this->frontend_data['cpcss'] = $_frontend_data;
+        }
+
+        add_filter('rapidload/optimizer/frontend/data', function ($data){
+            return array_merge($data,$this->frontend_data);
+        });
 
         add_filter('uucss/enqueue/content/cpcss/handled', function (){
             return true;

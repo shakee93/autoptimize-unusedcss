@@ -329,6 +329,7 @@ class Javascript_Enqueue
 
         if(@file_exists($minified_file)){
             $link->setAttribute('src', $minified_url);
+            $link->{'data-rpd-minify-js'} = true;
         }
 
         $_frontend_data['new_src'] = $minified_url;
@@ -371,6 +372,7 @@ class Javascript_Enqueue
                     }
 
                     $link->defer = true;
+                    $link->{'data-rpd-strategy'} = 'defer';
                     unset($link->async);
 
                     $_frontend_data['deferred'] = true;
