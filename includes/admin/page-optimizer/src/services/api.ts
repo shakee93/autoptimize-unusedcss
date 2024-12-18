@@ -218,7 +218,7 @@ class ApiService {
     async getAiPrediction(url: string, score: number, audits: any, metrics: any): Promise<any> {
         try {
 
-            const ai_api_root = 'https://rapidload-ai-faq-manager.vercel.app/api';
+            const ai_api_root = 'https://ai.rapidload.io/api';
             const ai_prediction_url = new URL(`${ai_api_root}/score`);
 
             ai_prediction_url.searchParams.append('url', url);

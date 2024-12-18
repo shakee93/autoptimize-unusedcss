@@ -252,23 +252,11 @@ class RapidLoad_Optimizer
 
             $head = $state['dom']->find('head', 0);
 
-            // get the file content from /includes/modules/optimizer/scripts/optimizer-stat.js
-            $content = "//!injected by RapidLoad \n
-            !(function(){function getQueryParam(param){const urlParams=new URLSearchParams(window.location.search);console.log(urlParams.get(param));return urlParams.get(param)}window.addEventListener('load',function(){if(getQueryParam('rapidload_preview')){const rapidload_cache_status_div_content=document.querySelector('#rapidload-cache-status');if(rapidload_cache_status_div_content){rapidload_cache_status_div_content.style.display='block'}}})})();";
-
-            if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG === true || defined('RAPIDLOAD_DEV_MODE') && RAPIDLOAD_DEV_MODE === true) {
-                $filePath = RAPIDLOAD_PLUGIN_DIR . '/includes/modules/optimizer/scripts/optimizer-stat.js';
-
-                if (file_exists($filePath)) {
-                    $content = file_get_contents($filePath);
-                }
-            }
-
             $front_end_data = apply_filters('rapidload/optimizer/frontend/data',[
                 'server' => $this->get_server_type()
             ]);
 
-            $script = '<script id="rapidload-optimizer-status-script"> window.rapidload_preview_stats = ' . json_encode($front_end_data) . ';' . $content . '</script>';
+            $script = '<script id="rapidload-optimizer-status-script"> window.rapidload_preview_stats = ' . json_encode($front_end_data) . ';' . '</script>';
             $first_child = $head->last_child();
             $first_child->__set('outertext', $script . $first_child->outertext);
 
