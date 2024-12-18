@@ -25,7 +25,7 @@ export default function Chat() {
         apiKey: import.meta.env.VITE_API_APIKEY as string,
       },
     });
-    console.log("API Key:", import.meta.env);
+   
 
   const { 
     data, 

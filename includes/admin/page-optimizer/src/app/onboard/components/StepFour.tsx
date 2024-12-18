@@ -71,39 +71,56 @@ const StepFour= () => {
                             <div className="flex flex-col gap-4 w-full border border-brand-200 rounded-2xl">
                                 {/* Opportunities Section */}
                                 <div className="flex flex-col gap-2">
-                                    
-                                <div className="flex items-center gap-4 text-sm font-semibold text-brand-900 border-b border-brand-200 px-6 py-2">
-                                <span>Opportunities</span>
-                                    <span className="flex text-xxs items-center text-brand-0 justify-center rounded-full w-6 h-6 border-2 border-orange-400 bg-orange-400">
-                                    {aiPredictionResult?.currentScore?.opportunities?.length || 0}
-                                </span>
+                                    <div className="flex items-center gap-4 text-sm font-semibold text-brand-900 border-b border-brand-200 px-6 py-2">
+                                        <span>Opportunities</span>
+                                        <span className="flex text-xxs items-center text-brand-0 justify-center rounded-full w-6 h-6 border-2 border-orange-400 bg-orange-400">
+                                            {data?.grouped?.opportunities?.length || 0}
+                                        </span>
+                                    </div>
+                                    <div className='p-6 py-2'>
+                                        {data?.grouped?.opportunities?.map((audit: Audit, index: number) => (
+                                            <div key={index} className="text-xs text-brand-600 flex justify-between py-0.5">
+                                                <span>{audit.name}</span>
+                                                <span className="font-medium">{audit.displayValue}</span>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                                <div className='p-6 py-2'>
-                                    {aiPredictionResult?.currentScore?.opportunities.map((opp: any, index: number) => (
-                                        <div key={index} className="text-xs text-brand-600 flex justify-between py-0.5">
-                                            <span>{opp.description}</span>
-                                            <span className="font-medium">{opp.potentialSavings}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                                </div>
-                        
+
                                 {/* Diagnostics Section */}
                                 <div className="flex flex-col gap-2">
-                                <div className="flex items-center gap-4 text-sm font-semibold text-brand-900 border-b border-brand-200 px-6 py-2">
-                                <span>Diagnostics</span>
-                                    <span className="flex text-xxs items-center text-brand-0 justify-center rounded-full w-6 h-6 border-2 border-yellow-400  bg-yellow-400">
-                                    {aiPredictionResult?.currentScore?.diagnostics?.length || 0}
-                                </span>
+                                    <div className="flex items-center gap-4 text-sm font-semibold text-brand-900 border-b border-brand-200 px-6 py-2">
+                                        <span>Diagnostics</span>
+                                        <span className="flex text-xxs items-center text-brand-0 justify-center rounded-full w-6 h-6 border-2 border-yellow-400 bg-yellow-400">
+                                            {data?.grouped?.diagnostics?.length || 0}
+                                        </span>
+                                    </div>
+                                    <div className='p-6 pt-2'>
+                                        {data?.grouped?.diagnostics?.map((audit: Audit, index: number) => (
+                                            <div key={index} className="text-xs text-brand-600 flex justify-between py-0.5">
+                                                <span>{audit.name}</span>
+                                                <span className="font-medium">{audit.displayValue}</span>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                                <div className='p-6 pt-2'>
-                                    {aiPredictionResult?.currentScore?.diagnostics.map((diag: any, index: number) => (
-                                        <div key={index} className="text-xs text-brand-600 flex justify-between py-0.5">
-                                            <span>{diag.description}</span>
-                                            <span className="font-medium">{diag.elements} elements</span>
-                                        </div>
-                                    ))}
-                                </div>
+
+                                {/* Passed Audits Section */}
+                                <div className="flex flex-col gap-2">
+                                    <div className="flex items-center gap-4 text-sm font-semibold text-brand-900 border-b border-brand-200 px-6 py-2">
+                                        <span>Passed Audits</span>
+                                        <span className="flex text-xxs items-center text-brand-0 justify-center rounded-full w-6 h-6 border-2 border-green-400 bg-green-400">
+                                            {data?.grouped?.passed_audits?.length || 0}
+                                        </span>
+                                    </div>
+                                    <div className='p-6 pt-2'>
+                                        {data?.grouped?.passed_audits?.map((audit: Audit, index: number) => (
+                                            <div key={index} className="text-xs text-brand-600 flex justify-between py-0.5">
+                                                <span>{audit.name}</span>
+                                                <span className="font-medium">{audit.displayValue}</span>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </div>

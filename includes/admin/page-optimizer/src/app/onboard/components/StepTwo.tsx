@@ -239,7 +239,14 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
                             </div>
                         </div>
 
-                        <GearDisplay activeGear={activeLevel as PerformanceGear}/>
+                        {/* <GearDisplay activeGear={activeLevel as PerformanceGear}/> */}
+                        <button className="text-base font-semibold capitalize text-center underline text-brand-500"
+                                    onClick={() => setOpen(true)}
+                            >Compare Performance Gears
+                            </button>
+                            <ComparisonDialog open={open} setOpen={setOpen}/>
+                            {/*<button onClick={onNext}>Next</button>*/}
+                            {isDev && <button onClick={onNext}>Next</button>}
                     </>
                 ) : (
                     <div className="flex flex-col gap-2 text-center">
@@ -251,7 +258,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
                 )}
 
 
-                <div className="flex flex-col gap-6 items-center">
+                <div className="flex flex-col gap-6 items-center border-t-2 border-brand-200 pt-8 w-full max-w-[900px]">
                     <h6 className="text-base font-semibold capitalize text-center">Connect Your Account to
                         Optimize </h6>
 
@@ -344,18 +351,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
                         )}
                     </AnimatePresence>
 
-                    {!reconnect &&
-                        <>
-                            <button className="text-base font-semibold capitalize text-center underline"
-                                    onClick={() => setOpen(true)}
-                            >Compare Performance Gears
-                            </button>
-                            <ComparisonDialog open={open} setOpen={setOpen}/>
-                            {/*<button onClick={onNext}>Next</button>*/}
-                            {isDev && <button onClick={onNext}>Next</button>}
-                        </>
-
-                    }
+                   
 
                 </div>
             </div>
