@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { cn } from "lib/utils";
 import { useAppContext } from "../../../context/app";
-import { ArrowLongRightIcon } from "@heroicons/react/24/solid";
+import { ArrowLongRightIcon, ExclamationCircleIcon, ExclamationTriangleIcon } from "@heroicons/react/24/solid";
 import { useSelector } from "react-redux";
 import { optimizerData } from "../../../store/app/appSelector";
 import { AnimatePresence, motion } from 'framer-motion';
@@ -11,6 +11,7 @@ import usePerformanceColors from "hooks/usePerformanceColors";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import { setCommonRootState, setCommonState } from "../../../store/common/commonActions";
 import { AIButtonIcon } from './icons/icon-svg';
+import ErrorFetch from 'components/ErrorFetch';
 
 const StepFour = () => {
     const { options } = useAppContext()
@@ -69,63 +70,63 @@ const StepFour = () => {
                     <div className="flex justify-center p-4 max-w-xl mx-auto w-full relative items-center gap-4">
                         {aiMessage ? (
                             <div className='flex flex-col items-center gap-2 px-10 py-4 rounded-2xl min-w-[550px] '>
-                                <div className="text-lg font-semibold flex items-center gap-2"><AIButtonIcon /> AI Analysis</div>
+                                
 
-                                <div className="flex flex-col gap-4 w-full border border-brand-200 rounded-2xl">
-                                    {/* Opportunities Section */}
-                                    <div className="flex flex-col gap-2">
-                                        <div className="flex items-center gap-4 text-sm font-semibold text-brand-900 border-b border-brand-200 px-6 py-2">
-                                            <span>Opportunities</span>
-                                            <span className="flex text-xxs items-center text-brand-0 justify-center rounded-full w-6 h-6 border-2 border-orange-400 bg-orange-400">
-                                                {data?.grouped?.opportunities?.length || 0}
-                                            </span>
+                                {(!data?.grouped?.opportunities?.length && !data?.grouped?.diagnostics?.length) ? (
+                                    <div className='border-2 border-brand-500 rounded-xl flex items-start gap-4 p-4'>
+                                        <div className='p-2 bg-brand-200/30 rounded-lg'>
+                                            <ExclamationCircleIcon className='w-10 h-10 text-purple-800' />
                                         </div>
-                                        <div className='p-6 py-2'>
-                                            {data?.grouped?.opportunities?.map((audit: Audit, index: number) => (
-                                                <div key={index} className="text-xs text-brand-600 flex justify-between py-0.5">
-                                                    <span>{audit.name}</span>
-                                                    <span className="font-medium">{audit.displayValue}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    {/* Diagnostics Section */}
-                                    <div className="flex flex-col gap-2">
-                                        <div className="flex items-center gap-4 text-sm font-semibold text-brand-900 border-b border-brand-200 px-6 py-2">
-                                            <span>Diagnostics</span>
-                                            <span className="flex text-xxs items-center text-brand-0 justify-center rounded-full w-6 h-6 border-2 border-yellow-400 bg-yellow-400">
-                                                {data?.grouped?.diagnostics?.length || 0}
-                                            </span>
-                                        </div>
-                                        <div className='p-6 pt-2'>
-                                            {data?.grouped?.diagnostics?.map((audit: Audit, index: number) => (
-                                                <div key={index} className="text-xs text-brand-600 flex justify-between py-0.5">
-                                                    <span>{audit.name}</span>
-                                                    <span className="font-medium">{audit.displayValue}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    {/* Passed Audits Section */}
-                                    {/* <div className="flex flex-col gap-2">
-                                    <div className="flex items-center gap-4 text-sm font-semibold text-brand-900 border-b border-brand-200 px-6 py-2">
-                                        <span>Passed Audits</span>
-                                        <span className="flex text-xxs items-center text-brand-0 justify-center rounded-full w-6 h-6 border-2 border-green-400 bg-green-400">
-                                            {data?.grouped?.passed_audits?.length || 0}
+                                        <span className='font-medium text-zinc-600 dark:text-brand-300'>
+                                            <p>We couldn't find any opportunities or diagnostics for your site. This is a good thing! It means your site is already performing well.</p>
                                         </span>
                                     </div>
-                                    <div className='p-6 pt-2'>
-                                        {data?.grouped?.passed_audits?.map((audit: Audit, index: number) => (
-                                            <div key={index} className="text-xs text-brand-600 flex justify-between py-0.5">
-                                                <span>{audit.name}</span>
-                                                <span className="font-medium">{audit.displayValue}</span>
+                                ) : (
+                                    <>
+                                        <div className="text-lg font-semibold flex items-center gap-2"><AIButtonIcon /> AI Analysis</div>
+                                        <div className="flex flex-col gap-4 w-full border border-brand-200 rounded-2xl">
+                                            {/* Opportunities Section - Only show if length > 0 */}
+                                        {data?.grouped?.opportunities?.length > 0 && (
+                                            <div className="flex flex-col gap-2">
+                                                <div className="flex items-center gap-4 text-sm font-semibold text-brand-900 border-b border-brand-200 px-6 py-2">
+                                                    <span>Opportunities</span>
+                                                    <span className="flex text-xxs items-center text-brand-0 justify-center rounded-full w-6 h-6 border-2 border-orange-400 bg-orange-400">
+                                                        {data?.grouped?.opportunities?.length || 0}
+                                                    </span>
+                                                </div>
+                                                <div className='p-6 py-2'>
+                                                    {data?.grouped?.opportunities?.map((audit: Audit, index: number) => (
+                                                        <div key={index} className="text-xs text-brand-600 flex justify-between py-0.5">
+                                                            <span>{audit.name}</span>
+                                                            <span className="font-medium">{audit.displayValue}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </div>
-                                        ))}
+                                        )}
+
+                                        {/* Diagnostics Section - Only show if length > 0 */}
+                                        {data?.grouped?.diagnostics?.length > 0 && (
+                                            <div className="flex flex-col gap-2">
+                                                <div className="flex items-center gap-4 text-sm font-semibold text-brand-900 border-b border-brand-200 px-6 py-2">
+                                                    <span>Diagnostics</span>
+                                                    <span className="flex text-xxs items-center text-brand-0 justify-center rounded-full w-6 h-6 border-2 border-yellow-400 bg-yellow-400">
+                                                        {data?.grouped?.diagnostics?.length || 0}
+                                                    </span>
+                                                </div>
+                                                <div className='p-6 pt-2'>
+                                                    {data?.grouped?.diagnostics?.map((audit: Audit, index: number) => (
+                                                        <div key={index} className="text-xs text-brand-600 flex justify-between py-0.5">
+                                                            <span>{audit.name}</span>
+                                                            <span className="font-medium">{audit.displayValue}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
-                                </div> */}
-                                </div>
+                                    </>
+                                )}
                             </div>
                         ) : (
                             <>

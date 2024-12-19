@@ -190,7 +190,7 @@ const StepThree: React.FC<StepThreeProps> = ({ onNext }) => {
                             ) : (
                                 <Skeleton
                                     key={step}
-                                    className="h-2 flex-grow bg-gray-300 rounded-lg mr-2"
+                                    className="h-2 flex-grow bg-purple-950/30 rounded-lg mr-2"
                                 >
                                 </Skeleton>
                             )
