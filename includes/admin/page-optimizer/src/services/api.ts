@@ -1,6 +1,7 @@
-import {isDev, toBoolean} from "lib/utils";
+import { isDev, toBoolean } from "lib/utils";
 import store from "../store";
 import { toast } from "components/ui/use-toast";
+import { fetchPages, fetchPosts, updateLicense } from "../store/app/appActions";
 
 class ApiService {
     public baseURL: URL;
@@ -65,7 +66,7 @@ class ApiService {
         }
     }
 
-    async fetchPageSpeed(url: string, activeReport: string, reload: boolean): Promise<any>  {
+    async fetchPageSpeed(url: string, activeReport: string, reload: boolean): Promise<any> {
 
         try {
             let fresh = reload
@@ -74,7 +75,7 @@ class ApiService {
             if (reload) {
                 data = await this.analyzeViaAPI(url, activeReport);
 
-                if(data?.errors) {
+                if (data?.errors) {
                     if (Array.isArray(data?.errors)) {
                         throw new Error(
                             `[Code:${data.errors[0].code}] ${data.errors[0].detail}`
@@ -97,15 +98,15 @@ class ApiService {
             // this.baseURL.searchParams.append('settingsMode', settingsMode || '')
 
             const response = await fetch(this.baseURL, {
-                method: data ? "POST": "GET",
+                method: data ? "POST" : "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 ...(
                     data ? {
-                            body : JSON.stringify( {
-                                page_speed: data
-                            })
+                        body: JSON.stringify({
+                            page_speed: data
+                        })
                     } : {}
                 )
             });
@@ -127,7 +128,7 @@ class ApiService {
         }
     }
 
-    async fetchSettings(url: string, activeReport: string, reload: boolean): Promise<any>  {
+    async fetchSettings(url: string, activeReport: string, reload: boolean): Promise<any> {
 
         try {
             let fresh = reload
@@ -143,7 +144,7 @@ class ApiService {
             // this.baseURL.searchParams.append('settingsMode', settingsMode || '')
 
             const response = await fetch(this.baseURL, {
-                method: data ? "POST": "GET",
+                method: data ? "POST" : "GET",
                 headers: {
                     "Content-Type": "application/json",
                 }
@@ -163,55 +164,92 @@ class ApiService {
         } catch (error) {
             console.error(error);
             toast({
-                    description: 'Failed to fetch RapidLoad settings!',
-                    variant: 'destructive',
-                })
+                description: 'Failed to fetch RapidLoad settings!',
+                variant: 'destructive',
+            })
             throw error;
         }
     }
 
     async analyzeViaAPI(url: string, strategy: string) {
 
-       try {
-           const state = store.getState()
-           const data = state.app.report[state.app.activeReport]
-           const settings = state.app.settings.performance[state.app.activeReport]
-           const testModeStatus = state.app.testMode?.status ?? state.app.settings.general.test_mode ?? false;
-           const previewUrl = testModeStatus ? '?rapidload_preview': '';
+        try {
+            const state = store.getState()
+            const data = state.app.report[state.app.activeReport]
+            const settings = state.app.settings.performance[state.app.activeReport]
+            const testModeStatus = state.app.testMode?.status ?? state.app.settings.general.test_mode ?? false;
+            const previewUrl = testModeStatus ? '?rapidload_preview' : '';
 
-           const api_root = this.options?.api_root || 'https://api.rapidload.io/api/v1';
-           const pageSpeedURL = new URL(`${api_root}/page-speed`);
+            const api_root = this.options?.api_root || 'https://api.rapidload.io/api/v1';
+            const pageSpeedURL = new URL(`${api_root}/page-speed`);
 
-           pageSpeedURL.searchParams.append('url', url + previewUrl)
-           pageSpeedURL.searchParams.append('strategy', state.app.activeReport)
-           pageSpeedURL.searchParams.append('plugin_version', this.options.rapidload_version)
-           pageSpeedURL.searchParams.append('titan_version', __OPTIMIZER_VERSION__)
+            pageSpeedURL.searchParams.append('url', url + previewUrl)
+            pageSpeedURL.searchParams.append('strategy', state.app.activeReport)
+            pageSpeedURL.searchParams.append('plugin_version', this.options.rapidload_version)
+            pageSpeedURL.searchParams.append('titan_version', __OPTIMIZER_VERSION__)
 
-           if (this.options.license_key) {
-               pageSpeedURL.searchParams.append('api_key', this.options.license_key);
-           }
+            if (this.options.license_key) {
+                pageSpeedURL.searchParams.append('api_key', this.options.license_key);
+            }
 
-           const pageSpeed = await fetch(pageSpeedURL, {
-               method: "POST",
-               headers: {
-                   "Content-Type": "application/json",
-               },
-               body: JSON.stringify({
-                   settings: settings.state?.
-                   flatMap(t =>
-                       t.inputs
-                           .filter(({ value }) => value != null)
-                           .map(({ key, value }) => ({ key, value, status: t.status  })))
-                       || []
-               })
-           });
+            const pageSpeed = await fetch(pageSpeedURL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    settings: settings.state?.
+                        flatMap(t =>
+                            t.inputs
+                                .filter(({ value }) => value != null)
+                                .map(({ key, value }) => ({ key, value, status: t.status })))
+                        || []
+                })
+            });
 
-           return await pageSpeed.json()
+            return await pageSpeed.json()
 
-       } catch (error) {
-           console.error(error);
-           throw error;
-       }
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async getAiPrediction(url: string, score: number, audits: any, metrics: any): Promise<any> {
+        try {
+
+            const ai_api_root = 'https://ai.rapidload.io/api';
+            // const ai_api_root = 'http://localhost:3000/api';
+            const ai_prediction_url = new URL(`${ai_api_root}/score`);
+
+            ai_prediction_url.searchParams.append('url', url);
+            ai_prediction_url.searchParams.append('score', score.toString());
+
+            const response = await fetch(ai_prediction_url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    audits,
+                    metrics
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('AI prediction request failed');
+            }
+
+            const data = await response.json();
+            return {
+                success: true,
+                data: data
+            };
+
+        } catch (error) {
+            console.error('AI Prediction Error:', error);
+            throw error;
+        }
     }
 
     async getCSSJobStatus(url: string, types: string[]): Promise<any> {
@@ -253,6 +291,200 @@ class ApiService {
         }
     }
 
+    async getSummary(action: string): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', action);
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async getOptimizationData(startFrom: number, limit: number): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', 'rapidload_titan_optimizations_data');
+            this.baseURL.searchParams.append('start_from', startFrom)
+            this.baseURL.searchParams.append('limit', limit)
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+
+    async searchData(action: string, searchFor: string, postType?: string): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', action);
+            this.baseURL.searchParams.append('s', searchFor)
+            this.baseURL.searchParams.append('post_type', postType)
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async deleteOptimizedData(url: string): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', 'rapidload_delete_titan_optimizations');
+            this.baseURL.searchParams.append('url', url)
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async saveGeneralSettings(data: any): Promise<any> {
+        try {
+            const formData = new FormData();
+            this.baseURL.searchParams.append('action', 'update_rapidload_settings');
+            Object.keys(data).forEach(key => {
+                if (Array.isArray(data[key])) {
+                    data[key].forEach((item: any, index: number) => {
+                        formData.append(`${key}[${index}]`, item);
+                    });
+                } else {
+                    formData.append(key, data[key]);
+                }
+            });
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                body: formData,
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    // async updateLicense(data?: any): Promise<any> {
+    //     try {
+    //         this.baseURL.searchParams.append('action', data? 'uucss_connect': 'uucss_license');
+    //
+    //         const formData = new FormData();
+    //         formData.append('license_key', data);
+    //
+    //         const response = await fetch(this.baseURL, {
+    //             method: 'POST',
+    //             body: formData,
+    //         });
+    //         return this.throwIfError(response);
+    //     } catch (error) {
+    //         console.error(error);
+    //         throw error;
+    //     }
+    // }
+
+    async updateLicense(data?: any): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', data ? 'uucss_connect' : 'uucss_license');
+
+            const formData = new FormData();
+            formData.append('license_key', data);
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                body: formData,
+            });
+
+            const responseData = await response.json();
+            return responseData;
+        } catch (error) {
+            console.error('Error in updateLicense:', error);
+            return { success: false, data: "An unknown error occurred" };
+        }
+    }
+
+    async fetchPosts(): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', 'rapidload_fetch_post_types_with_links');
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async homePagePerformance(): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', 'rapidload_titan_home_page_performance');
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async getLicense(): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', 'uucss_license');
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
     async updateSettings(url: string, activeReport: string, data: any, global: boolean, analyze: boolean) {
         try {
 
@@ -264,8 +496,8 @@ class ApiService {
 
             this.baseURL.searchParams.append('action', 'update_titan_settings');
 
-            if(global) this.baseURL.searchParams.append('global', 'true')
-            if(analyze) this.baseURL.searchParams.append('analyze', 'true')
+            if (global) this.baseURL.searchParams.append('global', 'true')
+            if (analyze) this.baseURL.searchParams.append('analyze', 'true')
 
             this.baseURL.searchParams.append('url', url)
             this.baseURL.searchParams.append('strategy', activeReport)
@@ -279,7 +511,7 @@ class ApiService {
                 body: JSON.stringify({
                     settings: {
                         general: {
-                          performance_gear: data.activeGear
+                            performance_gear: data.activeGear
                         },
                         performance: data.settings
                     },
@@ -295,11 +527,11 @@ class ApiService {
         }
     }
 
-    async post(action : string | null = null, queryParams: {[p: string] : string} = {}) {
+    async post(action: string | null = null, queryParams: { [p: string]: string } = {}) {
 
         try {
 
-            if(action) {
+            if (action) {
                 if (this.baseURL.searchParams.get('action')) {
                     this.baseURL.searchParams.delete('action')
                 }
@@ -327,8 +559,8 @@ class ApiService {
     }
 
     async request(endpoint: string,
-                  params:{[p: string] : string} = {},
-                  type: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET'
+        params: { [p: string]: string } = {},
+        type: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET'
     ) {
 
         let base = new URL(this.options.rest_url);

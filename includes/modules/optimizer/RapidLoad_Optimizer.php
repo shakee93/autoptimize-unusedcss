@@ -56,6 +56,8 @@ class RapidLoad_Optimizer
             'get_rapidload_cdn_usage' => 'get_rapidload_cdn_usage',
             'get_rapidload_image_usage' => 'get_rapidload_image_usage',
             'get_cache_file_size' => 'get_cache_file_size',
+            'update_titan_performance_gear' => 'update_titan_performance_gear',
+            'rapidload_titan_home_page_performance' => 'rapidload_titan_home_page_performance',
         ];
 
         foreach ($actions as $action => $method) {
@@ -67,52 +69,120 @@ class RapidLoad_Optimizer
         }
     }
 
+    public function rapidload_titan_home_page_performance(){
+
+        $performance_data = RapidLoad_Job::get_first_and_last_optimization_score($this->transform_url(site_url()), 'desktop');
+
+        wp_send_json_success($performance_data);
+    }
+
     public function get_cache_file_size() {
 
         $cache_folders = [
-            'page_cache_dir' => RapidLoad_Cache_Store::get_cache_dir(site_url()),
-            'js_cache_dir' => JavaScript::$base_dir,
-            'font_cache_dir' => RapidLoad_Font::$base_dir,
+            'page_cache_dir' => [
+                'path' => RapidLoad_Cache_Store::get_cache_dir(site_url()),
+                'label' => 'Page Cache',
+                'action' => [
+                    'href' => wp_nonce_url( add_query_arg( array(
+                        '_cache'  => 'rapidload-cache',
+                        '_action' => 'clear',
+                    ) ,admin_url('admin.php') ), 'rapidload_cache_clear_cache_nonce' ),
+                    'label' => 'Clear Page Cache'
+                ]
+            ],
+            'js_cache_dir' => [
+                'path' => JavaScript::$base_dir,
+                'label' => 'JavaScript Cache',
+                'action' => [
+                    'href' => wp_nonce_url( add_query_arg( array(
+                        'action' => 'rapidload_purge_all',
+                        'job_type' => 'js',
+                        'clear' => true,
+                    ) , admin_url( 'admin-ajax.php' )), 'uucss_nonce', 'nonce' ),
+                    'label' => 'Clear JavaScript Cache'
+                ]
+            ],
+            'font_cache_dir' => [
+                'path' => RapidLoad_Font::$base_dir,
+                'label' => 'Font Cache',
+                'action' => [
+                    'href' => wp_nonce_url( add_query_arg( array(
+                        'action' => 'rapidload_purge_all',
+                        'job_type' => 'fonts',
+                        'clear' => true,
+                    ) , admin_url('admin-ajax.php')), 'uucss_nonce', 'nonce' ),
+                    'label' => 'Clear Font Cache'
+                ]
+            ]
         ];
 
         $css_folders = [
-            'cpcss_cache_dir' => CriticalCSS::$base_dir,
-            'uucss_cache_dir' => UnusedCSS::$base_dir,
-            'minified_css_cache_dir' => MinifyCSS::$base_dir,
+            'cpcss_cache_dir' => [
+                'path' => CriticalCSS::$base_dir,
+                'label' => 'Critical CSS Cache'
+            ],
+            'uucss_cache_dir' => [
+                'path' => UnusedCSS::$base_dir,
+                'label' => 'Unused CSS Cache'
+            ],
+            'minified_css_cache_dir' => [
+                'path' => MinifyCSS::$base_dir,
+                'label' => 'Minified CSS Cache'
+            ]
         ];
 
         $folder_sizes = [];
         $file_system = RapidLoad_Base::get_log_instance();
 
         foreach ($cache_folders as $key => $folder) {
-            if (file_exists($folder)) {
-                $folder_sizes[$key] = [
-                    'folder_name' => $folder,
-                    'size' => $file_system->get_folder_size($folder)
+            if (file_exists($folder['path'])) {
+                $folder_sizes[] = [
+                    'key' => $key,
+                    'label' => $folder['label'],
+                    'size' => [
+                        'folder_name' => $folder['path'],
+                        'size' => $file_system->get_folder_size($folder['path'])
+                    ],
+                    'action' => $folder['action']
                 ];
             } else {
-                $folder_sizes[$key] = [
-                    'folder_name' => $folder,
-                    'size' => 'Directory does not exist'
+                $folder_sizes[] = [
+                    'key' => $key,
+                    'label' => $folder['label'], 
+                    'size' => [
+                        'folder_name' => $folder['path'],
+                        'size' => '0 KB'
+                    ],
+                    'action' => $folder['action']
                 ];
             }
         }
 
         $css_total_size = 0;
         foreach ($css_folders as $folder) {
-            if (file_exists($folder)) {
-                $css_total_size += $file_system->get_folder_size_in_bytes($folder);
+            if (file_exists($folder['path'])) {
+                $css_total_size += $file_system->get_folder_size_in_bytes($folder['path']);
             }
         }
 
-        $folder_sizes['css_file_size'] = [
-            'folder_name' => 'CSS Cache Folders (Combined)',
-            'size' => $file_system->format_size_units($css_total_size)
+        $folder_sizes[] = [
+            'key' => 'css_file_size',
+            'label' => 'CSS Cache',
+            'size' => [
+                'folder_name' => 'CSS Cache Folders (Combined)',
+                'size' => $file_system->format_size_units($css_total_size)
+            ],
+            'action' => [
+                'href' => wp_nonce_url( add_query_arg( array(
+                    'action' => 'rapidload_purge_all',
+                    'job_type' => 'css',
+                    'clear' => true,
+                ) , admin_url('admin-ajax.php')), 'uucss_nonce', 'nonce' ),
+                'label' => 'Clear CSS Cache'
+            ]
         ];
 
-        wp_send_json_success([
-            'cache_folders' => $folder_sizes
-        ]);
+        wp_send_json_success((array)$folder_sizes);
     }
 
     public function get_rapidload_cdn_usage(){
@@ -180,27 +250,15 @@ class RapidLoad_Optimizer
 
         if(isset($state['dom']) && isset($_REQUEST['rapidload_preview'])){
 
-            /*$head = $state['dom']->find('head', 0);
-
-            // get the file content from /includes/modules/optimizer/scripts/optimizer-stat.js
-            $content = "//!injected by RapidLoad \n
-            !(function(){function getQueryParam(param){const urlParams=new URLSearchParams(window.location.search);console.log(urlParams.get(param));return urlParams.get(param)}window.addEventListener('load',function(){if(getQueryParam('rapidload_preview')){const rapidload_cache_status_div_content=document.querySelector('#rapidload-cache-status');if(rapidload_cache_status_div_content){rapidload_cache_status_div_content.style.display='block'}}})})();";
-
-            if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG === true || defined('RAPIDLOAD_DEV_MODE') && RAPIDLOAD_DEV_MODE === true) {
-                $filePath = RAPIDLOAD_PLUGIN_DIR . '/includes/modules/optimizer/scripts/optimizer-stat.min.js';
-
-                if (file_exists($filePath)) {
-                    $content = file_get_contents($filePath);
-                }
-            }
+            $head = $state['dom']->find('head', 0);
 
             $front_end_data = apply_filters('rapidload/optimizer/frontend/data',[
                 'server' => $this->get_server_type()
             ]);
 
-            $script = '<script id="rapidload-optimizer-status-script"> window.rapidload_preview_stats = ' . json_encode($front_end_data) . ';' . $content . '</script>';
-            $first_child = $head->first_child();
-            $first_child->__set('outertext', $script . $first_child->outertext);*/
+            $script = '<script id="rapidload-optimizer-status-script"> window.rapidload_preview_stats = ' . json_encode($front_end_data) . ';' . '</script>';
+            $first_child = $head->last_child();
+            $first_child->__set('outertext', $script . $first_child->outertext);
 
             $body = $state['dom']->find('body', 0);
 
@@ -324,6 +382,64 @@ class RapidLoad_Optimizer
 
         wp_send_json_success($last_metrics);
 
+    }
+
+    public function update_titan_performance_gear(){
+
+        self::verify_nonce();
+
+        if(!isset($_REQUEST['titan_gear']) || empty($_REQUEST['titan_gear'])){
+            wp_send_json_error('titan gear required');
+        }
+
+        if(!isset($_REQUEST['url']) || empty($_REQUEST['url'])){
+            wp_send_json_error('url required');
+        }
+
+        $url = $_REQUEST['url'];
+        $titan_gear = $_REQUEST['titan_gear'];
+
+        if(filter_var($url, FILTER_VALIDATE_URL) == false){
+            wp_send_json_error('url not valid');
+        }
+
+        $strategy = isset($_REQUEST['strategy']) ? $_REQUEST['strategy'] : 'mobile';
+
+        $global = isset($_REQUEST['global']) && $_REQUEST['global'] || rtrim(strtolower($url),"/") == rtrim(strtolower(site_url()), "/");
+
+        $this->pre_optimizer_function($url, $strategy, $global);
+
+        $starter = ['uucss_enable_uucss', 'uucss_minify', 'minify_js', 'uucss_enable_cache', 'uucss_self_host_google_fonts'];
+
+        $accelerate = array_merge($starter, ['uucss_enable_cdn', 'uucss_support_next_gen_formats', 'uucss_lazy_load_iframes', 'uucss_lazy_load_images', 'uucss_exclude_above_the_fold_images', 'uucss_set_width_and_height', 'uucss_load_js_method']);
+
+        $turboMax = array_merge($accelerate, ['delay_javascript', 'uucss_enable_cpcss', 'uucss_support_next_gen_formats']);
+
+        $setOptions = function($enabledOptions) {
+            foreach (self::$options as $key => $value) {
+                if (in_array($key, $enabledOptions)) {
+                    self::$options[$key] = "1";
+                } else {
+                    unset(self::$options[$key]);
+                }
+            }
+        };
+
+        switch ($titan_gear) {
+            case 'starter':
+                $setOptions($starter);
+                break;
+            case 'accelerate':
+                $setOptions($accelerate);
+                break;
+            case 'turboMax':
+                $setOptions($turboMax);
+                break;
+        }
+
+        self::post_optimizer_function(null);
+
+        wp_send_json_success();
     }
 
     public function fetch_titan_settings(){
@@ -510,6 +626,31 @@ class RapidLoad_Optimizer
                 }
             }
 
+        }
+
+        $preload_images = [];
+
+        if (isset($data) && isset($data->audits) && is_array($data->audits)) {
+
+            $lcp_audit = array_filter($data->audits, function($audit) {
+                return $audit->id === 'prioritize-lcp-image';
+            });
+
+            if (!empty($lcp_audit)) {
+                $lcp_audit = reset($lcp_audit);
+
+                if (isset($lcp_audit->files) && isset($lcp_audit->files->debugData) && !empty($lcp_audit->files->debugData->initiatorPath)) {
+                    foreach ($lcp_audit->files->debugData->initiatorPath as $path) {
+                        if (isset($path->url) && preg_match('/\.(jpg|jpeg|jpg|png|gif)$/i', $path->url)) {
+                            $preload_images[] = $path->url;
+                        }
+                    }
+                }
+            }
+        }
+
+        if(!empty($preload_images)){
+            self::$options['uucss_preload_lcp_image'] = implode("\n",$preload_images);
         }
 
         if(self::$strategy == "desktop"){
@@ -1581,4 +1722,8 @@ class RapidLoad_Optimizer
 
         wp_send_json_success($result);
     }
+
+   
+    
+    
 }

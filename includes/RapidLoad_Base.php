@@ -162,6 +162,29 @@ class RapidLoad_Base
 
         add_action( 'admin_init', array( 'PAnD', 'init' ) );
 
+        $this->enqueue_diagnose_script();
+
+    }
+
+    public function enqueue_diagnose_script(){
+        
+        $diagnose_script_file = plugin_dir_path(UUCSS_PLUGIN_FILE) . 'assets/js/rapidload-diagnose-script.js';
+
+        if (defined('RAPIDLOAD_DEV_MODE') && RAPIDLOAD_DEV_MODE && file_exists($diagnose_script_file)) {
+            $diagnose_script_content = file_get_contents($diagnose_script_file);
+        } else {
+            $diagnose_script_content = '!(function(){window.diagnose_data={cache:{status:false,key:\"uucss_enable_cache\"},cpcss:{status:false,key:\"uucss_enable_cpcss\"},uucss:{non_optimized_css:[],key:\"uucss_enable_uucss\"},css_minify:{non_minified_css:[],key:\"uucss_minify\"},js_minify:{non_minified_js:[],key:\"minify_js\"},js_defer:{non_deferred_js:[],key:\"uucss_load_js_method\"},js_delay:{non_delayed_js:[],key:\"delay_javascript\"},cdn:{status:false,key:\"uucss_enable_cdn\"}};function is_rapidload_preview(){const urlParams=new URLSearchParams(window.location.search);const params=[];urlParams.forEach((value,key)=>{params.push(key)});return params.includes(\"rapidload_preview\")}document.addEventListener(\"DOMContentLoaded\",function(){if(is_rapidload_preview()){const rapidload_cache_status_div_content=document.querySelector(\"#rapidload-cache-status\");if(rapidload_cache_status_div_content){window.diagnose_data.cache.status=true}else{window.diagnose_data.cache.status=false}const rapidload_cpcss_style_content=document.querySelector(\"#rapidload-critical-css\");if(rapidload_cpcss_style_content){window.diagnose_data.cpcss.status=true}else{window.diagnose_data.cpcss.status=false}const allStylesheets=document.querySelectorAll(\'link[type=\"text/css\"]\');const nonOptimizedStylesheets=Array.from(allStylesheets).filter(sheet=>!sheet.hasAttribute(\"data-rpd-uucss\"));if(nonOptimizedStylesheets.length>0){window.diagnose_data.uucss.non_optimized_css=nonOptimizedStylesheets.map(sheet=>sheet.href)}else{window.diagnose_data.uucss.non_optimized_css=[]}const nonMinifiedStylesheets=Array.from(allStylesheets).filter(sheet=>{const href=sheet.href||\"\";return!sheet.hasAttribute(\"data-rpd-minify\")&&!href.toString().includes(\".min.css\")});if(nonMinifiedStylesheets.length>0){window.diagnose_data.css_minify.non_minified_css=nonMinifiedStylesheets.map(sheet=>sheet.href)}else{window.diagnose_data.css_minify.non_minified_css=[]}const allScripts=document.querySelectorAll(\"script[src]\");const nonMinifiedScripts=Array.from(allScripts).filter(script=>{const src=script.src||\"\";return!script.hasAttribute(\"data-rpd-minify-js\")&&!src.toString().includes(\".min.js\")});if(nonMinifiedScripts.length>0){window.diagnose_data.js_minify.non_minified_js=nonMinifiedScripts.map(script=>script.src)}else{window.diagnose_data.js_minify.non_minified_js=[]}const nonDeferredScripts=Array.from(allScripts).filter(script=>{return!script.hasAttribute(\"data-rpd-strategy\")&&!script.hasAttribute(\"defer\")});if(nonDeferredScripts.length>0){window.diagnose_data.js_defer.non_deferred_js=nonDeferredScripts.map(script=>script.src)}else{window.diagnose_data.js_defer.non_deferred_js=[]}const nonDelayedScripts=Array.from(allScripts).filter(script=>{return!script.hasAttribute(\"data-rpd-strategy\")||script.getAttribute(\"data-rpd-strategy\")!==\"delay\"});if(nonDelayedScripts.length>0){window.diagnose_data.js_delay.non_delayed_js=nonDelayedScripts.map(script=>script.src)}else{window.diagnose_data.js_delay.non_delayed_js=[]}const preconnectLink=document.querySelector(\'link[rel=\"preconnect\"][crossorigin][href*=\".rapidload-cdn.io\"]\');if(preconnectLink){window.diagnose_data.cdn.status=true}else{window.diagnose_data.cdn.status=false}}setTimeout(()=>{window.parent.postMessage({type:\"RAPIDLOAD_CHECK_RESULTS\",data:diagnose_data},\"*\")},5e3)})})();';
+        }
+
+        add_action('wp_enqueue_scripts', function() use ($diagnose_script_content) {
+            if (isset($_REQUEST['rapidload_preview'])) {
+                echo sprintf(
+                    "<script id='rapidload-diagnose-script' type='text/javascript' norapidload>\n%s\n</script>\n",
+                    $diagnose_script_content
+                );
+            }
+        });
+
     }
 
     public static function get_license_key(){
@@ -372,7 +395,7 @@ class RapidLoad_Base
             $data = array(
                 'ajax_url'          => admin_url( 'admin-ajax.php' ),
                 'setting_url'       => admin_url( 'options-general.php?page=uucss_legacy' ),
-                'on_board_complete' => apply_filters('uucss/on-board/complete', false),
+                'on_board_complete' => apply_filters('uucss/on-board/complete', RapidLoad_Onboard::on_board_completed()),
                 'home_url' => home_url(),
                 'api_url' => RapidLoad_Api::get_key(),
                 'nonce' => self::create_nonce( 'uucss_nonce' ),
@@ -607,7 +630,7 @@ class RapidLoad_Base
             'uucss_image_optimize_level' => "lossless",
             'uucss_exclude_above_the_fold_image_count' => 3,
             'uucss_enable_page_optimizer' => "1",
-            'rapidload_test_mode' => "1",
+            'rapidload_test_mode' => "0",
             'rapidload_cpcss_file_character_length' => 0,
             'uucss_adaptive_image_delivery' => "1",
         ];
