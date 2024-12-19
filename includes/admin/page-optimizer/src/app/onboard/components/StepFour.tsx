@@ -86,7 +86,7 @@ const StepFour= () => {
                                         ))}
                                     </div>
                                 </div>
-
+                                
                                 {/* Diagnostics Section */}
                                 <div className="flex flex-col gap-2">
                                     <div className="flex items-center gap-4 text-sm font-semibold text-brand-900 border-b border-brand-200 px-6 py-2">
