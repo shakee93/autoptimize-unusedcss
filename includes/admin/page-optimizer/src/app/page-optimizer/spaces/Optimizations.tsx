@@ -120,7 +120,7 @@ const Optimizations = ({ }) => {
                                     </button>
                                 </div>
                                 <iframe 
-                                    src={'http://rapidload.local/?rapidload_preview'} 
+                                    src={`${optimizerUrl}/?rapidload_preview`} 
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                 />

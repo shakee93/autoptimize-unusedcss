@@ -129,6 +129,7 @@ const PerformanceProgressBar: React.FC<PerformanceProgressBarProps> = ({
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 10 }}
+                            className="h-0"
                         >
                             {children}
                         </m.div>
