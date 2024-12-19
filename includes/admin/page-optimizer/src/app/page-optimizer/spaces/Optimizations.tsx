@@ -32,15 +32,49 @@ const Optimizations = ({ }) => {
     const optimizerUrl = options?.optimizer_url;
     const [showIframe, setShowIframe] = useState(false);
 
+    // useEffect(() => {
+    //         console.log('window', window)
+    //         window.addEventListener("message", (event) => {
+    //             console.log('event', event.data)
+    //             if (event.data.type === "RAPIDLOAD_CHECK_RESULTS") {
+    //                 console.log("Received data from iframe:", event.data);
+    //             }
+    //         });
+    // }, [window]);
+
     useEffect(() => {
-            console.log('window', window)
-            window.addEventListener("message", (event) => {
-                console.log('event', event.data)
-                if (event.data.type === "RAPIDLOAD_CHECK_RESULTS") {
-                    console.log("Received data from iframe:", event.data);
-                }
-            });
-    }, [window]);
+        const handleMessage = (event: MessageEvent) => {
+            if (event.data.type === "RAPIDLOAD_CHECK_RESULTS") {
+                console.log("Received data from iframe:", event.data);
+                
+                // Compare received data with settings
+                const receivedData = event.data.data;
+                settings.forEach((setting: AuditSetting) => {
+                    
+                    const mainInput = setting.inputs[0];
+                    if (!mainInput) return;
+
+                    Object.entries(receivedData).forEach(([category, data]: [string, any]) => {
+                        if (data.key === mainInput.key) {
+                            console.log(`Match found for ${category}:`, {
+                                settingName: setting.name,
+                                settingKey: mainInput.key,
+                                settingValue: mainInput.value,
+                                receivedStatus: data.status,
+                                nonOptimizedItems: data.non_optimized_css || data.non_minified_css || data.non_minified_js || data.non_deferred_js || data.non_delayed_js
+                            });
+                        }
+                    });
+                });
+            }
+        };
+
+        window.addEventListener("message", handleMessage);
+        
+        return () => {
+            window.removeEventListener("message", handleMessage);
+        };
+    }, [settings]);
   
     const getFilteredSettings = (settings: any) => {
       return settings.filter((setting: any) => setting.inputs.some((input: any) => input.value === true));
@@ -120,7 +154,8 @@ const Optimizations = ({ }) => {
                                     </button>
                                 </div>
                                 <iframe 
-                                    src={`${optimizerUrl}/?rapidload_preview`} 
+                                    // src={`${optimizerUrl}/?rapidload_preview`} 
+                                    src={`${window.uucss_global.home_url}/?rapidload_preview`} 
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                 />
