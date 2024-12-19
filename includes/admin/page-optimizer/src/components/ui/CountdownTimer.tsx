@@ -35,8 +35,12 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ text, className, timerO
             ' select-none',
             className
         )}>
-            {timerOnly ? `${countdown}s` : `${text} — just ${countdown} seconds to completion. Hang tight!`}
-
+            {countdown === 0 
+                ? "It's taking longer than expected. Hang tight!"
+                : timerOnly 
+                    ? `${countdown}s` 
+                    : `${text} — just ${countdown} seconds to completion. Hang tight!`
+            }
         </p>
     );
 };

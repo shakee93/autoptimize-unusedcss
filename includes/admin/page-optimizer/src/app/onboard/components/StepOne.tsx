@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from "lib/utils";
 import { useAppContext } from "../../../context/app";
-import { BoltIcon, ExclamationCircleIcon, InformationCircleIcon } from "@heroicons/react/24/solid";
+import { BoltIcon, ExclamationTriangleIcon , InformationCircleIcon } from "@heroicons/react/24/solid";
 import TooltipText from "components/ui/tooltip-text";
 import { changeReport, fetchReport, getAiPrediction } from "../../../store/app/appActions";
 import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
@@ -80,34 +80,46 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                         Your website ({options?.optimizer_url}) uses caching. We bypass it to <br /> reveal the unoptimized performance, showing RapidLoad's full <br /> impact.
                     </span>
                 </div>
-                <div className='bg-brand-100/30 border rounded-3xl p-2'>
+                
 
-                    {true &&
-                        <TooltipText
-                            text='Re-analyze the page'>
-                            <AppButton asChild={true} data-tour='analyze'
-                                className={cn(
-
-                                    'border-r-0 border-l-0 border-t-0 border-b-0 bg-transparent hover:bg-transparent',
-                                )}
+            {error ? (
+                <>
+                    <div className='border-2 border-red-500 rounded-xl flex items-start gap-4 p-4'>
+                        <div className='p-2 bg-red-200/30 rounded-lg'>
+                            <ExclamationTriangleIcon className='w-10 h-10 text-red-500' />
+                        </div>
+                        <span className='font-medium text-zinc-600 dark:text-brand-300'>
+                            <ErrorFetch className={"max-w-[420px] text-sm gap-0  mb-0"} error={error} icon={false}></ErrorFetch>
+                        </span>
+                    </div>
+                    
+                    <div className="flex gap-8 items-center mt-8">
+                        <button
+                            className="items-center bg-brand-200 text-brand-950 hover:shadow-[inset_0_0_0_2px_rgba(0,0,0,1)] font-medium py-2 px-4 rounded-lg hover:bg-transparent transition-all gap-2"
+                                onClick={() => {
+                                    window.open('https://rapidload.zendesk.com/hc/en-us/requests/new', '_blank');
+                            }}
+                        >
+                            Contact Support
+                        </button>
+                    
+                        <button
+                            className="items-center flex gap-2 hover:bg-gradient-to-br hover:from-[rgba(94,92,92,0.55)]  hover:to-brand-900/90 bg-brand-900/90  text-white font-medium py-2 px-4 rounded-lg transition-all gap-2"
                                 onClick={() => {
                                     dispatch(fetchReport(options, options.optimizer_url, true))
                                 }}
-                                variant='outline'>
-                                <div className={`flex flex-col gap-[1px] items-center`}>
-                                    <RefreshCw className={cn(
-                                        'w-4',
-                                        loading && 'animate-spin'
-                                    )} />
-                                    {/*<span className='text-xxs font-normal text-brand-500'>Analyze </span>*/}
-                                </div>
-                            </AppButton>
-                        </TooltipText>
-                    }
-
-                    <div
-                        className="flex items-center justify-center text-md gap-2 overflow-hidden relative">
-                        <div className="flex justify-center px-4 py-2 max-w-xl mx-auto w-full relative">
+                            >
+                                <RefreshCw className="w-4 text-brand-0" />
+                                Refresh to Continue
+                        </button>
+                    </div>
+                </>
+                ):(
+                <>
+                    <div className='bg-brand-100/30 border rounded-3xl p-2'>
+                        <div
+                            className="flex items-center justify-center text-md gap-2 overflow-hidden relative">
+                            <div className="flex justify-center px-4 py-2 max-w-xl mx-auto w-full relative">
                             {/* Before Results */}
 
                             <div className="flex flex-col items-center gap-4 px-6 rounded-2xl w-[230px]">
@@ -166,31 +178,26 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                                     }
                                 </div>
                             </div>
-
-
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                {error &&
-                    <div className='border rounded-xl p-2 flex items-center gap-4'>
-                        <div className='p-2 bg-brand-200/60 rounded-lg'>
-                            <ExclamationCircleIcon className='w-10 h-10 text-red-500' />
-                        </div>
-                        <span className='font-medium text-xs text-zinc-600 dark:text-brand-300'>
-                            <ErrorFetch className={"max-w-[420px] text-xs"} error={error} icon={false}></ErrorFetch>
-                        </span>
-                    </div>
+                    <button
+                                className={cn('flex items-center bg-gradient-to-r from-brand-900/90 to-brand-950 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2 hover:bg-gradient-to-br hover:from-[rgba(94,92,92,0.55)]  hover:to-brand-900/90 bg-brand-900/90',
+                                predictedLoading && 'pointer-events-none cursor-default opacity-30')}
+                                onClick={onNext}
+                            >
+                                Let’s improve this score
+                                <ArrowLongRightIcon className="w-6 h-6" />
+                            </button>
+                    </>
+                    )
                 }
 
-                <button
-                    className={cn('flex items-center bg-gradient-to-r from-brand-900/90 to-brand-950 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2 hover:bg-gradient-to-br hover:from-[rgba(94,92,92,0.55)]  hover:to-brand-900/90 bg-brand-900/90',
-                        predictedLoading && 'pointer-events-none cursor-default opacity-30')}
-                    onClick={onNext}
-                >
-                    Let’s improve this score
-                    <ArrowLongRightIcon className="w-6 h-6" />
-                </button>
+                    
+               
+                
+                
 
             </div>
         </div>
