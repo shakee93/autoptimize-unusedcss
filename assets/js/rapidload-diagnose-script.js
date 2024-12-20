@@ -37,7 +37,7 @@
             optimized_images: [],
             redirected_images: [],
             non_handled_images: [],
-            key: 'uucss_image_optimization',
+            key: 'uucss_support_next_gen_formats',
         },
     };
 
