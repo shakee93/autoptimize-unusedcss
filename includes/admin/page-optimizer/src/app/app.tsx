@@ -107,7 +107,7 @@ const App = ({ popup, _showOptimizer = false }: {
         // load initial data
         dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, false));
         //console.log(activeRoute)
-        if(!uucssGlobal?.on_board_complete){
+        if(!uucssGlobal?.on_board_complete && !isDev){
             return;
         }
         const optimizeUrl = getOptimizeUrl();
@@ -237,7 +237,7 @@ const App = ({ popup, _showOptimizer = false }: {
 
         if (!(isAdminPage || isDev)) return;
 
-        if (onboardCompleted) {
+        if (onboardCompleted || isDev) {
             window.location.hash = activeRoute;
             return;
         }

@@ -89,14 +89,15 @@ const SpeedSettings = ({ }) => {
     const modes: PerformanceGear[] = ['starter', 'accelerate', 'turboMax'];
 
     const customUnsavedChanges = useRef<HTMLDivElement>(null);
-    const [tempMode, setTempMode] = useState<PerformanceGear>('custom');
+    const { options, savingData, invalidatingCache } = useAppContext()
+    const [tempMode, setTempMode] = useState<PerformanceGear>((options.rapidload_titan_gear as PerformanceGear) || 'custom');
     const [customMode, setCustomMode] = useState(false);
 
     const [mouseOnSettingsGear, setMouseOnSettingsGear] = useState('');
     const { toast } = useToast();
     const { testMode } = useSelector(optimizerData);
     const { handleTestModeSwitchChange } = useTestModeUtils();
-    const { options, savingData, invalidatingCache } = useAppContext()
+   
 
     const icons: {
         [key in SettingsCategory]: React.ReactElement;
@@ -238,6 +239,7 @@ const SpeedSettings = ({ }) => {
 
     const settingsModeOnChange = (mode: PerformanceGear, activate?: boolean) => {
         handleTestModeSettingsChange(mode);
+        setTempMode(mode);
 
         if (activeGear === 'custom' && !activate) {
             customUnsavedChanges.current?.click();
@@ -262,8 +264,10 @@ const SpeedSettings = ({ }) => {
             firstRender.current = false;
             return;
         }
-        submitSettings(true);
-    }, [activeGear]);
+        if(tempMode !== 'custom'){
+            submitSettings(true);
+        }
+    }, [tempMode]);
 
     const handleTestModeSettingsChange = (gearSettingsMode: string,) => {
         let toastInstance: ReturnType<typeof toast> | undefined;
@@ -312,9 +316,9 @@ const SpeedSettings = ({ }) => {
     }, [settings]);
 
     useEffect(() => {
-        if (revisions?.length == 0 && !activeGear) {
-            dispatch(changeGear('accelerate'));
-        }
+        // if (revisions?.length == 0 && !activeGear) {
+        //     dispatch(changeGear('accelerate'));
+        // }
     }, [settings])
 
 
@@ -411,11 +415,9 @@ const SpeedSettings = ({ }) => {
                         <TooltipText text={loading ? "Analyzing your site performance" : savingData || invalidatingCache ? "Please wait while applying optimizations" : null }>
                         <div
                             key={index}
-                            className={`${(savingData || invalidatingCache || loading) && 'cursor-not-allowed opacity-90 pointer-events-none'} cursor-pointer transition-all flex px-4 py-4 min-w-[166px] min-h-[166px] items-center justify-center w-fit rounded-3xl dark:bg-brand-950 bg-brand-0 dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px]  ${mode === activeGear ? ' border-purple-700 dark:border-purple-700' : ''}`}
+                            className={`${(savingData || invalidatingCache || loading) && 'cursor-not-allowed opacity-90 pointer-events-none'} cursor-pointer transition-all flex px-4 py-4 min-w-[166px] min-h-[166px] items-center justify-center w-fit rounded-3xl dark:bg-brand-950 bg-brand-0 dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px]  ${mode === (activeGear || tempMode) ? ' border-purple-700 dark:border-purple-700' : ''}`}
                             onClick={e => {
-                                setTempMode(mode);
                                 settingsModeOnChange(mode);
-
                             }}
                             onMouseEnter={() => setMouseOnSettingsGear(mode)}
                             onMouseLeave={() => setMouseOnSettingsGear('')}
@@ -479,7 +481,7 @@ const SpeedSettings = ({ }) => {
                     cancel='Cancel'
                     onClick={() => {
                         settingsModeOnChange(tempMode, true);
-
+                        setCustomMode(false);
                     }}>
                     <div ref={customUnsavedChanges}></div>
                 </UnsavedChanges>
