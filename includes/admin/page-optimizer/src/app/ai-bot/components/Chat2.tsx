@@ -77,6 +77,10 @@ export default function Chat() {
     }
   }, [messages]);
 
+  useEffect(() => {
+    console.log('license', license)
+  }, [license]);
+
   const handleNewChat = () => {
     const newChat = {
       id: Date.now().toString(),
