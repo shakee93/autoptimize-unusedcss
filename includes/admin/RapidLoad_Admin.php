@@ -44,6 +44,7 @@ class RapidLoad_Admin
             add_action('wp_ajax_titan_checklist_plugins', [$this, 'titan_checklist_plugins']);
             add_action('wp_ajax_titan_checklist_status', [$this, 'titan_checklist_status']);
             add_action('wp_ajax_rapidload_switch_test_mode', [$this, 'rapidload_switch_test_mode']);
+            
 
             if (defined('RAPIDLOAD_DEV_MODE')) {
                 add_action('wp_ajax_nopriv_uucss_license', [ $this, 'uucss_license' ] );
@@ -62,6 +63,9 @@ class RapidLoad_Admin
 
         }
 
+        add_action('wp_ajax_rapidload_image_optimization_status', [ $this, 'rapidload_image_optimization_status' ] );
+        add_action('wp_ajax_nopriv_rapidload_image_optimization_status', [ $this, 'rapidload_image_optimization_status' ] );
+
         add_action('cron_check_rapidload', function (){
             update_option('cron_check_rapidload_success',"1");
         });
@@ -70,6 +74,50 @@ class RapidLoad_Admin
         add_filter('uucss/rules', [$this, 'rapidload_rule_types'], 90 , 1);
         add_action('add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
 
+    }
+
+    function rapidload_image_optimization_status(){
+
+        self::verify_nonce();
+
+        if (!isset($_REQUEST['image_urls'])) {
+            wp_send_json_error('No image URLs provided');
+        }
+
+        $image_url_status = [];
+
+        $image_urls = json_decode(stripslashes($_REQUEST['image_urls']), true);
+
+        if (!is_array($image_urls)) {
+            wp_send_json_error('Invalid image URLs format');
+        }
+
+        foreach ($image_urls as $url) {
+
+            $response = wp_remote_head($url);
+            
+            if (is_wp_error($response)) {
+                $image_url_status[] = [
+                    'url' => $url,
+                    'status' => 0,
+                    'redirected' => false,
+                    'error' => $response->get_error_message()
+                ];
+                continue;
+            }
+    
+            $status_code = wp_remote_retrieve_response_code($response);
+            $is_redirected = wp_remote_retrieve_header($response, 'location') ? true : false;
+
+            $image_url_status[] = [
+                'url' => $url,
+                'status' => $status_code,
+                'redirected' => $is_redirected
+            ];
+
+        }
+
+        wp_send_json_success($image_url_status);
     }
 
     function rapidload_fetch_post_types_with_links() {

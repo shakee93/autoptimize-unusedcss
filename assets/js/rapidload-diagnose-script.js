@@ -33,6 +33,12 @@
             status: false,
             key: 'uucss_enable_cdn',
         },
+        images: {
+            optimized_images: [],
+            redirected_images: [],
+            non_handled_images: [],
+            key: 'uucss_support_next_gen_formats',
+        },
     };
 
     function is_rapidload_preview() {
@@ -136,18 +142,123 @@
                 window.diagnose_data.cdn.status = false;
             }
 
-        }
+            // check image optimization
 
+            // Create observer to track image loads
+            const imageObserver = new PerformanceObserver((list) => {
+                list.getEntries().forEach((entry) => {
+                    if (entry.initiatorType === 'img') {
+                        processImage(entry.name.toString());
+                    } else if (entry.initiatorType === 'css' && entry.name.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
+                        processImage(entry.name.toString());
+                    }
+                });
+            });
+
+            imageObserver.observe({
+                entryTypes: ['resource']
+            });
+
+            // Process existing images
+            /*document.querySelectorAll('img').forEach(img => {
+                processImage(img);
+            });*/
+
+            function processImage(img) {
+                const imageUrl = img;
+                
+                if (window.diagnose_data.images.non_handled_images.includes(imageUrl) || 
+                    window.diagnose_data.images.optimized_images.includes(imageUrl)) {
+                    return;
+                }
+
+                if (!imageUrl.includes('images.rapidload-cdn.io')) {
+                    if (!window.diagnose_data.images.non_handled_images.includes(imageUrl)) {
+                        window.diagnose_data.images.non_handled_images.push(imageUrl);
+                    }
+                } else {
+                    if (!window.diagnose_data.images.optimized_images.includes(imageUrl)) {
+                        window.diagnose_data.images.optimized_images.push(imageUrl);
+                    }
+                }
+            }
+        }
 
         setTimeout(() => {
 
-            window.parent.postMessage(
-                {
-                    type: "RAPIDLOAD_CHECK_RESULTS",
-                    data: diagnose_data,
-                },
-                "*" 
-            );
+            // Send AJAX request to check image optimization status
+            if (window.diagnose_data.images.optimized_images.length > 0) {
+                fetch(rapidload_diagnose_tool.ajaxurl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        action: 'rapidload_image_optimization_status',
+                        image_urls: JSON.stringify(window.diagnose_data.images.optimized_images),
+                        _ajax_nonce: rapidload_diagnose_tool.nonce
+                    })
+                })
+                .then(response => response.json())
+                .then(response => {
+                    if (response.success && response.data) {
+                        response.data.forEach(image => {
+                            if (image.redirected && image.status === 307) {
+                                const index = window.diagnose_data.images.optimized_images.indexOf(image.url);
+                                if (index > -1) {
+                                    window.diagnose_data.images.optimized_images.splice(index, 1);
+                                    window.diagnose_data.images.redirected_images.push(image.url);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+
+            if (window.diagnose_data.images.optimized_images.length > 0) {
+                fetch(rapidload_diagnose_tool.ajaxurl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        action: 'rapidload_image_optimization_status',
+                        image_urls: JSON.stringify(window.diagnose_data.images.optimized_images),
+                        _ajax_nonce: rapidload_diagnose_tool.nonce
+                    })
+                })
+                .then(response => response.json())
+                .then(response => {
+                    if (response.success && response.data) {
+                        response.data.forEach(image => {
+                            if (image.redirected && image.status === 307) {
+                                const index = window.diagnose_data.images.optimized_images.indexOf(image.url);
+                                if (index > -1) {
+                                    window.diagnose_data.images.optimized_images.splice(index, 1);
+                                    window.diagnose_data.images.redirected_images.push(image.url);
+                                }
+                            }
+                        });
+                    }
+                })
+                .finally(() => {
+                    window.parent.postMessage(
+                        {
+                            type: "RAPIDLOAD_CHECK_RESULTS",
+                            data: diagnose_data,
+                        },
+                        "*"
+                    );
+                });
+            } else {
+                window.parent.postMessage(
+                    {
+                        type: "RAPIDLOAD_CHECK_RESULTS",
+                        data: diagnose_data,
+                    },
+                    "*"
+                );
+            }
         }, 5000);
     })
 
