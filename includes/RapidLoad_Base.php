@@ -178,12 +178,18 @@ class RapidLoad_Base
 
         add_action('wp_enqueue_scripts', function() use ($diagnose_script_content) {
             if (isset($_REQUEST['rapidload_preview'])) {
+                
                 echo sprintf(
                     "<script id='rapidload-diagnose-script' type='text/javascript' norapidload>\n%s\n</script>\n",
                     $diagnose_script_content
                 );
+
+                wp_localize_script('jquery', 'rapidload_diagnose_tool', array(
+                    'ajaxurl' => admin_url('admin-ajax.php'),
+                    'nonce' => wp_create_nonce( 'uucss_nonce' ),
+                ));
             }
-        });
+        },99);
 
     }
 
