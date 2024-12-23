@@ -58,12 +58,27 @@ jobs:
           echo "INSTANCE_ID=${{ github.event.number }}" >> $GITHUB_ENV
           echo "WORDPRESS_PORT=$((3000 + ${{ github.event.number }}))" >> $GITHUB_ENV
 
+      - name: Generate GitHub App Token for PR Comment
+        if: ${{ github.event.action == 'opened' }}
+        id: generate_token_pr
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: '967897'
+          installation_id: '53709773'
+          private_key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+
       - name: Comment on PR
         if: ${{ github.event.action == 'opened' }}
-        run: |
-          curl -X POST -H "Authorization: token ${{ secrets.SSH_GITHUB_TOKEN }}" \
-            -d "{\"body\": \"WordPress instance for this PR is available at https://pr-${{ github.event.number }}.rapidload.live\"}" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments"
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ steps.generate_token_pr.outputs.token }}
+          script: |
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: 'WordPress instance for this PR is available at https://pr-${{ github.event.number }}.rapidload.live'
+            });
 
       - name: Create dynamic Nginx config
         if: ${{ github.event.action == 'opened' }}
