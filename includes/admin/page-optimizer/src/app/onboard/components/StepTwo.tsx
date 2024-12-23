@@ -144,25 +144,23 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
 
     const renderBoosterLevel = useCallback((level: PerformanceGear) => {
         const isActive = activeLevel === level;
-        const isTurboMax = activeLevel === 'turboMax' && level === 'turboMax';
+        const isTurboMax = level === 'turboMax';
         return (
             <div
                 key={level}
                 className={cn(
                     'relative hover:bg-brand-100/50 flex flex-col gap-3.5 font-normal w-[166px] h-[166px] cursor-pointer rounded-3xl items-center justify-center',
-                    isActive ? 'text-brand-600 border-[3px] border-[#592d8d]' : 'border border-brand-200 dark:border-brand-700',
+                    isActive ? 'text-brand-600 border-[3px] border-[#592d8d]' : 'border border-transparent border-[3px] outline outline-1 outline-brand-200 dark:outline-brand-700',
                     isTurboMax && 'gap-1 pt-4',
                 )}
                 onClick={() => settingsModeOnChange(level)}
             >
                 <div>
                     {getIcon(level)}
-                    {isActive && (
-                        <div className={cn("absolute", level === "turboMax" ? "right-[7px] top-2 gap-1 text-[10px] items-center font-semibold bg-purple-100 rounded-3xl p-1 pl-2 flex" : "top-2.5 right-2.5")}>
+                    <div className={cn("absolute w-7 h-7 justify-center", level === "turboMax" ? "top-2.5 right-1.5 gap-1 text-[10px] items-center font-semibold rounded-3xl p-1 flex bg-brand-0 border border-brand-200 min-w-[150px]	" : "top-2.5 right-2.5 ")}>
                             {level === 'turboMax' && (<><AIButtonIcon />  AI Recommended </>)}
-                            <CheckCircleIcon className={`w-6 h-6 text-purple-800 `} />
-                        </div>
-                    )}
+                           {isActive && <CheckCircleIcon className={`w-6 h-6 text-purple-800 `} />}
+                    </div>
                 </div>
                 <div className="items-center flex flex-col">
                     <span className="capitalize font-semibold">{level}</span>

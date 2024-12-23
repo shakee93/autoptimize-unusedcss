@@ -21,6 +21,7 @@ interface WordPressOptions {
     rest_url: string
     license_key?: string
     test_mode?: boolean
+    rapidload_titan_gear?: string
 }
 
 type RapidLoadOptimizerModes ='normal' | 'onboard' | 'preview'
