@@ -23,13 +23,26 @@ jobs:
           git merge origin/${{ github.base_ref }} --no-commit --no-ff || echo "::set-output name=conflict::true"
         id: merge_check
 
+      - name: Generate GitHub App Token
+        if: steps.merge_check.outputs.conflict == 'true'
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: '967897'
+          private_key: '${{ secrets.GH_APP_PRIVATE_KEY }}'
+
       - name: Comment on PR if there are merge conflicts
         if: steps.merge_check.outputs.conflict == 'true'
-        run: |
-          curl -X POST -H "Authorization: token ${{ secrets.SSH_GITHUB_TOKEN }}" \
-            -d "{\"body\": \"There are merge conflicts in this pull request. Please resolve the conflicts before merging.\"}" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments"
-        continue-on-error: true
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ steps.generate_token.outputs.token }}
+          script: |
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: 'There are merge conflicts in this pull request. Please resolve the conflicts before merging.'
+            });
 
       - name: Configure SSH
         run: |
