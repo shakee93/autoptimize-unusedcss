@@ -206,19 +206,31 @@ const App = ({ popup, _showOptimizer = false }: {
     useEffect(() => {
         const handleHashChange = () => {
             const hash = window.location.hash.replace("#", "");
-            const validRoute = routes.some(route => route.id === hash);
+            // Extract the base route without query parameters
+            const baseRoute = hash.split('?')[0];
+            const validRoute = routes.some(route => route.id === baseRoute);
             if (validRoute) {
-                setActiveRoute(hash);
+                setActiveRoute(hash); // Store the full hash including query params
             } else {
                 setActiveRoute("/");
             }
         };
 
         window.addEventListener("hashchange", handleHashChange);
+        // Initial check
+        handleHashChange();
+        
         return () => {
             window.removeEventListener("hashchange", handleHashChange);
         };
     }, [routes]);
+
+    // Modify the route finding logic
+    const findRouteComponent = (route: string) => {
+        // Extract the base route without query parameters
+        const baseRoute = route.split('?')[0];
+        return routes.find(r => r.id === baseRoute)?.component || routes[0].component;
+    };
 
     // useEffect(() => {
     //     if (isAdminPage || isDev) {
@@ -396,7 +408,7 @@ const App = ({ popup, _showOptimizer = false }: {
                         )}
                         {showStepTwo ? (renderStepTwo()):(
                             <SlideUp uuid={activeRoute || routes[0].id}>
-                                {routes.find(route => route.id === activeRoute)?.component || routes[0].component}
+                                {findRouteComponent(activeRoute)}
                             </SlideUp>
                         )}
 

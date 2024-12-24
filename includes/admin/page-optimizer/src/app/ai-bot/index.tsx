@@ -4,7 +4,7 @@ import Chat2 from "app/ai-bot/components/Chat2";
 
 export default function ChatPage() {
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center container">
       <Chat2 />
     </div>
   );

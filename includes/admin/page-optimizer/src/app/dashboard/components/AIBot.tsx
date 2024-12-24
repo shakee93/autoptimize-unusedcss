@@ -6,41 +6,70 @@ import {ArrowUpCircleIcon} from "@heroicons/react/24/solid";
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger
 } from "components/ui/dialog";
-import ComparisonTable from "components/ui/compare-table";
-import AppButton from "components/ui/app-button";
-import AISpeedCoach from "app/dashboard/components/AISpeedCoach";
-import HermisAIBot from "app/ai-bot";
+import { MessagesSquare } from "lucide-react";
 
 const AIBot = () => {
     const [open, setOpen] = useState(false);
+    const [conversations, setConversations] = useState(() => {
+        const saved = localStorage.getItem('chat-conversations');
+        return saved ? JSON.parse(saved) : [];
+    });
+
+    const handleConversationSelect = (conv: any) => {
+        // Add conversation ID to URL hash
+        window.location.hash = `#/hermes-ai?conv=${conv.id}`;
+        setOpen(false);
+    };
 
     const questions = [
-        'What causes lightning?',
-        'What causes lightning?',
-        'Why do cats purr?',
-        'Why do cats purr?',
+        'CSS Delivery?',
+        'JS Delivery?',
+        'Image Delivery?',
+        'CDN Delivery?',
     ];
 
     return(
         <div className='w-full flex flex-col gap-4'>
             <Card data-tour='AIBot' className="border flex flex-col gap-4">
-                <div
-                    className="flex flex-col items-center p-6 gap-2 relative">
+                <div className="flex flex-col items-center p-6 gap-2 relative">
                     <button
-                        className="flex gap-1 m-6 my-0 right-0 absolute cursor-pointer border text-brand-950 py-1.5 px-2 rounded-lg text-xs font-medium">
-                        <InboxIcon className="h-4 w-4 text-brand-950 "/>
+                        onClick={() => setOpen(true)}
+                        className="flex gap-1 m-6 my-0 right-0 absolute cursor-pointer border text-brand-950 py-1.5 px-2 rounded-lg text-xs font-medium hover:bg-gray-100">
+                        <InboxIcon className="h-4 w-4 text-brand-950"/>
                     </button>
+                    
+                    <Dialog open={open} onOpenChange={setOpen}>
+                        <DialogContent className="sm:max-w-[425px] p-6">
+                            <DialogHeader>
+                                <DialogTitle>Chat History</DialogTitle>
+                            </DialogHeader>
+                            <div className="space-y-2 max-h-[400px] overflow-y-auto">
+                                {conversations.length === 0 ? (
+                                    <div className="text-center text-gray-500 py-4">
+                                        No chat history yet
+                                    </div>
+                                ) : (
+                                    conversations.map((conv: any) => (
+                                        <div
+                                            key={conv.id}
+                                            onClick={() => handleConversationSelect(conv)}
+                                            className="flex items-center gap-2 p-3 border rounded-lg hover:bg-gray-100 cursor-pointer"
+                                        >
+                                            <MessagesSquare className="h-4 w-4 text-brand-950" />
+                                            <span className="text-sm truncate">{conv.title}</span>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </DialogContent>
+                    </Dialog>
                     
                     <AIBotIcon/>
                     <div className="dark:text-brand-300 text-center flex flex-col gap-2">
                         <h2 className="text-base font-semibold">Hi, I am Speed Coach. <br/> Your AI Companion</h2>
-                        {/* <span className="text-brand-400 font-normal text-xs leading-4">AI  Speed Coach answers your questions with information and insights from our wide-ranging collection of articles. For generations, knowledge-seekers have turned to Speed Coach for answers they can trust. AI  Speed Coach offers a new way to engage with  Speed Coach -created content.</span> */}
                     </div>
                 </div>
                 <div className="w-full max-w-md mx-auto p-6 pt-0">

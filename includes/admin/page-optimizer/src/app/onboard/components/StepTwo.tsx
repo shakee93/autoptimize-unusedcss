@@ -213,7 +213,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
 
     return (
         <div
-            className="w-full flex flex-col gap-4">
+            className="w-full flex flex-col gap-4 transition-all">
             <div className="bg-brand-0 flex flex-col gap-8 p-16 items-center rounded-3xl">
                 <div className="px-2">
                     <img
@@ -244,7 +244,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
                             </button>
                             <ComparisonDialog open={open} setOpen={setOpen}/>
                             {/*<button onClick={onNext}>Next</button>*/}
-                            {isDev && <button onClick={onNext}>Next</button>}
+                            {isDev && <button className='absolute top-4 right-4' onClick={onNext}>Skip</button>}
                     </>
                 ) : (
                     <div className="flex flex-col gap-2 text-center">

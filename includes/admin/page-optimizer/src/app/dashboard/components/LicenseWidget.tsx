@@ -74,35 +74,46 @@ const LicenseWidget = () => {
         );
     };
 
+    const licenseFields = [
+        { label: 'Email ID', value: licenseInfo?.email },
+        { 
+            label: 'Exp. date', 
+            value: licenseInfo?.next_billing 
+                ? new Date(licenseInfo.next_billing * 1000).toLocaleDateString() 
+                : '' 
+        },
+        { label: 'License', value: licenseInfo?.plan },
+        { label: 'Connected Domain', value: licenseInfo?.licensedDomain }
+    ];
 
     const renderLicenseDetails = () => (
-        <>
-            <div className="absolute right-10">
+        <div className="relative space-y-3">
+            <button 
+                onClick={toggleVisibility}
+                className="absolute right-0 -top-4 p-1.5 rounded-full transition-colors"
+                aria-label={isVisible ? "Hide details" : "Show details"}
+            >
                 {isVisible ? (
-                    <EyeIcon className="h-4 w-4 text-violet-300 hover:cursor-pointer" onClick={toggleVisibility} />
+                    <EyeIcon className="h-4 w-4 text-violet-400" />
                 ) : (
-                    <EyeSlashIcon className="h-4 w-4 text-violet-300 hover:cursor-pointer" onClick={toggleVisibility} />
+                    <EyeSlashIcon className="h-4 w-4 text-violet-400" />
                 )}
-            </div>
-            <div className="flex gap-1 text-sm">
-                <span>Email ID:</span>
-                <span className="font-semibold">
-                    {isVisible ? licenseInfo?.email : '*'.repeat((licenseInfo?.email || '').length)}
-                </span>
-            </div>
-            <div className="flex gap-1 text-sm">
-                <span>Exp. date:</span>
-                <span className="font-semibold">
-                    {isVisible ? licenseInfo?.next_billing ? new Date(licenseInfo.next_billing * 1000).toLocaleDateString() : '' : '*'.repeat((licenseInfo?.next_billing ?? '').toString().length)}
-                </span>
-            </div>
-            <div className="flex gap-1 text-sm">
-                <span>License:</span>
-                <span className="font-semibold">
-                    {isVisible ? licenseInfo?.plan : '*'.repeat((licenseInfo?.plan || '').length)}
-                </span>
-            </div>
-        </>
+            </button>
+
+            {licenseFields.map(({ label, value }, index) => (
+                <div 
+                    key={label} 
+                    className="flex gap-4 items-center text-sm"
+                >
+                    <span className="text-brand-850">{label} :</span>
+                    <span className="font-medium text-brand-950">
+                        {isVisible 
+                            ? value 
+                            : '•'.repeat((value || '').toString().length)}
+                    </span>
+                </div>
+            ))}
+        </div>
     );
 
     const renderLicenseInput = () => (
