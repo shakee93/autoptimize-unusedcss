@@ -8,7 +8,7 @@ import TooltipText from "components/ui/tooltip-text";
 import { ThunkDispatch } from "redux-thunk";
 import { AppAction, RootState } from "../../../store/app/appTypes";
 import { useDispatch, useSelector } from "react-redux";
-import { changeReport, fetchReport } from "../../../store/app/appActions";
+import {changeReport, fetchReport, fetchSettings} from "../../../store/app/appActions";
 import { optimizerData } from "../../../store/app/appSelector";
 import AppButton from "components/ui/app-button";
 import { cn, isAdminPage } from "lib/utils";
@@ -28,15 +28,17 @@ const Header = ({ url }: { url: string }) => {
         options,
         version,
         mode,
-        savingData
+        savingData,
+        invalidatingCache,
     } = useAppContext()
 
     const { activeReport,
         loading,
         testMode,
-        reanalyze
+        reanalyze,
+         settings, settingsOriginal
     } = useSelector(optimizerData);
-    const { inProgress } = useCommonDispatch()
+    const { inProgress, testModeStatus } = useCommonDispatch()
     const {
         dispatch: commonDispatch
     } = useCommonDispatch()
@@ -57,13 +59,38 @@ const Header = ({ url }: { url: string }) => {
                 setScrolled(false);
             }
         };
-
         window.addEventListener("scroll", handleScroll);
 
         return () => {
             window.removeEventListener("scroll", handleScroll);
         };
     }, []);
+
+    useEffect(() => {
+        if(!savingData && !invalidatingCache){
+            dispatch(fetchSettings(options, options.optimizer_url, true))
+        }
+    }, [savingData, invalidatingCache]);
+
+    // useEffect(() => {
+    //     if (settings && settingsOriginal) {
+    //         settings.forEach((setting, settingIndex) => {
+    //             const originalSetting = settingsOriginal[settingIndex];
+    //
+    //             setting.inputs.forEach((input, inputIndex) => {
+    //                 const originalInput = originalSetting.inputs[inputIndex];
+    //
+    //                 if (input.value !== originalInput.value) {
+    //                     console.log(`Difference found in object index ${settingIndex}, input index ${inputIndex}:`);
+    //                     console.log(`Key: ${input.key}`, `Name: ${setting.name}` , `control_label: ${input.control_label}`);
+    //                     console.log(`Current Value: ${input.value}, Original Value: ${originalInput.value}`);
+    //                 }
+    //             });
+    //         });
+    //     }
+    // }, [settings, settingsOriginal]);
+
+
 
     return (
         <>

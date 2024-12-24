@@ -187,27 +187,28 @@ class RapidLoad_Job{
 
     }
 
-    function delete(){
-
+    function delete() {
         global $wpdb;
 
-        $query = $wpdb->query("DELETE FROM {$wpdb->prefix}rapidload_job_data WHERE job_id = " . $this->id);
-        $query = $wpdb->query("DELETE FROM {$wpdb->prefix}rapidload_job WHERE id = " . $this->id);
+        $wpdb->query(
+            $wpdb->prepare("DELETE FROM {$wpdb->prefix}rapidload_job_data WHERE job_id = %d", $this->id)
+        );
 
+        $wpdb->query(
+            $wpdb->prepare("DELETE FROM {$wpdb->prefix}rapidload_job WHERE id = %d", $this->id)
+        );
     }
 
-    function get_urls(){
-
-        if($this->rule == "is_url"){
+    function get_urls() {
+        if ($this->rule == "is_url") {
             return [];
         }
 
         global $wpdb;
 
-        $data = $wpdb->get_results("SELECT url FROM {$wpdb->prefix}rapidload_job WHERE rule_id = " . $this->id . " AND rule = 'is_url'" , ARRAY_A);
+        $data = $wpdb->get_results($wpdb->prepare("SELECT url FROM {$wpdb->prefix}rapidload_job WHERE rule_id = %d AND rule = 'is_url'",$this->id),ARRAY_A);
 
-        if(!empty($data))
-        {
+        if (!empty($data)) {
             return array_column($data, 'url');
         }
 
@@ -269,26 +270,23 @@ class RapidLoad_Job{
         }
     }
 
-    function get_optimization_revisions($strategy, $limit = 10){
-
+    function get_optimization_revisions($strategy, $limit = 10) {
         global $wpdb;
 
-        if(!isset($this->id)){
+        if (!isset($this->id)) {
             return [];
         }
 
-        $data = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " ORDER BY id DESC LIMIT "  . $limit . " OFFSET 1", OBJECT);
+        $data = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = %s AND job_id = %d ORDER BY id DESC LIMIT %d OFFSET 1",$strategy,$this->id,$limit), OBJECT);
 
         $transformed_data = [];
 
         foreach ($data as $d) {
-
             $d->data = json_decode($d->data);
 
             $transformed_object = new stdClass();
             $transformed_object->id = $d->id;
             $transformed_object->created_at = $d->created_at;
-
             $transformed_object->data = new stdClass();
             if (isset($d->data) && isset($d->data->performance)) {
                 $transformed_object->data->performance = $d->data->performance;
@@ -308,66 +306,64 @@ class RapidLoad_Job{
         return $transformed_data;
     }
 
-    function get_last_optimization_revision_hash($strategy){
+    function get_last_optimization_revision_hash($strategy) {
         global $wpdb;
 
-        if(!isset($this->id)){
+        if (!isset($this->id)) {
             return (object)[];
         }
 
-        $data = $wpdb->get_var("SELECT data FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " ORDER BY id DESC LIMIT 1 ");
+        $data = $wpdb->get_var(
+            $wpdb->prepare("SELECT data FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = %s AND job_id = %d ORDER BY id DESC LIMIT 1",$strategy,$this->id)
+        );
 
-        if(!$data){
-            return false;
-        }else{
-            return hash('md5',$data);
-        }
+        return $data ? hash('md5', $data) : false;
     }
 
-    function get_last_optimization_revision($strategy){
+    function get_last_optimization_revision($strategy) {
         global $wpdb;
 
-        if(!isset($this->id)){
+        if (!isset($this->id)) {
             return (object)[];
         }
 
-        $data = $wpdb->get_var("SELECT data FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id . " ORDER BY id DESC LIMIT 1 ");
+        $data = $wpdb->get_var(
+            $wpdb->prepare("SELECT data FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = %s AND job_id = %d ORDER BY id DESC LIMIT 1",$strategy, $this->id )
+        );
 
-        if(!$data){
-            return false;
-        }else{
-            return json_decode($data);
-        }
+        return $data ? json_decode($data) : false;
     }
 
-    function get_revision_count($strategy){
-
+    function get_revision_count($strategy) {
         global $wpdb;
-        return $wpdb->get_var("SELECT count(id) FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id );
-
+        return $wpdb->get_var(
+            $wpdb->prepare("SELECT count(id) FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = %s AND job_id = %d",$strategy,$this->id)
+        );
     }
 
-    function delete_old_revision($strategy, $revision_count){
+    function delete_old_revision($strategy, $revision_count) {
         $revsions = $this->get_revision_ids($strategy);
 
-        if(!empty($revsions) && count($revsions) > ($revision_count -1 )){
-            $revsions = array_slice($revsions, (-1 * ($revision_count -1 )));
-            $revsions = array_map(function ($r){
+        if (!empty($revsions) && count($revsions) > ($revision_count - 1)) {
+            $revsions = array_slice($revsions, -($revision_count - 1));
+            $revsions = array_map(function ($r) {
                 return (double)$r[0];
-            },$revsions);
-            $revsions = implode(",",$revsions);
-            global $wpdb;
-            $wpdb->query("DELETE FROM {$wpdb->prefix}rapidload_job_optimizations WHERE id NOT IN( $revsions ) AND strategy = '$strategy'");
-        }
+            }, $revsions);
+            $revsions = implode(",", $revsions);
 
+            global $wpdb;
+            $wpdb->query(
+                $wpdb->prepare("DELETE FROM {$wpdb->prefix}rapidload_job_optimizations WHERE id NOT IN( %s ) AND strategy = %s",$revsions,$strategy)
+            );
+        }
     }
 
-    function get_revision_ids($strategy){
-
+    function get_revision_ids($strategy) {
         global $wpdb;
 
-        return $wpdb->get_results("SELECT id FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = '" . $strategy . "' AND job_id = " . $this->id , ARRAY_N);
+        $query = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = %s AND job_id = %d",$strategy,$this->id);
 
+        return $wpdb->get_results($query, ARRAY_N);
     }
 
     function delete_all_revisions(){

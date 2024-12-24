@@ -101,7 +101,7 @@ class RapidLoad_Admin_Bar {
             'admin_url' => admin_url(),
             'dashboard_url' => admin_url( 'admin.php?page=rapidload' ),
             'optimizer_url' => defined('RAPIDLOAD_OPTIMIZER_TEST_URL') ? RAPIDLOAD_OPTIMIZER_TEST_URL : $this->transform_url($current_url),
-            'nonce' => wp_create_nonce( 'uucss_nonce' ),
+            'nonce' => self::create_nonce( 'uucss_nonce' ),
             'timezone' => get_option('timezone_string', 'UTC'),
             'rapidload_version' => UUCSS_VERSION,
             'actions' => [
@@ -135,6 +135,8 @@ class RapidLoad_Admin_Bar {
             'enable_entire_site' => RapidLoad_DB::get_optimization_count() < 2,
             'rest_url' => RapidLoadRestApi::rest_url(),
             'license_key' => RapidLoad_Base::get_license_key(),
+            'test_mode' => boolval(isset($options['rapidload_test_mode']) && $options['rapidload_test_mode'] == "1"),
+            'uucss_disable_error_tracking' => boolval(isset($options['uucss_disable_error_tracking']) && $options['uucss_disable_error_tracking'] == "1"),
             'test_mode' => boolval(isset($options['rapidload_test_mode']) && $options['rapidload_test_mode'] == "1"),
             'rapidload_titan_gear' => get_option('rapidload_titan_gear', 'trurboMax'),
         );

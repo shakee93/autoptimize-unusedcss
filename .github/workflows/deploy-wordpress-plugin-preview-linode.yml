@@ -16,21 +16,6 @@ jobs:
         run: |
           echo "Branch name: ${{ github.head_ref }}"
 
-      - name: Check for merge conflicts
-        run: |
-          git fetch origin
-          git checkout ${{ github.head_ref }}
-          git merge origin/${{ github.base_ref }} --no-commit --no-ff || echo "::set-output name=conflict::true"
-        id: merge_check
-
-      - name: Comment on PR if there are merge conflicts
-        if: steps.merge_check.outputs.conflict == 'true'
-        run: |
-          curl -X POST -H "Authorization: token ${{ secrets.SSH_GITHUB_TOKEN }}" \
-            -d "{\"body\": \"There are merge conflicts in this pull request. Please resolve the conflicts before merging.\"}" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments"
-        continue-on-error: true
-
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh
@@ -44,12 +29,27 @@ jobs:
           echo "INSTANCE_ID=${{ github.event.number }}" >> $GITHUB_ENV
           echo "WORDPRESS_PORT=$((3000 + ${{ github.event.number }}))" >> $GITHUB_ENV
 
+      - name: Generate GitHub App Token for PR Comment
+        if: ${{ github.event.action == 'opened' }}
+        id: generate_token_pr
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: '967897'
+          installation_id: '53709773'
+          private_key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+
       - name: Comment on PR
         if: ${{ github.event.action == 'opened' }}
-        run: |
-          curl -X POST -H "Authorization: token ${{ secrets.SSH_GITHUB_TOKEN }}" \
-            -d "{\"body\": \"WordPress instance for this PR is available at https://pr-${{ github.event.number }}.rapidload.live\"}" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments"
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ steps.generate_token_pr.outputs.token }}
+          script: |
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: 'WordPress instance for this PR is available at https://pr-${{ github.event.number }}.rapidload.live'
+            });
 
       - name: Create dynamic Nginx config
         if: ${{ github.event.action == 'opened' }}
@@ -208,19 +208,6 @@ jobs:
             sudo docker exec -u root -i \${WP_CONTAINER} sh -c "chmod 666 /bitnami/wordpress/wp-config.php"
           EOF
 
-      - name: Create cache folder and grant 755 permissions
-        if: ${{ github.event.action == 'opened' }}
-        run: |
-          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} << EOF
-            set -x
-            INSTANCE_ID=${{ github.event.number }}
-            DOMAIN="pr-${INSTANCE_ID}.rapidload.live"
-            WP_CONTAINER=\$(sudo docker ps -q --filter "name=wordpress_\${INSTANCE_ID}")
-
-            # Create cache folder if it doesn't exist and grant 755 permissions
-            sudo docker exec -u root -i \${WP_CONTAINER} sh -c "if [ ! -d /bitnami/wordpress/wp-content/cache ]; then mkdir -p /bitnami/wordpress/wp-content/cache; fi && chmod -R 775 /bitnami/wordpress/wp-content/cache && chown daemon:daemon /bitnami/wordpress/wp-content/cache"
-          EOF
-
       - name: Update domain in wp-config.php
         if: ${{ github.event.action == 'opened' }}
         run: |
@@ -283,6 +270,7 @@ jobs:
               if [ -d ${PLUGIN_PATH} ]; then
                 echo 'Plugin directory exists. Running git pull...'
                 cd ${PLUGIN_PATH}
+                git config --global --add safe.directory /bitnami/wordpress/wp-content/plugins/autoptimize-unusedcss
                 git clean -f
                 git reset --hard HEAD
                 git pull origin ${{ github.head_ref }}
@@ -297,6 +285,7 @@ jobs:
               echo "Plugin repository updated successfully in ${WP_CONTAINER}"
             else
               echo "Failed to update plugin repository in ${WP_CONTAINER}"
+              exit 1
             fi
           EOF
 
@@ -358,6 +347,19 @@ jobs:
 
             # Remove the 'upload_plugins' capability from the 'administrator' role
             sudo docker exec -u root -i ${WP_CONTAINER} sh -c "echo \"define('DISALLOW_FILE_MODS', true);\" >> /bitnami/wordpress/wp-config.php"
+          EOF
+
+      - name: Grant permission to daemon user
+        if: ${{ github.event.action == 'opened' }}
+        run: |
+          ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.SSH_HOST_LINODE }} << EOF
+            set -x
+            INSTANCE_ID=${{ github.event.number }}
+            DOMAIN="pr-${INSTANCE_ID}.rapidload.live"
+            WP_CONTAINER=\$(sudo docker ps -q --filter "name=wordpress_\${INSTANCE_ID}")
+
+            # Grant permission to daemon user
+            sudo docker exec -u root \$WP_CONTAINER sh -c 'chown -R daemon:daemon /bitnami/wordpress'
           EOF
 
       - name: Clean up old Docker containers and volumes

@@ -1,4 +1,12 @@
+<<<<<<< HEAD:includes/admin/page-optimizer/dist/assets/InitTour.rZQashkx.js
 import{j as e}from"./vendor.BX0_ezNS.js";import{c as L,t as $,u as I,s as h,a as M,o as D,b as Y}from"./index.CCU4V4vu.js";import{r as m}from"./core-vendor.V80Ff32-.js";import{u as B}from"./index.Be5yF97N.js";import"./animations.F1FEklSB.js";/**
+=======
+<<<<<<<< HEAD:includes/admin/page-optimizer/dist/assets/InitTour.BaAd13VN.js
+import{j as e}from"./vendor.BX0_ezNS.js";import{c as L,t as $,u as I,s as h,a as M,o as D,b as Y}from"./index.HI2Vtmtk.js";import{r as m}from"./core-vendor.V80Ff32-.js";import{u as B}from"./index.Be5yF97N.js";import"./animations.F1FEklSB.js";/**
+========
+import{j as e}from"./vendor.C2Ge5RaU.js";import{c as L,t as $,u as I,s as h,a as M,o as D,b as Y}from"./index.Cv_SMXQx.js";import{r as m}from"./core-vendor.a21Wwx5s.js";import{u as B}from"./index.JHaeFuYk.js";import"./animations.CWk52Myu.js";/**
+>>>>>>>> origin/release/v2.4.5:includes/admin/page-optimizer/dist/assets/InitTour.BwPT7_Wj.js
+>>>>>>> 6895c64190f14295f6ccd38506dc9bd765c1b010:includes/admin/page-optimizer/dist/assets/InitTour.BaAd13VN.js
  * @license lucide-react v0.417.0 - ISC
  *
  * This source code is licensed under the ISC license.

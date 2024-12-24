@@ -10,12 +10,13 @@ import {createRoot} from 'react-dom/client';
 import ShadowRoot from "components/shadow-dom";
 import SpeedPopover from "app/speed-popover";
 import {isDev, isAdminPage} from "lib/utils";
+import {disableDebugReport} from "lib/utils";
 import Providers from "./Providers";
 
 import Bugsnag from '@bugsnag/js'
 import BugsnagPluginReact, {BugsnagPluginReactResult} from '@bugsnag/plugin-react'
 
-if (!isDev) {
+if (!isDev && !disableDebugReport) {
     Bugsnag.start({
         appVersion: __OPTIMIZER_VERSION__,
         apiKey: '005f0d45718ad741e38cf9280457d034',
@@ -28,7 +29,7 @@ if (!isDev) {
     })
 }
 
-const plugin = !isDev ? Bugsnag.getPlugin("react") as BugsnagPluginReactResult : null;
+const plugin = !isDev && !disableDebugReport ? Bugsnag.getPlugin("react") as BugsnagPluginReactResult : null;
 export const ErrorBoundary = plugin ? plugin.createErrorBoundary(React) : null;
 
 interface initRapidLoadOptimizerProps {
