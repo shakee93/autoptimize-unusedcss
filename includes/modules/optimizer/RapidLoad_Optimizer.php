@@ -339,13 +339,15 @@ class RapidLoad_Optimizer
                     $cache_file = RapidLoad_Cache_Store::get_cache_file($url);
                     $cache_file_exist = @file_exists($cache_file);
 
+                    $status = RapidLoad_Cache_Store::get_page_cache_errors();
+
                     $response[$type] = [
-                        'status' => $cache_file_exist ? 'Hit' : 'processing',
+                        'status' => $cache_file_exist ? 'Hit' : ($status == 'Hit' ? $status : 'failed'),
                         'file' => $cache_file,
                         'size' => $cache_file_exist ? $this->formatSize(@filesize($cache_file)) : null,
                         'error' => [
                             'code' => $cache_file_exist ? null : 422,
-                            'message' => $cache_file_exist ? null : 'Cache file not found',
+                            'message' => $cache_file_exist ? 'Hit' : $status,
                         ],
                     ];
                     break;
@@ -930,7 +932,7 @@ class RapidLoad_Optimizer
             'cpcss_purge_url' => array(
                 'control_type' => 'button',
                 'control_label' => 'Regenerate Critical CSS',
-                'action' => 'action=cpcss_purge_url&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                'action' => 'action=cpcss_purge_url&url=' . $url . '&nonce=' . self::create_nonce( 'uucss_nonce' ),
                 'description' => ''
             ),
             // UUCSS settings starts here
@@ -1004,7 +1006,7 @@ class RapidLoad_Optimizer
             'rapidload_purge_all' => array(
                 'control_type' => 'button',
                 'control_label' => 'Regenerate Unused CSS',
-                'action' => 'action=rapidload_purge_all&job_type=url&clear=false&immediate=true&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                'action' => 'action=rapidload_purge_all&job_type=url&clear=false&immediate=true&url=' . $url . '&nonce=' . self::create_nonce( 'uucss_nonce' ),
                 'description' => ''
             ),
 
@@ -1241,7 +1243,7 @@ class RapidLoad_Optimizer
                         'control_label' => 'Validate CDN URL',
                         'control_icon' => 'check-circle',
                         'control_description' => 'Check if the CDN url is working',
-                        'action' => 'action=validate_cdn&dashboard_cdn_validator&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                        'action' => 'action=validate_cdn&dashboard_cdn_validator&nonce=' . self::create_nonce( 'uucss_nonce' ),
                         // this state will be updated in the frontend after response using data.${provided_key}
                         'action_response_mutates' => ['uucss_cdn_url'],
                     ),
@@ -1251,7 +1253,7 @@ class RapidLoad_Optimizer
                         'control_label' => 'Clear CDN Cache',
                         'control_icon' => 'rotate-cw',
                         'control_description' => 'Clear resources caches across the CDN network',
-                        'action' => 'action=purge_rapidload_cdn&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                        'action' => 'action=purge_rapidload_cdn&nonce=' . self::create_nonce( 'uucss_nonce' ),
                     ),
                 )
             ),

@@ -27,7 +27,7 @@ export interface AuditComponentRef {
 export default function PageOptimizer() {
     const { data, loading, error, testMode } = useSelector(optimizerData);
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(data?.performance);
-    const { dispatch, activeMetric } = useCommonDispatch()
+    const { dispatch, activeMetric, testModeStatus } = useCommonDispatch()
 
     const {
         options,

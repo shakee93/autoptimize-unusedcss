@@ -5,13 +5,15 @@ import {useAppContext} from "../../context/app";
 import {Toaster} from "components/ui/toaster";
 import Bugsnag from "@bugsnag/js";
 
+import {isDev, disableDebugReport} from "lib/utils";
+
 function SpeedPopover() {
 
     const { options } = useAppContext()
 
 
     useEffect(() => {
-        Bugsnag.leaveBreadcrumb('Popup Loaded')
+        !isDev && !disableDebugReport && Bugsnag.leaveBreadcrumb('Popup Loaded')
     }, [])
 
     return (

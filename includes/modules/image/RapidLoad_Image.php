@@ -87,7 +87,7 @@ class RapidLoad_Image
             ?>
             (function(w, d){
                 w.rapidload_io_data = {
-                    nonce : "<?php echo wp_create_nonce('rapidload_image') ?>",
+                    nonce : "<?php echo self::create_nonce('rapidload_image') ?>",
                     image_endpoint : "<?php echo RapidLoad_Image::$image_indpoint ?>",
                     optimize_level : "<?php echo ( isset($this->options['uucss_image_optimize_level']) ? $this->options['uucss_image_optimize_level'] : 'null' ) ?>" ,
                     adaptive_image_delivery : <?php echo ( isset($this->options['uucss_adaptive_image_delivery']) && $this->options['uucss_adaptive_image_delivery'] == "1" ? 'true' : 'false' ) ?> ,

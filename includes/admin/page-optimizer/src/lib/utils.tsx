@@ -46,6 +46,8 @@ export const getOptimizeUrl = () => {
   return urlParams.get('optimize-url');
 };
 
+export const disableDebugReport = window.rapidload_optimizer && window.rapidload_optimizer.uucss_disable_error_tracking == '1';
+
 export function isUrl(input: string): boolean {
   try {
     new URL(input);

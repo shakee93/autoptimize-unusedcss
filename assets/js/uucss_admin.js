@@ -320,7 +320,7 @@
                     rule_based_status +
                 '</select>');
 
-            var input = '<div class="uucss-url-search-wrap"><input type="search" placeholder="Search" value="'+ url_filter +'"><input class="uucss_search_exact" type="checkbox" id="uucss_search_exact" value="1"></div>';
+            var input = '<div class="uucss-url-search-wrap url-history"><input type="search" placeholder="Search" value="'+ url_filter +'"><input class="uucss_search_exact" type="checkbox" id="uucss_search_exact" value="1"></div>';
             $(input).prependTo($('#uucss-history_info'));
 
             $(select).prependTo($('#uucss-history_info'));
@@ -337,8 +337,8 @@
                 appendTo: 'parent',
             });
 
-            var $url_input = $('#uucss-history_info input[type="search"]')
-            var $exact_search = $('#uucss-history_info input.uucss_search_exact')
+            var $url_input = $('#uucss-history_info .uucss-url-search-wrap.url-history input[type="search"]')
+            var $exact_search = $('#uucss-history_info .uucss-url-search-wrap.url-history input.uucss_search_exact')
 
             $url_input.on('input',function () {
                 url_filter = $(this).val();
@@ -425,7 +425,7 @@
                 '<option value="failed" ' + (status_filter_rule === 'failed'? 'selected' : '') +'>Failed</option>' +
                 '</select>');
 
-            var input = '<div class="uucss-url-search-wrap"><input type="search" placeholder="Search" value="'+ url_filter +'"><input class="uucss_search_exact" type="checkbox" id="uucss_search_exact_rule" value="1"></div>';
+            var input = '<div class="uucss-url-search-wrap rule-history"><input type="search" placeholder="Search" value="'+ url_filter +'"><input class="uucss_search_exact" type="checkbox" id="uucss_search_exact_rule" value="1"></div>';
             $(input).prependTo($('#uucss-rule-history_info'));
 
             $(select).prependTo($('#uucss-rule-history_info'));
@@ -442,8 +442,8 @@
                 appendTo: 'parent',
             });*/
 
-            var $input = $('#uucss-rule-history_info input[type="search"]')
-            var $exact_search = $('#uucss-rule-history_info input.uucss_search_exact')
+            var $input = $('#uucss-rule-history_info .uucss-url-search-wrap.rule-history input[type="search"]')
+            var $exact_search = $('#uucss-rule-history_info .uucss-url-search-wrap.rule-history input.uucss_search_exact')
 
             $input.on('input',function () {
                 url_filter_rule = $(this).val();
@@ -1332,9 +1332,11 @@
                         }
 
                         if(!window.uucss || !window.uucss.uucss_enable_debug){
-                            rowData.meta.warnings = rowData.meta.warnings.filter(function(w){
-                                return !w.message.toString().includes('optimized version for the file missing')
-                            })
+                            if(rowData.meta?.warnings?.length){
+                                rowData.meta.warnings = rowData.meta.warnings.filter(function(w){
+                                    return !w.message.toString().includes('optimized version for the file missing')
+                                })
+                            }
                         }
 
                         /*if(rowData.meta.warnings && rowData.meta.warnings.length){

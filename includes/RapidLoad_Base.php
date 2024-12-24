@@ -404,7 +404,7 @@ class RapidLoad_Base
                 'on_board_complete' => apply_filters('uucss/on-board/complete', RapidLoad_Onboard::on_board_completed()),
                 'home_url' => home_url(),
                 'api_url' => RapidLoad_Api::get_key(),
-                'nonce' => wp_create_nonce( 'uucss_nonce' ),
+                'nonce' => self::create_nonce( 'uucss_nonce' ),
                 'active_modules' => (array)self::get()->modules()->active_modules(),
                 'notifications' => apply_filters('uucss/notifications', []),
                 'activation_url' => self::activation_url('authorize' ),
@@ -412,7 +412,8 @@ class RapidLoad_Base
                 'app_url' => defined('UUCSS_APP_URL') ? trailingslashit(UUCSS_APP_URL) : 'https://app.rapidload.io/',
                 //'total_jobs' => RapidLoad_DB::get_total_job_count(),
                 'db_tobe_updated' => RapidLoad_DB::$current_version < 1.6,
-                "test_mode" => isset(self::$options['rapidload_test_mode']) && self::$options['rapidload_test_mode'] == "1"
+                "test_mode" => isset(self::$options['rapidload_test_mode']) && self::$options['rapidload_test_mode'] == "1",
+                "uucss_disable_error_tracking" => isset(self::$options['uucss_disable_error_tracking']) && self::$options['uucss_disable_error_tracking'] == "1"
             );
             wp_localize_script( 'uucss_global_admin_script', 'uucss_global', $data );
             wp_enqueue_script( 'uucss_global_admin_script' );
@@ -627,10 +628,10 @@ class RapidLoad_Base
             'uucss_keyframes' => "1",
             'uucss_variables' => "1",
             'uucss_enable_uucss' => "1",
-            'uucss_enable_cpcss' => "1",
+            'uucss_enable_cpcss' => "0",
             'uucss_enable_cpcss_mobile' => "1",
             'uucss_minify' => "1",
-            'uucss_support_next_gen_formats' => "1",
+            'uucss_support_next_gen_formats' => "0",
             'uucss_set_width_and_height' => "1",
             'uucss_self_host_google_fonts' => "1",
             'uucss_image_optimize_level' => "lossless",
@@ -639,6 +640,14 @@ class RapidLoad_Base
             'rapidload_test_mode' => "0",
             'rapidload_cpcss_file_character_length' => 0,
             'uucss_adaptive_image_delivery' => "1",
+            'uucss_load_js_method' => "1",
+            'uucss_lazy_load_images' => "1",
+            'minify_js' => "1",
+            'uucss_enable_cache' => "1",
+            'uucss_enable_cdn' => "1",
+            'update_htaccess_file' => "0",
+            'uucss_lazy_load_iframes' => "1"
+
         ];
     }
 

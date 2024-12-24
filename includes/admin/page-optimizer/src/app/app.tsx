@@ -15,6 +15,7 @@ import Header from "app/page-optimizer/components/Header";
 import { cn, hasQueryParam } from "lib/utils";
 import { setCommonState } from "../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
+import {toBoolean, isDev, disableDebugReport} from "lib/utils";
 import { toBoolean } from "lib/utils";
 import Bugsnag from "@bugsnag/js";
 import Dashboard from "app/dashboard";
@@ -88,16 +89,16 @@ const App = ({ popup, _showOptimizer = false }: {
             setMounted(true)
         }, 50);
 
-        Bugsnag.leaveBreadcrumb('Titan Loaded')
+        !isDev && !disableDebugReport && Bugsnag.leaveBreadcrumb('Titan Loaded')
 
     }, []);
 
     useEffect(() => {
 
         if (showOptimizer) {
-            Bugsnag.leaveBreadcrumb('Titan Opened');
+            !isDev && !disableDebugReport && Bugsnag.leaveBreadcrumb('Titan Opened');
         } else {
-            Bugsnag.leaveBreadcrumb('Titan Closed');
+            !isDev && !disableDebugReport && Bugsnag.leaveBreadcrumb('Titan Closed');
         }
 
     }, [showOptimizer])

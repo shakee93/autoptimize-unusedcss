@@ -803,6 +803,12 @@ class RapidLoad_Admin
 
         }
 
+        if(isset($_REQUEST['uucss_disable_error_tracking'])){
+
+            $options['uucss_disable_error_tracking'] = ($_REQUEST['uucss_disable_error_tracking'] == 'true' ? "1" : null);
+
+        }
+
         // update image delivery settings
 
         if(isset($_REQUEST['uucss_enable_image_delivery'])){
