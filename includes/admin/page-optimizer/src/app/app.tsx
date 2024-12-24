@@ -15,8 +15,7 @@ import Header from "app/page-optimizer/components/Header";
 import { cn, hasQueryParam } from "lib/utils";
 import { setCommonState } from "../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
-import {toBoolean, isDev, disableDebugReport} from "lib/utils";
-import { toBoolean } from "lib/utils";
+import {toBoolean, isDev, disableDebugReport, isAdminPage, getOptimizeUrl} from "lib/utils";
 import Bugsnag from "@bugsnag/js";
 import Dashboard from "app/dashboard";
 import Onboard from "app/onboard";
@@ -24,7 +23,6 @@ import TestModeSwitcher from "app/page-optimizer/components/TestModeSwitcher";
 
 const AppTour = React.lazy(() => import('components/tour'))
 const InitTour = React.lazy(() => import('components/tour/InitTour'))
-import { isDev, isAdminPage, getOptimizeUrl } from "lib/utils";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from "components/ui/dialog";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { ContentSelector } from "components/ui/content-selector";
