@@ -38,7 +38,7 @@ const StepFour = () => {
     useEffect(() => {
         if (homePerformance.last_entry < homePerformance.first_entry || homePerformance.last_entry < 1) {
             setAiMessage(true)
-            console.log(aiPredictionResult)
+           // console.log(aiPredictionResult)
         } else {
             setPerformance(homePerformance)
             setAiMessage(false)

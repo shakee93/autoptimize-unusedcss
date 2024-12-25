@@ -125,7 +125,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
         setActiveLevel(mode)
     };
     useEffect(() => {
-       console.log(activeGear)
+      // console.log(activeGear)
 
     },[activeGear]);
 
