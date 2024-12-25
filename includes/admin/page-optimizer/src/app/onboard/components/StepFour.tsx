@@ -10,7 +10,7 @@ import PerformanceProgressBar from "components/performance-progress-bar";
 import usePerformanceColors from "hooks/usePerformanceColors";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import { setCommonRootState, setCommonState } from "../../../store/common/commonActions";
-import { AIButtonIcon } from './icons/icon-svg';
+import { AIButtonIcon, PerformanceArrowIcon } from './icons/icon-svg';
 import ErrorFetch from 'components/ErrorFetch';
 import ApiService from '../../../services/api';
 
@@ -37,6 +37,7 @@ interface MetricWithAudits extends Metric {
     metric: string;
     audits: Audit[];
 }
+import { getHomePagePerformance } from '../../../store/app/appActions';
 
 const StepFour = () => {
     const { options } = useAppContext()
@@ -62,7 +63,7 @@ const StepFour = () => {
     useEffect(() => {
         if (homePerformance.last_entry < homePerformance.first_entry || homePerformance.last_entry < 1) {
             setAiMessage(true)
-            console.log(aiPredictionResult)
+           // console.log(aiPredictionResult)
         } else {
             setPerformance(homePerformance)
             setAiMessage(false)
@@ -154,7 +155,16 @@ const StepFour = () => {
 
 
         return metricsWithAudits;
+        dispatch(getHomePagePerformance(options))
     }
+
+    const calculateImprovement = () => {
+        if (performance.first_entry === 0 || performance.last_entry === 0) {
+            return 50; // Default value when entries are 0
+        }
+        const improvement = ((performance.last_entry - performance.first_entry) / performance.first_entry) * 100;
+        return Math.round(improvement);
+    };
 
     return (
         <motion.div
@@ -175,7 +185,7 @@ const StepFour = () => {
                             We have analyzed your entire site and this is the current results
                         </span>
                     </div>
-                    <div className="flex justify-center p-4 max-w-xl mx-auto w-full relative items-center gap-4">
+                    <div className="flex justify-center p-4 mx-auto w-full relative items-center gap-4">
                         {aiMessage ? (
                             <div className='flex flex-col items-center gap-2 px-10 py-4 rounded-2xl min-w-[550px] '>
 
@@ -239,7 +249,7 @@ const StepFour = () => {
                         ) : (
                             <>
                                 {/* Before Results */}
-                                <div className="flex flex-col items-center gap-2 px-10 py-4 rounded-2xl w-[230px] bg-brand-100/30">
+                                <div className="flex flex-col items-center gap-4">
                                     <div className="text-lg font-semibold">Before Score</div>
                                     <div className="">
                                         <PerformanceProgressBar
@@ -248,6 +258,7 @@ const StepFour = () => {
                                             stroke={6}
                                             loading={performance.first_entry < 1}
                                             performance={performance.first_entry > 1 ? performance.first_entry : 80}
+                                           // performance={50}
                                         />
                                     </div>
                                     <div className="text-sm font-semibold flex items-center gap-1">
@@ -260,11 +271,20 @@ const StepFour = () => {
                                     </div>
                                 </div>
                                 {/* Divider with BoltIcon */}
-                                <ArrowLongRightIcon className="w-6 h-6" />
-
+                                {/* <ArrowLongRightIcon className="w-6 h-6" /> */}
+                                <div className='flex items-center gap-2 relative'>
+                                    <PerformanceArrowIcon className='text-brand-900' fill={beforeColor[1]}/>
+                                    <div className='text-brand-900 font-bold text-2xl text-center'>
+                                        <span className='absolute -top-8 left-0 right-0 text-brand-900 font-normal text-xl'>
+                                            Boosted with 
+                                        </span>
+                                        {calculateImprovement()}%
+                                    </div>
+                                    <PerformanceArrowIcon className='text-brand-900' fill={afterColor[1]}/>
+                                </div>
 
                                 <div
-                                    className="flex flex-col items-center gap-2 px-10 py-4 rounded-2xl w-[230px] bg-brand-100/30">
+                                    className="flex flex-col items-center gap-4">
                                     <div className="text-lg font-semibold">Current Score</div>
                                     <div className="">
                                         <PerformanceProgressBar
@@ -274,6 +294,7 @@ const StepFour = () => {
                                             stroke={6}
                                             loading={performance.last_entry < 1}
                                             performance={performance.last_entry > 1 ? performance.last_entry : 80}
+                                            //performance={90}
                                         />
                                     </div>
                                     <div className="text-sm font-semibold flex items-center gap-1">

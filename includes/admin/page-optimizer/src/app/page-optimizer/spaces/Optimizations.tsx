@@ -42,6 +42,39 @@ const Optimizations = ({ }) => {
     //         });
     // }, [window]);
 
+    // useEffect(() => {
+    //     const handleMessage = (event: MessageEvent) => {
+    //         if (event.data.type === "RAPIDLOAD_CHECK_RESULTS") {
+    //             console.log("Received data from iframe:", event.data);
+                
+    //             // Compare received data with settings
+    //             const receivedData = event.data.data;
+    //             settings.forEach((setting: AuditSetting) => {
+                    
+    //                 const mainInput = setting.inputs[0];
+    //                 if (!mainInput) return;
+
+    //                 Object.entries(receivedData).forEach(([category, data]: [string, any]) => {
+    //                     if (data.key === mainInput.key) {
+    //                         console.log(`Match found for ${category}:`, {
+    //                             optimizerSettings: {
+    //                                 settingName: setting.name,
+    //                                 settingKey: mainInput.key,
+    //                                 settingValue: mainInput.value,
+    //                                 status: setting.status,
+    //                             },
+    //                             receivedData: {
+    //                                 key: data.key,
+    //                                 status: data.status,
+    //                                 nonOptimizedItems: data.non_optimized_css || data.non_minified_css || data.non_minified_js || data.non_deferred_js || data.non_delayed_js
+    //                             }
+    //                         });
+    //                     }
+    //                 });
+    //             });
+    //         }
+    //     };
+
     useEffect(() => {
         const handleMessage = (event: MessageEvent) => {
             if (event.data.type === "RAPIDLOAD_CHECK_RESULTS") {
@@ -49,23 +82,31 @@ const Optimizations = ({ }) => {
 
                 // Compare received data with settings
                 const receivedData = event.data.data;
-                settings.forEach((setting: AuditSetting) => {
+                const matches: any[] = [];
 
+                 settings.forEach((setting: AuditSetting) => {
                     const mainInput = setting.inputs[0];
                     if (!mainInput) return;
-
-                    Object.entries(receivedData).forEach(([category, data]: [string, any]) => {
+                     Object.entries(receivedData).forEach(([category, data]: [string, any]) => {
                         if (data.key === mainInput.key) {
-                            console.log(`Match found for ${category}:`, {
-                                settingName: setting.name,
-                                settingKey: mainInput.key,
-                                settingValue: mainInput.value,
-                                receivedStatus: data.status,
-                                nonOptimizedItems: data.non_optimized_css || data.non_minified_css || data.non_minified_js || data.non_deferred_js || data.non_delayed_js
+                            matches.push({
+                                key: category,
+                                optimizerSettings: {
+                                    settingName: setting.name,
+                                    settingKey: mainInput.key,
+                                    settingValue: mainInput.value,
+                                    status: setting.status,
+                                },
+                                receivedData: {
+                                    key: data.key,
+                                    status: data.status,
+                                    nonOptimizedItems: data.non_optimized_css || data.non_minified_css || data.non_minified_js || data.non_deferred_js || data.non_delayed_js
+                                }
                             });
                         }
                     });
                 });
+                 console.log('All matches:', matches);
             }
         };
 
