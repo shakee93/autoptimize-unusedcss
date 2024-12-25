@@ -231,7 +231,7 @@ const PerformanceGears: React.FC = () => {
             ? settings.filter(data => data.inputs[0]?.value).map(data => data.name)
             : features;
 
-        const initialDisplayCount = 8;
+        const initialDisplayCount = 7;
         const shouldShowSeeMore = displayFeatures.length > initialDisplayCount;
 
         const handleSeeMoreClick = () => {
@@ -255,7 +255,9 @@ const PerformanceGears: React.FC = () => {
                             onClick={handleSeeMoreClick}
                             className="text-brand-950 text-sm mx-auto block underline"
                         >
-                            {isExpanded ? "See Less" : "See More"}
+                            <ChevronDown 
+                                className={cn("w-4 h-4 transition-transform",isExpanded ? "rotate-180" : "")}
+                            />
                         </button>
                     </div>
                     // <button onClick={handleSeeMoreClick} className={cn('text-sm z-10 w-full flex justify-center items-center underline', isExpanded ? 'h-8' : 'absolute bg-gradient-to-b from-transparent to-brand-0 transform -translate-y-[100%] h-14 ')}>{isExpanded ? "See Less" : "See More"}</button>

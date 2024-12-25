@@ -54,7 +54,7 @@ const OptimizerInProgress = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        console.log(settings)
+       // console.log(settings)
     }, [cssStatus]);
 
    

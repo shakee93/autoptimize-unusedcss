@@ -125,7 +125,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
         setActiveLevel(mode)
     };
     useEffect(() => {
-       console.log(activeGear)
+      // console.log(activeGear)
 
     },[activeGear]);
 
@@ -157,7 +157,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
             >
                 <div>
                     {getIcon(level)}
-                    <div className={cn("absolute w-7 h-7 justify-center", level === "turboMax" ? "top-2.5 right-1.5 gap-1 text-[10px] items-center font-semibold rounded-3xl p-1 flex bg-brand-0 border border-brand-200 min-w-[150px]	" : "top-2.5 right-2.5 ")}>
+                    <div className={cn("absolute w-7 h-7 justify-center", level === "turboMax" ? "top-1 right-1.5 gap-1 text-[10px] items-center font-semibold rounded-3xl p-1 flex bg-brand-0 border border-brand-200 min-w-[150px]	" : "top-2.5 right-2.5 ")}>
                             {level === 'turboMax' && (<><AIButtonIcon />  AI Recommended </>)}
                            {isActive && <CheckCircleIcon className={`w-6 h-6 text-purple-800 `} />}
                     </div>
@@ -213,7 +213,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
 
     return (
         <div
-            className="w-full flex flex-col gap-4">
+            className="w-full flex flex-col gap-4 transition-all">
             <div className="bg-brand-0 flex flex-col gap-8 p-16 items-center rounded-3xl">
                 <div className="px-2">
                     <img
@@ -244,7 +244,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
                             </button>
                             <ComparisonDialog open={open} setOpen={setOpen}/>
                             {/*<button onClick={onNext}>Next</button>*/}
-                            {isDev && <button onClick={onNext}>Next</button>}
+                            {isDev && <button className='absolute top-4 right-4' onClick={onNext}>Skip</button>}
                     </>
                 ) : (
                     <div className="flex flex-col gap-2 text-center">

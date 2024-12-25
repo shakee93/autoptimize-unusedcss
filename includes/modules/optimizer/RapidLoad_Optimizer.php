@@ -48,7 +48,7 @@ class RapidLoad_Optimizer
     {
         $actions = [
             'fetch_page_speed' => 'handle_ajax_fetch_page_speed',
-            'latest_page_speed' => 'latest_page_speed',
+            'latest_page_speed' => 'latest_page_speed', 
             'preload_page' => 'preload_page',
             'rapidload_css_job_status' => 'rapidload_css_job_status',
             'fetch_titan_settings' => 'fetch_titan_settings',
@@ -58,6 +58,7 @@ class RapidLoad_Optimizer
             'get_cache_file_size' => 'get_cache_file_size',
             'update_titan_performance_gear' => 'update_titan_performance_gear',
             'rapidload_titan_home_page_performance' => 'rapidload_titan_home_page_performance',
+            'rapidload_get_active_plugins' => 'rapidload_get_active_plugins',
         ];
 
         foreach ($actions as $action => $method) {
@@ -67,6 +68,10 @@ class RapidLoad_Optimizer
                 add_action("wp_ajax_nopriv_$action", [$this, $method]);
             }
         }
+    }
+
+    public function rapidload_get_active_plugins(){
+        wp_send_json_success(RapidLoad_Utils::get_active_plugins());
     }
 
     public function rapidload_titan_home_page_performance(){
@@ -339,13 +344,15 @@ class RapidLoad_Optimizer
                     $cache_file = RapidLoad_Cache_Store::get_cache_file($url);
                     $cache_file_exist = @file_exists($cache_file);
 
+                    $status = RapidLoad_Cache_Store::get_page_cache_errors();
+
                     $response[$type] = [
-                        'status' => $cache_file_exist ? 'Hit' : 'processing',
+                        'status' => $cache_file_exist ? 'Hit' : ($status == 'Hit' ? $status : 'failed'),
                         'file' => $cache_file,
                         'size' => $cache_file_exist ? $this->formatSize(@filesize($cache_file)) : null,
                         'error' => [
                             'code' => $cache_file_exist ? null : 422,
-                            'message' => $cache_file_exist ? null : 'Cache file not found',
+                            'message' => $cache_file_exist ? 'Hit' : $status,
                         ],
                     ];
                     break;
@@ -930,7 +937,7 @@ class RapidLoad_Optimizer
             'cpcss_purge_url' => array(
                 'control_type' => 'button',
                 'control_label' => 'Regenerate Critical CSS',
-                'action' => 'action=cpcss_purge_url&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                'action' => 'action=cpcss_purge_url&url=' . $url . '&nonce=' . self::create_nonce( 'uucss_nonce' ),
                 'description' => ''
             ),
             // UUCSS settings starts here
@@ -1004,7 +1011,7 @@ class RapidLoad_Optimizer
             'rapidload_purge_all' => array(
                 'control_type' => 'button',
                 'control_label' => 'Regenerate Unused CSS',
-                'action' => 'action=rapidload_purge_all&job_type=url&clear=false&immediate=true&url=' . $url . '&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                'action' => 'action=rapidload_purge_all&job_type=url&clear=false&immediate=true&url=' . $url . '&nonce=' . self::create_nonce( 'uucss_nonce' ),
                 'description' => ''
             ),
 
@@ -1241,7 +1248,7 @@ class RapidLoad_Optimizer
                         'control_label' => 'Validate CDN URL',
                         'control_icon' => 'check-circle',
                         'control_description' => 'Check if the CDN url is working',
-                        'action' => 'action=validate_cdn&dashboard_cdn_validator&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                        'action' => 'action=validate_cdn&dashboard_cdn_validator&nonce=' . self::create_nonce( 'uucss_nonce' ),
                         // this state will be updated in the frontend after response using data.${provided_key}
                         'action_response_mutates' => ['uucss_cdn_url'],
                     ),
@@ -1251,7 +1258,7 @@ class RapidLoad_Optimizer
                         'control_label' => 'Clear CDN Cache',
                         'control_icon' => 'rotate-cw',
                         'control_description' => 'Clear resources caches across the CDN network',
-                        'action' => 'action=purge_rapidload_cdn&nonce=' . wp_create_nonce( 'uucss_nonce' ),
+                        'action' => 'action=purge_rapidload_cdn&nonce=' . self::create_nonce( 'uucss_nonce' ),
                     ),
                 )
             ),

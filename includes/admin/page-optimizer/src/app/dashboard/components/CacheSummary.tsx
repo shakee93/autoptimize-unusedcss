@@ -41,8 +41,8 @@ const CacheSummary = () => {
     const [itemLoading, setItemLoading] = useState<string | null>(null);
 
     useEffect(() => {
-        console.log(actions);
-        console.log(cacheUsage);
+       // console.log(actions);
+       // console.log(cacheUsage);
     }, [actions]);
 
     const chartOptions = {

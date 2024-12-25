@@ -41,13 +41,14 @@ export default function Onboard() {
             <div
                 id="onboard-content"
                 className={cn(
-                    "overflow-y-auto w-full pb-20 min-h-[780px] flex items-center",
+                    "overflow-y-auto w-full min-h-screen flex items-center justify-center",
                     "dark:bg-brand-900"
                 )}
             >
                 <section
                     className={cn(
-                        "relative container flex flex-col p-6 gap-4"
+                        "relative container flex flex-col p-6 gap-4",
+                        "max-w-7xl mx-auto",
                     )}
                 >
                     <AnimatePresence mode="wait">

@@ -64,6 +64,18 @@ interface GeneralSettings {
     uucss_disable_add_to_re_queue: boolean;
 }
 
+interface Message {
+    role: string;
+    content: string;
+}   
+
+interface Conversation {
+    id: string;
+    title: string;
+    active: boolean;
+    messages: Message[];
+}
+
 type SettingsCategory = 'cache' | 'cdn' | 'image' | 'javascript' | 'js' | 'font' | 'css';
 
 declare const __OPTIMIZER_VERSION__ : string

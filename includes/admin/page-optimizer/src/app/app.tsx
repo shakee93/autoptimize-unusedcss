@@ -15,7 +15,7 @@ import Header from "app/page-optimizer/components/Header";
 import { cn, hasQueryParam } from "lib/utils";
 import { setCommonState } from "../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
-import { toBoolean } from "lib/utils";
+import {toBoolean, isDev, disableDebugReport, isAdminPage, getOptimizeUrl} from "lib/utils";
 import Bugsnag from "@bugsnag/js";
 import Dashboard from "app/dashboard";
 import Onboard from "app/onboard";
@@ -23,7 +23,6 @@ import TestModeSwitcher from "app/page-optimizer/components/TestModeSwitcher";
 
 const AppTour = React.lazy(() => import('components/tour'))
 const InitTour = React.lazy(() => import('components/tour/InitTour'))
-import { isDev, isAdminPage, getOptimizeUrl } from "lib/utils";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from "components/ui/dialog";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { ContentSelector } from "components/ui/content-selector";
@@ -88,16 +87,16 @@ const App = ({ popup, _showOptimizer = false }: {
             setMounted(true)
         }, 50);
 
-        Bugsnag.leaveBreadcrumb('Titan Loaded')
+        !isDev && !disableDebugReport && Bugsnag.leaveBreadcrumb('Titan Loaded')
 
     }, []);
 
     useEffect(() => {
 
         if (showOptimizer) {
-            Bugsnag.leaveBreadcrumb('Titan Opened');
+            !isDev && !disableDebugReport && Bugsnag.leaveBreadcrumb('Titan Opened');
         } else {
-            Bugsnag.leaveBreadcrumb('Titan Closed');
+            !isDev && !disableDebugReport && Bugsnag.leaveBreadcrumb('Titan Closed');
         }
 
     }, [showOptimizer])
@@ -206,19 +205,31 @@ const App = ({ popup, _showOptimizer = false }: {
     useEffect(() => {
         const handleHashChange = () => {
             const hash = window.location.hash.replace("#", "");
-            const validRoute = routes.some(route => route.id === hash);
+            // Extract the base route without query parameters
+            const baseRoute = hash.split('?')[0];
+            const validRoute = routes.some(route => route.id === baseRoute);
             if (validRoute) {
-                setActiveRoute(hash);
+                setActiveRoute(hash); // Store the full hash including query params
             } else {
                 setActiveRoute("/");
             }
         };
 
         window.addEventListener("hashchange", handleHashChange);
+        // Initial check
+        handleHashChange();
+        
         return () => {
             window.removeEventListener("hashchange", handleHashChange);
         };
     }, [routes]);
+
+    // Modify the route finding logic
+    const findRouteComponent = (route: string) => {
+        // Extract the base route without query parameters
+        const baseRoute = route.split('?')[0];
+        return routes.find(r => r.id === baseRoute)?.component || routes[0].component;
+    };
 
     // useEffect(() => {
     //     if (isAdminPage || isDev) {
@@ -396,7 +407,7 @@ const App = ({ popup, _showOptimizer = false }: {
                         )}
                         {showStepTwo ? (renderStepTwo()):(
                             <SlideUp uuid={activeRoute || routes[0].id}>
-                                {routes.find(route => route.id === activeRoute)?.component || routes[0].component}
+                                {findRouteComponent(activeRoute)}
                             </SlideUp>
                         )}
 

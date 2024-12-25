@@ -33,7 +33,33 @@ const CDNSummary = () => {
 
     const {dispatch} = useCommonDispatch();
     const {options} = useAppContext();
-    const {cdnUsage, imageUsage, cacheUsage} = useSelector(optimizerData);
+    const {cdnUsage, imageUsage, cacheUsage, license} = useSelector(optimizerData);
+    const [licenseInfo, setLicenseInfo] = useState<License | null>(null);
+    const [nextBillingDate, setNextBillingDate] = useState<string>('');
+
+    useEffect(() => {
+        const storedLicense = localStorage.getItem('rapidLoadLicense');
+        if (storedLicense) {
+            try {
+                setLicenseInfo(JSON.parse(storedLicense));
+            } catch (error) {
+                console.error("Error parsing license data", error);
+            }
+        } else if(license) {
+            setLicenseInfo(license);
+        }
+
+        
+        const currentDate = new Date();
+        const nextMonth = new Date(currentDate);
+        nextMonth.setMonth(currentDate.getMonth() + 1);
+
+        if (licenseInfo?.next_billing) {
+            const nextBilling = new Date(licenseInfo.next_billing * 1000);
+            setNextBillingDate(nextMonth.toLocaleDateString('en-US', { month: 'short' }) + ' ' + nextBilling.getDate());
+        }
+
+    }, [license, licenseInfo?.next_billing]);
 
     const SectionHeader = ({title, tooltip}: SectionHeaderProps) => (
         <div className="flex gap-2 items-center">
@@ -93,7 +119,7 @@ const CDNSummary = () => {
             <div className="p-6">
                 <SectionHeader title="Usage Summary" tooltip="Detailed overview of the total files cached and served by RapidLoad." />
 
-                <UsageBar label="CDN" usage={cdnUsage.used_gb} allowedUsage={cdnUsage.allowed_gb} note="Limits will be updated on July 5" used_gb_formatted={cdnUsage.used_gb_formatted}/>
+                <UsageBar label="CDN" usage={cdnUsage.used_gb} allowedUsage={cdnUsage.allowed_gb} note={`Limits will be updated on ${nextBillingDate}`} used_gb_formatted={cdnUsage.used_gb_formatted}/>
                 {cdnUsage.additional_usage_gb > 0 &&
                     <UsageBar label="Additional Usage" usage={cdnUsage.additional_usage_gb} />
                 }
@@ -101,7 +127,7 @@ const CDNSummary = () => {
 
             <div
                 className="p-6 pt-4 relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white">
-                <UsageBar label="Images" usage={imageUsage.used_gb} allowedUsage={imageUsage.allowed_gb} note="Limits will be updated on July 5" used_gb_formatted={imageUsage.used_gb_formatted}/>
+                <UsageBar label="Images" usage={imageUsage.used_gb} allowedUsage={imageUsage.allowed_gb} note={`Limits will be updated on ${nextBillingDate}`} used_gb_formatted={imageUsage.used_gb_formatted}/>
                 {imageUsage.additional_usage_gb > 0 &&
                     <UsageBar label="Additional Usage" usage={imageUsage.additional_usage_gb}/>
                 }

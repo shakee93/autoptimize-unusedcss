@@ -677,7 +677,7 @@ trait RapidLoad_Utils {
             return true;
         }
 
-        if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], $nonce ) ) {
+        if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], $nonce ) || !current_user_can('manage_options')) {
             wp_send_json_error( 'RapidLoad - Malformed Request Detected, Contact Support.' );
         }
     }
@@ -796,6 +796,40 @@ trait RapidLoad_Utils {
             }
             self::debug_log("User Agent: Not available or not an HTML request");
         }
+    }
+
+    public static function create_nonce($nonce_name)
+    {
+        if(current_user_can('manage_options')){
+            return wp_create_nonce( $nonce_name );
+        }
+        return '';
+    }
+
+     public static function get_active_plugins() {
+        $plugins = (array) get_option('active_plugins', []);
+        $plugin_details = [];
+
+        foreach ($plugins as $plugin) {
+            $plugin_data = get_plugin_data(WP_PLUGIN_DIR . '/' . $plugin);
+            $plugin_details[] = [
+                'name' => $plugin_data['Name'],
+                'source' => $plugin_data['PluginURI'] ?? 'Unknown'
+            ];
+        }
+
+        if (is_multisite()) {
+            $sitewide_plugins = array_keys((array) get_site_option('active_sitewide_plugins', []));
+            foreach ($sitewide_plugins as $plugin) {
+                $plugin_data = get_plugin_data(WP_PLUGIN_DIR . '/' . $plugin);
+                $plugin_details[] = [
+                    'name' => $plugin_data['Name'],
+                    'source' => $plugin_data['PluginURI'] ?? 'Unknown'
+                ];
+            }
+        }
+
+        return array_column($plugin_details, 'name');
     }
     
 }
