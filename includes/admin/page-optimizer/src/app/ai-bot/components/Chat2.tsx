@@ -1,5 +1,4 @@
 "use client";
-
 import { useChat } from "ai/react";
 import { useEffect, useRef } from "react";
 import Markdown from "react-markdown";
