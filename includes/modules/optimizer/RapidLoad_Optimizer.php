@@ -48,7 +48,7 @@ class RapidLoad_Optimizer
     {
         $actions = [
             'fetch_page_speed' => 'handle_ajax_fetch_page_speed',
-            'latest_page_speed' => 'latest_page_speed',
+            'latest_page_speed' => 'latest_page_speed', 
             'preload_page' => 'preload_page',
             'rapidload_css_job_status' => 'rapidload_css_job_status',
             'fetch_titan_settings' => 'fetch_titan_settings',
@@ -58,6 +58,7 @@ class RapidLoad_Optimizer
             'get_cache_file_size' => 'get_cache_file_size',
             'update_titan_performance_gear' => 'update_titan_performance_gear',
             'rapidload_titan_home_page_performance' => 'rapidload_titan_home_page_performance',
+            'rapidload_get_active_plugins' => 'rapidload_get_active_plugins',
         ];
 
         foreach ($actions as $action => $method) {
@@ -67,6 +68,10 @@ class RapidLoad_Optimizer
                 add_action("wp_ajax_nopriv_$action", [$this, $method]);
             }
         }
+    }
+
+    public function rapidload_get_active_plugins(){
+        wp_send_json_success(RapidLoad_Utils::get_active_plugins());
     }
 
     public function rapidload_titan_home_page_performance(){
@@ -1653,6 +1658,7 @@ class RapidLoad_Optimizer
 
         if(isset(self::$options['uucss_enable_cache'])){
             self::$global_options['uucss_enable_cache'] = self::$options['uucss_enable_cache'];
+            RapidLoad_Base::update_option('rapidload_module_cache', self::$options['uucss_enable_cache']);
             RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
         }
 

@@ -1,0 +1,4117 @@
+{
+  "strategy": "desktop",
+  "performance": 98,
+  "meta": {
+    "controls": {
+      "dropdown_options": [
+        {
+          "type": "css",
+          "options": [
+            "none",
+            "remove"
+          ]
+        },
+        {
+          "type": "font",
+          "options": [
+            "none",
+            "preload"
+          ]
+        },
+        {
+          "type": "image",
+          "options": [
+            "none",
+            "preload"
+          ]
+        },
+        {
+          "type": "js",
+          "options": [
+            "none",
+            "exclude"
+          ]
+        }
+      ]
+    }
+  },
+  "metrics": [
+    {
+      "id": "first-contentful-paint",
+      "title": "First Contentful Paint",
+      "scoreDisplayMode": "numeric",
+      "description": "First Contentful Paint marks the time at which the first text or image is painted. [Learn more about the First Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/first-contentful-paint/).",
+      "displayValue": "0.4 s",
+      "icon": "pass",
+      "score": 100,
+      "refs": {
+        "id": "first-contentful-paint",
+        "weight": 10,
+        "group": "metrics",
+        "acronym": "FCP",
+        "relevantAudits": [
+          "server-response-time",
+          "render-blocking-resources",
+          "redirects",
+          "critical-request-chains",
+          "uses-text-compression",
+          "uses-rel-preconnect",
+          "uses-rel-preload",
+          "font-display",
+          "unminified-javascript",
+          "unminified-css",
+          "unused-css-rules"
+        ]
+      }
+    },
+    {
+      "id": "speed-index",
+      "title": "Speed Index",
+      "scoreDisplayMode": "numeric",
+      "description": "Speed Index shows how quickly the contents of a page are visibly populated. [Learn more about the Speed Index metric](https://developer.chrome.com/docs/lighthouse/performance/speed-index/).",
+      "displayValue": "1.5 s",
+      "icon": "average",
+      "score": 82,
+      "refs": {
+        "id": "speed-index",
+        "weight": 10,
+        "group": "metrics",
+        "acronym": "SI",
+        "relevantAudits": []
+      }
+    },
+    {
+      "id": "total-blocking-time",
+      "title": "Total Blocking Time",
+      "scoreDisplayMode": "numeric",
+      "description": "Sum of all time periods between FCP and Time to Interactive, when task length exceeded 50ms, expressed in milliseconds. [Learn more about the Total Blocking Time metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-total-blocking-time/).",
+      "displayValue": "0 ms",
+      "icon": "pass",
+      "score": 100,
+      "refs": {
+        "id": "total-blocking-time",
+        "weight": 30,
+        "group": "metrics",
+        "acronym": "TBT",
+        "relevantAudits": [
+          "long-tasks",
+          "third-party-summary",
+          "third-party-facades",
+          "bootup-time",
+          "mainthread-work-breakdown",
+          "dom-size",
+          "duplicated-javascript",
+          "legacy-javascript",
+          "viewport"
+        ]
+      }
+    },
+    {
+      "id": "largest-contentful-paint",
+      "title": "Largest Contentful Paint",
+      "scoreDisplayMode": "numeric",
+      "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+      "displayValue": "0.8 s",
+      "icon": "pass",
+      "score": 98,
+      "refs": {
+        "id": "largest-contentful-paint",
+        "weight": 25,
+        "group": "metrics",
+        "acronym": "LCP",
+        "relevantAudits": [
+          "server-response-time",
+          "render-blocking-resources",
+          "redirects",
+          "critical-request-chains",
+          "uses-text-compression",
+          "uses-rel-preconnect",
+          "uses-rel-preload",
+          "font-display",
+          "unminified-javascript",
+          "unminified-css",
+          "unused-css-rules",
+          "largest-contentful-paint-element",
+          "prioritize-lcp-image",
+          "unused-javascript",
+          "efficient-animated-content",
+          "total-byte-weight",
+          "lcp-lazy-loaded"
+        ]
+      }
+    },
+    {
+      "id": "cumulative-layout-shift",
+      "title": "Cumulative Layout Shift",
+      "scoreDisplayMode": "numeric",
+      "description": "Cumulative Layout Shift measures the movement of visible elements within the viewport. [Learn more about the Cumulative Layout Shift metric](https://web.dev/articles/cls).",
+      "displayValue": "0.003",
+      "icon": "pass",
+      "score": 100,
+      "refs": {
+        "id": "cumulative-layout-shift",
+        "weight": 25,
+        "group": "metrics",
+        "acronym": "CLS",
+        "relevantAudits": [
+          "layout-shift-elements",
+          "non-composited-animations",
+          "unsized-images"
+        ]
+      }
+    }
+  ],
+  "audits": [
+    {
+      "id": "render-blocking-resources",
+      "name": "Eliminate render-blocking resources",
+      "scoreDisplayMode": "metricSavings",
+      "description": "Resources are blocking the first paint of your page. Consider delivering critical JS/CSS inline and deferring all non-critical JS/styles. [Learn how to eliminate render-blocking resources](https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources/).",
+      "icon": "pass",
+      "files": {
+        "overallSavingsMs": 0,
+        "items": [],
+        "headings": [],
+        "type": "opportunity"
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": [
+        {
+          "name": "Critical CSS",
+          "description": "Extract and prioritize above-the-fold CSS.",
+          "category": "css",
+          "inputs": [
+            {
+              "control_type": "checkbox",
+              "control_label": "Enable Critical CSS",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_enable_cpcss",
+              "main_input": true
+            },
+            {
+              "control_type": "checkbox",
+              "control_label": "Enable Separate CSS for Mobile",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_enable_cpcss_mobile",
+              "main_input": false
+            },
+            {
+              "control_type": "textarea",
+              "control_label": "Additional Critical CSS",
+              "control_values": null,
+              "value": "",
+              "key": "uucss_additional_css"
+            },
+            {
+              "control_type": "button",
+              "control_label": "Regenerate Critical CSS",
+              "action": "cpcss_purge_url",
+              "key": "cpcss_purge_url",
+              "description": ""
+            },
+            {
+              "control_type": "checkbox",
+              "control_label": "Remove Critical CSS on User Interaction",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "remove_cpcss_on_user_interaction"
+            },
+            {
+              "control_type": "checkbox",
+              "control_label": "Include inline styles",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_ignore_inlined_styles",
+              "main_input": true
+            }
+          ]
+        },
+        {
+          "name": "Self Host Google Fonts",
+          "description": "Self host all your Google fonts and load fonts faster. Turn on CDN to serve these fonts faster through RapidLoad CDN.",
+          "category": "font",
+          "inputs": [
+            {
+              "control_type": "checkbox",
+              "control_label": "Self Host Google Fonts",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_self_host_google_fonts"
+            }
+          ]
+        },
+        {
+          "name": "Defer Javascript",
+          "description": "Render-blocking JS on website can be resolved with defer javaScript.",
+          "category": "javascript",
+          "inputs": [
+            {
+              "control_type": "checkbox",
+              "control_label": "Defer Javascript",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_load_js_method"
+            },
+            {
+              "control_type": "textarea",
+              "control_label": "Exclude Javascript from Deferring",
+              "control_values": null,
+              "value": "",
+              "key": "uucss_excluded_js_files_from_defer"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "uses-responsive-images",
+      "name": "Properly size images",
+      "scoreDisplayMode": "metricSavings",
+      "description": "Serve images that are appropriately-sized to save cellular data and improve load time. [Learn how to size images](https://developer.chrome.com/docs/lighthouse/performance/uses-responsive-images/).",
+      "icon": "pass",
+      "files": {
+        "overallSavingsBytes": 0,
+        "items": [],
+        "type": "opportunity",
+        "overallSavingsMs": 0,
+        "debugData": {
+          "type": "debugdata",
+          "metricSavings": {
+            "FCP": 0,
+            "LCP": 0
+          }
+        },
+        "sortedBy": [
+          "wastedBytes"
+        ],
+        "headings": []
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": [
+        {
+          "name": "Serve next-gen Images (AVIF, WEBP)",
+          "description": "Serve the images in next-gen image formats to all the browsers that support them.",
+          "category": "image",
+          "inputs": [
+            {
+              "control_type": "checkbox",
+              "control_label": "Serve next-gen Images",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_support_next_gen_formats"
+            },
+            {
+              "control_type": "options",
+              "control_label": "Image Optimize Level",
+              "control_values": [
+                "lossy",
+                "glossy",
+                "lossless"
+              ],
+              "value": null,
+              "key": "uucss_image_optimize_level"
+            },
+            {
+              "control_type": "checkbox",
+              "control_label": "Low Quality Image placeholders (LQIP)",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_generate_blurry_place_holder"
+            },
+            {
+              "control_type": "textarea",
+              "control_label": "Exclude Images from modern image urls",
+              "control_values": null,
+              "value": "",
+              "key": "uucss_exclude_images_from_modern_images"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "offscreen-images",
+      "name": "Defer offscreen images",
+      "scoreDisplayMode": "metricSavings",
+      "description": "Consider lazy-loading offscreen and hidden images after all critical resources have finished loading to lower time to interactive. [Learn how to defer offscreen images](https://developer.chrome.com/docs/lighthouse/performance/offscreen-images/).",
+      "icon": "pass",
+      "files": {
+        "headings": [],
+        "overallSavingsMs": 0,
+        "type": "opportunity",
+        "sortedBy": [
+          "wastedBytes"
+        ],
+        "overallSavingsBytes": 0,
+        "debugData": {
+          "metricSavings": {
+            "LCP": 0,
+            "FCP": 0
+          },
+          "type": "debugdata"
+        },
+        "items": []
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": [
+        {
+          "name": "Lazy Load Images",
+          "description": "Delay loading of images until needed.",
+          "category": "image",
+          "inputs": [
+            {
+              "control_type": "checkbox",
+              "control_label": "Lazy Load Images",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_lazy_load_images"
+            },
+            {
+              "control_type": "textarea",
+              "control_label": "Exclude Images/Iframes from Lazy Load",
+              "control_values": null,
+              "value": "",
+              "key": "uucss_exclude_images_from_lazy_load"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unminified-css",
+      "name": "Minify CSS",
+      "scoreDisplayMode": "metricSavings",
+      "description": "Minifying CSS files can reduce network payload sizes. [Learn how to minify CSS](https://developer.chrome.com/docs/lighthouse/performance/unminified-css/).",
+      "icon": "pass",
+      "files": {
+        "items": [],
+        "type": "opportunity",
+        "sortedBy": [
+          "wastedBytes"
+        ],
+        "overallSavingsBytes": 0,
+        "debugData": {
+          "type": "debugdata",
+          "metricSavings": {
+            "FCP": 0,
+            "LCP": 0
+          }
+        },
+        "headings": [],
+        "overallSavingsMs": 0
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": [
+        {
+          "name": "Minify CSS",
+          "description": "Remove unnecessary spaces, lines and comments from CSS files.",
+          "category": "css",
+          "inputs": [
+            {
+              "control_type": "checkbox",
+              "control_label": "Minify CSS",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_minify"
+            },
+            {
+              "control_type": "textarea",
+              "control_label": "Exclude Images from being minify",
+              "control_values": null,
+              "value": "",
+              "key": "uucss_minify_excluded_files"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unminified-javascript",
+      "name": "Minify JavaScript",
+      "scoreDisplayMode": "metricSavings",
+      "description": "Minifying JavaScript files can reduce payload sizes and script parse time. [Learn how to minify JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unminified-javascript/).",
+      "icon": "pass",
+      "files": {
+        "items": [],
+        "type": "opportunity",
+        "overallSavingsBytes": 0,
+        "sortedBy": [
+          "wastedBytes"
+        ],
+        "overallSavingsMs": 0,
+        "headings": [],
+        "debugData": {
+          "metricSavings": {
+            "LCP": 0,
+            "FCP": 0
+          },
+          "type": "debugdata"
+        }
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": [
+        {
+          "name": "Minify Javascript",
+          "description": "Remove unnecessary spaces, lines and comments from JS files.",
+          "category": "javascript",
+          "inputs": [
+            {
+              "control_type": "checkbox",
+              "control_label": "Minify Javascript",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "minify_js"
+            },
+            {
+              "control_type": "textarea",
+              "control_label": "Exclude js files from being minify",
+              "control_values": null,
+              "value": "",
+              "key": "uucss_exclude_files_from_minify_js"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unused-css-rules",
+      "name": "Reduce unused CSS",
+      "scoreDisplayMode": "metricSavings",
+      "description": "Reduce unused rules from stylesheets and defer CSS not used for above-the-fold content to decrease bytes consumed by network activity. [Learn how to reduce unused CSS](https://developer.chrome.com/docs/lighthouse/performance/unused-css-rules/).",
+      "displayValue": "Potential savings of 16 KiB",
+      "icon": "fail",
+      "files": {
+        "debugData": {
+          "type": "debugdata",
+          "metricSavings": {
+            "FCP": 0,
+            "LCP": 40
+          }
+        },
+        "overallSavingsBytes": 16080,
+        "headings": [
+          {
+            "key": "url",
+            "valueType": "url",
+            "label": "URL"
+          },
+          {
+            "valueType": "bytes",
+            "label": "Transfer Size",
+            "key": "totalBytes"
+          },
+          {
+            "valueType": "bytes",
+            "label": "Potential Savings",
+            "key": "wastedBytes"
+          },
+          {
+            "key": "file_type",
+            "valueType": "string",
+            "label": "Type",
+            "subItemsHeading": {
+              "key": "file_type"
+            }
+          }
+        ],
+        "overallSavingsMs": 40,
+        "sortedBy": [
+          "wastedBytes"
+        ],
+        "items": [
+          {
+            "url": {
+              "url": "https://seedkitty.com/wp-content/themes/astra/assets/css/minified/compatibility/woocommerce/woocommerce-grid.min.css?ver=4.8.8",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "wastedBytes": 16080,
+            "wastedPercent": 99.55135572298131,
+            "totalBytes": 16152,
+            "action": {
+              "control_type": "dropdown",
+              "value": "none"
+            }
+          }
+        ],
+        "type": "opportunity"
+      },
+      "type": "opportunity",
+      "score": 0,
+      "settings": [
+        {
+          "name": "Remove Unused CSS",
+          "description": "Remove unused CSS for each page and reduce page size.",
+          "category": "css",
+          "inputs": [
+            {
+              "control_type": "checkbox",
+              "control_label": "Remove Unused CSS",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_enable_uucss"
+            },
+            {
+              "control_type": "button",
+              "control_label": "Regenerate Unused CSS",
+              "action": "rapidload_purge_all",
+              "key": "rapidload_purge_all",
+              "description": ""
+            },
+            {
+              "control_type": "textarea",
+              "control_label": "Exclude CSS Files",
+              "control_values": null,
+              "value": "",
+              "key": "uucss_excluded_files"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unused-javascript",
+      "name": "Reduce unused JavaScript",
+      "scoreDisplayMode": "metricSavings",
+      "description": "Reduce unused JavaScript and defer loading scripts until they are required to decrease bytes consumed by network activity. [Learn how to reduce unused JavaScript](https://developer.chrome.com/docs/lighthouse/performance/unused-javascript/).",
+      "icon": "pass",
+      "files": {
+        "overallSavingsMs": 0,
+        "sortedBy": [
+          "wastedBytes"
+        ],
+        "headings": [],
+        "type": "opportunity",
+        "items": [],
+        "debugData": {
+          "metricSavings": {
+            "FCP": 0,
+            "LCP": 0
+          },
+          "type": "debugdata"
+        },
+        "overallSavingsBytes": 0
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": [
+        {
+          "name": "Delay Javascript",
+          "description": "Loading JS files on user interaction",
+          "category": "javascript",
+          "inputs": [
+            {
+              "control_type": "checkbox",
+              "control_label": "Delay Javascript",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "delay_javascript"
+            },
+            {
+              "control_type": "button",
+              "control_label": "Exclude Files",
+              "value": null,
+              "key": "uucss_exclude_files_from_delay_js",
+              "description": ""
+            },
+            {
+              "control_type": "textarea",
+              "control_label": "Callback Script",
+              "control_values": null,
+              "value": "",
+              "key": "delay_javascript_callback"
+            },
+            {
+              "control_type": "textarea",
+              "control_label": "Exclude Javascript",
+              "control_values": null,
+              "value": "",
+              "key": "uucss_excluded_js_files"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "uses-optimized-images",
+      "name": "Efficiently encode images",
+      "scoreDisplayMode": "metricSavings",
+      "description": "Optimized images load faster and consume less cellular data. [Learn how to efficiently encode images](https://developer.chrome.com/docs/lighthouse/performance/uses-optimized-images/).",
+      "icon": "pass",
+      "files": {
+        "sortedBy": [
+          "wastedBytes"
+        ],
+        "items": [],
+        "type": "opportunity",
+        "overallSavingsBytes": 0,
+        "debugData": {
+          "type": "debugdata",
+          "metricSavings": {
+            "FCP": 0,
+            "LCP": 0
+          }
+        },
+        "headings": [],
+        "overallSavingsMs": 0
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": [
+        {
+          "name": "Serve next-gen Images (AVIF, WEBP)",
+          "description": "Serve the images in next-gen image formats to all the browsers that support them.",
+          "category": "image",
+          "inputs": [
+            {
+              "control_type": "checkbox",
+              "control_label": "Serve next-gen Images",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_support_next_gen_formats"
+            },
+            {
+              "control_type": "options",
+              "control_label": "Image Optimize Level",
+              "control_values": [
+                "lossy",
+                "glossy",
+                "lossless"
+              ],
+              "value": null,
+              "key": "uucss_image_optimize_level"
+            },
+            {
+              "control_type": "checkbox",
+              "control_label": "Low Quality Image placeholders (LQIP)",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_generate_blurry_place_holder"
+            },
+            {
+              "control_type": "textarea",
+              "control_label": "Exclude Images from modern image urls",
+              "control_values": null,
+              "value": "",
+              "key": "uucss_exclude_images_from_modern_images"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "modern-image-formats",
+      "name": "Serve images in next-gen formats",
+      "scoreDisplayMode": "metricSavings",
+      "description": "Image formats like WebP and AVIF often provide better compression than PNG or JPEG, which means faster downloads and less data consumption. [Learn more about modern image formats](https://developer.chrome.com/docs/lighthouse/performance/uses-webp-images/).",
+      "icon": "pass",
+      "files": {
+        "debugData": {
+          "type": "debugdata",
+          "metricSavings": {
+            "FCP": 0,
+            "LCP": 0
+          }
+        },
+        "type": "opportunity",
+        "overallSavingsMs": 0,
+        "items": [],
+        "headings": [],
+        "overallSavingsBytes": 0,
+        "sortedBy": [
+          "wastedBytes"
+        ]
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": [
+        {
+          "name": "Serve next-gen Images (AVIF, WEBP)",
+          "description": "Serve the images in next-gen image formats to all the browsers that support them.",
+          "category": "image",
+          "inputs": [
+            {
+              "control_type": "checkbox",
+              "control_label": "Serve next-gen Images",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_support_next_gen_formats"
+            },
+            {
+              "control_type": "options",
+              "control_label": "Image Optimize Level",
+              "control_values": [
+                "lossy",
+                "glossy",
+                "lossless"
+              ],
+              "value": null,
+              "key": "uucss_image_optimize_level"
+            },
+            {
+              "control_type": "checkbox",
+              "control_label": "Low Quality Image placeholders (LQIP)",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_generate_blurry_place_holder"
+            },
+            {
+              "control_type": "textarea",
+              "control_label": "Exclude Images from modern image urls",
+              "control_values": null,
+              "value": "",
+              "key": "uucss_exclude_images_from_modern_images"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "uses-text-compression",
+      "name": "Enable text compression",
+      "scoreDisplayMode": "metricSavings",
+      "description": "Text-based resources should be served with compression (gzip, deflate or brotli) to minimize total network bytes. [Learn more about text compression](https://developer.chrome.com/docs/lighthouse/performance/uses-text-compression/).",
+      "icon": "pass",
+      "files": {
+        "overallSavingsMs": 0,
+        "type": "opportunity",
+        "items": [],
+        "debugData": {
+          "type": "debugdata",
+          "metricSavings": {
+            "LCP": 0,
+            "FCP": 0
+          }
+        },
+        "headings": [],
+        "sortedBy": [
+          "wastedBytes"
+        ],
+        "overallSavingsBytes": 0
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": []
+    },
+    {
+      "id": "uses-rel-preconnect",
+      "name": "Preconnect to required origins",
+      "scoreDisplayMode": "metricSavings",
+      "description": "Consider adding `preconnect` or `dns-prefetch` resource hints to establish early connections to important third-party origins. [Learn how to preconnect to required origins](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/).",
+      "icon": "pass",
+      "files": {
+        "overallSavingsMs": 0,
+        "headings": [],
+        "sortedBy": [
+          "wastedMs"
+        ],
+        "items": [],
+        "type": "opportunity"
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": []
+    },
+    {
+      "id": "server-response-time",
+      "name": "Reduce initial server response time",
+      "scoreDisplayMode": "metricSavings",
+      "description": "Keep the server response time for the main document short because all other requests depend on it. [Learn more about the Time to First Byte metric](https://developer.chrome.com/docs/lighthouse/performance/time-to-first-byte/).",
+      "displayValue": "Root document took 1,620 ms",
+      "icon": "fail",
+      "files": {
+        "type": "opportunity",
+        "items": [
+          {
+            "responseTime": 1616,
+            "url": {
+              "url": "https://seedkitty.com/?xxy=1234",
+              "file_type": {
+                "label": "Unknown",
+                "value": "unknown"
+              }
+            }
+          }
+        ],
+        "headings": [
+          {
+            "label": "URL",
+            "key": "url",
+            "valueType": "url"
+          },
+          {
+            "key": "responseTime",
+            "valueType": "timespanMs",
+            "label": "Time Spent"
+          }
+        ],
+        "overallSavingsMs": 1516
+      },
+      "type": "opportunity",
+      "score": 0,
+      "settings": [
+        {
+          "name": "Page Cache",
+          "description": "Optimize and cache static HTML pages to provide a snappier page experience.",
+          "category": "cache",
+          "inputs": [
+            {
+              "control_type": "checkbox",
+              "control_label": "Page Cache",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_enable_cache"
+            }
+          ]
+        },
+        {
+          "name": "Preload Links",
+          "description": "Preload Links",
+          "category": "cache",
+          "inputs": [
+            {
+              "control_type": "checkbox",
+              "control_label": "Preload Links",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "preload_internal_links"
+            }
+          ]
+        },
+        {
+          "name": "Disable WP-Emojis",
+          "description": "Prevents WordPress from displaying emojis, smiley faces and other icons",
+          "category": "cache",
+          "inputs": [
+            {
+              "control_type": "checkbox",
+              "control_label": "Disable Wpemoji",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_disable_wp_emoji"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "redirects",
+      "name": "Avoid multiple page redirects",
+      "scoreDisplayMode": "metricSavings",
+      "description": "Redirects introduce additional delays before the page can be loaded. [Learn how to avoid page redirects](https://developer.chrome.com/docs/lighthouse/performance/redirects/).",
+      "icon": "pass",
+      "files": {
+        "items": [],
+        "headings": [],
+        "overallSavingsMs": 0,
+        "type": "opportunity"
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": []
+    },
+    {
+      "id": "efficient-animated-content",
+      "name": "Use video formats for animated content",
+      "scoreDisplayMode": "metricSavings",
+      "description": "Large GIFs are inefficient for delivering animated content. Consider using MPEG4/WebM videos for animations and PNG/WebP for static images instead of GIF to save network bytes. [Learn more about efficient video formats](https://developer.chrome.com/docs/lighthouse/performance/efficient-animated-content/)",
+      "icon": "pass",
+      "files": {
+        "headings": [],
+        "type": "opportunity",
+        "overallSavingsBytes": 0,
+        "debugData": {
+          "type": "debugdata",
+          "metricSavings": {
+            "LCP": 0,
+            "FCP": 0
+          }
+        },
+        "overallSavingsMs": 0,
+        "items": [],
+        "sortedBy": [
+          "wastedBytes"
+        ]
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": []
+    },
+    {
+      "id": "duplicated-javascript",
+      "name": "Remove duplicate modules in JavaScript bundles",
+      "scoreDisplayMode": "metricSavings",
+      "description": "Remove large, duplicate JavaScript modules from bundles to reduce unnecessary bytes consumed by network activity. ",
+      "icon": "pass",
+      "files": {
+        "headings": [],
+        "overallSavingsMs": 0,
+        "type": "opportunity",
+        "items": [],
+        "debugData": {
+          "metricSavings": {
+            "FCP": 0,
+            "LCP": 0
+          },
+          "type": "debugdata"
+        },
+        "overallSavingsBytes": 0,
+        "sortedBy": [
+          "wastedBytes"
+        ]
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": []
+    },
+    {
+      "id": "legacy-javascript",
+      "name": "Avoid serving legacy JavaScript to modern browsers",
+      "scoreDisplayMode": "metricSavings",
+      "description": "Polyfills and transforms enable legacy browsers to use new JavaScript features. However, many aren't necessary for modern browsers. For your bundled JavaScript, adopt a modern script deployment strategy using module/nomodule feature detection to reduce the amount of code shipped to modern browsers, while retaining support for legacy browsers. [Learn how to use modern JavaScript](https://web.dev/articles/publish-modern-javascript)",
+      "icon": "pass",
+      "files": {
+        "type": "opportunity",
+        "sortedBy": [
+          "wastedBytes"
+        ],
+        "debugData": {
+          "metricSavings": {
+            "LCP": 0,
+            "FCP": 0
+          },
+          "type": "debugdata"
+        },
+        "items": [],
+        "overallSavingsBytes": 0,
+        "headings": [],
+        "overallSavingsMs": 0
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": []
+    },
+    {
+      "id": "total-byte-weight",
+      "name": "Avoids enormous network payloads",
+      "scoreDisplayMode": "informative",
+      "description": "Large network payloads cost users real money and are highly correlated with long load times. [Learn how to reduce payload sizes](https://developer.chrome.com/docs/lighthouse/performance/total-byte-weight/).",
+      "displayValue": "Total size was 453 KiB",
+      "icon": "pass",
+      "files": {
+        "headings": [
+          {
+            "label": "URL",
+            "valueType": "url",
+            "key": "url"
+          },
+          {
+            "label": "Transfer Size",
+            "key": "totalBytes",
+            "valueType": "bytes"
+          },
+          {
+            "key": "file_type",
+            "valueType": "string",
+            "label": "Type",
+            "subItemsHeading": {
+              "key": "file_type"
+            }
+          }
+        ],
+        "sortedBy": [
+          "totalBytes"
+        ],
+        "type": "table",
+        "items": [
+          {
+            "url": {
+              "url": "https://seedkitty.com/wp-content/uploads/fonts/lora/Lora-Variable.woff2",
+              "file_type": {
+                "label": "Font",
+                "value": "font"
+              }
+            },
+            "totalBytes": 84567
+          },
+          {
+            "url": {
+              "url": "https://seedkitty.com/?xxy=1234",
+              "file_type": {
+                "label": "Unknown",
+                "value": "unknown"
+              }
+            },
+            "totalBytes": 50944
+          },
+          {
+            "url": {
+              "url": "https://images.rapidload-cdn.io/spai/ret_img,q_lossy,to_avif/https://seedkitty.com/wp-content/uploads/2024/12/SeedKitty-Advent.webp",
+              "file_type": {
+                "label": "Image",
+                "value": "image"
+              }
+            },
+            "totalBytes": 45940
+          },
+          {
+            "url": {
+              "url": "https://seedkitty.com/wp-content/uploads/2024/12/SeedKitty-Advent.webp",
+              "file_type": {
+                "label": "Image",
+                "value": "image"
+              }
+            },
+            "totalBytes": 45930
+          },
+          {
+            "totalBytes": 22015,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/uploads/2024/06/Sunset-Sherbet-Feminisiert-200x299.webp",
+              "file_type": {
+                "label": "Image",
+                "value": "image"
+              }
+            }
+          },
+          {
+            "totalBytes": 20966,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/uploads/2024/06/Gelato-Feminisiert-200x299.webp",
+              "file_type": {
+                "label": "Image",
+                "value": "image"
+              }
+            }
+          },
+          {
+            "totalBytes": 19062,
+            "url": {
+              "url": "https://images.rapidload-cdn.io/spai/ret_img,q_lossy,to_avif,w_200/https://seedkitty.com/wp-content/uploads/2024/08/Zkittlez-Fast-Version-200x299.webp",
+              "file_type": {
+                "label": "Image",
+                "value": "image"
+              }
+            }
+          },
+          {
+            "totalBytes": 17518,
+            "url": {
+              "url": "https://sp-ao.shortpixel.ai/client/q_lossy+w_200+to_auto+ret_img/seedkitty.com/wp-content/uploads/2024/08/Nicole-Kush-Feminisiert-200x299.webp",
+              "file_type": {
+                "label": "Image",
+                "value": "image"
+              }
+            }
+          },
+          {
+            "totalBytes": 17291,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/themes/astra/assets/css/minified/compatibility/woocommerce/woocommerce-grid.min.css?ver=4.8.8",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "action": {
+              "control_type": "dropdown",
+              "value": "none"
+            }
+          },
+          {
+            "totalBytes": 15231,
+            "url": {
+              "url": "https://sp-ao.shortpixel.ai/assets/js/bundles/spai-lib-bg.1.1.min.js",
+              "file_type": {
+                "label": "Javascript",
+                "value": "js"
+              }
+            },
+            "action": {
+              "control_type": "dropdown",
+              "value": "none"
+            }
+          }
+        ]
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": []
+    },
+    {
+      "id": "uses-long-cache-ttl",
+      "name": "Serve static assets with an efficient cache policy",
+      "scoreDisplayMode": "metricSavings",
+      "description": "A long cache lifetime can speed up repeat visits to your page. [Learn more about efficient cache policies](https://developer.chrome.com/docs/lighthouse/performance/uses-long-cache-ttl/).",
+      "displayValue": "43 resources found",
+      "icon": "average",
+      "files": {
+        "skipSumming": [
+          "cacheLifetimeMs"
+        ],
+        "headings": [
+          {
+            "label": "URL",
+            "valueType": "url",
+            "key": "url"
+          },
+          {
+            "key": "cacheLifetimeMs",
+            "valueType": "ms",
+            "label": "Cache TTL",
+            "displayUnit": "duration"
+          },
+          {
+            "key": "totalBytes",
+            "granularity": 1,
+            "displayUnit": "kb",
+            "valueType": "bytes",
+            "label": "Transfer Size"
+          }
+        ],
+        "summary": {
+          "wastedBytes": 37751.962849161995
+        },
+        "type": "table",
+        "sortedBy": [
+          "totalBytes"
+        ],
+        "items": [
+          {
+            "cacheHitProbability": 0,
+            "totalBytes": 5779,
+            "wastedBytes": 5779,
+            "cacheLifetimeMs": 0,
+            "url": {
+              "url": "https://seedkitty.com/cdn-cgi/zaraz/s.js?z=JTdCJTIyZXhlY3V0ZWQlMjIlM0ElNUIlNUQlMkMlMjJ0JTIyJTNBJTIyQ2FubmFiaXNzYW1lbiUyMCUyNiUyMEhhbmZzYW1lbiUyMGthdWZlbiUyMCU3QyUyMEtlaW1nYXJhbnRpZSUyMCUyNiUyMEV4cHJlc3MlMjIlMkMlMjJ4JTIyJTNBMC4wNzM4MDg5MjI4NTU2MjY5JTJDJTIydyUyMiUzQTgwMCUyQyUyMmglMjIlM0E2MDAlMkMlMjJqJTIyJTNBOTQwJTJDJTIyZSUyMiUzQTEzNTAlMkMlMjJsJTIyJTNBJTIyaHR0cHMlM0ElMkYlMkZzZWVka2l0dHkuY29tJTJGJTNGeHh5JTNEMTIzNCUyMiUyQyUyMnIlMjIlM0ElMjIlMjIlMkMlMjJrJTIyJTNBMjQlMkMlMjJuJTIyJTNBJTIyVVRGLTglMjIlMkMlMjJvJTIyJTNBNDgwJTJDJTIycSUyMiUzQSU1QiU1RCU3RA==",
+              "file_type": {
+                "label": "Javascript",
+                "value": "js"
+              }
+            }
+          },
+          {
+            "cacheHitProbability": 0.6,
+            "cacheLifetimeMs": 86400000,
+            "debugData": {
+              "type": "debugdata",
+              "max-age": 86400,
+              "public": true
+            },
+            "url": {
+              "url": "https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015",
+              "file_type": {
+                "label": "Unknown",
+                "value": "unknown"
+              }
+            },
+            "totalBytes": 7256,
+            "wastedBytes": 2902.4
+          },
+          {
+            "cacheLifetimeMs": 172800000,
+            "wastedBytes": 1383.0000000000002,
+            "totalBytes": 4610,
+            "cacheHitProbability": 0.7,
+            "debugData": {
+              "public": true,
+              "type": "debugdata",
+              "max-age": 172800
+            },
+            "url": {
+              "url": "https://seedkitty.com/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js",
+              "file_type": {
+                "label": "Javascript",
+                "value": "js"
+              }
+            }
+          },
+          {
+            "debugData": {
+              "type": "debugdata",
+              "public": true,
+              "max-age": 2592000
+            },
+            "url": {
+              "url": "https://seedkitty.com/wp-content/uploads/fonts/lora/Lora-Variable.woff2",
+              "file_type": {
+                "label": "Font",
+                "value": "font"
+              }
+            },
+            "cacheHitProbability": 0.9064245810055866,
+            "totalBytes": 84567,
+            "cacheLifetimeMs": 2592000000,
+            "wastedBytes": 7913.392458100554
+          },
+          {
+            "debugData": {
+              "max-age": 2592000,
+              "public": true,
+              "type": "debugdata"
+            },
+            "cacheLifetimeMs": 2592000000,
+            "cacheHitProbability": 0.9064245810055866,
+            "totalBytes": 45930,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/uploads/2024/12/SeedKitty-Advent.webp",
+              "file_type": {
+                "label": "Image",
+                "value": "image"
+              }
+            },
+            "wastedBytes": 4297.918994413405
+          },
+          {
+            "totalBytes": 22015,
+            "cacheLifetimeMs": 2592000000,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/uploads/2024/06/Sunset-Sherbet-Feminisiert-200x299.webp",
+              "file_type": {
+                "label": "Image",
+                "value": "image"
+              }
+            },
+            "wastedBytes": 2060.06284916201,
+            "cacheHitProbability": 0.9064245810055866,
+            "debugData": {
+              "max-age": 2592000,
+              "public": true,
+              "type": "debugdata"
+            }
+          },
+          {
+            "debugData": {
+              "type": "debugdata",
+              "public": true,
+              "max-age": 2592000
+            },
+            "cacheLifetimeMs": 2592000000,
+            "wastedBytes": 1961.9022346368704,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/uploads/2024/06/Gelato-Feminisiert-200x299.webp",
+              "file_type": {
+                "label": "Image",
+                "value": "image"
+              }
+            },
+            "totalBytes": 20966,
+            "cacheHitProbability": 0.9064245810055866
+          },
+          {
+            "cacheHitProbability": 0.9064245810055866,
+            "debugData": {
+              "max-age": 2592000,
+              "type": "debugdata",
+              "public": true
+            },
+            "cacheLifetimeMs": 2592000000,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/themes/astra/assets/css/minified/compatibility/woocommerce/woocommerce-grid.min.css?ver=4.8.8",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "wastedBytes": 1618.0125698324011,
+            "totalBytes": 17291
+          },
+          {
+            "cacheHitProbability": 0.9064245810055866,
+            "cacheLifetimeMs": 2592000000,
+            "wastedBytes": 1425.2472067039098,
+            "totalBytes": 15231,
+            "debugData": {
+              "max-age": 2592000,
+              "type": "debugdata",
+              "public": true
+            },
+            "url": {
+              "url": "https://sp-ao.shortpixel.ai/assets/js/bundles/spai-lib-bg.1.1.min.js",
+              "file_type": {
+                "label": "Javascript",
+                "value": "js"
+              }
+            }
+          },
+          {
+            "wastedBytes": 945.3924581005581,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/themes/astra/assets/css/minified/main.min.css?ver=4.8.8",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "debugData": {
+              "max-age": 2592000,
+              "type": "debugdata",
+              "public": true
+            },
+            "totalBytes": 10103,
+            "cacheLifetimeMs": 2592000000,
+            "cacheHitProbability": 0.9064245810055866
+          },
+          {
+            "url": {
+              "url": "https://seedkitty.com/wp-content/uploads/elementor/css/custom-frontend.min.css?ver=1734987690",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "debugData": {
+              "type": "debugdata",
+              "public": true,
+              "max-age": 2592000
+            },
+            "cacheHitProbability": 0.9064245810055866,
+            "totalBytes": 8331,
+            "wastedBytes": 779.5768156424576,
+            "cacheLifetimeMs": 2592000000
+          },
+          {
+            "totalBytes": 5612,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/plugins/elementor/assets/lib/swiper/v8/css/swiper.min.css?ver=8.4.5",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "wastedBytes": 525.1452513966477,
+            "cacheHitProbability": 0.9064245810055866,
+            "cacheLifetimeMs": 2592000000,
+            "debugData": {
+              "type": "debugdata",
+              "max-age": 2592000,
+              "public": true
+            }
+          },
+          {
+            "totalBytes": 5260,
+            "cacheLifetimeMs": 2592000000,
+            "cacheHitProbability": 0.9064245810055866,
+            "debugData": {
+              "public": true,
+              "type": "debugdata",
+              "max-age": 2592000
+            },
+            "url": {
+              "url": "https://seedkitty.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/v4-shims.min.css?ver=3.26.3",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "wastedBytes": 492.20670391061424
+          },
+          {
+            "cacheHitProbability": 0.9064245810055866,
+            "cacheLifetimeMs": 2592000000,
+            "totalBytes": 4438,
+            "wastedBytes": 415.28770949720644,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/uploads/elementor/css/custom-pro-widget-nav-menu.min.css?ver=1734987690",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "debugData": {
+              "type": "debugdata",
+              "public": true,
+              "max-age": 2592000
+            }
+          },
+          {
+            "debugData": {
+              "type": "debugdata",
+              "max-age": 2592000,
+              "public": true
+            },
+            "wastedBytes": 368.40642458100535,
+            "cacheLifetimeMs": 2592000000,
+            "totalBytes": 3937,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/main-25c97c5f8be7.min.css",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "cacheHitProbability": 0.9064245810055866
+          },
+          {
+            "cacheHitProbability": 0.9064245810055866,
+            "totalBytes": 3605,
+            "debugData": {
+              "type": "debugdata",
+              "public": true,
+              "max-age": 2592000
+            },
+            "cacheLifetimeMs": 2592000000,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/wc-blocks-49db983e0920.min.css",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "wastedBytes": 337.33938547486014
+          },
+          {
+            "cacheHitProbability": 0.9064245810055866,
+            "debugData": {
+              "public": true,
+              "max-age": 2592000,
+              "type": "debugdata"
+            },
+            "url": {
+              "url": "https://seedkitty.com/wp-content/themes/astra/assets/css/minified/compatibility/woocommerce/woocommerce-layout-grid.min.css?ver=4.8.8",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "totalBytes": 3038,
+            "cacheLifetimeMs": 2592000000,
+            "wastedBytes": 284.28212290502773
+          },
+          {
+            "totalBytes": 3037,
+            "cacheLifetimeMs": 2592000000,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/plugins/advanced-coupons-for-woocommerce-free/dist/common/NoticesPlugin.4b31c3cc.js",
+              "file_type": {
+                "label": "Javascript",
+                "value": "js"
+              }
+            },
+            "wastedBytes": 284.18854748603337,
+            "cacheHitProbability": 0.9064245810055866,
+            "debugData": {
+              "public": true,
+              "max-age": 2592000,
+              "type": "debugdata"
+            }
+          },
+          {
+            "url": {
+              "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/post-5518-12fb4b718f9e.min.css",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "wastedBytes": 273.9888268156423,
+            "debugData": {
+              "public": true,
+              "max-age": 2592000,
+              "type": "debugdata"
+            },
+            "cacheLifetimeMs": 2592000000,
+            "cacheHitProbability": 0.9064245810055866,
+            "totalBytes": 2928
+          },
+          {
+            "debugData": {
+              "max-age": 2592000,
+              "type": "debugdata",
+              "public": true
+            },
+            "wastedBytes": 239.74022346368702,
+            "cacheHitProbability": 0.9064245810055866,
+            "totalBytes": 2562,
+            "cacheLifetimeMs": 2592000000,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/plugins/elementor-pro/assets/css/widget-form.min.css?ver=3.26.2",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            }
+          },
+          {
+            "cacheLifetimeMs": 2592000000,
+            "wastedBytes": 237.40083798882668,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/post-5469-85c202159813.min.css",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "totalBytes": 2537,
+            "debugData": {
+              "type": "debugdata",
+              "max-age": 2592000,
+              "public": true
+            },
+            "cacheHitProbability": 0.9064245810055866
+          },
+          {
+            "cacheLifetimeMs": 2592000000,
+            "cacheHitProbability": 0.9064245810055866,
+            "wastedBytes": 232.25418994413394,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/post-4968-53e4b720fa83.min.css",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "debugData": {
+              "type": "debugdata",
+              "public": true,
+              "max-age": 2592000
+            },
+            "totalBytes": 2482
+          },
+          {
+            "debugData": {
+              "public": true,
+              "type": "debugdata",
+              "max-age": 2592000
+            },
+            "cacheLifetimeMs": 2592000000,
+            "totalBytes": 2416,
+            "cacheHitProbability": 0.9064245810055866,
+            "wastedBytes": 226.07821229050265,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/plugins/elementor-pro/assets/css/widget-loop-carousel.min.css?ver=3.26.2",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            }
+          },
+          {
+            "cacheHitProbability": 0.9064245810055866,
+            "debugData": {
+              "max-age": 2592000,
+              "type": "debugdata",
+              "public": true
+            },
+            "wastedBytes": 200.71927374301663,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/uploads/elementor/css/custom-widget-icon-list.min.css?ver=1734987690",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "totalBytes": 2145,
+            "cacheLifetimeMs": 2592000000
+          },
+          {
+            "debugData": {
+              "type": "debugdata",
+              "max-age": 2592000,
+              "public": true
+            },
+            "url": {
+              "url": "https://seedkitty.com/wp-content/themes/astra/assets/css/minified/compatibility/woocommerce/woocommerce-smallscreen-grid.min.css?ver=4.8.8",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "wastedBytes": 180.41340782122893,
+            "cacheHitProbability": 0.9064245810055866,
+            "totalBytes": 1928,
+            "cacheLifetimeMs": 2592000000
+          },
+          {
+            "cacheLifetimeMs": 2592000000,
+            "wastedBytes": 171.24301675977642,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/plugins/elementor/assets/css/widget-divider.min.css?ver=3.26.3",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "cacheHitProbability": 0.9064245810055866,
+            "debugData": {
+              "type": "debugdata",
+              "max-age": 2592000,
+              "public": true
+            },
+            "totalBytes": 1830
+          },
+          {
+            "cacheHitProbability": 0.9064245810055866,
+            "wastedBytes": 170.77513966480436,
+            "cacheLifetimeMs": 2592000000,
+            "totalBytes": 1825,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/plugins/elementor/assets/css/conditionals/e-swiper.min.css?ver=3.26.3",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "debugData": {
+              "max-age": 2592000,
+              "type": "debugdata",
+              "public": true
+            }
+          },
+          {
+            "debugData": {
+              "max-age": 2592000,
+              "public": true,
+              "type": "debugdata"
+            },
+            "wastedBytes": 150.93715083798872,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/plugins/elementor-pro/assets/css/widget-woocommerce-products.min.css?ver=3.26.2",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "cacheLifetimeMs": 2592000000,
+            "totalBytes": 1613,
+            "cacheHitProbability": 0.9064245810055866
+          },
+          {
+            "debugData": {
+              "type": "debugdata",
+              "max-age": 2592000,
+              "public": true
+            },
+            "url": {
+              "url": "https://seedkitty.com/wp-content/uploads/elementor/css/custom-pro-widget-slides.min.css?ver=1734987690",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "wastedBytes": 149.9078212290502,
+            "cacheHitProbability": 0.9064245810055866,
+            "totalBytes": 1602,
+            "cacheLifetimeMs": 2592000000
+          },
+          {
+            "wastedBytes": 139.89525139664795,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/post-4498-db05434ba523.min.css",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "totalBytes": 1495,
+            "debugData": {
+              "type": "debugdata",
+              "max-age": 2592000,
+              "public": true
+            },
+            "cacheLifetimeMs": 2592000000,
+            "cacheHitProbability": 0.9064245810055866
+          },
+          {
+            "wastedBytes": 139.61452513966472,
+            "debugData": {
+              "type": "debugdata",
+              "max-age": 2592000,
+              "public": true
+            },
+            "url": {
+              "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/acfw-blocks-frontend-7c448cf4d973.min.css",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "cacheLifetimeMs": 2592000000,
+            "cacheHitProbability": 0.9064245810055866,
+            "totalBytes": 1492
+          },
+          {
+            "url": {
+              "url": "https://seedkitty.com/wp-content/plugins/wp-menu-cart/assets/css/wpmenucart-main.min.css?ver=2.14.10",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "wastedBytes": 134.84217877094963,
+            "totalBytes": 1441,
+            "debugData": {
+              "type": "debugdata",
+              "public": true,
+              "max-age": 2592000
+            },
+            "cacheLifetimeMs": 2592000000,
+            "cacheHitProbability": 0.9064245810055866
+          },
+          {
+            "url": {
+              "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/index-2a7d8588-376c919b98a5.min.css",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "cacheHitProbability": 0.9064245810055866,
+            "debugData": {
+              "public": true,
+              "type": "debugdata",
+              "max-age": 2592000
+            },
+            "cacheLifetimeMs": 2592000000,
+            "totalBytes": 1437,
+            "wastedBytes": 134.46787709497198
+          },
+          {
+            "cacheHitProbability": 0.9064245810055866,
+            "debugData": {
+              "type": "debugdata",
+              "public": true,
+              "max-age": 2592000
+            },
+            "cacheLifetimeMs": 2592000000,
+            "wastedBytes": 131.94134078212284,
+            "totalBytes": 1410,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/post-14946-113006773d29.min.css",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            }
+          },
+          {
+            "debugData": {
+              "type": "debugdata",
+              "public": true,
+              "max-age": 2592000
+            },
+            "url": {
+              "url": "https://seedkitty.com/wp-content/plugins/elementor/assets/css/widget-spacer.min.css?ver=3.26.3",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "totalBytes": 1376,
+            "cacheHitProbability": 0.9064245810055866,
+            "wastedBytes": 128.75977653631276,
+            "cacheLifetimeMs": 2592000000
+          },
+          {
+            "wastedBytes": 127.16899441340775,
+            "totalBytes": 1359,
+            "debugData": {
+              "type": "debugdata",
+              "public": true,
+              "max-age": 2592000
+            },
+            "url": {
+              "url": "https://seedkitty.com/wp-content/uploads/elementor/css/custom-widget-image-box.min.css?ver=1734987690",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "cacheHitProbability": 0.9064245810055866,
+            "cacheLifetimeMs": 2592000000
+          },
+          {
+            "url": {
+              "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/index-467dde24-9364cc26dbea.min.css",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "totalBytes": 1324,
+            "wastedBytes": 123.89385474860327,
+            "cacheLifetimeMs": 2592000000,
+            "debugData": {
+              "public": true,
+              "type": "debugdata",
+              "max-age": 2592000
+            },
+            "cacheHitProbability": 0.9064245810055866
+          },
+          {
+            "debugData": {
+              "public": true,
+              "max-age": 2592000,
+              "type": "debugdata"
+            },
+            "cacheLifetimeMs": 2592000000,
+            "wastedBytes": 119.1215083798882,
+            "totalBytes": 1273,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/plugins/elementor/assets/css/widget-text-editor.min.css?ver=3.26.3",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "cacheHitProbability": 0.9064245810055866
+          },
+          {
+            "cacheLifetimeMs": 2592000000,
+            "cacheHitProbability": 0.9064245810055866,
+            "totalBytes": 1272,
+            "wastedBytes": 119.02793296089378,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/plugins/wp-menu-cart/assets/css/wpmenucart-icons.min.css?ver=2.14.10",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "debugData": {
+              "type": "debugdata",
+              "max-age": 2592000,
+              "public": true
+            }
+          },
+          {
+            "url": {
+              "url": "https://seedkitty.com/wp-content/plugins/elementor/assets/css/widget-heading.min.css?ver=3.26.3",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "debugData": {
+              "type": "debugdata",
+              "max-age": 2592000,
+              "public": true
+            },
+            "cacheHitProbability": 0.9064245810055866,
+            "totalBytes": 1218,
+            "cacheLifetimeMs": 2592000000,
+            "wastedBytes": 113.97486033519546
+          },
+          {
+            "debugData": {
+              "public": true,
+              "type": "debugdata",
+              "max-age": 2592000
+            },
+            "cacheLifetimeMs": 2592000000,
+            "wastedBytes": 112.38407821229043,
+            "cacheHitProbability": 0.9064245810055866,
+            "url": {
+              "url": "https://seedkitty.com/wp-content/plugins/elementor-pro/assets/css/widget-loop-common.min.css?ver=3.26.2",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "totalBytes": 1201
+          },
+          {
+            "cacheHitProbability": 0.9064245810055866,
+            "totalBytes": 1200,
+            "debugData": {
+              "type": "debugdata",
+              "max-age": 2592000,
+              "public": true
+            },
+            "url": {
+              "url": "https://seedkitty.com/wp-content/plugins/elementor/assets/css/widget-image.min.css?ver=3.26.3",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "wastedBytes": 112.29050279329601,
+            "cacheLifetimeMs": 2592000000
+          },
+          {
+            "totalBytes": 1158,
+            "wastedBytes": 108.36033519553067,
+            "cacheHitProbability": 0.9064245810055866,
+            "debugData": {
+              "public": true,
+              "max-age": 2592000,
+              "type": "debugdata"
+            },
+            "url": {
+              "url": "https://seedkitty.com/wp-content/plugins/elementor-pro/assets/css/modules/sticky.min.css?ver=3.26.2",
+              "file_type": {
+                "label": "CSS",
+                "value": "css"
+              }
+            },
+            "cacheLifetimeMs": 2592000000
+          }
+        ]
+      },
+      "type": "diagnostics",
+      "score": 50,
+      "settings": [
+        {
+          "name": "RapidLoad CDN",
+          "description": "Load resource files faster by using 112 edge locations with only 27ms latency.",
+          "category": "cdn",
+          "inputs": [
+            {
+              "control_type": "checkbox",
+              "control_label": "RapidLoad CDN",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_enable_cdn"
+            }
+          ]
+        },
+        {
+          "name": "Cache Policy",
+          "description": "Set up cache-control header to increase the browser cache expiration",
+          "category": "cache",
+          "inputs": [
+            {
+              "control_type": "button",
+              "control_label": "Setup Policies",
+              "value": "update_htaccess_file",
+              "key": "update_htaccess_file",
+              "description": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dom-size",
+      "name": "Avoids an excessive DOM size",
+      "scoreDisplayMode": "informative",
+      "description": "A large DOM will increase memory usage, cause longer [style calculations](https://developers.google.com/web/fundamentals/performance/rendering/reduce-the-scope-and-complexity-of-style-calculations), and produce costly [layout reflows](https://developers.google.com/speed/articles/reflow). [Learn how to avoid an excessive DOM size](https://developer.chrome.com/docs/lighthouse/performance/dom-size/).",
+      "displayValue": "675 elements",
+      "icon": "pass",
+      "files": {
+        "items": [
+          {
+            "statistic": "Total DOM Elements",
+            "value": {
+              "granularity": 1,
+              "type": "numeric",
+              "value": 675
+            }
+          },
+          {
+            "statistic": "Maximum DOM Depth",
+            "value": {
+              "value": 28,
+              "granularity": 1,
+              "type": "numeric"
+            },
+            "node": {
+              "nodeLabel": "5.00",
+              "lhId": "1-0-STRONG",
+              "path": "1,HTML,1,BODY,6,DIV,1,DIV,0,DIV,0,DIV,0,MAIN,0,ARTICLE,0,DIV,0,DIV,1,DIV,0,DIV,4,DIV,0,DIV,0,DIV,0,DIV,1,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,UL,0,LI,1,DIV,1,DIV,0,DIV,0,SPAN,1,STRONG",
+              "selector": "div.review-rating > div.star-rating > span > strong.rating",
+              "type": "node",
+              "boundingRect": {
+                "left": 240,
+                "width": 33,
+                "bottom": 1291,
+                "right": 273,
+                "top": 1271,
+                "height": 20
+              },
+              "snippet": "<strong class=\"rating\">"
+            }
+          },
+          {
+            "node": {
+              "type": "node",
+              "lhId": "1-1-BODY",
+              "selector": "body.home",
+              "path": "1,HTML,1,BODY",
+              "snippet": "<body itemtype=\"https://schema.org/WebPage\" itemscope=\"itemscope\" class=\"home page-template-default page page-id-4968 wp-custom-logo theme-astra wo…\">",
+              "boundingRect": {
+                "width": 1335,
+                "height": 2960,
+                "right": 1335,
+                "bottom": 2960,
+                "top": 0,
+                "left": 0
+              },
+              "nodeLabel": "body.home"
+            },
+            "statistic": "Maximum Child Elements",
+            "value": {
+              "type": "numeric",
+              "granularity": 1,
+              "value": 59
+            }
+          }
+        ],
+        "headings": [
+          {
+            "label": "Statistic",
+            "key": "statistic",
+            "valueType": "text"
+          },
+          {
+            "label": "Element",
+            "key": "node",
+            "valueType": "node"
+          },
+          {
+            "label": "Value",
+            "key": "value",
+            "valueType": "numeric"
+          }
+        ],
+        "type": "table"
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": []
+    },
+    {
+      "id": "user-timings",
+      "name": "User Timing marks and measures",
+      "scoreDisplayMode": "notApplicable",
+      "description": "Consider instrumenting your app with the User Timing API to measure your app's real-world performance during key user experiences. [Learn more about User Timing marks](https://developer.chrome.com/docs/lighthouse/performance/user-timings/).",
+      "icon": "fail",
+      "files": {
+        "headings": [],
+        "items": [],
+        "type": "table"
+      },
+      "type": "passed_audit",
+      "score": 0,
+      "settings": []
+    },
+    {
+      "id": "bootup-time",
+      "name": "JavaScript execution time",
+      "scoreDisplayMode": "informative",
+      "description": "Consider reducing the time spent parsing, compiling, and executing JS. You may find delivering smaller JS payloads helps with this. [Learn how to reduce Javascript execution time](https://developer.chrome.com/docs/lighthouse/performance/bootup-time/).",
+      "displayValue": "0.0 s",
+      "icon": "pass",
+      "files": {
+        "type": "table",
+        "sortedBy": [
+          "total"
+        ],
+        "headings": [
+          {
+            "valueType": "url",
+            "label": "URL",
+            "key": "url"
+          },
+          {
+            "label": "Total CPU Time",
+            "granularity": 1,
+            "key": "total",
+            "valueType": "ms"
+          },
+          {
+            "valueType": "ms",
+            "key": "scripting",
+            "label": "Script Evaluation",
+            "granularity": 1
+          },
+          {
+            "granularity": 1,
+            "key": "scriptParseCompile",
+            "label": "Script Parse",
+            "valueType": "ms"
+          }
+        ],
+        "items": [
+          {
+            "scripting": 4.572,
+            "url": {
+              "url": "https://seedkitty.com/?xxy=1234",
+              "file_type": {
+                "label": "Unknown",
+                "value": "unknown"
+              }
+            },
+            "total": 234.69200000000004,
+            "scriptParseCompile": 0.591
+          },
+          {
+            "scriptParseCompile": 0,
+            "scripting": 0.7350000000000003,
+            "url": "Unattributable",
+            "total": 68.71700000000013
+          }
+        ],
+        "summary": {
+          "wastedMs": 5.898000000000001
+        }
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": [
+        {
+          "name": "Delay Javascript",
+          "description": "Loading JS files on user interaction",
+          "category": "javascript",
+          "inputs": [
+            {
+              "control_type": "checkbox",
+              "control_label": "Delay Javascript",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "delay_javascript"
+            },
+            {
+              "control_type": "button",
+              "control_label": "Exclude Files",
+              "value": null,
+              "key": "uucss_exclude_files_from_delay_js",
+              "description": ""
+            },
+            {
+              "control_type": "textarea",
+              "control_label": "Callback Script",
+              "control_values": null,
+              "value": "",
+              "key": "delay_javascript_callback"
+            },
+            {
+              "control_type": "textarea",
+              "control_label": "Exclude Javascript",
+              "control_values": null,
+              "value": "",
+              "key": "uucss_excluded_js_files"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mainthread-work-breakdown",
+      "name": "Minimizes main-thread work",
+      "scoreDisplayMode": "informative",
+      "description": "Consider reducing the time spent parsing, compiling and executing JS. You may find delivering smaller JS payloads helps with this. [Learn how to minimize main-thread work](https://developer.chrome.com/docs/lighthouse/performance/mainthread-work-breakdown/)",
+      "displayValue": "0.4 s",
+      "icon": "pass",
+      "files": {
+        "headings": [
+          {
+            "valueType": "text",
+            "label": "Category",
+            "key": "groupLabel"
+          },
+          {
+            "granularity": 1,
+            "valueType": "ms",
+            "key": "duration",
+            "label": "Time Spent"
+          }
+        ],
+        "sortedBy": [
+          "duration"
+        ],
+        "items": [
+          {
+            "duration": 160.608,
+            "group": "styleLayout",
+            "groupLabel": "Style & Layout"
+          },
+          {
+            "group": "other",
+            "groupLabel": "Other",
+            "duration": 110.15800000000007
+          },
+          {
+            "group": "scriptEvaluation",
+            "duration": 49.577000000000055,
+            "groupLabel": "Script Evaluation"
+          },
+          {
+            "group": "parseHTML",
+            "groupLabel": "Parse HTML & CSS",
+            "duration": 36.635000000000005
+          },
+          {
+            "groupLabel": "Rendering",
+            "group": "paintCompositeRender",
+            "duration": 25.938000000000017
+          },
+          {
+            "group": "scriptParseCompile",
+            "groupLabel": "Script Parsing & Compilation",
+            "duration": 8.904
+          }
+        ],
+        "type": "table"
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": []
+    },
+    {
+      "id": "font-display",
+      "name": "Ensure text remains visible during webfont load",
+      "scoreDisplayMode": "metricSavings",
+      "description": "Leverage the `font-display` CSS feature to ensure text is user-visible while webfonts are loading. [Learn more about `font-display`](https://developer.chrome.com/docs/lighthouse/performance/font-display/).",
+      "icon": "average",
+      "files": {
+        "headings": [
+          {
+            "key": "url",
+            "valueType": "url",
+            "label": "URL"
+          },
+          {
+            "valueType": "ms",
+            "label": "Potential Savings",
+            "key": "wastedMs"
+          },
+          {
+            "key": "file_type",
+            "valueType": "string",
+            "label": "Type",
+            "subItemsHeading": {
+              "key": "file_type"
+            }
+          }
+        ],
+        "items": [
+          {
+            "url": {
+              "url": "https://seedkitty.com/wp-content/uploads/fonts/lora/Lora-Variable.woff2",
+              "file_type": {
+                "label": "Font",
+                "value": "font"
+              }
+            },
+            "wastedMs": 223.09600019454956,
+            "action": {
+              "control_type": "dropdown",
+              "value": "none"
+            }
+          }
+        ],
+        "type": "table"
+      },
+      "type": "diagnostics",
+      "score": 50,
+      "settings": [
+        {
+          "name": "Self Host Google Fonts",
+          "description": "Self host all your Google fonts and load fonts faster. Turn on CDN to serve these fonts faster through RapidLoad CDN.",
+          "category": "font",
+          "inputs": [
+            {
+              "control_type": "checkbox",
+              "control_label": "Self Host Google Fonts",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_self_host_google_fonts"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "third-party-summary",
+      "name": "Minimize third-party usage",
+      "scoreDisplayMode": "informative",
+      "description": "Third-party code can significantly impact load performance. Limit the number of redundant third-party providers and try to load third-party code after your page has primarily finished loading. [Learn how to minimize third-party impact](https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/loading-third-party-javascript/).",
+      "displayValue": "Third-party code blocked the main thread for 0 ms",
+      "icon": "pass",
+      "files": {
+        "isEntityGrouped": true,
+        "items": [
+          {
+            "entity": "rapidload-cdn.io",
+            "subItems": {
+              "type": "subitems",
+              "items": [
+                {
+                  "url": "https://images.rapidload-cdn.io/spai/ret_img,q_lossy,to_avif/https://seedkitty.com/wp-content/uploads/2024/12/SeedKitty-Advent.webp",
+                  "blockingTime": 0,
+                  "transferSize": 45940,
+                  "tbtImpact": 0,
+                  "mainThreadTime": 0
+                },
+                {
+                  "blockingTime": 0,
+                  "transferSize": 19062,
+                  "url": "https://images.rapidload-cdn.io/spai/ret_img,q_lossy,to_avif,w_200/https://seedkitty.com/wp-content/uploads/2024/08/Zkittlez-Fast-Version-200x299.webp",
+                  "tbtImpact": 0,
+                  "mainThreadTime": 0
+                },
+                {
+                  "transferSize": 1379,
+                  "blockingTime": 0,
+                  "mainThreadTime": 0,
+                  "url": "https://images.rapidload-cdn.io/spai/ret_blank,q_lossy,to_avif/https://sp-ao.shortpixel.ai/client/to_auto,q_lossy,ret_img/https://seedkitty.com/wp-content/uploads/elementor/thumbs/SeedKitty-Logo-qsjytckwehi0l5ict7a0ar564kt0ac5ki5f50897fy.webp",
+                  "tbtImpact": 0
+                },
+                {
+                  "tbtImpact": 0,
+                  "transferSize": 1284,
+                  "url": "https://images.rapidload-cdn.io/spai/ret_blank,q_lossy,to_avif/https://sp-ao.shortpixel.ai/client/to_auto,q_lossy,ret_img/https://seedkitty.com/wp-content/uploads/2024/05/shopping-bag.webp",
+                  "blockingTime": 0,
+                  "mainThreadTime": 0
+                }
+              ]
+            },
+            "tbtImpact": 0,
+            "blockingTime": 0,
+            "transferSize": 67665,
+            "mainThreadTime": 0
+          },
+          {
+            "transferSize": 44937,
+            "blockingTime": 0,
+            "subItems": {
+              "type": "subitems",
+              "items": [
+                {
+                  "tbtImpact": 0,
+                  "mainThreadTime": 0,
+                  "url": "https://sp-ao.shortpixel.ai/client/q_lossy+w_200+to_auto+ret_img/seedkitty.com/wp-content/uploads/2024/08/Nicole-Kush-Feminisiert-200x299.webp",
+                  "transferSize": 17518,
+                  "blockingTime": 0
+                },
+                {
+                  "mainThreadTime": 12.423999999999998,
+                  "blockingTime": 0,
+                  "url": "https://sp-ao.shortpixel.ai/assets/js/bundles/spai-lib-bg.1.1.min.js",
+                  "transferSize": 15231,
+                  "tbtImpact": 0
+                },
+                {
+                  "transferSize": 6573,
+                  "url": "https://sp-ao.shortpixel.ai/client/to_auto,q_lossy,ret_img/https://seedkitty.com/wp-content/uploads/elementor/thumbs/SeedKitty-Logo-qsjytckwehi0l5ict7a0ar564kt0ac5ki5f50897fy.webp",
+                  "tbtImpact": 0,
+                  "mainThreadTime": 0,
+                  "blockingTime": 0
+                },
+                {
+                  "url": "https://sp-ao.shortpixel.ai/client/to_auto,q_lossy,ret_img/https://seedkitty.com/wp-content/uploads/2024/05/shopping-bag.webp",
+                  "mainThreadTime": 0,
+                  "tbtImpact": 0,
+                  "blockingTime": 0,
+                  "transferSize": 1888
+                },
+                {
+                  "url": "https://sp-ao.shortpixel.ai/client/to_auto,q_lossy,ret_img/https://images.rapidload-cdn.io/spai/ret_img,q_lossy,to_avif,w_200/https://seedkitty.com/wp-content/uploads/2024/08/Zkittlez-Fast-Version-200x299.webp",
+                  "tbtImpact": 0,
+                  "transferSize": 1312,
+                  "blockingTime": 0,
+                  "mainThreadTime": 0
+                },
+                {
+                  "transferSize": 1224,
+                  "mainThreadTime": 0,
+                  "blockingTime": 0,
+                  "url": "https://sp-ao.shortpixel.ai/client/q_lossy+w_200+to_auto+ret_img/seedkitty.com/wp-content/uploads/2024/06/Sunset-Sherbet-Feminisiert-200x299.webp",
+                  "tbtImpact": 0
+                },
+                {
+                  "blockingTime": 0,
+                  "transferSize": 1191,
+                  "tbtImpact": 0,
+                  "url": "https://sp-ao.shortpixel.ai/client/q_lossy+w_200+to_auto+ret_img/seedkitty.com/wp-content/uploads/2024/06/Gelato-Feminisiert-200x299.webp",
+                  "mainThreadTime": 0
+                }
+              ]
+            },
+            "tbtImpact": 0,
+            "mainThreadTime": 12.423999999999998,
+            "entity": "shortpixel.ai"
+          },
+          {
+            "mainThreadTime": 7.79,
+            "subItems": {
+              "items": [
+                {
+                  "transferSize": 7256,
+                  "blockingTime": 0,
+                  "tbtImpact": 0,
+                  "url": "https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015",
+                  "mainThreadTime": 7.79
+                }
+              ],
+              "type": "subitems"
+            },
+            "tbtImpact": 0,
+            "entity": "Cloudflare",
+            "blockingTime": 0,
+            "transferSize": 7256
+          },
+          {
+            "entity": "Google/Doubleclick Ads",
+            "subItems": {
+              "type": "subitems",
+              "items": [
+                {
+                  "transferSize": 793,
+                  "url": "https://stats.g.doubleclick.net/g/collect?t=dc&aip=1&_r=3&v=1&_v=j86&tid=G-9G1B0N6W4C&cid=458b7977-180f-4f5f-a1e4-164d9439238c&_u=KGDAAEADQAAAAC%7E&z=172846466",
+                  "blockingTime": 0,
+                  "tbtImpact": 0,
+                  "mainThreadTime": 0
+                }
+              ]
+            },
+            "blockingTime": 0,
+            "mainThreadTime": 0,
+            "transferSize": 793,
+            "tbtImpact": 0
+          },
+          {
+            "subItems": {
+              "type": "subitems",
+              "items": [
+                {
+                  "blockingTime": 0,
+                  "tbtImpact": 0,
+                  "mainThreadTime": 0,
+                  "url": "https://www.google.com/ads/ga-audiences?t=sr&aip=1&_r=4&v=1&_v=j86&tid=G-9G1B0N6W4C&cid=458b7977-180f-4f5f-a1e4-164d9439238c&_u=KGDAAEADQAAAAC%7E&z=172846466&slf_rd=1",
+                  "transferSize": 695
+                }
+              ]
+            },
+            "blockingTime": 0,
+            "entity": "Other Google APIs/SDKs",
+            "tbtImpact": 0,
+            "transferSize": 695,
+            "mainThreadTime": 0
+          }
+        ],
+        "type": "table",
+        "summary": {
+          "wastedMs": 0,
+          "wastedBytes": 121346
+        },
+        "headings": [
+          {
+            "subItemsHeading": {
+              "key": "url",
+              "valueType": "url"
+            },
+            "valueType": "text",
+            "key": "entity",
+            "label": "Third-Party"
+          },
+          {
+            "subItemsHeading": {
+              "key": "transferSize"
+            },
+            "label": "Transfer Size",
+            "granularity": 1,
+            "key": "transferSize",
+            "valueType": "bytes"
+          },
+          {
+            "key": "blockingTime",
+            "granularity": 1,
+            "valueType": "ms",
+            "label": "Main-Thread Blocking Time",
+            "subItemsHeading": {
+              "key": "blockingTime"
+            }
+          }
+        ]
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": []
+    },
+    {
+      "id": "third-party-facades",
+      "name": "Lazy load third-party resources with facades",
+      "scoreDisplayMode": "notApplicable",
+      "description": "Some third-party embeds can be lazy loaded. Consider replacing them with a facade until they are required. [Learn how to defer third-parties with a facade](https://developer.chrome.com/docs/lighthouse/performance/third-party-facades/).",
+      "icon": "fail",
+      "type": "passed_audit",
+      "score": 0,
+      "settings": [
+        {
+          "name": "Lazy Load Iframes",
+          "description": "Delay loading of iframes until needed.",
+          "category": "image",
+          "inputs": [
+            {
+              "control_type": "checkbox",
+              "control_label": "Lazy Load Iframes",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_lazy_load_iframes"
+            },
+            {
+              "control_type": "textarea",
+              "control_label": "Exclude Images/Iframes from Lazy Load",
+              "control_values": null,
+              "value": "",
+              "key": "uucss_exclude_images_from_lazy_load"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lcp-lazy-loaded",
+      "name": "Largest Contentful Paint image was not lazily loaded",
+      "scoreDisplayMode": "metricSavings",
+      "description": "Above-the-fold images that are lazily loaded render later in the page lifecycle, which can delay the largest contentful paint. [Learn more about optimal lazy loading](https://web.dev/articles/lcp-lazy-loading).",
+      "icon": "pass",
+      "files": {
+        "items": [
+          {
+            "node": {
+              "selector": "div.elementor-slides-wrapper > div.swiper-wrapper > div.elementor-repeater-item-61a53b5 > div.swiper-slide-bg",
+              "nodeLabel": "div.elementor-slides-wrapper > div.swiper-wrapper > div.elementor-repeater-item-61a53b5 > div.swiper-slide-bg",
+              "snippet": "<div class=\"swiper-slide-bg\" role=\"img\">",
+              "lhId": "1-22-DIV",
+              "type": "node",
+              "path": "1,HTML,1,BODY,6,DIV,1,DIV,0,DIV,0,DIV,0,MAIN,0,ARTICLE,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV",
+              "boundingRect": {
+                "top": 71,
+                "left": 0,
+                "width": 1335,
+                "right": 1335,
+                "bottom": 671,
+                "height": 600
+              }
+            }
+          }
+        ],
+        "headings": [
+          {
+            "valueType": "node",
+            "key": "node",
+            "label": "Element"
+          }
+        ],
+        "type": "table"
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": [
+        {
+          "name": "Exclude Above-the-fold Images from Lazy Load",
+          "description": "Improve your LCP images.",
+          "category": "image",
+          "inputs": [
+            {
+              "control_type": "checkbox",
+              "control_label": "Exclude LCP image from Lazy Load",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_exclude_above_the_fold_images"
+            },
+            {
+              "control_type": "number",
+              "control_label": "Exclude Above-the-fold Images from Lazy Load",
+              "control_values": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5"
+              ],
+              "value": null,
+              "key": "uucss_exclude_above_the_fold_image_count"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "uses-passive-event-listeners",
+      "name": "Uses passive listeners to improve scrolling performance",
+      "scoreDisplayMode": "metricSavings",
+      "description": "Consider marking your touch and wheel event listeners as `passive` to improve your page's scroll performance. [Learn more about adopting passive event listeners](https://developer.chrome.com/docs/lighthouse/best-practices/uses-passive-event-listeners/).",
+      "icon": "pass",
+      "files": {
+        "headings": [],
+        "items": [],
+        "type": "table"
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": []
+    },
+    {
+      "id": "no-document-write",
+      "name": "Avoids `document.write()`",
+      "scoreDisplayMode": "metricSavings",
+      "description": "For users on slow connections, external scripts dynamically injected via `document.write()` can delay page load by tens of seconds. [Learn how to avoid document.write()](https://developer.chrome.com/docs/lighthouse/best-practices/no-document-write/).",
+      "icon": "pass",
+      "files": {
+        "type": "table",
+        "items": [],
+        "headings": []
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": []
+    },
+    {
+      "id": "long-tasks",
+      "name": "Avoid long main-thread tasks",
+      "scoreDisplayMode": "informative",
+      "description": "Lists the longest tasks on the main thread, useful for identifying worst contributors to input delay. [Learn how to avoid long main-thread tasks](https://web.dev/articles/optimize-long-tasks)",
+      "displayValue": "1 long task found",
+      "icon": "pass",
+      "files": {
+        "sortedBy": [
+          "duration"
+        ],
+        "debugData": {
+          "type": "debugdata",
+          "urls": [
+            "https://seedkitty.com/?xxy=1234"
+          ],
+          "tasks": [
+            {
+              "other": 52,
+              "urlIndex": 0,
+              "paintCompositeRender": 0,
+              "scriptEvaluation": 0,
+              "duration": 52,
+              "styleLayout": 0,
+              "startTime": 323
+            }
+          ]
+        },
+        "items": [
+          {
+            "startTime": 323,
+            "duration": 52,
+            "url": {
+              "url": "https://seedkitty.com/?xxy=1234",
+              "file_type": {
+                "label": "Unknown",
+                "value": "unknown"
+              }
+            }
+          }
+        ],
+        "type": "table",
+        "skipSumming": [
+          "startTime"
+        ],
+        "headings": [
+          {
+            "key": "url",
+            "label": "URL",
+            "valueType": "url"
+          },
+          {
+            "key": "startTime",
+            "granularity": 1,
+            "label": "Start Time",
+            "valueType": "ms"
+          },
+          {
+            "key": "duration",
+            "granularity": 1,
+            "label": "Duration",
+            "valueType": "ms"
+          }
+        ]
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": []
+    },
+    {
+      "id": "non-composited-animations",
+      "name": "Avoid non-composited animations",
+      "scoreDisplayMode": "informative",
+      "description": "Animations which are not composited can be janky and increase CLS. [Learn how to avoid non-composited animations](https://developer.chrome.com/docs/lighthouse/performance/non-composited-animations/)",
+      "displayValue": "8 animated elements found",
+      "icon": "pass",
+      "files": {
+        "headings": [
+          {
+            "label": "Element",
+            "valueType": "node",
+            "subItemsHeading": {
+              "valueType": "text",
+              "key": "failureReason"
+            },
+            "key": "node"
+          },
+          {
+            "valueType": "text",
+            "subItemsHeading": {
+              "valueType": "text",
+              "key": "animation"
+            },
+            "label": "Name",
+            "key": null
+          }
+        ],
+        "type": "table",
+        "items": [
+          {
+            "node": {
+              "type": "node",
+              "boundingRect": {
+                "right": 827,
+                "width": 25,
+                "top": 2896,
+                "left": 802,
+                "height": 25,
+                "bottom": 2921
+              },
+              "snippet": "<svg aria-hidden=\"true\" class=\"e-font-icon-svg e-fab-cc-mastercard\" viewBox=\"0 0 576 512\" xmlns=\"http://www.w3.org/2000/svg\">",
+              "nodeLabel": "ul.elementor-icon-list-items > li.elementor-icon-list-item > span.elementor-icon-list-icon > svg.e-font-icon-svg",
+              "lhId": "page-2-svg",
+              "path": "1,HTML,1,BODY,6,DIV,3,FOOTER,1,DIV,0,DIV,1,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,UL,3,LI,0,SPAN,0,svg",
+              "selector": "ul.elementor-icon-list-items > li.elementor-icon-list-item > span.elementor-icon-list-icon > svg.e-font-icon-svg"
+            },
+            "subItems": {
+              "items": [
+                {
+                  "animation": "fill",
+                  "failureReason": "Unsupported CSS Property: fill"
+                }
+              ],
+              "type": "subitems"
+            }
+          },
+          {
+            "node": {
+              "type": "node",
+              "selector": "ul.elementor-icon-list-items > li.elementor-icon-list-item > span.elementor-icon-list-icon > svg.e-font-icon-svg",
+              "path": "1,HTML,1,BODY,6,DIV,3,FOOTER,1,DIV,0,DIV,1,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,UL,2,LI,0,SPAN,0,svg",
+              "lhId": "page-3-svg",
+              "nodeLabel": "ul.elementor-icon-list-items > li.elementor-icon-list-item > span.elementor-icon-list-icon > svg.e-font-icon-svg",
+              "boundingRect": {
+                "right": 740,
+                "bottom": 2921,
+                "top": 2896,
+                "left": 715,
+                "height": 25,
+                "width": 25
+              },
+              "snippet": "<svg aria-hidden=\"true\" class=\"e-font-icon-svg e-fab-cc-visa\" viewBox=\"0 0 576 512\" xmlns=\"http://www.w3.org/2000/svg\">"
+            },
+            "subItems": {
+              "items": [
+                {
+                  "animation": "fill",
+                  "failureReason": "Unsupported CSS Property: fill"
+                }
+              ],
+              "type": "subitems"
+            }
+          },
+          {
+            "subItems": {
+              "items": [
+                {
+                  "failureReason": "Unsupported CSS Property: fill",
+                  "animation": "fill"
+                }
+              ],
+              "type": "subitems"
+            },
+            "node": {
+              "snippet": "<svg aria-hidden=\"true\" class=\"e-font-icon-svg e-fas-euro-sign\" viewBox=\"0 0 320 512\" xmlns=\"http://www.w3.org/2000/svg\">",
+              "path": "1,HTML,1,BODY,6,DIV,3,FOOTER,1,DIV,0,DIV,1,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,UL,0,LI,0,SPAN,0,svg",
+              "nodeLabel": "ul.elementor-icon-list-items > li.elementor-icon-list-item > span.elementor-icon-list-icon > svg.e-font-icon-svg",
+              "type": "node",
+              "boundingRect": {
+                "bottom": 2921,
+                "height": 25,
+                "left": 421,
+                "right": 446,
+                "top": 2896,
+                "width": 25
+              },
+              "selector": "ul.elementor-icon-list-items > li.elementor-icon-list-item > span.elementor-icon-list-icon > svg.e-font-icon-svg",
+              "lhId": "page-4-svg"
+            }
+          },
+          {
+            "node": {
+              "snippet": "<span class=\"elementor-icon-list-text\">",
+              "type": "node",
+              "path": "1,HTML,1,BODY,6,DIV,3,FOOTER,1,DIV,0,DIV,1,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,UL,1,LI,1,SPAN",
+              "nodeLabel": "Direkt-Lastschrift",
+              "boundingRect": {
+                "left": 570,
+                "height": 23,
+                "top": 2897,
+                "bottom": 2920,
+                "width": 120,
+                "right": 690
+              },
+              "selector": "div.elementor-widget-container > ul.elementor-icon-list-items > li.elementor-icon-list-item > span.elementor-icon-list-text",
+              "lhId": "page-5-SPAN"
+            },
+            "subItems": {
+              "items": [
+                {
+                  "animation": "color",
+                  "failureReason": "Unsupported CSS Property: color"
+                }
+              ],
+              "type": "subitems"
+            }
+          },
+          {
+            "node": {
+              "path": "1,HTML,1,BODY,6,DIV,3,FOOTER,1,DIV,0,DIV,1,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,UL,0,LI,1,SPAN",
+              "lhId": "page-6-SPAN",
+              "snippet": "<span class=\"elementor-icon-list-text\">",
+              "type": "node",
+              "boundingRect": {
+                "left": 452,
+                "bottom": 2920,
+                "height": 23,
+                "right": 514,
+                "top": 2897,
+                "width": 62
+              },
+              "selector": "div.elementor-widget-container > ul.elementor-icon-list-items > li.elementor-icon-list-item > span.elementor-icon-list-text",
+              "nodeLabel": "Vorkasse"
+            },
+            "subItems": {
+              "items": [
+                {
+                  "animation": "color",
+                  "failureReason": "Unsupported CSS Property: color"
+                }
+              ],
+              "type": "subitems"
+            }
+          },
+          {
+            "subItems": {
+              "items": [
+                {
+                  "failureReason": "Unsupported CSS Property: fill",
+                  "animation": "fill"
+                }
+              ],
+              "type": "subitems"
+            },
+            "node": {
+              "boundingRect": {
+                "bottom": 2921,
+                "height": 25,
+                "right": 564,
+                "top": 2896,
+                "width": 25,
+                "left": 539
+              },
+              "lhId": "page-7-svg",
+              "snippet": "<svg aria-hidden=\"true\" class=\"e-font-icon-svg e-fas-money-check\" viewBox=\"0 0 640 512\" xmlns=\"http://www.w3.org/2000/svg\">",
+              "selector": "ul.elementor-icon-list-items > li.elementor-icon-list-item > span.elementor-icon-list-icon > svg.e-font-icon-svg",
+              "nodeLabel": "ul.elementor-icon-list-items > li.elementor-icon-list-item > span.elementor-icon-list-icon > svg.e-font-icon-svg",
+              "path": "1,HTML,1,BODY,6,DIV,3,FOOTER,1,DIV,0,DIV,1,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,UL,1,LI,0,SPAN,0,svg",
+              "type": "node"
+            }
+          },
+          {
+            "subItems": {
+              "type": "subitems",
+              "items": [
+                {
+                  "failureReason": "Unsupported CSS Property: color",
+                  "animation": "color"
+                }
+              ]
+            },
+            "node": {
+              "snippet": "<span class=\"elementor-icon-list-text\">",
+              "boundingRect": {
+                "left": 834,
+                "right": 915,
+                "height": 23,
+                "bottom": 2920,
+                "top": 2897,
+                "width": 81
+              },
+              "path": "1,HTML,1,BODY,6,DIV,3,FOOTER,1,DIV,0,DIV,1,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,UL,3,LI,1,SPAN",
+              "type": "node",
+              "nodeLabel": "MasterCard",
+              "selector": "div.elementor-widget-container > ul.elementor-icon-list-items > li.elementor-icon-list-item > span.elementor-icon-list-text",
+              "lhId": "page-8-SPAN"
+            }
+          },
+          {
+            "node": {
+              "snippet": "<span class=\"elementor-icon-list-text\">",
+              "nodeLabel": "Visa",
+              "lhId": "page-9-SPAN",
+              "boundingRect": {
+                "width": 31,
+                "bottom": 2920,
+                "left": 746,
+                "height": 23,
+                "right": 777,
+                "top": 2897
+              },
+              "type": "node",
+              "selector": "div.elementor-widget-container > ul.elementor-icon-list-items > li.elementor-icon-list-item > span.elementor-icon-list-text",
+              "path": "1,HTML,1,BODY,6,DIV,3,FOOTER,1,DIV,0,DIV,1,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,UL,2,LI,1,SPAN"
+            },
+            "subItems": {
+              "items": [
+                {
+                  "animation": "color",
+                  "failureReason": "Unsupported CSS Property: color"
+                }
+              ],
+              "type": "subitems"
+            }
+          }
+        ]
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": []
+    },
+    {
+      "id": "unsized-images",
+      "name": "Image elements do not have explicit `width` and `height`",
+      "scoreDisplayMode": "metricSavings",
+      "description": "Set an explicit width and height on image elements to reduce layout shifts and improve CLS. [Learn how to set image dimensions](https://web.dev/articles/optimize-cls#images_without_dimensions)",
+      "icon": "average",
+      "files": {
+        "headings": [
+          {
+            "key": "node",
+            "valueType": "node"
+          },
+          {
+            "key": "url",
+            "label": "URL",
+            "valueType": "url"
+          },
+          {
+            "key": "file_type",
+            "valueType": "string",
+            "label": "Type",
+            "subItemsHeading": {
+              "key": "file_type"
+            }
+          }
+        ],
+        "type": "table",
+        "items": [
+          {
+            "url": {
+              "url": "https://images.rapidload-cdn.io/spai/ret_blank,q_lossy,to_avif/https://sp-ao.shortpixel.ai/client/to_auto,q_lossy,ret_img/https://seedkitty.com/wp-content/uploads/elementor/thumbs/SeedKitty-Logo-qsjytckwehi0l5ict7a0ar564kt0ac5ki5f50897fy.webp",
+              "file_type": {
+                "label": "Image",
+                "value": "image"
+              }
+            },
+            "node": {
+              "type": "node",
+              "selector": "div.elementor-element > div.elementor-widget-container > a > img",
+              "snippet": "<img decoding=\"sync\" src=\"https://images.rapidload-cdn.io/spai/ret_blank,q_lossy,to_avif/https://sp-…\" alt=\"SeedKitty - Premium Cannabis Samen Kaufen - Logo\" loading=\"eager\" fetchpriority=\"high\" data-rp-src=\"https://sp-ao.shortpixel.ai/client/to_auto,q_lossy,ret_img/https://seedkit…\">",
+              "nodeLabel": "SeedKitty - Premium Cannabis Samen Kaufen - Logo",
+              "boundingRect": {
+                "top": 45,
+                "width": 175,
+                "left": 25,
+                "bottom": 89,
+                "right": 200,
+                "height": 44
+              },
+              "lhId": "1-2-IMG",
+              "path": "1,HTML,1,BODY,6,DIV,0,HEADER,0,DIV,1,DIV,1,DIV,0,DIV,0,A,0,IMG"
+            },
+            "action": {
+              "control_type": "dropdown",
+              "value": "none"
+            }
+          },
+          {
+            "url": {
+              "url": "https://images.rapidload-cdn.io/spai/ret_blank,q_lossy,to_avif/https://sp-ao.shortpixel.ai/client/to_auto,q_lossy,ret_img/https://seedkitty.com/wp-content/uploads/2024/05/shopping-bag.webp",
+              "file_type": {
+                "label": "Image",
+                "value": "image"
+              }
+            },
+            "node": {
+              "path": "1,HTML,1,BODY,6,DIV,0,HEADER,0,DIV,1,DIV,2,DIV,0,DIV,0,DIV,0,DIV,0,A,0,IMG",
+              "snippet": "<img decoding=\"sync\" src=\"https://images.rapidload-cdn.io/spai/ret_blank,q_lossy,to_avif/https://sp-…\" alt=\"Cart\" style=\"width: 30px; height: auto;\" loading=\"eager\" fetchpriority=\"high\" data-rp-src=\"https://sp-ao.shortpixel.ai/client/to_auto,q_lossy,ret_img/https://seedkit…\">",
+              "lhId": "1-3-IMG",
+              "selector": "div.elementor-shortcode > div.wpmenucart-container > a.wpmenucart-icon > img",
+              "type": "node",
+              "boundingRect": {
+                "left": 1290,
+                "width": 30,
+                "bottom": 82,
+                "top": 52,
+                "right": 1320,
+                "height": 30
+              },
+              "nodeLabel": "Cart"
+            },
+            "action": {
+              "control_type": "dropdown",
+              "value": "none"
+            }
+          }
+        ]
+      },
+      "type": "diagnostics",
+      "score": 50,
+      "settings": [
+        {
+          "name": "Add Width and Height Attributes",
+          "description": "Include width and height attributes for these images.",
+          "category": "image",
+          "inputs": [
+            {
+              "control_type": "checkbox",
+              "control_label": "Add Width and Height Attributes",
+              "control_values": [
+                "1",
+                "0"
+              ],
+              "value": null,
+              "key": "uucss_set_width_and_height"
+            },
+            {
+              "control_type": "textarea",
+              "control_label": "Exclude Images from being set width and height",
+              "control_values": null,
+              "value": "",
+              "key": "uucss_exclude_images_from_set_width_and_height"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "viewport",
+      "name": "Has a `<meta name=\"viewport\">` tag with `width` or `initial-scale`",
+      "scoreDisplayMode": "metricSavings",
+      "description": "A `<meta name=\"viewport\">` not only optimizes your app for mobile screen sizes, but also prevents [a 300 millisecond delay to user input](https://developer.chrome.com/blog/300ms-tap-delay-gone-away/). [Learn more about using the viewport meta tag](https://developer.chrome.com/docs/lighthouse/pwa/viewport/).",
+      "icon": "pass",
+      "files": {
+        "type": "debugdata",
+        "viewportContent": "width=device-width, initial-scale=1"
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": []
+    },
+    {
+      "id": "critical-request-chains",
+      "name": "Avoid chaining critical requests",
+      "scoreDisplayMode": "informative",
+      "description": "The Critical Request Chains below show you what resources are loaded with a high priority. Consider reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load. [Learn how to avoid chaining critical requests](https://developer.chrome.com/docs/lighthouse/performance/critical-request-chains/).",
+      "displayValue": "33 chains found",
+      "icon": "pass",
+      "files": {
+        "chains": {
+          "A41F8C5A267A9042BC4D81023CA44689": {
+            "request": {
+              "startTime": 1460726.052517,
+              "url": "https://seedkitty.com/?xxy=1234",
+              "responseReceivedTime": 1460727.758904,
+              "endTime": 1460727.759382,
+              "transferSize": 50944
+            },
+            "children": {
+              "52.22": {
+                "request": {
+                  "responseReceivedTime": 1460727.884654,
+                  "url": "https://seedkitty.com/wp-content/uploads/elementor/css/custom-pro-widget-slides.min.css?ver=1734987690",
+                  "transferSize": 1602,
+                  "endTime": 1460727.88466,
+                  "startTime": 1460727.783245
+                }
+              },
+              "52.7": {
+                "request": {
+                  "startTime": 1460727.780714,
+                  "responseReceivedTime": 1460728.0025700002,
+                  "url": "https://seedkitty.com/wp-content/themes/astra/assets/css/minified/compatibility/woocommerce/woocommerce-layout-grid.min.css?ver=4.8.8",
+                  "transferSize": 3038,
+                  "endTime": 1460728.002576
+                }
+              },
+              "52.11": {
+                "request": {
+                  "startTime": 1460727.781463,
+                  "endTime": 1460727.855676,
+                  "responseReceivedTime": 1460727.8556720002,
+                  "url": "https://seedkitty.com/wp-content/uploads/elementor/css/custom-frontend.min.css?ver=1734987690",
+                  "transferSize": 8331
+                }
+              },
+              "52.12": {
+                "request": {
+                  "responseReceivedTime": 1460727.808911,
+                  "transferSize": 4438,
+                  "endTime": 1460727.808916,
+                  "startTime": 1460727.781631,
+                  "url": "https://seedkitty.com/wp-content/uploads/elementor/css/custom-pro-widget-nav-menu.min.css?ver=1734987690"
+                }
+              },
+              "52.38": {
+                "request": {
+                  "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/post-14946-113006773d29.min.css",
+                  "startTime": 1460727.968214,
+                  "endTime": 1460728.110204,
+                  "responseReceivedTime": 1460728.1102000002,
+                  "transferSize": 1410
+                }
+              },
+              "52.6": {
+                "request": {
+                  "endTime": 1460727.853358,
+                  "responseReceivedTime": 1460727.8533539998,
+                  "transferSize": 3937,
+                  "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/main-25c97c5f8be7.min.css",
+                  "startTime": 1460727.779805
+                }
+              },
+              "52.24": {
+                "request": {
+                  "url": "https://seedkitty.com/wp-content/plugins/elementor-pro/assets/css/widget-loop-common.min.css?ver=3.26.2",
+                  "responseReceivedTime": 1460727.841145,
+                  "startTime": 1460727.783614,
+                  "transferSize": 1201,
+                  "endTime": 1460727.84115
+                }
+              },
+              "52.5": {
+                "request": {
+                  "transferSize": 1492,
+                  "responseReceivedTime": 1460727.9661720002,
+                  "endTime": 1460727.966175,
+                  "startTime": 1460727.779667,
+                  "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/acfw-blocks-frontend-7c448cf4d973.min.css"
+                }
+              },
+              "52.28": {
+                "request": {
+                  "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/post-5469-85c202159813.min.css",
+                  "startTime": 1460727.784513,
+                  "transferSize": 2537,
+                  "endTime": 1460727.968691,
+                  "responseReceivedTime": 1460727.968687
+                }
+              },
+              "52.15": {
+                "request": {
+                  "transferSize": 1218,
+                  "responseReceivedTime": 1460727.96583,
+                  "endTime": 1460727.965833,
+                  "url": "https://seedkitty.com/wp-content/plugins/elementor/assets/css/widget-heading.min.css?ver=3.26.3",
+                  "startTime": 1460727.781983
+                }
+              },
+              "52.9": {
+                "request": {
+                  "startTime": 1460727.781237,
+                  "transferSize": 1272,
+                  "url": "https://seedkitty.com/wp-content/plugins/wp-menu-cart/assets/css/wpmenucart-icons.min.css?ver=2.14.10",
+                  "responseReceivedTime": 1460727.846385,
+                  "endTime": 1460727.846388
+                }
+              },
+              "52.19": {
+                "request": {
+                  "url": "https://seedkitty.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/v4-shims.min.css?ver=3.26.3",
+                  "responseReceivedTime": 1460727.966875,
+                  "startTime": 1460727.782566,
+                  "transferSize": 5260,
+                  "endTime": 1460727.966878
+                }
+              },
+              "52.17": {
+                "request": {
+                  "endTime": 1460727.848812,
+                  "startTime": 1460727.782275,
+                  "url": "https://seedkitty.com/wp-content/plugins/elementor/assets/css/widget-text-editor.min.css?ver=3.26.3",
+                  "responseReceivedTime": 1460727.8488079999,
+                  "transferSize": 1273
+                }
+              },
+              "52.8": {
+                "request": {
+                  "url": "https://seedkitty.com/wp-content/themes/astra/assets/css/minified/compatibility/woocommerce/woocommerce-grid.min.css?ver=4.8.8",
+                  "responseReceivedTime": 1460727.849526,
+                  "startTime": 1460727.781092,
+                  "endTime": 1460727.84953,
+                  "transferSize": 17291
+                }
+              },
+              "52.18": {
+                "children": {
+                  "52.105": {
+                    "request": {
+                      "endTime": 1460728.285214,
+                      "responseReceivedTime": 1460728.2852019998,
+                      "startTime": 1460728.062118,
+                      "transferSize": 84567,
+                      "url": "https://seedkitty.com/wp-content/uploads/fonts/lora/Lora-Variable.woff2"
+                    }
+                  }
+                },
+                "request": {
+                  "responseReceivedTime": 1460727.833373,
+                  "endTime": 1460727.833379,
+                  "transferSize": 1495,
+                  "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/post-4498-db05434ba523.min.css",
+                  "startTime": 1460727.782462
+                }
+              },
+              "52.16": {
+                "request": {
+                  "transferSize": 2562,
+                  "responseReceivedTime": 1460727.847367,
+                  "url": "https://seedkitty.com/wp-content/plugins/elementor-pro/assets/css/widget-form.min.css?ver=3.26.2",
+                  "startTime": 1460727.782147,
+                  "endTime": 1460727.847371
+                }
+              },
+              "52.21": {
+                "request": {
+                  "url": "https://seedkitty.com/wp-content/plugins/elementor/assets/css/conditionals/e-swiper.min.css?ver=3.26.3",
+                  "endTime": 1460727.828007,
+                  "transferSize": 1825,
+                  "startTime": 1460727.782909,
+                  "responseReceivedTime": 1460727.828002
+                }
+              },
+              "52.37": {
+                "request": {
+                  "startTime": 1460727.785717,
+                  "responseReceivedTime": 1460727.966469,
+                  "endTime": 1460727.966472,
+                  "url": "https://seedkitty.com/wp-content/plugins/elementor-pro/assets/css/widget-woocommerce-products.min.css?ver=3.26.2",
+                  "transferSize": 1613
+                }
+              },
+              "52.25": {
+                "request": {
+                  "responseReceivedTime": 1460727.834612,
+                  "endTime": 1460727.834616,
+                  "startTime": 1460727.783721,
+                  "url": "https://seedkitty.com/wp-content/plugins/elementor-pro/assets/css/widget-loop-carousel.min.css?ver=3.26.2",
+                  "transferSize": 2416
+                }
+              },
+              "52.26": {
+                "request": {
+                  "endTime": 1460727.978403,
+                  "transferSize": 1359,
+                  "startTime": 1460727.783991,
+                  "responseReceivedTime": 1460727.978398,
+                  "url": "https://seedkitty.com/wp-content/uploads/elementor/css/custom-widget-image-box.min.css?ver=1734987690"
+                }
+              },
+              "52.20": {
+                "request": {
+                  "url": "https://seedkitty.com/wp-content/plugins/elementor/assets/lib/swiper/v8/css/swiper.min.css?ver=8.4.5",
+                  "responseReceivedTime": 1460727.8477170002,
+                  "endTime": 1460727.84772,
+                  "startTime": 1460727.782814,
+                  "transferSize": 5612
+                }
+              },
+              "52.10": {
+                "request": {
+                  "url": "https://seedkitty.com/wp-content/plugins/wp-menu-cart/assets/css/wpmenucart-main.min.css?ver=2.14.10",
+                  "responseReceivedTime": 1460727.846128,
+                  "startTime": 1460727.781352,
+                  "transferSize": 1441,
+                  "endTime": 1460727.84613
+                }
+              },
+              "52.14": {
+                "request": {
+                  "startTime": 1460727.781862,
+                  "responseReceivedTime": 1460727.8507990001,
+                  "url": "https://seedkitty.com/wp-content/plugins/elementor/assets/css/widget-divider.min.css?ver=3.26.3",
+                  "transferSize": 1830,
+                  "endTime": 1460727.850802
+                }
+              },
+              "52.39": {
+                "request": {
+                  "transferSize": 2145,
+                  "responseReceivedTime": 1460727.990529,
+                  "startTime": 1460727.969634,
+                  "url": "https://seedkitty.com/wp-content/uploads/elementor/css/custom-widget-icon-list.min.css?ver=1734987690",
+                  "endTime": 1460727.990535
+                }
+              },
+              "52.2": {
+                "request": {
+                  "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/index-467dde24-9364cc26dbea.min.css",
+                  "transferSize": 1324,
+                  "responseReceivedTime": 1460727.9747799998,
+                  "endTime": 1460727.974786,
+                  "startTime": 1460727.779249
+                }
+              },
+              "52.4": {
+                "request": {
+                  "startTime": 1460727.779475,
+                  "responseReceivedTime": 1460727.8454449999,
+                  "endTime": 1460727.84545,
+                  "transferSize": 10103,
+                  "url": "https://seedkitty.com/wp-content/themes/astra/assets/css/minified/main.min.css?ver=4.8.8"
+                }
+              },
+              "52.29": {
+                "request": {
+                  "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/post-5518-12fb4b718f9e.min.css",
+                  "transferSize": 2928,
+                  "startTime": 1460727.784621,
+                  "endTime": 1460727.837143,
+                  "responseReceivedTime": 1460727.837138
+                }
+              },
+              "52.13": {
+                "request": {
+                  "transferSize": 1200,
+                  "startTime": 1460727.781759,
+                  "responseReceivedTime": 1460727.8584529997,
+                  "url": "https://seedkitty.com/wp-content/plugins/elementor/assets/css/widget-image.min.css?ver=3.26.3",
+                  "endTime": 1460727.858459
+                }
+              },
+              "52.36": {
+                "request": {
+                  "startTime": 1460727.785554,
+                  "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/wc-blocks-49db983e0920.min.css",
+                  "endTime": 1460727.965424,
+                  "responseReceivedTime": 1460727.965419,
+                  "transferSize": 3605
+                }
+              },
+              "52.27": {
+                "request": {
+                  "responseReceivedTime": 1460727.845877,
+                  "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/post-4968-53e4b720fa83.min.css",
+                  "endTime": 1460727.845881,
+                  "startTime": 1460727.784386,
+                  "transferSize": 2482
+                }
+              },
+              "52.3": {
+                "request": {
+                  "responseReceivedTime": 1460727.844724,
+                  "endTime": 1460727.844729,
+                  "startTime": 1460727.779347,
+                  "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/index-2a7d8588-376c919b98a5.min.css",
+                  "transferSize": 1437
+                }
+              },
+              "52.23": {
+                "request": {
+                  "startTime": 1460727.783485,
+                  "responseReceivedTime": 1460727.8614670003,
+                  "url": "https://seedkitty.com/wp-content/plugins/elementor/assets/css/widget-spacer.min.css?ver=3.26.3",
+                  "endTime": 1460727.861471,
+                  "transferSize": 1376
+                }
+              },
+              "52.40": {
+                "request": {
+                  "transferSize": 1158,
+                  "url": "https://seedkitty.com/wp-content/plugins/elementor-pro/assets/css/modules/sticky.min.css?ver=3.26.2",
+                  "startTime": 1460727.99271,
+                  "endTime": 1460728.012323,
+                  "responseReceivedTime": 1460728.0123179997
+                }
+              }
+            }
+          }
+        },
+        "type": "criticalrequestchain",
+        "longestChain": {
+          "duration": 2232.697000026703,
+          "transferSize": 84567,
+          "length": 3
+        }
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": []
+    },
+    {
+      "id": "resource-summary",
+      "name": "Resources Summary",
+      "scoreDisplayMode": "informative",
+      "description": "Aggregates all network requests and groups them by type",
+      "icon": "pass",
+      "files": {
+        "headings": [
+          {
+            "key": "label",
+            "valueType": "text",
+            "label": "Resource Type"
+          },
+          {
+            "valueType": "numeric",
+            "label": "Requests",
+            "key": "requestCount"
+          },
+          {
+            "valueType": "bytes",
+            "label": "Transfer Size",
+            "key": "transferSize"
+          }
+        ],
+        "type": "table",
+        "items": [
+          {
+            "transferSize": 463671,
+            "label": "Total",
+            "requestCount": 57,
+            "resourceType": "total"
+          },
+          {
+            "resourceType": "image",
+            "transferSize": 179892,
+            "label": "Image",
+            "requestCount": 8
+          },
+          {
+            "requestCount": 34,
+            "transferSize": 104139,
+            "label": "Stylesheet",
+            "resourceType": "stylesheet"
+          },
+          {
+            "resourceType": "font",
+            "requestCount": 1,
+            "label": "Font",
+            "transferSize": 84567
+          },
+          {
+            "requestCount": 1,
+            "resourceType": "document",
+            "transferSize": 50944,
+            "label": "Document"
+          },
+          {
+            "requestCount": 5,
+            "transferSize": 35913,
+            "resourceType": "script",
+            "label": "Script"
+          },
+          {
+            "label": "Other",
+            "resourceType": "other",
+            "requestCount": 8,
+            "transferSize": 8216
+          },
+          {
+            "resourceType": "media",
+            "requestCount": 0,
+            "label": "Media",
+            "transferSize": 0
+          },
+          {
+            "label": "Third-party",
+            "resourceType": "third-party",
+            "requestCount": 14,
+            "transferSize": 121346
+          }
+        ]
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": []
+    },
+    {
+      "id": "largest-contentful-paint-element",
+      "name": "Largest Contentful Paint element",
+      "scoreDisplayMode": "informative",
+      "description": "This is the largest contentful element painted within the viewport. [Learn more about the Largest Contentful Paint element](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+      "displayValue": "810 ms",
+      "icon": "pass",
+      "files": {
+        "type": "list",
+        "items": [
+          {
+            "items": [
+              {
+                "node": {
+                  "type": "node",
+                  "path": "1,HTML,1,BODY,6,DIV,1,DIV,0,DIV,0,DIV,0,MAIN,0,ARTICLE,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV",
+                  "nodeLabel": "div.elementor-slides-wrapper > div.swiper-wrapper > div.elementor-repeater-item-61a53b5 > div.swiper-slide-bg",
+                  "snippet": "<div class=\"swiper-slide-bg\" role=\"img\">",
+                  "boundingRect": {
+                    "top": 71,
+                    "bottom": 671,
+                    "height": 600,
+                    "width": 1335,
+                    "right": 1335,
+                    "left": 0
+                  },
+                  "selector": "div.elementor-slides-wrapper > div.swiper-wrapper > div.elementor-repeater-item-61a53b5 > div.swiper-slide-bg",
+                  "lhId": "page-0-DIV"
+                }
+              }
+            ],
+            "type": "table",
+            "headings": [
+              {
+                "valueType": "node",
+                "label": "Element",
+                "key": "node"
+              }
+            ]
+          },
+          {
+            "headings": [
+              {
+                "valueType": "text",
+                "label": "Phase",
+                "key": "phase"
+              },
+              {
+                "valueType": "text",
+                "label": "% of LCP",
+                "key": "percent"
+              },
+              {
+                "key": "timing",
+                "valueType": "ms",
+                "label": "Timing"
+              }
+            ],
+            "type": "table",
+            "items": [
+              {
+                "percent": "20%",
+                "phase": "TTFB",
+                "timing": 161
+              },
+              {
+                "timing": 580.5410621091326,
+                "percent": "72%",
+                "phase": "Load Delay"
+              },
+              {
+                "timing": 8.392831138810266,
+                "percent": "1%",
+                "phase": "Load Time"
+              },
+              {
+                "phase": "Render Delay",
+                "timing": 59.06610675205718,
+                "percent": "7%"
+              }
+            ]
+          }
+        ]
+      },
+      "type": "passed_audit",
+      "score": 100,
+      "settings": []
+    },
+    {
+      "id": "prioritize-lcp-image",
+      "name": "Preload Largest Contentful Paint image",
+      "scoreDisplayMode": "metricSavings",
+      "description": "If the LCP element is dynamically added to the page, you should preload the image in order to improve LCP. [Learn more about preloading LCP elements](https://web.dev/articles/optimize-lcp#optimize_when_the_resource_is_discovered).",
+      "icon": "average",
+      "files": {
+        "debugData": {
+          "pathLength": 3,
+          "initiatorPath": [
+            {
+              "url": "https://seedkitty.com/wp-content/uploads/2024/12/SeedKitty-Advent.webp",
+              "initiatorType": "parser"
+            },
+            {
+              "url": "https://seedkitty.com/wp-content/cache/rapidload/min-css/post-4968-53e4b720fa83.min.css",
+              "initiatorType": "parser"
+            },
+            {
+              "url": "https://seedkitty.com/?xxy=1234",
+              "initiatorType": "other"
+            }
+          ],
+          "type": "debugdata"
+        },
+        "overallSavingsMs": 0,
+        "items": [
+          {
+            "wastedMs": 0,
+            "node": {
+              "type": "node",
+              "boundingRect": {
+                "bottom": 671,
+                "height": 600,
+                "right": 1335,
+                "left": 0,
+                "width": 1335,
+                "top": 71
+              },
+              "selector": "div.elementor-slides-wrapper > div.swiper-wrapper > div.elementor-repeater-item-61a53b5 > div.swiper-slide-bg",
+              "snippet": "<div class=\"swiper-slide-bg\" role=\"img\">",
+              "nodeLabel": "div.elementor-slides-wrapper > div.swiper-wrapper > div.elementor-repeater-item-61a53b5 > div.swiper-slide-bg",
+              "lhId": "page-0-DIV",
+              "path": "1,HTML,1,BODY,6,DIV,1,DIV,0,DIV,0,DIV,0,MAIN,0,ARTICLE,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV,0,DIV"
+            },
+            "url": {
+              "url": "https://seedkitty.com/wp-content/uploads/2024/12/SeedKitty-Advent.webp",
+              "file_type": {
+                "label": "Image",
+                "value": "image"
+              }
+            },
+            "action": {
+              "control_type": "dropdown",
+              "value": "none"
+            }
+          }
+        ],
+        "sortedBy": [
+          "wastedMs"
+        ],
+        "type": "opportunity",
+        "headings": [
+          {
+            "valueType": "node",
+            "key": "node"
+          },
+          {
+            "valueType": "url",
+            "label": "URL",
+            "key": "url"
+          },
+          {
+            "label": "Potential Savings",
+            "key": "wastedMs",
+            "valueType": "timespanMs"
+          },
+          {
+            "key": "file_type",
+            "valueType": "string",
+            "label": "Type",
+            "subItemsHeading": {
+              "key": "file_type"
+            }
+          }
+        ]
+      },
+      "type": "opportunity",
+      "score": 50,
+      "settings": []
+    }
+  ],
+  "loadingExperience": {
+    "initial_url": "https://seedkitty.com/?xxy=1234",
+    "timestamp": 1735039102267
+  },
+  "settings": [
+    {
+      "key": "uucss_enable_cpcss",
+      "value": true,
+      "status": {
+        "status": null,
+        "error": null,
+        "desktop": null,
+        "mobile": null
+      }
+    },
+    {
+      "key": "uucss_enable_cpcss_mobile",
+      "value": false,
+      "status": {
+        "status": null,
+        "error": null,
+        "desktop": null,
+        "mobile": null
+      }
+    },
+    {
+      "key": "uucss_additional_css",
+      "value": "",
+      "status": {
+        "status": null,
+        "error": null,
+        "desktop": null,
+        "mobile": null
+      }
+    },
+    {
+      "key": "remove_cpcss_on_user_interaction",
+      "value": false,
+      "status": {
+        "status": null,
+        "error": null,
+        "desktop": null,
+        "mobile": null
+      }
+    },
+    {
+      "key": "uucss_ignore_inlined_styles",
+      "value": false,
+      "status": {
+        "status": null,
+        "error": null,
+        "desktop": null,
+        "mobile": null
+      }
+    },
+    {
+      "key": "rapidload_enable_cpcss_file_chunk",
+      "value": false,
+      "status": {
+        "status": null,
+        "error": null,
+        "desktop": null,
+        "mobile": null
+      }
+    },
+    {
+      "key": "rapidload_cpcss_file_character_length",
+      "value": 0,
+      "status": {
+        "status": null,
+        "error": null,
+        "desktop": null,
+        "mobile": null
+      }
+    },
+    {
+      "key": "enable_uucss_on_cpcss",
+      "value": false,
+      "status": {
+        "status": null,
+        "error": null,
+        "desktop": null,
+        "mobile": null
+      }
+    },
+    {
+      "key": "uucss_preload_font_urls",
+      "value": "",
+      "status": {
+        "status": null,
+        "error": null,
+        "desktop": null,
+        "mobile": null
+      }
+    },
+    {
+      "key": "uucss_load_js_method",
+      "value": true
+    },
+    {
+      "key": "uucss_excluded_js_files_from_defer",
+      "value": ""
+    },
+    {
+      "key": "uucss_support_next_gen_formats",
+      "value": true
+    },
+    {
+      "key": "uucss_image_optimize_level",
+      "value": "lossless"
+    },
+    {
+      "key": "uucss_generate_blurry_place_holder",
+      "value": false
+    },
+    {
+      "key": "uucss_adaptive_image_delivery",
+      "value": false
+    },
+    {
+      "key": "uucss_exclude_images_from_modern_images",
+      "value": ""
+    },
+    {
+      "key": "uucss_lazy_load_images",
+      "value": true
+    },
+    {
+      "key": "uucss_exclude_images_from_lazy_load",
+      "value": ""
+    },
+    {
+      "key": "minify_js",
+      "value": true
+    },
+    {
+      "key": "uucss_exclude_files_from_minify_js",
+      "value": ""
+    },
+    {
+      "key": "uucss_enable_uucss",
+      "value": true,
+      "status": {
+        "status": null,
+        "stats": null,
+        "warnings": null,
+        "error": null
+      }
+    },
+    {
+      "key": "uucss_excluded_files",
+      "value": "",
+      "status": {
+        "status": null,
+        "stats": null,
+        "warnings": null,
+        "error": null
+      }
+    },
+    {
+      "key": "uucss_safelist",
+      "value": "",
+      "status": {
+        "status": null,
+        "stats": null,
+        "warnings": null,
+        "error": null
+      }
+    },
+    {
+      "key": "uucss_misc_options",
+      "value": "All Files",
+      "status": {
+        "status": null,
+        "stats": null,
+        "warnings": null,
+        "error": null
+      }
+    },
+    {
+      "key": "delay_javascript",
+      "value": true
+    },
+    {
+      "key": "rapidload_js_delay_method",
+      "value": "All Files"
+    },
+    {
+      "key": "uucss_exclude_files_from_delay_js",
+      "value": []
+    },
+    {
+      "key": "delay_javascript_callback",
+      "value": ""
+    },
+    {
+      "key": "uucss_excluded_js_files",
+      "value": ""
+    },
+    {
+      "key": "uucss_load_scripts_on_user_interaction",
+      "value": ""
+    },
+    {
+      "key": "uucss_disable_wp_emoji",
+      "value": false
+    },
+    {
+      "key": "preload_internal_links",
+      "value": false
+    },
+    {
+      "key": "uucss_enable_cache",
+      "value": true,
+      "status": {
+        "status": "processing",
+        "file": "/Users/shakee93/Local Sites/rapidload/app/public/wp-content/cache/rapidload-cache/seedkitty.com/https-index.html",
+        "size": null,
+        "error": {
+          "code": 422,
+          "message": "Cache file not found"
+        },
+        "url": "https://seedkitty.com/?xxy=1234"
+      }
+    },
+    {
+      "key": "cache_expiry_time",
+      "value": "0",
+      "status": {
+        "status": "processing",
+        "file": "/Users/shakee93/Local Sites/rapidload/app/public/wp-content/cache/rapidload-cache/seedkitty.com/https-index.html",
+        "size": null,
+        "error": {
+          "code": 422,
+          "message": "Cache file not found"
+        },
+        "url": "https://seedkitty.com/?xxy=1234"
+      }
+    },
+    {
+      "key": "mobile_cache",
+      "value": true,
+      "status": {
+        "status": "processing",
+        "file": "/Users/shakee93/Local Sites/rapidload/app/public/wp-content/cache/rapidload-cache/seedkitty.com/https-index.html",
+        "size": null,
+        "error": {
+          "code": 422,
+          "message": "Cache file not found"
+        },
+        "url": "https://seedkitty.com/?xxy=1234"
+      }
+    },
+    {
+      "key": "excluded_page_paths",
+      "value": "",
+      "status": {
+        "status": "processing",
+        "file": "/Users/shakee93/Local Sites/rapidload/app/public/wp-content/cache/rapidload-cache/seedkitty.com/https-index.html",
+        "size": null,
+        "error": {
+          "code": 422,
+          "message": "Cache file not found"
+        },
+        "url": "https://seedkitty.com/?xxy=1234"
+      }
+    },
+    {
+      "key": "uucss_enable_cdn",
+      "value": true
+    },
+    {
+      "key": "update_htaccess_file",
+      "value": false,
+      "status": {
+        "server": "apache",
+        "has_rapidload_rules": true,
+        "status": "success",
+        "error": {
+          "code": null,
+          "message": null
+        }
+      }
+    },
+    {
+      "key": "uucss_self_host_google_fonts",
+      "value": true
+    },
+    {
+      "key": "uucss_lazy_load_iframes",
+      "value": true
+    },
+    {
+      "key": "uucss_exclude_iframes_from_lazy_load",
+      "value": ""
+    },
+    {
+      "key": "uucss_exclude_above_the_fold_images",
+      "value": false
+    },
+    {
+      "key": "uucss_exclude_above_the_fold_image_count",
+      "value": 3
+    },
+    {
+      "key": "uucss_minify",
+      "value": true
+    },
+    {
+      "key": "uucss_minify_excluded_files",
+      "value": ""
+    },
+    {
+      "key": "uucss_set_width_and_height",
+      "value": true
+    },
+    {
+      "key": "uucss_exclude_images_from_set_width_and_height",
+      "value": ""
+    }
+  ],
+  "id": 141535473
+}

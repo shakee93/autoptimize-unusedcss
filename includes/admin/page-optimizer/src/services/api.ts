@@ -1,11 +1,11 @@
 import { isDev, toBoolean } from "lib/utils";
 import store from "../store";
 import { toast } from "components/ui/use-toast";
-import { fetchPages, fetchPosts, updateLicense } from "../store/app/appActions";
-
+import sampleData from "../lib/sample-pagespeed.json";
 class ApiService {
     public baseURL: URL;
     private options: WordPressOptions;
+    public aiBaseURL: URL;
 
 
     constructor(options?: WordPressOptions, query?: string, action?: string) {
@@ -15,6 +15,9 @@ class ApiService {
         }
 
         this.options = options
+
+        // this.aiBaseURL = new URL('https://ai.rapidload.io/api');
+        this.aiBaseURL = new URL('http://localhost:3000/api');
 
         let base = options?.ajax_url
             ? options.ajax_url
@@ -192,22 +195,24 @@ class ApiService {
                 pageSpeedURL.searchParams.append('api_key', this.options.license_key);
             }
 
-            const pageSpeed = await fetch(pageSpeedURL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    settings: settings.state?.
-                        flatMap(t =>
-                            t.inputs
-                                .filter(({ value }) => value != null)
-                                .map(({ key, value }) => ({ key, value, status: t.status })))
-                        || []
-                })
-            });
 
-            return await pageSpeed.json()
+
+            // const pageSpeed = await fetch(pageSpeedURL, {
+            //     method: "POST",
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //     },
+            //     body: JSON.stringify({
+            //         settings: settings.state?.
+            //             flatMap(t =>
+            //                 t.inputs
+            //                     .filter(({ value }) => value != null)
+            //                     .map(({ key, value }) => ({ key, value, status: t.status })))
+            //             || []
+            //     })
+            // });
+
+            return sampleData
 
         } catch (error) {
             console.error(error);
@@ -218,9 +223,42 @@ class ApiService {
     async getAiPrediction(url: string, score: number, audits: any, metrics: any): Promise<any> {
         try {
 
-            const ai_api_root = 'https://ai.rapidload.io/api';
-            // const ai_api_root = 'http://localhost:3000/api';
-            const ai_prediction_url = new URL(`${ai_api_root}/score`);
+            const ai_prediction_url = new URL(`${this.aiBaseURL}/score`);
+
+            ai_prediction_url.searchParams.append('url', url);
+            ai_prediction_url.searchParams.append('score', score.toString());
+
+            const response = await fetch(ai_prediction_url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    audits,
+                    metrics
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('AI prediction request failed');
+            }
+
+            const data = await response.json();
+            return {
+                success: true,
+                data: data
+            };
+
+        } catch (error) {
+            console.error('AI Prediction Error:', error);
+            throw error;
+        }
+    }
+
+    async getAIDiagnosis(url: string, score: number, audits: any, metrics: any): Promise<any> {
+        try {
+
+            const ai_prediction_url = new URL(`${this.aiBaseURL}/diagnosis`);
 
             ai_prediction_url.searchParams.append('url', url);
             ai_prediction_url.searchParams.append('score', score.toString());
@@ -590,6 +628,24 @@ class ApiService {
         }
 
     }
+
+    async getActivePlugins(): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', 'rapidload_get_active_plugins');
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
     rest() {
         return this
     }

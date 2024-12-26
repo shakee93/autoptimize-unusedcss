@@ -805,5 +805,31 @@ trait RapidLoad_Utils {
         }
         return '';
     }
+
+     public static function get_active_plugins() {
+        $plugins = (array) get_option('active_plugins', []);
+        $plugin_details = [];
+
+        foreach ($plugins as $plugin) {
+            $plugin_data = get_plugin_data(WP_PLUGIN_DIR . '/' . $plugin);
+            $plugin_details[] = [
+                'name' => $plugin_data['Name'],
+                'source' => $plugin_data['PluginURI'] ?? 'Unknown'
+            ];
+        }
+
+        if (is_multisite()) {
+            $sitewide_plugins = array_keys((array) get_site_option('active_sitewide_plugins', []));
+            foreach ($sitewide_plugins as $plugin) {
+                $plugin_data = get_plugin_data(WP_PLUGIN_DIR . '/' . $plugin);
+                $plugin_details[] = [
+                    'name' => $plugin_data['Name'],
+                    'source' => $plugin_data['PluginURI'] ?? 'Unknown'
+                ];
+            }
+        }
+
+        return array_column($plugin_details, 'name');
+    }
     
 }
