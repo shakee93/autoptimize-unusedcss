@@ -576,7 +576,9 @@ class RapidLoad_Job{
             'first_entry' => $first_entry ? json_decode($first_entry->data)->performance : 0,
             'last_entry' => $last_entry ? json_decode($last_entry->data)->performance : 0,
             'first_response_time' => $first_entry ? $get_response_time($first_entry->data) : 0,
-            'last_response_time' => $last_entry ? $get_response_time($last_entry->data) : 0
+            'last_response_time' => $last_entry ? $get_response_time($last_entry->data) : 0,
+            'first_entry_metrics' => $first_entry ? json_decode($first_entry->data)->metrics : [],
+            'last_entry_metrics' => $last_entry ? json_decode($last_entry->data)->metrics : [],
         ];
     }
 

@@ -1658,6 +1658,7 @@ class RapidLoad_Optimizer
 
         if(isset(self::$options['uucss_enable_cache'])){
             self::$global_options['uucss_enable_cache'] = self::$options['uucss_enable_cache'];
+            RapidLoad_Base::update_option('rapidload_module_cache', self::$options['uucss_enable_cache']);
             RapidLoad_Base::update_option('autoptimize_uucss_settings',self::$global_options);
         }
 
