@@ -255,33 +255,27 @@ class ApiService {
         }
     }
 
-    async getAIDiagnosis(url: string, score: number, audits: any, metrics: any): Promise<any> {
+    async getAIDiagnosis(data: any): Promise<any> {
         try {
 
             const ai_prediction_url = new URL(`${this.aiBaseURL}/diagnosis`);
-
-            ai_prediction_url.searchParams.append('url', url);
-            ai_prediction_url.searchParams.append('score', score.toString());
 
             const response = await fetch(ai_prediction_url, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                    audits,
-                    metrics
-                })
+                body: JSON.stringify(data)
             });
 
             if (!response.ok) {
                 throw new Error('AI prediction request failed');
             }
 
-            const data = await response.json();
+            const output = await response.json();
             return {
                 success: true,
-                data: data
+                data: output
             };
 
         } catch (error) {

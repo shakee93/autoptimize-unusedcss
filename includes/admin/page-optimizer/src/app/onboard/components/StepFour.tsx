@@ -14,24 +14,6 @@ import { AIButtonIcon, PerformanceArrowIcon } from './icons/icon-svg';
 import ErrorFetch from 'components/ErrorFetch';
 import ApiService from '../../../services/api';
 
-interface Metric {
-    score: number;
-    potentialGain: number;
-    displayValue: string;
-    metric: string;
-}
-
-interface Audit {
-    name: string;
-    score?: number;
-    metrics?: string[];
-    displayValue?: string;
-}
-
-interface Audits {
-    opportunities: any[];
-    diagnostics: any[];
-}
 
 interface MetricWithAudits extends Metric {
     metric: string;
@@ -195,95 +177,11 @@ const StepFour = () => {
             setPerformance(homePerformance)
             setAiMessage(false)
         }
+
+        dispatch(getHomePagePerformance(options))
     }, [homePerformance]);
 
-    const doAnalysis = async () => {
-
-        const api = new ApiService(options);
-        const plugins = await api.getActivePlugins();
-
-        const metricsWithAudits = transformMetrics({
-            opportunities: data?.grouped?.opportunities.map((o: any) => ({
-                name: o.name,
-                score: o.score,
-                metrics: o.metrics.map((m: any) => m.refs.acronym),
-                settings: o.settings.map((s: any) => s),
-            })),
-            diagnostics: data?.grouped?.diagnostics.map((d: any) => ({
-                name: d.name,
-                score: d.score,
-                metrics: d.metrics.map((m: any) => m.refs.acronym),
-                settings: d.settings.map((s: any) => s),
-            })),
-        }, data?.metrics.map((m: any) => ({
-            metric: m.refs.acronym,
-            potentialGain: m.potentialGain,
-            score: m.score,
-            weight: m.weight,
-            displayValue: m.displayValue,
-        })));
-        console.log({
-            settings: settings,
-            plugins: plugins.data,
-            report: {
-                opportunities: data?.grouped?.opportunities.map((o: any) => ({
-                    name: o.name,
-                    score: o.score,
-                    metrics: o.metrics.map((m: any) => m.refs.acronym),
-                    settings: o.settings.map((s: any) => s.name),
-                })),
-                diagnostics: data?.grouped?.diagnostics.map((d: any) => ({
-                    name: d.name,
-                    score: d.score,
-                    metrics: d.metrics.map((m: any) => m.refs.acronym),
-                    settings: d.settings.map((s: any) => s.name),
-                })),
-            }
-        })
-    }
-
-    function transformMetrics(
-        audits: Audits,
-        metrics: Metric[],
-    ): MetricWithAudits[] {
-        // Helper function to get all audits related to a specific metric
-        const getAuditsForMetric = (metricName: string): Audit[] => {
-            const relatedAudits = [
-                ...audits.opportunities.filter(audit => audit.metrics?.includes(metricName)),
-                ...audits.diagnostics.filter(audit => audit.metrics?.includes(metricName))
-            ];
-            return relatedAudits;
-        };
-
-        // Get audits with no metrics
-        const getAuditsWithNoMetrics = (): Audit[] => {
-            return [
-                ...audits.opportunities.filter(audit => !audit.metrics || audit.metrics.length === 0),
-                ...audits.diagnostics.filter(audit => !audit.metrics || audit.metrics.length === 0)
-            ];
-        };
-
-        console.log(metrics)
-
-        // Group audits by metrics
-        const metricsWithAudits: MetricWithAudits[] = [
-            ...metrics.map(metric => ({
-                ...metric,
-                audits: getAuditsForMetric(metric.metric)
-            })),
-            {
-                metric: 'NOMETRIC',
-                potentialGain: 0,
-                score: 100,
-                displayValue: '-',
-                audits: getAuditsWithNoMetrics()
-            }
-        ];
-
-
-        return metricsWithAudits;
-        dispatch(getHomePagePerformance(options))
-    }
+   
 
     const calculateImprovement = () => {
         if (performance.first_entry === 0 || performance.last_entry === 0) {
