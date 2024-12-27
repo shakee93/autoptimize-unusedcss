@@ -65,20 +65,35 @@ const StepFour = () => {
     //     }
     // ], [data]);
 
-     const metrics = useMemo(() => {
-        if (!data?.metrics) return [];
-        return data.metrics.filter(metric => 
+    //  const metrics = useMemo(() => {
+    //     if (!data?.metrics) return [];
+    //     return data.metrics.filter(metric => 
+    //         ['first-contentful-paint', 'largest-contentful-paint', 'total-blocking-time', 'cumulative-layout-shift', 'speed-index'].includes(metric.id)
+    //     );
+    // }, [data]);
+    
+    const metrics = useMemo(() => {
+        // Handle new data structure
+        if(!homePerformance.first_entry_metrics || !homePerformance.last_entry_metrics) {
+            return [];
+        }
+        return homePerformance.first_entry_metrics.filter(metric => 
             ['first-contentful-paint', 'largest-contentful-paint', 'total-blocking-time', 'cumulative-layout-shift', 'speed-index'].includes(metric.id)
-        );
+        ).map(metric => ({
+            //...metric,
+            id: metric.id,
+            title: metric.title,
+            before: metric.displayValue,
+            after: homePerformance.last_entry_metrics.find(m => m.id === metric.id)?.displayValue || '0'
+        }));
     }, [data]);
 
     useEffect(() => {
-        console.log(data)
-        console.log(metrics)
+     //   console.log(metrics)
     }, [metrics, data])
 
     const calculateBoost = (before: number, after: number): JSX.Element => {
-        if (before === 0 || after === 0) return <span className='text-brand-900'>-</span>;
+        if (before === 0 || before < after) return <span className='text-brand-900'>-</span>;
         const boost = before / after;
         if(boost > 99) {
            return <div className='flex flex-col text-sm'>More than <div><span className='text-purple-600 font-bold'>100 X</span> Faster</div></div>
@@ -90,23 +105,23 @@ const StepFour = () => {
  const getIcon = (id: string) => {
     switch (id) {
       case 'first-contentful-paint':
-        return <PaintRoller className='w-5 h-5'/>; 
+        return <PaintRoller className='w-4 h-4'/>; 
       case 'largest-contentful-paint':
-        return <EyeIcon className='w-5 h-5'/>;
+        return <EyeIcon className='w-4 h-4'/>;
       case 'total-blocking-time':
-        return <DownloadIcon className='w-5 h-5'/>;
+        return <DownloadIcon className='w-4 h-4'/>;
       case 'cumulative-layout-shift':
         return <LayoutDashboard className='w-5 h-5'/>;
       case 'speed-index':
-        return <LoaderCircle className='w-5 h-5'/>;
+        return <LoaderCircle className='w-4 h-4'/>;
       case 'first-input-delay':
-        return <MousePointerClick className='w-5 h-5'/>;
+        return <MousePointerClick className='w-4 h-4'/>;
       case 'time-to-first-byte':
-        return <Hourglass className='w-5 h-5'/>;
+        return <Hourglass className='w-4 h-4'/>;
       case 'page-load-time':
-        return <Timer className='w-5 h-5'/>;
+        return <Timer className='w-4 h-4'/>;
       default:
-        return <GearIcon className='w-5 h-5'/>;
+        return <GearIcon className='w-4 h-4'/>;
     }
   };
 
@@ -141,13 +156,13 @@ const StepFour = () => {
                                 {metric.title} {getShortName(metric.id)} <span><InfoIcon className='w-3 h-3 hover:cursor-pointer'/></span>
                             </td>
                             <td className="text-center border-b border-brand-200">
-                                {metric.displayValue}
+                                {metric.before}
                             </td>
                             <td className="text-center border-b border-brand-200">
-                                {'0.5 s'}
+                                {metric.after}
                             </td>
                             <td className="text-center border-b border-brand-200 font-medium">
-                                {calculateBoost(parseFloat(metric.displayValue), parseFloat('0.5 s'))}
+                                {calculateBoost(parseFloat(metric.before), parseFloat(metric.after))}
                             </td>
                         </tr>
                     ))}
@@ -178,8 +193,8 @@ const StepFour = () => {
             setAiMessage(false)
         }
 
-        dispatch(getHomePagePerformance(options))
-    }, [homePerformance]);
+       // dispatch(getHomePagePerformance(options))
+    }, []);
 
    
 
@@ -211,7 +226,7 @@ const StepFour = () => {
                         </span>
                     </div>
                     <div className="flex justify-center p-4 mx-auto w-full relative items-center gap-4">
-                        {false ? (
+                        {aiMessage ? (
                             <div className='flex flex-col items-center gap-2 px-10 py-4 rounded-2xl min-w-[550px] '>
 
 
@@ -281,9 +296,9 @@ const StepFour = () => {
                                             className={cn('max-h-[180px]')}
                                             background={false}
                                             stroke={6}
-                                           // loading={performance.first_entry < 1}
-                                           // performance={performance.first_entry > 1 ? performance.first_entry : 80}
-                                            performance={50}
+                                            loading={performance.first_entry < 1}
+                                            performance={performance.first_entry > 1 ? performance.first_entry : 80}
+                                           // performance={50}
                                         />
                                     </div>
                                     <div className="text-sm font-semibold flex items-center gap-1">
@@ -317,9 +332,9 @@ const StepFour = () => {
                                             scoreClassName={"text-brand-950"}
                                             background={false}
                                             stroke={6}
-                                            //loading={performance.last_entry < 1}
-                                            //performance={performance.last_entry > 1 ? performance.last_entry : 80}
-                                            performance={90}
+                                            loading={performance.last_entry < 1}
+                                            performance={performance.last_entry > 1 ? performance.last_entry : 80}
+                                           // performance={90}
                                         />
                                     </div>
                                     <div className="text-sm font-semibold flex items-center gap-1">
@@ -335,7 +350,7 @@ const StepFour = () => {
                             </>
                         )}
                     </div>
-                    {true && (
+                    {!aiMessage && (
                                 <div className="flex justify-center p-4 mx-auto w-full relative items-center gap-4">
                                     <div className="w-full max-w-2xl">
                                     {renderMetricsTable()}

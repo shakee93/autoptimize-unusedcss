@@ -301,7 +301,8 @@ interface HomePerformance{
     last_entry: number;
     first_response_time: string;
     last_response_time: string;
-
+    first_entry_metrics: Metric[];
+    last_entry_metrics: Metric[];
 }
 
 interface License {
