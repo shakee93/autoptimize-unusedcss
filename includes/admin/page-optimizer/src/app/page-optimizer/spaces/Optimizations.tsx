@@ -365,7 +365,7 @@ const Optimizations = ({ }) => {
 
                     {showIframe && (
                         <div
-                            className="h-0 overflow-hidden"
+                        // className="h-0 overflow-hidden"
                         >
                             <div className="relative w-full rounded-xl overflow-hidden bg-white shadow-lg">
                                 <div className="absolute top-4 right-4 z-10">
