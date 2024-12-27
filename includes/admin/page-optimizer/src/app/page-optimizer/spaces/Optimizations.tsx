@@ -149,17 +149,34 @@ const Optimizations = ({ }) => {
         }
 
         setLoadingText('Hermes AI is analyzing your page...')
-        const result = await api.getAIDiagnosis(input)
-        setAiDiagnosisResult(result.data.diagnostics)
-        console.log(result)
-        setDiagnosticsLoading(false)
-        setLoadingText(null)
 
-        toast({
-            title: "AI Diagnostic Complete",
-            description: "AI analysis of your page has been completed successfully.",
-            variant: "default",
-        });
+        try {
+            const result = await api.getAIDiagnosis(input)
+            setAiDiagnosisResult(result.data.diagnostics)
+            console.log(result)
+            setDiagnosticsLoading(false)
+            setLoadingText(null)
+
+            toast({
+                title: "AI Diagnostic Complete",
+                description: "AI analysis of your page has been completed successfully.",
+                variant: "default",
+            });
+        } catch (error: any) {
+            console.error('AI Diagnosis Error:', error);
+            setDiagnosticsLoading(false);
+            setLoadingText(null);
+
+            // Show error toast
+            toast({
+                title: "AI Diagnostic Failed",
+                description: error?.message || "Failed to complete AI analysis. Please try again.",
+                variant: "destructive",
+            });
+
+            // Show error in loading area
+            setLoadingText(`❌ ${error?.message || "Failed to complete AI analysis. Please try again."}`);
+        }
     }
 
     useEffect(() => {
