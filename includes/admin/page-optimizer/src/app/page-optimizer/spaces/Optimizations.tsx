@@ -38,6 +38,9 @@ const DiagnosticSchema = z.object({
     ),
 });
 
+// TODO: create an env variable for this
+// const AIBaseURL = "http://localhost:3000/api"
+const AIBaseURL = "https://ai.rapidload.io/api"
 
 const Optimizations = ({ }) => {
     const { settings, data } = useSelector(optimizerData);
@@ -45,7 +48,7 @@ const Optimizations = ({ }) => {
     const [loadingText, setLoadingText] = useState<string | null>(null);
 
     const { object, submit, isLoading, error } = useObject({
-        api: 'http://localhost:3000/api/diagnosis',
+        api: `${AIBaseURL}/api/diagnosis`,
         schema: DiagnosticSchema,
         onFinish: (diagnostic: any) => {
             console.log(diagnostic)
