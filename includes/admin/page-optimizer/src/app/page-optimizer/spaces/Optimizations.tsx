@@ -221,7 +221,7 @@ const Optimizations = ({ }) => {
                         <div className={cn('relative col-span-3 bg-brand-0 rounded-2xl p-10 flex flex-col gap-4 text-center', !object?.CriticalIssues?.length && 'items-center justify-center')}>
 
 
-                            {!object?.AnalysisSummary?.length && isLoading ? <>
+                            {!object?.AnalysisSummary?.length ? <>
 
 
                                 <h3 className="font-semibold text-lg">Test Your Optimizations</h3>
@@ -246,6 +246,7 @@ const Optimizations = ({ }) => {
                                         <Button
                                             variant="outline"
                                             size="sm"
+                                            hidden={isLoading}
                                             disabled={diagnosticsLoading}
                                             className="p-2 py-4 h-6 flex items-center gap-2"
                                             onClick={async () => {
