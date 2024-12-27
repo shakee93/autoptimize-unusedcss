@@ -5,7 +5,7 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "..
 import { AnimatePresence, m, motion } from "framer-motion"
 import useCommonDispatch from "hooks/useCommonDispatch";
 import { changeGear } from '../../../store/app/appActions';
-import { LoaderIcon, ChevronDown, GaugeCircle } from "lucide-react";
+import { LoaderIcon, ChevronDown, GaugeCircle, RefreshCw } from "lucide-react";
 import { useSelector } from "react-redux";
 import { optimizerData } from "../../../store/app/appSelector";
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
@@ -13,6 +13,7 @@ import OptimizationsProgress from '../../../components/optimizations-progress';
 import { useAppContext } from "../../../context/app";
 import ApiService from "../../../services/api";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "components/ui/collapsible";
+import { Button } from "components/ui/button";
 
 const Steps = [
     "Analyze with Google PageSpeed",
@@ -51,6 +52,8 @@ const Optimizations = ({ }) => {
     const [currentStep, setCurrentStep] = useState(-1);
     const [isOptimizing, setIsOptimizing] = useState(false);
     const [aiDiagnosisResult, setAiDiagnosisResult] = useState<any>(null);
+    const [diagnosticsLoading, setDiagnosticsLoading] = useState(false);
+    const [loadingText, setLoadingText] = useState<string | null>(null);
 
     const [diagnostics, setDiagnostics] = useState([]);
 
@@ -104,30 +107,9 @@ const Optimizations = ({ }) => {
     //     };
 
     const doAnalysis = async () => {
-        setShowIframe(true)
+        setLoadingText('Collecting active plugins...')
         const api = new ApiService(options);
         const plugins = await api.getActivePlugins();
-
-        const metricsWithAudits = transformMetrics({
-            opportunities: data?.grouped?.opportunities.map((o: any) => ({
-                name: o.name,
-                score: o.score,
-                metrics: o.metrics.map((m: any) => m.refs.acronym),
-                settings: o.settings.map((s: any) => s),
-            })),
-            diagnostics: data?.grouped?.diagnostics.map((d: any) => ({
-                name: d.name,
-                score: d.score,
-                metrics: d.metrics.map((m: any) => m.refs.acronym),
-                settings: d.settings.map((s: any) => s),
-            })),
-        }, data?.metrics.map((m: any) => ({
-            metric: m.refs.acronym,
-            potentialGain: m.potentialGain,
-            score: m.score,
-            weight: m.weight,
-            displayValue: m.displayValue,
-        })));
 
         const _diagnostics = Object.entries(diagnostics).map(([key, value]) => value)
         console.log()
@@ -142,6 +124,8 @@ const Optimizations = ({ }) => {
             })),
             plugins: plugins.data,
             report: {
+                performanceScore: data?.performanceScore,
+                metrics: data?.metrics,
                 opportunities: data?.grouped?.opportunities.map((o: any) => ({
                     name: o.name,
                     score: o.score,
@@ -158,50 +142,12 @@ const Optimizations = ({ }) => {
             // diagnostics: Object.entries(diagnostics).map(([key, value]) => value),
         }
 
+        setLoadingText('Hermes AI is analyzing your page...')
         const result = await api.getAIDiagnosis(input)
         setAiDiagnosisResult(result.data.diagnostics)
         console.log(result)
-
-    }
-
-    function transformMetrics(
-        audits: Audits,
-        metrics: Metric[],
-    ): MetricWithAudits[] {
-        // Helper function to get all audits related to a specific metric
-        const getAuditsForMetric = (metricName: string): Audit[] => {
-            const relatedAudits = [
-                ...audits.opportunities.filter(audit => audit.metrics?.includes(metricName)),
-                ...audits.diagnostics.filter(audit => audit.metrics?.includes(metricName))
-            ];
-            return relatedAudits;
-        };
-
-        // Get audits with no metrics
-        const getAuditsWithNoMetrics = (): Audit[] => {
-            return [
-                ...audits.opportunities.filter(audit => !audit.metrics || audit.metrics.length === 0),
-                ...audits.diagnostics.filter(audit => !audit.metrics || audit.metrics.length === 0)
-            ];
-        };
-
-        // Group audits by metrics
-        const metricsWithAudits: MetricWithAudits[] = [
-            ...metrics.map(metric => ({
-                ...metric,
-                audits: getAuditsForMetric(metric.metric)
-            })),
-            {
-                metric: 'NOMETRIC',
-                potentialGain: 0,
-                score: 100,
-                displayValue: '-',
-                audits: getAuditsWithNoMetrics()
-            }
-        ];
-
-
-        return metricsWithAudits;
+        setDiagnosticsLoading(false)
+        setLoadingText(null)
     }
 
     useEffect(() => {
@@ -209,6 +155,7 @@ const Optimizations = ({ }) => {
             if (event.data.type === "RAPIDLOAD_CHECK_RESULTS") {
                 console.log("Received data from iframe:", event.data);
 
+                setLoadingText('Collected data from your page...')
                 // Compare received data with settings
                 const receivedData = event.data.data;
                 const matches: any[] = [];
@@ -237,6 +184,7 @@ const Optimizations = ({ }) => {
                 });
 
                 setDiagnostics(event.data.data)
+                doAnalysis()
             }
         };
 
@@ -290,59 +238,91 @@ const Optimizations = ({ }) => {
 
                         </div>
 
-                        <div className='col-span-3 bg-brand-0 rounded-2xl p-10 items-center justify-center flex flex-col gap-4 text-center'>
-                            <h3 className="font-semibold text-lg">Test Your Optimizations</h3>
-                            <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Your optimizations are complete! However, changes might not take effect due to factors like caching, conflicts with plugins or themes, or dynamic content. Let's test to ensure everything is working smoothly and identify any bottlenecks.</span>
-                            <AppButton
-                                className="rounded-xl px-8 py-4"
-                                onClick={() => doAnalysis()}
-                            >
-                                Run Optimization Test
-                            </AppButton>
-                            <span className="font-normal text-xs text-zinc-600 dark:text-brand-300">Disabled: All Optimizations needs to be completed to run the test</span>
+                        <div className='relative col-span-3 bg-brand-0 rounded-2xl p-10 items-center justify-center flex flex-col gap-4 text-center'>
+
+                            {!aiDiagnosisResult?.CriticalIssues.length > 0 ? <>
+
+
+                                <h3 className="font-semibold text-lg">Test Your Optimizations</h3>
+                                <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Your optimizations are complete! However, changes might not take effect due to factors like caching, conflicts with plugins or themes, or dynamic content. Let's test to ensure everything is working smoothly and identify any bottlenecks.</span>
+                                <AppButton
+                                    disabled={diagnosticsLoading}
+                                    className="rounded-xl px-8 py-4"
+                                    onClick={() => {
+                                        setLoadingText('Collecting Diagnostics from your page...')
+                                        setDiagnosticsLoading(true)
+                                        setShowIframe(true)
+                                    }}
+                                >
+                                    {diagnosticsLoading && <LoaderIcon className="h-4 w-4 text-white animate-spin" />}
+                                    Run Optimization Test
+                                </AppButton>
+                                <span className="font-normal text-xs text-zinc-600 dark:text-brand-300">Disabled: All Optimizations needs to be completed to run the test</span>
+
+                            </> :
+                                <div className="w-full">
+                                    <div className="flex justify-end mb-4">
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            onClick={() => {
+                                                setShowIframe(false);
+                                                setDiagnosticsLoading(true);
+                                                setLoadingText('Refreshing diagnostics...');
+                                                setShowIframe(true);
+                                            }}
+                                        >
+                                            <RefreshCw className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                    <h3 className="font-semibold text-lg">AI Diagnosis</h3>
+                                    <div className="w-fullmt-4">
+
+                                        {aiDiagnosisResult?.CriticalIssues?.map((result: any) => (
+                                            <Accordion key={result?.issue} type="single" collapsible>
+                                                <AccordionItem value={result?.issue}>
+                                                    <AccordionTrigger className=" font-semibold text-zinc-900 dark:text-zinc-100">
+                                                        {result?.issue}
+                                                    </AccordionTrigger>
+                                                    <AccordionContent>
+                                                        <div className="space-y-2 flex flex-col justify-start items-start text-left">
+                                                            <p className="text-sm text-zinc-600 dark:text-zinc-300">{result?.description}</p>
+                                                            <div>
+                                                                <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200 mb-2">How to fix</p>
+                                                                <ul className="list-disc list-inside space-y-2">
+                                                                    {result?.howToFix?.map((fix: any) => (
+                                                                        <li key={fix} className="text-sm text-zinc-600 dark:text-zinc-300">{fix}</li>
+                                                                    ))}
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+
+                                                        <Collapsible>
+                                                            <CollapsibleTrigger className="mt-6 text-sm font-medium text-zinc-800 dark:text-zinc-200 mb-2">
+                                                                View Raw Data
+                                                            </CollapsibleTrigger>
+                                                            <CollapsibleContent>
+                                                                <pre className="mt-2 p-4 bg-zinc-50 dark:bg-zinc-900 rounded-lg overflow-auto">
+                                                                    {JSON.stringify(result, null, 2)}
+                                                                </pre>
+                                                            </CollapsibleContent>
+                                                        </Collapsible>
+                                                    </AccordionContent>
+                                                </AccordionItem>
+                                            </Accordion>
+                                        ))}
+                                    </div>
+                                </div>
+
+                            }
+
                         </div>
                     </div>
 
-
-                    <div className="mt-4 bg-brand-0 rounded-2xl p-4 py-6">
-                        <h3 className="font-semibold text-lg">AI Diagnosis</h3>
-                        <div className="mt-4">
-
-                            {aiDiagnosisResult?.CriticalIssues?.map((result: any) => (
-                                <Accordion key={result?.issue} type="single" collapsible>
-                                    <AccordionItem value={result?.issue}>
-                                        <AccordionTrigger className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-                                            {result?.issue}
-                                        </AccordionTrigger>
-                                        <AccordionContent>
-                                            <div className="space-y-4">
-                                                <p className="text-sm text-zinc-600 dark:text-zinc-300">{result?.description}</p>
-                                                <div>
-                                                    <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200 mb-2">How to fix</p>
-                                                    <ul className="list-disc list-inside space-y-2">
-                                                        {result?.howToFix?.map((fix: any) => (
-                                                            <li key={fix} className="text-sm text-zinc-600 dark:text-zinc-300">{fix}</li>
-                                                        ))}
-                                                    </ul>
-                                                </div>
-                                            </div>
-
-                                            <Collapsible>
-                                                <CollapsibleTrigger className="text-sm font-medium text-zinc-800 dark:text-zinc-200 mb-2">
-                                                    View Raw Data
-                                                </CollapsibleTrigger>
-                                                <CollapsibleContent>
-                                                    <pre className="mt-2 p-4 bg-zinc-50 dark:bg-zinc-900 rounded-lg overflow-auto">
-                                                        {JSON.stringify(result, null, 2)}
-                                                    </pre>
-                                                </CollapsibleContent>
-                                            </Collapsible>
-                                        </AccordionContent>
-                                    </AccordionItem>
-                                </Accordion>
-                            ))}
-                        </div>
-                    </div>
+                    {diagnosticsLoading && <div className="flex items-center gap-2 mt-4 bg-brand-0 rounded-2xl p-4 py-3">
+                        <LoaderIcon className="h-4 w-4 text-gray-600 animate-spin" />
+                        <span className="text-sm text-gray-600">{loadingText}</span>
+                    </div>}
 
                     {/* Iframe Section */}
                     <AnimatePresence>
