@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import AppButton from "components/ui/app-button";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "../../../components/ui/accordion";
-
+import { useCompletion, experimental_useObject as useObject } from 'ai/react'
 import { AnimatePresence, m, motion } from "framer-motion"
 import useCommonDispatch from "hooks/useCommonDispatch";
 import { changeGear } from '../../../store/app/appActions';
@@ -16,112 +16,70 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "components/
 import { Button } from "components/ui/button";
 import { toast } from "components/ui/use-toast";
 import { cn } from "lib/utils";
+import { z } from 'zod';
 
-const Steps = [
-    "Analyze with Google PageSpeed",
-    "Change performance gear to TurboMax",
-    "Apply DOM optimizations",
-    "Generate Critical CSS",
-    "Generate Unused CSS",
-    "Optimize Images",
-    "All Optimizations are completed",
-];
+const DiagnosticSchema = z.object({
+    AnalysisSummary: z.string(),
+    PluginConflicts: z.array(
+        z.object({
+            plugin: z.string(),
+            recommendedAction: z.string(),
+        })
+    ),
+    CriticalIssues: z.array(
+        z.object({
+            issue: z.string(),
+            description: z.string(),
+            howToFix: z.array(z.string()),
+            pagespeed_insight_audits: z.array(z.string()),
+            pagespeed_insight_metrics: z.array(z.string()),
+            anyAdditionalTips: z.array(z.string()).optional().describe('Any additional tips to fix the issue.'),
+        })
+    ),
+});
 
-
-interface Metric {
-    score: number;
-    potentialGain: number;
-    displayValue: string;
-    metric: string;
-}
-
-interface Audit {
-    name: string;
-    score?: number;
-    metrics?: string[];
-    displayValue?: string;
-}
-
-interface Audits {
-    opportunities: any[];
-    diagnostics: any[];
-}
 
 const Optimizations = ({ }) => {
-    const { activeGear, settings, data } = useSelector(optimizerData);
-    const [activeLevel, setActiveLevel] = useState<PerformanceGear>('accelerate');
-    const [isAccordionOpen, setIsAccordionOpen] = useState(true);
-    const [currentStep, setCurrentStep] = useState(-1);
-    const [isOptimizing, setIsOptimizing] = useState(false);
-    const [aiDiagnosisResult, setAiDiagnosisResult] = useState<any>(null);
+    const { settings, data } = useSelector(optimizerData);
     const [diagnosticsLoading, setDiagnosticsLoading] = useState(false);
     const [loadingText, setLoadingText] = useState<string | null>(null);
 
-    const [diagnostics, setDiagnostics] = useState([]);
+    const { object, submit, isLoading, error } = useObject({
+        api: 'http://localhost:3000/api/diagnosis',
+        schema: DiagnosticSchema,
+        onFinish: (diagnostic: any) => {
+            console.log(diagnostic)
+            setDiagnosticsLoading(false)
+            setLoadingText(null)
 
-    const [OptimizationSteps, setOptimizationSteps] = useState(Steps);
+            toast({
+                title: "AI Diagnostic Complete",
+                description: "AI analysis of your page has been completed successfully.",
+                variant: "default",
+            });
+        }
+    });
+
     const { dispatch } = useCommonDispatch()
     const { options } = useAppContext()
     const optimizerUrl = options?.optimizer_url;
     const [showIframe, setShowIframe] = useState(false);
 
-    // useEffect(() => {
-    //         console.log('window', window)
-    //         window.addEventListener("message", (event) => {
-    //             console.log('event', event.data)
-    //             if (event.data.type === "RAPIDLOAD_CHECK_RESULTS") {
-    //                 console.log("Received data from iframe:", event.data);
-    //             }
-    //         });
-    // }, [window]);
-
-    // useEffect(() => {
-    //     const handleMessage = (event: MessageEvent) => {
-    //         if (event.data.type === "RAPIDLOAD_CHECK_RESULTS") {
-    //             console.log("Received data from iframe:", event.data);
-
-    //             // Compare received data with settings
-    //             const receivedData = event.data.data;
-    //             settings.forEach((setting: AuditSetting) => {
-
-    //                 const mainInput = setting.inputs[0];
-    //                 if (!mainInput) return;
-
-    //                 Object.entries(receivedData).forEach(([category, data]: [string, any]) => {
-    //                     if (data.key === mainInput.key) {
-    //                         console.log(`Match found for ${category}:`, {
-    //                             optimizerSettings: {
-    //                                 settingName: setting.name,
-    //                                 settingKey: mainInput.key,
-    //                                 settingValue: mainInput.value,
-    //                                 status: setting.status,
-    //                             },
-    //                             receivedData: {
-    //                                 key: data.key,
-    //                                 status: data.status,
-    //                                 nonOptimizedItems: data.non_optimized_css || data.non_minified_css || data.non_minified_js || data.non_deferred_js || data.non_delayed_js
-    //                             }
-    //                         });
-    //                     }
-    //                 });
-    //             });
-    //         }
-    //     };
-
-    const doAnalysis = async () => {
+    const doAnalysis = useCallback(async (diagnostics: any) => {
         setLoadingText('Collecting active plugins...')
         const api = new ApiService(options);
         const plugins = await api.getActivePlugins();
 
+
         const _diagnostics = Object.entries(diagnostics).map(([key, value]) => value)
-        console.log()
+        console.log(_diagnostics)
 
         const input = {
             settings: settings.map((s: any) => ({
                 ...s,
                 inputs: s.inputs.map((i: any) => ({
                     ...i,
-                    diagnostics: i.value ? _diagnostics.filter((d: any) => d.key === i.key) : []
+                    diagnostics: i.value ? _diagnostics.filter((d: any) => d.key === i.key).map(({ key, ...rest }: any) => rest) : []
                 })),
             })),
             plugins: plugins.data,
@@ -151,17 +109,10 @@ const Optimizations = ({ }) => {
         setLoadingText('Hermes AI is analyzing your page...')
 
         try {
-            const result = await api.getAIDiagnosis(input)
-            setAiDiagnosisResult(result.data.diagnostics)
-            console.log(result)
-            setDiagnosticsLoading(false)
-            setLoadingText(null)
 
-            toast({
-                title: "AI Diagnostic Complete",
-                description: "AI analysis of your page has been completed successfully.",
-                variant: "default",
-            });
+            submit(input)
+
+
         } catch (error: any) {
             console.error('AI Diagnosis Error:', error);
             setDiagnosticsLoading(false);
@@ -177,7 +128,7 @@ const Optimizations = ({ }) => {
             // Show error in loading area
             setLoadingText(`❌ ${error?.message || "Failed to complete AI analysis. Please try again."}`);
         }
-    }
+    }, [loadingText])
 
     useEffect(() => {
         const handleMessage = (event: MessageEvent) => {
@@ -212,8 +163,8 @@ const Optimizations = ({ }) => {
                     });
                 });
 
-                setDiagnostics(event.data.data)
-                doAnalysis()
+                console.log(event.data.data)
+                doAnalysis(event.data.data)
             }
         };
 
@@ -267,9 +218,10 @@ const Optimizations = ({ }) => {
 
                         </div>
 
-                        <div className={cn('relative col-span-3 bg-brand-0 rounded-2xl p-10 flex flex-col gap-4 text-center', !aiDiagnosisResult?.CriticalIssues.length && 'items-center justify-center')}>
+                        <div className={cn('relative col-span-3 bg-brand-0 rounded-2xl p-10 flex flex-col gap-4 text-center', !object?.CriticalIssues?.length && 'items-center justify-center')}>
 
-                            {!aiDiagnosisResult?.CriticalIssues.length ? <>
+
+                            {!object?.AnalysisSummary?.length && isLoading ? <>
 
 
                                 <h3 className="font-semibold text-lg">Test Your Optimizations</h3>
@@ -298,9 +250,9 @@ const Optimizations = ({ }) => {
                                             className="p-2 py-4 h-6 flex items-center gap-2"
                                             onClick={async () => {
                                                 setShowIframe(false);
-                                                await new Promise(resolve => setTimeout(resolve, 300));
                                                 setDiagnosticsLoading(true);
                                                 setLoadingText('Refreshing diagnostics...');
+                                                await new Promise(resolve => setTimeout(resolve, 200));
                                                 setShowIframe(true);
                                             }}
                                         >
@@ -312,13 +264,13 @@ const Optimizations = ({ }) => {
                                         Hermes AI Diagnosis</h3>
                                     <div className="w-full mt-4 text-left">
                                         <div className="text-sm text-zinc-600 dark:text-zinc-300">
-                                            {aiDiagnosisResult?.AnalysisSummary}
+                                            {object?.AnalysisSummary}
                                         </div>
 
                                         <div className="flex flex-col gap-2">
-                                            <Accordion type="" collapsible>
-                                                {aiDiagnosisResult?.CriticalIssues?.map((result: any) => (
-                                                    <AccordionItem value={result?.issue}>
+                                            <Accordion type="multiple" defaultValue={["0"]}>
+                                                {object?.CriticalIssues?.map((result: any, index: number) => (
+                                                    <AccordionItem key={index} value={index.toString()}>
                                                         <AccordionTrigger className=" font-semibold text-zinc-900 dark:text-zinc-100">
                                                             {result?.issue}
                                                         </AccordionTrigger>
@@ -335,7 +287,7 @@ const Optimizations = ({ }) => {
                                                                 </div>
                                                             </div>
 
-                                                            <Collapsible>
+                                                            {/* <Collapsible>
                                                                 <CollapsibleTrigger className="mt-6 text-sm font-medium text-zinc-800 dark:text-zinc-200 mb-2">
                                                                     View Raw Data
                                                                 </CollapsibleTrigger>
@@ -344,7 +296,7 @@ const Optimizations = ({ }) => {
                                                                         {JSON.stringify(result, null, 2)}
                                                                     </pre>
                                                                 </CollapsibleContent>
-                                                            </Collapsible>
+                                                            </Collapsible> */}
                                                         </AccordionContent>
                                                     </AccordionItem>
                                                 ))}

@@ -16,8 +16,8 @@ class ApiService {
 
         this.options = options
 
-        this.aiBaseURL = new URL('https://ai.rapidload.io/api');
-        // this.aiBaseURL = new URL('http://localhost:3000/api');
+        // this.aiBaseURL = new URL('https://ai.rapidload.io/api');
+        this.aiBaseURL = new URL('http://localhost:3000/api');
 
         let base = options?.ajax_url
             ? options.ajax_url
@@ -247,35 +247,6 @@ class ApiService {
             return {
                 success: true,
                 data: data
-            };
-
-        } catch (error) {
-            console.error('AI Prediction Error:', error);
-            throw error;
-        }
-    }
-
-    async getAIDiagnosis(data: any): Promise<any> {
-        try {
-
-            const ai_prediction_url = new URL(`${this.aiBaseURL}/diagnosis`);
-
-            const response = await fetch(ai_prediction_url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data)
-            });
-
-            if (!response.ok) {
-                throw new Error('AI prediction request failed');
-            }
-
-            const output = await response.json();
-            return {
-                success: true,
-                data: output
             };
 
         } catch (error) {
