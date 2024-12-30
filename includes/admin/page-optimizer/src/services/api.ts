@@ -213,21 +213,7 @@ class ApiService {
                         || []
                 })
             });
-            const pageSpeed = await fetch(pageSpeedURL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    settings: settings.state?.
-                        flatMap(t =>
-                            t.inputs
-                                .filter(({ value }) => value != null)
-                                .map(({ key, value }) => ({ key, value, status: t.status })))
-                        || []
-                })
-            });
-
+           
             // TO TEST: remove return sampleData and comment above fetch
             return await pageSpeed.json()
 
