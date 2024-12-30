@@ -16,8 +16,8 @@ class ApiService {
 
         this.options = options
 
-        // this.aiBaseURL = new URL('https://ai.rapidload.io/api');
-        this.aiBaseURL = new URL('http://localhost:3000/api');
+        this.aiBaseURL = new URL('https://ai.rapidload.io/api');
+        // this.aiBaseURL = new URL('http://localhost:3000/api');
 
         let base = options?.ajax_url
             ? options.ajax_url
@@ -213,8 +213,9 @@ class ApiService {
                         || []
                 })
             });
-
-            return pageSpeed
+           
+            // TO TEST: remove return sampleData and comment above fetch
+            return await pageSpeed.json()
 
         } catch (error) {
             console.error(error);
