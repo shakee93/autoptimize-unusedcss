@@ -156,7 +156,9 @@
                 });
             });
 
-            imageObserver.observe();
+            imageObserver.observe({
+                entryTypes: ['resource']
+            });
 
             function processImage(img) {
                 const imageUrl = img;
