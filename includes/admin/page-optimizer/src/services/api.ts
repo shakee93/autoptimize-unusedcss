@@ -257,35 +257,6 @@ class ApiService {
         }
     }
 
-    async getAIDiagnosis(data: any): Promise<any> {
-        try {
-
-            const ai_prediction_url = new URL(`${this.aiBaseURL}/diagnosis`);
-
-            const response = await fetch(ai_prediction_url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data)
-            });
-
-            if (!response.ok) {
-                throw new Error('AI prediction request failed');
-            }
-
-            const output = await response.json();
-            return {
-                success: true,
-                data: output
-            };
-
-        } catch (error) {
-            console.error('AI Prediction Error:', error);
-            throw error;
-        }
-    }
-
     async getCSSJobStatus(url: string, types: string[]): Promise<any> {
         try {
             this.baseURL.searchParams.append('action', 'rapidload_css_job_status');

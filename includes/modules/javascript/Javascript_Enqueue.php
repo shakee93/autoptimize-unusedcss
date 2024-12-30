@@ -411,7 +411,7 @@ class Javascript_Enqueue
                 return;
             }
 
-            if(isset($link->id) && in_array($link->id, ["rapidload-js-extra"])){
+            if(isset($link->id) && in_array($link->id, ["rapidload-js-extra","rapidload-diagnose-script-js-after"])){
                 $link->norapidload = true;
                 return;
             }

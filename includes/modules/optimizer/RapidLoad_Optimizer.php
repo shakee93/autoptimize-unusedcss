@@ -59,6 +59,7 @@ class RapidLoad_Optimizer
             'update_titan_performance_gear' => 'update_titan_performance_gear',
             'rapidload_titan_home_page_performance' => 'rapidload_titan_home_page_performance',
             'rapidload_get_active_plugins' => 'rapidload_get_active_plugins',
+            'rapidload_diagnos_data' => 'rapidload_diagnos_data',
         ];
 
         foreach ($actions as $action => $method) {
@@ -68,6 +69,40 @@ class RapidLoad_Optimizer
                 add_action("wp_ajax_nopriv_$action", [$this, $method]);
             }
         }
+    }
+
+    public function rapidload_diagnos_data(){
+
+        self::verify_nonce();
+
+        $url = isset($_REQUEST['url']) && $_REQUEST['url'] ? $_REQUEST['url'] : $this->transform_url(site_url());
+        $data = isset($_REQUEST['data']) && $_REQUEST['data'] ? $_REQUEST['data'] : null;
+        $strategy = isset($_REQUEST['strategy']) && $_REQUEST['strategy'] ? $_REQUEST['strategy'] : 'desktop';
+
+        $job = new RapidLoad_Job([
+            'url' => $url
+        ]);
+
+        if(!isset($job->id)){
+            wp_send_json_error('job not found');
+        }
+
+        if($data){
+            $diagnos_data = $this->get_diagnos_data();
+            if($strategy == 'desktop'){
+                $diagnos_data['desktop_data'] = $data;
+                $job->set_diagnos_data($diagnos_data);
+            }else{
+                $diagnos_data['mobile_data'] = $data;
+                $job->set_diagnos_data($diagnos_data);
+            }
+            $job->save();
+        }
+
+        wp_send_json_success([
+            'diagnos_data' => $job->get_diagnos_data(),
+            'strategy' => $strategy
+        ]);
     }
 
     public function rapidload_get_active_plugins(){

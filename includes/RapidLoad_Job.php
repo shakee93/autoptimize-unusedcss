@@ -54,6 +54,7 @@ class RapidLoad_Job{
             $this->created_at = $exist->created_at;
             $this->desktop_options = isset($exist->desktop_options) ? $exist->desktop_options : null;
             $this->mobile_options = isset($exist->mobile_options) ? $exist->mobile_options : null;
+            $this->diagnos_data = isset($exist->diagnos_data) ? $exist->diagnos_data : null;
 
             if(isset($this->rule_id) && $this->rule_id != $this->id && $this->rule == 'is_url'){
                 $this->parent = RapidLoad_Job::find_or_fail($this->rule_id);
@@ -252,6 +253,16 @@ class RapidLoad_Job{
         return [];
     }
 
+    function get_diagnos_data(){
+        if(isset($this->diagnos_data) && !empty($this->diagnos_data)){
+            return unserialize($this->diagnos_data);
+        }
+        return [
+            'mobile_data' => null,
+            'desktop_data' => null,
+        ];
+    }   
+
     function set_desktop_options($options){
 
         if(isset($options) && is_array($options) && !empty($options)){
@@ -267,6 +278,17 @@ class RapidLoad_Job{
             $this->mobile_options = serialize($options);
         }else{
             $this->mobile_options = null;
+        }
+    }
+
+    function set_diagnos_data($data){
+        if(isset($data) && is_array($data) && !empty($data)){
+            $this->diagnos_data = serialize($data);
+        }else{
+            $this->diagnos_data = serialize([
+                'mobile_data' => null,
+                'desktop_data' => null,
+            ]);
         }
     }
 

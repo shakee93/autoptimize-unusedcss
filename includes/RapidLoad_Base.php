@@ -178,18 +178,17 @@ class RapidLoad_Base
 
         add_action('wp_enqueue_scripts', function() use ($diagnose_script_content) {
             if (isset($_REQUEST['rapidload_preview'])) {
-                
-                echo sprintf(
-                    "<script id='rapidload-diagnose-script' type='text/javascript' norapidload>\n%s\n</script>\n",
-                    $diagnose_script_content
-                );
+                wp_register_script('rapidload-diagnose-script', '', [], '', true);
+                wp_enqueue_script('rapidload-diagnose-script');
 
-                wp_localize_script('jquery', 'rapidload_diagnose_tool', array(
+                wp_add_inline_script('rapidload-diagnose-script', $diagnose_script_content);
+
+                wp_localize_script('rapidload-diagnose-script', 'rapidload_diagnose_tool', array(
                     'ajaxurl' => admin_url('admin-ajax.php'),
-                    'nonce' => wp_create_nonce( 'uucss_nonce' ),
+                    'nonce' => wp_create_nonce('uucss_nonce'),
                 ));
             }
-        },99);
+        });
 
     }
 
