@@ -147,6 +147,7 @@
             // Create observer to track image loads
             const imageObserver = new PerformanceObserver((list) => {
                 list.getEntries().forEach((entry) => {
+                    console.log(entry.name);
                     if (entry.initiatorType === 'img') {
                         processImage(entry.name.toString());
                     } else if (entry.initiatorType === 'css' && entry.name.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
