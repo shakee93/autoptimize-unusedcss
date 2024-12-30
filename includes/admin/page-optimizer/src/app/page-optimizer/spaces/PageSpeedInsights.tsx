@@ -50,11 +50,11 @@ const PageSpeedInsights = ({ }) => {
 
     return (
         <div className={cn(
-            'tabs flex sticky -top-1 dark:bg-brand-800/40 bg-brand-200 px-2.5 py-4 pb-1 rounded-t-3xl',
+            'tabs flex sticky -top-1 dark:bg-brand-800/40 bg-brand-200 px-4 py-4 pb-4 rounded-t-3xl border-b-2 border-brand-300',
         )}>
         <div data-tour='audit-groups'
                     className={cn(
-                        'dark:bg-brand-930/90 bg-brand-0 flex justify-between items-center select-none p-0 pl-6 pr-3 rounded-[20px] w-full',
+                        'dark:bg-brand-930/90 flex justify-between items-center select-none rounded-[20px] w-full',
                         isSticky && 'rounded-b-xl rounded-t-none shadow-lg'
                     )}
 
@@ -65,9 +65,9 @@ const PageSpeedInsights = ({ }) => {
                                 <div
                                     onClick={() => dispatch(setCommonState('activeTab', tab.key))}
                                     className={cn(
-                                        `cursor-pointer flex items-center gap-2 px-4 py-3 text-sm font-medium `,
+                                        `cursor-pointer flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-2xl`,
                                         isSticky && 'py-3',
-                                        activeTab === tab.key ? "font-medium " : "dark:hover:text-brand-300 text-brand-400"
+                                        activeTab === tab.key ? "font-medium bg-brand-0 " : "dark:hover:text-brand-300"
                                     )}
                                     key={tab.key}
                                 >

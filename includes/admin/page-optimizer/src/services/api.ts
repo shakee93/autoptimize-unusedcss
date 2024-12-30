@@ -70,12 +70,13 @@ class ApiService {
     }
 
     async fetchPageSpeed(url: string, activeReport: string, reload: boolean): Promise<any> {
-
+        
         try {
             let fresh = reload
             let data = null
-
+            
             if (reload) {
+                
                 data = await this.analyzeViaAPI(url, activeReport);
 
                 if (data?.errors) {
@@ -175,8 +176,9 @@ class ApiService {
     }
 
     async analyzeViaAPI(url: string, strategy: string) {
-
+       
         try {
+            
             const state = store.getState()
             const data = state.app.report[state.app.activeReport]
             const settings = state.app.settings.performance[state.app.activeReport]
@@ -197,6 +199,20 @@ class ApiService {
 
 
 
+            const pageSpeed = await fetch(pageSpeedURL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    settings: settings.state?.
+                        flatMap(t =>
+                            t.inputs
+                                .filter(({ value }) => value != null)
+                                .map(({ key, value }) => ({ key, value, status: t.status })))
+                        || []
+                })
+            });
             const pageSpeed = await fetch(pageSpeedURL, {
                 method: "POST",
                 headers: {
