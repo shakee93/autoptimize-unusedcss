@@ -16,8 +16,8 @@ class ApiService {
 
         this.options = options
 
-        // this.aiBaseURL = new URL('https://ai.rapidload.io/api');
-        this.aiBaseURL = new URL('http://localhost:3000/api');
+        this.aiBaseURL = new URL('https://ai.rapidload.io/api');
+        // this.aiBaseURL = new URL('http://localhost:3000/api');
 
         let base = options?.ajax_url
             ? options.ajax_url
@@ -197,22 +197,23 @@ class ApiService {
 
 
 
-            // const pageSpeed = await fetch(pageSpeedURL, {
-            //     method: "POST",
-            //     headers: {
-            //         "Content-Type": "application/json",
-            //     },
-            //     body: JSON.stringify({
-            //         settings: settings.state?.
-            //             flatMap(t =>
-            //                 t.inputs
-            //                     .filter(({ value }) => value != null)
-            //                     .map(({ key, value }) => ({ key, value, status: t.status })))
-            //             || []
-            //     })
-            // });
+            const pageSpeed = await fetch(pageSpeedURL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    settings: settings.state?.
+                        flatMap(t =>
+                            t.inputs
+                                .filter(({ value }) => value != null)
+                                .map(({ key, value }) => ({ key, value, status: t.status })))
+                        || []
+                })
+            });
 
-            return sampleData
+            // TO TEST: remove return sampleData and comment above fetch
+            return await pageSpeed.json()
 
         } catch (error) {
             console.error(error);
