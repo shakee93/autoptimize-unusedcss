@@ -7,7 +7,7 @@ interface SvgProps {
 const width = 34;
 const height = 34;
 
-export const SettingsLine: FC<SvgProps & { width?: number, category?: string }> = ({ width = 400, category }) => {
+export const SettingsLine: FC<SvgProps & { width?: number, category?: string, flip?: boolean }> = ({ width = 400, category, flip = false }) => {
     const [animate, setAnimate] = useState(true);
 
     useEffect(() => {
@@ -23,7 +23,8 @@ export const SettingsLine: FC<SvgProps & { width?: number, category?: string }> 
 
     // Adjusting path values based on the new width
     const adjustedPath = `M${Math.min(width - (width - 66), width - 9.5)} 1C${Math.min(width - (width - 66), width - 9.5)} 8.5 ${Math.min(width - (width - 72), width - 9.5)} 8 ${Math.min(width - (width - 75.5), width - 9.5)} 8C${Math.min(width - (width - 89.7), width - 9.5)} 8 ${Math.min(width - (width - 130.5), width - 9.5)} 8 ${width - 9.5} 8C${width - 5.5} 8 ${width - 0.5} 9.5 ${width - 0.5} 15.5`;
-    const strokeWidth = 2;
+//   const adjustedPath = `M${width - 9.5} 1C${width - 9.5} 8.5 ${width - 9.5} 8 ${width - 9.5} 8C${width - 9.5} 8 ${width - 9.5} 8 ${width - 9.5} 8C${width - 5.5} 8 ${width - 0.5} 9.5 ${width - 0.5} 15.5`;
+   const strokeWidth = 2;
 
     return (
         <div className='absolute -left-7 top-0.5'>

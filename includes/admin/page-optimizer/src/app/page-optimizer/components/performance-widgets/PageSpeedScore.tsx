@@ -187,6 +187,13 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                             </div>
                         </TooltipText>
                     </div>
+                    <AppButton onClick={() => {
+                        dispatch(fetchReport(options, url, true, true))
+                        
+                    }}>
+                        Analyze
+                    </AppButton>
+
                     <div className="pl-2 pr-2 content-center">
                         <div className="flex overflow-hidden">
                             <div className='hover:bg-brand-0 rounded-xl transition-all delay-100' data-tour="current-url">

@@ -18,6 +18,7 @@ import SpeedSettings from "app/page-optimizer/spaces/SpeedSettings";
 import { OptimizationsIcon } from "../components/icons/icon-svg";
 import Optimizations from "./Optimizations";
 import PageSpeedInsights from "./PageSpeedInsights";
+import { SettingsLine } from "../components/icons/line-icons";
 
 
 
@@ -95,6 +96,23 @@ const Performance = () => {
 
     };
 
+    const getWidthForActiveTab = (activeTab: string) => {
+        switch (activeTab) {
+            case 'configurations':
+                return 100;
+            case 'optimizations':
+                return 285;
+            case 'opportunities':
+                return 485;
+            case 'diagnostics':
+                return 395;
+            case 'passed_audits':
+                return 740;
+            default:
+                return 395;
+        }
+    };
+
 
     return (
 
@@ -104,16 +122,16 @@ const Performance = () => {
                 Fix Performance Issues</h2> */}
             <div ref={navbarRef} style={{ height: '1px' }}></div>
             <div className={cn(
-                'tabs flex sticky -top-1 dark:bg-brand-800/40 bg-brand-200 px-2.5 py-2.5 pb-1 rounded-t-3xl gap-2',
+                'tabs flex sticky -top-1 dark:bg-brand-800/40 bg-brand-200 px-2 py-2 rounded-3xl gap-2 w-fit',
             )}>
                 <div
 
                     onClick={() => dispatch(setCommonState('activeTab', 'configurations'))}
                     className={cn(
 
-                        `whitespace-nowrap dark:bg-brand-930/90 bg-brand-0 border-r rounded-[20px] cursor-pointer w-[170px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+                        `whitespace-nowrap dark:bg-brand-930/90 border-r rounded-[20px] cursor-pointer w-[170px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
 
-                        activeTab === 'configurations' ? "font-medium " : "text-brand-500 dark:hover:text-brand-300"
+                        activeTab === 'configurations' ? "font-medium bg-brand-0" : "dark:hover:text-brand-300"
                     )}
                     data-tour="speed-settings"> <BoltIcon className='w-4 rounded-[15px]' />  Speed Settings</div>
 
@@ -122,9 +140,9 @@ const Performance = () => {
                     onClick={() => dispatch(setCommonState('activeTab', 'optimizations'))}
                     className={cn(
 
-                        `whitespace-nowrap dark:bg-brand-930/90 bg-brand-0 border-r rounded-[20px] cursor-pointer w-[160px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+                        `whitespace-nowrap dark:bg-brand-930/90 border-r rounded-[20px] cursor-pointer w-[160px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
 
-                        activeTab === 'optimizations' ? "font-medium " : "text-brand-500 dark:hover:text-brand-300"
+                        activeTab === 'optimizations' ? "font-medium bg-brand-0" : "dark:hover:text-brand-300"
                     )}
                     data-tour="optimizations"> <GaugeCircle className='w-4' />  Optimizations </div>
 
@@ -133,15 +151,19 @@ const Performance = () => {
                     onClick={() => dispatch(setCommonState('activeTab', 'insights'))}
                     className={cn(
 
-                        `whitespace-nowrap dark:bg-brand-930/90 bg-brand-0 border-r rounded-[20px] cursor-pointer w-[200px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+                        `whitespace-nowrap dark:bg-brand-930/90 border-r rounded-[20px] cursor-pointer w-[200px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
 
-                        activeTab === 'insights' || activeTab === 'opportunities'  || activeTab === 'diagnostics' || activeTab === 'passed_audits' ? "font-medium " : "text-brand-500 dark:hover:text-brand-300"
+                        activeTab === 'insights' || activeTab === 'opportunities'  || activeTab === 'diagnostics' || activeTab === 'passed_audits' ? "font-medium bg-brand-0" : "dark:hover:text-brand-300"
                     )}
                     data-tour="page-speed-insights"> <GaugeCircle className='w-4' />  Page Speed Insights </div>
 
             </div>
-
-            <div className="audits flex mb-24 dark:bg-brand-800/40 bg-brand-200 rounded-b-3xl">
+            <div className= {"py-3 relative"} >
+                <SettingsLine width={getWidthForActiveTab(activeTab) || 220} />
+                {/* <SettingsLine width={300} /> */}
+            </div>
+           
+            <div className="audits flex mb-24 dark:bg-brand-800/40 bg-brand-200 rounded-3xl">
                 <div className='w-full flex flex-col'>
 
                     <AnimatePresence initial={false}>
