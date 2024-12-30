@@ -48,7 +48,7 @@ const Optimizations = ({ }) => {
     const [loadingText, setLoadingText] = useState<string | null>(null);
 
     const { object, submit, isLoading, error } = useObject({
-        api: `${AIBaseURL}/api/diagnosis`,
+        api: `${AIBaseURL}/diagnosis`,
         schema: DiagnosticSchema,
         onFinish: (diagnostic: any) => {
             console.log(diagnostic)
