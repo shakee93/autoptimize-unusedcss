@@ -1399,7 +1399,7 @@ class RapidLoad_Optimizer
                 }else if($input['key'] == "uucss_enable_uucss"){
                     $data = new RapidLoad_Job_Data(self::$job, 'uucss');
                     $settings['status'] = [
-                        'status' => isset($data->id) ? $data->status : null,
+                        'status' => isset($data->id) ? $data->status : 'queued',
                         'stats' =>  isset($data->id) ? $data->get_stats() : null,
                         'warnings' =>  isset($data->id) ? $data->get_warnings() : null,
                         'error' =>  isset($data->id) ? $data->get_error() : null
@@ -1411,7 +1411,7 @@ class RapidLoad_Optimizer
                     $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
                     $cpcss_data = $data->get_cpcss_data();
                     $settings['status'] = [
-                        'status' => isset($data->id) ? $data->status : null,
+                        'status' => isset($data->id) ? $data->status : 'queued',
                         'error' => isset($data->id) ? $data->get_error() : null,
                         'desktop' => isset($data->id) && isset($cpcss_data['desktop']) && !empty($cpcss_data['desktop']) ? $cpcss_data['desktop'] : null,
                         'mobile' => isset($data->id) && isset($cpcss_data['mobile']) && !empty($cpcss_data['mobile']) ? $cpcss_data['mobile'] : null,
