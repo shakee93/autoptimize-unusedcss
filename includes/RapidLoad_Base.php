@@ -626,11 +626,11 @@ class RapidLoad_Base
             'uucss_fontface' => "1",
             'uucss_keyframes' => "1",
             'uucss_variables' => "1",
-            'uucss_enable_uucss' => "1",
-            'uucss_enable_cpcss' => "0",
+            'uucss_enable_uucss' => "0",
+            'uucss_enable_cpcss' => "1",
             'uucss_enable_cpcss_mobile' => "1",
             'uucss_minify' => "1",
-            'uucss_support_next_gen_formats' => "0",
+            'uucss_support_next_gen_formats' => "1",
             'uucss_set_width_and_height' => "1",
             'uucss_self_host_google_fonts' => "1",
             'uucss_image_optimize_level' => "lossless",
@@ -642,10 +642,10 @@ class RapidLoad_Base
             'uucss_load_js_method' => "1",
             'uucss_lazy_load_images' => "1",
             'minify_js' => "1",
-            'uucss_enable_cache' => "1",
-            'uucss_enable_cdn' => "1",
+            'uucss_enable_cache' => "0",
+            'uucss_enable_cdn' => "0",
             'update_htaccess_file' => "0",
-            'uucss_lazy_load_iframes' => "1"
+            'uucss_lazy_load_iframes' => "0"
 
         ];
     }
