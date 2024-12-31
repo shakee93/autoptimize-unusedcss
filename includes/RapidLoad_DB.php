@@ -224,7 +224,7 @@ abstract class RapidLoad_DB
 
     }
 
-    static function update_db(){error_log("dsadad");
+    static function update_db(){
 
         if(!self::is_wp_cli()){
             self::verify_nonce();

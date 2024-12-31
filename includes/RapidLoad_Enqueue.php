@@ -277,6 +277,10 @@ class RapidLoad_Enqueue {
 
     public function enabled($url) {
 
+        if(!RapidLoad_Base::is_api_key_verified()){
+            return false;
+        }
+
         if ( $this->is_doing_api_fetch() ) {
             return false;
         }
