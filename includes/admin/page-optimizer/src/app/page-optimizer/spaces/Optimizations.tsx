@@ -55,8 +55,8 @@ const DiagnosticSchema = z.object({
 });
 
 // TODO: create an env variable for this
-const AIBaseURL = "http://localhost:3000/api"
-// const AIBaseURL = "https://ai.rapidload.io/api"
+// const AIBaseURL = "http://localhost:3000/api"
+const AIBaseURL = "https://ai.rapidload.io/api"
 
 const Optimizations = ({ }) => {
     const { settings, data } = useSelector(optimizerData);
@@ -381,6 +381,34 @@ const Optimizations = ({ }) => {
                                                     </AccordionItem>
                                                 ))}
                                             </Accordion>
+
+
+                                            {object?.PluginConflicts && object?.PluginConflicts.length > 0 && (
+                                                <div className="flex flex-col gap-2 mt-6">
+                                                    <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Potential Plugin Conflicts:</span>
+
+                                                    <span className="text-sm text-zinc-600 dark:text-zinc-300">
+                                                        These plugins may conflict with each other, causing issues with your page.
+
+                                                        WORK IN PROGRESS
+                                                    </span>
+                                                    <ul className="space-y-3">
+                                                        {object?.PluginConflicts.map((conflict: any, index: number) => (
+                                                            <li key={index} className="flex flex-col gap-1">
+                                                                <span className="text-sm font-medium text-red-600 dark:text-red-400">
+                                                                    {conflict.plugin}
+                                                                </span>
+                                                                <span className="text-sm text-zinc-600 dark:text-zinc-300">
+                                                                    Recommended Action: {conflict.recommendedAction}
+                                                                </span>
+                                                                <span className="text-sm text-zinc-600 dark:text-zinc-300">
+                                                                    Categories: {conflict?.categories?.join(', ')}
+                                                                </span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
