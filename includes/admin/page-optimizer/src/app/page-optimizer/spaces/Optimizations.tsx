@@ -17,6 +17,7 @@ import { Button } from "components/ui/button";
 import { toast } from "components/ui/use-toast";
 import { cn } from "lib/utils";
 import { z } from 'zod';
+import Setting from "../components/audit/Setting";
 
 const DiagnosticSchema = z.object({
     AnalysisSummary: z.string(),
@@ -30,7 +31,22 @@ const DiagnosticSchema = z.object({
         z.object({
             issue: z.string(),
             description: z.string(),
-            howToFix: z.array(z.string()),
+            howToFix: z.array(z.object({
+                step: z.string(),
+                description: z.string(),
+                type: z.enum(['rapidload_fix', 'wordpress_fix', 'code_fix', 'other']),
+                substeps: z.array(z.object({
+                    step: z.string(),
+                    description: z.string(),
+                })).optional().describe('Substeps to fix the issue.'),
+            })),
+            resources: z.array(z.object({
+                name: z.string(),
+                url: z.string(),
+                type: z.enum(['javascript', 'css', 'image', 'html', 'other']),
+                relatedAudit: z.string().optional().describe('Related audit from PageSpeed Insights.'),
+                reason: z.string().optional().describe('Reason why this resource is related to the issue.'),
+            })),
             pagespeed_insight_audits: z.array(z.string()),
             pagespeed_insight_metrics: z.array(z.string()),
             anyAdditionalTips: z.array(z.string()).optional().describe('Any additional tips to fix the issue.'),
@@ -39,8 +55,8 @@ const DiagnosticSchema = z.object({
 });
 
 // TODO: create an env variable for this
-// const AIBaseURL = "http://localhost:3000/api"
-const AIBaseURL = "https://ai.rapidload.io/api"
+const AIBaseURL = "http://localhost:3000/api"
+// const AIBaseURL = "https://ai.rapidload.io/api"
 
 const Optimizations = ({ }) => {
     const { settings, data } = useSelector(optimizerData);
@@ -93,11 +109,12 @@ const Optimizations = ({ }) => {
                     displayValue: m.displayValue,
                     score: m.score,
                 })),
-                opportunities: data?.grouped?.opportunities.map((o: any) => ({
+                opportunities: data?.grouped?.opportunities.map((o: Audit) => ({
                     name: o.name,
                     score: o.score,
                     metrics: o.metrics.map((m: any) => m.refs.acronym),
                     settings: o.settings.map((s: any) => s.name),
+                    files: o.files.items.map((f: AuditTableResource) => f?.url),
                 })),
                 diagnostics: data?.grouped?.diagnostics.map((d: any) => ({
                     name: d.name,
@@ -113,6 +130,7 @@ const Optimizations = ({ }) => {
 
         try {
 
+            console.log(input)
             submit(input)
 
 
@@ -211,17 +229,15 @@ const Optimizations = ({ }) => {
                     </div>
 
                     <div className="grid grid-cols-5 gap-4 mb-6">
-                        <div className='col-span-2 bg-brand-0 rounded-2xl p-4'>
+                        {/* <div className='col-span-2 bg-brand-0 rounded-2xl p-4'>
 
                             <div className="flex flex-col pt-1 gap-2 w-full">
-                                {/* {getFilteredSettings(settings).map(renderOptimizationStep)} */}
-
                                 <OptimizationsProgress />
                             </div>
 
-                        </div>
+                        </div> */}
 
-                        <div className={cn('relative col-span-3 bg-brand-0 rounded-2xl p-10 flex flex-col gap-4 text-center', !object?.CriticalIssues?.length && 'items-center justify-center')}>
+                        <div className={cn('relative col-span-5 bg-brand-0 rounded-2xl p-10 flex flex-col gap-4 text-center', !object?.CriticalIssues?.length && 'items-center justify-center')}>
 
 
                             {!object?.AnalysisSummary?.length ? <>
@@ -276,18 +292,78 @@ const Optimizations = ({ }) => {
                                                 {object?.CriticalIssues?.map((result: any, index: number) => (
                                                     <AccordionItem key={index} value={index.toString()}>
                                                         <AccordionTrigger className=" font-semibold text-zinc-900 dark:text-zinc-100">
-                                                            {result?.issue}
+
+                                                            <div className="flex flex-col justify-start items-start gap-0.5 w-full">
+                                                                <div>
+                                                                    {result?.issue}
+                                                                </div>
+
+                                                            </div>
+
+
                                                         </AccordionTrigger>
                                                         <AccordionContent>
-                                                            <div className="space-y-2 flex flex-col justify-start items-start text-left">
-                                                                <p className="text-sm text-zinc-600 dark:text-zinc-300">{result?.description}</p>
+                                                            <div className="px-4 py-4 border-2 shadow-md rounded-lg space-y-2 flex flex-col justify-start items-start text-left">
                                                                 <div>
-                                                                    <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200 mb-2">How to fix</p>
-                                                                    <ul className="list-disc list-inside space-y-2">
+                                                                    <p className="text-sm text-left font-normal text-zinc-600 dark:text-zinc-300">{result?.description}</p>
+                                                                </div>
+                                                                <div>
+                                                                    <p className="text-lg font-medium text-zinc-800 dark:text-zinc-200 mb-2">How to fix</p>
+                                                                    <ul className="list-disc space-y-4 pl-4 mt-4">
                                                                         {result?.howToFix?.map((fix: any) => (
-                                                                            <li key={fix} className="text-sm text-zinc-600 dark:text-zinc-300">{fix}</li>
+                                                                            <li key={fix} className="text-sm text-zinc-600 dark:text-zinc-300">
+                                                                                <div className="flex flex-col gap-1">
+                                                                                    <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">{fix.step}</span>
+                                                                                    <span className="text-xs text-zinc-600 dark:text-zinc-300">{fix.description}</span>
+                                                                                    {fix.type === 'rapidload_fix' &&
+                                                                                        <>
+                                                                                            <AppButton
+                                                                                                size="sm"
+                                                                                                className="mt-2 w-fit px-4 text-xs flex items-center gap-2"
+                                                                                                onClick={() => {
+                                                                                                    console.log(settings.find((s: any) => s.inputs.find((i: any) => i.key === fix.rapidload_setting_input?.name)))
+                                                                                                }}
+                                                                                            >
+                                                                                                <Sparkles className="h-3.5 w-3.5 text-white -ml-1.5" /> Fix with AI
+                                                                                            </AppButton>
+                                                                                            {/* <span className="mt-2">
+                                                                                                <Setting
+                                                                                                    index={index}
+                                                                                                    settings={settings.find((s: any) => s.inputs.find((i: any) => i.key === fix.rapidload_setting_input?.name))}
+                                                                                                />
+                                                                                            </span> */}
+
+                                                                                        </>
+                                                                                    }
+
+                                                                                </div>
+                                                                            </li>
                                                                         ))}
+
                                                                     </ul>
+
+                                                                    <div className="flex flex-col gap-2 mt-4">
+                                                                        <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Related Resources:</span>
+                                                                        <span className="text-sm text-blue-600 dark:text-blue-300"> <a href={result?.resources?.map((r: any) => r.url).join(', ')} target="_blank" rel="noopener noreferrer">{result?.resources?.map((r: any) => r.url).join(', ')}</a> </span>
+                                                                        <span className="text-sm text-zinc-600 dark:text-zinc-300"> <a href={result?.resources?.map((r: any) => r.url).join(', ')} target="_blank" rel="noopener noreferrer">{result?.resources?.map((r: any) => r.reason).join(', ')}</a> </span>
+                                                                    </div>
+
+                                                                    <div className="flex flex-col gap-2 mt-4">
+                                                                        <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Related Audit:</span>
+                                                                        <span className="text-sm dark:text-blue-300"> <a href={result?.pagespeed_insight_audits?.join(', ')} target="_blank" rel="noopener noreferrer">
+                                                                            {result?.pagespeed_insight_audits?.join(', ')}
+                                                                        </a> </span>
+                                                                    </div>
+
+                                                                    <div className="flex flex-col gap-2 mt-4">
+                                                                        <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Related Metrics:</span>
+                                                                        <span className="text-sm dark:text-blue-300"> <a href={result?.pagespeed_insight_metrics?.join(', ')} target="_blank" rel="noopener noreferrer">
+                                                                            {result?.pagespeed_insight_metrics?.join(', ')}
+                                                                        </a> </span>
+                                                                    </div>
+
+
+
                                                                 </div>
                                                             </div>
 
@@ -321,7 +397,7 @@ const Optimizations = ({ }) => {
 
                     {showIframe && (
                         <div
-                        // className="h-0 overflow-hidden"
+                            className="h-0 overflow-hidden"
                         >
                             <div className="relative w-full rounded-xl overflow-hidden bg-white shadow-lg">
                                 <div className="absolute top-4 right-4 z-10">
