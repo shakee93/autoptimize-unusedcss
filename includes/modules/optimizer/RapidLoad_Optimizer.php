@@ -59,7 +59,7 @@ class RapidLoad_Optimizer
             'update_titan_performance_gear' => 'update_titan_performance_gear',
             'rapidload_titan_home_page_performance' => 'rapidload_titan_home_page_performance',
             'rapidload_get_active_plugins' => 'rapidload_get_active_plugins',
-            'rapidload_diagnos_data' => 'rapidload_diagnos_data',
+            'rapidload_diagnose_data' => 'rapidload_diagnose_data',
         ];
 
         foreach ($actions as $action => $method) {
@@ -71,7 +71,7 @@ class RapidLoad_Optimizer
         }
     }
 
-    public function rapidload_diagnos_data(){
+    public function rapidload_diagnose_data(){
 
         self::verify_nonce();
 
@@ -88,19 +88,19 @@ class RapidLoad_Optimizer
         }
 
         if($data){
-            $diagnos_data = $this->get_diagnos_data();
+            $diagnose_data = $this->get_diagnose_data();
             if($strategy == 'desktop'){
-                $diagnos_data['desktop_data'] = $data;
-                $job->set_diagnos_data($diagnos_data);
+                $diagnose_data['desktop_data'] = $data;
+                $job->set_diagnose_data($diagnose_data);
             }else{
-                $diagnos_data['mobile_data'] = $data;
-                $job->set_diagnos_data($diagnos_data);
+                $diagnose_data['mobile_data'] = $data;
+                $job->set_diagnose_data($diagnose_data);
             }
             $job->save();
         }
 
         wp_send_json_success([
-            'diagnos_data' => $job->get_diagnos_data(),
+            'diagnose_data' => $job->get_diagnose_data(),
             'strategy' => $strategy
         ]);
     }
@@ -349,6 +349,10 @@ class RapidLoad_Optimizer
         $job = new RapidLoad_Job([
             'url' => $url
         ]);
+
+        if(!isset($job->id)){
+            wp_send_json_error('url not found');
+        }
 
         $response = [];
 
