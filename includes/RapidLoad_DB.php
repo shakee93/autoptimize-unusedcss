@@ -848,7 +848,6 @@ abstract class RapidLoad_DB
 
         $options_to_delete = [
             'autoptimize_uucss_settings',
-            'rapidload_migration',
             'rapidload_cache',
             'rapidload_module_cache',
             'rapidload_module_cdn',
