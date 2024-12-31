@@ -11,16 +11,20 @@ import ChatHistoryPanel from './ChatHistoryPanel';
 import { useChatHistory } from "../hooks/useChatHistory";
 import { formatSystemMessage } from "../utils/messageFormatter";
 import { WelcomeScreen } from "./WelcomeScreen";
+import { useAppContext } from "../../../context/app";
+import { isDev } from "lib/utils";
 
 interface ChatProps {
   apiEndpoint?: string;
 }
 
-export default function Chat({ apiEndpoint = "https://rapidload-ai-faq-manager.vercel.app/api/support" }: ChatProps) {
+export default function Chat({ apiEndpoint = "https://ai.rapidload.io/api/support" }: ChatProps) {
+
+  const { options} = useAppContext()
   const { messages, input, handleInputChange, handleSubmit, setMessages } = useChat({
     api: apiEndpoint,
-    body: {
-      apiKey: import.meta.env.VITE_API_APIKEY as string,
+    headers: {
+      'Authorization': `Bearer ${ isDev ? 'f86e8df144f1469eacca8becd12a6e7f' : options.license_key!}`
     },
   });
 
