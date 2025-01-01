@@ -19,6 +19,7 @@ import useCommonDispatch from "hooks/useCommonDispatch";
 import SlideUp from "components/animation/SlideUp";
 import ErrorFetch from "components/ErrorFetch";
 import TestModeNotification from "components/ui/test-mode-notification";
+import { fetchSettings } from "../../store/app/appActions";
 
 export interface AuditComponentRef {
     notifyHeightChange: () => void;
@@ -48,6 +49,14 @@ export default function PageOptimizer() {
         }
 
     }, [savingData])
+
+    // useEffect(() => {
+    //     if(!savingData && !invalidatingCache){
+    //         dispatch(fetchSettings(options, options.optimizer_url, true))
+    //         console.log("fetching settings")
+    //     }
+    // }, [savingData, invalidatingCache]);
+
 
     return (
 

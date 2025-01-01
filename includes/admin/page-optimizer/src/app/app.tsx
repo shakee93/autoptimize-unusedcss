@@ -274,6 +274,7 @@ const App = ({ popup, _showOptimizer = false }: {
             [key]: isOpen
         }));
     };
+    
 
     return (
         <AnimatePresence>

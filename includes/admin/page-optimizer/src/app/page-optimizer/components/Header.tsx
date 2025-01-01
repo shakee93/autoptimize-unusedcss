@@ -66,11 +66,13 @@ const Header = ({ url }: { url: string }) => {
         };
     }, []);
 
-    useEffect(() => {
-        if(!savingData && !invalidatingCache){
-            dispatch(fetchSettings(options, options.optimizer_url, true))
-        }
-    }, [savingData, invalidatingCache]);
+    // useEffect(() => {
+    //     console.log('settings', settings)
+    //     if(!savingData && !invalidatingCache){
+    //         dispatch(fetchSettings(options, options.optimizer_url, true))
+    //         console.log("fetching settings")
+    //     }
+    // }, [savingData, invalidatingCache]);
 
     // useEffect(() => {
     //     if (settings && settingsOriginal) {

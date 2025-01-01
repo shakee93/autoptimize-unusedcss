@@ -518,7 +518,6 @@ export const fetchReport = (options: WordPressOptions, url: string, reload = fal
                 reload,
             );
 
-
             dispatch({
                 type: FETCH_REPORT_SUCCESS, payload: {
                     activeReport,
@@ -568,7 +567,6 @@ export const fetchSettings = (options: WordPressOptions, url: string, reload = f
                 activeReport,
                 reload,
             );
-
 
             dispatch({
                 type: FETCH_SETTING_SUCCESS, payload: {
@@ -626,7 +624,7 @@ export const updateSettings = (
 
         dispatch({
             type: UPDATE_SETTINGS, payload: {
-                settings: newOptions
+                settings: newOptions,
             }
         });
     }

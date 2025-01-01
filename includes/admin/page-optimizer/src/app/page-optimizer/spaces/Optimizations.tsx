@@ -210,18 +210,17 @@ const Optimizations = ({ }) => {
                         <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Let’s confirm that all optimizations are working as expected...</span>
                     </div>
 
-                    <div className="grid grid-cols-5 gap-4 mb-6">
-                        <div className='col-span-2 bg-brand-0 rounded-2xl p-4'>
+                    <div className="grid grid-cols gap-4 mb-6">
+                        {/* <div className='col-span-2 bg-brand-0 rounded-2xl p-4'>
 
                             <div className="flex flex-col pt-1 gap-2 w-full">
-                                {/* {getFilteredSettings(settings).map(renderOptimizationStep)} */}
-
+                            
                                 <OptimizationsProgress />
                             </div>
 
-                        </div>
+                        </div> */}
 
-                        <div className={cn('relative col-span-3 bg-brand-0 rounded-2xl p-10 flex flex-col gap-4 text-center', !object?.CriticalIssues?.length && 'items-center justify-center')}>
+                        <div className={cn('relative bg-brand-0 rounded-2xl p-10 flex flex-col gap-4 text-center', !object?.CriticalIssues?.length && 'items-center justify-center')}>
 
 
                             {!object?.AnalysisSummary?.length ? <>

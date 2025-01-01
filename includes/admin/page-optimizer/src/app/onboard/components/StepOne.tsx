@@ -163,9 +163,9 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                                             className={cn('max-h-44')}
                                             scoreClassName={"text-brand-950"}
                                             performance={performanceScore}
-                                        >
-                                            <span className='text-brand-950 text-xs top-10 font-normal h-10'>to 100</span>
-                                        </PerformanceProgressBar>
+                                        />
+                                        
+                                        
                                     )}
 
                                 </div>
