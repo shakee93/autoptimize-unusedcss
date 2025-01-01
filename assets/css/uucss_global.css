@@ -1054,3 +1054,8 @@ body.rl-page-optimizer-loaded #wpbody-content>.notice{
     line-height: 18px;
     font-size: 13px;
 }
+
+#wp-admin-bar-rapidload .ab-item:hover,
+#wp-admin-bar-rapidload .ab-item:focus{
+    color: #FFFFFF!important;
+}
