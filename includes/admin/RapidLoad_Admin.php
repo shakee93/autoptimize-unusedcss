@@ -273,7 +273,11 @@ class RapidLoad_Admin
             wp_send_json_error('url required');
         }
 
-        $url = $_REQUEST['url'];
+        $url = $this->transform_url($_REQUEST['url']);
+
+        if($url == $this->transform_url(site_url())){
+            wp_send_json_error('cannot delete home page optimizations');
+        }
 
         $job = new RapidLoad_Job(['url' => $url]);
 
