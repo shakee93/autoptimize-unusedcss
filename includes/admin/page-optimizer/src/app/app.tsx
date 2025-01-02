@@ -210,8 +210,6 @@ const App = ({ popup, _showOptimizer = false }: {
             // Extract the base route without query parameters
             const baseRoute = hash.split('?')[0];
             const validRoute = routes.some(route => route.id === baseRoute);
-            console.log("baseRoute: ", baseRoute)
-            console.log("validRoute: ", validRoute)
             if (validRoute) {
                 setActiveRoute(hash); // Store the full hash including query params
             } else {
