@@ -102,21 +102,21 @@ class ApiService {
                 }
             }
 
-            this.setSearchParams({
-                action: 'fetch_page_speed',
-                url,
-                strategy: activeReport,
-                new: reload as unknown as string,
-                is_dev: isDev as unknown as string
-            });
+            // this.setSearchParams({
+            //     action: 'fetch_page_speed',
+            //     url,
+            //     strategy: activeReport,
+            //     new: reload as unknown as string,
+            //     is_dev: isDev as unknown as string
+            // });
 
-            // const query = new URLSearchParams();
+            const query = new URLSearchParams();
 
-            // this.baseURL.searchParams.append('action', 'fetch_page_speed')
-            // this.baseURL.searchParams.append('url', url)
-            // this.baseURL.searchParams.append('strategy', activeReport)
-            // this.baseURL.searchParams.append('new', reload as unknown as string)
-            // this.baseURL.searchParams.append('is_dev', isDev as unknown as string)
+            this.baseURL.searchParams.append('action', 'fetch_page_speed')
+            this.baseURL.searchParams.append('url', url)
+            this.baseURL.searchParams.append('strategy', activeReport)
+            this.baseURL.searchParams.append('new', reload as unknown as string)
+            this.baseURL.searchParams.append('is_dev', isDev as unknown as string)
             // this.baseURL.searchParams.append('settingsMode', settingsMode || '')
 
             const response = await fetch(this.baseURL, {
