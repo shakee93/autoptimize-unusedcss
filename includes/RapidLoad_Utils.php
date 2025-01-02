@@ -30,13 +30,11 @@ trait RapidLoad_Utils {
 	    global $wp;
 
 	    if ( $wp ) {
-
-            return home_url(add_query_arg(array($_GET), $wp->request));
-
+            return urldecode(home_url(add_query_arg(array(), $wp->request)));
 	    }
 
         if(isset($_SERVER['REQUEST_URI'])){
-            return home_url(add_query_arg(array(), $_SERVER['REQUEST_URI']));
+            return urldecode(home_url(add_query_arg(array(), $_SERVER['REQUEST_URI'])));
         }
 
 	    return null;
@@ -534,6 +532,7 @@ trait RapidLoad_Utils {
     }
 
     public function is_valid_url($url){
+        $url = urldecode($url);
         return filter_var($url, FILTER_VALIDATE_URL);
     }
 
