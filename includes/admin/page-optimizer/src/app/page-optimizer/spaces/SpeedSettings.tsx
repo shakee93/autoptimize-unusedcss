@@ -377,6 +377,7 @@ const SpeedSettings = ({ }) => {
     const [enableFlags, setEnableFlags] = useState({ cpcss: false, uucss: false, cpcssuucss: false });
 
     const updateEnableFlags = useCallback(() => {
+        if(!settings) return;
         const cpcssEnabled = settings.some(item => item.inputs.find(input => input.key === 'uucss_enable_cpcss')?.value);
         const uucssEnabled = settings.some(item => item.inputs.find(input => input.key === 'uucss_enable_uucss')?.value);
         const cpcssuucssEnabled = settings.some(item => item.inputs.find(input => input.key === 'enable_uucss_on_cpcss')?.value);
