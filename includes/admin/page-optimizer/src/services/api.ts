@@ -102,22 +102,29 @@ class ApiService {
                 }
             }
 
-            this.setSearchParams({
-                action: 'fetch_page_speed',
-                url,
-                strategy: activeReport,
-                new: reload as unknown as string,
-                is_dev: isDev as unknown as string
-            });
+            // this.setSearchParams({
+            //     action: 'fetch_page_speed',
+            //     url,
+            //     strategy: activeReport,
+            //     new: reload as unknown as string,
+            //     is_dev: isDev as unknown as string
+            // });
 
             //console.log("this.baseURL: ", this.baseURL)
-            // const query = new URLSearchParams();
+            const query = new URLSearchParams();
 
-            // this.baseURL.searchParams.append('action', 'fetch_page_speed')
-            // this.baseURL.searchParams.append('url', url)
-            // this.baseURL.searchParams.append('strategy', activeReport)
-            // this.baseURL.searchParams.append('new', reload as unknown as string)
-            // this.baseURL.searchParams.append('is_dev', isDev as unknown as string)
+             // Clear existing search params before adding new ones
+            this.baseURL.searchParams.delete('action');
+            this.baseURL.searchParams.delete('url');
+            this.baseURL.searchParams.delete('strategy');
+            this.baseURL.searchParams.delete('new');
+            this.baseURL.searchParams.delete('is_dev');
+
+            this.baseURL.searchParams.append('action', 'fetch_page_speed')
+            this.baseURL.searchParams.append('url', url)
+            this.baseURL.searchParams.append('strategy', activeReport)
+            this.baseURL.searchParams.append('new', reload as unknown as string)
+            this.baseURL.searchParams.append('is_dev', isDev as unknown as string)
             // this.baseURL.searchParams.append('settingsMode', settingsMode || '')
 
             const response = await fetch(this.baseURL, {
