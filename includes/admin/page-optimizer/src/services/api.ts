@@ -69,6 +69,16 @@ class ApiService {
         }
     }
 
+    private setSearchParams(params: Record<string, string>) {
+        // Clear all existing params
+        this.baseURL.search = '';
+        
+        // Add new params
+        Object.entries(params).forEach(([key, value]) => {
+            this.baseURL.searchParams.append(key, value);
+        });
+    }
+
     async fetchPageSpeed(url: string, activeReport: string, reload: boolean): Promise<any> {
         
         try {
@@ -92,13 +102,21 @@ class ApiService {
                 }
             }
 
-            const query = new URLSearchParams();
+            this.setSearchParams({
+                action: 'fetch_titan_settings',
+                url,
+                strategy: activeReport,
+                new: reload as unknown as string,
+                is_dev: isDev as unknown as string
+            });
 
-            this.baseURL.searchParams.append('action', 'fetch_page_speed')
-            this.baseURL.searchParams.append('url', url)
-            this.baseURL.searchParams.append('strategy', activeReport)
-            this.baseURL.searchParams.append('new', reload as unknown as string)
-            this.baseURL.searchParams.append('is_dev', isDev as unknown as string)
+            // const query = new URLSearchParams();
+
+            // this.baseURL.searchParams.append('action', 'fetch_page_speed')
+            // this.baseURL.searchParams.append('url', url)
+            // this.baseURL.searchParams.append('strategy', activeReport)
+            // this.baseURL.searchParams.append('new', reload as unknown as string)
+            // this.baseURL.searchParams.append('is_dev', isDev as unknown as string)
             // this.baseURL.searchParams.append('settingsMode', settingsMode || '')
 
             const response = await fetch(this.baseURL, {
@@ -132,39 +150,22 @@ class ApiService {
         }
     }
 
-    private setSearchParams(params: Record<string, string>) {
-        // Clear all existing params
-        this.baseURL.search = '';
-        
-        // Add new params
-        Object.entries(params).forEach(([key, value]) => {
-            this.baseURL.searchParams.append(key, value);
-        });
-    }
+   
 
     async fetchSettings(url: string, activeReport: string, reload: boolean): Promise<any> {
 
         try {
             
-
             let fresh = reload
             let data = null
 
-            this.setSearchParams({
-                action: 'fetch_titan_settings',
-                url,
-                strategy: activeReport,
-                new: reload as unknown as string,
-                is_dev: isDev as unknown as string
-            });
+            const query = new URLSearchParams();
 
-            // const query = new URLSearchParams();
-
-            // this.baseURL.searchParams.append('action', 'fetch_titan_settings')
-            // this.baseURL.searchParams.append('url', url)
-            // this.baseURL.searchParams.append('strategy', activeReport)
-            // this.baseURL.searchParams.append('new', reload as unknown as string)
-            // this.baseURL.searchParams.append('is_dev', isDev as unknown as string)
+            this.baseURL.searchParams.append('action', 'fetch_titan_settings')
+            this.baseURL.searchParams.append('url', url)
+            this.baseURL.searchParams.append('strategy', activeReport)
+            this.baseURL.searchParams.append('new', reload as unknown as string)
+            this.baseURL.searchParams.append('is_dev', isDev as unknown as string)
             // this.baseURL.searchParams.append('settingsMode', settingsMode || '')
 
             const response = await fetch(this.baseURL, {
