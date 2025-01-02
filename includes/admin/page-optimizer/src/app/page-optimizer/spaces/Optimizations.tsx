@@ -237,7 +237,7 @@ const Optimizations = ({ }) => {
                             </div>
 
                         </div> */}
-                        </div> */}
+                        
 
                         <div className={cn('relative bg-brand-0 rounded-2xl p-10 flex flex-col gap-4 text-center', !object?.CriticalIssues?.length && 'items-center justify-center')}>
 

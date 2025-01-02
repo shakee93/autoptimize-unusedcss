@@ -69,7 +69,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
     } = useCommonDispatch()
     //Test Mode
     const { options, savingData, invalidatingCache } = useAppContext();
-    const { settingsMode, testModeStatus, testModeLoading, inProgress } = useCommonDispatch();
+    const { settingsMode, testModeStatus, testModeLoading, inProgress, headerUrl } = useCommonDispatch();
     const { testMode } = useSelector((state: RootState) => state.app);
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
     const [localSwitchState, setLocalSwitchState] = useState<boolean>(testMode?.status || false);
@@ -77,7 +77,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
 
     const { handleTestModeSwitchChange } = useTestModeUtils();
 
-    let url = options?.optimizer_url;
+    let url = headerUrl ? headerUrl : options?.optimizer_url;
 
     useEffect(() => {
         if (testMode) {
