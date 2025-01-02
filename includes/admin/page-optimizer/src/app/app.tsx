@@ -105,7 +105,7 @@ const App = ({ popup, _showOptimizer = false }: {
     useEffect(() => {
         const optimizeUrl = getOptimizeUrl();
         dispatch(setCommonState('headerUrl', optimizeUrl));
-        
+        console.log(headerUrl)
         // load initial data
         dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, false));
         //console.log(activeRoute)
