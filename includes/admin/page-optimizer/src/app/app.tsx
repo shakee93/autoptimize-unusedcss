@@ -103,14 +103,16 @@ const App = ({ popup, _showOptimizer = false }: {
 
 
     useEffect(() => {
+        const optimizeUrl = getOptimizeUrl();
+        dispatch(setCommonState('headerUrl', optimizeUrl));
+        
         // load initial data
         dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, false));
         //console.log(activeRoute)
         if(!uucssGlobal?.on_board_complete && !isDev){
             return;
         }
-        const optimizeUrl = getOptimizeUrl();
-        dispatch(setCommonState('headerUrl', optimizeUrl));
+       
         dispatch(fetchSettings(options, headerUrl ? headerUrl : options.optimizer_url, false));
         dispatch(setCommonState('testModeStatus', initialTestMode));
         dispatch(fetchPosts(options));
