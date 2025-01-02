@@ -568,9 +568,13 @@ class RapidLoad_Optimizer
     }
 
     public function  pre_optimizer_function($url, $strategy, $global, $can_be_saved = false){
+
+        $url = $this->transform_url(urldecode($url));
+
         self::$job = new RapidLoad_Job([
-            'url' => $this->transform_url($url)
+            'url' => $url
         ]);
+        
         if(!isset(self::$job->id) && $can_be_saved){
             self::$job->save();
         }
