@@ -444,7 +444,7 @@ class RapidLoad_Optimizer
         $titan_gear = $_REQUEST['titan_gear'];
 
         if(filter_var($url, FILTER_VALIDATE_URL) == false){
-            wp_send_json_error('url not valid');
+           // wp_send_json_error('url not valid');
         }
 
         $strategy = isset($_REQUEST['strategy']) ? $_REQUEST['strategy'] : 'mobile';
@@ -497,7 +497,7 @@ class RapidLoad_Optimizer
         $url = $_REQUEST['url'];
 
         if(filter_var($url, FILTER_VALIDATE_URL) == false){
-            wp_send_json_error('url not valid');
+          //  wp_send_json_error('url not valid');
         }
 
         $strategy = isset($_REQUEST['strategy']) ? $_REQUEST['strategy'] : 'mobile';
@@ -542,7 +542,7 @@ class RapidLoad_Optimizer
         $url = $_REQUEST['url'];
 
         if(filter_var($url, FILTER_VALIDATE_URL) == false){
-            wp_send_json_error('url not valid');
+           // wp_send_json_error('url not valid');
         }
 
         $strategy = isset($_REQUEST['strategy']) ? $_REQUEST['strategy'] : 'mobile';
@@ -784,7 +784,7 @@ class RapidLoad_Optimizer
         $url = $_REQUEST['url'];
 
         if(filter_var($url, FILTER_VALIDATE_URL) == false){
-            wp_send_json_error('url not valid');
+           // wp_send_json_error('url not valid');
         }
 
         $strategy = isset($_REQUEST['strategy']) ? $_REQUEST['strategy'] : 'mobile';
