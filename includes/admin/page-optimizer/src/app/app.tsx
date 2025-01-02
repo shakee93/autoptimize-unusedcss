@@ -101,15 +101,14 @@ const App = ({ popup, _showOptimizer = false }: {
 
     }, [showOptimizer])
 
-
     useEffect(() => {
         const optimizeUrl = getOptimizeUrl();
         dispatch(setCommonState('headerUrl', optimizeUrl));
         console.log("headerUrl: ", headerUrl)
-        const initialUrl = data?.loadingExperience?.initial_url
-        ? decodeURIComponent(data.loadingExperience.initial_url.replace('?rapidload_preview', ''))
-        : null;
-        console.log("initialUrl: ", initialUrl)
+    },[headerUrl]);
+
+    useEffect(() => {
+       
         // load initial data
         dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, false));
         //console.log(activeRoute)
