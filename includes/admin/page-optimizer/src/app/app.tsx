@@ -101,14 +101,17 @@ const App = ({ popup, _showOptimizer = false }: {
 
     }, [showOptimizer])
 
-    const getOptimizeUrl = () => {
+    // const getOptimizeUrl = () => {
+    //     const queryString = window.location.search;
+    //     const urlParams = new URLSearchParams(queryString);
+    //     return urlParams.get('optimize-url');
+    //   };
+
+    useEffect(() => {
+        // const optimizeUrl = getOptimizeUrl();
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
-        return urlParams.get('optimize-url');
-      };
-      
-    useEffect(() => {
-        const optimizeUrl = getOptimizeUrl();
+        const optimizeUrl = urlParams.get('optimize-url');
         dispatch(setCommonState('headerUrl', optimizeUrl));
         console.log("headerUrl: ", headerUrl)
     },[headerUrl]);
