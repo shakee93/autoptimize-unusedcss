@@ -67,7 +67,7 @@ const App = ({ popup, _showOptimizer = false }: {
     });
     const { headerUrl, onboardCompleted } = useCommonDispatch();
     const { changeTheme } = useRootContext()
-    const { testMode, license } = useSelector(optimizerData);
+    const { testMode, license, data } = useSelector(optimizerData);
 
     useEffect(() => {
 
