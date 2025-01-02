@@ -100,7 +100,6 @@ const App = ({ popup, _showOptimizer = false }: {
         }
 
     }, [showOptimizer])
-    
 
     useEffect(() => {
         const optimizeUrl = getOptimizeUrl();
