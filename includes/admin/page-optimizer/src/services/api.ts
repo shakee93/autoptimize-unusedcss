@@ -103,7 +103,7 @@ class ApiService {
             }
 
             this.setSearchParams({
-                action: 'fetch_titan_settings',
+                action: 'fetch_page_speed',
                 url,
                 strategy: activeReport,
                 new: reload as unknown as string,
