@@ -35,6 +35,7 @@ const UrlPreview = () => {
         : (headerUrl || url);
 
         console.log("finalUrl: ", finalUrl)
+        console.log("Preview headerUrl: ", headerUrl)
 
         const truncateUrl = (url: string, maxLength: number = 30) => {
             return url.length > maxLength ? `${url.substring(0, maxLength)}...` : url;
