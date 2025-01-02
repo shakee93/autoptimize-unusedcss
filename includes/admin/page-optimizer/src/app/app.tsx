@@ -101,6 +101,12 @@ const App = ({ popup, _showOptimizer = false }: {
 
     }, [showOptimizer])
 
+    const getOptimizeUrl = () => {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        return urlParams.get('optimize-url');
+      };
+      
     useEffect(() => {
         const optimizeUrl = getOptimizeUrl();
         dispatch(setCommonState('headerUrl', optimizeUrl));
