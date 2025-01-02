@@ -100,22 +100,12 @@ const App = ({ popup, _showOptimizer = false }: {
         }
 
     }, [showOptimizer])
-
-    // const getOptimizeUrl = () => {
-    //     const queryString = window.location.search;
-    //     const urlParams = new URLSearchParams(queryString);
-    //     return urlParams.get('optimize-url');
-    //   };
-
-    useEffect(() => {
-       
-        console.log("headerUrl: ", headerUrl)
-    },[headerUrl]);
+    
 
     useEffect(() => {
         const optimizeUrl = getOptimizeUrl();
         dispatch(setCommonState('headerUrl', optimizeUrl));
-        
+
         // load initial data
         dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, false));
         //console.log(activeRoute)
