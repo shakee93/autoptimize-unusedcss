@@ -89,6 +89,9 @@ class RapidLoad_Admin_Bar {
 
         if($this->is_admin_url($current_url)){
             $current_url = site_url();
+            if(isset($_GET[‘optimize-url’])){
+                $current_url = $_GET['optimize-url'];
+            }
         }
 
         $data = array(
