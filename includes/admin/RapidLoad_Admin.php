@@ -565,12 +565,6 @@ class RapidLoad_Admin
 
             $options['uucss_enable_cpcss'] = ($_REQUEST['uucss_enable_cpcss'] == 'true' ? "1" : null);
 
-            if(isset($_REQUEST['uucss_enable_cpcss_mobile'])){
-
-                $options['uucss_enable_cpcss_mobile'] = ($_REQUEST['uucss_enable_cpcss_mobile'] == 'true' ? "1" : null);
-
-            }
-
             if(isset($_REQUEST['remove_cpcss_on_user_interaction'])){
 
                 $options['remove_cpcss_on_user_interaction'] = ($_REQUEST['remove_cpcss_on_user_interaction'] == 'true' ? "1" : null);

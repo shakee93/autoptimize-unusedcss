@@ -17,7 +17,7 @@ import { Button } from "components/ui/button";
 import { toast } from "components/ui/use-toast";
 import { cn } from "lib/utils";
 import { z } from 'zod';
-import Setting from "../components/audit/Setting";
+import { AnimatedLogo } from "components/animated-logo";
 
 const DiagnosticSchema = z.object({
     AnalysisSummary: z.string(),
@@ -61,6 +61,7 @@ const AIBaseURL = "https://ai.rapidload.io/api"
 const Optimizations = ({ }) => {
     const { settings, data } = useSelector(optimizerData);
     const [diagnosticsLoading, setDiagnosticsLoading] = useState(false);
+    const [diagnosticComplete, setDiagnosticComplete] = useState(false);
     const [loadingText, setLoadingText] = useState<string | null>(null);
 
     const { object, submit, isLoading, error } = useObject({
@@ -70,7 +71,7 @@ const Optimizations = ({ }) => {
             console.log(diagnostic)
             setDiagnosticsLoading(false)
             setLoadingText(null)
-
+            setDiagnosticComplete(true)
             toast({
                 title: "AI Diagnostic Complete",
                 description: "AI analysis of your page has been completed successfully.",
@@ -103,6 +104,7 @@ const Optimizations = ({ }) => {
             })),
             plugins: plugins.data,
             report: {
+                url: options?.optimizer_url,
                 performance: data?.performance,
                 metrics: data?.metrics.map((m: any) => ({
                     metric: m.refs.acronym,
@@ -199,7 +201,6 @@ const Optimizations = ({ }) => {
     const getFilteredSettings = (settings: any) => {
         return settings.filter((setting: any) => setting.inputs.some((input: any) => input.value === true));
     };
-    ;
 
     const renderOptimizationStep = useCallback((step: string, index: number) => (
         <div key={index} className="flex items-start gap-2 py-1 relative">
@@ -219,76 +220,54 @@ const Optimizations = ({ }) => {
                 transition={{ duration: 0.2, delay: 0.05 }}
                 className=''
             >
-                <div className='px-11 py-4'>
-                    <div className="pb-4">
-                        {false &&
-                            <div>loading...</div>
-                        }
-                        <h3 className="font-semibold text-lg">Optimizations Summary</h3>
-                        <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Let’s confirm that all optimizations are working as expected...</span>
+                <div className='px-8 py-8 bg-white rounded-2xl'>
+                    <div className="pb-4 flex justify-start gap-4 w-full">
+
+                        <div className="flex  justify-start gap-2 w-10">
+                            <AnimatedLogo size="md" isPlaying={diagnosticsLoading} />
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                            <span className="text-sm text-zinc-500 -mt-1 dark:text-zinc-300">I can help your get more speed...</span>
+                            <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">
+                                {object?.AnalysisSummary ? (
+                                    object.AnalysisSummary
+                                ) : (
+                                    "Let's analyze your page to identify potential optimizations and performance improvements."
+                                )}
+                            </span>
+                        </div>
+
+                        <AppButton
+                            disabled={diagnosticsLoading}
+                            className="rounded-xl px-8 py-4 whitespace-nowrap"
+                            onClick={async () => {
+
+                                if (diagnosticComplete) {
+                                    setDiagnosticComplete(false)
+                                    setShowIframe(false);
+                                    setDiagnosticsLoading(true);
+                                    setLoadingText('Refreshing diagnostics...');
+                                    await new Promise(resolve => setTimeout(resolve, 200));
+                                    setShowIframe(true);
+                                } else {
+                                    setLoadingText('Collecting Diagnostics from your page...')
+                                    setDiagnosticsLoading(true)
+                                    setShowIframe(true)
+                                }
+
+                            }}
+                        >
+                            {diagnosticsLoading && <LoaderIcon className="h-4 w-4 text-white animate-spin" />}
+                            {diagnosticComplete ? 'Test Again' : 'Run Test'}
+
+                        </AppButton>
                     </div>
-
-                    <div className="grid grid-cols gap-4 mb-6">
-                        {/* <div className='col-span-2 bg-brand-0 rounded-2xl p-4'>
-
-                            <div className="flex flex-col pt-1 gap-2 w-full">
-                            
-                                <OptimizationsProgress />
-                            </div>
-
-                        </div> */}
-                        
-
-                        <div className={cn('relative bg-brand-0 rounded-2xl p-10 flex flex-col gap-4 text-center', !object?.CriticalIssues?.length && 'items-center justify-center')}>
-
-
-                            {!object?.AnalysisSummary?.length ? <>
-
-
-                                <h3 className="font-semibold text-lg">Test Your Optimizations</h3>
-                                <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Your optimizations are complete! However, changes might not take effect due to factors like caching, conflicts with plugins or themes, or dynamic content. Let's test to ensure everything is working smoothly and identify any bottlenecks.</span>
-                                <AppButton
-                                    disabled={diagnosticsLoading}
-                                    className="rounded-xl px-8 py-4"
-                                    onClick={() => {
-                                        setLoadingText('Collecting Diagnostics from your page...')
-                                        setDiagnosticsLoading(true)
-                                        setShowIframe(true)
-                                    }}
-                                >
-                                    {diagnosticsLoading && <LoaderIcon className="h-4 w-4 text-white animate-spin" />}
-                                    Run Optimization Test
-                                </AppButton>
-                                <span className="font-normal text-xs text-zinc-600 dark:text-brand-300">Disabled: All Optimizations needs to be completed to run the test</span>
-
-                            </> :
+                    {object?.AnalysisSummary?.length &&
+                        <div className="grid grid-cols-5 gap-4 mb-6">
+                            <div className={cn('relative col-span-5 bg-brand-0 rounded-2xl p-10 flex flex-col gap-4 text-center', !object?.CriticalIssues?.length && 'items-center justify-center')}>
                                 <div className="w-full">
-                                    <div className="absolute top-4 right-4 flex justify-end mb-4">
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            hidden={isLoading}
-                                            disabled={diagnosticsLoading}
-                                            className="p-2 py-4 h-6 flex items-center gap-2"
-                                            onClick={async () => {
-                                                setShowIframe(false);
-                                                setDiagnosticsLoading(true);
-                                                setLoadingText('Refreshing diagnostics...');
-                                                await new Promise(resolve => setTimeout(resolve, 200));
-                                                setShowIframe(true);
-                                            }}
-                                        >
-                                            <RefreshCw className={cn("h-3.5 w-3.5", diagnosticsLoading && "animate-spin")} /> Test Again
-                                        </Button>
-                                    </div>
-                                    <h3 className="font-semibold text-lg flex items-center gap-2 ">
-                                        <Sparkles className="h-5 w-5 text-brand-600" />
-                                        Hermes AI Diagnosis</h3>
                                     <div className="w-full mt-4 text-left">
-                                        <div className="text-sm text-zinc-600 dark:text-zinc-300">
-                                            {object?.AnalysisSummary}
-                                        </div>
-
                                         <div className="flex flex-col gap-2">
                                             <Accordion type="multiple" defaultValue={["0"]}>
                                                 {object?.CriticalIssues?.map((result: any, index: number) => (
@@ -313,7 +292,7 @@ const Optimizations = ({ }) => {
                                                                     <p className="text-lg font-medium text-zinc-800 dark:text-zinc-200 mb-2">How to fix</p>
                                                                     <ul className="list-disc space-y-4 pl-4 mt-4">
                                                                         {result?.howToFix?.map((fix: any) => (
-                                                                            <li key={fix} className="text-sm text-zinc-600 dark:text-zinc-300">
+                                                                            <li key={fix.step} className="text-sm text-zinc-600 dark:text-zinc-300">
                                                                                 <div className="flex flex-col gap-1">
                                                                                     <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">{fix.step}</span>
                                                                                     <span className="text-xs text-zinc-600 dark:text-zinc-300">{fix.description}</span>
@@ -415,10 +394,11 @@ const Optimizations = ({ }) => {
                                     </div>
                                 </div>
 
-                            }
 
+                            </div>
                         </div>
-                    </div>
+                    }
+
 
                     {diagnosticsLoading && <div className="flex items-center gap-2 mt-4 bg-brand-0 rounded-2xl p-4 py-3">
                         <LoaderIcon className="h-4 w-4 text-gray-600 animate-spin" />

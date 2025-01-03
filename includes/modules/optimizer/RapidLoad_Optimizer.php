@@ -361,7 +361,7 @@ class RapidLoad_Optimizer
                 case 'uucss' :{
                     $job_data_uucss = new RapidLoad_Job_Data($job,'uucss');
                     $response[$type] = [
-                        'status' => isset($job_data_uucss->id) ? $job_data_uucss->status : null,
+                        'status' => isset($job_data_uucss->id) ? $job_data_uucss->status : 'queued',
                         'error' => isset($job_data_uucss->id) && isset($job_data_uucss->error) ? unserialize($job_data_uucss->error) : null,
                         'warnings' => isset($job_data_uucss->id) && isset($job_data_uucss->warnings) ? unserialize($job_data_uucss->warnings) : null,
                         'stats' => isset($job_data_uucss->id) && isset($job_data_uucss->stats) ? unserialize($job_data_uucss->stats) : null
@@ -371,7 +371,7 @@ class RapidLoad_Optimizer
                 case 'cpcss' :{
                     $job_data_cpcss = new RapidLoad_Job_Data($job,'cpcss');
                     $response[$type] = [
-                        'status' => isset($job_data_cpcss->id) ? $job_data_cpcss->status : null,
+                        'status' => isset($job_data_cpcss->id) ? $job_data_cpcss->status : 'queued',
                         'error' => isset($job_data_cpcss->id) && isset($job_data_cpcss->error) ? unserialize($job_data_cpcss->error) : null,
                         'warnings' => isset($job_data_cpcss->id) && isset($job_data_cpcss->warnings) ? unserialize($job_data_cpcss->warnings) : null,
                         'stats' => isset($job_data_cpcss->id) && isset($job_data_cpcss->stats) ? unserialize($job_data_cpcss->stats) : null
@@ -574,7 +574,7 @@ class RapidLoad_Optimizer
         self::$job = new RapidLoad_Job([
             'url' => $url
         ]);
-        
+
         if(!isset(self::$job->id) && $can_be_saved){
             self::$job->save();
         }
@@ -715,7 +715,6 @@ class RapidLoad_Optimizer
             'uucss_minify',
             'uucss_minify_excluded_files',
             'uucss_enable_cpcss',
-            'uucss_enable_cpcss_mobile',
             'uucss_additional_css',
             'uucss_enable_uucss',
             'uucss_safelist',
@@ -749,6 +748,7 @@ class RapidLoad_Optimizer
             'uucss_exclude_images_from_lazy_load',
             'uucss_set_width_and_height',
             'uucss_exclude_images_from_set_width_and_height',
+            'uucss_exclude_iframes_from_lazy_load',
             //font
             'uucss_enable_font_optimization',
             'uucss_self_host_google_fonts',
@@ -911,14 +911,6 @@ class RapidLoad_Optimizer
                 'control_values' => array('1', '0'),
                 'default' => '0',
                 'main_input' => true
-            ),
-            'uucss_enable_cpcss_mobile' => array(
-                'control_type' => 'checkbox',
-                'control_label' => 'Mobile Critical CSS',
-                'control_description' => 'Extract Critical CSS for mobile screens',
-                'control_values' => array('1', '0'),
-                'default' => '0',
-                'main_input' => false
             ),
             'uucss_additional_css' => array(
                 'control_type' => 'textarea',
@@ -1479,11 +1471,11 @@ class RapidLoad_Optimizer
 
         $settings_map = [
             ['keys' => ['modern-image-formats', 'uses-optimized-images', 'uses-responsive-images'], 'name' => 'Serve next-gen Images (AVIF, WEBP)', 'description' => 'Serve the images in next-gen image formats to all the browsers that support them.', 'category' => 'image', 'inputs' => ['uucss_support_next_gen_formats', 'uucss_image_optimize_level', 'uucss_generate_blurry_place_holder','uucss_adaptive_image_delivery', 'uucss_exclude_images_from_modern_images']],
-            ['keys' => ['font-display', 'enable-font'], 'name' => 'Self Host Google Fonts', 'description' => 'Self host all your Google fonts and load fonts faster. Turn on CDN to serve these fonts faster through RapidLoad CDN.', 'category' => 'font', 'inputs' => ['uucss_self_host_google_fonts']],
+            ['keys' => ['font-display', 'enable-font'], 'name' => 'Self Host Google Fonts', 'description' => 'Self host all your Google fonts and load fonts faster. Turn on CDN to serve these fonts faster through RapidLoad CDN.', 'category' => 'font', 'inputs' => ['uucss_self_host_google_fonts', 'uucss_preload_font_urls']],
             ['keys' => ['unsized-images'], 'name' => 'Minify CSS', 'description' => 'Remove unnecessary spaces, lines and comments from CSS files.', 'category' => 'css', 'inputs' => ['uucss_minify', 'uucss_minify_excluded_files']],
             ['keys' => ['unminified-javascript'], 'name' => 'Minify Javascript', 'description' => 'Remove unnecessary spaces, lines and comments from JS files.', 'category' => 'javascript', 'inputs' => ['minify_js', 'uucss_exclude_files_from_minify_js']],
             ['keys' => ['unused-css-rules'], 'name' => 'Remove Unused CSS', 'description' => 'Remove unused CSS for each page and reduce page size.', 'category' => 'css', 'inputs' => ['uucss_enable_uucss', 'uucss_excluded_files','uucss_safelist','uucss_misc_options','rapidload_purge_all']],
-            ['keys' => ['render-blocking-resources'], 'name' => 'Critical CSS', 'description' => 'Extract and prioritize above-the-fold CSS.', 'category' => 'css', 'inputs' => ['uucss_enable_cpcss', 'uucss_enable_cpcss_mobile', 'uucss_additional_css', 'remove_cpcss_on_user_interaction', 'uucss_ignore_inlined_styles', 'rapidload_enable_cpcss_file_chunk', 'rapidload_cpcss_file_character_length', 'enable_uucss_on_cpcss', 'uucss_preload_font_urls', 'cpcss_purge_url']],
+            ['keys' => ['render-blocking-resources'], 'name' => 'Critical CSS', 'description' => 'Extract and prioritize above-the-fold CSS.', 'category' => 'css', 'inputs' => ['uucss_enable_cpcss', 'remove_cpcss_on_user_interaction', 'uucss_ignore_inlined_styles', 'enable_uucss_on_cpcss', 'uucss_additional_css', 'cpcss_purge_url']],
             ['keys' => ['render-blocking-resources'], 'name' => 'Defer Javascript', 'description' => 'Render-blocking JS on website can be resolved with defer JavaScript.', 'category' => 'javascript', 'inputs' => ['uucss_load_js_method', 'uucss_excluded_js_files_from_defer']],
             ['keys' => ['offscreen-images'], 'name' => 'Lazy Load Images', 'description' => 'Delay loading of images until needed.', 'category' => 'image', 'inputs' => ['uucss_lazy_load_images', 'uucss_exclude_images_from_lazy_load']],
             ['keys' => ['lcp-lazy-loaded'], 'name' => 'Exclude Above-the-fold Images from Lazy Load', 'description' => 'Improve your LCP images.', 'category' => 'image', 'inputs' => ['uucss_exclude_above_the_fold_images', 'uucss_exclude_above_the_fold_image_count']],
