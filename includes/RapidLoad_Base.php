@@ -568,7 +568,6 @@ class RapidLoad_Base
         }
         if(isset($_REQUEST['rapidload_enable_cpcss']) && $_REQUEST['rapidload_enable_cpcss'] == "1"){
             self::$paged_options['uucss_enable_cpcss'] = "1";
-            self::$paged_options['uucss_enable_cpcss_mobile'] = "1";
             self::$paged_options['uucss_enable_css'] = "1";
         }
 
@@ -628,7 +627,6 @@ class RapidLoad_Base
             'uucss_variables' => "1",
             'uucss_enable_uucss' => "0",
             'uucss_enable_cpcss' => "1",
-            'uucss_enable_cpcss_mobile' => "1",
             'uucss_minify' => "1",
             'uucss_support_next_gen_formats' => "1",
             'uucss_set_width_and_height' => "1",

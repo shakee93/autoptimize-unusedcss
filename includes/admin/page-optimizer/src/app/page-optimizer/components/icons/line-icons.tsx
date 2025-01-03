@@ -29,7 +29,7 @@ export const SettingsLine: FC<SvgProps & { width?: number, category?: string, fl
     return (
         <div className='absolute -left-7 top-0.5'>
             {!animate &&
-                <svg className={`absolute selectionBar`} width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg className={`absolute selectionBar  ${flip ? 'reverse-draw' : 'draw'}`} width={width} height="16" viewBox={`0 0 ${width} 16`} fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path className='dark:stroke-brand-600 stroke-purple-800/10' d={adjustedPath}  strokeWidth={strokeWidth} />
                 </svg>
             }

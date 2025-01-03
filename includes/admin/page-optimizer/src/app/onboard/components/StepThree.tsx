@@ -195,18 +195,14 @@ const StepThree: React.FC<StepThreeProps> = ({ onNext }) => {
                     <div className="flex items-center w-64">
                         {[0, 1, 2].map(step => (
                             currentStep > step ? (
-                                <div key={step} className="h-2 flex-grow bg-gray-300 rounded-lg mr-2">
-                                    <div
-                                        className="h-2 bg-purple-600 rounded-lg"
-                                        style={{width: '100%'}}
-                                    ></div>
-                                </div>
-                            ) : (
+                                <div key={step} className="h-2 flex-grow bg-purple-600 rounded-lg mr-2"/>
+                            ) : step === currentStep ? (
                                 <Skeleton
                                     key={step}
                                     className="h-2 flex-grow bg-purple-950/30 rounded-lg mr-2"
-                                >
-                                </Skeleton>
+                                />
+                            ) : (
+                                <div key={step} className="h-2 flex-grow bg-gray-300 rounded-lg mr-2" />
                             )
                         ))}
                     </div>

@@ -19,7 +19,7 @@ import xusePerformanceColors from "hooks/usePerformanceColors";
 import AppButton from "components/ui/app-button";
 import Feedback from "app/page-optimizer/components/performance-widgets/Feedback";
 import TooltipText from "components/ui/tooltip-text";
-import { changeReport, fetchReport } from "../../../../store/app/appActions";
+import { changeReport, fetchReport, fetchSettings } from "../../../../store/app/appActions";
 import { ArrowTopRightOnSquareIcon, DevicePhoneMobileIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
 import { getTestModeStatus } from "../../../../store/app/appActions";
 import { useToast } from "components/ui/use-toast";
@@ -68,8 +68,8 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
         dispatch: commonDispatch
     } = useCommonDispatch()
     //Test Mode
-    const { options } = useAppContext();
-    const { settingsMode, testModeStatus, testModeLoading, inProgress } = useCommonDispatch();
+    const { options, savingData, invalidatingCache } = useAppContext();
+    const { settingsMode, testModeStatus, testModeLoading, inProgress, headerUrl } = useCommonDispatch();
     const { testMode } = useSelector((state: RootState) => state.app);
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
     const [localSwitchState, setLocalSwitchState] = useState<boolean>(testMode?.status || false);
@@ -77,7 +77,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
 
     const { handleTestModeSwitchChange } = useTestModeUtils();
 
-    let url = options?.optimizer_url;
+    let url = headerUrl ? headerUrl : options?.optimizer_url;
 
     useEffect(() => {
         if (testMode) {
@@ -150,7 +150,6 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
         }
 
     }, [expanded])
-
 
     return <>
         {/*min-w-[310px]*/}

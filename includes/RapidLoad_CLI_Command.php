@@ -45,7 +45,6 @@ if (defined('WP_CLI') && WP_CLI) {
             if (isset($assoc_args['cpcss'])) {
                 RapidLoad_Base::update_option('rapidload_module_css',"1");
                 $options['uucss_enable_cpcss'] = "1";
-                $options['uucss_enable_cpcss_mobile'] = "1";
             }
 
             RapidLoad_Base::update_option( 'autoptimize_uucss_settings', $options );

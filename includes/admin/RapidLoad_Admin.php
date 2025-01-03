@@ -273,7 +273,11 @@ class RapidLoad_Admin
             wp_send_json_error('url required');
         }
 
-        $url = $_REQUEST['url'];
+        $url = $this->transform_url($_REQUEST['url']);
+
+        if($url == $this->transform_url(site_url())){
+            wp_send_json_error('cannot delete home page optimizations');
+        }
 
         $job = new RapidLoad_Job(['url' => $url]);
 
@@ -560,12 +564,6 @@ class RapidLoad_Admin
         if(isset($_REQUEST['uucss_enable_cpcss'])){
 
             $options['uucss_enable_cpcss'] = ($_REQUEST['uucss_enable_cpcss'] == 'true' ? "1" : null);
-
-            if(isset($_REQUEST['uucss_enable_cpcss_mobile'])){
-
-                $options['uucss_enable_cpcss_mobile'] = ($_REQUEST['uucss_enable_cpcss_mobile'] == 'true' ? "1" : null);
-
-            }
 
             if(isset($_REQUEST['remove_cpcss_on_user_interaction'])){
 

@@ -245,8 +245,10 @@ class CriticalCSS
 
                 if($count == 0){
 
-                    $this->file_system->delete( self::$base_dir . '/' .  $job_data->data);
-                    if(isset($this->options['uucss_enable_cpcss_mobile']) && $this->options['uucss_enable_cpcss_mobile'] == "1"){
+                    if($this->file_system->exists(self::$base_dir . '/' .  $job_data->data)){
+                        $this->file_system->delete( self::$base_dir . '/' .  $job_data->data);
+                    }
+                    if($this->file_system->exists(self::$base_dir . '/' .  str_replace(".css","-mobile.css", $job_data->data))){
                         $this->file_system->delete( self::$base_dir . '/' .  str_replace(".css","-mobile.css", $job_data->data));
                     }
 

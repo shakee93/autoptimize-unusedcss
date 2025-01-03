@@ -82,7 +82,7 @@ const CDNSummary = () => {
                 <div className="flex gap-2 items-baseline">
                     <span className={`font-semibold ${label === 'Additional Usage' && 'text-brand-400'}`}>{label}</span>
                     <span
-                        className="text-brand-400 text-xs">{usage < 1 ? used_gb_formatted? used_gb_formatted : 0 + ' MB' : usage} / {allowedUsage ? allowedUsage : 30} GB</span>
+                        className="text-brand-400 text-xs">{ usage? usage < 1 ? usage.toFixed(2) : usage : '0'} GB / {allowedUsage ? allowedUsage : 30} GB</span>
                 </div>
                 <div className="text-[10px] font-normal dark:text-brand-300 text-brand-400">
                     {note}
@@ -104,7 +104,7 @@ const CDNSummary = () => {
     useEffect(() => {
         dispatch(getSummary(options, 'get_rapidload_cdn_usage'));
         dispatch(getSummary(options, 'get_rapidload_image_usage'));
-        dispatch(getSummary(options, 'get_cache_file_size'));
+      //  dispatch(getSummary(options, 'get_cache_file_size'));
 
     }, [dispatch]);
 
@@ -117,7 +117,7 @@ const CDNSummary = () => {
     return (
         <Card data-tour="license-widget" className="border flex flex-col">
             <div className="p-6">
-                <SectionHeader title="Usage Summary" tooltip="Detailed overview of the total files cached and served by RapidLoad." />
+                <SectionHeader title="Usage Summary" tooltip="Comprehensive breakdown of CDN and Image CDN usage allocated through RapidLoad." />
 
                 <UsageBar label="CDN" usage={cdnUsage.used_gb} allowedUsage={cdnUsage.allowed_gb} note={`Limits will be updated on ${nextBillingDate}`} used_gb_formatted={cdnUsage.used_gb_formatted}/>
                 {cdnUsage.additional_usage_gb > 0 &&

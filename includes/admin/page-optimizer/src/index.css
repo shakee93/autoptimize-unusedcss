@@ -122,17 +122,34 @@
 .selectionBar {
   stroke-dasharray: 1000;
   stroke-dashoffset: 1000;
-  animation: draw 2s ease-in-out alternate forwards;
 }
 
 @keyframes draw {
   from {
-    stroke-dashoffset: 1000;
+    stroke-dashoffset: 1000; /* Start from left */
   }
   to {
-    stroke-dashoffset: 0;
+    stroke-dashoffset: 0; /* End at right */
   }
 }
+
+@keyframes reverse-draw {
+  from {
+    stroke-dashoffset: -1000; /* Start from right */
+  }
+  to {
+    stroke-dashoffset: 0; /* End at left */
+  }
+}
+
+.draw {
+  animation: draw 2s ease-in-out alternate forwards;
+}
+
+.reverse-draw {
+  animation: reverse-draw 2s ease-in-out alternate forwards;
+}
+
 
 .optimizer-show-button-fade-in {
   animation: fadeIn 0.5s ease-in-out;

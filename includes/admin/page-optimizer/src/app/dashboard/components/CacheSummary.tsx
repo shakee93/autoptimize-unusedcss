@@ -201,7 +201,7 @@ const CacheSummary = () => {
     return (
         <Card data-tour="license-widget" className="border flex flex-col">
             <div className="flex flex-col px-6 py-6 gap-4">
-            <SectionHeader title="Cache summary" tooltip="Comprehensive breakdown of CDN and Image CDN usage allocated through RapidLoad." />
+            <SectionHeader title="Cache summary" tooltip="Detailed overview of the total files cached and served by RapidLoad." />
                 
                 {/* Placeholder for chart, uncomment when ready to use */}
                 {/* <div className="grid justify-center">
