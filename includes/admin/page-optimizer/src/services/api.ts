@@ -69,6 +69,16 @@ class ApiService {
         }
     }
 
+    private setSearchParams(params: Record<string, string>) {
+        // Clear all existing params
+        this.baseURL.search = '';
+        
+        // Add new params
+        Object.entries(params).forEach(([key, value]) => {
+            this.baseURL.searchParams.append(key, value);
+        });
+    }
+
     async fetchPageSpeed(url: string, activeReport: string, reload: boolean): Promise<any> {
         
         try {
@@ -92,7 +102,23 @@ class ApiService {
                 }
             }
 
+            // this.setSearchParams({
+            //     action: 'fetch_page_speed',
+            //     url,
+            //     strategy: activeReport,
+            //     new: reload as unknown as string,
+            //     is_dev: isDev as unknown as string
+            // });
+
+            //console.log("this.baseURL: ", this.baseURL)
             const query = new URLSearchParams();
+
+             // Clear existing search params before adding new ones
+            this.baseURL.searchParams.delete('action');
+            this.baseURL.searchParams.delete('url');
+            this.baseURL.searchParams.delete('strategy');
+            this.baseURL.searchParams.delete('new');
+            this.baseURL.searchParams.delete('is_dev');
 
             this.baseURL.searchParams.append('action', 'fetch_page_speed')
             this.baseURL.searchParams.append('url', url)
@@ -132,9 +158,12 @@ class ApiService {
         }
     }
 
+   
+
     async fetchSettings(url: string, activeReport: string, reload: boolean): Promise<any> {
 
         try {
+            
             let fresh = reload
             let data = null
 
