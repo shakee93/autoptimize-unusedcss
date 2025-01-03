@@ -361,7 +361,7 @@ class RapidLoad_Optimizer
                 case 'uucss' :{
                     $job_data_uucss = new RapidLoad_Job_Data($job,'uucss');
                     $response[$type] = [
-                        'status' => isset($job_data_uucss->id) ? $job_data_uucss->status : null,
+                        'status' => isset($job_data_uucss->id) ? $job_data_uucss->status : 'queued',
                         'error' => isset($job_data_uucss->id) && isset($job_data_uucss->error) ? unserialize($job_data_uucss->error) : null,
                         'warnings' => isset($job_data_uucss->id) && isset($job_data_uucss->warnings) ? unserialize($job_data_uucss->warnings) : null,
                         'stats' => isset($job_data_uucss->id) && isset($job_data_uucss->stats) ? unserialize($job_data_uucss->stats) : null
@@ -371,7 +371,7 @@ class RapidLoad_Optimizer
                 case 'cpcss' :{
                     $job_data_cpcss = new RapidLoad_Job_Data($job,'cpcss');
                     $response[$type] = [
-                        'status' => isset($job_data_cpcss->id) ? $job_data_cpcss->status : null,
+                        'status' => isset($job_data_cpcss->id) ? $job_data_cpcss->status : 'queued',
                         'error' => isset($job_data_cpcss->id) && isset($job_data_cpcss->error) ? unserialize($job_data_cpcss->error) : null,
                         'warnings' => isset($job_data_cpcss->id) && isset($job_data_cpcss->warnings) ? unserialize($job_data_cpcss->warnings) : null,
                         'stats' => isset($job_data_cpcss->id) && isset($job_data_cpcss->stats) ? unserialize($job_data_cpcss->stats) : null
@@ -574,7 +574,7 @@ class RapidLoad_Optimizer
         self::$job = new RapidLoad_Job([
             'url' => $url
         ]);
-        
+
         if(!isset(self::$job->id) && $can_be_saved){
             self::$job->save();
         }
