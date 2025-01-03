@@ -355,6 +355,7 @@ class RapidLoad_Module
                     'uucss_generate_blurry_place_holder' => isset($options['uucss_generate_blurry_place_holder']) && $options['uucss_generate_blurry_place_holder'] == "1" ? true : false,
                     'uucss_adaptive_image_delivery' => isset($options['uucss_adaptive_image_delivery']) && $options['uucss_adaptive_image_delivery'] == "1" ? true : false,
                     'uucss_lazy_load_iframes' => isset($options['uucss_lazy_load_iframes']) && $options['uucss_lazy_load_iframes'] == "1" ? true : false,
+                    'uucss_exclude_iframes_from_lazy_load' => isset($options['uucss_exclude_iframes_from_lazy_load']) ? $options['uucss_exclude_iframes_from_lazy_load'] : '',
                     'uucss_set_width_and_height' => isset($options['uucss_set_width_and_height']) && $options['uucss_set_width_and_height'] == "1" ? true : false,
                     'uucss_exclude_images_from_set_width_and_height' => isset($options['uucss_exclude_images_from_set_width_and_height']) ? $options['uucss_exclude_images_from_set_width_and_height'] : '',
                 ]

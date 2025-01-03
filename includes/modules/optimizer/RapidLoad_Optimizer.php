@@ -748,6 +748,7 @@ class RapidLoad_Optimizer
             'uucss_exclude_images_from_lazy_load',
             'uucss_set_width_and_height',
             'uucss_exclude_images_from_set_width_and_height',
+            'uucss_exclude_iframes_from_lazy_load',
             //font
             'uucss_enable_font_optimization',
             'uucss_self_host_google_fonts',
