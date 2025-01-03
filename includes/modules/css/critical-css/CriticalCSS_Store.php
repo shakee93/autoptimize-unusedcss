@@ -229,8 +229,6 @@ class CriticalCSS_Store
 
         $result = $uucss_api->get( 's/criticalcss/' . $this->job_data->queue_job_id);
 
-        error_log("fetching result for queue job id " . $this->job_data->queue_job_id);
-
         if ( ! isset( $result ) || isset( $result->errors ) || ( gettype( $result ) === 'string' && strpos( $result, 'cURL error' ) !== false ) ) {
 
             $error = $uucss_api->extract_error( $result );
