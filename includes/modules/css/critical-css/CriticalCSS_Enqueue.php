@@ -63,7 +63,7 @@ class CriticalCSS_Enqueue
             ];
         }
 
-        $this->is_mobile = $this->is_mobile() && isset($this->options) && isset($this->options['uucss_enable_cpcss_mobile']) && $this->options['uucss_enable_cpcss_mobile'] == "1";
+        $this->is_mobile = $this->is_mobile();
 
         $data = isset($this->data['desktop']) ? $this->data['desktop'] : null;
 
