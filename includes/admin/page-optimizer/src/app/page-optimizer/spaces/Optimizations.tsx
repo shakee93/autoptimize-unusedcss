@@ -17,9 +17,7 @@ import { Button } from "components/ui/button";
 import { toast } from "components/ui/use-toast";
 import { cn } from "lib/utils";
 import { z } from 'zod';
-import Setting from "../components/audit/Setting";
-import { AnimatedSparkle } from "components/animated-sparkle";
-import { AnimatedLogo, AnimatedLogoV2 } from "components/animated-logo";
+import { AnimatedLogo } from "components/animated-logo";
 
 const DiagnosticSchema = z.object({
     AnalysisSummary: z.string(),
