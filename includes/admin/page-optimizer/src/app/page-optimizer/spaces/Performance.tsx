@@ -18,7 +18,7 @@ import SpeedSettings from "app/page-optimizer/spaces/SpeedSettings";
 import { OptimizationsIcon } from "../components/icons/icon-svg";
 import Optimizations from "./Optimizations";
 import PageSpeedInsights from "./PageSpeedInsights";
-import { SettingsLine } from "../components/icons/line-icons";
+import { MainSettingsLine, SettingsLine } from "../components/icons/line-icons";
 
 
 
@@ -101,13 +101,13 @@ const Performance = () => {
             case 'configurations':
                 return 100;
             case 'optimizations':
-                return 285;
+                return 270;
             case 'opportunities':
-                return 485;
+                return 435;
             case 'diagnostics':
-                return 395;
+                return 275;
             case 'passed_audits':
-                return 740;
+                return 135;
             default:
                 return 395;
         }
@@ -158,9 +158,17 @@ const Performance = () => {
                     data-tour="page-speed-insights"> <GaugeCircle className='w-4' />  Page Speed Insights </div>
 
             </div>
-            <div className= {"py-3 relative"} >
-                <SettingsLine width={getWidthForActiveTab(activeTab) || 220} />
+            <div className={cn("flex", activeTab === 'opportunities' || activeTab === 'diagnostics' || activeTab === 'passed_audits' ? "justify-center items-center" : "")}>
+  <div
+    className={cn(
+      "py-3 relative",
+      activeTab === 'opportunities' || activeTab === 'diagnostics' || activeTab === 'passed_audits'
+        ? "scale-y-[1] scale-x-[-1] top-1"
+        : "scale-y-[-1] ml-6"
+    )}
+  >      <SettingsLine width={getWidthForActiveTab(activeTab) || 220} flip={!(activeTab === 'passed_audits' || activeTab === 'diagnostics' || activeTab === 'opportunities')}   />
                 {/* <SettingsLine width={300} /> */}
+            </div>
             </div>
            
             <div className="audits flex mb-24 dark:bg-brand-800/40 bg-brand-200 rounded-3xl">
