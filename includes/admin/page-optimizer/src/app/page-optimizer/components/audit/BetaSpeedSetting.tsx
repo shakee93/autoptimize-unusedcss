@@ -288,9 +288,11 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
             'Cache Policy': 'cache_policy',
         }[settings.name];
 
-        if (!isStatusValid || !cssStatusKey) return;
+        if (!isStatusValid || !cssStatusKey ) return;
+        if (cssStatusKey === 'uucss' && uucssError) return;
 
         const fetchStatus = async () => {
+
             try {
                 const status = await dispatch(getCSSStatus(options, options?.optimizer_url, [cssStatusKey]));
                 const currentStatus = status[cssStatusKey];
@@ -301,18 +303,17 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
                     clearInterval(intervalId);
                 }
             } catch (error) {
-                console.error('Error fetching CSS status:', error);
+                console.error('Error fetching status:', error);
                 clearInterval(intervalId);
             }
         };
 
         fetchStatus();
         const intervalId = setInterval(fetchStatus, 5000);
-
         return () => clearInterval(intervalId);
 
         
-    }, [settings, options, dispatch, open]);
+    }, [settings, options, dispatch, open, uucssError]);
 
     return (
         <>
@@ -407,7 +408,9 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
 
                                 {showStatus && (
                                     <div className='px-1'>
-                                        <Status status={settingsStatus}/>
+                                        {!(mainInput.key === 'uucss_enable_uucss' && uucssError) && (
+                                            <Status status={settingsStatus} />
+                                        )}
                                     </div>
                                 )}
 

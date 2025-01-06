@@ -52,7 +52,12 @@ interface Settings {
     total_jobs: number;
 }
 
-const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => {
+interface OptimizerPagesTableProps {    
+    settings: Settings;
+    onOpenChange: (open: boolean) => void;
+}
+
+const OptimizerPagesTable: React.FC<OptimizerPagesTableProps> = ({ settings, onOpenChange }) => {
     const [open, setOpen] = useState(false);
     const { optimizationData, allPosts } = useSelector((state: RootState) => state.app);
     const { toast } = useToast();
@@ -92,6 +97,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
         dispatch(fetchSettings(options, url, false));
         dispatch(fetchReport(options, url, false));
         window.location.hash = '#/optimize';
+        onOpenChange(false);
     };
 
     useEffect(() => {
@@ -130,7 +136,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                         </div>
                     ),
                 });
-                fetchData();
+                
             }
         } catch (error) {
             toast({
@@ -142,6 +148,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
             });
         } finally {
             setLoading(false);
+            fetchData(true);
         }
     };
 
@@ -217,7 +224,7 @@ const OptimizerPagesTable: React.FC<{ settings: Settings }> = ({ settings }) => 
                                 <DialogTitle />
                                 <DialogContent className="sm:max-w-[650px]">
                                     <div className="py-2">
-                                        <ContentSelector data={allPosts} />
+                                        <ContentSelector data={allPosts} onOpenChange={setOpen} />
                                     </div>
                                     <DialogFooter className="px-6 py-3 border-t">
                                         <AppButton onClick={() => setOpen(false)} variant='outline' className='text-sm'>

@@ -7,7 +7,12 @@ import {setCommonState} from "../../store/common/commonActions";
 import TableSkeleton from "components/ui/TableSkeleton";
 import {Skeleton} from "components/ui/skeleton";
 
-const ContentSelector = ({ data }) => {
+interface ContentSelectorProps {
+    data: any;
+    onOpenChange: (open: boolean) => void;
+}
+
+const ContentSelector: React.FC<ContentSelectorProps> = ({ data, onOpenChange }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedContent, setSelectedContent] = useState(null);
     const [searchResults, setSearchResults] = useState([]);
@@ -49,11 +54,12 @@ const ContentSelector = ({ data }) => {
         setSearchResults([]);
     };
 
-    const handleItemClick = (item) => {
+    const handleItemClick = (item: any) => {
         dispatch(setCommonState('headerUrl', item.permalink));
         dispatch(fetchSettings(options, item.permalink, true));
         dispatch(fetchReport(options, item.permalink, true));
         window.location.hash = '#/optimize';
+        onOpenChange(false);
     };
 
 

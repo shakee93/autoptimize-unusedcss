@@ -155,7 +155,7 @@ const Performance = () => {
 
                         activeTab === 'optimizations' ? "font-medium bg-brand-0" : "dark:hover:text-brand-300"
                     )}
-                    data-tour="optimizations"> <GaugeCircle className='w-4' />  Optimizations </div>
+                    data-tour="optimizations"> <GaugeCircle className='w-4' />  AI Diagnostic </div>
 
 
             </div>

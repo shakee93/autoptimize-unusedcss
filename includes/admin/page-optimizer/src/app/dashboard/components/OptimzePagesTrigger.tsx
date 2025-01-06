@@ -14,7 +14,7 @@ const OptimzePagesTrigger: React.FC<OptimzePagesTriggerProps> = ({ open, onOpenC
         <DialogTitle />
         <DialogContent className="sm:max-w-[650px]">
             <div className="py-2">
-                <ContentSelector data={data} />
+                <ContentSelector data={data} onOpenChange={onOpenChange} />
             </div>
             <DialogFooter className="px-6 py-3 border-t">
                 <AppButton onClick={() => onOpenChange(false)} variant='outline' className='text-sm'>
