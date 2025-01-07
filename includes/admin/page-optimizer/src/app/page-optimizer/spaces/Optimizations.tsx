@@ -4,7 +4,7 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "..
 import { useCompletion, experimental_useObject as useObject } from 'ai/react'
 import { AnimatePresence, m, motion } from "framer-motion"
 import useCommonDispatch from "hooks/useCommonDispatch";
-import { changeGear } from '../../../store/app/appActions';
+import { changeGear, fetchReport, fetchSettings } from '../../../store/app/appActions';
 import { LoaderIcon, ChevronDown, GaugeCircle, RefreshCw, Sparkles } from "lucide-react";
 import { useSelector } from "react-redux";
 import { optimizerData } from "../../../store/app/appSelector";
@@ -18,6 +18,8 @@ import { toast } from "components/ui/use-toast";
 import { cn } from "lib/utils";
 import { z } from 'zod';
 import { AnimatedLogo } from "components/animated-logo";
+import ProgressTracker from '../../../components/ProgressTracker';
+import { compareVersions } from 'compare-versions';
 
 const DiagnosticSchema = z.object({
     AnalysisSummary: z.string(),
@@ -59,10 +61,16 @@ const DiagnosticSchema = z.object({
 const AIBaseURL = "https://ai.rapidload.io/api"
 
 const Optimizations = ({ }) => {
-    const { settings, data } = useSelector(optimizerData);
+    const { settings, data, activeReport } = useSelector(optimizerData);
     const [diagnosticsLoading, setDiagnosticsLoading] = useState(false);
     const [diagnosticComplete, setDiagnosticComplete] = useState(false);
     const [loadingText, setLoadingText] = useState<string | null>(null);
+    const [currentStep, setCurrentStep] = useState<number | null>(null);
+    const [stepProgress, setStepProgress] = useState(0);
+    const [isFlushingProgress, setIsFlushingProgress] = useState(0);
+    const [settingsProgress, setSettingsProgress] = useState(0);
+    const [pageSpeedProgress, setPageSpeedProgress] = useState(0);
+    const { headerUrl } = useCommonDispatch()
 
     const { object, submit, isLoading, error } = useObject({
         api: `${AIBaseURL}/diagnosis`,
@@ -212,6 +220,144 @@ const Optimizations = ({ }) => {
         </div>
     ), []);
 
+    const progressSteps = [
+        { duration: '15s', label: 'Flush Cache', progress: isFlushingProgress },
+        { duration: '5s', label: 'Optimizations', progress: settingsProgress },
+        { duration: '10s', label: 'Server Info', progress: 0 },
+        { duration: '40s', label: 'New Page Speed', progress: pageSpeedProgress },
+        { duration: '10s', label: 'Page Diagnostics', progress: 0 },
+    ];
+
+    const handleFetchSettings = async () => {
+        try {
+            setSettingsProgress(25);
+            const progressInterval = setInterval(() => {
+
+                setSettingsProgress(prev => Math.min(prev + 15, 90));
+
+            }, 500);
+            
+            const result = await dispatch(fetchSettings(options, headerUrl ? headerUrl : options.optimizer_url, true));
+            
+            clearInterval(progressInterval);
+            
+            setSettingsProgress(100);
+
+            console.log('✅ Settings fetch completed successfully');
+            toast({
+                title: "Settings Updated",
+                description: "Page settings have been refreshed successfully.",
+                variant: "default",
+            });
+
+            setTimeout(() => {
+                setCurrentStep(3);
+                newPageSpeed();
+            }, 1000);
+
+        } catch (error) {
+            setSettingsProgress(0);
+            console.error('❌ Settings fetch failed:', error);
+            toast({
+                title: "Settings Update Failed",
+                description: error?.message || "Failed to refresh page settings",
+                variant: "destructive",
+            });
+        }
+    };
+
+    const newPageSpeed = async () => {
+        try {
+            setPageSpeedProgress(25);
+            
+            const progressInterval = setInterval(() => {
+                setPageSpeedProgress(prev => {
+                    if (prev >= 90) {
+                        clearInterval(progressInterval);
+                        return 90;
+                    }
+                    return prev + 5;
+                });
+            }, 2000);
+
+            const result = await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
+        
+            clearInterval(progressInterval);
+            setPageSpeedProgress(100);
+            
+            setTimeout(() => {
+                setCurrentStep(4); 
+            }, 1000);
+
+        } catch (error) {
+            setPageSpeedProgress(0);
+            console.error('❌ PageSpeed fetch failed:', error);
+            toast({
+                title: "PageSpeed Update Failed",
+                description: error?.message || "Failed to fetch new PageSpeed data",
+                variant: "destructive",
+            });
+        }
+    };
+
+    const handleFlushCache = async () => {
+        setCurrentStep(0);
+        setIsFlushingProgress(0);
+        const api = new ApiService(options);
+
+        try {
+            // Clear page cache - 40% of progress
+            setIsFlushingProgress(10);
+            await api.post('clear_page_cache', {
+                url: optimizerUrl
+            });
+            setIsFlushingProgress(40);
+
+            const USER_AGENTS = {
+                mobile: 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.133 Mobile Safari/537.36',
+                desktop: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
+            };
+
+            setIsFlushingProgress(60);
+            if (compareVersions(options?.rapidload_version, '2.2.11') > 0) {
+                await api.post(`preload_page`, {
+                    url: optimizerUrl,
+                    user_agent: activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
+                    nonce: options.nonce as string,
+                    job_id: data?.job_id as string,
+                });
+            } else {
+                const rest = api.rest();
+                await rest.request('/ping', {
+                    'url': optimizerUrl,
+                    'user_agent': activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
+                    'nonce': options?.nonce as string,
+                    'job_id': data?.job_id as string,
+                });
+            }
+            setIsFlushingProgress(100);
+
+            toast({
+                title: "Cache Flushed",
+                description: "Page cache has been cleared successfully.",
+                variant: "default",
+            });
+
+
+        } catch (error: any) {
+            setIsFlushingProgress(0);
+            toast({
+                title: "Cache Flush Failed",
+                description: error.message || "Failed to clear page cache",
+                variant: "destructive",
+            });
+        } finally {
+            console.log('Cache flush complete');
+            setCurrentStep(1);
+            handleFetchSettings();
+        }
+    };
+
     return (
         <AnimatePresence>
             <m.div
@@ -238,6 +384,8 @@ const Optimizations = ({ }) => {
                             </span>
                         </div>
 
+                        
+
                         <AppButton
                             disabled={diagnosticsLoading}
                             className="rounded-xl px-8 py-4 whitespace-nowrap"
@@ -263,6 +411,21 @@ const Optimizations = ({ }) => {
 
                         </AppButton>
                     </div>
+                    <div className="flex items-center gap-2 w-fit w-fit bg-brand-950 font-semibold text-white rounded-xl text-sm px-4 p-2 cursor-pointer" 
+                        onClick={() => {
+                            handleFlushCache();
+                        }}
+                    >
+                        Run Now
+                    </div>
+                    {/* <ProgressTracker steps={progressSteps} currentStep={0} /> */}
+                    <div className="flex flex-col gap-4">
+                        <ProgressTracker 
+                            steps={progressSteps} 
+                            currentStep={currentStep} 
+                        />
+                    </div>
+                    
                     {object?.AnalysisSummary?.length &&
                         <div className="grid grid-cols-5 gap-4 mb-6">
                             <div className={cn('relative col-span-5 bg-brand-0 rounded-2xl p-10 flex flex-col gap-4 text-center', !object?.CriticalIssues?.length && 'items-center justify-center')}>
