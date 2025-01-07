@@ -71,6 +71,7 @@ const Optimizations = ({ }) => {
     const [settingsProgress, setSettingsProgress] = useState(0);
     const [pageSpeedProgress, setPageSpeedProgress] = useState(0);
     const [serverInfoProgress, setServerInfoProgress] = useState(0);
+    const [diagnosticsProgress, setDiagnosticsProgress] = useState(0);
     const { headerUrl } = useCommonDispatch()
 
     const { object, submit, isLoading, error } = useObject({
@@ -81,6 +82,7 @@ const Optimizations = ({ }) => {
             setDiagnosticsLoading(false)
             setLoadingText(null)
             setDiagnosticComplete(true)
+            setDiagnosticsProgress(100);
             toast({
                 title: "AI Diagnostic Complete",
                 description: "AI analysis of your page has been completed successfully.",
@@ -226,7 +228,7 @@ const Optimizations = ({ }) => {
         { duration: '5s', label: 'Optimizations', progress: settingsProgress },
         { duration: '10s', label: 'Server Info', progress: serverInfoProgress },
         { duration: '40s', label: 'New Page Speed', progress: pageSpeedProgress },
-        { duration: '10s', label: 'Page Diagnostics', progress: 0 },
+        { duration: '10s', label: 'Page Diagnostics', progress: diagnosticsProgress },
     ];
 
     const handleFetchSettings = async () => {
@@ -303,6 +305,40 @@ const Optimizations = ({ }) => {
         }
     };
 
+    const startDiagnostics = async () => {
+        try {
+            setDiagnosticsProgress(25);
+            
+            const progressInterval = setInterval(() => {
+                setDiagnosticsProgress(prev => Math.min(prev + 10, 90));
+            }, 1000);
+
+            if (diagnosticComplete) {
+                setDiagnosticComplete(false)
+                setShowIframe(false);
+                setDiagnosticsLoading(true);
+                setLoadingText('Refreshing diagnostics...');
+                await new Promise(resolve => setTimeout(resolve, 200));
+                setShowIframe(true);
+            } else {
+                setLoadingText('Collecting Diagnostics from your page...')
+                setDiagnosticsLoading(true)
+                setShowIframe(true)
+            }
+
+            // Clear interval when AI analysis is complete
+            return () => clearInterval(progressInterval);
+        } catch (error) {
+            setDiagnosticsProgress(0);
+            console.error('❌ Diagnostics failed:', error);
+            toast({
+                title: "Diagnostics Failed",
+                description: error?.message || "Failed to run diagnostics",
+                variant: "destructive",
+            });
+        }
+    };
+
     const newPageSpeed = async () => {
         try {
             setPageSpeedProgress(25);
@@ -322,8 +358,9 @@ const Optimizations = ({ }) => {
             clearInterval(progressInterval);
             setPageSpeedProgress(100);
             
-            setTimeout(() => {
+            setTimeout(async() => {
                 setCurrentStep(4); 
+                startDiagnostics();
             }, 1000);
 
         } catch (error) {
@@ -428,18 +465,18 @@ const Optimizations = ({ }) => {
                             className="rounded-xl px-8 py-4 whitespace-nowrap"
                             onClick={async () => {
 
-                                if (diagnosticComplete) {
-                                    setDiagnosticComplete(false)
-                                    setShowIframe(false);
-                                    setDiagnosticsLoading(true);
-                                    setLoadingText('Refreshing diagnostics...');
-                                    await new Promise(resolve => setTimeout(resolve, 200));
-                                    setShowIframe(true);
-                                } else {
-                                    setLoadingText('Collecting Diagnostics from your page...')
-                                    setDiagnosticsLoading(true)
-                                    setShowIframe(true)
-                                }
+                                // if (diagnosticComplete) {
+                                //     setDiagnosticComplete(false)
+                                //     setShowIframe(false);
+                                //     setDiagnosticsLoading(true);
+                                //     setLoadingText('Refreshing diagnostics...');
+                                //     await new Promise(resolve => setTimeout(resolve, 200));
+                                //     setShowIframe(true);
+                                // } else {
+                                //     setLoadingText('Collecting Diagnostics from your page...')
+                                //     setDiagnosticsLoading(true)
+                                //     setShowIframe(true)
+                                // }
 
                             }}
                         >
