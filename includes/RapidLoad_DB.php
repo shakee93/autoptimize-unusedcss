@@ -576,9 +576,18 @@ abstract class RapidLoad_DB
 
     static function get_merged_data($start_from = 0, $limit = 10, $where = '', $order_by = 'id DESC') {
 
-        $status_column = "CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE uucss.status END AS status,";
+        $status_column = "CASE 
+            WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based'
+            WHEN uucss.status IS NULL THEN 'queued'  
+            ELSE uucss.status 
+        END AS status,";
+
         if (defined('RAPIDLOAD_CPCSS_ENABLED') && RAPIDLOAD_CPCSS_ENABLED) {
-            $status_column = "CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE cpcss.status END AS status,";
+            $status_column = "CASE 
+                WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based'
+                WHEN cpcss.status IS NULL THEN 'queued'
+                ELSE cpcss.status 
+            END AS status,";
         }
 
         global $wpdb;
@@ -641,7 +650,7 @@ abstract class RapidLoad_DB
         $data['applied_successful_links'] = isset( $link->applied_successful_links ) ? $link->applied_successful_links : 0;
         $data['applied_links'] = isset( $link->applied_successful_links ) ? $link->applied_successful_links : 0;
         $data['time'] = isset( $link->created_at ) ? strtotime( $link->created_at ) * 1000 : null;
-
+        $data['status'] = isset( $link->status ) ? $link->status : null;
         if(isset($data['rule_id'])){
             $job_url = RapidLoad_Job::find_or_fail($data['rule_id']);
             $data['base'] = $job_url->url;
