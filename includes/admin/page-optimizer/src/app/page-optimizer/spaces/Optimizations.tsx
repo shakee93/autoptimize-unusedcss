@@ -463,7 +463,7 @@ const Optimizations = ({ }) => {
                         <AppButton
                             disabled={diagnosticsLoading}
                             className="rounded-xl px-8 py-4 whitespace-nowrap"
-                            onClick={async () => {
+                            onClick={() => {
 
                                 // if (diagnosticComplete) {
                                 //     setDiagnosticComplete(false)
@@ -477,6 +477,7 @@ const Optimizations = ({ }) => {
                                 //     setDiagnosticsLoading(true)
                                 //     setShowIframe(true)
                                 // }
+                                handleFlushCache();
 
                             }}
                         >
@@ -485,13 +486,13 @@ const Optimizations = ({ }) => {
 
                         </AppButton>
                     </div>
-                    <div className="flex items-center gap-2 w-fit w-fit bg-brand-950 font-semibold text-white rounded-xl text-sm px-4 p-2 cursor-pointer" 
+                    {/* <div className="flex items-center gap-2 w-fit w-fit bg-brand-950 font-semibold text-white rounded-xl text-sm px-4 p-2 cursor-pointer" 
                         onClick={() => {
                             handleFlushCache();
                         }}
                     >
                         Run Now
-                    </div>
+                    </div> */}
                     {/* <ProgressTracker steps={progressSteps} currentStep={0} /> */}
                     <div className="flex flex-col gap-4">
                         <ProgressTracker 
