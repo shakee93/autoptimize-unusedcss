@@ -70,6 +70,7 @@ const Optimizations = ({ }) => {
     const [isFlushingProgress, setIsFlushingProgress] = useState(0);
     const [settingsProgress, setSettingsProgress] = useState(0);
     const [pageSpeedProgress, setPageSpeedProgress] = useState(0);
+    const [serverInfoProgress, setServerInfoProgress] = useState(0);
     const { headerUrl } = useCommonDispatch()
 
     const { object, submit, isLoading, error } = useObject({
@@ -223,7 +224,7 @@ const Optimizations = ({ }) => {
     const progressSteps = [
         { duration: '15s', label: 'Flush Cache', progress: isFlushingProgress },
         { duration: '5s', label: 'Optimizations', progress: settingsProgress },
-        { duration: '10s', label: 'Server Info', progress: 0 },
+        { duration: '10s', label: 'Server Info', progress: serverInfoProgress },
         { duration: '40s', label: 'New Page Speed', progress: pageSpeedProgress },
         { duration: '10s', label: 'Page Diagnostics', progress: 0 },
     ];
@@ -251,8 +252,8 @@ const Optimizations = ({ }) => {
             });
 
             setTimeout(() => {
-                setCurrentStep(3);
-                newPageSpeed();
+                setCurrentStep(2);
+                checkServerInfo();
             }, 1000);
 
         } catch (error) {
@@ -261,6 +262,42 @@ const Optimizations = ({ }) => {
             toast({
                 title: "Settings Update Failed",
                 description: error?.message || "Failed to refresh page settings",
+                variant: "destructive",
+            });
+        }
+    };
+
+    const checkServerInfo = async () => {
+        try {
+            setServerInfoProgress(25);
+            const api = new ApiService(options);
+            
+            const progressInterval = setInterval(() => {
+                setServerInfoProgress(prev => Math.min(prev + 15, 90));
+            }, 500);
+
+            const response = await api.post('titan_checklist_cron');
+
+            clearInterval(progressInterval);
+            setServerInfoProgress(100);
+
+            toast({
+                title: "Server Info Check Complete",
+                description: "Server information has been collected successfully.",
+                variant: "default",
+            });
+
+            setTimeout(() => {
+                setCurrentStep(3);
+                newPageSpeed();
+            }, 1000);
+
+        } catch (error: any) {
+            setServerInfoProgress(0);
+            console.error('❌ Server info check failed:', error);
+            toast({
+                title: "Server Info Check Failed",
+                description: error?.message || "Failed to check server information",
                 variant: "destructive",
             });
         }
