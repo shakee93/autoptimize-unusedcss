@@ -484,7 +484,7 @@ const Optimizations = ({ }) => {
                             {currentStep === 1 && "Gathering current optimization settings..."}
                             {currentStep === 2 && "Analyzing server configuration and performance..."}
                             {currentStep === 3 && "Running comprehensive PageSpeed diagnostics..."}
-                            {currentStep === 4 && loadingText? loadingText : "Processing data through AI for insights..."}
+                            {currentStep === 4 && (loadingText ? loadingText : "Processing data through AI for insights...")}
                             </>
                             ) : (
                                 "Do you need any AI assistance?"
@@ -498,13 +498,14 @@ const Optimizations = ({ }) => {
                             ) : (
                                 object?.AnalysisSummary ? 
                                     object.AnalysisSummary : 
-                                    "Let's check if your optimizations are working properly..."
+                                    "Let's check if your optimizations are working properly. Things might not update right away due to caching or conflicts. We should test everything to make sure it's running well."
                             )}
                         
                         </span>
                     </div>
 
                     {/* Button Column */}
+                    {!diagnosticsLoading &&
                     <div className="flex justify-end items-center mt-2">
                         <AppButton
                             disabled={diagnosticsLoading}
@@ -519,6 +520,7 @@ const Optimizations = ({ }) => {
                             Run Diagnostics Test 
                         </AppButton>
                     </div>
+                    }
                 </div>
 
                     
