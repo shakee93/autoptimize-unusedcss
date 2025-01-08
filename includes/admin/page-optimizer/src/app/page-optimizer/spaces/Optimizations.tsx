@@ -395,7 +395,7 @@ const Optimizations = ({ }) => {
             setIsFlushingProgress(60);
             if (compareVersions(options?.rapidload_version, '2.2.11') > 0) {
                 await api.post(`preload_page`, {
-                    url: optimizerUrl,
+                    url: optimizerUrl + '/?rapidload_preview',
                     user_agent: activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
                     nonce: options.nonce as string,
                     job_id: data?.job_id as string,
@@ -403,7 +403,7 @@ const Optimizations = ({ }) => {
             } else {
                 const rest = api.rest();
                 await rest.request('/ping', {
-                    'url': optimizerUrl,
+                    'url': optimizerUrl + '/?rapidload_preview',
                     'user_agent': activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
                     'nonce': options?.nonce as string,
                     'job_id': data?.job_id as string,
