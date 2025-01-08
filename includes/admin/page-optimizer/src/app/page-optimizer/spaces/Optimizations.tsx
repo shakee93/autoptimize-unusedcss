@@ -374,11 +374,39 @@ const Optimizations = ({ }) => {
         }
     };
 
+    const preloadPage = async (previewUrl: string)=> {
+        const USER_AGENTS = {
+            mobile: 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.133 Mobile Safari/537.36',
+            desktop: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
+        };
+
+        const api = new ApiService(options);
+
+        if (compareVersions(options?.rapidload_version, '2.2.11') > 0) {
+            console.log('Preloading page with URL:', previewUrl);
+            await api.post(`preload_page`, {
+                url: previewUrl,
+                user_agent: activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
+                nonce: options.nonce as string,
+                job_id: data?.job_id as string,
+            });
+        } else {
+            const rest = api.rest();
+            await rest.request('/ping', {
+                'url': previewUrl,
+                'user_agent': activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
+                'nonce': options?.nonce as string,
+                'job_id': data?.job_id as string,
+            });
+        }
+    };
+
     const handleFlushCache = async () => {
         setCurrentStep(0);
         setIsFlushingProgress(0);
         const api = new ApiService(options);
-
+        const previewUrl = optimizerUrl + '?rapidload_preview'
+        
         try {
             // Clear page cache - 40% of progress
             setIsFlushingProgress(10);
@@ -387,28 +415,8 @@ const Optimizations = ({ }) => {
             });
             setIsFlushingProgress(40);
 
-            const USER_AGENTS = {
-                mobile: 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.133 Mobile Safari/537.36',
-                desktop: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
-            };
-
             setIsFlushingProgress(60);
-            if (compareVersions(options?.rapidload_version, '2.2.11') > 0) {
-                await api.post(`preload_page`, {
-                    url: optimizerUrl + '/?rapidload_preview',
-                    user_agent: activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
-                    nonce: options.nonce as string,
-                    job_id: data?.job_id as string,
-                });
-            } else {
-                const rest = api.rest();
-                await rest.request('/ping', {
-                    'url': optimizerUrl + '/?rapidload_preview',
-                    'user_agent': activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
-                    'nonce': options?.nonce as string,
-                    'job_id': data?.job_id as string,
-                });
-            }
+            await preloadPage(previewUrl);
             setIsFlushingProgress(100);
 
             toast({
@@ -416,7 +424,6 @@ const Optimizations = ({ }) => {
                 description: "Page cache has been cleared successfully.",
                 variant: "default",
             });
-
 
         } catch (error: any) {
             setIsFlushingProgress(0);
