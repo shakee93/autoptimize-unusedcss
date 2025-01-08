@@ -102,9 +102,9 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ duration, label, progress, 
         {progress === 100 ? (
           <>Completed <CheckIcon className="h-4 w-4 text-brand-950" /></>
         ) : showHangTight ? (
-          <>Hang tight... <LoaderIcon className="h-4 w-4 animate-spin" /></>
+          <>Hang tight... {isActive && <LoaderIcon className="h-4 w-4 animate-spin" />}</>
         ) : (
-          <>{countdown}s <LoaderIcon className="h-4 w-4 animate-spin" /></>
+          <>{countdown}s {isActive && <LoaderIcon className="h-4 w-4 animate-spin" />}</>
         )}
       </span>
       <span className="text-xs text-gray-600 border-b border-gray-200 my-2 -mx-4"/>
