@@ -172,7 +172,7 @@ const SparklePath = ({ isPlaying }: SparklePathProps) => {
 
 export const AnimatedLogo = ({
     className,
-    size = "sm",
+    size = "lg",
     isPlaying = true,
     animationType = "moving"
 }: AnimatedLogoProps) => {

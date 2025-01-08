@@ -96,6 +96,32 @@ const Optimizations = ({ }) => {
     const optimizerUrl = options?.optimizer_url;
     const [showIframe, setShowIframe] = useState(false);
 
+    const progressSteps = [
+        { duration: '15s', label: 'Flush Cache', progress: isFlushingProgress },
+        { duration: '5s', label: 'Optimizations', progress: settingsProgress },
+        { duration: '10s', label: 'Server Info', progress: serverInfoProgress },
+        { duration: '40s', label: 'New Page Speed', progress: pageSpeedProgress },
+        { duration: '10s', label: 'Page Diagnostics', progress: diagnosticsProgress },
+    ];
+
+    const [remainingTime, setRemainingTime] = useState(
+        progressSteps.reduce((total, step) => total + parseInt(step.duration), 0)
+    );
+
+    useEffect(() => {
+        if (diagnosticsLoading) {
+            const timer = setInterval(() => {
+                setRemainingTime(prev => Math.max(0, prev - 1));
+            }, 1000);
+
+            return () => clearInterval(timer);
+        } else {
+            setRemainingTime(progressSteps.reduce((total, step) => 
+                total + parseInt(step.duration), 0
+            ));
+        }
+    }, [diagnosticsLoading]);
+
     const doAnalysis = useCallback(async (diagnostics: any) => {
         setLoadingText('Collecting active plugins...')
         const api = new ApiService(options);
@@ -223,13 +249,7 @@ const Optimizations = ({ }) => {
         </div>
     ), []);
 
-    const progressSteps = [
-        { duration: '15s', label: 'Flush Cache', progress: isFlushingProgress },
-        { duration: '5s', label: 'Optimizations', progress: settingsProgress },
-        { duration: '10s', label: 'Server Info', progress: serverInfoProgress },
-        { duration: '40s', label: 'New Page Speed', progress: pageSpeedProgress },
-        { duration: '10s', label: 'Page Diagnostics', progress: diagnosticsProgress },
-    ];
+    
 
     const handleFetchSettings = async () => {
         try {
@@ -316,16 +336,16 @@ const Optimizations = ({ }) => {
             if (diagnosticComplete) {
                 setDiagnosticComplete(false)
                 setShowIframe(false);
-                setDiagnosticsLoading(true);
+                // setDiagnosticsLoading(true);
                 setLoadingText('Refreshing diagnostics...');
                 await new Promise(resolve => setTimeout(resolve, 200));
                 setShowIframe(true);
             } else {
                 setLoadingText('Collecting Diagnostics from your page...')
-                setDiagnosticsLoading(true)
+                // setDiagnosticsLoading(true)
                 setShowIframe(true)
             }
-
+            
             // Clear interval when AI analysis is complete
             return () => clearInterval(progressInterval);
         } catch (error) {
@@ -402,6 +422,7 @@ const Optimizations = ({ }) => {
     };
 
     const handleFlushCache = async () => {
+       
         setCurrentStep(0);
         setIsFlushingProgress(0);
         const api = new ApiService(options);
@@ -447,66 +468,82 @@ const Optimizations = ({ }) => {
                 transition={{ duration: 0.2, delay: 0.05 }}
                 className=''
             >
-                <div className='px-8 py-8 bg-white rounded-2xl'>
-                    <div className="pb-4 flex justify-start gap-4 w-full">
+                <div className='px-6 py-6 bg-white rounded-3xl'>
+                <div className="flex gap-4 w-full items-start">
+                    {/* Logo Column */}
+                    <div className="flex justify-start items-center gap-2 w-10">
+                        <AnimatedLogo size="lg" isPlaying={diagnosticsLoading} />
+                    </div>
 
-                        <div className="flex  justify-start gap-2 w-10">
-                            <AnimatedLogo size="md" isPlaying={diagnosticsLoading} />
-                        </div>
-
-                        <div className="flex flex-col gap-2">
-                            <span className="text-sm text-zinc-500 -mt-1 dark:text-zinc-300">I can help your get more speed...</span>
-                            <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">
-                                {object?.AnalysisSummary ? (
-                                    object.AnalysisSummary
-                                ) : (
-                                    "Let's analyze your page to identify potential optimizations and performance improvements."
-                                )}
-                            </span>
-                        </div>
-
+                    {/* Content Column */}
+                    <div className="flex flex-col gap-1 flex-grow">
+                        <span className="text-base font-normal text-zinc-900 dark:text-zinc-100">
+                        {diagnosticsLoading ? (
+                            <>
+                            {currentStep === 0 && "Clearing all cached data to ensure fresh analysis..."}
+                            {currentStep === 1 && "Gathering current optimization settings..."}
+                            {currentStep === 2 && "Analyzing server configuration and performance..."}
+                            {currentStep === 3 && "Running comprehensive PageSpeed diagnostics..."}
+                            {currentStep === 4 && loadingText? loadingText : "Processing data through AI for insights..."}
+                            </>
+                            ) : (
+                                "Do you need any AI assistance?"
+                            )}
+                        </span>
+                        <span className="font-normal text-sm text-zinc-600 dark:text-brand-300 max-w-[600px]">
+                            {diagnosticsLoading ? (
+                                remainingTime === 0 ? 
+                                    "It's taking a bit longer than expected, hang tight..." :
+                                    `Looks like I'll need to wait ${remainingTime}s more...`
+                            ) : (
+                                object?.AnalysisSummary ? 
+                                    object.AnalysisSummary : 
+                                    "Let's check if your optimizations are working properly..."
+                            )}
                         
+                        </span>
+                    </div>
 
+                    {/* Button Column */}
+                    <div className="flex justify-end items-center mt-2">
                         <AppButton
                             disabled={diagnosticsLoading}
-                            className="rounded-xl px-8 py-4 whitespace-nowrap"
+                            className="rounded-xl px-8 py-6 whitespace-nowrap"
                             onClick={() => {
-
-                                // if (diagnosticComplete) {
-                                //     setDiagnosticComplete(false)
-                                //     setShowIframe(false);
-                                //     setDiagnosticsLoading(true);
-                                //     setLoadingText('Refreshing diagnostics...');
-                                //     await new Promise(resolve => setTimeout(resolve, 200));
-                                //     setShowIframe(true);
-                                // } else {
-                                //     setLoadingText('Collecting Diagnostics from your page...')
-                                //     setDiagnosticsLoading(true)
-                                //     setShowIframe(true)
-                                // }
                                 handleFlushCache();
-
+                                setDiagnosticsLoading(true);
                             }}
                         >
-                            {diagnosticsLoading && <LoaderIcon className="h-4 w-4 text-white animate-spin" />}
-                            {diagnosticComplete ? 'Test Again' : 'Run Test'}
-
+                            {/* {diagnosticsLoading && <LoaderIcon className="h-4 w-4 text-white animate-spin" />} */}
+                            {/* {diagnosticComplete ? 'Test Again' : 'Run Test'} */}
+                            Run Diagnostics Test 
                         </AppButton>
                     </div>
-                    {/* <div className="flex items-center gap-2 w-fit w-fit bg-brand-950 font-semibold text-white rounded-xl text-sm px-4 p-2 cursor-pointer" 
-                        onClick={() => {
-                            handleFlushCache();
+                </div>
+
+                    
+                    {diagnosticsLoading && (
+                    <m.div
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: 20, opacity: 0 }}
+                        transition={{ 
+                        duration: 0.3,
+                        ease: "easeOut"
                         }}
-                    >
-                        Run Now
-                    </div> */}
+                    >                         
                     {/* <ProgressTracker steps={progressSteps} currentStep={0} /> */}
+                
+                    <div className="border-b border-zinc-200 dark:border-zinc-800 -mx-6 my-6"/>
+                    
                     <div className="flex flex-col gap-4">
                         <ProgressTracker 
                             steps={progressSteps} 
-                            currentStep={currentStep} 
-                        />
-                    </div>
+                            currentStep={currentStep ?? undefined} 
+                            />
+                        </div>
+                    </m.div>
+                    )}
                     
                     {object?.AnalysisSummary?.length &&
                         <div className="grid grid-cols-5 gap-4 mb-6">
@@ -645,10 +682,7 @@ const Optimizations = ({ }) => {
                     }
 
 
-                    {diagnosticsLoading && <div className="flex items-center gap-2 mt-4 bg-brand-0 rounded-2xl p-4 py-3">
-                        <LoaderIcon className="h-4 w-4 text-gray-600 animate-spin" />
-                        <span className="text-sm text-gray-600">{loadingText}</span>
-                    </div>}
+                    
 
                     {showIframe && (
                         <div
