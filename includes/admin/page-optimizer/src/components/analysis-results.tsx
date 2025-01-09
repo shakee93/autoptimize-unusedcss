@@ -1,4 +1,4 @@
-import { AccordionItem, AccordionTrigger, AccordionContent } from "./ui/accordion";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "./ui/accordion";
 import { Sparkles } from "lucide-react";
 import AppButton from "components/ui/app-button";
 import { cn } from "lib/utils";
