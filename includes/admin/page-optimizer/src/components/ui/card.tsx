@@ -9,7 +9,7 @@ interface CardProps {
 const Card = forwardRef<HTMLDivElement, CardProps>(({ children, className, spreader = false, ...props }, ref) => {
 
     return (
-        <div {...props} ref={ref} className='w-full'>
+        <div {...props} ref={ref} className='w-full relative'>
 
             <div className={cn(
                 `w-full dark:bg-brand-950 bg-brand-0 rounded-3xl`,

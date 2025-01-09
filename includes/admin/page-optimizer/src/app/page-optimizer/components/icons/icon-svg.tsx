@@ -54,3 +54,16 @@ export const OptimizationsIcon: FC<SvgProps> = ({cls}) => (
         </defs>
     </svg>
 );
+
+export const MicroscopeIcon: FC<SvgProps> = ({cls}) => (
+    <svg className={`${cls}`} width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3 9H7" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M1.5 11H10.5" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M7 11C7.92826 11 8.8185 10.6313 9.47487 9.97487C10.1313 9.3185 10.5 8.42826 10.5 7.5C10.5 6.57174 10.1313 5.6815 9.47487 5.02513C8.8185 4.36875 7.92826 4 7 4H6.5" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M4.5 7H5.5" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M4.5 6C4.23478 6 3.98043 5.89464 3.79289 5.70711C3.60536 5.51957 3.5 5.26522 3.5 5V3H6.5V5C6.5 5.26522 6.39464 5.51957 6.20711 5.70711C6.01957 5.89464 5.76522 6 5.5 6H4.5Z" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M6 3V1.5C6 1.36739 5.94732 1.24021 5.85355 1.14645C5.75979 1.05268 5.63261 1 5.5 1H4.5C4.36739 1 4.24021 1.05268 4.14645 1.14645C4.05268 1.24021 4 1.36739 4 1.5V3" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    
+);
+

@@ -559,10 +559,6 @@ const Optimizations = ({ }) => {
                     } */}
 
 
-            
-                    {object?.AnalysisSummary?.length && <AnalysisResults object={object} />}
-
-
                     
 
                     {showIframe && (
@@ -581,8 +577,8 @@ const Optimizations = ({ }) => {
                                     </button>
                                 </div>
                                 <iframe
-                                    src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
-                                    // src={`${window.uucss_global.home_url}/?rapidload_preview`} 
+                                    //src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
+                                     src={showIframe ? 'http://rapidload.local/?rapidload_preview': ''} 
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                 />
@@ -590,6 +586,7 @@ const Optimizations = ({ }) => {
                         </div>
                     )}
                 </div>
+                {object?.AnalysisSummary?.length && <AnalysisResults object={object} />}
             </m.div>
         </AnimatePresence>
     )
