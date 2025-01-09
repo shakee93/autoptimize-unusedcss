@@ -1,8 +1,8 @@
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "./ui/accordion";
 import { Sparkles } from "lucide-react";
-import { AppButton } from "./ui/app-button";
+import AppButton from "components/ui/app-button";
 import { cn } from "lib/utils";
-import { PartialObject } from 'ai/rsc';
+import type { PartialObject } from '../../types/ai';
 
 interface AnalysisResultsProps {
     object: PartialObject<{
@@ -69,7 +69,7 @@ export const AnalysisResults = ({ object }: AnalysisResultsProps) => {
                                                                                                 size="sm"
                                                                                                 className="mt-2 w-fit px-4 text-xs flex items-center gap-2"
                                                                                                 onClick={() => {
-                                                                                                    console.log(settings.find((s: any) => s.inputs.find((i: any) => i.key === fix.rapidload_setting_input?.name)))
+                                                                                                   // console.log(settings.find((s: any) => s.inputs.find((i: any) => i.key === fix.rapidload_setting_input?.name)))
                                                                                                 }}
                                                                                             >
                                                                                                 <Sparkles className="h-3.5 w-3.5 text-white -ml-1.5" /> Fix with AI
