@@ -363,6 +363,7 @@ const Optimizations = ({ }) => {
             
             // Clear interval when AI analysis is complete
             return () => clearInterval(progressInterval);
+           
         } catch (error) {
             setDiagnosticsProgress(0);
             console.error('❌ Diagnostics failed:', error);
