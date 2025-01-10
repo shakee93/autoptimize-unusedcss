@@ -84,12 +84,12 @@ const Optimizations = ({ }) => {
         api: `${AIBaseURL}/diagnosis`,
         schema: DiagnosticSchema,
         onFinish: (diagnostic: any) => {
-            console.log(diagnostic)
+           // console.log(diagnostic)
             setDiagnosticsLoading(false)
             setLoadingText(null)
             setDiagnosticComplete(true)
             setDiagnosticsProgress(100);
-            
+            resetDiagnosticResults();
             toast({
                 title: "AI Diagnostic Complete",
                 description: "AI analysis of your page has been completed successfully.",
@@ -371,7 +371,7 @@ const Optimizations = ({ }) => {
                 description: error?.message || "Failed to run diagnostics",
                 variant: "destructive",
             });
-        }
+        } 
     };
 
     const newPageSpeed = async () => {
@@ -471,13 +471,63 @@ const Optimizations = ({ }) => {
         } finally {
             console.log('Cache flush complete');
             setCurrentStep(1);
+            //runParallelSteps();
             handleFetchSettings();
         }
     };
+    const resetDiagnosticResults = () => {
+        setCurrentStep(0);
+        setSettingsProgress(0);
+        setServerInfoProgress(0);
+        setPageSpeedProgress(0);
+        setDiagnosticsProgress(0);
+       // dispatch(setDiagnosticResults(null));
+    }
 
-    // const storedDiagnostics = diagnosticResults;
 
-    // const diagnosticResults = storedDiagnostics || object;
+    // const runParallelSteps = async () => {
+    //     setSettingsProgress(0);
+    //     setServerInfoProgress(0);
+    //     setPageSpeedProgress(0);
+    
+    //     try {
+    //         await Promise.all([
+    //             // Fetch Settings
+    //             (async () => {
+    //                 setSettingsProgress(25);
+    //                 await dispatch(fetchSettings(options, headerUrl ? headerUrl : options.optimizer_url, true));
+    //                 setSettingsProgress(100);
+    //             })(),
+    
+    //             // Server Info Check
+    //             (async () => {
+    //                 setServerInfoProgress(25);
+    //                 const api = new ApiService(options);
+    //                 await api.post('titan_checklist_cron');
+    //                 setServerInfoProgress(100);
+    //             })(),
+    
+    //             // New Page Speed
+    //             (async () => {
+    //                 setPageSpeedProgress(25);
+    //                 await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
+    //                 setPageSpeedProgress(100);
+    //             })()
+    //         ]);
+    
+    //         // After all parallel operations complete, move to diagnostics
+    //         setCurrentStep(4);
+    //         startDiagnostics();
+    
+    //     } catch (error: any) {
+    //         toast({
+    //             title: "Operation Failed",
+    //             description: error.message || "One or more operations failed",
+    //             variant: "destructive",
+    //         });
+    //     }
+    // };
+
 
     return (
         <AnimatePresence>
@@ -532,10 +582,13 @@ const Optimizations = ({ }) => {
                             onClick={() => {
                                 handleFlushCache();
                                 setDiagnosticsLoading(true);
+                                // dispatch(setDiagnosticResults({
+                                //     AnalysisSummary: ''
+                                // }));
                             }}
                         >
                             {/* {diagnosticsLoading && <LoaderIcon className="h-4 w-4 text-white animate-spin" />} */}
-                            {diagnosticComplete ? 'Run Diagnostics Test Again' : 'Run Diagnostics Test '}
+                            {diagnosticResults?.AnalysisSummary?.length ? 'Run Diagnostics Test Again' : 'Run Diagnostics Test '}
                             {/* Run Diagnostics Test  */}
                         </AppButton>
                     </div>
