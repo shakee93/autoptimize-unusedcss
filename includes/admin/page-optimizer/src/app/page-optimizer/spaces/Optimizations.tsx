@@ -74,7 +74,10 @@ const Optimizations = ({ }) => {
     const [serverInfoProgress, setServerInfoProgress] = useState(0);
     const [diagnosticsProgress, setDiagnosticsProgress] = useState(0);
     const { headerUrl } = useCommonDispatch()
-    const sampleData = (data?.grouped as Record<AuditTypes, Audit[] | undefined>)["opportunities"] || [];
+    const relatedAudits = [
+        ...(data?.grouped as Record<AuditTypes, Audit[] | undefined>)["opportunities"] || [],
+        ...(data?.grouped as Record<AuditTypes, Audit[] | undefined>)["diagnostics"] || []
+    ];
     
 
     const { object, submit, isLoading, error } = useObject({
@@ -602,7 +605,7 @@ const Optimizations = ({ }) => {
                     )}
                 </div>
                 
-                {diagnosticResults?.AnalysisSummary?.length && <AnalysisResults object={diagnosticResults} sampleData={sampleData} />}
+                {diagnosticResults?.AnalysisSummary?.length && <AnalysisResults object={diagnosticResults} relatedAudits={relatedAudits} />}
             </m.div>
         </AnimatePresence>
     )

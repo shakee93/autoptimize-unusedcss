@@ -1,5 +1,6 @@
 import { AccordionItem, AccordionTrigger, AccordionContent } from "./ui/accordion";
-import { PlusCircleIcon, MinusCircleIcon, Sparkles, MicroscopeIcon, LightbulbIcon, FileCodeIcon } from "lucide-react";
+import { Sparkles, MicroscopeIcon, LightbulbIcon, FileCodeIcon } from "lucide-react";
+import {PlusCircleIcon, MinusCircleIcon, CheckCircleIcon} from "@heroicons/react/24/solid";
 import AppButton from "components/ui/app-button";
 import { cn } from "lib/utils";
 import type { PartialObject } from '../../types/ai';
@@ -32,10 +33,10 @@ interface AnalysisResultsProps {
             categories?: string[];
         }>;
     }>;
-    sampleData: Audit[];
+    relatedAudits: Audit[];
 }
 
-export const AnalysisResults = ({ object, sampleData }: AnalysisResultsProps) => {
+export const AnalysisResults = ({ object, relatedAudits }: AnalysisResultsProps) => {
     const [openItems, setOpenItems] = useState<string[]>(["0"]);
 
     const toggleAccordion = (id: string) => {
@@ -160,16 +161,19 @@ export const AnalysisResults = ({ object, sampleData }: AnalysisResultsProps) =>
                                                         {/* <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Related Resources:</span> */}
                                                         <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200 flex gap-2 items-center"> <FileCodeIcon className="w-5 h-5" />Related Resources</p>
                                                         <p className="text-sm text-left text-brand-700 dark:text-brand-300">{result?.pagespeed_insight_audits?.join(', ')}</p>
+                                                        {/* this part is not returning anything */}
                                                         <span className="text-sm text-blue-600 dark:text-blue-300"> <a href={result?.resources?.map((r: any) => r.url).join(', ')} target="_blank" rel="noopener noreferrer">{result?.resources?.map((r: any) => r.url).join(', ')}</a> </span>
                                                         <span className="text-sm text-zinc-600 dark:text-zinc-300"> <a href={result?.resources?.map((r: any) => r.url).join(', ')} target="_blank" rel="noopener noreferrer">{result?.resources?.map((r: any) => r.reason).join(', ')}</a> </span>
-                                                        
-                                                        {sampleData.map((audit, index) => (
+                                                        {/* end here */}
+
+                                                        {relatedAudits.map((audit, index) => (
                                                         result?.pagespeed_insight_audits?.includes(audit.name) ? (
                                                             <FileTable
                                                                 key={index}
                                                                 index={index}
                                                                 group={audit.files}
                                                                 audit={audit}
+                                                                aiTable={true}
                                                             />
                                                         ) : null
                                                         ))}
