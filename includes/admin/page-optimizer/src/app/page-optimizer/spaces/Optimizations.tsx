@@ -21,6 +21,7 @@ import { AnimatedLogo } from "components/animated-logo";
 import ProgressTracker from '../../../components/ProgressTracker';
 import { compareVersions } from 'compare-versions';
 import { AnalysisResults } from '../../../components/analysis-results';
+import { setCommonState } from "../../../store/common/commonActions";
 
 const DiagnosticSchema = z.object({
     AnalysisSummary: z.string(),
@@ -73,7 +74,12 @@ const Optimizations = ({ }) => {
     const [pageSpeedProgress, setPageSpeedProgress] = useState(0);
     const [serverInfoProgress, setServerInfoProgress] = useState(0);
     const [diagnosticsProgress, setDiagnosticsProgress] = useState(0);
-    const { headerUrl } = useCommonDispatch()
+    const { headerUrl, diagnosticLoading } = useCommonDispatch();
+
+    useEffect(() => {
+        console.log('diagnosticLoading', diagnosticLoading)
+    }, [diagnosticLoading])
+
     const relatedAudits = [
         ...(data?.grouped as Record<AuditTypes, Audit[] | undefined>)["opportunities"] || [],
         ...(data?.grouped as Record<AuditTypes, Audit[] | undefined>)["diagnostics"] || []
@@ -376,7 +382,9 @@ const Optimizations = ({ }) => {
     };
 
     const newPageSpeed = async () => {
+        
         try {
+            dispatch(setCommonState('diagnosticLoading', true));
             setPageSpeedProgress(25);
             
             const progressInterval = setInterval(() => {
@@ -397,6 +405,7 @@ const Optimizations = ({ }) => {
             setTimeout(async() => {
                 setCurrentStep(4); 
                 startDiagnostics();
+                dispatch(setCommonState('diagnosticLoading', false));
             }, 1000);
 
         } catch (error) {
