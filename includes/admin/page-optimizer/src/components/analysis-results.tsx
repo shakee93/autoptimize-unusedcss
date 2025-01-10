@@ -1,6 +1,6 @@
 import { AccordionItem, AccordionTrigger, AccordionContent } from "./ui/accordion";
 import { Sparkles, MicroscopeIcon, LightbulbIcon, FileCodeIcon } from "lucide-react";
-import {PlusCircleIcon, MinusCircleIcon, CheckCircleIcon} from "@heroicons/react/24/solid";
+import { PlusCircleIcon, MinusCircleIcon, CheckCircleIcon } from "@heroicons/react/24/solid";
 import AppButton from "components/ui/app-button";
 import { cn } from "lib/utils";
 import type { PartialObject } from '../../types/ai';
@@ -56,7 +56,7 @@ export const AnalysisResults = ({ object, relatedAudits }: AnalysisResultsProps)
                     <div className="w-full mt-4">
                         <div className="flex flex-col gap-4">
                             {object?.CriticalIssues?.map((result: any, index: number) => (
-                               
+
                                 <Card
                                     spreader={!openItems.includes(index.toString())}
                                     key={index}
@@ -65,17 +65,17 @@ export const AnalysisResults = ({ object, relatedAudits }: AnalysisResultsProps)
                                         openItems.includes(index.toString()) ? 'shadow-lg dark:shadow-brand-800/30' : 'dark:hover:border-brand-700/70 hover:border-brand-400/60'
                                     )}
                                 >
-                                     {/* {console.log(result)} */}
+                                    {/* {console.log(result)} */}
                                     <div className="min-h-[56px] relative flex justify-between w-full py-2 px-4">
                                         <div className="flex gap-3 font-normal items-center text-base">
                                             <div className="flex flex-col justify-around">
                                                 <div className="flex gap-1.5 items-center text-zinc-800 dark:text-zinc-200">
                                                     {result?.issue}
                                                     {result?.pagespeed_insight_metrics?.map((metric: string) => (
-                                                        <div 
+                                                        <div
                                                             className={cn(
                                                                 'flex text-xxs items-center transition-colors flex gap-1 cursor-default hover:bg-brand-100 dark:hover:bg-brand-800 border py-1 px-1.5 rounded-md',
-                                                            )} 
+                                                            )}
                                                             key={metric}
                                                         >
                                                             {metric}
@@ -122,7 +122,7 @@ export const AnalysisResults = ({ object, relatedAudits }: AnalysisResultsProps)
                                         <div className="border-t space-y-2">
                                             <div className="p-8">
                                                 <div className="border-b border-zinc-200 dark:border-zinc-800 flex flex-col gap-2 mb-4">
-                                                    <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200 flex gap-2 items-center"> <MicroscopeIcon className="w-5 h-5"/>Core Issue</p>
+                                                    <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200 flex gap-2 items-center"> <MicroscopeIcon className="w-5 h-5" />Core Issue</p>
                                                     <p className="text-sm text-left text-brand-700 dark:text-brand-300 pb-4">{result?.description}</p>
                                                 </div>
                                                 <div>
@@ -141,8 +141,8 @@ export const AnalysisResults = ({ object, relatedAudits }: AnalysisResultsProps)
                                                         )}</div>
                                                     <ul className="list-disc space-y-4 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 px-8 bg-brand-100/30 dark:bg-brand-800">
                                                         {result?.howToFix?.map((fix: any, index: number) => (
-                                                            <li 
-                                                                key={fix.step} 
+                                                            <li
+                                                                key={fix.step}
                                                                 className={cn(
                                                                     "text-sm text-zinc-600 dark:text-zinc-300 marker:text-brand-300 marker:text-lg",
                                                                     index !== result.howToFix.length - 1 && "border-b border-zinc-200 dark:border-zinc-800 pb-4"
@@ -167,18 +167,18 @@ export const AnalysisResults = ({ object, relatedAudits }: AnalysisResultsProps)
                                                         {/* end here */}
 
                                                         {relatedAudits.map((audit, index) => (
-                                                        result?.pagespeed_insight_audits?.includes(audit.name) ? (
-                                                            <FileTable
-                                                                key={index}
-                                                                index={index}
-                                                                group={audit.files}
-                                                                audit={audit}
-                                                                aiTable={true}
-                                                            />
-                                                        ) : null
+                                                            result?.pagespeed_insight_audits?.includes(audit.name) ? (
+                                                                <FileTable
+                                                                    key={index}
+                                                                    index={index}
+                                                                    group={audit.files}
+                                                                    audit={audit}
+                                                                    aiTable={true}
+                                                                />
+                                                            ) : null
                                                         ))}
 
-                                                        
+
                                                     </div>
 
                                                     {/* <div className="flex flex-col gap-2 mt-4">
@@ -202,34 +202,36 @@ export const AnalysisResults = ({ object, relatedAudits }: AnalysisResultsProps)
                                             </div>
                                         </div>
                                     </Accordion>
-                                    {object?.PluginConflicts && object?.PluginConflicts.length > 0 && (
-                                        <div className="flex flex-col gap-2 mt-6">
-                                            <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Potential Plugin Conflicts:</span>
 
-                                            <span className="text-sm text-zinc-600 dark:text-zinc-300">
-                                                These plugins may conflict with each other, causing issues with your page.
-
-                                                WORK IN PROGRESS
-                                            </span>
-                                            <ul className="space-y-3">
-                                                {object?.PluginConflicts.map((conflict: any, index: number) => (
-                                                    <li key={index} className="flex flex-col gap-1">
-                                                        <span className="text-sm font-medium text-red-600 dark:text-red-400">
-                                                            {conflict.plugin}
-                                                        </span>
-                                                        <span className="text-sm text-zinc-600 dark:text-zinc-300">
-                                                            Recommended Action: {conflict.recommendedAction}
-                                                        </span>
-                                                        <span className="text-sm text-zinc-600 dark:text-zinc-300">
-                                                            Categories: {conflict?.categories?.join(', ')}
-                                                        </span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    )}
                                 </Card>
                             ))}
+
+                            {object?.PluginConflicts && object?.PluginConflicts.length > 0 && (
+                                <div className="flex flex-col gap-2 mt-6">
+                                    <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Potential Plugin Conflicts:</span>
+
+                                    <span className="text-sm text-zinc-600 dark:text-zinc-300">
+                                        These plugins may conflict with each other, causing issues with your page.
+
+                                        WORK IN PROGRESS
+                                    </span>
+                                    <ul className="space-y-3">
+                                        {object?.PluginConflicts.map((conflict: any, index: number) => (
+                                            <li key={index} className="flex flex-col gap-1">
+                                                <span className="text-sm font-medium text-red-600 dark:text-red-400">
+                                                    {conflict.plugin}
+                                                </span>
+                                                <span className="text-sm text-zinc-600 dark:text-zinc-300">
+                                                    Recommended Action: {conflict.recommendedAction}
+                                                </span>
+                                                <span className="text-sm text-zinc-600 dark:text-zinc-300">
+                                                    Categories: {conflict?.categories?.join(', ')}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
