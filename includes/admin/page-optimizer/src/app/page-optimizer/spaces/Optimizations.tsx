@@ -4,7 +4,7 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "..
 import { useCompletion, experimental_useObject as useObject } from 'ai/react'
 import { AnimatePresence, m, motion } from "framer-motion"
 import useCommonDispatch from "hooks/useCommonDispatch";
-import { changeGear, fetchReport, fetchSettings } from '../../../store/app/appActions';
+import { changeGear, fetchReport, fetchSettings, setDiagnosticResults } from '../../../store/app/appActions';
 import { LoaderIcon, ChevronDown, GaugeCircle, RefreshCw, Sparkles } from "lucide-react";
 import { useSelector } from "react-redux";
 import { optimizerData } from "../../../store/app/appSelector";
@@ -62,7 +62,7 @@ const DiagnosticSchema = z.object({
 const AIBaseURL = "https://ai.rapidload.io/api"
 
 const Optimizations = ({ }) => {
-    const { settings, data, activeReport } = useSelector(optimizerData);
+    const { settings, data, activeReport, diagnosticResults } = useSelector(optimizerData);
     const [diagnosticsLoading, setDiagnosticsLoading] = useState(false);
     const [diagnosticComplete, setDiagnosticComplete] = useState(false);
     const [loadingText, setLoadingText] = useState<string | null>(null);
@@ -74,6 +74,8 @@ const Optimizations = ({ }) => {
     const [serverInfoProgress, setServerInfoProgress] = useState(0);
     const [diagnosticsProgress, setDiagnosticsProgress] = useState(0);
     const { headerUrl } = useCommonDispatch()
+    const sampleData = (data?.grouped as Record<AuditTypes, Audit[] | undefined>)["opportunities"] || [];
+    
 
     const { object, submit, isLoading, error } = useObject({
         api: `${AIBaseURL}/diagnosis`,
@@ -84,6 +86,7 @@ const Optimizations = ({ }) => {
             setLoadingText(null)
             setDiagnosticComplete(true)
             setDiagnosticsProgress(100);
+            
             toast({
                 title: "AI Diagnostic Complete",
                 description: "AI analysis of your page has been completed successfully.",
@@ -108,6 +111,14 @@ const Optimizations = ({ }) => {
     const [remainingTime, setRemainingTime] = useState(
         progressSteps.reduce((total, step) => total + parseInt(step.duration), 0)
     );
+
+    useEffect(() => {
+       // console.log("diagnosticResults Available in app state", diagnosticResults)
+
+        if(object?.AnalysisSummary && object.AnalysisSummary.length) {
+            dispatch(setDiagnosticResults(object as DiagnosticResults));
+        }
+    }, [object])
 
     useEffect(() => {
         if (diagnosticsLoading) {
@@ -461,13 +472,17 @@ const Optimizations = ({ }) => {
         }
     };
 
+    // const storedDiagnostics = diagnosticResults;
+
+    // const diagnosticResults = storedDiagnostics || object;
+
     return (
         <AnimatePresence>
             <m.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.2, delay: 0.05 }}
-                className=''
+                className='bg-[#F0F0F1] dark:bg-brand-800'
             >
                 <div className='px-6 py-6 bg-white rounded-3xl'>
                 <div className="flex gap-4 w-full items-start">
@@ -577,8 +592,8 @@ const Optimizations = ({ }) => {
                                     </button>
                                 </div>
                                 <iframe
-                                    src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
-                                    // src={showIframe ? 'http://rapidload.local/?rapidload_preview': ''} 
+                                    // src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
+                                     src={showIframe ? 'http://rapidload.local/?rapidload_preview': ''} 
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                 />
@@ -586,7 +601,8 @@ const Optimizations = ({ }) => {
                         </div>
                     )}
                 </div>
-                {object?.AnalysisSummary?.length && <AnalysisResults object={object} />}
+                
+                {diagnosticResults?.AnalysisSummary?.length && <AnalysisResults object={diagnosticResults} sampleData={sampleData} />}
             </m.div>
         </AnimatePresence>
     )

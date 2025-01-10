@@ -53,6 +53,7 @@ export const optimizerData = createSelector(
         const license = state.license
         const homePerformance = state.homePerformance
         const cssStatus = state.cssStatus
+        const diagnosticResults = state.diagnosticResults
 
         return {
             ...report,
@@ -69,6 +70,7 @@ export const optimizerData = createSelector(
             license,
             homePerformance,
             cssStatus,
+            diagnosticResults,
             touched: !equal(settings.original, settings.state) || !!optimizeChangesFiles(report.changes).find(i => i?.changed),
             fresh : report?.state?.fresh,
             reanalyze: report.data !== null && report.loading

@@ -13,6 +13,8 @@ interface FileGroupProps {
 
 const FileTable = ({audit, group, index }: FileGroupProps) => {
 
+    //console.log("group", group, index)
+
     if (!group?.items?.length) {
         return <></>
     }
