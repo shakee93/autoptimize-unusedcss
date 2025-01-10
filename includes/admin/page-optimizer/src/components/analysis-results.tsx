@@ -1,5 +1,5 @@
 import { AccordionItem, AccordionTrigger, AccordionContent } from "./ui/accordion";
-import { PlusCircleIcon, MinusCircleIcon, Sparkles, MicroscopeIcon } from "lucide-react";
+import { PlusCircleIcon, MinusCircleIcon, Sparkles, MicroscopeIcon, LightbulbIcon } from "lucide-react";
 import AppButton from "components/ui/app-button";
 import { cn } from "lib/utils";
 import type { PartialObject } from '../../types/ai';
@@ -66,7 +66,7 @@ export const AnalysisResults = ({ object }: AnalysisResultsProps) => {
                                     <div className="min-h-[56px] relative flex justify-between w-full py-2 px-4">
                                         <div className="flex gap-3 font-normal items-center text-base">
                                             <div className="flex flex-col justify-around">
-                                                <div className="flex gap-1.5 items-center">
+                                                <div className="flex gap-1.5 items-center text-zinc-800 dark:text-zinc-200 font-medium">
                                                     {result?.issue}
                                                 </div>
                                             </div>
@@ -107,17 +107,17 @@ export const AnalysisResults = ({ object }: AnalysisResultsProps) => {
                                         {/* Content section */}
                                         <div className="border-t space-y-2">
                                             <div className="p-8">
-                                                <div className="border-b border-zinc-200 dark:border-zinc-800 pb-4 mb-4">
-                                                    <p className="text-lg font-medium text-zinc-800 dark:text-zinc-200 flex gap-2"> <MicroscopeIcon className="w-6 h-6"/>Core Issue</p>
-                                                    <p className="text-sm text-left font-normal text-zinc-600 dark:text-zinc-300">{result?.description}</p>
+                                                <div className="border-b border-zinc-200 dark:border-zinc-800 flex flex-col gap-2 mb-4">
+                                                    <p className="text-lg font-medium text-zinc-800 dark:text-zinc-200 flex gap-2 items-center"> <MicroscopeIcon className="w-5 h-5"/>Core Issue</p>
+                                                    <p className="text-sm text-left font-normal text-zinc-600 dark:text-zinc-300 pb-4">{result?.description}</p>
                                                 </div>
                                                 <div>
-                                                    <div className="flex gap-2 w-full justify-between">
-                                                        <p className="text-lg font-medium text-zinc-800 dark:text-zinc-200">How to fix</p>
+                                                    <div className="flex gap-2 w-full justify-between my-4">
+                                                        <p className="text-lg font-medium text-zinc-800 dark:text-zinc-200 flex gap-2 items-center"> <LightbulbIcon className="w-5 h-5" />How to fix this?</p>
                                                         {result?.howToFix?.some((fix: any) => fix.type === 'rapidload_fix') && (
                                                             <AppButton
                                                                 size="sm"
-                                                                className="w-fit px-4 text-xs flex items-center gap-2"
+                                                                className="w-fit px-4 text-xs flex items-center gap-2 rounded-xl"
                                                                 onClick={() => {
                                                                     // console.log(settings.find((s: any) => s.inputs.find((i: any) => i.key === fix.rapidload_setting_input?.name)))
                                                                 }}
@@ -130,13 +130,13 @@ export const AnalysisResults = ({ object }: AnalysisResultsProps) => {
                                                             <li 
                                                                 key={fix.step} 
                                                                 className={cn(
-                                                                    "text-sm text-zinc-600 dark:text-zinc-300 pb-4",
+                                                                    "text-sm text-zinc-600 dark:text-zinc-300 pb-4 marker:text-brand-300 marker:text-lg",
                                                                     index !== result.howToFix.length - 1 && "border-b border-zinc-200 dark:border-zinc-800"
                                                                 )}
                                                             >
                                                                 <div className="flex flex-col gap-1">
-                                                                    <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">{fix.step}</span>
-                                                                    <span className="text-xs text-zinc-600 dark:text-zinc-300">{fix.description}</span>
+                                                                    <span className="text-base font-medium text-zinc-800 dark:text-zinc-200">{fix.step}</span>
+                                                                    <span className="text-sm text-zinc-600 dark:text-zinc-300">{fix.description}</span>
                                                                 </div>
                                                             </li>
                                                         ))}
