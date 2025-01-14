@@ -48,7 +48,7 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ steps, currentStep = 
                   duration={step.duration}
                   label={step.label}
                   progress={step.progress}
-                  isActive={currentStep === index + 1}
+                  isActive={step.progress > 0}
                 />
               </div>
             ))}

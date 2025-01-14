@@ -80,17 +80,21 @@ const Optimizations = ({ }) => {
         console.log('diagnosticLoading', diagnosticLoading)
     }, [diagnosticLoading])
 
-    const relatedAudits = [
-        ...(data?.grouped as Record<AuditTypes, Audit[] | undefined>)["opportunities"] || [],
-        ...(data?.grouped as Record<AuditTypes, Audit[] | undefined>)["diagnostics"] || []
-    ];
+    const relatedAudits = useMemo(() => {
+        if (!data?.grouped) return [];
+        
+        return [
+            ...(data.grouped as Record<AuditTypes, Audit[] | undefined>)["opportunities"] || [],
+            ...(data.grouped as Record<AuditTypes, Audit[] | undefined>)["diagnostics"] || []
+        ];
+    }, [data?.grouped]);
     
 
     const { object, submit, isLoading, error } = useObject({
         api: `${AIBaseURL}/diagnosis`,
         schema: DiagnosticSchema,
         onFinish: (diagnostic: any) => {
-           // console.log(diagnostic)
+            console.log(diagnostic)
             setDiagnosticsLoading(false)
             setLoadingText(null)
             setDiagnosticComplete(true)
@@ -150,7 +154,7 @@ const Optimizations = ({ }) => {
 
 
         const _diagnostics = Object.entries(diagnostics).map(([key, value]) => value)
-        console.log(_diagnostics)
+       // console.log(_diagnostics)
 
         const input = {
             settings: settings.map((s: any) => ({
@@ -187,12 +191,13 @@ const Optimizations = ({ }) => {
         }
 
         setLoadingText('Hermes AI is analyzing your page...')
+        
 
         try {
 
-            console.log(input)
+          //  console.log(input)
             submit(input)
-
+            setDiagnosticsProgress(95);
 
         } catch (error: any) {
             console.error('AI Diagnosis Error:', error);
@@ -214,7 +219,7 @@ const Optimizations = ({ }) => {
     useEffect(() => {
         const handleMessage = (event: MessageEvent) => {
             if (event.data.type === "RAPIDLOAD_CHECK_RESULTS") {
-                console.log("Received data from iframe:", event.data);
+               // console.log("Received data from iframe:", event.data);
 
                 setLoadingText('Collected data from your page...')
                 // Compare received data with settings
@@ -244,7 +249,7 @@ const Optimizations = ({ }) => {
                     });
                 });
 
-                console.log(event.data.data)
+              //  console.log(event.data.data)
                 doAnalysis(event.data.data)
             }
         };
@@ -270,89 +275,17 @@ const Optimizations = ({ }) => {
         </div>
     ), []);
 
-    
-
-    const handleFetchSettings = async () => {
-        try {
-            setSettingsProgress(25);
-            const progressInterval = setInterval(() => {
-
-                setSettingsProgress(prev => Math.min(prev + 15, 90));
-
-            }, 500);
-            
-            const result = await dispatch(fetchSettings(options, headerUrl ? headerUrl : options.optimizer_url, true));
-            
-            clearInterval(progressInterval);
-            
-            setSettingsProgress(100);
-
-            console.log('✅ Settings fetch completed successfully');
-            toast({
-                title: "Settings Updated",
-                description: "Page settings have been refreshed successfully.",
-                variant: "default",
-            });
-
-            setTimeout(() => {
-                setCurrentStep(2);
-                checkServerInfo();
-            }, 1000);
-
-        } catch (error) {
-            setSettingsProgress(0);
-            console.error('❌ Settings fetch failed:', error);
-            toast({
-                title: "Settings Update Failed",
-                description: error?.message || "Failed to refresh page settings",
-                variant: "destructive",
-            });
-        }
-    };
-
-    const checkServerInfo = async () => {
-        try {
-            setServerInfoProgress(25);
-            const api = new ApiService(options);
-            
-            const progressInterval = setInterval(() => {
-                setServerInfoProgress(prev => Math.min(prev + 15, 90));
-            }, 500);
-
-            const response = await api.post('titan_checklist_cron');
-
-            clearInterval(progressInterval);
-            setServerInfoProgress(100);
-
-            toast({
-                title: "Server Info Check Complete",
-                description: "Server information has been collected successfully.",
-                variant: "default",
-            });
-
-            setTimeout(() => {
-                setCurrentStep(3);
-                newPageSpeed();
-            }, 1000);
-
-        } catch (error: any) {
-            setServerInfoProgress(0);
-            console.error('❌ Server info check failed:', error);
-            toast({
-                title: "Server Info Check Failed",
-                description: error?.message || "Failed to check server information",
-                variant: "destructive",
-            });
-        }
-    };
 
     const startDiagnostics = async () => {
+        
+        let progressInterval: NodeJS.Timeout | undefined = undefined;
+
         try {
             setDiagnosticsProgress(25);
             
-            const progressInterval = setInterval(() => {
-                setDiagnosticsProgress(prev => Math.min(prev + 10, 90));
-            }, 1000);
+            // progressInterval = setInterval(() => {
+            //     setDiagnosticsProgress(prev => Math.min(prev + 10, 90));
+            // }, 1000);
 
             if (diagnosticComplete) {
                 setDiagnosticComplete(false)
@@ -368,56 +301,25 @@ const Optimizations = ({ }) => {
             }
             
             // Clear interval when AI analysis is complete
-            return () => clearInterval(progressInterval);
+            setDiagnosticsProgress(50);
+           // return () => clearInterval(progressInterval);
            
         } catch (error) {
             setDiagnosticsProgress(0);
-            console.error('❌ Diagnostics failed:', error);
+           // console.error('❌ Diagnostics failed:', error);
             toast({
                 title: "Diagnostics Failed",
                 description: error?.message || "Failed to run diagnostics",
                 variant: "destructive",
             });
         } 
+        //  finally {
+        //     if ( diagnosticsProgress > 94) {
+        //         clearInterval(progressInterval);
+        //     }
+        // }
     };
 
-    const newPageSpeed = async () => {
-        
-        try {
-            dispatch(setCommonState('diagnosticLoading', true));
-            setPageSpeedProgress(25);
-            
-            const progressInterval = setInterval(() => {
-                setPageSpeedProgress(prev => {
-                    if (prev >= 90) {
-                        clearInterval(progressInterval);
-                        return 90;
-                    }
-                    return prev + 5;
-                });
-            }, 2000);
-
-            const result = await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
-        
-            clearInterval(progressInterval);
-            setPageSpeedProgress(100);
-            
-            setTimeout(async() => {
-                setCurrentStep(4); 
-                startDiagnostics();
-                dispatch(setCommonState('diagnosticLoading', false));
-            }, 1000);
-
-        } catch (error) {
-            setPageSpeedProgress(0);
-            console.error('❌ PageSpeed fetch failed:', error);
-            toast({
-                title: "PageSpeed Update Failed",
-                description: error?.message || "Failed to fetch new PageSpeed data",
-                variant: "destructive",
-            });
-        }
-    };
 
     const preloadPage = async (previewUrl: string)=> {
         const USER_AGENTS = {
@@ -428,7 +330,7 @@ const Optimizations = ({ }) => {
         const api = new ApiService(options);
 
         if (compareVersions(options?.rapidload_version, '2.2.11') > 0) {
-            console.log('Preloading page with URL:', previewUrl);
+         //   console.log('Preloading page with URL:', previewUrl);
             await api.post(`preload_page`, {
                 url: previewUrl,
                 user_agent: activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
@@ -479,12 +381,13 @@ const Optimizations = ({ }) => {
                 variant: "destructive",
             });
         } finally {
-            console.log('Cache flush complete');
+           // console.log('Cache flush complete');
             setCurrentStep(1);
-            //runParallelSteps();
-            handleFetchSettings();
+            runParallelSteps();
+           // handleFetchSettings();
         }
     };
+
     const resetDiagnosticResults = () => {
         setCurrentStep(0);
         setSettingsProgress(0);
@@ -495,48 +398,100 @@ const Optimizations = ({ }) => {
     }
 
 
-    // const runParallelSteps = async () => {
-    //     setSettingsProgress(0);
-    //     setServerInfoProgress(0);
-    //     setPageSpeedProgress(0);
-    
-    //     try {
-    //         await Promise.all([
-    //             // Fetch Settings
-    //             (async () => {
-    //                 setSettingsProgress(25);
-    //                 await dispatch(fetchSettings(options, headerUrl ? headerUrl : options.optimizer_url, true));
-    //                 setSettingsProgress(100);
-    //             })(),
-    
-    //             // Server Info Check
-    //             (async () => {
-    //                 setServerInfoProgress(25);
-    //                 const api = new ApiService(options);
-    //                 await api.post('titan_checklist_cron');
-    //                 setServerInfoProgress(100);
-    //             })(),
-    
-    //             // New Page Speed
-    //             (async () => {
-    //                 setPageSpeedProgress(25);
-    //                 await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
-    //                 setPageSpeedProgress(100);
-    //             })()
-    //         ]);
-    
-    //         // After all parallel operations complete, move to diagnostics
-    //         setCurrentStep(4);
-    //         startDiagnostics();
-    
-    //     } catch (error: any) {
-    //         toast({
-    //             title: "Operation Failed",
-    //             description: error.message || "One or more operations failed",
-    //             variant: "destructive",
-    //         });
-    //     }
-    // };
+    const runParallelSteps = async () => {
+        try {
+            setCurrentStep(1); // Start all steps simultaneously
+            
+            await Promise.all([
+                // Fetch Settings
+                (async () => {
+                    try {
+                        setSettingsProgress(25);
+                        const progressInterval = setInterval(() => {
+                            setSettingsProgress(prev => Math.min(prev + 15, 90));
+                        }, 500);
+                        
+                        await dispatch(fetchSettings(options, headerUrl ? headerUrl : options.optimizer_url, true));
+                        
+                        clearInterval(progressInterval);
+                        setSettingsProgress(100);
+                        
+                      //  console.log('✅ Settings fetch completed');
+                    } catch (error) {
+                       // console.error('❌ Settings fetch failed:', error);
+                        throw error;
+                    }
+                })(),
+
+                // Server Info Check
+                (async () => {
+                    try {
+                        setServerInfoProgress(25);
+                        const progressInterval = setInterval(() => {
+                            setServerInfoProgress(prev => Math.min(prev + 15, 90));
+                        }, 500);
+
+                        const api = new ApiService(options);
+                        await api.post('titan_checklist_cron');
+                        
+                        clearInterval(progressInterval);
+                        setServerInfoProgress(100);
+                        
+                       // console.log('✅ Server info check completed');
+                    } catch (error) {
+                       // console.error('❌ Server info check failed:', error);
+                        throw error;
+                    }
+                })(),
+
+                // New Page Speed
+                (async () => {
+                    try {
+                        dispatch(setCommonState('diagnosticLoading', true));
+                        setPageSpeedProgress(25);
+                        
+                        const progressInterval = setInterval(() => {
+                            setPageSpeedProgress(prev => Math.min(prev + 5, 90));
+                        }, 2000);
+
+                        await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
+                        
+                        clearInterval(progressInterval);
+                        setPageSpeedProgress(100);
+                        
+                       // console.log('✅ PageSpeed fetch completed');
+                    } catch (error) {
+                       // console.error('❌ PageSpeed fetch failed:', error);
+                        throw error;
+                    } finally {
+                        dispatch(setCommonState('diagnosticLoading', false));
+                    }
+                })()
+            ]);
+
+            // All steps completed successfully
+            toast({
+                title: "All Steps Completed",
+                description: "Settings, server info, and PageSpeed data updated successfully.",
+                variant: "default",
+            });
+
+            // // Move to diagnostics step
+
+            setTimeout(async() => {
+                setCurrentStep(4); 
+                startDiagnostics();
+                
+            }, 1000);
+
+        } catch (error: any) {
+            toast({
+                title: "Process Failed",
+                description: error?.message || "One or more steps failed to complete",
+                variant: "destructive",
+            });
+        }
+    };
 
 
     return (
@@ -658,8 +613,8 @@ const Optimizations = ({ }) => {
                                     </button>
                                 </div>
                                 <iframe
-                                     src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
-                                    // src={showIframe ? 'http://rapidload.local/?rapidload_preview': ''} 
+                                    // src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
+                                     src={showIframe ? 'http://rapidload.local/?rapidload_preview': ''} 
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                 />

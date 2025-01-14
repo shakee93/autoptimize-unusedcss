@@ -142,7 +142,7 @@ export const AnalysisResults = ({ object, relatedAudits }: AnalysisResultsProps)
                                                     <ul className="list-disc space-y-4 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 px-8 bg-brand-100/30 dark:bg-brand-800">
                                                         {result?.howToFix?.map((fix: any, index: number) => (
                                                             <li
-                                                                key={fix.step}
+                                                                key={index}
                                                                 className={cn(
                                                                     "text-sm text-zinc-600 dark:text-zinc-300 marker:text-brand-300 marker:text-lg",
                                                                     index !== result.howToFix.length - 1 && "border-b border-zinc-200 dark:border-zinc-800 pb-4"
@@ -156,7 +156,8 @@ export const AnalysisResults = ({ object, relatedAudits }: AnalysisResultsProps)
                                                         ))}
 
                                                     </ul>
-
+                                                    
+                                                    {result?.pagespeed_insight_audits && result?.pagespeed_insight_audits.length > 0 &&
                                                     <div className="flex flex-col gap-2 mt-4">
                                                         {/* <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Related Resources:</span> */}
                                                         <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200 flex gap-2 items-center"> <FileCodeIcon className="w-5 h-5" />Related Resources</p>
@@ -180,6 +181,7 @@ export const AnalysisResults = ({ object, relatedAudits }: AnalysisResultsProps)
 
 
                                                     </div>
+                                                    }
 
                                                     {/* <div className="flex flex-col gap-2 mt-4">
                                                         <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Related Audit:</span>
