@@ -10,20 +10,45 @@ interface ProgressStep {
 interface ProgressTrackerProps {
   steps: ProgressStep[];
   currentStep?: number;
+  onTimeUpdate?: (time: number) => void;
 }
 
-// Helper function to convert duration string to seconds
 const durationToSeconds = (duration: string): number => {
   const match = duration.match(/(\d+)s/);
   return match ? parseInt(match[1], 10) : 0;
 };
 
-const ProgressTracker: React.FC<ProgressTrackerProps> = ({ steps, currentStep = 0 }) => {
+const ProgressTracker: React.FC<ProgressTrackerProps> = ({ steps, currentStep = 0, onTimeUpdate }) => {
+  const [totalRemainingTime, setTotalRemainingTime] = useState(
+    steps.reduce((sum, step) => sum + durationToSeconds(step.duration), 0)
+  );
+
+  // Add this effect to update total time when any countdown changes
+  useEffect(() => {
+    const updateTotalTime = () => {
+      const allCountdowns = document.querySelectorAll('[data-countdown]');
+      const currentTotal = Array.from(allCountdowns)
+        .reduce((sum, el) => sum + Number(el.textContent?.replace('s', '') || 0), 0);
+      setTotalRemainingTime(currentTotal);
+      onTimeUpdate?.(currentTotal);
+    };
+
+    document.addEventListener('countdownupdate', updateTotalTime);
+    updateTotalTime();
+
+    return () => {
+      document.removeEventListener('countdownupdate', updateTotalTime);
+    };
+  }, [steps, onTimeUpdate]);
+
   const mainStep = steps[0];
   const remainingSteps = steps.slice(1);
 
+  //console.log("Total time across all steps:", totalRemainingTime, "seconds");
+
   return (
     <div className="grid grid-cols-5 gap-4 w-full">
+      
       {/* Main step */}
       <div className="col-span-1">
         <h3 className="text-sm font-medium text-gray-700 mb-2">1. Preparing</h3>
@@ -81,11 +106,18 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ duration, label, progress, 
           return prev - 1;
         });
       }, 1000);
-    }
 
-    return () => {
-      if (timer) clearInterval(timer);
-    };
+      // Force an immediate DOM update after countdown changes
+      const forceUpdate = setTimeout(() => {
+        const event = new Event('countdownupdate');
+        document.dispatchEvent(event);
+      }, 0);
+
+      return () => {
+        if (timer) clearInterval(timer);
+        clearTimeout(forceUpdate);
+      };
+    }
   }, [isActive, countdown]);
 
   return (
@@ -104,7 +136,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ duration, label, progress, 
         ) : showHangTight ? (
           <>Hang tight... {isActive && <LoaderIcon className="h-4 w-4 animate-spin" />}</>
         ) : (
-          <>{countdown}s {isActive && <LoaderIcon className="h-4 w-4 animate-spin" />}</>
+          <span data-countdown>{countdown}s {isActive && <LoaderIcon className="h-4 w-4 animate-spin" />}</span>
         )}
       </span>
       <span className="text-xs text-gray-600 border-b border-gray-200 my-2 -mx-4"/>

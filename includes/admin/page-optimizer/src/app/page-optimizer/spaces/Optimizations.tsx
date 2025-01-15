@@ -75,6 +75,7 @@ const Optimizations = ({ }) => {
     const [serverInfoProgress, setServerInfoProgress] = useState(0);
     const [diagnosticsProgress, setDiagnosticsProgress] = useState(0);
     const { headerUrl, diagnosticLoading } = useCommonDispatch();
+    const [remainingTime, setRemainingTime] = useState(0);
 
     useEffect(() => {
         console.log('diagnosticLoading', diagnosticLoading)
@@ -121,9 +122,9 @@ const Optimizations = ({ }) => {
         { duration: '10s', label: 'Page Diagnostics', progress: diagnosticsProgress },
     ];
 
-    const [remainingTime, setRemainingTime] = useState(
-        progressSteps.reduce((total, step) => total + parseInt(step.duration), 0)
-    );
+    const handleRemainingTimeUpdate = (time: number) => {
+        setRemainingTime(time);
+    };
 
     useEffect(() => {
        // console.log("diagnosticResults Available in app state", diagnosticResults)
@@ -133,19 +134,19 @@ const Optimizations = ({ }) => {
         }
     }, [object])
 
-    useEffect(() => {
-        if (diagnosticsLoading) {
-            const timer = setInterval(() => {
-                setRemainingTime(prev => Math.max(0, prev - 1));
-            }, 1000);
+    // useEffect(() => {
+    //     if (diagnosticsLoading) {
+    //         const timer = setInterval(() => {
+    //             setRemainingTime(prev => Math.max(0, prev - 1));
+    //         }, 1000);
 
-            return () => clearInterval(timer);
-        } else {
-            setRemainingTime(progressSteps.reduce((total, step) => 
-                total + parseInt(step.duration), 0
-            ));
-        }
-    }, [diagnosticsLoading]);
+    //         return () => clearInterval(timer);
+    //     } else {
+    //         setRemainingTime(progressSteps.reduce((total, step) => 
+    //             total + parseInt(step.duration), 0
+    //         ));
+    //     }
+    // }, [diagnosticsLoading]);
 
     const doAnalysis = useCallback(async (diagnostics: any) => {
         setLoadingText('Collecting active plugins...')
@@ -493,7 +494,7 @@ const Optimizations = ({ }) => {
         }
     };
 
-
+    
     return (
         <AnimatePresence>
             <m.div
@@ -502,6 +503,7 @@ const Optimizations = ({ }) => {
                 transition={{ duration: 0.2, delay: 0.05 }}
                 className='bg-[#F0F0F1] dark:bg-brand-800'
             >
+                
                 <div className='px-6 py-6 bg-white rounded-3xl'>
                 <div className="flex gap-4 w-full items-start">
                     {/* Logo Column */}
@@ -559,8 +561,8 @@ const Optimizations = ({ }) => {
                     </div>
                     }
                 </div>
-
                     
+                    {/* diagnosticsLoading */}
                     {diagnosticsLoading && (
                     <m.div
                         initial={{ y: 20, opacity: 0 }}
@@ -578,8 +580,9 @@ const Optimizations = ({ }) => {
                     <div className="flex flex-col gap-4">
                         <ProgressTracker 
                             steps={progressSteps} 
-                            currentStep={currentStep ?? undefined} 
-                            />
+                            currentStep={currentStep ?? undefined}
+                            onTimeUpdate={handleRemainingTimeUpdate}
+                        />
                         </div>
                     </m.div>
                     )}
