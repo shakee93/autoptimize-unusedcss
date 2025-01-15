@@ -363,8 +363,10 @@ class RapidLoad_Optimizer
                     $response[$type] = [
                         'status' => isset($job_data_uucss->id) ? $job_data_uucss->status : 'queued',
                         'error' => isset($job_data_uucss->id) && isset($job_data_uucss->error) ? unserialize($job_data_uucss->error) : null,
-                        'warnings' => isset($job_data_uucss->id) && isset($job_data_uucss->warnings) ? unserialize($job_data_uucss->warnings) : null,
-                        'stats' => isset($job_data_uucss->id) && isset($job_data_uucss->stats) ? unserialize($job_data_uucss->stats) : null
+                        'meta' => [
+                            'warnings' => isset($job_data_uucss->id) && isset($job_data_uucss->warnings) ? unserialize($job_data_uucss->warnings) : null,
+                            'stats' => isset($job_data_uucss->id) && isset($job_data_uucss->stats) ? unserialize($job_data_uucss->stats) : null
+                        ]
                     ];
                     break;
                 }
@@ -373,8 +375,10 @@ class RapidLoad_Optimizer
                     $response[$type] = [
                         'status' => isset($job_data_cpcss->id) ? $job_data_cpcss->status : 'queued',
                         'error' => isset($job_data_cpcss->id) && isset($job_data_cpcss->error) ? unserialize($job_data_cpcss->error) : null,
-                        'warnings' => isset($job_data_cpcss->id) && isset($job_data_cpcss->warnings) ? unserialize($job_data_cpcss->warnings) : null,
-                        'stats' => isset($job_data_cpcss->id) && isset($job_data_cpcss->stats) ? unserialize($job_data_cpcss->stats) : null
+                        'meta' => [
+                            'warnings' => isset($job_data_cpcss->id) && isset($job_data_cpcss->warnings) ? unserialize($job_data_cpcss->warnings) : null,
+                            'stats' => isset($job_data_cpcss->id) && isset($job_data_cpcss->stats) ? unserialize($job_data_cpcss->stats) : null
+                        ]   
                     ];
                     break;
                 }
@@ -387,12 +391,14 @@ class RapidLoad_Optimizer
 
                     $response[$type] = [
                         'status' => $cache_file_exist ? 'Hit' : ($status == 'Hit' ? $status : 'failed'),
-                        'file' => $cache_file,
-                        'size' => $cache_file_exist ? $this->formatSize(@filesize($cache_file)) : null,
                         'error' => [
                             'code' => $cache_file_exist ? null : 422,
                             'message' => $cache_file_exist ? 'Hit' : $status,
                         ],
+                        'meta' => [
+                            'file' => $cache_file,
+                            'size' => $cache_file_exist ? $this->formatSize(@filesize($cache_file)) : null,
+                        ]
                     ];
                     break;
                 }
