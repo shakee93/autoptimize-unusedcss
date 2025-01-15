@@ -16,8 +16,7 @@ class ApiService {
 
         this.options = options
 
-        this.aiBaseURL = new URL('https://ai.rapidload.io/api');
-        // this.aiBaseURL = new URL('http://localhost:3000/api');
+        this.aiBaseURL = new URL(options?.ai_root || 'https://ai.rapidload.io/api');
 
         let base = options?.ajax_url
             ? options.ajax_url
@@ -72,7 +71,7 @@ class ApiService {
     private setSearchParams(params: Record<string, string>) {
         // Clear all existing params
         this.baseURL.search = '';
-        
+
         // Add new params
         Object.entries(params).forEach(([key, value]) => {
             this.baseURL.searchParams.append(key, value);
@@ -80,13 +79,13 @@ class ApiService {
     }
 
     async fetchPageSpeed(url: string, activeReport: string, reload: boolean): Promise<any> {
-        
+
         try {
             let fresh = reload
             let data = null
-            
+
             if (reload) {
-                
+
                 data = await this.analyzeViaAPI(url, activeReport);
 
                 if (data?.errors) {
@@ -113,7 +112,7 @@ class ApiService {
             //console.log("this.baseURL: ", this.baseURL)
             const query = new URLSearchParams();
 
-             // Clear existing search params before adding new ones
+            // Clear existing search params before adding new ones
             this.baseURL.searchParams.delete('action');
             this.baseURL.searchParams.delete('url');
             this.baseURL.searchParams.delete('strategy');
@@ -158,12 +157,12 @@ class ApiService {
         }
     }
 
-   
+
 
     async fetchSettings(url: string, activeReport: string, reload: boolean): Promise<any> {
 
         try {
-            
+
             let fresh = reload
             let data = null
 
@@ -205,9 +204,9 @@ class ApiService {
     }
 
     async analyzeViaAPI(url: string, strategy: string) {
-       
+
         try {
-            
+
             const state = store.getState()
             const data = state.app.report[state.app.activeReport]
             const settings = state.app.settings.performance[state.app.activeReport]
@@ -242,7 +241,7 @@ class ApiService {
                         || []
                 })
             });
-           
+
             // TO TEST: remove return sampleData and comment above fetch
             return await pageSpeed.json()
 
