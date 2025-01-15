@@ -130,15 +130,15 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ duration, label, progress, 
           style={{ width: `${progress}%` }}
         />
       </div>
-      <span className="text-xs text-gray-600 mt-2 flex gap-1 items-center">
+      <div className="text-xs text-gray-600 mt-2 flex gap-1 items-center ">
         {progress === 100 ? (
           <>Completed <CheckIcon className="h-4 w-4 text-brand-950" /></>
         ) : showHangTight ? (
           <>Hang tight... {isActive && <LoaderIcon className="h-4 w-4 animate-spin" />}</>
         ) : (
-          <span data-countdown>{countdown}s {isActive && <LoaderIcon className="h-4 w-4 animate-spin" />}</span>
+          <span className='flex gap-1' data-countdown>{countdown}s {isActive && <LoaderIcon className="h-4 w-4 animate-spin" />}</span>
         )}
-      </span>
+      </div>
       <span className="text-xs text-gray-600 border-b border-gray-200 my-2 -mx-4"/>
       <span className="text-sm font-semibold text-gray-800">{label}</span>
     </div>
