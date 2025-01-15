@@ -12,9 +12,9 @@
       window.rapidload_optimizer = {
         page_optimizer_package_base: window.location.origin,
         rapidload_version: '2.2.26',
-        optimizer_url : 'https://staging.rapidload.io/',
-        ajax_url : 'http://rapidload.local/wp-admin/admin-ajax.php',
-        api_root: 'https://api.rapidload.io/api/v1'.includes('VITE') ? 'https://api.rapidload.io/api/v1' : 'https://api.rapidload.io/api/v1'
+        optimizer_url : 'https://rapidload.local/',
+        ajax_url : 'https://rapidload.local/wp-admin/admin-ajax.php',
+        api_root: 'http://localhost:5556/api/v1'.includes('VITE') ? 'https://api.rapidload.io/api/v1' : 'http://localhost:5556/api/v1'
       };
 
 
@@ -121,7 +121,7 @@
     
     <script>
 (function(){
-var preloads = [{"parentTagName":"head","tagName":"link","attrs":{"rel":"manifest","href":"/manifest.webmanifest"}},{"parentTagName":"head","tagName":"script","attrs":{"type":"module","crossorigin":"","src":"/assets/index.5hXsLgVC.js"}},{"parentTagName":"head","tagName":"link","attrs":{"rel":"modulepreload","crossorigin":"","href":"/assets/core-vendor.V80Ff32-.js"}},{"parentTagName":"head","tagName":"link","attrs":{"rel":"modulepreload","crossorigin":"","href":"/assets/vendor.T3CYoFTJ.js"}},{"parentTagName":"head","tagName":"link","attrs":{"rel":"modulepreload","crossorigin":"","href":"/assets/animations.CVpoelRy.js"}},{"parentTagName":"head","tagName":"link","attrs":{"rel":"stylesheet","crossorigin":"","href":"/assets/index.BXhnlBeK.css"}}];
+var preloads = [{"parentTagName":"head","tagName":"link","attrs":{"rel":"manifest","href":"/manifest.webmanifest"}},{"parentTagName":"head","tagName":"script","attrs":{"type":"module","crossorigin":"","src":"/assets/index.DYefR2lg.js"}},{"parentTagName":"head","tagName":"link","attrs":{"rel":"modulepreload","crossorigin":"","href":"/assets/core-vendor.V80Ff32-.js"}},{"parentTagName":"head","tagName":"link","attrs":{"rel":"modulepreload","crossorigin":"","href":"/assets/vendor.BX0_ezNS.js"}},{"parentTagName":"head","tagName":"link","attrs":{"rel":"modulepreload","crossorigin":"","href":"/assets/animations.F1FEklSB.js"}},{"parentTagName":"head","tagName":"link","attrs":{"rel":"stylesheet","crossorigin":"","href":"/assets/index.akIzYW5A.css"}}];
 function setAttribute(target, attrs) {
 for (var key in attrs) {
   target.setAttribute(key, attrs[key]);
@@ -171,6 +171,6 @@ document.getElementsByTagName(item.parentTagName)[0].appendChild(childNode);
         });
       }
 
-    </script>
+    </script>
   </body>
 </html>

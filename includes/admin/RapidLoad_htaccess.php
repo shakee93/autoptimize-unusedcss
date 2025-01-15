@@ -307,12 +307,14 @@ HTACCESS;
 
         if ( ! $is_apache ) {
             return [
-                'apache' => false,
-                'has_rapidload_rules' => false,
                 'status' => 'failed',
                 'error' => [
                     'code' => 422,
                     'message' => 'Server not support'
+                ],
+                'meta' => [
+                    'apache' => false,
+                    'has_rapidload_rules' => false,
                 ]
             ];
         }
@@ -323,12 +325,14 @@ HTACCESS;
 
         if(!$file_system->is_readable($htaccess_file)){
             return [
-                'server' => 'apache',
-                'has_rapidload_rules' => false,
                 'status' => 'failed',
                 'error' => [
                     'code' => 422,
                     'message' => 'File cannot access'
+                ],
+                'meta' => [
+                    'server' => 'apache',
+                    'has_rapidload_rules' => false,
                 ]
             ];
         }
@@ -337,12 +341,14 @@ HTACCESS;
 
         if ( false === $htaccess_content ) {
             return [
-                'server' => 'apache',
-                'has_rapidload_rules' => false,
                 'status' => 'failed',
                 'error' => [
                     'code' => 422,
                     'message' => 'File content empty'
+                ],
+                'meta' => [
+                    'server' => 'apache',
+                    'has_rapidload_rules' => false,
                 ]
             ];
         }
@@ -350,13 +356,15 @@ HTACCESS;
         $has_rapidload_rules = (strpos($htaccess_content, '# BEGIN RapidLoad') !== false && strpos($htaccess_content, '# END RapidLoad') !== false);
 
         return [
-            'server' => 'apache',
-            'has_rapidload_rules' => $has_rapidload_rules,
             'status' => $has_rapidload_rules ? 'success' : 'failed',
             'error' => [
                 'code' => null,
                 'message' => null
-            ]
+            ],
+            'meta' => [
+                'server' => 'apache',
+                'has_rapidload_rules' => $has_rapidload_rules,
+            ]   
         ];
     }
 

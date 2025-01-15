@@ -368,7 +368,7 @@ class RapidLoad_Enqueue {
             isset( $this->options['uucss_disable_add_to_queue'] ) && $this->options['uucss_disable_add_to_queue'] != "1";
 
 
-        if(!isset(RapidLoad_Enqueue::$job->id)){
+        if(!isset(RapidLoad_Enqueue::$job->id) && $front_end_enabled['add_queue_enabled']){
 
             RapidLoad_Enqueue::$job->save();
 

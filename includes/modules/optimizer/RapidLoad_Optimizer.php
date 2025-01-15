@@ -363,8 +363,10 @@ class RapidLoad_Optimizer
                     $response[$type] = [
                         'status' => isset($job_data_uucss->id) ? $job_data_uucss->status : 'queued',
                         'error' => isset($job_data_uucss->id) && isset($job_data_uucss->error) ? unserialize($job_data_uucss->error) : null,
-                        'warnings' => isset($job_data_uucss->id) && isset($job_data_uucss->warnings) ? unserialize($job_data_uucss->warnings) : null,
-                        'stats' => isset($job_data_uucss->id) && isset($job_data_uucss->stats) ? unserialize($job_data_uucss->stats) : null
+                        'meta' => [
+                            'warnings' => isset($job_data_uucss->id) && isset($job_data_uucss->warnings) ? unserialize($job_data_uucss->warnings) : null,
+                            'stats' => isset($job_data_uucss->id) && isset($job_data_uucss->stats) ? unserialize($job_data_uucss->stats) : null
+                        ]
                     ];
                     break;
                 }
@@ -373,8 +375,10 @@ class RapidLoad_Optimizer
                     $response[$type] = [
                         'status' => isset($job_data_cpcss->id) ? $job_data_cpcss->status : 'queued',
                         'error' => isset($job_data_cpcss->id) && isset($job_data_cpcss->error) ? unserialize($job_data_cpcss->error) : null,
-                        'warnings' => isset($job_data_cpcss->id) && isset($job_data_cpcss->warnings) ? unserialize($job_data_cpcss->warnings) : null,
-                        'stats' => isset($job_data_cpcss->id) && isset($job_data_cpcss->stats) ? unserialize($job_data_cpcss->stats) : null
+                        'meta' => [
+                            'warnings' => isset($job_data_cpcss->id) && isset($job_data_cpcss->warnings) ? unserialize($job_data_cpcss->warnings) : null,
+                            'stats' => isset($job_data_cpcss->id) && isset($job_data_cpcss->stats) ? unserialize($job_data_cpcss->stats) : null
+                        ]   
                     ];
                     break;
                 }
@@ -387,12 +391,14 @@ class RapidLoad_Optimizer
 
                     $response[$type] = [
                         'status' => $cache_file_exist ? 'Hit' : ($status == 'Hit' ? $status : 'failed'),
-                        'file' => $cache_file,
-                        'size' => $cache_file_exist ? $this->formatSize(@filesize($cache_file)) : null,
                         'error' => [
                             'code' => $cache_file_exist ? null : 422,
                             'message' => $cache_file_exist ? 'Hit' : $status,
                         ],
+                        'meta' => [
+                            'file' => $cache_file,
+                            'size' => $cache_file_exist ? $this->formatSize(@filesize($cache_file)) : null,
+                        ]
                     ];
                     break;
                 }
@@ -1121,7 +1127,7 @@ class RapidLoad_Optimizer
                 ]
             ),
             'uucss_exclude_files_from_delay_js' => array(
-                'control_type' => 'tab',
+                'control_type' => 'textarea',
                 'control_label' => 'Exclude Javascript from Delaying',
                 'control_description' => 'These JS files will be excluded from delaying.',
                 'default' => '',
@@ -1132,6 +1138,18 @@ class RapidLoad_Optimizer
                     ]
                 ]
             ),
+            /*'uucss_exclude_files_from_delay_js' => array(
+                'control_type' => 'tab',
+                'control_label' => 'Exclude Javascript from Delaying',
+                'control_description' => 'These JS files will be excluded from delaying.',
+                'default' => '',
+                'control_visibility' => [
+                    [
+                        'key' => 'rapidload_js_delay_method',
+                        'value' => 'All Files',
+                    ]
+                ]
+            ),*/
             'delay_javascript_callback' => array(
                 'control_type' => 'textarea',
                 'control_label' => 'Callback Script',
@@ -1385,10 +1403,12 @@ class RapidLoad_Optimizer
                 $input['key'] = $key;
                 if($input['key'] == "uucss_exclude_files_from_delay_js"){
                     $input['control_values'] = JavaScript::get_dynamic_exclusion_list();
+                    $input['value'] = "";
                     if(isset($options['uucss_dynamic_js_exclusion_list']) && !empty($options['uucss_dynamic_js_exclusion_list'])){
-                        $input['value'] = explode("\n", $options['uucss_dynamic_js_exclusion_list']);
-                    }else{
-                        $input['value'] = [];
+                        $input['value'] = $options['uucss_dynamic_js_exclusion_list'];
+                    }
+                    if(isset($options['uucss_exclude_files_from_delay_js']) && !empty($options['uucss_exclude_files_from_delay_js'])){
+                        $input['value'] = (!empty($input['value'])) ? trim($input['value']) . "," . $options['uucss_exclude_files_from_delay_js'] : $options['uucss_exclude_files_from_delay_js'];
                     }
                 }else if($input['key'] == "uucss_load_js_method" && isset($options[$input['key']])){
                     $input['value'] = $options[$input['key']] == "defer" || $options[$input['key']] == "1";
@@ -1481,7 +1501,7 @@ class RapidLoad_Optimizer
             ['keys' => ['lcp-lazy-loaded'], 'name' => 'Exclude Above-the-fold Images from Lazy Load', 'description' => 'Improve your LCP images.', 'category' => 'image', 'inputs' => ['uucss_exclude_above_the_fold_images', 'uucss_exclude_above_the_fold_image_count']],
             ['keys' => ['server-response-time'], 'name' => 'Disable WP-Emojis', 'description' => 'Prevents WordPress from displaying emojis, smiley faces and other icons', 'category' => 'cache', 'inputs' => ['uucss_disable_wp_emoji']],
             ['keys' => ['server-response-time'], 'name' => 'Preload Links', 'description' => 'Intelligent preload and pre-render pages to faster page load times.', 'category' => 'cache', 'inputs' => ['preload_internal_links']],
-            ['keys' => ['bootup-time', 'unused-javascript'], 'name' => 'Delay Javascript', 'description' => 'Loading JS files on user interaction', 'category' => 'javascript', 'inputs' => ['delay_javascript', 'rapidload_js_delay_method', 'uucss_exclude_files_from_delay_js', 'delay_javascript_callback', 'uucss_excluded_js_files','uucss_load_scripts_on_user_interaction']],
+            ['keys' => ['bootup-time', 'unused-javascript'], 'name' => 'Delay Javascript', 'description' => 'Loading JS files on user interaction', 'category' => 'javascript', 'inputs' => ['delay_javascript', 'rapidload_js_delay_method', 'uucss_exclude_files_from_delay_js', 'uucss_excluded_js_files', 'uucss_load_scripts_on_user_interaction']],
             ['keys' => ['server-response-time'], 'name' => 'Page Cache', 'description' => 'Optimize and cache static HTML pages to provide a snappier page experience.', 'category' => 'cache', 'inputs' => ['uucss_enable_cache','cache_expires','cache_expiry_time','mobile_cache','excluded_page_paths']],
             ['keys' => ['third-party-facades'], 'name' => 'Lazy Load Iframes', 'description' => 'Delay loading of iframes until needed.', 'category' => 'image', 'inputs' => ['uucss_lazy_load_iframes', 'uucss_exclude_iframes_from_lazy_load']],
             ['keys' => ['uses-long-cache-ttl'], 'name' => 'RapidLoad CDN', 'description' => 'Load resource files faster by using 112 edge locations with only 27ms latency.', 'category' => 'cdn', 'inputs' => ['uucss_enable_cdn','uucss_cdn_url', 'validate_cdn_url', 'clear_cdn_cache']],

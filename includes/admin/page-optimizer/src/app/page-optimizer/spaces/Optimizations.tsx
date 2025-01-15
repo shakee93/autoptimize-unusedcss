@@ -24,6 +24,7 @@ import { AnalysisResults } from '../../../components/analysis-results';
 import { setCommonState } from "../../../store/common/commonActions";
 
 const DiagnosticSchema = z.object({
+    AnalysisTitle: z.string(),
     AnalysisSummary: z.string(),
     PluginConflicts: z.array(
         z.object({
@@ -50,7 +51,7 @@ const DiagnosticSchema = z.object({
                 type: z.enum(['javascript', 'css', 'image', 'html', 'other']),
                 relatedAudit: z.string().optional().describe('Related audit from PageSpeed Insights.'),
                 reason: z.string().optional().describe('Reason why this resource is related to the issue.'),
-            })),
+            })).optional(),
             pagespeed_insight_audits: z.array(z.string()),
             pagespeed_insight_metrics: z.array(z.string()),
             anyAdditionalTips: z.array(z.string()).optional().describe('Any additional tips to fix the issue.'),
@@ -60,7 +61,7 @@ const DiagnosticSchema = z.object({
 
 // TODO: create an env variable for this
 // const AIBaseURL = "http://localhost:3000/api"
-const AIBaseURL = "https://ai.rapidload.io/api"
+const AIBaseURL = window.rapidload_optimizer.ai_root || "https://ai.rapidload.io/api"
 
 const Optimizations = ({ }) => {
     const { settings, data, activeReport, diagnosticResults } = useSelector(optimizerData);
@@ -83,13 +84,13 @@ const Optimizations = ({ }) => {
 
     const relatedAudits = useMemo(() => {
         if (!data?.grouped) return [];
-        
+
         return [
             ...(data.grouped as Record<AuditTypes, Audit[] | undefined>)["opportunities"] || [],
             ...(data.grouped as Record<AuditTypes, Audit[] | undefined>)["diagnostics"] || []
         ];
     }, [data?.grouped]);
-    
+
 
     const { object, submit, isLoading, error } = useObject({
         api: `${AIBaseURL}/diagnosis`,
@@ -127,9 +128,9 @@ const Optimizations = ({ }) => {
     };
 
     useEffect(() => {
-       // console.log("diagnosticResults Available in app state", diagnosticResults)
+        // console.log("diagnosticResults Available in app state", diagnosticResults)
 
-        if(object?.AnalysisSummary && object.AnalysisSummary.length) {
+        if (object?.AnalysisSummary && object.AnalysisSummary.length) {
             dispatch(setDiagnosticResults(object as DiagnosticResults));
         }
     }, [object])
@@ -155,7 +156,7 @@ const Optimizations = ({ }) => {
 
 
         const _diagnostics = Object.entries(diagnostics).map(([key, value]) => value)
-       // console.log(_diagnostics)
+        // console.log(_diagnostics)
 
         const input = {
             settings: settings.map((s: any) => ({
@@ -188,16 +189,20 @@ const Optimizations = ({ }) => {
                     settings: d.settings.map((s: any) => s.name),
                 })),
             },
-            // diagnostics: Object.entries(diagnostics).map(([key, value]) => value),
+            real_user_diagnostics: Object.entries(diagnostics).map(([key, value]) => value),
+            server_diagnostics: settings.map((s: any) => ({
+                status: s.status,
+                name: s.name,
+            })).filter((s: any) => s.status),
         }
 
         setLoadingText('Hermes AI is analyzing your page...')
-        
+
 
         try {
 
-          //  console.log(input)
-            submit(input)
+            console.log(input)
+            // submit(input)
             setDiagnosticsProgress(95);
 
         } catch (error: any) {
@@ -220,37 +225,12 @@ const Optimizations = ({ }) => {
     useEffect(() => {
         const handleMessage = (event: MessageEvent) => {
             if (event.data.type === "RAPIDLOAD_CHECK_RESULTS") {
-               // console.log("Received data from iframe:", event.data);
+                // console.log("Received data from iframe:", event.data);
 
                 setLoadingText('Collected data from your page...')
-                // Compare received data with settings
-                const receivedData = event.data.data;
-                const matches: any[] = [];
 
-                settings.forEach((setting: AuditSetting) => {
-                    const mainInput = setting.inputs[0];
-                    if (!mainInput) return;
-                    Object.entries(receivedData).forEach(([category, data]: [string, any]) => {
-                        if (data.key === mainInput.key) {
-                            matches.push({
-                                key: category,
-                                optimizerSettings: {
-                                    settingName: setting.name,
-                                    settingKey: mainInput.key,
-                                    settingValue: mainInput.value,
-                                    status: setting.status,
-                                },
-                                receivedData: {
-                                    key: data.key,
-                                    status: data.status,
-                                    nonOptimizedItems: data.non_optimized_css || data.non_minified_css || data.non_minified_js || data.non_deferred_js || data.non_delayed_js
-                                }
-                            });
-                        }
-                    });
-                });
 
-              //  console.log(event.data.data)
+                console.log(event.data.data)
                 doAnalysis(event.data.data)
             }
         };
@@ -262,28 +242,13 @@ const Optimizations = ({ }) => {
         };
     }, [settings]);
 
-    const getFilteredSettings = (settings: any) => {
-        return settings.filter((setting: any) => setting.inputs.some((input: any) => input.value === true));
-    };
-
-    const renderOptimizationStep = useCallback((step: string, index: number) => (
-        <div key={index} className="flex items-start gap-2 py-1 relative">
-            <div className=" bg-gray-100 rounded-full flex items-center justify-center p-1">
-                <LoaderIcon className="h-4 w-4 text-gray-600 animate-spin" />
-            </div>
-            <CheckCircleIcon className="h-6 w-6 text-green-600" />
-            <span className={`text-sm transition-colors text-gray-900`}>{step.name}</span>
-        </div>
-    ), []);
-
-
     const startDiagnostics = async () => {
-        
+
         let progressInterval: NodeJS.Timeout | undefined = undefined;
 
         try {
             setDiagnosticsProgress(25);
-            
+
             // progressInterval = setInterval(() => {
             //     setDiagnosticsProgress(prev => Math.min(prev + 10, 90));
             // }, 1000);
@@ -300,20 +265,20 @@ const Optimizations = ({ }) => {
                 // setDiagnosticsLoading(true)
                 setShowIframe(true)
             }
-            
+
             // Clear interval when AI analysis is complete
             setDiagnosticsProgress(50);
-           // return () => clearInterval(progressInterval);
-           
+            // return () => clearInterval(progressInterval);
+
         } catch (error) {
             setDiagnosticsProgress(0);
-           // console.error('❌ Diagnostics failed:', error);
+            // console.error('❌ Diagnostics failed:', error);
             toast({
                 title: "Diagnostics Failed",
                 description: error?.message || "Failed to run diagnostics",
                 variant: "destructive",
             });
-        } 
+        }
         //  finally {
         //     if ( diagnosticsProgress > 94) {
         //         clearInterval(progressInterval);
@@ -322,7 +287,7 @@ const Optimizations = ({ }) => {
     };
 
 
-    const preloadPage = async (previewUrl: string)=> {
+    const preloadPage = async (previewUrl: string) => {
         const USER_AGENTS = {
             mobile: 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.133 Mobile Safari/537.36',
             desktop: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
@@ -331,7 +296,7 @@ const Optimizations = ({ }) => {
         const api = new ApiService(options);
 
         if (compareVersions(options?.rapidload_version, '2.2.11') > 0) {
-         //   console.log('Preloading page with URL:', previewUrl);
+            //   console.log('Preloading page with URL:', previewUrl);
             await api.post(`preload_page`, {
                 url: previewUrl,
                 user_agent: activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
@@ -350,12 +315,12 @@ const Optimizations = ({ }) => {
     };
 
     const handleFlushCache = async () => {
-       
+
         setCurrentStep(0);
         setIsFlushingProgress(0);
         const api = new ApiService(options);
         const previewUrl = optimizerUrl + '?rapidload_preview'
-        
+
         try {
             // Clear page cache - 40% of progress
             setIsFlushingProgress(10);
@@ -382,10 +347,10 @@ const Optimizations = ({ }) => {
                 variant: "destructive",
             });
         } finally {
-           // console.log('Cache flush complete');
+            // console.log('Cache flush complete');
             setCurrentStep(1);
             runParallelSteps();
-           // handleFetchSettings();
+            // handleFetchSettings();
         }
     };
 
@@ -395,14 +360,14 @@ const Optimizations = ({ }) => {
         setServerInfoProgress(0);
         setPageSpeedProgress(0);
         setDiagnosticsProgress(0);
-       // dispatch(setDiagnosticResults(null));
+        // dispatch(setDiagnosticResults(null));
     }
 
 
     const runParallelSteps = async () => {
         try {
             setCurrentStep(1); // Start all steps simultaneously
-            
+
             await Promise.all([
                 // Fetch Settings
                 (async () => {
@@ -411,15 +376,15 @@ const Optimizations = ({ }) => {
                         const progressInterval = setInterval(() => {
                             setSettingsProgress(prev => Math.min(prev + 15, 90));
                         }, 500);
-                        
+
                         await dispatch(fetchSettings(options, headerUrl ? headerUrl : options.optimizer_url, true));
-                        
+
                         clearInterval(progressInterval);
                         setSettingsProgress(100);
-                        
-                      //  console.log('✅ Settings fetch completed');
+
+                        //  console.log('✅ Settings fetch completed');
                     } catch (error) {
-                       // console.error('❌ Settings fetch failed:', error);
+                        // console.error('❌ Settings fetch failed:', error);
                         throw error;
                     }
                 })(),
@@ -434,13 +399,13 @@ const Optimizations = ({ }) => {
 
                         const api = new ApiService(options);
                         await api.post('titan_checklist_cron');
-                        
+
                         clearInterval(progressInterval);
                         setServerInfoProgress(100);
-                        
-                       // console.log('✅ Server info check completed');
+
+                        // console.log('✅ Server info check completed');
                     } catch (error) {
-                       // console.error('❌ Server info check failed:', error);
+                        // console.error('❌ Server info check failed:', error);
                         throw error;
                     }
                 })(),
@@ -450,19 +415,19 @@ const Optimizations = ({ }) => {
                     try {
                         dispatch(setCommonState('diagnosticLoading', true));
                         setPageSpeedProgress(25);
-                        
+
                         const progressInterval = setInterval(() => {
                             setPageSpeedProgress(prev => Math.min(prev + 5, 90));
                         }, 2000);
 
-                        await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
-                        
+                        // await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
+
                         clearInterval(progressInterval);
                         setPageSpeedProgress(100);
-                        
-                       // console.log('✅ PageSpeed fetch completed');
+
+                        // console.log('✅ PageSpeed fetch completed');
                     } catch (error) {
-                       // console.error('❌ PageSpeed fetch failed:', error);
+                        // console.error('❌ PageSpeed fetch failed:', error);
                         throw error;
                     } finally {
                         dispatch(setCommonState('diagnosticLoading', false));
@@ -479,10 +444,10 @@ const Optimizations = ({ }) => {
 
             // // Move to diagnostics step
 
-            setTimeout(async() => {
-                setCurrentStep(4); 
+            setTimeout(async () => {
+                setCurrentStep(4);
                 startDiagnostics();
-                
+
             }, 1000);
 
         } catch (error: any) {
@@ -505,40 +470,40 @@ const Optimizations = ({ }) => {
             >
                 
                 <div className='px-6 py-6 bg-white rounded-3xl'>
-                <div className="flex gap-4 w-full items-start">
-                    {/* Logo Column */}
-                    <div className="flex justify-start items-center gap-2 w-10">
-                        <AnimatedLogo size="lg" isPlaying={diagnosticsLoading} />
-                    </div>
+                    <div className="flex gap-4 w-full items-start">
+                        {/* Logo Column */}
+                        <div className="flex justify-start items-center gap-2 w-10">
+                            <AnimatedLogo size="lg" isPlaying={diagnosticsLoading} />
+                        </div>
 
-                    {/* Content Column */}
-                    <div className="flex flex-col gap-1 flex-grow">
-                        <span className="text-base font-normal text-zinc-900 dark:text-zinc-100">
-                        {diagnosticsLoading ? (
-                            <>
-                            {currentStep === 0 && "Clearing all cached data to ensure fresh analysis..."}
-                            {currentStep === 1 && "Gathering current optimization settings..."}
-                            {currentStep === 2 && "Analyzing server configuration and performance..."}
-                            {currentStep === 3 && "Running comprehensive PageSpeed diagnostics..."}
-                            {currentStep === 4 && (loadingText ? loadingText : "Processing data through AI for insights...")}
-                            </>
-                            ) : (
-                                "Do you need any AI assistance?"
-                            )}
-                        </span>
-                        <span className="font-normal text-sm text-zinc-600 dark:text-brand-300 max-w-[600px]">
-                            {diagnosticsLoading ? (
-                                remainingTime === 0 ? 
-                                    "It's taking a bit longer than expected, hang tight..." :
-                                    `Looks like I'll need to wait ${remainingTime}s more...`
-                            ) : (
-                                object?.AnalysisSummary ? 
-                                    object.AnalysisSummary : 
-                                    "Let's check if your optimizations are working properly. Things might not update right away due to caching or conflicts. We should test everything to make sure it's running well."
-                            )}
-                        
-                        </span>
-                    </div>
+                        {/* Content Column */}
+                        <div className="flex flex-col gap-1 flex-grow">
+                            <span className="text-base font-normal text-zinc-900 dark:text-zinc-100">
+                                {diagnosticsLoading ? (
+                                    <>
+                                        {currentStep === 0 && "Clearing all cached data to ensure fresh analysis..."}
+                                        {currentStep === 1 && "Gathering current optimization settings..."}
+                                        {currentStep === 2 && "Analyzing server configuration and performance..."}
+                                        {currentStep === 3 && "Running comprehensive PageSpeed diagnostics..."}
+                                        {currentStep === 4 && (loadingText ? loadingText : "Processing data through AI for insights...")}
+                                    </>
+                                ) : (
+                                    "Do you need any AI assistance?"
+                                )}
+                            </span>
+                            <span className="font-normal text-sm text-zinc-600 dark:text-brand-300 max-w-[600px]">
+                                {diagnosticsLoading ? (
+                                    remainingTime === 0 ?
+                                        "It's taking a bit longer than expected, hang tight..." :
+                                        `Looks like I'll need to wait ${remainingTime}s more...`
+                                ) : (
+                                    object?.AnalysisSummary ?
+                                        object.AnalysisSummary :
+                                        "Let's check if your optimizations are working properly. Things might not update right away due to caching or conflicts. We should test everything to make sure it's running well."
+                                )}
+
+                            </span>
+                        </div>
 
                     {/* Button Column */}
                     {!diagnosticsLoading &&
@@ -586,7 +551,7 @@ const Optimizations = ({ }) => {
                         </div>
                     </m.div>
                     )}
-                    
+
                     {/* {object?.AnalysisSummary?.length &&
                         <div className="grid grid-cols-5 gap-4 mb-6">
                             <div className={cn('relative col-span-5 bg-brand-0 rounded-2xl p-10 flex flex-col gap-4 text-center', !object?.CriticalIssues?.length && 'items-center justify-center')}>
@@ -598,7 +563,7 @@ const Optimizations = ({ }) => {
                     } */}
 
 
-                    
+
 
                     {showIframe && (
                         <div
@@ -616,8 +581,8 @@ const Optimizations = ({ }) => {
                                     </button>
                                 </div>
                                 <iframe
-                                    // src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
-                                     src={showIframe ? 'http://rapidload.local/?rapidload_preview': ''} 
+                                    src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
+                                    // src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                 />
@@ -625,7 +590,7 @@ const Optimizations = ({ }) => {
                         </div>
                     )}
                 </div>
-                
+
                 {diagnosticResults?.AnalysisSummary?.length && <AnalysisResults object={diagnosticResults} relatedAudits={relatedAudits} />}
             </m.div>
         </AnimatePresence>
