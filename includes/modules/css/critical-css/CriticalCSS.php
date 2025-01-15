@@ -25,6 +25,7 @@ class CriticalCSS
         $this->file_system = new RapidLoad_FileSystem();
 
         add_action('wp_ajax_cpcss_purge_url', [$this, 'cpcss_purge_url']);
+        add_action('wp_ajax_nopriv_cpcss_purge_url', [$this, 'cpcss_purge_url']);
 
         self::$cpcss_other_plugins = apply_filters('cpcss/other-plugins', []);
 

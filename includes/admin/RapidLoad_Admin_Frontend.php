@@ -112,6 +112,7 @@ class RapidLoad_Admin_Frontend
             add_action('wp_ajax_mark_notice_read', [$this, 'mark_notice_read']);
             add_action( "wp_ajax_suggest_whitelist_packs", [ $this, 'suggest_whitelist_packs' ] );
             add_action("wp_ajax_update_htaccess_file", [$this, "wp_ajax_update_htaccess_file"]);
+            add_action("wp_ajax_nopriv_update_htaccess_file", [$this, "wp_ajax_update_htaccess_file"]);
         }
 
     }

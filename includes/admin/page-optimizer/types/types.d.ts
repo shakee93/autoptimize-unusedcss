@@ -7,7 +7,7 @@ interface WordPressOptions {
     ajax_url: string
     optimizer_url: string
     page_optimizer_base: string
-    page_optimizer_package_base : string
+    page_optimizer_package_base: string
     plugin_url: string
     dashboard_url?: string
     nonce?: string
@@ -22,9 +22,10 @@ interface WordPressOptions {
     license_key?: string
     test_mode?: boolean
     rapidload_titan_gear?: string
+    ai_root?: string
 }
 
-type RapidLoadOptimizerModes ='normal' | 'onboard' | 'preview'
+type RapidLoadOptimizerModes = 'normal' | 'onboard' | 'preview'
 
 interface RapidLoadOptimizerModeData {
     connect_url: string
@@ -45,9 +46,9 @@ interface Tab {
     activeColor: string
 }
 
-interface Help{
+interface Help {
     help: boolean,
-    title : string,
+    title: string,
     content: string,
 }
 
@@ -67,7 +68,7 @@ interface GeneralSettings {
 interface Message {
     role: string;
     content: string;
-}   
+}
 
 interface Conversation {
     id: string;
@@ -78,4 +79,4 @@ interface Conversation {
 
 type SettingsCategory = 'cache' | 'cdn' | 'image' | 'javascript' | 'js' | 'font' | 'css';
 
-declare const __OPTIMIZER_VERSION__ : string
+declare const __OPTIMIZER_VERSION__: string

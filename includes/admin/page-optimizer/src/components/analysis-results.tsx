@@ -10,6 +10,7 @@ import Card from "@/components/ui/card";
 import { InformationCircleIcon, MicrophoneIcon } from "@heroicons/react/24/outline";
 import TooltipText from "./ui/tooltip-text";
 import FileTable from "app/page-optimizer/components/audit/content/table";
+import { Fail } from "app/page-optimizer/components/icons/icon-svg";
 
 interface AnalysisResultsProps {
     object: PartialObject<{
@@ -69,7 +70,11 @@ export const AnalysisResults = ({ object, relatedAudits }: AnalysisResultsProps)
                                     <div className="min-h-[56px] relative flex justify-between w-full py-2 px-4">
                                         <div className="flex gap-3 font-normal items-center text-base">
                                             <div className="flex flex-col justify-around">
-                                                <div className="flex gap-1.5 items-center text-zinc-800 dark:text-zinc-200">
+                                                <div className="flex gap-3.5 items-center text-zinc-800 dark:text-zinc-200">
+                                                    <div
+                                                        className={`inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50`}>
+                                                        <Fail />
+                                                    </div>
                                                     {result?.issue}
                                                     {result?.pagespeed_insight_metrics?.map((metric: string) => (
                                                         <div
@@ -156,31 +161,31 @@ export const AnalysisResults = ({ object, relatedAudits }: AnalysisResultsProps)
                                                         ))}
 
                                                     </ul>
-                                                    
+
                                                     {result?.pagespeed_insight_audits && result?.pagespeed_insight_audits.length > 0 &&
-                                                    <div className="flex flex-col gap-2 mt-4">
-                                                        {/* <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Related Resources:</span> */}
-                                                        <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200 flex gap-2 items-center"> <FileCodeIcon className="w-5 h-5" />Related Resources</p>
-                                                        <p className="text-sm text-left text-brand-700 dark:text-brand-300">{result?.pagespeed_insight_audits?.join(', ')}</p>
-                                                        {/* this part is not returning anything */}
-                                                        {/* <span className="text-sm text-blue-600 dark:text-blue-300"> <a href={result?.resources?.map((r: any) => r.url).join(', ')} target="_blank" rel="noopener noreferrer">{result?.resources?.map((r: any) => r.url).join(', ')}</a> </span>
+                                                        <div className="flex flex-col gap-2 mt-4">
+                                                            {/* <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Related Resources:</span> */}
+                                                            <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200 flex gap-2 items-center"> <FileCodeIcon className="w-5 h-5" />Related Resources</p>
+                                                            <p className="text-sm text-left text-brand-700 dark:text-brand-300">{result?.pagespeed_insight_audits?.join(', ')}</p>
+                                                            {/* this part is not returning anything */}
+                                                            {/* <span className="text-sm text-blue-600 dark:text-blue-300"> <a href={result?.resources?.map((r: any) => r.url).join(', ')} target="_blank" rel="noopener noreferrer">{result?.resources?.map((r: any) => r.url).join(', ')}</a> </span>
                                                         <span className="text-sm text-zinc-600 dark:text-zinc-300"> <a href={result?.resources?.map((r: any) => r.url).join(', ')} target="_blank" rel="noopener noreferrer">{result?.resources?.map((r: any) => r.reason).join(', ')}</a> </span> */}
-                                                        {/* end here */}
+                                                            {/* end here */}
 
-                                                        {relatedAudits.map((audit, index) => (
-                                                            result?.pagespeed_insight_audits?.includes(audit.name) ? (
-                                                                <FileTable
-                                                                    key={index}
-                                                                    index={index}
-                                                                    group={audit.files}
-                                                                    audit={audit}
-                                                                    aiTable={true}
-                                                                />
-                                                            ) : null
-                                                        ))}
+                                                            {relatedAudits.map((audit, index) => (
+                                                                result?.pagespeed_insight_audits?.includes(audit.name) ? (
+                                                                    <FileTable
+                                                                        key={index}
+                                                                        index={index}
+                                                                        group={audit.files}
+                                                                        audit={audit}
+                                                                        aiTable={true}
+                                                                    />
+                                                                ) : null
+                                                            ))}
 
 
-                                                    </div>
+                                                        </div>
                                                     }
 
                                                     {/* <div className="flex flex-col gap-2 mt-4">
@@ -209,30 +214,39 @@ export const AnalysisResults = ({ object, relatedAudits }: AnalysisResultsProps)
                             ))}
 
                             {object?.PluginConflicts && object?.PluginConflicts.length > 0 && (
-                                <div className="flex flex-col gap-2 mt-6">
-                                    <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Potential Plugin Conflicts:</span>
-
-                                    <span className="text-sm text-zinc-600 dark:text-zinc-300">
-                                        These plugins may conflict with each other, causing issues with your page.
-
-                                        WORK IN PROGRESS
-                                    </span>
-                                    <ul className="space-y-3">
-                                        {object?.PluginConflicts.map((conflict: any, index: number) => (
-                                            <li key={index} className="flex flex-col gap-1">
-                                                <span className="text-sm font-medium text-red-600 dark:text-red-400">
-                                                    {conflict.plugin}
-                                                </span>
-                                                <span className="text-sm text-zinc-600 dark:text-zinc-300">
-                                                    Recommended Action: {conflict.recommendedAction}
-                                                </span>
-                                                <span className="text-sm text-zinc-600 dark:text-zinc-300">
-                                                    Categories: {conflict?.categories?.join(', ')}
-                                                </span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
+                                <Card
+                                    className="overflow-hidden w-full flex justify-center flex-col items-center p-0 rounded-3xl"
+                                >
+                                    <div className="min-h-[56px] relative flex justify-between w-full py-2 px-4">
+                                        <div className="flex gap-3 font-normal items-center text-base">
+                                            <div className="flex flex-col justify-around">
+                                                <div className="flex gap-3.5 items-center text-zinc-800 dark:text-zinc-200">
+                                                    <div className="inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50">
+                                                        <InformationCircleIcon className="w-5 h-5" />
+                                                    </div>
+                                                    Potential Plugin Conflicts
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="border-t w-full">
+                                        <div className="p-4">
+                                            <div className="space-y-2">
+                                                {object?.PluginConflicts.map((conflict: any, index: number) => (
+                                                    <div
+                                                        key={index}
+                                                        className="flex items-center gap-3 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-brand-100/30 dark:bg-brand-800"
+                                                    >
+                                                        <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                                                        <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+                                                            {conflict.plugin}
+                                                        </span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Card>
                             )}
                         </div>
                     </div>
