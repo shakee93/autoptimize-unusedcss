@@ -4,40 +4,49 @@
         cache: {
             status: false,
             key: 'uucss_enable_cache',
+            name: 'Page Cache',
         },
         cpcss: {
             status: false,
             key: 'uucss_enable_cpcss',
+            name: 'Critical CSS',
         },
         uucss: {
             non_optimized_css: [],
             key: 'uucss_enable_uucss',
+            name: 'Remove Unused CSS',
         },
         css_minify: {
             non_minified_css: []    ,
             key: 'uucss_minify',
+            name: 'Minify CSS',
         },
         js_minify: {
             non_minified_js: [],
             key: 'minify_js',
+            name: 'Minify Javascript',
         },
         js_defer: {
             non_deferred_js: [],
             key: 'uucss_load_js_method',
+            name: 'Defer Javascript',
         },
         js_delay: {
             non_delayed_js: [],
             key: 'delay_javascript',
+            name: 'Delay Javascript',
         },
         cdn: {
             status: false,
             key: 'uucss_enable_cdn',
+            name: 'RapidLoad CDN',
         },
         images: {
             optimized_images: [],
             redirected_images: [],
             non_handled_images: [],
             key: 'uucss_support_next_gen_formats',
+            name: 'Serve next-gen Images (AVIF, WEBP)',
         },
     };
 
