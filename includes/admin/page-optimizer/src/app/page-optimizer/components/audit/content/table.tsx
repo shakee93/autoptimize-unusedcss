@@ -9,9 +9,12 @@ interface FileGroupProps {
     audit: Audit
     group: any
     index: number
+    aiTable?: boolean
 }
 
-const FileTable = ({audit, group, index }: FileGroupProps) => {
+const FileTable = ({audit, group, index, aiTable }: FileGroupProps) => {
+
+    //console.log("group", group, index)
 
     if (!group?.items?.length) {
         return <></>
@@ -41,7 +44,7 @@ const FileTable = ({audit, group, index }: FileGroupProps) => {
     return (
         <div
             data-tour={`${audit.id}-group-${index}-table`}
-            className='px-4 py-3'>
+            className={cn(aiTable ? 'px-0 py-0' : 'px-4 py-3')}>
             <div className="w-full border rounded-[20px] overflow-hidden">
                 <table className="w-full dark:text-brand-300 text-brand-800">
                     <thead>

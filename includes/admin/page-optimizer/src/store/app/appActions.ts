@@ -14,7 +14,8 @@ import {
     RootState,
     UPDATE_FILE_ACTION, UPDATE_OPTIMIZE_TABLE,
     UPDATE_SETTINGS,
-    UPDATE_TEST_MODE
+    UPDATE_TEST_MODE,
+    SET_DIAGNOSTIC_RESULTS
 } from "./appTypes";
 import ApiService from "../../services/api";
 import Audit from "app/page-optimizer/components/audit/Audit";
@@ -711,4 +712,14 @@ export const updateFileAction = (
             }
         })
     }
+}
+
+export const setDiagnosticResults = (results: DiagnosticResults) => (
+    dispatch: ThunkDispatch<RootState, unknown, AppAction>,
+    getState: () => RootState
+) => {
+    dispatch({
+        type: SET_DIAGNOSTIC_RESULTS,
+        payload: results,
+    });
 }

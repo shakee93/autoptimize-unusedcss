@@ -264,10 +264,10 @@ const SpeedSettings = ({ }) => {
             firstRender.current = false;
             return;
         }
-        if(tempMode !== 'custom'){
+        if(tempMode !== 'custom' && !customMode){
             submitSettings(true);
         }
-    }, [tempMode]);
+    }, [tempMode, customMode]);
 
     const handleTestModeSettingsChange = (gearSettingsMode: string,) => {
         let toastInstance: ReturnType<typeof toast> | undefined;

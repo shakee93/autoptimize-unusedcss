@@ -17,7 +17,7 @@ import {
     FETCH_POSTS,
     GET_CDN_USAGE,
     GET_IMAGE_USAGE,
-    GET_CACHE_USAGE, LICENSE_INFORMATION, HOME_PAGE_PERFORMANCE
+    GET_CACHE_USAGE, LICENSE_INFORMATION, HOME_PAGE_PERFORMANCE, SET_DIAGNOSTIC_RESULTS
 } from "./appTypes";
 
 const blankReport =  {
@@ -40,6 +40,7 @@ const initialState: AppState = {
     testMode: null,
     optimizationData: [],
     allPosts: null,
+    diagnosticResults: null,
     report: {
         mobile: blankReport,
         desktop: blankReport,
@@ -92,6 +93,11 @@ const initialState: AppState = {
 const appReducer = (state = initialState, action: AppAction): AppState => {
 
     switch (action.type) {
+        case SET_DIAGNOSTIC_RESULTS:
+            return {
+                ...state,
+                diagnosticResults: action.payload
+            };
         case HOME_PAGE_PERFORMANCE:
             return {
                 ...state,

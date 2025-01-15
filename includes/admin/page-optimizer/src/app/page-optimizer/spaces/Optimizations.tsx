@@ -4,7 +4,7 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "..
 import { useCompletion, experimental_useObject as useObject } from 'ai/react'
 import { AnimatePresence, m, motion } from "framer-motion"
 import useCommonDispatch from "hooks/useCommonDispatch";
-import { changeGear } from '../../../store/app/appActions';
+import { changeGear, fetchReport, fetchSettings, setDiagnosticResults } from '../../../store/app/appActions';
 import { LoaderIcon, ChevronDown, GaugeCircle, RefreshCw, Sparkles } from "lucide-react";
 import { useSelector } from "react-redux";
 import { optimizerData } from "../../../store/app/appSelector";
@@ -18,6 +18,10 @@ import { toast } from "components/ui/use-toast";
 import { cn } from "lib/utils";
 import { z } from 'zod';
 import { AnimatedLogo } from "components/animated-logo";
+import ProgressTracker from '../../../components/ProgressTracker';
+import { compareVersions } from 'compare-versions';
+import { AnalysisResults } from '../../../components/analysis-results';
+import { setCommonState } from "../../../store/common/commonActions";
 
 const DiagnosticSchema = z.object({
     AnalysisSummary: z.string(),
@@ -59,10 +63,32 @@ const DiagnosticSchema = z.object({
 const AIBaseURL = "https://ai.rapidload.io/api"
 
 const Optimizations = ({ }) => {
-    const { settings, data } = useSelector(optimizerData);
+    const { settings, data, activeReport, diagnosticResults } = useSelector(optimizerData);
     const [diagnosticsLoading, setDiagnosticsLoading] = useState(false);
     const [diagnosticComplete, setDiagnosticComplete] = useState(false);
     const [loadingText, setLoadingText] = useState<string | null>(null);
+    const [currentStep, setCurrentStep] = useState<number | null>(null);
+    const [stepProgress, setStepProgress] = useState(0);
+    const [isFlushingProgress, setIsFlushingProgress] = useState(0);
+    const [settingsProgress, setSettingsProgress] = useState(0);
+    const [pageSpeedProgress, setPageSpeedProgress] = useState(0);
+    const [serverInfoProgress, setServerInfoProgress] = useState(0);
+    const [diagnosticsProgress, setDiagnosticsProgress] = useState(0);
+    const { headerUrl, diagnosticLoading } = useCommonDispatch();
+
+    useEffect(() => {
+        console.log('diagnosticLoading', diagnosticLoading)
+    }, [diagnosticLoading])
+
+    const relatedAudits = useMemo(() => {
+        if (!data?.grouped) return [];
+        
+        return [
+            ...(data.grouped as Record<AuditTypes, Audit[] | undefined>)["opportunities"] || [],
+            ...(data.grouped as Record<AuditTypes, Audit[] | undefined>)["diagnostics"] || []
+        ];
+    }, [data?.grouped]);
+    
 
     const { object, submit, isLoading, error } = useObject({
         api: `${AIBaseURL}/diagnosis`,
@@ -72,6 +98,8 @@ const Optimizations = ({ }) => {
             setDiagnosticsLoading(false)
             setLoadingText(null)
             setDiagnosticComplete(true)
+            setDiagnosticsProgress(100);
+            resetDiagnosticResults();
             toast({
                 title: "AI Diagnostic Complete",
                 description: "AI analysis of your page has been completed successfully.",
@@ -85,6 +113,40 @@ const Optimizations = ({ }) => {
     const optimizerUrl = options?.optimizer_url;
     const [showIframe, setShowIframe] = useState(false);
 
+    const progressSteps = [
+        { duration: '15s', label: 'Flush Cache', progress: isFlushingProgress },
+        { duration: '5s', label: 'Optimizations', progress: settingsProgress },
+        { duration: '10s', label: 'Server Info', progress: serverInfoProgress },
+        { duration: '40s', label: 'New Page Speed', progress: pageSpeedProgress },
+        { duration: '10s', label: 'Page Diagnostics', progress: diagnosticsProgress },
+    ];
+
+    const [remainingTime, setRemainingTime] = useState(
+        progressSteps.reduce((total, step) => total + parseInt(step.duration), 0)
+    );
+
+    useEffect(() => {
+       // console.log("diagnosticResults Available in app state", diagnosticResults)
+
+        if(object?.AnalysisSummary && object.AnalysisSummary.length) {
+            dispatch(setDiagnosticResults(object as DiagnosticResults));
+        }
+    }, [object])
+
+    useEffect(() => {
+        if (diagnosticsLoading) {
+            const timer = setInterval(() => {
+                setRemainingTime(prev => Math.max(0, prev - 1));
+            }, 1000);
+
+            return () => clearInterval(timer);
+        } else {
+            setRemainingTime(progressSteps.reduce((total, step) => 
+                total + parseInt(step.duration), 0
+            ));
+        }
+    }, [diagnosticsLoading]);
+
     const doAnalysis = useCallback(async (diagnostics: any) => {
         setLoadingText('Collecting active plugins...')
         const api = new ApiService(options);
@@ -92,7 +154,7 @@ const Optimizations = ({ }) => {
 
 
         const _diagnostics = Object.entries(diagnostics).map(([key, value]) => value)
-        console.log(_diagnostics)
+       // console.log(_diagnostics)
 
         const input = {
             settings: settings.map((s: any) => ({
@@ -129,12 +191,13 @@ const Optimizations = ({ }) => {
         }
 
         setLoadingText('Hermes AI is analyzing your page...')
+        
 
         try {
 
-            console.log(input)
+          //  console.log(input)
             submit(input)
-
+            setDiagnosticsProgress(95);
 
         } catch (error: any) {
             console.error('AI Diagnosis Error:', error);
@@ -156,7 +219,7 @@ const Optimizations = ({ }) => {
     useEffect(() => {
         const handleMessage = (event: MessageEvent) => {
             if (event.data.type === "RAPIDLOAD_CHECK_RESULTS") {
-                console.log("Received data from iframe:", event.data);
+               // console.log("Received data from iframe:", event.data);
 
                 setLoadingText('Collected data from your page...')
                 // Compare received data with settings
@@ -186,7 +249,7 @@ const Optimizations = ({ }) => {
                     });
                 });
 
-                console.log(event.data.data)
+              //  console.log(event.data.data)
                 doAnalysis(event.data.data)
             }
         };
@@ -212,198 +275,327 @@ const Optimizations = ({ }) => {
         </div>
     ), []);
 
+
+    const startDiagnostics = async () => {
+        
+        let progressInterval: NodeJS.Timeout | undefined = undefined;
+
+        try {
+            setDiagnosticsProgress(25);
+            
+            // progressInterval = setInterval(() => {
+            //     setDiagnosticsProgress(prev => Math.min(prev + 10, 90));
+            // }, 1000);
+
+            if (diagnosticComplete) {
+                setDiagnosticComplete(false)
+                setShowIframe(false);
+                // setDiagnosticsLoading(true);
+                setLoadingText('Refreshing diagnostics...');
+                await new Promise(resolve => setTimeout(resolve, 200));
+                setShowIframe(true);
+            } else {
+                setLoadingText('Collecting Diagnostics from your page...')
+                // setDiagnosticsLoading(true)
+                setShowIframe(true)
+            }
+            
+            // Clear interval when AI analysis is complete
+            setDiagnosticsProgress(50);
+           // return () => clearInterval(progressInterval);
+           
+        } catch (error) {
+            setDiagnosticsProgress(0);
+           // console.error('❌ Diagnostics failed:', error);
+            toast({
+                title: "Diagnostics Failed",
+                description: error?.message || "Failed to run diagnostics",
+                variant: "destructive",
+            });
+        } 
+        //  finally {
+        //     if ( diagnosticsProgress > 94) {
+        //         clearInterval(progressInterval);
+        //     }
+        // }
+    };
+
+
+    const preloadPage = async (previewUrl: string)=> {
+        const USER_AGENTS = {
+            mobile: 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.133 Mobile Safari/537.36',
+            desktop: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
+        };
+
+        const api = new ApiService(options);
+
+        if (compareVersions(options?.rapidload_version, '2.2.11') > 0) {
+         //   console.log('Preloading page with URL:', previewUrl);
+            await api.post(`preload_page`, {
+                url: previewUrl,
+                user_agent: activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
+                nonce: options.nonce as string,
+                job_id: data?.job_id as string,
+            });
+        } else {
+            const rest = api.rest();
+            await rest.request('/ping', {
+                'url': previewUrl,
+                'user_agent': activeReport === 'mobile' ? USER_AGENTS.mobile : USER_AGENTS.desktop,
+                'nonce': options?.nonce as string,
+                'job_id': data?.job_id as string,
+            });
+        }
+    };
+
+    const handleFlushCache = async () => {
+       
+        setCurrentStep(0);
+        setIsFlushingProgress(0);
+        const api = new ApiService(options);
+        const previewUrl = optimizerUrl + '?rapidload_preview'
+        
+        try {
+            // Clear page cache - 40% of progress
+            setIsFlushingProgress(10);
+            await api.post('clear_page_cache', {
+                url: optimizerUrl
+            });
+            setIsFlushingProgress(40);
+
+            setIsFlushingProgress(60);
+            await preloadPage(previewUrl);
+            setIsFlushingProgress(100);
+
+            toast({
+                title: "Cache Flushed",
+                description: "Page cache has been cleared successfully.",
+                variant: "default",
+            });
+
+        } catch (error: any) {
+            setIsFlushingProgress(0);
+            toast({
+                title: "Cache Flush Failed",
+                description: error.message || "Failed to clear page cache",
+                variant: "destructive",
+            });
+        } finally {
+           // console.log('Cache flush complete');
+            setCurrentStep(1);
+            runParallelSteps();
+           // handleFetchSettings();
+        }
+    };
+
+    const resetDiagnosticResults = () => {
+        setCurrentStep(0);
+        setSettingsProgress(0);
+        setServerInfoProgress(0);
+        setPageSpeedProgress(0);
+        setDiagnosticsProgress(0);
+       // dispatch(setDiagnosticResults(null));
+    }
+
+
+    const runParallelSteps = async () => {
+        try {
+            setCurrentStep(1); // Start all steps simultaneously
+            
+            await Promise.all([
+                // Fetch Settings
+                (async () => {
+                    try {
+                        setSettingsProgress(25);
+                        const progressInterval = setInterval(() => {
+                            setSettingsProgress(prev => Math.min(prev + 15, 90));
+                        }, 500);
+                        
+                        await dispatch(fetchSettings(options, headerUrl ? headerUrl : options.optimizer_url, true));
+                        
+                        clearInterval(progressInterval);
+                        setSettingsProgress(100);
+                        
+                      //  console.log('✅ Settings fetch completed');
+                    } catch (error) {
+                       // console.error('❌ Settings fetch failed:', error);
+                        throw error;
+                    }
+                })(),
+
+                // Server Info Check
+                (async () => {
+                    try {
+                        setServerInfoProgress(25);
+                        const progressInterval = setInterval(() => {
+                            setServerInfoProgress(prev => Math.min(prev + 15, 90));
+                        }, 500);
+
+                        const api = new ApiService(options);
+                        await api.post('titan_checklist_cron');
+                        
+                        clearInterval(progressInterval);
+                        setServerInfoProgress(100);
+                        
+                       // console.log('✅ Server info check completed');
+                    } catch (error) {
+                       // console.error('❌ Server info check failed:', error);
+                        throw error;
+                    }
+                })(),
+
+                // New Page Speed
+                (async () => {
+                    try {
+                        dispatch(setCommonState('diagnosticLoading', true));
+                        setPageSpeedProgress(25);
+                        
+                        const progressInterval = setInterval(() => {
+                            setPageSpeedProgress(prev => Math.min(prev + 5, 90));
+                        }, 2000);
+
+                        await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
+                        
+                        clearInterval(progressInterval);
+                        setPageSpeedProgress(100);
+                        
+                       // console.log('✅ PageSpeed fetch completed');
+                    } catch (error) {
+                       // console.error('❌ PageSpeed fetch failed:', error);
+                        throw error;
+                    } finally {
+                        dispatch(setCommonState('diagnosticLoading', false));
+                    }
+                })()
+            ]);
+
+            // All steps completed successfully
+            toast({
+                title: "All Steps Completed",
+                description: "Settings, server info, and PageSpeed data updated successfully.",
+                variant: "default",
+            });
+
+            // // Move to diagnostics step
+
+            setTimeout(async() => {
+                setCurrentStep(4); 
+                startDiagnostics();
+                
+            }, 1000);
+
+        } catch (error: any) {
+            toast({
+                title: "Process Failed",
+                description: error?.message || "One or more steps failed to complete",
+                variant: "destructive",
+            });
+        }
+    };
+
+
     return (
         <AnimatePresence>
             <m.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.2, delay: 0.05 }}
-                className=''
+                className='bg-[#F0F0F1] dark:bg-brand-800'
             >
-                <div className='px-8 py-8 bg-white rounded-2xl'>
-                    <div className="pb-4 flex justify-start gap-4 w-full">
+                <div className='px-6 py-6 bg-white rounded-3xl'>
+                <div className="flex gap-4 w-full items-start">
+                    {/* Logo Column */}
+                    <div className="flex justify-start items-center gap-2 w-10">
+                        <AnimatedLogo size="lg" isPlaying={diagnosticsLoading} />
+                    </div>
 
-                        <div className="flex  justify-start gap-2 w-10">
-                            <AnimatedLogo size="md" isPlaying={diagnosticsLoading} />
-                        </div>
+                    {/* Content Column */}
+                    <div className="flex flex-col gap-1 flex-grow">
+                        <span className="text-base font-normal text-zinc-900 dark:text-zinc-100">
+                        {diagnosticsLoading ? (
+                            <>
+                            {currentStep === 0 && "Clearing all cached data to ensure fresh analysis..."}
+                            {currentStep === 1 && "Gathering current optimization settings..."}
+                            {currentStep === 2 && "Analyzing server configuration and performance..."}
+                            {currentStep === 3 && "Running comprehensive PageSpeed diagnostics..."}
+                            {currentStep === 4 && (loadingText ? loadingText : "Processing data through AI for insights...")}
+                            </>
+                            ) : (
+                                "Do you need any AI assistance?"
+                            )}
+                        </span>
+                        <span className="font-normal text-sm text-zinc-600 dark:text-brand-300 max-w-[600px]">
+                            {diagnosticsLoading ? (
+                                remainingTime === 0 ? 
+                                    "It's taking a bit longer than expected, hang tight..." :
+                                    `Looks like I'll need to wait ${remainingTime}s more...`
+                            ) : (
+                                object?.AnalysisSummary ? 
+                                    object.AnalysisSummary : 
+                                    "Let's check if your optimizations are working properly. Things might not update right away due to caching or conflicts. We should test everything to make sure it's running well."
+                            )}
+                        
+                        </span>
+                    </div>
 
-                        <div className="flex flex-col gap-2">
-                            <span className="text-sm text-zinc-500 -mt-1 dark:text-zinc-300">I can help your get more speed...</span>
-                            <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">
-                                {object?.AnalysisSummary ? (
-                                    object.AnalysisSummary
-                                ) : (
-                                    "Let's analyze your page to identify potential optimizations and performance improvements."
-                                )}
-                            </span>
-                        </div>
-
+                    {/* Button Column */}
+                    {!diagnosticsLoading &&
+                    <div className="flex justify-end items-center mt-2">
                         <AppButton
                             disabled={diagnosticsLoading}
-                            className="rounded-xl px-8 py-4 whitespace-nowrap"
-                            onClick={async () => {
-
-                                if (diagnosticComplete) {
-                                    setDiagnosticComplete(false)
-                                    setShowIframe(false);
-                                    setDiagnosticsLoading(true);
-                                    setLoadingText('Refreshing diagnostics...');
-                                    await new Promise(resolve => setTimeout(resolve, 200));
-                                    setShowIframe(true);
-                                } else {
-                                    setLoadingText('Collecting Diagnostics from your page...')
-                                    setDiagnosticsLoading(true)
-                                    setShowIframe(true)
-                                }
-
+                            className="rounded-xl px-8 py-6 whitespace-nowrap"
+                            onClick={() => {
+                                handleFlushCache();
+                                setDiagnosticsLoading(true);
+                                // dispatch(setDiagnosticResults({
+                                //     AnalysisSummary: ''
+                                // }));
                             }}
                         >
-                            {diagnosticsLoading && <LoaderIcon className="h-4 w-4 text-white animate-spin" />}
-                            {diagnosticComplete ? 'Test Again' : 'Run Test'}
-
+                            {/* {diagnosticsLoading && <LoaderIcon className="h-4 w-4 text-white animate-spin" />} */}
+                            {diagnosticResults?.AnalysisSummary?.length ? 'Run Diagnostics Test Again' : 'Run Diagnostics Test '}
+                            {/* Run Diagnostics Test  */}
                         </AppButton>
                     </div>
-                    {object?.AnalysisSummary?.length &&
+                    }
+                </div>
+
+                    
+                    {diagnosticsLoading && (
+                    <m.div
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: 20, opacity: 0 }}
+                        transition={{ 
+                        duration: 0.3,
+                        ease: "easeOut"
+                        }}
+                    >                         
+                    {/* <ProgressTracker steps={progressSteps} currentStep={0} /> */}
+                
+                    <div className="border-b border-zinc-200 dark:border-zinc-800 -mx-6 my-6"/>
+                    
+                    <div className="flex flex-col gap-4">
+                        <ProgressTracker 
+                            steps={progressSteps} 
+                            currentStep={currentStep ?? undefined} 
+                            />
+                        </div>
+                    </m.div>
+                    )}
+                    
+                    {/* {object?.AnalysisSummary?.length &&
                         <div className="grid grid-cols-5 gap-4 mb-6">
                             <div className={cn('relative col-span-5 bg-brand-0 rounded-2xl p-10 flex flex-col gap-4 text-center', !object?.CriticalIssues?.length && 'items-center justify-center')}>
-                                <div className="w-full">
-                                    <div className="w-full mt-4 text-left">
-                                        <div className="flex flex-col gap-2">
-                                            <Accordion type="multiple" defaultValue={["0"]}>
-                                                {object?.CriticalIssues?.map((result: any, index: number) => (
-                                                    <AccordionItem key={index} value={index.toString()}>
-                                                        <AccordionTrigger className=" font-semibold text-zinc-900 dark:text-zinc-100">
-
-                                                            <div className="flex flex-col justify-start items-start gap-0.5 w-full">
-                                                                <div>
-                                                                    {result?.issue}
-                                                                </div>
-
-                                                            </div>
-
-
-                                                        </AccordionTrigger>
-                                                        <AccordionContent>
-                                                            <div className="px-4 py-4 border-2 shadow-md rounded-lg space-y-2 flex flex-col justify-start items-start text-left">
-                                                                <div>
-                                                                    <p className="text-sm text-left font-normal text-zinc-600 dark:text-zinc-300">{result?.description}</p>
-                                                                </div>
-                                                                <div>
-                                                                    <p className="text-lg font-medium text-zinc-800 dark:text-zinc-200 mb-2">How to fix</p>
-                                                                    <ul className="list-disc space-y-4 pl-4 mt-4">
-                                                                        {result?.howToFix?.map((fix: any) => (
-                                                                            <li key={fix.step} className="text-sm text-zinc-600 dark:text-zinc-300">
-                                                                                <div className="flex flex-col gap-1">
-                                                                                    <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">{fix.step}</span>
-                                                                                    <span className="text-xs text-zinc-600 dark:text-zinc-300">{fix.description}</span>
-                                                                                    {fix.type === 'rapidload_fix' &&
-                                                                                        <>
-                                                                                            <AppButton
-                                                                                                size="sm"
-                                                                                                className="mt-2 w-fit px-4 text-xs flex items-center gap-2"
-                                                                                                onClick={() => {
-                                                                                                    console.log(settings.find((s: any) => s.inputs.find((i: any) => i.key === fix.rapidload_setting_input?.name)))
-                                                                                                }}
-                                                                                            >
-                                                                                                <Sparkles className="h-3.5 w-3.5 text-white -ml-1.5" /> Fix with AI
-                                                                                            </AppButton>
-                                                                                            {/* <span className="mt-2">
-                                                                                                <Setting
-                                                                                                    index={index}
-                                                                                                    settings={settings.find((s: any) => s.inputs.find((i: any) => i.key === fix.rapidload_setting_input?.name))}
-                                                                                                />
-                                                                                            </span> */}
-
-                                                                                        </>
-                                                                                    }
-
-                                                                                </div>
-                                                                            </li>
-                                                                        ))}
-
-                                                                    </ul>
-
-                                                                    <div className="flex flex-col gap-2 mt-4">
-                                                                        <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Related Resources:</span>
-                                                                        <span className="text-sm text-blue-600 dark:text-blue-300"> <a href={result?.resources?.map((r: any) => r.url).join(', ')} target="_blank" rel="noopener noreferrer">{result?.resources?.map((r: any) => r.url).join(', ')}</a> </span>
-                                                                        <span className="text-sm text-zinc-600 dark:text-zinc-300"> <a href={result?.resources?.map((r: any) => r.url).join(', ')} target="_blank" rel="noopener noreferrer">{result?.resources?.map((r: any) => r.reason).join(', ')}</a> </span>
-                                                                    </div>
-
-                                                                    <div className="flex flex-col gap-2 mt-4">
-                                                                        <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Related Audit:</span>
-                                                                        <span className="text-sm dark:text-blue-300"> <a href={result?.pagespeed_insight_audits?.join(', ')} target="_blank" rel="noopener noreferrer">
-                                                                            {result?.pagespeed_insight_audits?.join(', ')}
-                                                                        </a> </span>
-                                                                    </div>
-
-                                                                    <div className="flex flex-col gap-2 mt-4">
-                                                                        <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Related Metrics:</span>
-                                                                        <span className="text-sm dark:text-blue-300"> <a href={result?.pagespeed_insight_metrics?.join(', ')} target="_blank" rel="noopener noreferrer">
-                                                                            {result?.pagespeed_insight_metrics?.join(', ')}
-                                                                        </a> </span>
-                                                                    </div>
-
-
-
-                                                                </div>
-                                                            </div>
-
-                                                            {/* <Collapsible>
-                                                                <CollapsibleTrigger className="mt-6 text-sm font-medium text-zinc-800 dark:text-zinc-200 mb-2">
-                                                                    View Raw Data
-                                                                </CollapsibleTrigger>
-                                                                <CollapsibleContent>
-                                                                    <pre className="mt-2 p-4 bg-zinc-50 dark:bg-zinc-900 rounded-lg overflow-auto">
-                                                                        {JSON.stringify(result, null, 2)}
-                                                                    </pre>
-                                                                </CollapsibleContent>
-                                                            </Collapsible> */}
-                                                        </AccordionContent>
-                                                    </AccordionItem>
-                                                ))}
-                                            </Accordion>
-
-
-                                            {object?.PluginConflicts && object?.PluginConflicts.length > 0 && (
-                                                <div className="flex flex-col gap-2 mt-6">
-                                                    <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Potential Plugin Conflicts:</span>
-
-                                                    <span className="text-sm text-zinc-600 dark:text-zinc-300">
-                                                        These plugins may conflict with each other, causing issues with your page.
-
-                                                        WORK IN PROGRESS
-                                                    </span>
-                                                    <ul className="space-y-3">
-                                                        {object?.PluginConflicts.map((conflict: any, index: number) => (
-                                                            <li key={index} className="flex flex-col gap-1">
-                                                                <span className="text-sm font-medium text-red-600 dark:text-red-400">
-                                                                    {conflict.plugin}
-                                                                </span>
-                                                                <span className="text-sm text-zinc-600 dark:text-zinc-300">
-                                                                    Recommended Action: {conflict.recommendedAction}
-                                                                </span>
-                                                                <span className="text-sm text-zinc-600 dark:text-zinc-300">
-                                                                    Categories: {conflict?.categories?.join(', ')}
-                                                                </span>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
+                                
 
 
                             </div>
                         </div>
-                    }
+                    } */}
 
 
-                    {diagnosticsLoading && <div className="flex items-center gap-2 mt-4 bg-brand-0 rounded-2xl p-4 py-3">
-                        <LoaderIcon className="h-4 w-4 text-gray-600 animate-spin" />
-                        <span className="text-sm text-gray-600">{loadingText}</span>
-                    </div>}
+                    
 
                     {showIframe && (
                         <div
@@ -421,8 +613,8 @@ const Optimizations = ({ }) => {
                                     </button>
                                 </div>
                                 <iframe
-                                    src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
-                                    // src={`${window.uucss_global.home_url}/?rapidload_preview`} 
+                                    // src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
+                                     src={showIframe ? 'http://rapidload.local/?rapidload_preview': ''} 
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                 />
@@ -430,6 +622,8 @@ const Optimizations = ({ }) => {
                         </div>
                     )}
                 </div>
+                
+                {diagnosticResults?.AnalysisSummary?.length && <AnalysisResults object={diagnosticResults} relatedAudits={relatedAudits} />}
             </m.div>
         </AnimatePresence>
     )

@@ -13,7 +13,7 @@ interface Props {
 
 const AuditList =({ activeTab }: Props) => {
     const {data, loading, reanalyze, error} = useSelector(optimizerData);
-
+    // console.log("data", (data?.grouped as Record<AuditTypes, Audit[] | undefined>)[activeTab] || []);
 
     const activeData = useMemo(() => {
         // return data?.grouped[activeTab] || []

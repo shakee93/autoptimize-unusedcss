@@ -52,7 +52,8 @@ export interface AppState {
     imageUsage: imageUsage;
     cacheUsage: cacheUsage[] | null;
     license: License | null;
-    homePerformance: HomePerformance
+    homePerformance: HomePerformance;
+    diagnosticResults: DiagnosticResults | null;
 }
 
 export const FETCH_REPORT_REQUEST = 'FETCH_REPORT_REQUEST';
@@ -74,6 +75,12 @@ export const GET_IMAGE_USAGE = 'GET_IMAGE_USAGE';
 export const GET_CACHE_USAGE = 'GET_CACHE_USAGE';
 export const LICENSE_INFORMATION = 'LICENSE_INFORMATION';
 export const HOME_PAGE_PERFORMANCE = 'HOME_PAGE_PERFORMANCE';
+export const SET_DIAGNOSTIC_RESULTS = 'SET_DIAGNOSTIC_RESULTS';
+
+interface SetDiagnosticResults {
+    type: typeof SET_DIAGNOSTIC_RESULTS,
+    payload : DiagnosticResults,
+}
 
 interface homePagePerformance {
     type: typeof HOME_PAGE_PERFORMANCE,
@@ -192,5 +199,5 @@ interface UpdateFileActionAction {
 // Define the combined action type
 export type AppAction = FetchDataRequestAction | FetchDataSuccessAction | FetchDataFailureAction |
     FetchSettingsRequestAction | FetchSettingsSuccessAction | FetchSettingsFailureAction | ChangeGearAction|
-    UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode | UpdateOptimizeTable | FetchPosts | GetCDNUsage | ImageUsage | CacheUsage | LicenseInformation | homePagePerformance;
+    UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode | UpdateOptimizeTable | FetchPosts | GetCDNUsage | ImageUsage | CacheUsage | LicenseInformation | homePagePerformance | SetDiagnosticResults;
 

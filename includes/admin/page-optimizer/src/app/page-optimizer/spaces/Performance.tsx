@@ -101,15 +101,15 @@ const Performance = () => {
             case 'configurations':
                 return 100;
             case 'optimizations':
-                return 270;
+                return 480;
             case 'opportunities':
-                return 435;
+                return 285;
             case 'diagnostics':
-                return 275;
+                return 285;
             case 'passed_audits':
-                return 135;
+                return 285;
             default:
-                return 395;
+                return 285;
         }
     };
 
@@ -135,17 +135,6 @@ const Performance = () => {
                     )}
                     data-tour="speed-settings"> <BoltIcon className='w-4 rounded-[15px]' />  Speed Settings</div>
 
-                    <div
-
-                    onClick={() => dispatch(setCommonState('activeTab', 'optimizations'))}
-                    className={cn(
-
-                        `whitespace-nowrap dark:bg-brand-930/90 border-r rounded-[20px] cursor-pointer w-[160px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
-
-                        activeTab === 'optimizations' ? "font-medium bg-brand-0" : "dark:hover:text-brand-300"
-                    )}
-                    data-tour="optimizations"> <GaugeCircle className='w-4' />  Optimizations </div>
-
                       <div
 
                     onClick={() => dispatch(setCommonState('activeTab', 'insights'))}
@@ -157,16 +146,25 @@ const Performance = () => {
                     )}
                     data-tour="page-speed-insights"> <GaugeCircle className='w-4' />  Page Speed Insights </div>
 
+                    <div
+
+                    onClick={() => dispatch(setCommonState('activeTab', 'optimizations'))}
+                    className={cn(
+
+                        `whitespace-nowrap dark:bg-brand-930/90 border-r rounded-[20px] cursor-pointer w-[160px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+
+                        activeTab === 'optimizations' ? "font-medium bg-brand-0" : "dark:hover:text-brand-300"
+                    )}
+                    data-tour="optimizations"> <GaugeCircle className='w-4' />  AI Diagnostic </div>
+
+
             </div>
-            <div className={cn("flex", activeTab === 'opportunities' || activeTab === 'diagnostics' || activeTab === 'passed_audits' ? "justify-center items-center" : "")}>
+            <div className={cn("flex")}>
   <div
     className={cn(
-      "py-3 relative",
-      activeTab === 'opportunities' || activeTab === 'diagnostics' || activeTab === 'passed_audits'
-        ? "scale-y-[1] scale-x-[-1] top-1"
-        : "scale-y-[-1] ml-6"
+      "py-3 relative scale-y-[-1] ml-6"
     )}
-  >      <SettingsLine width={getWidthForActiveTab(activeTab) || 220} flip={!(activeTab === 'passed_audits' || activeTab === 'diagnostics' || activeTab === 'opportunities')}   />
+  >      <SettingsLine width={getWidthForActiveTab(activeTab) || 220} flip={true}/>
                 {/* <SettingsLine width={300} /> */}
             </div>
             </div>

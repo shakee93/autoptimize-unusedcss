@@ -63,7 +63,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
     const [performance, setPerformance] = useState<number>(0)
     const [on, setOn] = useState<boolean>(false)
 
-    const { dispatch, hoveredMetric, activeMetric } = useCommonDispatch()
+    const { dispatch, hoveredMetric, activeMetric, diagnosticLoading } = useCommonDispatch()
     const {
         dispatch: commonDispatch
     } = useCommonDispatch()
@@ -220,7 +220,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                                             <div className={`flex flex-col gap-[1px] items-center`}>
                                                 <RefreshCw className={cn(
                                                     'w-4',
-                                                    loading && 'animate-spin'
+                                                    (loading && !diagnosticLoading) && 'animate-spin'
                                                 )} />
                                                 {/*<span className='text-xxs font-normal text-brand-500'>Analyze </span>*/}
                                             </div>
@@ -272,7 +272,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                                             <Skeleton className="w-44 h-44 rounded-full" />
                                         ) : (
                                             <PerformanceProgressBar
-                                                loading={reanalyze}
+                                                loading={reanalyze && !diagnosticLoading}
                                                 performance={(data?.performance && gain && metric) ?
                                                     (data.performance + gain >= 99) ? 99 :
                                                         data.performance + gain : data?.performance}>

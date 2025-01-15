@@ -19,6 +19,7 @@ export type CommonState = {
         auditsReturn: boolean;
         uucssError: boolean;
         headerUrl: string;
+        diagnosticLoading: boolean;
     }
     desktop : {
         activeTab: AuditTypes;
@@ -34,6 +35,7 @@ export type CommonState = {
         auditsReturn: boolean;
         uucssError: boolean;
         headerUrl: string;
+        diagnosticLoading: boolean;
     }
 
 };

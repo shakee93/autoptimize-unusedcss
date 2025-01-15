@@ -296,6 +296,10 @@ interface TestMode {
     status: boolean;
 }
 
+interface DiagnosticResults {
+    AnalysisSummary: any;
+}
+
 interface HomePerformance{
     first_entry: number;
     last_entry: number;
