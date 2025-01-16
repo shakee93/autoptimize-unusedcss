@@ -78,18 +78,18 @@ class RapidLoad_Optimizer
 
         // check if crawler is working
 
-        $response = [];
+        $response = [
+            'constants' => []
+        ];
 
         $api = new RapidLoad_Api();
-
-        $crawler_check = true;
 
         $result = $api->post('crawler-check',[
             'url' => site_url()
         ]);
 
         if($result == "200"){
-            $response['crawler_check'] = true;
+            $response['crawler_check'] = $result;
         }
 
         // check if there are any conflict plugins
@@ -126,19 +126,23 @@ class RapidLoad_Optimizer
         $response['cron_status'] = $code;
 
         if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
-            $response['DISABLE_WP_CRON'] = 'The DISABLE_WP_CRON constant is set to true. WP-Cron spawning is disabled.';
+            $response['constants']['DISABLE_WP_CRON'] = 'The DISABLE_WP_CRON constant is set to true. WP-Cron spawning is disabled.';
         }
 
         if ( defined( 'ALTERNATE_WP_CRON' ) && ALTERNATE_WP_CRON ) {
-            $response['ALTERNATE_WP_CRON'] = 'The ALTERNATE_WP_CRON constant is set to true. WP-Cron spawning is not asynchronous.';
+            $response['constants']['ALTERNATE_WP_CRON'] = 'The ALTERNATE_WP_CRON constant is set to true. WP-Cron spawning is not asynchronous.';
         }
 
         if ( defined( 'DONOTCACHEPAGE' ) && DONOTCACHEPAGE ) {
-            $response['DONOTCACHEPAGE'] = 'The DONOTCACHEPAGE constant is set to true. Page caching is disabled.';
+            $response['constants']['DONOTCACHEPAGE'] = 'The DONOTCACHEPAGE constant is set to true. Page caching is disabled.';
         }
 
         if( defined( 'WP_CACHE' ) && !WP_CACHE || !defined( 'WP_CACHE' ) ) {
-            $response['WP_CACHE'] = 'The WP_CACHE constant is not set or set to false. Page caching is disabled.';
+            $response['constants']['WP_CACHE'] = 'The WP_CACHE constant is not set or set to false. Page caching is disabled.';
+        }
+
+        if( defined( 'WP_CRON_LOCK_TIMEOUT' ) && WP_CRON_LOCK_TIMEOUT ) {
+            $response['constants']['WP_CRON_LOCK_TIMEOUT'] = 'The WP_CRON_LOCK_TIMEOUT constant is set to ' . WP_CRON_LOCK_TIMEOUT . '.';
         }
 
         // return all the data
