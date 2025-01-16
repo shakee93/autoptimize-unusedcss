@@ -60,6 +60,7 @@ class RapidLoad_Optimizer
             'rapidload_titan_home_page_performance' => 'rapidload_titan_home_page_performance',
             'rapidload_get_active_plugins' => 'rapidload_get_active_plugins',
             'rapidload_diagnose_data' => 'rapidload_diagnose_data',
+            'rapidload_server_info' => 'rapidload_server_info',
         ];
 
         foreach ($actions as $action => $method) {
@@ -69,6 +70,84 @@ class RapidLoad_Optimizer
                 add_action("wp_ajax_nopriv_$action", [$this, $method]);
             }
         }
+    }
+
+    public function rapidload_server_info(){
+
+        self::verify_nonce();
+
+        // check if crawler is working
+
+        $response = [
+            'constants' => []
+        ];
+
+        $api = new RapidLoad_Api();
+
+        $result = $api->post('crawler-check',[
+            'url' => site_url()
+        ]);
+
+        if($result == "200"){
+            $response['crawler_check'] = $result;
+        }
+
+        // check if there are any conflict plugins
+
+        $cnflict_plugins = apply_filters('uucss/third-party/plugins',[]);
+
+        $plugins = get_plugins();
+
+        $conflict_plugin_names = [];
+
+        foreach($cnflict_plugins as $cnflict_plugin){
+
+            if(isset($cnflict_plugin['has_conflict']) && $cnflict_plugin['has_conflict'] && isset($plugins[$cnflict_plugin['path']])){
+                $conflict_plugin_names[] = $plugins[$cnflict_plugin['path']]['Name'];
+            }
+        }
+
+        if(!empty($conflict_plugin_names)){
+            $response['conflict_plugins'] = $conflict_plugin_names;
+        }
+
+        // check if there are any cron issues
+
+        $cron_status = RapidLoad_Admin::get_cron_spawn();
+
+        if(is_wp_error($cron_status)){
+            $response['cron_status'] = $cron_status->get_error_message();
+        }
+
+        $code = wp_remote_retrieve_response_code( $spawn );
+        $message = wp_remote_retrieve_response_message( $spawn );
+        
+        // Update cron status with actual code
+        $response['cron_status'] = $code;
+
+        if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
+            $response['constants']['DISABLE_WP_CRON'] = 'The DISABLE_WP_CRON constant is set to true. WP-Cron spawning is disabled.';
+        }
+
+        if ( defined( 'ALTERNATE_WP_CRON' ) && ALTERNATE_WP_CRON ) {
+            $response['constants']['ALTERNATE_WP_CRON'] = 'The ALTERNATE_WP_CRON constant is set to true. WP-Cron spawning is not asynchronous.';
+        }
+
+        if ( defined( 'DONOTCACHEPAGE' ) && DONOTCACHEPAGE ) {
+            $response['constants']['DONOTCACHEPAGE'] = 'The DONOTCACHEPAGE constant is set to true. Page caching is disabled.';
+        }
+
+        if( defined( 'WP_CACHE' ) && !WP_CACHE || !defined( 'WP_CACHE' ) ) {
+            $response['constants']['WP_CACHE'] = 'The WP_CACHE constant is not set or set to false. Page caching is disabled.';
+        }
+
+        if( defined( 'WP_CRON_LOCK_TIMEOUT' ) && WP_CRON_LOCK_TIMEOUT ) {
+            $response['constants']['WP_CRON_LOCK_TIMEOUT'] = 'The WP_CRON_LOCK_TIMEOUT constant is set to ' . WP_CRON_LOCK_TIMEOUT . '.';
+        }
+
+        // return all the data
+
+        wp_send_json_success($response);
     }
 
     public function rapidload_diagnose_data(){

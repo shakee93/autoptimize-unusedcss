@@ -22,6 +22,7 @@ import ProgressTracker from '../../../components/ProgressTracker';
 import { compareVersions } from 'compare-versions';
 import { AnalysisResults } from '../../../components/analysis-results';
 import { setCommonState } from "../../../store/common/commonActions";
+import AIDemoMessage from "../components/AIDemoMessage";
 
 const DiagnosticSchema = z.object({
     // active_settings_inputs: z.array(z.object({
@@ -419,7 +420,7 @@ const Optimizations = ({ }) => {
                         }, 500);
 
                         const api = new ApiService(options);
-                        const data = await api.post('titan_checklist_cron');
+                        const data = await api.post('rapidload_server_info');
                         setServerDetails(data)
                         console.log(data)
                         clearInterval(progressInterval);
@@ -442,7 +443,7 @@ const Optimizations = ({ }) => {
                             setPageSpeedProgress(prev => Math.min(prev + 5, 90));
                         }, 2000);
 
-                        // await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
+                         await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
 
                         clearInterval(progressInterval);
                         setPageSpeedProgress(100);
@@ -490,6 +491,8 @@ const Optimizations = ({ }) => {
                 transition={{ duration: 0.2, delay: 0.05 }}
                 className='bg-[#F0F0F1] dark:bg-brand-800'
             >
+                
+                <AIDemoMessage/>
 
                 <div className='px-6 py-6 bg-white rounded-3xl'>
                     <div className="flex gap-4 w-full items-start">
@@ -603,8 +606,8 @@ const Optimizations = ({ }) => {
                                     </button>
                                 </div>
                                 <iframe
-                                    src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
-                                    // src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
+                                   // src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
+                                     src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                 />
