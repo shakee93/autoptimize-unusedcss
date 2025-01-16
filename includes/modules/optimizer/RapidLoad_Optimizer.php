@@ -78,7 +78,7 @@ class RapidLoad_Optimizer
 
         // check if crawler is working
 
-        $response = [];s
+        $response = [];
 
         $api = new RapidLoad_Api();
 

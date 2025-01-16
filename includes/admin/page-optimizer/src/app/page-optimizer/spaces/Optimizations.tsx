@@ -399,7 +399,7 @@ const Optimizations = ({ }) => {
                         }, 500);
 
                         const api = new ApiService(options);
-                        await api.post('titan_checklist_cron');
+                        await api.post('rapidload_server_info');
 
                         clearInterval(progressInterval);
                         setServerInfoProgress(100);
@@ -421,7 +421,7 @@ const Optimizations = ({ }) => {
                             setPageSpeedProgress(prev => Math.min(prev + 5, 90));
                         }, 2000);
 
-                        // await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
+                         await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
 
                         clearInterval(progressInterval);
                         setPageSpeedProgress(100);
