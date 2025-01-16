@@ -145,6 +145,11 @@ class RapidLoad_Optimizer
             $response['constants']['WP_CRON_LOCK_TIMEOUT'] = 'The WP_CRON_LOCK_TIMEOUT constant is set to ' . WP_CRON_LOCK_TIMEOUT . '.';
         }
 
+        $response['server'] = array(
+            'software' => $_SERVER['SERVER_SOFTWARE'],
+            'php_version' => PHP_VERSION,
+        );
+
         // return all the data
 
         wp_send_json_success($response);
