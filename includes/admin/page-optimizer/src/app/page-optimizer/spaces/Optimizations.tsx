@@ -22,6 +22,7 @@ import ProgressTracker from '../../../components/ProgressTracker';
 import { compareVersions } from 'compare-versions';
 import { AnalysisResults } from '../../../components/analysis-results';
 import { setCommonState } from "../../../store/common/commonActions";
+import AIDemoMessage from "../components/AIDemoMessage";
 
 const DiagnosticSchema = z.object({
     AnalysisTitle: z.string(),
@@ -469,6 +470,8 @@ const Optimizations = ({ }) => {
                 className='bg-[#F0F0F1] dark:bg-brand-800'
             >
                 
+                <AIDemoMessage/>
+
                 <div className='px-6 py-6 bg-white rounded-3xl'>
                     <div className="flex gap-4 w-full items-start">
                         {/* Logo Column */}
