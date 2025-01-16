@@ -113,7 +113,7 @@ class RapidLoad_Optimizer
 
         // check if there are any cron issues
 
-        $cron_status = RapidLoad_Admin::get_cron_spawn();
+        $cron_status = $this->get_cron_spawn();
 
         if(is_wp_error($cron_status)){
             $response['cron_status'] = $cron_status->get_error_message();
@@ -123,7 +123,10 @@ class RapidLoad_Optimizer
         $message = wp_remote_retrieve_response_message( $spawn );
         
         // Update cron status with actual code
-        $response['cron_status'] = $code;
+        $response['cron_status'] = [
+            'code' => $code,
+            'message' => $message
+        ];
 
         if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
             $response['constants']['DISABLE_WP_CRON'] = 'The DISABLE_WP_CRON constant is set to true. WP-Cron spawning is disabled.';
@@ -1874,7 +1877,31 @@ class RapidLoad_Optimizer
         wp_send_json_success($result);
     }
 
-   
+    public function get_cron_spawn() {
+
+        $doing_wp_cron = sprintf( '%.22F', microtime( true ) );
+
+        $cron_request_array = array(
+            'url'  => site_url( 'wp-cron.php?doing_wp_cron=' . $doing_wp_cron ),
+            'key'  => $doing_wp_cron,
+            'args' => array(
+                'timeout'   => 3,
+                'blocking'  => true,
+                // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Calling native WordPress hook.
+                'sslverify' => apply_filters( 'https_local_ssl_verify', true ),
+            ),
+        );
+
+        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Calling native WordPress hook.
+        $cron_request = apply_filters( 'cron_request', $cron_request_array );
+
+        # Enforce a blocking request in case something that's hooked onto the 'cron_request' filter sets it to false
+        $cron_request['args']['blocking'] = true;
+
+        $result = wp_remote_post( $cron_request['url'], $cron_request['args'] );
+
+        return $result;
+    }
     
     
 }
