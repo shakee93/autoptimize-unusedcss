@@ -11,6 +11,7 @@ import { InformationCircleIcon, MicrophoneIcon } from "@heroicons/react/24/outli
 import TooltipText from "./ui/tooltip-text";
 import FileTable from "app/page-optimizer/components/audit/content/table";
 import { Fail } from "app/page-optimizer/components/icons/icon-svg";
+import FAQSection from "./faq-section";
 
 interface AnalysisResultsProps {
     object: PartialObject<{
@@ -21,12 +22,22 @@ interface AnalysisResultsProps {
             howToFix: Array<{
                 step: string;
                 description: string;
-                type: "rapidload_fix" | "wordpress_fix" | "code_fix" | "other";
+                type: "rapidload_fix" | "wordpress_fix" | "theme_fix" | "plugin_fix" | "code_fix" | "server_config_fix" | "server_upgrade_fix";
                 rapidload_setting_input?: { name: string; };
             }>;
             resources: Array<any>;
             pagespeed_insight_audits: string[];
             pagespeed_insight_metrics: string[];
+            how_to_fix_questions: {
+                question: string;
+                explanation: string;
+                type: 'single_choice' | 'multiple_choice' | 'text' | 'number';
+                options: {
+                    value: string;
+                    label: string;
+                    description: string;
+                }[];
+            }[];
         }>;
         PluginConflicts?: Array<{
             plugin: string;
@@ -131,46 +142,54 @@ export const AnalysisResults = ({ object, relatedAudits }: AnalysisResultsProps)
                                                     <p className="text-sm text-left text-brand-700 dark:text-brand-300 pb-4">{result?.description}</p>
                                                 </div>
                                                 <div>
-                                                    <div className="flex gap-2 w-full justify-between my-4">
-                                                        <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200 flex gap-2 items-center"> <LightbulbIcon className="w-5 h-5" />How to fix this?</p>
-                                                        {result?.howToFix?.some((fix: any) => fix.type === 'rapidload_fix') && (
-                                                            <AppButton
-                                                                size="sm"
-                                                                className="w-fit px-4 text-xs flex items-center gap-2 rounded-xl"
-                                                                onClick={() => {
-                                                                    // console.log(settings.find((s: any) => s.inputs.find((i: any) => i.key === fix.rapidload_setting_input?.name)))
-                                                                }}
-                                                            >
-                                                                <Sparkles className="h-3.5 w-3.5 text-white -ml-1.5" /> Fix with AI
-                                                            </AppButton>
-                                                        )}</div>
-                                                    <ul className="list-disc space-y-4 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 px-8 bg-brand-100/30 dark:bg-brand-800">
-                                                        {result?.howToFix?.map((fix: any, index: number) => (
-                                                            <li
-                                                                key={index}
-                                                                className={cn(
-                                                                    "text-sm text-zinc-600 dark:text-zinc-300 marker:text-brand-300 marker:text-lg",
-                                                                    index !== result.howToFix.length - 1 && "border-b border-zinc-200 dark:border-zinc-800 pb-4"
+
+                                                    {result?.howToFix && result?.howToFix.length > 0 && (
+                                                        <>
+                                                            <div className="flex gap-2 w-full justify-between my-4">
+                                                                <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200 flex gap-2 items-center"> <LightbulbIcon className="w-5 h-5" />How to fix this?</p>
+                                                                {result?.howToFix?.some((fix: any) => fix.type === 'rapidload_fix') && (
+                                                                    <AppButton
+                                                                        size="sm"
+                                                                        className="w-fit px-4 text-xs flex items-center gap-2 rounded-xl"
+                                                                        onClick={() => {
+                                                                            // console.log(settings.find((s: any) => s.inputs.find((i: any) => i.key === fix.rapidload_setting_input?.name)))
+                                                                        }}
+                                                                    >
+                                                                        <Sparkles className="h-3.5 w-3.5 text-white -ml-1.5" /> Fix with AI
+                                                                    </AppButton>
                                                                 )}
-                                                            >
-                                                                <div className="flex flex-col gap-1">
-                                                                    <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">{fix.step}</span>
-                                                                    <span className="text-sm text-zinc-600 dark:text-zinc-300">{fix.description}</span>
-                                                                </div>
-                                                            </li>
-                                                        ))}
+                                                            </div>
+                                                            <ul className="list-disc space-y-4 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 px-8 bg-brand-100/30 dark:bg-brand-800">
+                                                                {result?.howToFix?.map((fix: any, index: number) => (
+                                                                    <li
+                                                                        key={index}
+                                                                        className={cn(
+                                                                            "text-sm text-zinc-600 dark:text-zinc-300 marker:text-brand-300 marker:text-lg",
+                                                                            index !== result.howToFix.length - 1 && "border-b border-zinc-200 dark:border-zinc-800 pb-4"
+                                                                        )}
+                                                                    >
+                                                                        <div className="flex flex-col gap-1">
+                                                                            <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">{fix.step}</span>
+                                                                            <span className="text-sm text-zinc-600 dark:text-zinc-300">{fix.description}</span>
+                                                                            <span className="text-sm text-zinc-600 dark:text-zinc-300">{fix.type}</span>
+                                                                            <span className="text-sm text-zinc-600 dark:text-zinc-300">{fix?.sub_type?.length > 0 ? fix?.sub_type?.join(', ') : ''}</span>
+                                                                        </div>
+                                                                    </li>
+                                                                ))}
 
-                                                    </ul>
+                                                            </ul>
+                                                        </>
+                                                    )}
 
-                                                    {result?.pagespeed_insight_audits && result?.pagespeed_insight_audits.length > 0 &&
+
+                                                    {result?.how_to_fix_questions && result?.how_to_fix_questions.length > 0 && (
+                                                        <FAQSection questions={result.how_to_fix_questions} />
+                                                    )}
+
+                                                    {/* {result?.pagespeed_insight_audits && result?.pagespeed_insight_audits.length > 0 &&
                                                         <div className="flex flex-col gap-2 mt-4">
-                                                            {/* <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Related Resources:</span> */}
                                                             <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200 flex gap-2 items-center"> <FileCodeIcon className="w-5 h-5" />Related Resources</p>
                                                             <p className="text-sm text-left text-brand-700 dark:text-brand-300">{result?.pagespeed_insight_audits?.join(', ')}</p>
-                                                            {/* this part is not returning anything */}
-                                                            {/* <span className="text-sm text-blue-600 dark:text-blue-300"> <a href={result?.resources?.map((r: any) => r.url).join(', ')} target="_blank" rel="noopener noreferrer">{result?.resources?.map((r: any) => r.url).join(', ')}</a> </span>
-                                                        <span className="text-sm text-zinc-600 dark:text-zinc-300"> <a href={result?.resources?.map((r: any) => r.url).join(', ')} target="_blank" rel="noopener noreferrer">{result?.resources?.map((r: any) => r.reason).join(', ')}</a> </span> */}
-                                                            {/* end here */}
 
                                                             {relatedAudits.map((audit, index) => (
                                                                 result?.pagespeed_insight_audits?.includes(audit.name) ? (
@@ -183,25 +202,9 @@ export const AnalysisResults = ({ object, relatedAudits }: AnalysisResultsProps)
                                                                     />
                                                                 ) : null
                                                             ))}
-
-
                                                         </div>
                                                     }
-
-                                                    {/* <div className="flex flex-col gap-2 mt-4">
-                                                        <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Related Audit:</span>
-                                                        <span className="text-sm dark:text-blue-300"> <a href={result?.pagespeed_insight_audits?.join(', ')} target="_blank" rel="noopener noreferrer">
-                                                            {result?.pagespeed_insight_audits?.join(', ')}
-                                                        </a> </span>
-                                                    </div> */}
-
-                                                    {/* <div className="flex flex-col gap-2 mt-4">
-                                                        <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Related Metrics:</span>
-                                                        <span className="text-sm dark:text-blue-300"> <a href={result?.pagespeed_insight_metrics?.join(', ')} target="_blank" rel="noopener noreferrer">
-                                                            {result?.pagespeed_insight_metrics?.join(', ')}
-                                                        </a> </span>
-                                                    </div> */}
-
+ */}
 
 
                                                 </div>

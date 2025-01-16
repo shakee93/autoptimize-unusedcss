@@ -429,43 +429,19 @@ class RapidLoad_Admin
         $server_info = array(
             'software' => $_SERVER['SERVER_SOFTWARE'],
             'php_version' => PHP_VERSION,
-            'modules' => array(),
             'cron_status' => 0
         );
 
-        // Get Apache modules if running on Apache
-        if (strpos(strtolower($_SERVER['SERVER_SOFTWARE']), 'apache') !== false) {
-            ob_start();
-            phpinfo(INFO_MODULES);
-            $phpinfo = ob_get_clean();
-            
-            $apache_modules = array(
-                'mod_mime',
-                'mod_headers',
-                'mod_alias', 
-                'mod_expires',
-                'mod_deflate',
-                'mod_setenvif',
-                'mod_filter',
-                'mod_rewrite'
-            );
-
-            foreach ($apache_modules as $module) {
-                $search_module = str_replace('mod_', '', $module);
-                $server_info['modules'][$module] = (strpos($phpinfo, $search_module) !== false);
-            }
-        }
-
         if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
             wp_send_json_error( [
-                'message' => 'The DISABLE_WP_CRON constant is set to true. WP-Cron spawning is disabled.',
+                'cron_message' => 'The DISABLE_WP_CRON constant is set to true. WP-Cron spawning is disabled.',
                 'server' => $server_info
             ] );
         }
 
         if ( defined( 'ALTERNATE_WP_CRON' ) && ALTERNATE_WP_CRON ) {
             wp_send_json_error( [
-                'message' => 'The ALTERNATE_WP_CRON constant is set to true. WP-Cron spawning is not asynchronous.',
+                'cron_message' => 'The ALTERNATE_WP_CRON constant is set to true. WP-Cron spawning is not asynchronous.',
                 'server' => $server_info
             ] );
         }
@@ -474,7 +450,7 @@ class RapidLoad_Admin
 
         if ( is_wp_error( $spawn ) ) {
             wp_send_json_error( [
-                'message' => sprintf( 'WP-Cron spawn failed with error: %s', $spawn->get_error_message() ),
+                'cron_message' => sprintf( 'WP-Cron spawn failed with error: %s', $spawn->get_error_message() ),
                 'server' => $server_info
             ] );
         }
@@ -486,15 +462,11 @@ class RapidLoad_Admin
         $server_info['cron_status'] = $code;
         
         $response = array(
-            'message' => $code === 200 ? 'WP-Cron spawning is working as expected.' : sprintf( 'WP-Cron spawn returned HTTP status code: %1$s %2$s', $code, $message ),
+            'cron_message' => $code === 200 ? 'WP-Cron spawning is working as expected.' : sprintf( 'WP-Cron spawn returned HTTP status code: %1$s %2$s', $code, $message ),
             'server' => $server_info
         );
 
-        if ($code === 200) {
-            wp_send_json_success($response);
-        } else {
-            wp_send_json_error($response);
-        }
+        wp_send_json_success($response);
     }
 
     public function get_cron_spawn() {
