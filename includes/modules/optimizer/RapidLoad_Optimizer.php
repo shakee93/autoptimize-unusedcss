@@ -119,13 +119,13 @@ class RapidLoad_Optimizer
             $response['cron_status'] = $cron_status->get_error_message();
         }
 
-        $code = wp_remote_retrieve_response_code( $spawn );
-        $message = wp_remote_retrieve_response_message( $spawn );
+        $code = wp_remote_retrieve_response_code( $cron_status );
+        $message = wp_remote_retrieve_response_message( $cron_status );
         
         // Update cron status with actual code
         $response['cron_status'] = [
             'code' => $code,
-            'message' => $message
+            'message' => $message,
         ];
 
         if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
@@ -1875,32 +1875,6 @@ class RapidLoad_Optimizer
         );
 
         wp_send_json_success($result);
-    }
-
-    public function get_cron_spawn() {
-
-        $doing_wp_cron = sprintf( '%.22F', microtime( true ) );
-
-        $cron_request_array = array(
-            'url'  => site_url( 'wp-cron.php?doing_wp_cron=' . $doing_wp_cron ),
-            'key'  => $doing_wp_cron,
-            'args' => array(
-                'timeout'   => 3,
-                'blocking'  => true,
-                // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Calling native WordPress hook.
-                'sslverify' => apply_filters( 'https_local_ssl_verify', true ),
-            ),
-        );
-
-        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Calling native WordPress hook.
-        $cron_request = apply_filters( 'cron_request', $cron_request_array );
-
-        # Enforce a blocking request in case something that's hooked onto the 'cron_request' filter sets it to false
-        $cron_request['args']['blocking'] = true;
-
-        $result = wp_remote_post( $cron_request['url'], $cron_request['args'] );
-
-        return $result;
     }
     
     
