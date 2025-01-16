@@ -157,10 +157,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // see if admin bar node is there get popup container
         let popup = null
-        if(!isAdminPage){
-            popup = replaceParentWithDiv(document.getElementById('rl-node-wrapper') as HTMLDivElement)
-        }
-
+        // if(!isAdminPage){
+        //     popup = replaceParentWithDiv(document.getElementById('rl-node-wrapper') as HTMLDivElement)
+        // }
+        popup = replaceParentWithDiv(document.getElementById('rl-node-wrapper') as HTMLDivElement)
 
         new RapidLoadOptimizer({
             container,
