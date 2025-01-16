@@ -119,34 +119,24 @@ class RapidLoad_Optimizer
             $response['cron_status'] = $cron_status->get_error_message();
         }
 
-        $code = wp_remote_retrieve_response_code( $spawn );
-        $message = wp_remote_retrieve_response_message( $spawn );
+        $code = wp_remote_retrieve_response_code( $cron_status );
+        $message = wp_remote_retrieve_response_message( $cron_status );
         
         // Update cron status with actual code
         $response['cron_status'] = [
             'code' => $code,
-            'message' => $message
+            'message' => $message,
         ];
 
-        if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
-            $response['constants']['DISABLE_WP_CRON'] = 'The DISABLE_WP_CRON constant is set to true. WP-Cron spawning is disabled.';
-        }
+        $response['constants']['DISABLE_WP_CRON'] = defined('DISABLE_WP_CRON') ? DISABLE_WP_CRON : false;
 
-        if ( defined( 'ALTERNATE_WP_CRON' ) && ALTERNATE_WP_CRON ) {
-            $response['constants']['ALTERNATE_WP_CRON'] = 'The ALTERNATE_WP_CRON constant is set to true. WP-Cron spawning is not asynchronous.';
-        }
+        $response['constants']['ALTERNATE_WP_CRON'] = defined('ALTERNATE_WP_CRON') ? ALTERNATE_WP_CRON : false;
 
-        if ( defined( 'DONOTCACHEPAGE' ) && DONOTCACHEPAGE ) {
-            $response['constants']['DONOTCACHEPAGE'] = 'The DONOTCACHEPAGE constant is set to true. Page caching is disabled.';
-        }
+        $response['constants']['DONOTCACHEPAGE'] = defined('DONOTCACHEPAGE') ? DONOTCACHEPAGE : false;
 
-        if( defined( 'WP_CACHE' ) && !WP_CACHE || !defined( 'WP_CACHE' ) ) {
-            $response['constants']['WP_CACHE'] = 'The WP_CACHE constant is not set or set to false. Page caching is disabled.';
-        }
+        $response['constants']['WP_CACHE'] = defined('WP_CACHE') ? WP_CACHE : false;
 
-        if( defined( 'WP_CRON_LOCK_TIMEOUT' ) && WP_CRON_LOCK_TIMEOUT ) {
-            $response['constants']['WP_CRON_LOCK_TIMEOUT'] = 'The WP_CRON_LOCK_TIMEOUT constant is set to ' . WP_CRON_LOCK_TIMEOUT . '.';
-        }
+        $response['constants']['WP_CRON_LOCK_TIMEOUT'] = defined('WP_CRON_LOCK_TIMEOUT') ? WP_CRON_LOCK_TIMEOUT : false;
 
         $response['server'] = array(
             'software' => $_SERVER['SERVER_SOFTWARE'],
@@ -1875,32 +1865,6 @@ class RapidLoad_Optimizer
         );
 
         wp_send_json_success($result);
-    }
-
-    public function get_cron_spawn() {
-
-        $doing_wp_cron = sprintf( '%.22F', microtime( true ) );
-
-        $cron_request_array = array(
-            'url'  => site_url( 'wp-cron.php?doing_wp_cron=' . $doing_wp_cron ),
-            'key'  => $doing_wp_cron,
-            'args' => array(
-                'timeout'   => 3,
-                'blocking'  => true,
-                // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Calling native WordPress hook.
-                'sslverify' => apply_filters( 'https_local_ssl_verify', true ),
-            ),
-        );
-
-        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Calling native WordPress hook.
-        $cron_request = apply_filters( 'cron_request', $cron_request_array );
-
-        # Enforce a blocking request in case something that's hooked onto the 'cron_request' filter sets it to false
-        $cron_request['args']['blocking'] = true;
-
-        $result = wp_remote_post( $cron_request['url'], $cron_request['args'] );
-
-        return $result;
     }
     
     
