@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { LoaderIcon, CheckIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
@@ -17,6 +19,29 @@ const durationToSeconds = (duration: string): number => {
   const match = duration.match(/(\d+)s/);
   return match ? parseInt(match[1], 10) : 0;
 };
+
+const LoadingGradient = () => (
+  <AnimatePresence>
+    {true && (
+      <motion.div
+        className="absolute inset-0 rounded-xl"
+        style={{
+          background: `linear-gradient(90deg, transparent 0%, transparent 25%, #6c21a8 50%, transparent 75%, transparent 100%)`,
+          backgroundSize: '200% 100%',
+        }}
+        animate={{
+          backgroundPosition: ['200% 0', '-200% 0'],
+          opacity: [1, 0.5, 1]
+        }}
+        transition={{
+          duration: 4,
+          ease: "linear",
+          repeat: Infinity,
+        }}
+      />
+    )}
+  </AnimatePresence>
+);
 
 const ProgressTracker: React.FC<ProgressTrackerProps> = ({ steps, currentStep = 0, onTimeUpdate }) => {
   const [totalRemainingTime, setTotalRemainingTime] = useState(
@@ -52,7 +77,26 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ steps, currentStep = 
       {/* Main step */}
       <div className="col-span-1">
         <h3 className="text-sm font-medium text-gray-700 mb-2">1. Preparing</h3>
-        <div className="border rounded-[10px] p-4">
+        <div className="relative rounded-[10px] p-0.5">
+        {/* <AnimatePresence>
+                    {true && <motion.div
+                        className="absolute inset-0 rounded-xl"
+                        style={{
+                            background: `linear-gradient(90deg, transparent 0%, transparent 25%, #6c21a8 50%, transparent 75%, transparent 100%)`,
+                            backgroundSize: '200% 100%',
+                        }}
+                        animate={{
+                            backgroundPosition: ['200% 0', '-200% 0'],
+                            opacity: [1, 0.5, 1]
+                        }}
+                        transition={{
+                            duration: 4,
+                            ease: "linear",
+                            repeat: Infinity,
+                        }}
+                    />}
+                </AnimatePresence> */}
+          <LoadingGradient/>
           <ProgressItem
             duration={mainStep.duration}
             label={mainStep.label}
@@ -121,7 +165,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ duration, label, progress, 
   }, [isActive, countdown]);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col relative bg-white p-4 rounded-xl">
       <div className="w-full bg-gray-200 rounded-full h-2 relative">
         <div
           className={`absolute left-0 top-0 h-2 rounded-full transition-all duration-300 ${
