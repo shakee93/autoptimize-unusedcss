@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { AnimatePresence } from 'framer-motion';
+import { cn } from 'lib/utils';
 import { LoaderIcon, CheckIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
@@ -77,7 +78,7 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ steps, currentStep = 
       {/* Main step */}
       <div className="col-span-1">
         <h3 className="text-sm font-medium text-gray-700 mb-2">1. Preparing</h3>
-        <div className="relative rounded-[10px] p-0.5">
+        <div className="border relative rounded-[10px] p-0.5">
         {/* <AnimatePresence>
                     {true && <motion.div
                         className="absolute inset-0 rounded-xl"
@@ -102,6 +103,7 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ steps, currentStep = 
             label={mainStep.label}
             progress={mainStep.progress}
             isActive={currentStep === 0}
+            rounded={true}
           />
         </div>
       </div>
@@ -109,15 +111,17 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ steps, currentStep = 
       {/* Secondary steps */}
       <div className="col-span-4">
         <h3 className="text-sm font-medium text-gray-700 mb-2">2. Collecting required data to diagnose</h3>
-        <div className="border rounded-[10px]">
-          <div className="grid grid-cols-4 divide-x divide-gray-200">
+        <div className="border rounded-[10px] relative bg-white ">
+        <LoadingGradient/>
+          <div className="grid grid-cols-4 p-0.5 [&>div:first-child>div]:rounded-l-xl [&>div:last-child>div]:rounded-r-xl">
             {remainingSteps.map((step, index) => (
-              <div key={index} className="p-4">
+              <div key={index} className="">
                 <ProgressItem
                   duration={step.duration}
                   label={step.label}
                   progress={step.progress}
                   isActive={step.progress > 0}
+                  rounded={false}
                 />
               </div>
             ))}
@@ -130,9 +134,10 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ steps, currentStep = 
 
 interface ProgressItemProps extends ProgressStep {
   isActive?: boolean;
+  rounded?: boolean;
 }
 
-const ProgressItem: React.FC<ProgressItemProps> = ({ duration, label, progress, isActive }) => {
+const ProgressItem: React.FC<ProgressItemProps> = ({ duration, label, progress, isActive, rounded }) => {
   const [countdown, setCountdown] = useState(durationToSeconds(duration));
   const [showHangTight, setShowHangTight] = useState(false);
 
@@ -165,7 +170,7 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ duration, label, progress, 
   }, [isActive, countdown]);
 
   return (
-    <div className="flex flex-col relative bg-white p-4 rounded-xl">
+    <div className={cn("flex flex-col relative bg-white p-4 ", rounded ? 'rounded-xl' : '')}>
       <div className="w-full bg-gray-200 rounded-full h-2 relative">
         <div
           className={`absolute left-0 top-0 h-2 rounded-full transition-all duration-300 ${

@@ -25,14 +25,18 @@ import { setCommonState } from "../../../store/common/commonActions";
 import AIDemoMessage from "../components/AIDemoMessage";
 
 const DiagnosticSchema = z.object({
-    AnalysisTitle: z.string(),
+    // active_settings_inputs: z.array(z.object({
+    //     name: z.string(),
+    //     value: z.string().nullable(),
+    // })),
+    AnalysisTitle: z.string().optional(),
     AnalysisSummary: z.string(),
-    PluginConflicts: z.array(
-        z.object({
-            plugin: z.string(),
-            recommendedAction: z.string(),
-        })
-    ),
+    // PluginConflicts: z.array(
+    //     z.object({
+    //         plugin: z.string(),
+    //         recommendedAction: z.string(),
+    //     })
+    // ),
     CriticalIssues: z.array(
         z.object({
             issue: z.string(),
@@ -40,11 +44,27 @@ const DiagnosticSchema = z.object({
             howToFix: z.array(z.object({
                 step: z.string(),
                 description: z.string(),
-                type: z.enum(['rapidload_fix', 'wordpress_fix', 'code_fix', 'other']),
+                type: z.enum(['rapidload_fix', 'wordpress_fix', 'theme_fix', 'another_plugin_fix', 'code_fix', 'server_config_fix', 'server_upgrade_fix', 'other']),
                 substeps: z.array(z.object({
                     step: z.string(),
                     description: z.string(),
                 })).optional().describe('Substeps to fix the issue.'),
+                rapidload_setting_input: z.object({
+                    name: z.string(),
+                    value: z.string().nullable(),
+                    original_current_value: z.string().nullable(),
+                }).optional(),
+            })),
+            how_to_fix_reasoning_memory: z.string(),
+            how_to_fix_questions: z.array(z.object({
+                question: z.string(),
+                explanation: z.string(),
+                type: z.enum(['single_choice', 'multiple_choice', 'text', 'number']),
+                options: z.array(z.object({
+                    value: z.string(),
+                    label: z.string(),
+                    description: z.string(),
+                })),
             })),
             resources: z.array(z.object({
                 name: z.string(),
@@ -78,7 +98,7 @@ const Optimizations = ({ }) => {
     const [diagnosticsProgress, setDiagnosticsProgress] = useState(0);
     const { headerUrl, diagnosticLoading } = useCommonDispatch();
     const [remainingTime, setRemainingTime] = useState(0);
-
+    const [serverDetails, setServerDetails] = useState(null);
     useEffect(() => {
         console.log('diagnosticLoading', diagnosticLoading)
     }, [diagnosticLoading])
@@ -154,18 +174,17 @@ const Optimizations = ({ }) => {
         setLoadingText('Collecting active plugins...')
         const api = new ApiService(options);
         const plugins = await api.getActivePlugins();
-
+        const server_data = await api.post('titan_checklist_cron');
 
         const _diagnostics = Object.entries(diagnostics).map(([key, value]) => value)
         // console.log(_diagnostics)
 
+        console.log(serverDetails)
+
         const input = {
-            settings: settings.map((s: any) => ({
-                ...s,
-                inputs: s.inputs.map((i: any) => ({
-                    ...i,
-                    diagnostics: i.value ? _diagnostics.filter((d: any) => d.key === i.key).map(({ key, ...rest }: any) => rest) : []
-                })),
+            settings: settings.map(({ status, ...rest }) => ({
+                ...rest,
+                enabled: rest.inputs[0]?.value || false,
             })),
             plugins: plugins.data,
             report: {
@@ -190,11 +209,13 @@ const Optimizations = ({ }) => {
                     settings: d.settings.map((s: any) => s.name),
                 })),
             },
-            real_user_diagnostics: Object.entries(diagnostics).map(([key, value]) => value),
-            server_diagnostics: settings.map((s: any) => ({
-                status: s.status,
+            plugin_diagnostics: settings.map((s: any) => ({
                 name: s.name,
-            })).filter((s: any) => s.status),
+                settings_diagnostics: s.status,
+                real_user_diagnostics: _diagnostics.find((d: any) => d.name === s.name),
+                value: s.name === "Cache Policy" ? "one_time_action" : (s.inputs[0]?.value || false)
+            })).filter((s: any) => s.settings_diagnostics || s.real_user_diagnostics),
+            server_details: server_data
         }
 
         setLoadingText('Hermes AI is analyzing your page...')
@@ -203,7 +224,7 @@ const Optimizations = ({ }) => {
         try {
 
             console.log(input)
-            // submit(input)
+            submit(input)
             setDiagnosticsProgress(95);
 
         } catch (error: any) {
@@ -221,7 +242,7 @@ const Optimizations = ({ }) => {
             // Show error in loading area
             setLoadingText(`❌ ${error?.message || "Failed to complete AI analysis. Please try again."}`);
         }
-    }, [loadingText])
+    }, [loadingText, serverDetails, settings])
 
     useEffect(() => {
         const handleMessage = (event: MessageEvent) => {
@@ -399,8 +420,9 @@ const Optimizations = ({ }) => {
                         }, 500);
 
                         const api = new ApiService(options);
-                        await api.post('titan_checklist_cron');
-
+                        const data = await api.post('rapidload_server_info');
+                        setServerDetails(data)
+                        console.log(data)
                         clearInterval(progressInterval);
                         setServerInfoProgress(100);
 
@@ -421,7 +443,7 @@ const Optimizations = ({ }) => {
                             setPageSpeedProgress(prev => Math.min(prev + 5, 90));
                         }, 2000);
 
-                        // await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
+                         await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
 
                         clearInterval(progressInterval);
                         setPageSpeedProgress(100);
@@ -460,7 +482,7 @@ const Optimizations = ({ }) => {
         }
     };
 
-    
+
     return (
         <AnimatePresence>
             <m.div
@@ -508,51 +530,51 @@ const Optimizations = ({ }) => {
                             </span>
                         </div>
 
-                    {/* Button Column */}
-                    {!diagnosticsLoading &&
-                    <div className="flex justify-end items-center mt-2">
-                        <AppButton
-                            disabled={diagnosticsLoading}
-                            className="rounded-xl px-8 py-6 whitespace-nowrap"
-                            onClick={() => {
-                                handleFlushCache();
-                                setDiagnosticsLoading(true);
-                                // dispatch(setDiagnosticResults({
-                                //     AnalysisSummary: ''
-                                // }));
-                            }}
-                        >
-                            {/* {diagnosticsLoading && <LoaderIcon className="h-4 w-4 text-white animate-spin" />} */}
-                            {diagnosticResults?.AnalysisSummary?.length ? 'Run Diagnostics Test Again' : 'Run Diagnostics Test '}
-                            {/* Run Diagnostics Test  */}
-                        </AppButton>
+                        {/* Button Column */}
+                        {!diagnosticsLoading &&
+                            <div className="flex justify-end items-center mt-2">
+                                <AppButton
+                                    disabled={diagnosticsLoading}
+                                    className="rounded-xl px-8 py-6 whitespace-nowrap"
+                                    onClick={() => {
+                                        handleFlushCache();
+                                        setDiagnosticsLoading(true);
+                                        // dispatch(setDiagnosticResults({
+                                        //     AnalysisSummary: ''
+                                        // }));
+                                    }}
+                                >
+                                    {/* {diagnosticsLoading && <LoaderIcon className="h-4 w-4 text-white animate-spin" />} */}
+                                    {diagnosticResults?.AnalysisSummary?.length ? 'Run Diagnostics Test Again' : 'Run Diagnostics Test '}
+                                    {/* Run Diagnostics Test  */}
+                                </AppButton>
+                            </div>
+                        }
                     </div>
-                    }
-                </div>
-                    
+
                     {/* diagnosticsLoading */}
                     {diagnosticsLoading && (
-                    <m.div
-                        initial={{ y: 20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: 20, opacity: 0 }}
-                        transition={{ 
-                        duration: 0.3,
-                        ease: "easeOut"
-                        }}
-                    >                         
-                    {/* <ProgressTracker steps={progressSteps} currentStep={0} /> */}
-                
-                    <div className="border-b border-zinc-200 dark:border-zinc-800 -mx-6 my-6"/>
-                    
-                    <div className="flex flex-col gap-4">
-                        <ProgressTracker 
-                            steps={progressSteps} 
-                            currentStep={currentStep ?? undefined}
-                            onTimeUpdate={handleRemainingTimeUpdate}
-                        />
-                        </div>
-                    </m.div>
+                        <m.div
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: 20, opacity: 0 }}
+                            transition={{
+                                duration: 0.3,
+                                ease: "easeOut"
+                            }}
+                        >
+                            {/* <ProgressTracker steps={progressSteps} currentStep={0} /> */}
+
+                            <div className="border-b border-zinc-200 dark:border-zinc-800 -mx-6 my-6" />
+
+                            <div className="flex flex-col gap-4">
+                                <ProgressTracker
+                                    steps={progressSteps}
+                                    currentStep={currentStep ?? undefined}
+                                    onTimeUpdate={handleRemainingTimeUpdate}
+                                />
+                            </div>
+                        </m.div>
                     )}
 
                     {/* {object?.AnalysisSummary?.length &&
