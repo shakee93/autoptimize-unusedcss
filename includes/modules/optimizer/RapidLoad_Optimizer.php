@@ -128,25 +128,15 @@ class RapidLoad_Optimizer
             'message' => $message,
         ];
 
-        if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
-            $response['constants']['DISABLE_WP_CRON'] = 'The DISABLE_WP_CRON constant is set to true. WP-Cron spawning is disabled.';
-        }
+        $response['constants']['DISABLE_WP_CRON'] = defined('DISABLE_WP_CRON') ? DISABLE_WP_CRON : false;
 
-        if ( defined( 'ALTERNATE_WP_CRON' ) && ALTERNATE_WP_CRON ) {
-            $response['constants']['ALTERNATE_WP_CRON'] = 'The ALTERNATE_WP_CRON constant is set to true. WP-Cron spawning is not asynchronous.';
-        }
+        $response['constants']['ALTERNATE_WP_CRON'] = defined('ALTERNATE_WP_CRON') ? ALTERNATE_WP_CRON : false;
 
-        if ( defined( 'DONOTCACHEPAGE' ) && DONOTCACHEPAGE ) {
-            $response['constants']['DONOTCACHEPAGE'] = 'The DONOTCACHEPAGE constant is set to true. Page caching is disabled.';
-        }
+        $response['constants']['DONOTCACHEPAGE'] = defined('DONOTCACHEPAGE') ? DONOTCACHEPAGE : false;
 
-        if( defined( 'WP_CACHE' ) && !WP_CACHE || !defined( 'WP_CACHE' ) ) {
-            $response['constants']['WP_CACHE'] = 'The WP_CACHE constant is not set or set to false. Page caching is disabled.';
-        }
+        $response['constants']['WP_CACHE'] = defined('WP_CACHE') ? WP_CACHE : false;
 
-        if( defined( 'WP_CRON_LOCK_TIMEOUT' ) && WP_CRON_LOCK_TIMEOUT ) {
-            $response['constants']['WP_CRON_LOCK_TIMEOUT'] = 'The WP_CRON_LOCK_TIMEOUT constant is set to ' . WP_CRON_LOCK_TIMEOUT . '.';
-        }
+        $response['constants']['WP_CRON_LOCK_TIMEOUT'] = defined('WP_CRON_LOCK_TIMEOUT') ? WP_CRON_LOCK_TIMEOUT : false;
 
         $response['server'] = array(
             'software' => $_SERVER['SERVER_SOFTWARE'],
