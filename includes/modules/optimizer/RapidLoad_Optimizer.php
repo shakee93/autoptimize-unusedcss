@@ -88,7 +88,9 @@ class RapidLoad_Optimizer
             'url' => site_url()
         ]);
 
-        if($result == "200"){
+        if(is_wp_error($result)){
+            $response['crawler_check'] = $result->get_error_message();
+        }else{
             $response['crawler_check'] = $result;
         }
 
