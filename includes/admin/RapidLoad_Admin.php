@@ -446,7 +446,7 @@ class RapidLoad_Admin
             ] );
         }
 
-        $spawn = self::get_cron_spawn();
+        $spawn = $this->get_cron_spawn();
 
         if ( is_wp_error( $spawn ) ) {
             wp_send_json_error( [
