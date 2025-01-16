@@ -492,7 +492,6 @@ const Optimizations = ({ }) => {
                 className='bg-[#F0F0F1] dark:bg-brand-800'
             >
                 
-                <AIDemoMessage/>
 
                 <div className='px-6 py-6 bg-white rounded-3xl'>
                     <div className="flex gap-4 w-full items-start">
