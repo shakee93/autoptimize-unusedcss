@@ -174,12 +174,11 @@ const Optimizations = ({ }) => {
         setLoadingText('Collecting active plugins...')
         const api = new ApiService(options);
         const plugins = await api.getActivePlugins();
-        const server_data = await api.post('titan_checklist_cron');
+        const server_data = await api.post('rapidload_server_info');
+
 
         const _diagnostics = Object.entries(diagnostics).map(([key, value]) => value)
         // console.log(_diagnostics)
-
-        console.log(serverDetails)
 
         const input = {
             settings: settings.map(({ status, ...rest }) => ({
@@ -215,7 +214,15 @@ const Optimizations = ({ }) => {
                 real_user_diagnostics: _diagnostics.find((d: any) => d.name === s.name),
                 value: s.name === "Cache Policy" ? "one_time_action" : (s.inputs[0]?.value || false)
             })).filter((s: any) => s.settings_diagnostics || s.real_user_diagnostics),
-            server_details: server_data
+            server_details: server_data.data ? {
+                ...server_data.data,
+                headers: {
+                    ...server_data.data.headers,
+                    'x-cache-handler': undefined,
+                    'x-cache-status': undefined,
+                    server: undefined,
+                }
+            } : null,
         }
 
         setLoadingText('Hermes AI is analyzing your page...')
@@ -443,7 +450,7 @@ const Optimizations = ({ }) => {
                             setPageSpeedProgress(prev => Math.min(prev + 5, 90));
                         }, 2000);
 
-                         await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
+                        // await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
 
                         clearInterval(progressInterval);
                         setPageSpeedProgress(100);
@@ -491,7 +498,7 @@ const Optimizations = ({ }) => {
                 transition={{ duration: 0.2, delay: 0.05 }}
                 className='bg-[#F0F0F1] dark:bg-brand-800'
             >
-                
+
 
                 <div className='px-6 py-6 bg-white rounded-3xl'>
                     <div className="flex gap-4 w-full items-start">
@@ -605,8 +612,8 @@ const Optimizations = ({ }) => {
                                     </button>
                                 </div>
                                 <iframe
-                                   // src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
-                                     src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
+                                    // src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
+                                    src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                 />

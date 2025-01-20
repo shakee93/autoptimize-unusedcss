@@ -141,7 +141,7 @@ class RapidLoad_Optimizer
         $response['constants']['WP_CRON_LOCK_TIMEOUT'] = defined('WP_CRON_LOCK_TIMEOUT') ? WP_CRON_LOCK_TIMEOUT : false;
 
         $response['server'] = array(
-            'software' => $_SERVER['SERVER_SOFTWARE'],
+            'server_software' => $_SERVER['SERVER_SOFTWARE'],
             'php_version' => PHP_VERSION,
         );
 
