@@ -43,31 +43,27 @@ const DiagnosticSchema = z.object({
         z.object({
             issue: z.string(),
             description: z.string(),
-            howToFix: z.array(z.object({
-                step: z.string(),
-                description: z.string(),
-                type: z.enum(['rapidload_fix', 'wordpress_fix', 'theme_fix', 'another_plugin_fix', 'code_fix', 'server_config_fix', 'server_upgrade_fix', 'other']),
-                substeps: z.array(z.object({
-                    step: z.string(),
-                    description: z.string(),
-                })).optional().describe('Substeps to fix the issue.'),
-                rapidload_setting_input: z.object({
-                    name: z.string(),
-                    value: z.string().nullable(),
-                    original_current_value: z.string().nullable(),
-                }).optional(),
-            })),
-            how_to_fix_reasoning_memory: z.string(),
-            how_to_fix_questions: z.array(z.object({
-                question: z.string(),
-                explanation: z.string(),
-                type: z.enum(['single_choice', 'multiple_choice', 'text', 'number']),
-                options: z.array(z.object({
-                    value: z.string(),
-                    label: z.string(),
-                    description: z.string(),
+            solutions: z.object({
+                solutions_reasoning: z.array(z.object({
+                    block_type: z.enum(['observation', 'analysis', 'hypothesis', 'validation', 'conclusion']),
+                    thought: z.string(),
+                    reasoning: z.string(),
+                    confidence_level: z.number().min(0).max(100),
+                    supporting_evidence: z.array(z.string()),
+                    related_blocks: z.array(z.string()).optional(),
                 })),
-            })),
+                solutions_list: z.array(z.object({
+                    type: z.enum(['rapidload_fix', 'wordpress_fix', 'theme_fix', 'another_plugin_fix', 'code_fix', 'server_config_fix', 'server_upgrade_fix']),
+                    title: z.string(),
+                    description: z.string(),
+                    steps: z.array(z.object({
+                        step: z.number(),
+                        action: z.string(),
+                        details: z.string(),
+                        verification: z.string().optional()
+                    })),
+                })),
+            }),
             resources: z.array(z.object({
                 name: z.string(),
                 url: z.string(),
@@ -101,6 +97,11 @@ const Optimizations = ({ }) => {
     const { headerUrl, diagnosticLoading } = useCommonDispatch();
     const [remainingTime, setRemainingTime] = useState(0);
     const [serverDetails, setServerDetails] = useState(null);
+    const [input, setInput] = useState(null);
+
+    useEffect(() => {
+        console.log('diagnosticLoading', diagnosticLoading)
+    }, [diagnosticLoading])
     const [diagnosticError, setDiagnosticError] = useState<string | null>(null);
 
     const relatedAudits = useMemo(() => {
@@ -196,12 +197,11 @@ const Optimizations = ({ }) => {
         setLoadingText('Collecting active plugins...')
         const api = new ApiService(options);
         const plugins = await api.getActivePlugins();
-        const server_data = await api.post('titan_checklist_cron');
+        const server_data = await api.post('rapidload_server_info');
+
 
         const _diagnostics = Object.entries(diagnostics).map(([key, value]) => value)
         // console.log(_diagnostics)
-
-        console.log(serverDetails)
 
         const input = {
             settings: settings.map(({ status, ...rest }) => ({
@@ -237,13 +237,23 @@ const Optimizations = ({ }) => {
                 real_user_diagnostics: _diagnostics.find((d: any) => d.name === s.name),
                 value: s.name === "Cache Policy" ? "one_time_action" : (s.inputs[0]?.value || false)
             })).filter((s: any) => s.settings_diagnostics || s.real_user_diagnostics),
-            server_details: server_data
+            server_details: server_data.data ? {
+                ...server_data.data,
+                headers: {
+                    ...server_data.data.headers,
+                    'x-cache-handler': undefined,
+                    'x-cache-status': undefined,
+                    server: undefined,
+                }
+            } : null,
         }
 
         setLoadingText('Hermes AI is analyzing your page...')
 
 
         try {
+
+            setInput(input)
             submit(input)
             setDiagnosticsProgress(95);
 
@@ -686,8 +696,8 @@ const Optimizations = ({ }) => {
                                     </button>
                                 </div>
                                 <iframe
-                                   // src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
-                                     src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
+                                    src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
+                                    // src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                 />
@@ -696,7 +706,13 @@ const Optimizations = ({ }) => {
                     )}
                 </div>
 
-                {diagnosticResults?.AnalysisSummary?.length && <AnalysisResults object={diagnosticResults} relatedAudits={relatedAudits} />}
+                {diagnosticResults?.AnalysisSummary?.length &&
+                    <AnalysisResults
+                        object={diagnosticResults}
+                        relatedAudits={relatedAudits}
+                        input={input}
+                    />
+                }
             </m.div>
         </AnimatePresence>
     )

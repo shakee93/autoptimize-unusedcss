@@ -62,7 +62,7 @@ class CriticalCSS_Store
                         'url' => $this->job_data->job->url,
                         'service' => true,
                         'mobile_device' => true,
-                        "cacheBusting"          => apply_filters('uucss/cache/bust',[]),
+                        "cacheBusting"          => isset($this->options['uucss_cache_busting_v2']) ? apply_filters('uucss/cache/bust',[]) : [],
                         "ignoreInlinedStyles" => isset($this->options['uucss_ignore_inlined_styles']) ? !($this->options['uucss_ignore_inlined_styles'] == "1") : true
                     ]
                 ) );
@@ -112,7 +112,7 @@ class CriticalCSS_Store
                         'wp_nonce' => wp_create_nonce('uucss_job_hook'),
                         'hook_end_point' => trailingslashit(get_site_url()),
                         'immediate' => true,
-                        "cacheBusting"          => apply_filters('uucss/cache/bust',[]),
+                        "cacheBusting"          => isset($this->options['uucss_cache_busting_v2']) ? apply_filters('uucss/cache/bust',[]) : [],
                         "ignoreInlinedStyles" => isset($this->options['uucss_ignore_inlined_styles']) ? !($this->options['uucss_ignore_inlined_styles'] == "1") : true
                     ]
 

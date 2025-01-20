@@ -178,7 +178,11 @@ module.exports = {
 					to: {
 						height: '0'
 					}
-				}
+				},
+				loading: {
+					'0%, 80%, 100%': { opacity: '0' },
+					'40%': { opacity: '1' },
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
@@ -187,7 +191,8 @@ module.exports = {
 				'rl-loading-loop': 'rl-loading-loop 1.8s ease-out infinite',
 				'bounce-horizontal': 'bounce-horizontal 1.5s infinite',
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				loading: 'loading 1.4s ease-in-out infinite',
 			}
 		}
 	},
