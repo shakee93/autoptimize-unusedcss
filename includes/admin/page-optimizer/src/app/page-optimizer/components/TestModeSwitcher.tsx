@@ -46,7 +46,8 @@ const TestModeSwitcher = () => {
                     <Loader className='w-5 animate-spin' />
                 </TooltipText>
             }
-            <div className={cn('flex items-center gap-2 justify-between p-2 px-4 rounded-xl text-sm font-medium transition-all duration-300', testMode ? 'bg-[#FFAA34] text-brand-0' : 'bg-brand-200/60')}>
+            {/* testMode ? 'bg-[#FFAA34] text-brand-0' : 'bg-brand-200/60' */}
+            <div className={cn('flex items-center gap-2 justify-between p-2 px-4 rounded-xl text-sm font-medium transition-all duration-300', testMode ? '' : '')}>
                 <div className="flex flex-col">
                     Test Mode
                 </div>
@@ -55,7 +56,7 @@ const TestModeSwitcher = () => {
                     onCheckedChange={async () => {
                         await handleSwitchChange(!testMode);
                     }}
-                    className="self-center data-[state=checked]:bg-[#6B3F02]"
+                    className="self-center data-[state=checked]:bg-[#FFAA34]"
                 />
             </div>
             {/*<div className='w-fit'>*/}

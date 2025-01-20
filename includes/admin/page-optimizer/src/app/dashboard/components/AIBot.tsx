@@ -10,6 +10,7 @@ import {
     DialogTitle,
 } from "components/ui/dialog";
 import { MessagesSquare } from "lucide-react";
+import { AnimatedLogo } from "components/animated-logo";
 
 const AIBot = () => {
     const [open, setOpen] = useState(false);
@@ -67,13 +68,17 @@ const AIBot = () => {
                         </DialogContent>
                     </Dialog>
                     
-                    <AIBotIcon/>
-                    <div className="dark:text-brand-300 text-center flex flex-col gap-2">
-                        <h2 className="text-base font-semibold">Hi, I am Speed Coach. <br/> Your AI Companion</h2>
+                    <div className="flex flex-col items-center gap-2 py-10">  
+                    {/* <AIBotIcon/> */}
+                    <AnimatedLogo size="lg" isPlaying={true} />
+                    <div className="dark:text-brand-300 text-center flex flex-col">
+                        <h2 className="text-base font-semibold">Chat with Hermes AI</h2>
+                        <p className="text-sm text-brand-500">An intelligent, responsive chatbot for PageSpeed</p>
+                    </div>
                     </div>
                 </div>
                 <div className="w-full max-w-md mx-auto p-6 pt-0">
-                    <h2 className="text-sm font-semibold mb-2">Suggested Questions</h2>
+                    {/* <h2 className="text-sm font-semibold mb-2">Suggested Questions</h2>
                     <div className="grid grid-cols-2 gap-4 mb-4">
                         {questions.map((question, index) => (
                             <button
@@ -84,7 +89,7 @@ const AIBot = () => {
                                 <ArrowRightIcon className="h-4 w-4 text-brand-950 "/>
                             </button>
                         ))}
-                    </div>
+                    </div> */}
                     <div className="relative">
                                     <input
                                         type="text"

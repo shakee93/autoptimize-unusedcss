@@ -17,7 +17,7 @@ import {
     FETCH_POSTS,
     GET_CDN_USAGE,
     GET_IMAGE_USAGE,
-    GET_CACHE_USAGE, LICENSE_INFORMATION, HOME_PAGE_PERFORMANCE, SET_DIAGNOSTIC_RESULTS
+    GET_CACHE_USAGE, LICENSE_INFORMATION, HOME_PAGE_PERFORMANCE, SET_DIAGNOSTIC_RESULTS, SET_DIAGNOSTIC_PROGRESS
 } from "./appTypes";
 
 const blankReport =  {
@@ -41,6 +41,14 @@ const initialState: AppState = {
     optimizationData: [],
     allPosts: null,
     diagnosticResults: null,
+    diagnosticProgress: {
+        currentStep: 0,
+        isFlushingProgress: 0,
+        settingsProgress: 0,
+        serverInfoProgress: 0,
+        pageSpeedProgress: 0,
+        diagnosticsProgress: 0
+    },
     report: {
         mobile: blankReport,
         desktop: blankReport,
@@ -93,6 +101,14 @@ const initialState: AppState = {
 const appReducer = (state = initialState, action: AppAction): AppState => {
 
     switch (action.type) {
+        case SET_DIAGNOSTIC_PROGRESS:
+            return {
+                ...state,
+                diagnosticProgress: {
+                    ...state.diagnosticProgress,
+                    ...action.payload,
+                }
+            };
         case SET_DIAGNOSTIC_RESULTS:
             return {
                 ...state,

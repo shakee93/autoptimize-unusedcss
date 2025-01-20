@@ -15,7 +15,8 @@ import {
     UPDATE_FILE_ACTION, UPDATE_OPTIMIZE_TABLE,
     UPDATE_SETTINGS,
     UPDATE_TEST_MODE,
-    SET_DIAGNOSTIC_RESULTS
+    SET_DIAGNOSTIC_RESULTS,
+    SET_DIAGNOSTIC_PROGRESS
 } from "./appTypes";
 import ApiService from "../../services/api";
 import Audit from "app/page-optimizer/components/audit/Audit";
@@ -723,3 +724,32 @@ export const setDiagnosticResults = (results: DiagnosticResults) => (
         payload: results,
     });
 }
+
+
+// export const setDiagnosticProgress = (
+//    progress: DiagnosticProgress
+// ): ThunkAction<void, RootState, unknown, AnyAction> => {
+//     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
+
+//         dispatch({
+//             type: SET_DIAGNOSTIC_PROGRESS, 
+//             payload: progress,
+//         })
+//     }
+// }
+
+export const setDiagnosticProgress = (
+    progress: Partial<DiagnosticProgress>
+ ): ThunkAction<void, RootState, unknown, AnyAction> => {
+     return (dispatch, getState) => {
+         const currentProgress = getState().app.diagnosticProgress;
+         
+         dispatch({
+             type: SET_DIAGNOSTIC_PROGRESS, 
+             payload: {
+                 ...currentProgress,
+                 ...progress
+             },
+         });
+     }
+ }

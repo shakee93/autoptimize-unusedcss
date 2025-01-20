@@ -4,7 +4,7 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "..
 import { useCompletion, experimental_useObject as useObject } from 'ai/react'
 import { AnimatePresence, m, motion } from "framer-motion"
 import useCommonDispatch from "hooks/useCommonDispatch";
-import { changeGear, fetchReport, fetchSettings, setDiagnosticResults } from '../../../store/app/appActions';
+import { changeGear, fetchReport, fetchSettings, setDiagnosticResults, setDiagnosticProgress } from '../../../store/app/appActions';
 import { LoaderIcon, ChevronDown, GaugeCircle, RefreshCw, Sparkles } from "lucide-react";
 import { useSelector } from "react-redux";
 import { optimizerData } from "../../../store/app/appSelector";
@@ -23,6 +23,8 @@ import { compareVersions } from 'compare-versions';
 import { AnalysisResults } from '../../../components/analysis-results';
 import { setCommonState } from "../../../store/common/commonActions";
 import AIDemoMessage from "../components/AIDemoMessage";
+import ErrorFetch from "components/ErrorFetch";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
 
 const DiagnosticSchema = z.object({
     // active_settings_inputs: z.array(z.object({
@@ -85,23 +87,21 @@ const DiagnosticSchema = z.object({
 const AIBaseURL = window.rapidload_optimizer.ai_root || "https://ai.rapidload.io/api"
 
 const Optimizations = ({ }) => {
-    const { settings, data, activeReport, diagnosticResults } = useSelector(optimizerData);
-    const [diagnosticsLoading, setDiagnosticsLoading] = useState(false);
+    const { settings, data, activeReport, diagnosticResults, diagnosticProgress } = useSelector(optimizerData);
     const [diagnosticComplete, setDiagnosticComplete] = useState(false);
     const [loadingText, setLoadingText] = useState<string | null>(null);
-    const [currentStep, setCurrentStep] = useState<number | null>(null);
-    const [stepProgress, setStepProgress] = useState(0);
+    const [aiLoading, setAiLoading] = useState(false);
+    const [currentStep, setCurrentStep] = useState<number>(0);
     const [isFlushingProgress, setIsFlushingProgress] = useState(0);
     const [settingsProgress, setSettingsProgress] = useState(0);
     const [pageSpeedProgress, setPageSpeedProgress] = useState(0);
     const [serverInfoProgress, setServerInfoProgress] = useState(0);
     const [diagnosticsProgress, setDiagnosticsProgress] = useState(0);
+    
     const { headerUrl, diagnosticLoading } = useCommonDispatch();
     const [remainingTime, setRemainingTime] = useState(0);
     const [serverDetails, setServerDetails] = useState(null);
-    useEffect(() => {
-        console.log('diagnosticLoading', diagnosticLoading)
-    }, [diagnosticLoading])
+    const [diagnosticError, setDiagnosticError] = useState<string | null>(null);
 
     const relatedAudits = useMemo(() => {
         if (!data?.grouped) return [];
@@ -117,12 +117,9 @@ const Optimizations = ({ }) => {
         api: `${AIBaseURL}/diagnosis`,
         schema: DiagnosticSchema,
         onFinish: (diagnostic: any) => {
-            console.log(diagnostic)
-            setDiagnosticsLoading(false)
-            setLoadingText(null)
-            setDiagnosticComplete(true)
-            setDiagnosticsProgress(100);
-            resetDiagnosticResults();
+            //console.log(diagnostic)
+            aiResultsComplete();
+
             toast({
                 title: "AI Diagnostic Complete",
                 description: "AI analysis of your page has been completed successfully.",
@@ -149,26 +146,51 @@ const Optimizations = ({ }) => {
     };
 
     useEffect(() => {
-        // console.log("diagnosticResults Available in app state", diagnosticResults)
-
         if (object?.AnalysisSummary && object.AnalysisSummary.length) {
             dispatch(setDiagnosticResults(object as DiagnosticResults));
         }
-    }, [object])
+    }, [object]);
 
-    // useEffect(() => {
-    //     if (diagnosticsLoading) {
-    //         const timer = setInterval(() => {
-    //             setRemainingTime(prev => Math.max(0, prev - 1));
-    //         }, 1000);
+    
+    const aiResultsComplete = () => {
+        setLoadingText(null)
+        setDiagnosticComplete(true)
+        setDiagnosticsProgress(100);
+        resetDiagnosticResults();
+        dispatch(setCommonState('diagnosticLoading', false));
+    };
 
-    //         return () => clearInterval(timer);
-    //     } else {
-    //         setRemainingTime(progressSteps.reduce((total, step) => 
-    //             total + parseInt(step.duration), 0
-    //         ));
-    //     }
-    // }, [diagnosticsLoading]);
+
+
+    const resetDiagnosticResults = () => {
+        setCurrentStep(0);
+        setSettingsProgress(0);
+        setServerInfoProgress(0);
+        setPageSpeedProgress(0);
+        setDiagnosticsProgress(0);
+        setIsFlushingProgress(0);
+        setAiLoading(false);
+    }
+
+
+
+    const handleDiagnosticError = (error: string) => {
+       
+        return <div className="flex gap-8 items-center mt-8">
+            <div className='border-2 border-red-500 rounded-xl flex items-start gap-4 p-4'>
+                <div className='p-2 bg-red-200/30 rounded-lg'>
+                    <ExclamationTriangleIcon className='w-10 h-10 text-red-500' />
+                </div>
+                <div className='flex flex-col gap-1'>
+                <span className='font-medium text-md '>Oops! Something went wrong</span>
+                <span className='text-sm text-brand-700 dark:text-brand-300'>Run Diagnostics Test Again</span>
+                <div className='text-sm text-brand-500 dark:text-brand-200 border-t mt-2 pt-2 max-w-[350px]'>
+                <span className='font-medium text-brand-800 dark:text-brand-400'>Details:</span> {error}</div>
+                </div>
+            </div>
+        </div>
+    }
+
 
     const doAnalysis = useCallback(async (diagnostics: any) => {
         setLoadingText('Collecting active plugins...')
@@ -222,16 +244,16 @@ const Optimizations = ({ }) => {
 
 
         try {
-
-            console.log(input)
             submit(input)
             setDiagnosticsProgress(95);
 
         } catch (error: any) {
             console.error('AI Diagnosis Error:', error);
-            setDiagnosticsLoading(false);
+            dispatch(setCommonState('diagnosticLoading', false));
+            setAiLoading(false);
             setLoadingText(null);
-
+            setDiagnosticError(error?.message || "Failed to complete AI analysis. Please try again.");
+            
             // Show error toast
             toast({
                 title: "AI Diagnostic Failed",
@@ -247,12 +269,7 @@ const Optimizations = ({ }) => {
     useEffect(() => {
         const handleMessage = (event: MessageEvent) => {
             if (event.data.type === "RAPIDLOAD_CHECK_RESULTS") {
-                // console.log("Received data from iframe:", event.data);
-
                 setLoadingText('Collected data from your page...')
-
-
-                console.log(event.data.data)
                 doAnalysis(event.data.data)
             }
         };
@@ -266,46 +283,39 @@ const Optimizations = ({ }) => {
 
     const startDiagnostics = async () => {
 
-        let progressInterval: NodeJS.Timeout | undefined = undefined;
-
         try {
+
             setDiagnosticsProgress(25);
 
-            // progressInterval = setInterval(() => {
+            // const progressInterval = setInterval(() => {
             //     setDiagnosticsProgress(prev => Math.min(prev + 10, 90));
             // }, 1000);
 
             if (diagnosticComplete) {
                 setDiagnosticComplete(false)
                 setShowIframe(false);
-                // setDiagnosticsLoading(true);
                 setLoadingText('Refreshing diagnostics...');
                 await new Promise(resolve => setTimeout(resolve, 200));
                 setShowIframe(true);
             } else {
                 setLoadingText('Collecting Diagnostics from your page...')
-                // setDiagnosticsLoading(true)
                 setShowIframe(true)
             }
 
-            // Clear interval when AI analysis is complete
-            setDiagnosticsProgress(50);
-            // return () => clearInterval(progressInterval);
+            
+            setDiagnosticsProgress( 50);
 
-        } catch (error) {
+        } catch (error: any) {
             setDiagnosticsProgress(0);
+            setDiagnosticError(error?.message || "Failed to run diagnostics");
             // console.error('❌ Diagnostics failed:', error);
-            toast({
-                title: "Diagnostics Failed",
-                description: error?.message || "Failed to run diagnostics",
-                variant: "destructive",
-            });
+            // toast({
+            //     title: "Diagnostics Failed",
+            //     description: error?.message || "Failed to run diagnostics",
+            //     variant: "destructive",
+            // });
         }
-        //  finally {
-        //     if ( diagnosticsProgress > 94) {
-        //         clearInterval(progressInterval);
-        //     }
-        // }
+        
     };
 
 
@@ -337,150 +347,216 @@ const Optimizations = ({ }) => {
     };
 
     const handleFlushCache = async () => {
-
-        setCurrentStep(0);
-        setIsFlushingProgress(0);
+        
         const api = new ApiService(options);
         const previewUrl = optimizerUrl + '?rapidload_preview'
 
         try {
-            // Clear page cache - 40% of progress
+        
+            
             setIsFlushingProgress(10);
+           
             await api.post('clear_page_cache', {
                 url: optimizerUrl
             });
-            setIsFlushingProgress(40);
 
             setIsFlushingProgress(60);
-            await preloadPage(previewUrl);
-            setIsFlushingProgress(100);
 
-            toast({
-                title: "Cache Flushed",
-                description: "Page cache has been cleared successfully.",
-                variant: "default",
-            });
+            await preloadPage(previewUrl);
+
+            setIsFlushingProgress(100);
+            setCurrentStep(1);
+            runParallelSteps();
+           
+            // toast({
+            //     title: "Cache Flushed",
+            //     description: "Page cache has been cleared successfully.",
+            //     variant: "default",
+            // });
 
         } catch (error: any) {
             setIsFlushingProgress(0);
-            toast({
-                title: "Cache Flush Failed",
-                description: error.message || "Failed to clear page cache",
-                variant: "destructive",
-            });
-        } finally {
-            // console.log('Cache flush complete');
-            setCurrentStep(1);
-            runParallelSteps();
-            // handleFetchSettings();
-        }
+            
+            setDiagnosticError(error.message || "Failed to clear page cache");
+            
+            // console.error('❌ Flushing cache failed:', error);
+
+            // toast({
+            //     title: "Cache Flush Failed",
+            //     description: error.message || "Failed to clear page cache",
+            //     variant: "destructive",
+            // });
+        } 
     };
 
-    const resetDiagnosticResults = () => {
-        setCurrentStep(0);
-        setSettingsProgress(0);
-        setServerInfoProgress(0);
-        setPageSpeedProgress(0);
-        setDiagnosticsProgress(0);
-        // dispatch(setDiagnosticResults(null));
-    }
+    // const simulateProgress = (setter: React.Dispatch<React.SetStateAction<number>>, start: number, end: number) => {
+    //     if (start >= end) return;
+    
+    //     setTimeout(() => {
+    //         setter(start + 5); 
+    //         simulateProgress(setter, start + 5, end); 
+    //     }, 100); 
+    // };
+    
+    // const runParallelSteps = async () => {
+        
+    //     try {
+          
+    //         await Promise.all([
+    //             // Fetch Settings
+    //             (async () => {
+    //                 try {
+                       
+    //                    // simulateProgress(setSettingsProgress, 25, 90);
+    //                    setSettingsProgress(25);
+                       
+    //                     await dispatch(fetchSettings(options, headerUrl ? headerUrl : options.optimizer_url, true));
+
+    //                     setSettingsProgress(100);
+                       
+
+    //                     //  console.log('✅ Settings fetch completed');
+
+    //                 } catch (error: any) {
+                       
+    //                     setDiagnosticError(error?.message || "Failed to run settings");
+    //                     throw error;
+    //                 }
+    //             })(),
+
+    //             // Server Info Check
+    //             (async () => {
+    //                 try {
+                        
+    //                   //  simulateProgress(setServerInfoProgress, 25, 90);
+    //                   setServerInfoProgress(25);
+                        
+
+    //                     const api = new ApiService(options);
+    //                     const data = await api.post('rapidload_server_info1');
+    //                     setServerDetails(data)
+   
+    //                     setServerInfoProgress(100);
+
+                       
+                        
+    //                     // console.log('✅ Server info check completed');
+    //                 } catch (error: any) {
+                      
+    //                     setDiagnosticError(error?.message || "Failed to run server info");
+    //                     throw error;
+    //                 }
+    //             })(),
+
+    //             // New Page Speed
+    //             (async () => {
+    //                 try {
+                      
+    //                 //    simulateProgress(setPageSpeedProgress, 25, 90);
+    //                 setPageSpeedProgress(25);
+
+    //                     await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
+
+    //                     setPageSpeedProgress(100);
+                        
+                    
+    //                     // console.log('✅ PageSpeed fetch completed');
+    //                 } catch (error: any) {
+                        
+    //                      setDiagnosticError(error?.message || "Failed to run page speed");               
+    //                     throw error;
+    //                 }
+    //             })()
+    //         ]);
+
+    //         // All steps completed successfully
+    //         // toast({
+    //         //     title: "All Steps Completed",
+    //         //     description: "Settings, server info, and PageSpeed data updated successfully.",
+    //         //     variant: "default",
+    //         // });
+
+    //         setTimeout(async () => {
+    //             setCurrentStep(4);
+    //             startDiagnostics();
+    
+    //         }, 1000);
+           
+    //     } catch (error: any) {
+    //         setDiagnosticError(error?.message || "One or more steps failed to complete");
+           
+    //     }
+    // };
 
 
     const runParallelSteps = async () => {
         try {
-            setCurrentStep(1); // Start all steps simultaneously
-
+            // All async functions are directly passed to Promise.all without await.
             await Promise.all([
                 // Fetch Settings
                 (async () => {
                     try {
                         setSettingsProgress(25);
-                        const progressInterval = setInterval(() => {
-                            setSettingsProgress(prev => Math.min(prev + 15, 90));
-                        }, 500);
-
+    
                         await dispatch(fetchSettings(options, headerUrl ? headerUrl : options.optimizer_url, true));
-
-                        clearInterval(progressInterval);
+    
                         setSettingsProgress(100);
-
-                        //  console.log('✅ Settings fetch completed');
-                    } catch (error) {
-                        // console.error('❌ Settings fetch failed:', error);
+                    } catch (error: any) {
+                        setDiagnosticError(error?.message || "Failed to run settings");
                         throw error;
                     }
                 })(),
-
+    
                 // Server Info Check
                 (async () => {
                     try {
                         setServerInfoProgress(25);
-                        const progressInterval = setInterval(() => {
-                            setServerInfoProgress(prev => Math.min(prev + 15, 90));
-                        }, 500);
-
+    
                         const api = new ApiService(options);
                         const data = await api.post('rapidload_server_info');
-                        setServerDetails(data)
-                        console.log(data)
-                        clearInterval(progressInterval);
+                        setServerDetails(data);
+    
                         setServerInfoProgress(100);
-
-                        // console.log('✅ Server info check completed');
-                    } catch (error) {
-                        // console.error('❌ Server info check failed:', error);
+                    } catch (error: any) {
+                        setDiagnosticError(error?.message || "Failed to run server info");
                         throw error;
                     }
                 })(),
-
+    
                 // New Page Speed
                 (async () => {
                     try {
-                        dispatch(setCommonState('diagnosticLoading', true));
                         setPageSpeedProgress(25);
-
-                        const progressInterval = setInterval(() => {
-                            setPageSpeedProgress(prev => Math.min(prev + 5, 90));
-                        }, 2000);
-
-                         await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
-
-                        clearInterval(progressInterval);
+    
+                        await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
+    
                         setPageSpeedProgress(100);
-
-                        // console.log('✅ PageSpeed fetch completed');
-                    } catch (error) {
-                        // console.error('❌ PageSpeed fetch failed:', error);
+                    } catch (error: any) {
+                        setDiagnosticError(error?.message || "Failed to run page speed");
                         throw error;
-                    } finally {
-                        dispatch(setCommonState('diagnosticLoading', false));
                     }
                 })()
             ]);
-
+    
             // All steps completed successfully
-            toast({
-                title: "All Steps Completed",
-                description: "Settings, server info, and PageSpeed data updated successfully.",
-                variant: "default",
-            });
-
-            // // Move to diagnostics step
-
-            setTimeout(async () => {
+            setTimeout(() => {
                 setCurrentStep(4);
                 startDiagnostics();
-
             }, 1000);
-
+    
         } catch (error: any) {
-            toast({
-                title: "Process Failed",
-                description: error?.message || "One or more steps failed to complete",
-                variant: "destructive",
-            });
+            setDiagnosticError(error?.message || "One or more steps failed to complete");
         }
     };
+    
+
+   useEffect(() => {
+    if(diagnosticError?.length){
+        resetDiagnosticResults();
+        console.log('settingsProgress: ', settingsProgress, 'serverInfoProgress: ', serverInfoProgress, 'pageSpeedProgress: ', pageSpeedProgress)
+      
+    }
+   }, [diagnosticError])
 
 
     return (
@@ -493,17 +569,18 @@ const Optimizations = ({ }) => {
             >
                 
 
+
                 <div className='px-6 py-6 bg-white rounded-3xl'>
                     <div className="flex gap-4 w-full items-start">
                         {/* Logo Column */}
                         <div className="flex justify-start items-center gap-2 w-10">
-                            <AnimatedLogo size="lg" isPlaying={diagnosticsLoading} />
+                            <AnimatedLogo size="lg" isPlaying={aiLoading} />
                         </div>
 
                         {/* Content Column */}
                         <div className="flex flex-col gap-1 flex-grow">
                             <span className="text-base font-normal text-zinc-900 dark:text-zinc-100">
-                                {diagnosticsLoading ? (
+                                {aiLoading ? (
                                     <>
                                         {currentStep === 0 && "Clearing all cached data to ensure fresh analysis..."}
                                         {currentStep === 1 && "Gathering current optimization settings..."}
@@ -516,7 +593,7 @@ const Optimizations = ({ }) => {
                                 )}
                             </span>
                             <span className="font-normal text-sm text-zinc-600 dark:text-brand-300 max-w-[600px]">
-                                {diagnosticsLoading ? (
+                                {aiLoading ? (
                                     remainingTime === 0 ?
                                         "It's taking a bit longer than expected, hang tight..." :
                                         `Looks like I'll need to wait ${remainingTime}s more...`
@@ -530,29 +607,32 @@ const Optimizations = ({ }) => {
                         </div>
 
                         {/* Button Column */}
-                        {!diagnosticsLoading &&
+                        {!aiLoading &&
                             <div className="flex justify-end items-center mt-2">
                                 <AppButton
-                                    disabled={diagnosticsLoading}
+                                    disabled={aiLoading}
                                     className="rounded-xl px-8 py-6 whitespace-nowrap"
                                     onClick={() => {
+                                    
+                                        setDiagnosticError(null);
+                                        dispatch(setCommonState('diagnosticLoading', true));
+                                        setAiLoading(true);
                                         handleFlushCache();
-                                        setDiagnosticsLoading(true);
-                                        // dispatch(setDiagnosticResults({
-                                        //     AnalysisSummary: ''
-                                        // }));
+                                       
                                     }}
                                 >
                                     {/* {diagnosticsLoading && <LoaderIcon className="h-4 w-4 text-white animate-spin" />} */}
                                     {diagnosticResults?.AnalysisSummary?.length ? 'Run Diagnostics Test Again' : 'Run Diagnostics Test '}
-                                    {/* Run Diagnostics Test  */}
+                                    
                                 </AppButton>
                             </div>
                         }
                     </div>
 
+                    {diagnosticError?.length && handleDiagnosticError(diagnosticError)} 
+                    
                     {/* diagnosticsLoading */}
-                    {diagnosticsLoading && (
+                    {aiLoading && (
                         <m.div
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
@@ -569,10 +649,11 @@ const Optimizations = ({ }) => {
                             <div className="flex flex-col gap-4">
                                 <ProgressTracker
                                     steps={progressSteps}
-                                    currentStep={currentStep ?? undefined}
+                                    currentStep={currentStep}
                                     onTimeUpdate={handleRemainingTimeUpdate}
                                 />
                             </div>
+                          
                         </m.div>
                     )}
 

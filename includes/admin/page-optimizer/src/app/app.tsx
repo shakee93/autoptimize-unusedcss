@@ -65,7 +65,7 @@ const App = ({ popup, _showOptimizer = false }: {
         optimizerTable: false,
         optimizePages: false
     });
-    const { headerUrl, onboardCompleted } = useCommonDispatch();
+    const { headerUrl, onboardCompleted, diagnosticLoading } = useCommonDispatch();
     const { changeTheme } = useRootContext()
     const { testMode, license, data } = useSelector(optimizerData);
 
@@ -251,6 +251,12 @@ const App = ({ popup, _showOptimizer = false }: {
 
         if (onboardCompleted || isDev) {
             window.location.hash = activeRoute;
+            // Clear nonce from URL if present
+            if (hasNonce) {
+                const url = new URL(window.location.href);
+                url.searchParams.delete('nonce');
+                window.history.replaceState({}, '', url.toString());
+            }
             return;
         }
 
@@ -307,7 +313,7 @@ const App = ({ popup, _showOptimizer = false }: {
                                     <div className='flex'>
                                         <div
                                             data-tour='app-switch'
-                                            className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[8px] rounded-2xl cursor-pointer overflow-hidden'
+                                            className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[8px] rounded-2xl overflow-hidden'
                                         >
                                             <div
                                                 className={`absolute top-1 bottom-1 left-1 bg-brand-200/60 border dark:bg-brand-700 rounded-xl transition-all duration-300 ease-in-out transform ${activeRoute === routes[1].id ? "translate-x-[115%] w-[45%]" : "translate-x-0 w-[55%]"
@@ -325,7 +331,8 @@ const App = ({ popup, _showOptimizer = false }: {
                                                         key={i}
                                                         onClick={() => setActiveRoute(route.id)}
                                                         className={cn(
-                                                            'flex h-10 text-sm z-10 font-medium items-center px-3 gap-2',
+                                                            'flex h-10 text-sm z-10 font-medium items-center px-3 gap-2 cursor-pointer',
+                                                            diagnosticLoading && 'cursor-not-allowed opacity-90 pointer-events-none',
                                                             activeRoute === route.id ? 'text-black dark:text-white' : 'text-gray-500'
                                                         )}
                                                     >

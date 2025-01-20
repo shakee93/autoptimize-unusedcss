@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Card from "components/ui/card";
 import { useSelector } from "react-redux";
-import { CheckBadgeIcon, EyeIcon, EyeSlashIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { CheckBadgeIcon, EyeIcon, EyeSlashIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import { optimizerData } from "../../../store/app/appSelector";
 import { Input } from "components/ui/input";
 import { updateLicense } from "../../../store/app/appActions";
@@ -62,13 +62,13 @@ const LicenseWidget = () => {
     const renderLicenseStatus = () => {
         const isActivated = !!licenseInfo?.licensedDomain;
         const Icon = isActivated ? CheckBadgeIcon : XCircleIcon;
-        const textColor = isActivated ? "text-purple-800" : "text-red-600";
-        const bgColor = isActivated ? "bg-purple-700" : "bg-red-600";
+        const textColor = isActivated ? "text-purple-900/90" : "text-red-600";
+        const bgColor = isActivated ? "text-purple-900/80" : "text-red-600";
         const statusText = isActivated ? "Rapidload Activated" : "Rapidload Deactivated";
 
         return (
             <div className="flex gap-2 items-center">
-                <Icon className={`h-4 w-4 text-white ${bgColor} rounded-full`} />
+                <Icon className={`h-4 w-4 ${bgColor}`} />
                 <span className={`text-xs ${textColor}`}>{statusText}</span>
             </div>
         );
@@ -88,7 +88,7 @@ const LicenseWidget = () => {
 
     const renderLicenseDetails = () => (
         <div className="relative space-y-3">
-            <button 
+            {/* <button 
                 onClick={toggleVisibility}
                 className="absolute right-0 -top-4 p-1.5 rounded-full transition-colors"
                 aria-label={isVisible ? "Hide details" : "Show details"}
@@ -98,7 +98,7 @@ const LicenseWidget = () => {
                 ) : (
                     <EyeSlashIcon className="h-4 w-4 text-violet-400" />
                 )}
-            </button>
+            </button> */}
 
             {licenseFields.map(({ label, value }, index) => (
                 <div 
@@ -160,7 +160,7 @@ const LicenseWidget = () => {
                             <span className="text-brand-400/90 dark:text-brand-300">Connect your license</span>
                         )}
                     </div>
-                    <div className="bg-purple-500/10 px-2.5 py-1.5 rounded-xl w-fit">{renderLicenseStatus()}</div>
+                    <div className="bg-purple-800/10 px-2.5 py-1.5 rounded-xl w-fit">{renderLicenseStatus()}</div>
                 </div>
 
                     <div className="grid gap-4 px-8 text-sm relative">

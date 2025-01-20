@@ -12,6 +12,7 @@ const initialState: CommonState = {
         hoveredMetric: null,
         activeMetric: null,
         settingsMode: null
+       
     },
     desktop: {
         activeTab: 'configurations',
@@ -19,6 +20,7 @@ const initialState: CommonState = {
         hoveredMetric: null,
         activeMetric: null,
         settingsMode: null
+        
     }
 };
 

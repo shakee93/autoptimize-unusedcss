@@ -43,20 +43,36 @@ const PerformanceWidget: React.FC = () => {
                 className="flex items-center justify-center text-md gap-2 bg-white rounded-t-3xl border border-b-0 w-full overflow-hidden relative">
                 <div className="flex justify-center p-4 max-w-xl mx-auto w-full relative">
                     {/* Before Results */}
+                   
+                
                     <div className="flex flex-col items-center gap-2 px-10 py-4 rounded-2xl w-[230px]" >
                         <div className="text-lg font-semibold">Before Results</div>
-                        <div className="">
-                            <PerformanceProgressBar
-                                className={cn('max-h-[140px]')}
-                                background={false}
-                                stroke={6}
-                                performance={homePerformance.first_entry}
-                            />
+                        <div className="">  
+                            {homePerformance.first_entry < 1 ? (
+                                <Skeleton className="w-[140px] h-[140px] rounded-full"/>
+                            ):(
+                                <PerformanceProgressBar
+                                    className={cn('max-h-[140px]')}
+                                    background={false}
+                                    stroke={6}
+                                    performance={homePerformance.first_entry}
+                                />
+                            )}
+                            
                         </div>
                         <div className="text-sm text-gray-600">
-                            Loading time: {homePerformance.first_response_time}
+                            {homePerformance.first_response_time == "0" ? (
+                                <Skeleton className="w-[140px] h-[20px] rounded-lg"/>
+                            ):(
+                                <div>
+                                    Loading time: {homePerformance.first_response_time}
+                                </div>
+                            )}
                         </div>
                     </div>
+
+                   
+
                     {/* Divider with BoltIcon */}
                     <div className={`absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 p-2 rounded-full text-white z-10`}
                          style={{ background: `linear-gradient(to right, ${progressbarColor}, ${lighterColor})` }}
@@ -70,16 +86,26 @@ const PerformanceWidget: React.FC = () => {
                         <div className="flex flex-col items-center gap-2 px-10 py-4 rounded-2xl w-[230px]">
                         <div className="text-lg font-semibold">Optimized Score</div>
                         <div className="">
-                            <PerformanceProgressBar
-                                className={cn('max-h-[140px]')}
-                                scoreClassName={"text-brand-950"}
-                                background={false}
-                                stroke={6}
-                                performance={homePerformance.last_entry}
-                            />
+                            {homePerformance.last_entry < 1 ? (
+                                <Skeleton className="w-[140px] h-[140px] rounded-full"/>
+                            ):(
+                                <PerformanceProgressBar
+                                    className={cn('max-h-[140px]')}
+                                    scoreClassName={"text-brand-950"}
+                                    background={false}
+                                    stroke={6}
+                                    performance={homePerformance.last_entry}
+                                />
+                            )}
                         </div>
                         <div className="text-sm text-gray-600">
-                            Loading time: {homePerformance.last_response_time}
+                            {homePerformance.last_response_time == "0" ? (
+                                <Skeleton className="w-[140px] h-[20px] rounded-lg"/>
+                            ):(
+                                <div>
+                                    Loading time: {homePerformance.last_response_time}
+                                </div>
+                            )}
                         </div>
                     </div>
 
