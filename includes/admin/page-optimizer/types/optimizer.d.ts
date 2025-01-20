@@ -1,5 +1,3 @@
-
-
 interface OptimizerResults {
     performance: number
     job_id?: string;
@@ -364,4 +362,18 @@ interface uucssGlobal {
             options: GeneralSettings;
         };
     };
+}
+
+interface Solution {
+    step: string;
+    description: string;
+    type: "rapidload_fix" | "wordpress_fix" | "theme_fix" | "plugin_fix" | "code_fix" | "server_config_fix" | "server_upgrade_fix";
+    sub_type?: string[];
+    rapidload_setting_input?: { name: string; };
+}
+
+interface SolutionResponse {
+    solutions: Solution[];
+    status: 'success' | 'error';
+    message?: string;
 }
