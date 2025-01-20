@@ -399,165 +399,107 @@ const Optimizations = ({ }) => {
         } 
     };
 
-    // const simulateProgress = (setter: React.Dispatch<React.SetStateAction<number>>, start: number, end: number) => {
-    //     if (start >= end) return;
+    const simulateProgress = (setter: React.Dispatch<React.SetStateAction<number>>, start: number, end: number) => {
+        if (start >= end) return;
     
-    //     setTimeout(() => {
-    //         setter(start + 5); 
-    //         simulateProgress(setter, start + 5, end); 
-    //     }, 100); 
-    // };
+        setTimeout(() => {
+            setter(start + 5); 
+            simulateProgress(setter, start + 5, end); 
+        }, 100); 
+    };
     
-    // const runParallelSteps = async () => {
-        
-    //     try {
-          
-    //         await Promise.all([
-    //             // Fetch Settings
-    //             (async () => {
-    //                 try {
-                       
-    //                    // simulateProgress(setSettingsProgress, 25, 90);
-    //                    setSettingsProgress(25);
-                       
-    //                     await dispatch(fetchSettings(options, headerUrl ? headerUrl : options.optimizer_url, true));
-
-    //                     setSettingsProgress(100);
-                       
-
-    //                     //  console.log('✅ Settings fetch completed');
-
-    //                 } catch (error: any) {
-                       
-    //                     setDiagnosticError(error?.message || "Failed to run settings");
-    //                     throw error;
-    //                 }
-    //             })(),
-
-    //             // Server Info Check
-    //             (async () => {
-    //                 try {
-                        
-    //                   //  simulateProgress(setServerInfoProgress, 25, 90);
-    //                   setServerInfoProgress(25);
-                        
-
-    //                     const api = new ApiService(options);
-    //                     const data = await api.post('rapidload_server_info1');
-    //                     setServerDetails(data)
-   
-    //                     setServerInfoProgress(100);
-
-                       
-                        
-    //                     // console.log('✅ Server info check completed');
-    //                 } catch (error: any) {
-                      
-    //                     setDiagnosticError(error?.message || "Failed to run server info");
-    //                     throw error;
-    //                 }
-    //             })(),
-
-    //             // New Page Speed
-    //             (async () => {
-    //                 try {
-                      
-    //                 //    simulateProgress(setPageSpeedProgress, 25, 90);
-    //                 setPageSpeedProgress(25);
-
-    //                     await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
-
-    //                     setPageSpeedProgress(100);
-                        
-                    
-    //                     // console.log('✅ PageSpeed fetch completed');
-    //                 } catch (error: any) {
-                        
-    //                      setDiagnosticError(error?.message || "Failed to run page speed");               
-    //                     throw error;
-    //                 }
-    //             })()
-    //         ]);
-
-    //         // All steps completed successfully
-    //         // toast({
-    //         //     title: "All Steps Completed",
-    //         //     description: "Settings, server info, and PageSpeed data updated successfully.",
-    //         //     variant: "default",
-    //         // });
-
-    //         setTimeout(async () => {
-    //             setCurrentStep(4);
-    //             startDiagnostics();
-    
-    //         }, 1000);
-           
-    //     } catch (error: any) {
-    //         setDiagnosticError(error?.message || "One or more steps failed to complete");
-           
-    //     }
-    // };
-
-
     const runParallelSteps = async () => {
+        
         try {
-            // All async functions are directly passed to Promise.all without await.
+          
             await Promise.all([
                 // Fetch Settings
                 (async () => {
                     try {
-                        setSettingsProgress(25);
-    
+                       
+                        simulateProgress(setSettingsProgress, 25, 90);
+                       // setSettingsProgress(25);
+                       
                         await dispatch(fetchSettings(options, headerUrl ? headerUrl : options.optimizer_url, true));
-    
+
                         setSettingsProgress(100);
+                       
+
+                        //  console.log('✅ Settings fetch completed');
+
                     } catch (error: any) {
+                       
                         setDiagnosticError(error?.message || "Failed to run settings");
                         throw error;
                     }
                 })(),
-    
+
                 // Server Info Check
                 (async () => {
                     try {
-                        setServerInfoProgress(25);
-    
+                        
+                        simulateProgress(setServerInfoProgress, 25, 90);
+                      // setServerInfoProgress(25);
+                        
+
                         const api = new ApiService(options);
-                        const data = await api.post('rapidload_server_info');
-                        setServerDetails(data);
-    
+                        const data = await api.post('rapidload_server_info1');
+                        setServerDetails(data)
+   
                         setServerInfoProgress(100);
+
+                       
+                        
+                        // console.log('✅ Server info check completed');
                     } catch (error: any) {
+                      
                         setDiagnosticError(error?.message || "Failed to run server info");
                         throw error;
                     }
                 })(),
-    
+
                 // New Page Speed
                 (async () => {
                     try {
-                        setPageSpeedProgress(25);
-    
+                      
+                        simulateProgress(setPageSpeedProgress, 25, 90);
+                        // setPageSpeedProgress(25);
+
                         await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
-    
+
                         setPageSpeedProgress(100);
+                        
+                    
+                        // console.log('✅ PageSpeed fetch completed');
                     } catch (error: any) {
-                        setDiagnosticError(error?.message || "Failed to run page speed");
+                        
+                         setDiagnosticError(error?.message || "Failed to run page speed");               
                         throw error;
                     }
                 })()
             ]);
-    
+
             // All steps completed successfully
-            setTimeout(() => {
+            // toast({
+            //     title: "All Steps Completed",
+            //     description: "Settings, server info, and PageSpeed data updated successfully.",
+            //     variant: "default",
+            // });
+
+            setTimeout(async () => {
                 setCurrentStep(4);
                 startDiagnostics();
-            }, 1000);
     
+            }, 1000);
+           
         } catch (error: any) {
             setDiagnosticError(error?.message || "One or more steps failed to complete");
+           
         }
     };
+
+
+    
     
 
    useEffect(() => {
