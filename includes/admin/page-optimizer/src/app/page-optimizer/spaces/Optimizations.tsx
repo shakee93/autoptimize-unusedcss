@@ -98,11 +98,12 @@ const Optimizations = ({ }) => {
     const [remainingTime, setRemainingTime] = useState(0);
     const [serverDetails, setServerDetails] = useState(null);
     const [input, setInput] = useState(null);
+    const [diagnosticError, setDiagnosticError] = useState<string | null>(null);
 
     useEffect(() => {
         console.log('diagnosticLoading', diagnosticLoading)
     }, [diagnosticLoading])
-    const [diagnosticError, setDiagnosticError] = useState<string | null>(null);
+    
 
     const relatedAudits = useMemo(() => {
         if (!data?.grouped) return [];
