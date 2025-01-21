@@ -77,6 +77,15 @@ interface Conversation {
     messages: Message[];
 }
 
+interface DiagnosticProgress {
+    currentStep: number;
+    isFlushingProgress: number;
+    settingsProgress: number;
+    serverInfoProgress: number;
+    pageSpeedProgress: number;
+    diagnosticsProgress: number;
+}
+
 type SettingsCategory = 'cache' | 'cdn' | 'image' | 'javascript' | 'js' | 'font' | 'css';
 
 declare const __OPTIMIZER_VERSION__: string

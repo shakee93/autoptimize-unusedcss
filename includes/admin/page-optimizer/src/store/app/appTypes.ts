@@ -54,6 +54,7 @@ export interface AppState {
     license: License | null;
     homePerformance: HomePerformance;
     diagnosticResults: DiagnosticResults | null;
+    diagnosticProgress: DiagnosticProgress | null;
 }
 
 export const FETCH_REPORT_REQUEST = 'FETCH_REPORT_REQUEST';
@@ -76,6 +77,12 @@ export const GET_CACHE_USAGE = 'GET_CACHE_USAGE';
 export const LICENSE_INFORMATION = 'LICENSE_INFORMATION';
 export const HOME_PAGE_PERFORMANCE = 'HOME_PAGE_PERFORMANCE';
 export const SET_DIAGNOSTIC_RESULTS = 'SET_DIAGNOSTIC_RESULTS';
+export const SET_DIAGNOSTIC_PROGRESS = 'SET_DIAGNOSTIC_PROGRESS';
+
+interface SetDiagnosticProgress {
+    type: typeof SET_DIAGNOSTIC_PROGRESS,
+    payload : DiagnosticProgress,
+}
 
 interface SetDiagnosticResults {
     type: typeof SET_DIAGNOSTIC_RESULTS,
@@ -199,5 +206,5 @@ interface UpdateFileActionAction {
 // Define the combined action type
 export type AppAction = FetchDataRequestAction | FetchDataSuccessAction | FetchDataFailureAction |
     FetchSettingsRequestAction | FetchSettingsSuccessAction | FetchSettingsFailureAction | ChangeGearAction|
-    UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode | UpdateOptimizeTable | FetchPosts | GetCDNUsage | ImageUsage | CacheUsage | LicenseInformation | homePagePerformance | SetDiagnosticResults;
+    UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode | UpdateOptimizeTable | FetchPosts | GetCDNUsage | ImageUsage | CacheUsage | LicenseInformation | homePagePerformance | SetDiagnosticResults | SetDiagnosticProgress;
 

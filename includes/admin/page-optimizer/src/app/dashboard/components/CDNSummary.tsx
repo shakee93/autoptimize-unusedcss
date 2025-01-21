@@ -62,7 +62,7 @@ const CDNSummary = () => {
     }, [license, licenseInfo?.next_billing]);
 
     const SectionHeader = ({title, tooltip}: SectionHeaderProps) => (
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center pb-2">
             <div className="text-base font-semibold dark:text-brand-300">{title}</div>
         
             <TooltipText className='max-w-sm' text={tooltip}>
@@ -76,7 +76,7 @@ const CDNSummary = () => {
     const progressWidth = allowedUsage ? `${(usage / allowedUsage) * 100}` : "0";
 
     return (
-        <div className="flex flex-col gap-1 py-2">
+        <div className="flex flex-col gap-2.5 py-2">
 
             <div className="flex items-center text-sm dark:text-brand-300 justify-between">
                 <div className="flex gap-2 items-baseline">
@@ -124,9 +124,9 @@ const CDNSummary = () => {
                     <UsageBar label="Additional Usage" usage={cdnUsage.additional_usage_gb} />
                 }
             </div>
-
+            <div className="relative mt-4 mb-2 before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white"/>
             <div
-                className="p-6 pt-4 relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white">
+                className="p-6 ">
                 <UsageBar label="Images" usage={imageUsage.used_gb} allowedUsage={imageUsage.allowed_gb} note={`Limits will be updated on ${nextBillingDate}`} used_gb_formatted={imageUsage.used_gb_formatted}/>
                 {imageUsage.additional_usage_gb > 0 &&
                     <UsageBar label="Additional Usage" usage={imageUsage.additional_usage_gb}/>
