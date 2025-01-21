@@ -30,6 +30,9 @@ export const useChatHistory = (messages: any[], setMessages: (messages: any[]) =
   }, [messages]);
 
   const handleNewChat = () => {
+    if(messages.length < 2){
+      return;
+    }
     const newChat = {
       id: Date.now().toString(),
       title: 'New Chat',

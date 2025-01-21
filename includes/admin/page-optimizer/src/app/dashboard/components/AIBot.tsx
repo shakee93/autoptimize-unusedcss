@@ -68,7 +68,7 @@ const AIBot = () => {
                         </DialogContent>
                     </Dialog>
                     
-                    <div className="flex flex-col items-center gap-2 py-24">  
+                    <div className="flex flex-col items-center gap-2 py-[92px]">  
                     {/* <AIBotIcon/> */}
                     <AnimatedLogo size="lg" isPlaying={true} />
                     <div className="dark:text-brand-300 text-center flex flex-col">

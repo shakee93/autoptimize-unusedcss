@@ -444,7 +444,7 @@ const Optimizations = ({ }) => {
                         
 
                         const api = new ApiService(options);
-                        const data = await api.post('rapidload_server_info1');
+                        const data = await api.post('rapidload_server_info');
                         setServerDetails(data)
    
                         setServerInfoProgress(100);

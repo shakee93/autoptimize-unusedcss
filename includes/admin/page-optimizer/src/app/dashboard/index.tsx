@@ -116,6 +116,8 @@ export default function Dashboard() {
                     {/*    </div>*/}
                     {/*)}*/}
 
+                    {/* border-b border-brand-950 */}
+                    
                     <div className="flex justify-between gap-4">
                         <div className="flex flex-col w-full gap-4">
                             <div className={!license?.licensedDomain ? "pointer-events-auto z-50" : ""}>
@@ -132,75 +134,9 @@ export default function Dashboard() {
                             <PerformanceWidget />
                             <PerformanceGears />
                         </div>
-
-                        {/*<div className="flex-col">*/}
-                        {/*    <div className="widgets pt-4 gap-4 grid">*/}
-                        {/*        <PageSpeedCoach/>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
-
-                        {/*<div className="col-span-2">*/}
-                        {/*    <div className="widgets pt-4 gap-4 grid">*/}
-                        {/*        <SpeedInsights dashboardMode={true}/>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
-
-                        {/*<div className="">*/}
-
-                        {/*    <div className="widgets flex">*/}
-                        {/*        <CDNSummary/>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
-                        {/*<div className="">*/}
-
-                        {/*<div className="widgets flex">*/}
-                        {/*    <CacheSummary/>*/}
-                        {/*</div>*/}
-                        {/*</div>*/}
-
-                        {/*<div className="">*/}
-
-                        {/*    <div className="widgets gap-4 grid">*/}
-                        {/*        <UnusedCSSSummary*/}
-                        {/*            settings={[*/}
-                        {/*                {*/}
-                        {/*                    title: "Unused CSS summary",*/}
-                        {/*                    total_jobs: 1000,*/}
-                        {/*                    items: [*/}
-                        {/*                        {label: "Success jobs", value: "153 jobs", performance: 95},*/}
-                        {/*                        {label: "Failed jobs", value: "153 jobs", performance: 95},*/}
-                        {/*                        {label: "Warning jobs", value: "153 jobs", performance: 95}*/}
-                        {/*                    ]*/}
-                        {/*                },*/}
-                        {/*                {*/}
-                        {/*                    title: "Critical CSS summary",*/}
-                        {/*                    total_jobs: 1000,*/}
-                        {/*                    items: [*/}
-                        {/*                        {label: "Success jobs", value: "153 jobs", performance: 95},*/}
-                        {/*                        {label: "Failed jobs", value: "153 jobs", performance: 95},*/}
-                        {/*                        {label: "Warning jobs", value: "153 jobs", performance: 95}*/}
-                        {/*                    ]*/}
-                        {/*                }*/}
-                        {/*            ]}*/}
-                        {/*        />*/}
-
-                        {/*    </div>*/}
-                        {/*</div>*/}
                     </div>
 
-                    {/*<div className="col-span-3">*/}
-                    {/*    <div className="widgets gap-4 grid">*/}
-                    {/*        <OptimizerPagesTable*/}
-                    {/*            settings={*/}
-                    {/*                {*/}
-                    {/*                    title: "Optimize Pages",*/}
-                    {/*                    description: "Check out you Optimized Pages details in here.",*/}
-                    {/*                        total_jobs: 1000,*/}
-                    {/*                    }*/}
-                    {/*                }*/}
-                    {/*            />*/}
-                    {/*        </div>*/}
-                    {/*    </div>*/}
+                   
 
                 </section>
             </div>

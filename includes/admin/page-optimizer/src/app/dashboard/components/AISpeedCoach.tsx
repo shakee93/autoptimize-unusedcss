@@ -29,7 +29,12 @@ const AISpeedCoach = () => {
         }, 1000);
     };
     const handleNewChat = () => {
-        setMessages([]);
+        // Only clear messages if there are existing messages
+        // console.log(messages.length)
+        // console.log("hellow this is me")
+        if (messages.length > 0) {
+            setMessages([]);
+        }
     };
 
     return (
@@ -68,8 +73,13 @@ const AISpeedCoach = () => {
                         />
                     </div>
                     <button
-                        className="mt-4 p-2 bg-red-500 text-white rounded-lg"
+                        className={`mt-4 p-2 ${
+                            messages.length > 0 
+                            ? 'bg-red-500 text-white' 
+                            : 'bg-gray-300 cursor-not-allowed'
+                        } rounded-lg`}
                         onClick={handleNewChat}
+                        disabled={messages.length === 0}
                     >
                         New Chat
                     </button>

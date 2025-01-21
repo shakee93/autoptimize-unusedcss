@@ -231,7 +231,7 @@ const PerformanceGears: React.FC = () => {
             ? settings.filter(data => data.inputs[0]?.value).map(data => data.name)
             : features;
 
-        const initialDisplayCount = 7;
+        const initialDisplayCount = 6;
         const shouldShowSeeMore = displayFeatures.length > initialDisplayCount;
 
         const handleSeeMoreClick = () => {
