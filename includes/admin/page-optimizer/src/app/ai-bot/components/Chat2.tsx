@@ -13,6 +13,7 @@ import { formatSystemMessage } from "../utils/messageFormatter";
 import { WelcomeScreen } from "./WelcomeScreen";
 import { useAppContext } from "../../../context/app";
 import { isDev } from "lib/utils";
+import { AnimatedLogo } from "components/animated-logo";
 
 interface ChatProps {
   apiEndpoint?: string;
@@ -20,7 +21,8 @@ interface ChatProps {
 
 export default function Chat({ apiEndpoint = "https://ai.rapidload.io/api/support" }: ChatProps) {
 
-  const { options} = useAppContext()
+  const { options} = useAppContext();
+  
   const { messages, input, handleInputChange, handleSubmit, setMessages } = useChat({
     api: apiEndpoint,
     headers: {
@@ -70,34 +72,71 @@ export default function Chat({ apiEndpoint = "https://ai.rapidload.io/api/suppor
         createdAt: new Date(),
       },
     ]);
+    
   }, [data, settings, license, activeReport, activeGear, testMode, setMessages]);
 
   // Handle URL parameters for conversation selection
   useEffect(() => {
     const params = new URLSearchParams(window.location.hash.split('?')[1]);
     const conversationId = params.get('conv');
-    
+  
     if (conversationId) {
       const conversation = conversations.find(conv => conv.id === conversationId);
       if (conversation) {
         handleSelectConversation(conversationId);
       }
     }
+    else{
+      handleNewChat(true);
+      // Initialize system message first
+      const systemMessage = formatSystemMessage({
+        data,
+        settings,
+        license,
+        activeReport,
+        activeGear: activeGear as string,
+        testMode: testMode as boolean,
+      });
+
+      setMessages([
+        {
+          id: "1",
+          role: "system",
+          content: systemMessage,
+          createdAt: new Date(),
+        },
+      ]);
+      
+    
+     
+    }
   }, []);
+
+  // Add this new function
+const handleClose = () => {
+  // Remove empty conversations before closing
+  conversations.forEach(conv => {
+    if (conv.messages.length <= 1) { // Only has system message or is empty
+      handleDeleteConversation(conv.id);
+    }
+  });
+  window.location.hash = '#/';
+};
+
 
   return (
     <div className="chat-container flex container mx-auto h-[calc(100vh-4rem)] max-h-[750px] py-4 bg-white my-8 rounded-2xl">
       <ChatHistoryPanel 
         conversations={conversations}
         onSelectConversation={handleSelectConversation}
-        onNewChat={handleNewChat}
+        onNewChat={() => handleNewChat(false)}
         onDeleteConversation={handleDeleteConversation}
       />
 
       <div className="flex-1 flex flex-col">
         <div className="px-4 pb-2 flex justify-end">
           <button
-            onClick={() => (window.location.hash = '#/')}
+            onClick={handleClose}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
             aria-label="Close chat"
           >
@@ -125,41 +164,88 @@ export default function Chat({ apiEndpoint = "https://ai.rapidload.io/api/suppor
 }
 
 // Extracted Components
+// const ChatMessages = ({ messages }: { messages: any[] }) => (
+//   <>
+//     {messages
+//       .filter((msg) => msg.role !== "system")
+//       .map((message) => (
+//         <ChatMessage key={message.id} message={message} />
+//       ))}
+//   </>
+// );
+
+
+
 const ChatMessages = ({ messages }: { messages: any[] }) => (
   <>
-    {messages
-      .filter((msg) => msg.role !== "system")
-      .map((message) => (
-        <ChatMessage key={message.id} message={message} />
+    {Array.isArray(messages) && messages
+      .filter((msg) => msg && typeof msg === 'object' && msg?.role !== "system")
+      .map((message) => message && (
+        <ChatMessage 
+          key={message.id || Math.random().toString()} 
+          message={message} 
+        />
       ))}
   </>
 );
 
-const ChatMessage = ({ message }: { message: any }) => (
-  <div className={`message my-2 flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-    {message.role === "assistant" && (
-      <div className="w-8 h-8 rounded-full bg-violet-900 flex items-center justify-center mr-2">
-        <MessagesSquare size={16} className="text-white" />
-      </div>
-    )}
-    <div
-      className={`max-w-lg px-4 py-2 rounded-lg shadow ${
-        message.role === "user"
-          ? "bg-violet-900 text-white"
-          : "bg-gray-100 text-gray-800"
-      }`}
-    >
-      {message.content.length > 0 ? (
-        <Markdown>{message.content}</Markdown>
-      ) : (
-        <span className="italic font-light">
-          {"calling tool: " + message?.toolInvocations?.[0]?.toolName}
-        </span>
+// const ChatMessage = ({ message }: { message: any }) => (
+//   <div className={`message my-2 flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
+//     {message.role === "assistant" && (
+//       <div className="w-8 h-8 rounded-full bg-violet-900 flex items-center justify-center mr-2">
+//         <MessagesSquare size={16} className="text-white" />
+//       </div>
+//     )}
+//     <div
+//       className={`max-w-lg px-4 py-2 rounded-lg shadow ${
+//         message.role === "user"
+//           ? "bg-violet-900 text-white"
+//           : "bg-gray-100 text-gray-800"
+//       }`}
+//     >
+//       {message.content.length > 0 ? (
+//         <Markdown>{message.content}</Markdown>
+//       ) : (
+//         <span className="italic font-light">
+//           {"calling tool: " + message?.toolInvocations?.[0]?.toolName}
+//         </span>
+//       )}
+//       <MessageTimestamp createdAt={message.createdAt} />
+//     </div>
+//   </div>
+// );
+
+const ChatMessage = ({ message }: { message: any }) => {
+  if (!message) return null;
+  
+  return (
+    <div className={`message my-2 flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
+      {message.role === "assistant" && (
+        <div className="flex mt-2 mr-2">
+          <AnimatedLogo className="!opacity-100" size="sm" isPlaying={false} />
+        </div>
+       
       )}
-      <MessageTimestamp createdAt={message.createdAt} />
+      <div
+        className={`max-w-lg px-4 py-2 rounded-lg ${
+          message.role === "user"
+            ? "bg-gray-100 text-brand-950"
+            : "text-brand-950"
+        }`}
+      >
+        {message.content && message.content.length > 0 ? (
+          <Markdown>{message.content}</Markdown>
+        ) : (
+          <span className="italic font-light">
+            {"calling tool: " + message?.toolInvocations?.[0]?.toolName}
+          </span>
+        )}
+        <MessageTimestamp createdAt={message.createdAt} />
+      </div>
     </div>
-  </div>
-);
+  );
+};
+
 
 const MessageTimestamp = ({ createdAt }: { createdAt: any }) => (
   <div className="text-xs text-right mt-1 opacity-75">
@@ -178,7 +264,7 @@ const ChatInput = ({ input, handleInputChange, handleSubmit }: { input: any, han
     <input
       className="flex-1 p-2 bg-brand-100 rounded-lg focus:outline-none focus:border-transparent"
       value={input}
-      placeholder="Reply to Hermes AI..."
+      placeholder="Ask Hermes AI..."
       onChange={handleInputChange}
     />
     <button

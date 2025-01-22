@@ -246,3 +246,32 @@
 }
 
 
+@keyframes slideInFromCenter {
+  0% { 
+      opacity: 0;
+      transform: translateX(-50%);
+  }
+  100% {
+      opacity: 1;
+      transform: translateX(0);
+  }
+}
+
+.slide-in-from-center {
+  animation: slideInFromCenter 0.5s ease-out forwards;
+}
+
+@keyframes slideOutFromCenter {
+  0% { 
+      opacity: 0;
+      transform: translateX(50%);
+  }
+  100% {
+      opacity: 1;
+      transform: translateX(0%);
+  }
+}
+
+.slide-out-from-center {
+  animation: slideOutFromCenter 0.5s ease-out forwards;
+}
