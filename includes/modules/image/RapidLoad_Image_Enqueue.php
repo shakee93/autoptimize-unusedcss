@@ -307,6 +307,15 @@ class RapidLoad_Image_Enqueue
                     foreach ($matches[0] as $match){
 
                         $urlExt = pathinfo($match, PATHINFO_EXTENSION);
+
+                        if($this->is_file_excluded($match,'uucss_exclude_images_from_modern_images')){
+                            continue;
+                        }
+
+                        if($this->is_file_excluded($match)){
+                            continue;
+                        }
+
                         if (in_array($urlExt, $this->imgExt)) {
                             $replace_url = RapidLoad_Image::get_replaced_url($match,$this->cdn,false,false, [
                                 'retina' => 'ret_img'
