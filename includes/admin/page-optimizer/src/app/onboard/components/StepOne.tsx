@@ -125,16 +125,16 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                         </span>
                     </div>
                     
-                    <div className='mt-6'>Redirecting in {countdown} seconds...</div>
-                    <div className="flex gap-8 items-center mt-2">
-                        <button
+                    <div>Redirecting in {countdown} seconds...</div>
+                    <div className="flex gap-8 items-center">
+                        {/* <button
                             className="items-center bg-brand-200 text-brand-950 hover:shadow-[inset_0_0_0_2px_rgba(0,0,0,1)] font-medium py-2 px-4 rounded-lg hover:bg-transparent transition-all gap-2"
                                 onClick={() => {
                                     window.open('https://rapidload.zendesk.com/hc/en-us/requests/new', '_blank');
                             }}
                         >
                             Contact Support
-                        </button>
+                        </button> */}
                     
                         <button
                             className="items-center flex gap-2 hover:bg-gradient-to-br hover:from-[rgba(94,92,92,0.55)]  hover:to-brand-900/90 bg-brand-900/90  text-white font-medium py-2 px-4 rounded-lg transition-all gap-2"
