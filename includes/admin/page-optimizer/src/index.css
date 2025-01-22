@@ -277,3 +277,23 @@
 .slide-out-from-center {
   animation: slideOutFromCenter 0.5s ease-out forwards;
 }
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: white; }
+}
+
+.typing-text {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid transparent;
+}
+
+.typing-text.animate {
+  animation: typing 1s steps(11, end), step-end infinite;
+}

@@ -39,6 +39,22 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
     const [aiPredictionError, setAiPredictionError] = useState<string | null>(null)
     const [countdown, setCountdown] = useState(5);
     const [showOptimizedScore, setShowOptimizedScore] = useState(false);
+    const [text, setText] = useState('Rapidload AI');
+    const [animate, setAnimate] = useState(true); 
+
+    useEffect(() => {
+        if(predictedLoading && !error && !loading){
+        const interval = setInterval(() => {
+          setAnimate(false); 
+          setTimeout(() => {
+            setText((prevText) => (prevText === 'Rapidload AI' ? 'Analyzing' : 'Rapidload AI'));
+            setAnimate(true);
+          }, 30); 
+        }, 3000);
+    
+        return () => clearInterval(interval);
+    }
+      }, [predictedLoading, error, loading]);
 
 
     useEffect(() => {
@@ -201,10 +217,11 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                                         >
                                             <div
                                                 className="flex flex-col items-center justify-center text-center text-brand-950">
-                                                <AnimatedLogo size="lg" isPlaying={predictedLoading} />
-                                                <div className='text-sm pt-2'>
-                                                <p>AI Analyzing</p>
-                                                <p>your site...</p>
+                                                <AnimatedLogo size="xl" isPlaying={predictedLoading} />
+                                                <div className='text-[10px] bg-[#7F54B3] px-1.5 py-[2px] rounded-[5px] mt-4 tracking-widest text-white uppercase'>
+                                                <p className={`typing-text ${animate ? 'animate' : ''}`}>
+                                                    {text}
+                                                </p>
                                                 </div>
                                             
                                             </div>
@@ -233,7 +250,7 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                                                 <ExclamationTriangleIcon className='w-4 text-red-500 cursor-pointer' /> Error in AI Prediction</TooltipText>
                                             </>
                                         ) : (
-                                            <><AIButtonIcon /> AI Predicted Score</>
+                                            <><AnimatedLogo className="!opacity-100" size="sm" isPlaying={false} /> AI Predicted Score</>
                                         )
                                     }
                                 </div>

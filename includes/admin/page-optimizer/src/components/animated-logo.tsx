@@ -2,7 +2,7 @@ import { motion, Variants } from "framer-motion";
 
 interface AnimatedLogoProps {
     className?: string;
-    size?: "sm" | "md" | "lg";
+    size?: "sm" | "md" | "lg" | "xl";
     isPlaying?: boolean;
     animationType?: "moving" | "path";
 }
@@ -11,7 +11,7 @@ const sizes = {
     sm: { width: 21, height: 22 },
     md: { width: 32, height: 33 },
     lg: { width: 42, height: 44 },
-    xl: { width: 230, height: 230 }
+    xl: { width: 50, height: 50 }
 };
 
 interface CirclePathProps {
