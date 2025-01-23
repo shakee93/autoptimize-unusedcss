@@ -250,7 +250,7 @@ const Optimizations = ({ }) => {
             } : null,
         }
 
-        setLoadingText('Hermes AI is analyzing your page...')
+        setLoadingText('Rapidload AI is analyzing your page...')
 
 
         try {
@@ -471,7 +471,9 @@ const Optimizations = ({ }) => {
 
                         setPageSpeedProgress(100);
                         
-                    
+                        if(!aiLoading){
+                            dispatch(setCommonState('diagnosticLoading', false));
+                        }
                         // console.log('✅ PageSpeed fetch completed');
                     } catch (error: any) {
                         
@@ -493,6 +495,8 @@ const Optimizations = ({ }) => {
                 startDiagnostics();
     
             }, 1000);
+
+            
            
         } catch (error: any) {
             setDiagnosticError(error?.message || "One or more steps failed to complete");
@@ -641,7 +645,7 @@ const Optimizations = ({ }) => {
                                 </div>
                                 <iframe
                                     src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
-                                  //  src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
+                                 //   src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                 />

@@ -10,7 +10,7 @@ export const WelcomeScreen = () => (
     </div>
 
     <h2 className="text-2xl text-gray-900 mb-3 font-normal">
-      <span className="font-bold">Hermes AI</span> by RapidLoad
+      <span className="font-bold">Rapidload AI</span> by RapidLoad
     </h2>
 
     <p className="text-base font-normal select-none text-center text-gray-500 max-w-xl mb-6 leading-relaxed">

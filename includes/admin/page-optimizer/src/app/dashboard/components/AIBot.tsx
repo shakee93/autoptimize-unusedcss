@@ -21,7 +21,7 @@ const AIBot = () => {
 
     const handleConversationSelect = (conv: any) => {
         // Add conversation ID to URL hash
-        window.location.hash = `#/hermes-ai?conv=${conv.id}`;
+        window.location.hash = `#/rapidload-ai?conv=${conv.id}`;
         setOpen(false);
     };
 
@@ -72,7 +72,7 @@ const AIBot = () => {
                     {/* <AIBotIcon/> */}
                     <AnimatedLogo className="!opacity-100" size="lg" isPlaying={false} />
                     <div className="dark:text-brand-300 text-center flex flex-col">
-                        <h2 className="text-base font-semibold">Chat with Hermes AI</h2>
+                        <h2 className="text-base font-semibold">Chat with Rapidload AI</h2>
                         <p className="text-sm text-brand-500">An intelligent, responsive chatbot for PageSpeed</p>
                     </div>
                     </div>
@@ -93,7 +93,7 @@ const AIBot = () => {
                     <div className="relative">
                                     <input
                                         type="text"
-                                        onClick={() => (window.location.hash = '#/hermes-ai')}
+                                        onClick={() => (window.location.hash = '#/rapidload-ai')}
                                         placeholder="Ask about anything..."
                                         className="w-full p-2 border border-brand-300 rounded-full focus:outline-none focus:border-black bg-brand-100 pr-10 pl-4"
                                     />

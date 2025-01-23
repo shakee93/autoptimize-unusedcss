@@ -264,7 +264,7 @@ const ChatInput = ({ input, handleInputChange, handleSubmit }: { input: any, han
     <input
       className="flex-1 p-2 bg-brand-100 rounded-lg focus:outline-none focus:border-transparent"
       value={input}
-      placeholder="Ask Hermes AI..."
+      placeholder="Ask Rapidload AI..."
       onChange={handleInputChange}
     />
     <button
