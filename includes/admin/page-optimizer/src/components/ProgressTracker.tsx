@@ -25,7 +25,7 @@ const LoadingGradient = () => (
   <AnimatePresence>
     {true && (
       <motion.div
-        className="absolute inset-0 rounded-xl"
+        className="absolute inset-0 rounded-[10px]"
         style={{
           background: `linear-gradient(90deg, transparent 0%, transparent 25%, #6c21a8 50%, transparent 75%, transparent 100%)`,
           backgroundSize: '200% 100%',
@@ -78,6 +78,8 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ steps, currentStep = 
       {/* Main step */}
       <div className="col-span-1">
         <h3 className="text-sm font-medium text-gray-700 mb-2">1. Preparing</h3>
+        <div className="relative p-0.5">
+        {currentStep === 0 && <LoadingGradient/>}
         <div className="border relative rounded-[10px] p-0.5">
         {/* <AnimatePresence>
                     {true && <motion.div
@@ -97,7 +99,7 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ steps, currentStep = 
                         }}
                     />}
                 </AnimatePresence> */}
-          {currentStep === 0 && <LoadingGradient/>}
+          {/* {currentStep === 0 && <LoadingGradient/>} */}
           <ProgressItem
             duration={mainStep.duration}
             label={mainStep.label}
@@ -107,13 +109,16 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ steps, currentStep = 
             currentStep={currentStep}
           />
         </div>
+        </div>
       </div>
 
       {/* Secondary steps */}
       <div className="col-span-4">
         <h3 className={cn("text-sm font-medium text-gray-700 mb-2", currentStep > 0 ? 'opacity-100' : 'opacity-40')}>2. Collecting required data to diagnose</h3>
-        <div className="border rounded-[10px] relative bg-white ">
+        <div className="relative p-0.5">
         {currentStep > 0 && <LoadingGradient/>}
+        <div className="border rounded-[10px] relative bg-white ">
+        {/* {currentStep > 0 && <LoadingGradient/>} */}
           <div className="grid grid-cols-4 p-0.5 [&>div:first-child>div]:rounded-l-xl [&>div:last-child>div]:rounded-r-xl">
             {remainingSteps.map((step, index) => (
               <div key={index} className="">
@@ -129,6 +134,7 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ steps, currentStep = 
               </div>
             ))}
           </div>
+        </div>
         </div>
       </div>
     </div>

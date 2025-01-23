@@ -610,8 +610,6 @@ const Optimizations = ({ }) => {
                             bounce: 0.2
                             }}
                         >
-                            
-
                             <div className="border-b border-zinc-200 dark:border-zinc-800 -mx-6 my-6" />
 
                             <div className="flex flex-col gap-4">
@@ -625,8 +623,6 @@ const Optimizations = ({ }) => {
                         </m.div>
                     )} */}
 
-                   
-
                     {/* {object?.AnalysisSummary?.length &&
                         <div className="grid grid-cols-5 gap-4 mb-6">
                             <div className={cn('relative col-span-5 bg-brand-0 rounded-2xl p-10 flex flex-col gap-4 text-center', !object?.CriticalIssues?.length && 'items-center justify-center')}>
@@ -636,8 +632,6 @@ const Optimizations = ({ }) => {
                             </div>
                         </div>
                     } */}
-
-
 
 
                     {showIframe && (
@@ -665,8 +659,6 @@ const Optimizations = ({ }) => {
                         </div>
                     )}
                 </div>
-   
-
                
                         <m.div
                         initial={{ y: -50, opacity: 0, height: 0 }}
@@ -680,9 +672,7 @@ const Optimizations = ({ }) => {
                             duration: 0.5,
                             bounce: 0.2
                         }}
-                        // style={{
-                        //     overflow: 'hidden',
-                        // }}
+ 
                         className="bg-white rounded-b-3xl border-t border-zinc-200 dark:border-zinc-800 overflow-hidden"
                         >
                             {/* <ProgressTracker steps={progressSteps} currentStep={0} /> */}
