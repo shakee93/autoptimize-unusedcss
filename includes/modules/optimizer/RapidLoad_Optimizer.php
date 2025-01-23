@@ -1491,35 +1491,35 @@ class RapidLoad_Optimizer
                     }
                 }else if($input['key'] == "uucss_load_js_method" && isset($options[$input['key']])){
                     $input['value'] = $options[$input['key']] == "defer" || $options[$input['key']] == "1";
-                }else if($input['key'] == "uucss_enable_uucss" && isset($options[$input['key']]) && $options[$input['key']] == "1"){
+                }else if($input['key'] == "uucss_enable_uucss"){
                     $data = new RapidLoad_Job_Data(self::$job, 'uucss');
-                    $settings['status'] = [
+                    $settings['status'] =  isset($options[$input['key']]) && $options[$input['key']] == "1" ? [
                         'status' => isset($data->id) ? $data->status : 'queued',
                         'error' =>  isset($data->id) ? $data->get_error() : null,
                         'meta' => [
                             'stats' =>  isset($data->id) ? $data->get_stats() : null,
                             'warnings' =>  isset($data->id) ? $data->get_warnings() : null,
                         ]
-                    ];
+                    ] : null;
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }else if($input['key'] == "update_htaccess_file"){
                     $settings['status'] = RapidLoad_htaccess::has_rapidload_rules();
-                }else if($input['key'] == "uucss_enable_cpcss" && isset($options[$input['key']]) && $options[$input['key']] == "1"){
+                }else if($input['key'] == "uucss_enable_cpcss"){
                     $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
                     $cpcss_data = $data->get_cpcss_data();
-                    $settings['status'] = [
+                    $settings['status'] = isset($options[$input['key']]) && $options[$input['key']] == "1" ? [
                         'status' => isset($data->id) ? $data->status : 'queued',
                         'error' => isset($data->id) ? $data->get_error() : null,
                         'meta' => [
                             'desktop' => isset($data->id) && isset($cpcss_data['desktop']) && !empty($cpcss_data['desktop']) ? $cpcss_data['desktop'] : null,
                             'mobile' => isset($data->id) && isset($cpcss_data['mobile']) && !empty($cpcss_data['mobile']) ? $cpcss_data['mobile'] : null,
                         ]
-                    ];
+                    ] : null;
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
-                }else if($input['key'] == "uucss_enable_cache" && isset($options[$input['key']]) && $options[$input['key']] == "1"){
+                }else if($input['key'] == "uucss_enable_cache"){
                     $cache_file = RapidLoad_Cache_Store::get_cache_file($url);
                     $cache_file_exist = @file_exists($cache_file);
-                    $settings['status'] = [
+                    $settings['status'] = isset($options[$input['key']]) && $options[$input['key']] == "1" ? [
                         'status' => $cache_file_exist ? 'Hit' : 'processing',
                         'error' => [
                             'code' => $cache_file_exist ? null : 422,
@@ -1530,7 +1530,7 @@ class RapidLoad_Optimizer
                             'size' => $cache_file_exist ? $this->formatSize(@filesize($cache_file)) : null,
                             'url' => $url,
                         ]
-                    ];
+                    ] : null;
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }else if($input['key'] == "uucss_safelist"){
                     $rulesArray = [];
