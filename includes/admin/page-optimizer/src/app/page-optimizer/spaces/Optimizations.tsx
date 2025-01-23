@@ -159,6 +159,7 @@ const Optimizations = ({ }) => {
         setDiagnosticComplete(true)
         setDiagnosticsProgress(100);
         resetDiagnosticResults();
+        setAiLoading(false);
         dispatch(setCommonState('diagnosticLoading', false));
     };
 
@@ -639,8 +640,8 @@ const Optimizations = ({ }) => {
                                     </button>
                                 </div>
                                 <iframe
-                                  //  src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
-                                    src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
+                                    src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
+                                  //  src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                 />
