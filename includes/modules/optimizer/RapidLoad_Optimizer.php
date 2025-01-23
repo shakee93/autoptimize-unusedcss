@@ -1491,7 +1491,7 @@ class RapidLoad_Optimizer
                     }
                 }else if($input['key'] == "uucss_load_js_method" && isset($options[$input['key']])){
                     $input['value'] = $options[$input['key']] == "defer" || $options[$input['key']] == "1";
-                }else if($input['key'] == "uucss_enable_uucss"){
+                }else if($input['key'] == "uucss_enable_uucss" && isset($options[$input['key']]) && $options[$input['key']] == "1"){
                     $data = new RapidLoad_Job_Data(self::$job, 'uucss');
                     $settings['status'] = [
                         'status' => isset($data->id) ? $data->status : 'queued',
@@ -1504,7 +1504,7 @@ class RapidLoad_Optimizer
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
                 }else if($input['key'] == "update_htaccess_file"){
                     $settings['status'] = RapidLoad_htaccess::has_rapidload_rules();
-                }else if($input['key'] == "uucss_enable_cpcss"){
+                }else if($input['key'] == "uucss_enable_cpcss" && isset($options[$input['key']]) && $options[$input['key']] == "1"){
                     $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
                     $cpcss_data = $data->get_cpcss_data();
                     $settings['status'] = [
@@ -1516,7 +1516,7 @@ class RapidLoad_Optimizer
                         ]
                     ];
                     $input['value'] = isset($options[$input['key']]) ? $options[$input['key']] : ( isset($input['default']) ? $input['default'] : null) ;
-                }else if($input['key'] == "uucss_enable_cache"){
+                }else if($input['key'] == "uucss_enable_cache" && isset($options[$input['key']]) && $options[$input['key']] == "1"){
                     $cache_file = RapidLoad_Cache_Store::get_cache_file($url);
                     $cache_file_exist = @file_exists($cache_file);
                     $settings['status'] = [
