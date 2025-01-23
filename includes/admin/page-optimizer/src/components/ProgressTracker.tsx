@@ -80,7 +80,7 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ steps, currentStep = 
         <h3 className="text-sm font-medium text-gray-700 mb-2">1. Preparing</h3>
         <div className="relative p-0.5">
         {currentStep === 0 && <LoadingGradient/>}
-        <div className="border relative rounded-[10px] p-0.5">
+        <div className="border relative rounded-[10px] bg-white">
         {/* <AnimatePresence>
                     {true && <motion.div
                         className="absolute inset-0 rounded-xl"
@@ -119,7 +119,7 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ steps, currentStep = 
         {currentStep > 0 && <LoadingGradient/>}
         <div className="border rounded-[10px] relative bg-white ">
         {/* {currentStep > 0 && <LoadingGradient/>} */}
-          <div className="grid grid-cols-4 p-0.5 [&>div:first-child>div]:rounded-l-xl [&>div:last-child>div]:rounded-r-xl">
+          <div className="grid grid-cols-4 [&>div:first-child>div]:rounded-l-xl [&>div:last-child>div]:rounded-r-xl">
             {remainingSteps.map((step, index) => (
               <div key={index} className="">
                 <ProgressItem
