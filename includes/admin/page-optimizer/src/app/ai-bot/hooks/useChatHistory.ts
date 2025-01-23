@@ -17,7 +17,7 @@ export const useChatHistory = (messages: any[], setMessages: (messages: any[]) =
     if (messages.length > 1) {
       setConversations(prev => prev.map(conv => {
         if (conv.active) {
-          const firstUserMessage = messages.find(m => m.role === 'user');
+          const firstUserMessage = messages.find(m => m && m.role === 'user');
           const title = firstUserMessage 
             ? firstUserMessage.content.slice(0, 30) + (firstUserMessage.content.length > 30 ? '...' : '')
             : conv.title;
@@ -29,8 +29,9 @@ export const useChatHistory = (messages: any[], setMessages: (messages: any[]) =
     }
   }, [messages]);
 
-  const handleNewChat = () => {
-    if(messages.length < 2){
+  const handleNewChat = (fresh: boolean) => {
+    console.log("messages", messages, fresh)
+    if(messages.length <= 1 && !fresh){
       return;
     }
     const newChat = {

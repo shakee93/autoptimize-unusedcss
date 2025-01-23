@@ -70,7 +70,7 @@ const AIBot = () => {
                     
                     <div className="flex flex-col items-center gap-2 py-[92px]">  
                     {/* <AIBotIcon/> */}
-                    <AnimatedLogo size="lg" isPlaying={true} />
+                    <AnimatedLogo className="!opacity-100" size="lg" isPlaying={false} />
                     <div className="dark:text-brand-300 text-center flex flex-col">
                         <h2 className="text-base font-semibold">Chat with Hermes AI</h2>
                         <p className="text-sm text-brand-500">An intelligent, responsive chatbot for PageSpeed</p>

@@ -92,6 +92,7 @@ const SpeedSettings = ({ }) => {
     const { options, savingData, invalidatingCache } = useAppContext()
     const [tempMode, setTempMode] = useState<PerformanceGear>((options.rapidload_titan_gear as PerformanceGear) || 'custom');
     const [customMode, setCustomMode] = useState(false);
+    const [baseMode, setBaseMode] = useState<PerformanceGear>((options.rapidload_titan_gear as PerformanceGear) || 'custom');
 
     const [mouseOnSettingsGear, setMouseOnSettingsGear] = useState('');
     const { toast } = useToast();
@@ -264,10 +265,13 @@ const SpeedSettings = ({ }) => {
             firstRender.current = false;
             return;
         }
-        if(tempMode !== 'custom' && !customMode){
+        console.log(activeGear, baseMode)
+        if(activeGear !== 'custom' && activeGear !== baseMode){
+            setBaseMode(tempMode);
             submitSettings(true);
         }
-    }, [tempMode, customMode]);
+        // submitSettings(true);
+    }, [activeGear]);
 
     const handleTestModeSettingsChange = (gearSettingsMode: string,) => {
         let toastInstance: ReturnType<typeof toast> | undefined;

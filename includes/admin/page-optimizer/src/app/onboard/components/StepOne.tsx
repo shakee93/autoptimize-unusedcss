@@ -16,6 +16,7 @@ import { Skeleton } from "components/ui/skeleton";
 import { setCommonRootState } from '../../../store/common/commonActions';
 import ErrorFetch from 'components/ErrorFetch';
 import AppButton from "components/ui/app-button";
+import { AnimatedLogo } from 'components/animated-logo';
 
 interface StepOneProps {
     onNext: () => void;
@@ -35,6 +36,52 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
     const [aiPredictionResult, setAiPredictionResult] = useState<AIPredictionResult | null>(null)
     const [aiPrediction, setAiPrediction] = useState<any>(null)
     const [performanceScore, setPerformanceScore] = useState(95)
+    const [aiPredictionError, setAiPredictionError] = useState<string | null>(null)
+    const [countdown, setCountdown] = useState(5);
+    const [showOptimizedScore, setShowOptimizedScore] = useState(false);
+    const [text, setText] = useState('Rapidload AI');
+    const [animate, setAnimate] = useState(true); 
+
+    useEffect(() => {
+        if(predictedLoading && !error && !loading){
+        const interval = setInterval(() => {
+          setAnimate(false); 
+          setTimeout(() => {
+            setText((prevText) => (prevText === 'Rapidload AI' ? 'Analyzing' : 'Rapidload AI'));
+            setAnimate(true);
+          }, 30); 
+        }, 3000);
+    
+        return () => clearInterval(interval);
+    }
+      }, [predictedLoading, error, loading]);
+
+
+    useEffect(() => {
+        if (!loading && data) {
+            // Short delay before showing optimized score
+            setTimeout(() => {
+                setShowOptimizedScore(true);
+            }, 500);
+        }
+    }, [loading, data]);
+
+    useEffect(() => {
+        if (error) {
+            const timer = setInterval(() => {
+                setCountdown((prev) => {
+                    if (prev <= 1) {
+                        clearInterval(timer);
+                        onNext();
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+    
+            return () => clearInterval(timer);
+        }
+    }, [error, onNext]);
 
     useEffect(() => {
         data && dispatch(getAiPrediction(options, options.optimizer_url, data.performance, data.grouped, data.metrics))
@@ -45,7 +92,8 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                 setPredictedLoading(false);
             })
             .catch(error => {
-                console.error('Error in AI Prediction:', error);
+                setAiPredictionError('Error in AI Prediction: ' + error)
+                setPredictedLoading(false);
             });
     }, [data])
 
@@ -93,15 +141,16 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                         </span>
                     </div>
                     
-                    <div className="flex gap-8 items-center mt-8">
-                        <button
+                    <div>Redirecting in {countdown} seconds...</div>
+                    <div className="flex gap-8 items-center">
+                        {/* <button
                             className="items-center bg-brand-200 text-brand-950 hover:shadow-[inset_0_0_0_2px_rgba(0,0,0,1)] font-medium py-2 px-4 rounded-lg hover:bg-transparent transition-all gap-2"
                                 onClick={() => {
                                     window.open('https://rapidload.zendesk.com/hc/en-us/requests/new', '_blank');
                             }}
                         >
                             Contact Support
-                        </button>
+                        </button> */}
                     
                         <button
                             className="items-center flex gap-2 hover:bg-gradient-to-br hover:from-[rgba(94,92,92,0.55)]  hover:to-brand-900/90 bg-brand-900/90  text-white font-medium py-2 px-4 rounded-lg transition-all gap-2"
@@ -110,8 +159,10 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                                 }}
                             >
                                 <RefreshCw className="w-4 text-brand-0" />
-                                Refresh to Continue
+                                Refresh to Retry
                         </button>
+
+                        
                     </div>
                 </>
                 ):(
@@ -119,10 +170,19 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                     <div className='bg-brand-100/30 border rounded-3xl p-2'>
                         <div
                             className="flex items-center justify-center text-md gap-2 overflow-hidden relative">
-                            <div className="flex justify-center px-4 py-2 max-w-xl mx-auto w-full relative">
+                            {/* <div className="flex justify-center px-4 py-2 max-w-xl mx-auto w-full relative"> */}
+                            <div className={cn(
+                                "flex justify-center px-4 py-2 max-w-xl mx-auto w-full relative transition-all duration-500",
+                                !showOptimizedScore && "justify-center min-w-[450px]",
+                                showOptimizedScore && "justify-between"
+                            )}>
                             {/* Before Results */}
 
-                            <div className="flex flex-col items-center gap-4 px-6 rounded-2xl w-[230px]">
+                            {/* <div className="flex flex-col items-center gap-4 px-6 rounded-2xl w-[230px]"> */}
+                            <div className={cn(
+                                "flex flex-col items-center gap-4 px-6 rounded-2xl w-[230px] transition-all duration-500",
+                                showOptimizedScore ? "slide-out-from-center" : "" // Center when alone
+                                )}>
                                 <div className="">
                                     {error ?
                                         <Skeleton className="w-44 h-44 rounded-full" />
@@ -141,7 +201,12 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
 
 
                             {/* Optimized Score */}
-                            <div className="flex flex-col items-center gap-4 px-6 rounded-2xl w-[230px]">
+                            {/* <div className="flex flex-col items-center gap-4 px-6 rounded-2xl w-[230px]"> */}
+                            {showOptimizedScore && (
+                                <div className={cn(
+                                    "flex flex-col items-center gap-4 px-6 rounded-2xl w-[230px] transition-all duration-500",
+                                    "slide-in-from-center"
+                                )}>
 
                                 <div className="">
                                     {predictedLoading || error || loading ? (
@@ -152,10 +217,15 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                                         >
                                             <div
                                                 className="flex flex-col items-center justify-center text-center text-brand-950">
-                                                <AIButtonIcon className='w-10 h-10 animate-pulse' />
-                                                <p className="text-lg">AI Analyzing</p>
-                                                <p className="text-lg">your site...</p>
+                                                <AnimatedLogo size="xl" isPlaying={predictedLoading} />
+                                                <div className='text-[10px] bg-[#7F54B3] px-1.5 py-[2px] rounded-[5px] mt-4 tracking-widest text-white uppercase'>
+                                                <p className={`typing-text ${animate ? 'animate' : ''}`}>
+                                                    {text}
+                                                </p>
+                                                </div>
+                                            
                                             </div>
+                                            
                                         </div>
 
                                     ) : (
@@ -174,19 +244,26 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                                     {predictedLoading || error || loading ?
                                         (
                                             <><Loader className='w-4 animate-spin' /> Hold on tight</>
+                                        ) : aiPredictionError && aiPredictionError?.length > 0 ? (
+                                            <>
+                                            <TooltipText text={aiPredictionError}>
+                                                <ExclamationTriangleIcon className='w-4 text-red-500 cursor-pointer' /> Error in AI Prediction</TooltipText>
+                                            </>
                                         ) : (
-                                            <><AIButtonIcon /> AI Predicted Score</>
+                                            <><AnimatedLogo className="!opacity-100" size="sm" isPlaying={false} /> AI Predicted Score</>
                                         )
                                     }
                                 </div>
                             </div>
+                            )}
                             </div>
+                            
                         </div>
                     </div>
 
                     <button
                                 className={cn('flex items-center bg-gradient-to-r from-brand-900/90 to-brand-950 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2 hover:bg-gradient-to-br hover:from-[rgba(94,92,92,0.55)]  hover:to-brand-900/90 bg-brand-900/90',
-                                predictedLoading && 'pointer-events-none cursor-default opacity-30')}
+                                predictedLoading  && 'pointer-events-none cursor-default opacity-30')}
                                 onClick={onNext}
                             >
                                 Let’s improve this score
