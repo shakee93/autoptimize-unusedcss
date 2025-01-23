@@ -120,7 +120,7 @@ const Optimizations = ({ }) => {
         schema: DiagnosticSchema,
         onFinish: (diagnostic: any) => {
             //console.log(diagnostic)
-            aiResultsComplete();
+          //  aiResultsComplete();
 
             toast({
                 title: "AI Diagnostic Complete",
@@ -150,6 +150,8 @@ const Optimizations = ({ }) => {
     useEffect(() => {
         if (object?.AnalysisSummary && object.AnalysisSummary.length) {
             dispatch(setDiagnosticResults(object as DiagnosticResults));
+            //when the ai repose is received, we need to complete AI Session
+            aiResultsComplete();
         }
     }, [object]);
 
