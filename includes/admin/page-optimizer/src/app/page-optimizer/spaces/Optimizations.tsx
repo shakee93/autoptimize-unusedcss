@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import AppButton from "components/ui/app-button";
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "../../../components/ui/accordion";
+import { AccordionItem, AccordionTrigger, AccordionContent } from "../../../components/ui/accordion";
 import { useCompletion, experimental_useObject as useObject } from 'ai/react'
 import { AnimatePresence, m, motion } from "framer-motion"
 import useCommonDispatch from "hooks/useCommonDispatch";
@@ -25,6 +25,7 @@ import { setCommonState } from "../../../store/common/commonActions";
 import AIDemoMessage from "../components/AIDemoMessage";
 import ErrorFetch from "components/ErrorFetch";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
+import AnimatedDiv from "components/ui/animatedDiv";
 
 const DiagnosticSchema = z.object({
     // active_settings_inputs: z.array(z.object({
@@ -99,6 +100,7 @@ const Optimizations = ({ }) => {
     const [serverDetails, setServerDetails] = useState(null);
     const [input, setInput] = useState(null);
     const [diagnosticError, setDiagnosticError] = useState<string | null>(null);
+    const [aiResponding, setAiResponding] = useState(false);
 
     useEffect(() => {
         console.log('diagnosticLoading', diagnosticLoading)
@@ -120,7 +122,7 @@ const Optimizations = ({ }) => {
         schema: DiagnosticSchema,
         onFinish: (diagnostic: any) => {
             //console.log(diagnostic)
-          //  aiResultsComplete();
+            aiResultsComplete();
 
             toast({
                 title: "AI Diagnostic Complete",
@@ -150,8 +152,7 @@ const Optimizations = ({ }) => {
     useEffect(() => {
         if (object?.AnalysisSummary && object.AnalysisSummary.length) {
             dispatch(setDiagnosticResults(object as DiagnosticResults));
-            //when the ai repose is received, we need to complete AI Session
-            aiResultsComplete();
+           
         }
     }, [object]);
 
@@ -162,6 +163,7 @@ const Optimizations = ({ }) => {
         setDiagnosticsProgress(100);
         resetDiagnosticResults();
         setAiLoading(false);
+        setAiResponding(false);
         dispatch(setCommonState('diagnosticLoading', false));
     };
 
@@ -175,6 +177,7 @@ const Optimizations = ({ }) => {
         setDiagnosticsProgress(0);
         setIsFlushingProgress(0);
         setAiLoading(false);
+        setAiResponding(false);
     }
 
 
@@ -253,7 +256,7 @@ const Optimizations = ({ }) => {
         }
 
         setLoadingText('Rapidload AI is analyzing your page...')
-
+        setAiResponding(true);
 
         try {
 
@@ -518,6 +521,8 @@ const Optimizations = ({ }) => {
     }
    }, [diagnosticError])
 
+   const [test, setTest] = useState(false);
+   
 
     return (
         <AnimatePresence>
@@ -527,14 +532,15 @@ const Optimizations = ({ }) => {
                 transition={{ duration: 0.2, delay: 0.05 }}
                 className='bg-[#F0F0F1] dark:bg-brand-800'
             >
+                {/* <button onClick={() => setTest(prev => !prev)}>Test</button> */}
+
                 
-
-
-                <div className='px-6 py-6 bg-white rounded-3xl'>
+                <div className={cn('px-6 py-6 bg-white z-50 relative', aiLoading && !aiResponding ? 'rounded-t-3xl' : 'rounded-3xl')}>
                     <div className="flex gap-4 w-full items-start">
                         {/* Logo Column */}
                         <div className="flex justify-start items-center gap-2 w-10">
-                            <AnimatedLogo size="lg" isPlaying={aiLoading} />
+                            
+                        <AnimatedLogo size="lg" isPlaying={aiLoading} animationType={aiResponding ? "path" : "moving"} />
                         </div>
 
                         {/* Content Column */}
@@ -591,18 +597,20 @@ const Optimizations = ({ }) => {
 
                     {diagnosticError?.length && handleDiagnosticError(diagnosticError)} 
                     
-                    {/* diagnosticsLoading */}
-                    {aiLoading && (
+                     {/* diagnosticsLoading */}
+                     
+                     {/* {aiLoading && !aiResponding && (
                         <m.div
-                            initial={{ y: 20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            exit={{ y: 20, opacity: 0 }}
-                            transition={{
-                                duration: 0.3,
-                                ease: "easeOut"
+                        initial={{ y: -50, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: -50, opacity: 0 }}
+                        transition={{
+                            type: "spring",
+                            duration: 0.5,
+                            bounce: 0.2
                             }}
                         >
-                            {/* <ProgressTracker steps={progressSteps} currentStep={0} /> */}
+                            
 
                             <div className="border-b border-zinc-200 dark:border-zinc-800 -mx-6 my-6" />
 
@@ -615,7 +623,9 @@ const Optimizations = ({ }) => {
                             </div>
                           
                         </m.div>
-                    )}
+                    )} */}
+
+                   
 
                     {/* {object?.AnalysisSummary?.length &&
                         <div className="grid grid-cols-5 gap-4 mb-6">
@@ -647,7 +657,7 @@ const Optimizations = ({ }) => {
                                 </div>
                                 <iframe
                                     src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
-                                 //   src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
+                                  //  src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                 />
@@ -655,6 +665,39 @@ const Optimizations = ({ }) => {
                         </div>
                     )}
                 </div>
+   
+
+               
+                        <m.div
+                        initial={{ y: -50, opacity: 0, height: 0 }}
+                        animate={{ 
+                            y: aiLoading && !aiResponding ? 0 : -50, 
+                            opacity: aiLoading && !aiResponding ? 1 : 0, 
+                            height: aiLoading && !aiResponding ? 'auto' : 0 
+                        }}
+                        transition={{
+                            type: "spring",
+                            duration: 0.5,
+                            bounce: 0.2
+                        }}
+                        // style={{
+                        //     overflow: 'hidden',
+                        // }}
+                        className="bg-white rounded-b-3xl border-t border-zinc-200 dark:border-zinc-800 overflow-hidden"
+                        >
+                            {/* <ProgressTracker steps={progressSteps} currentStep={0} /> */}
+
+                            <div className="flex flex-col gap-4 p-6">
+                                <ProgressTracker
+                                    steps={progressSteps}
+                                    currentStep={currentStep}
+                                    onTimeUpdate={handleRemainingTimeUpdate}
+                                />
+                            </div>
+                          
+                        </m.div>
+                    
+        
 
                 {diagnosticResults?.AnalysisSummary?.length &&
                     <AnalysisResults
