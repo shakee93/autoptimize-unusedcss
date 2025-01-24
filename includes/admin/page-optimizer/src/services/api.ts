@@ -78,7 +78,7 @@ class ApiService {
         });
     }
 
-    async fetchPageSpeed(url: string, activeReport: string, reload: boolean): Promise<any> {
+    async fetchPageSpeed(url: string, activeReport: string, reload: boolean, abortController?: AbortController): Promise<any> {
 
         try {
             let fresh = reload
@@ -86,7 +86,7 @@ class ApiService {
 
             if (reload) {
 
-                data = await this.analyzeViaAPI(url, activeReport);
+                data = await this.analyzeViaAPI(url, activeReport, abortController);
 
                 if (data?.errors) {
                     if (Array.isArray(data?.errors)) {
@@ -131,6 +131,7 @@ class ApiService {
                 headers: {
                     "Content-Type": "application/json",
                 },
+                signal: abortController?.signal,
                 ...(
                     data ? {
                         body: JSON.stringify({
@@ -203,7 +204,9 @@ class ApiService {
         }
     }
 
-    async analyzeViaAPI(url: string, strategy: string) {
+    async analyzeViaAPI(url: string, strategy: string, abortController?: AbortController) {
+
+        console.log('analyzeViaAPI', abortController);
 
         try {
 
@@ -232,6 +235,7 @@ class ApiService {
                 headers: {
                     "Content-Type": "application/json",
                 },
+                signal: abortController?.signal,
                 body: JSON.stringify({
                     settings: settings.state?.
                         flatMap(t =>

@@ -488,7 +488,7 @@ export const fetchPosts = (options: WordPressOptions): ThunkAction<void, RootSta
     };
 };
 
-export const fetchReport = (options: WordPressOptions, url: string, reload = false): ThunkAction<void, RootState, unknown, AnyAction> => {
+export const fetchReport = (options: WordPressOptions, url: string, reload = false, abortController?: AbortController): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
@@ -518,6 +518,7 @@ export const fetchReport = (options: WordPressOptions, url: string, reload = fal
                 url,
                 activeReport,
                 reload,
+                abortController
             );
 
             dispatch({

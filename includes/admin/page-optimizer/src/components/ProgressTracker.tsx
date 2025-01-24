@@ -81,24 +81,7 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ steps, currentStep = 
         <div className="relative p-0.5">
         {currentStep === 0 && <LoadingGradient/>}
         <div className="border relative rounded-[10px] bg-white">
-        {/* <AnimatePresence>
-                    {true && <motion.div
-                        className="absolute inset-0 rounded-xl"
-                        style={{
-                            background: `linear-gradient(90deg, transparent 0%, transparent 25%, #6c21a8 50%, transparent 75%, transparent 100%)`,
-                            backgroundSize: '200% 100%',
-                        }}
-                        animate={{
-                            backgroundPosition: ['200% 0', '-200% 0'],
-                            opacity: [1, 0.5, 1]
-                        }}
-                        transition={{
-                            duration: 4,
-                            ease: "linear",
-                            repeat: Infinity,
-                        }}
-                    />}
-                </AnimatePresence> */}
+        
           {/* {currentStep === 0 && <LoadingGradient/>} */}
           <ProgressItem
             duration={mainStep.duration}

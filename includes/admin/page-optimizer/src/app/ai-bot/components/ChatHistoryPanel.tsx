@@ -19,7 +19,7 @@ export default function ChatHistoryPanel({
   onDeleteConversation
 }: ChatHistoryPanelProps) {
   return (
-    <div className="w-64 h-full border-r border-gray-200 p-4">
+    <div className="w-64 h-full border-r border-gray-200 p-4 flex flex-col">
       <button
         onClick={onNewChat}
         className="w-full mb-4 flex items-center justify-center gap-2 px-4 py-2 bg-brand-950 text-white rounded-lg hover:bg-brand-900 transition-colors"
@@ -28,7 +28,7 @@ export default function ChatHistoryPanel({
         New Chat
       </button>
       
-      <div className="space-y-2">
+      <div className="space-y-2 overflow-y-auto flex-1">
         {conversations.map((conv) => (
           <div
             key={conv.id}

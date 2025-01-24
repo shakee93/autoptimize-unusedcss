@@ -26,6 +26,7 @@ import AIDemoMessage from "../components/AIDemoMessage";
 import ErrorFetch from "components/ErrorFetch";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
 import AnimatedDiv from "components/ui/animatedDiv";
+import TooltipText from "components/ui/tooltip-text";
 
 const DiagnosticSchema = z.object({
     // active_settings_inputs: z.array(z.object({
@@ -84,7 +85,7 @@ const DiagnosticSchema = z.object({
 const AIBaseURL = window.rapidload_optimizer.ai_root || "https://ai.rapidload.io/api"
 
 const Optimizations = ({ }) => {
-    const { settings, data, activeReport, diagnosticResults, diagnosticProgress } = useSelector(optimizerData);
+    const { settings, data, activeReport, diagnosticResults, diagnosticProgress, loading } = useSelector(optimizerData);
     const [diagnosticComplete, setDiagnosticComplete] = useState(false);
     const [loadingText, setLoadingText] = useState<string | null>(null);
     const [aiLoading, setAiLoading] = useState(false);
@@ -101,6 +102,15 @@ const Optimizations = ({ }) => {
     const [input, setInput] = useState(null);
     const [diagnosticError, setDiagnosticError] = useState<string | null>(null);
     const [aiResponding, setAiResponding] = useState(false);
+    const abortControllerRef = useRef<AbortController | null>(null);
+    const [privacyPolicy, setPrivacyPolicy] = useState(false);
+
+    useEffect(() => {
+        const storedValue = localStorage.getItem("rapidload_privacy_policy");
+        if (storedValue === "true") {
+            setPrivacyPolicy(true);
+        }
+      }, [privacyPolicy]);
 
     useEffect(() => {
         console.log('diagnosticLoading', diagnosticLoading)
@@ -164,7 +174,7 @@ const Optimizations = ({ }) => {
         resetDiagnosticResults();
         setAiLoading(false);
         setAiResponding(false);
-        dispatch(setCommonState('diagnosticLoading', false));
+       // dispatch(setCommonState('diagnosticLoading', false));
     };
 
 
@@ -178,6 +188,7 @@ const Optimizations = ({ }) => {
         setIsFlushingProgress(0);
         setAiLoading(false);
         setAiResponding(false);
+        dispatch(setCommonState('diagnosticLoading', false));
     }
 
 
@@ -369,8 +380,6 @@ const Optimizations = ({ }) => {
         const previewUrl = optimizerUrl + '?rapidload_preview'
 
         try {
-        
-            
             setIsFlushingProgress(10);
            
             await api.post('clear_page_cache', {
@@ -392,12 +401,9 @@ const Optimizations = ({ }) => {
             // });
 
         } catch (error: any) {
-            setIsFlushingProgress(0);
-            
+            setIsFlushingProgress(0); 
             setDiagnosticError(error.message || "Failed to clear page cache");
-            
             // console.error('❌ Flushing cache failed:', error);
-
             // toast({
             //     title: "Cache Flush Failed",
             //     description: error.message || "Failed to clear page cache",
@@ -423,17 +429,12 @@ const Optimizations = ({ }) => {
                 // Fetch Settings
                 (async () => {
                     try {
-                       
                         simulateProgress(setSettingsProgress, 25, 90);
-                       // setSettingsProgress(25);
-                       
+
                         await dispatch(fetchSettings(options, headerUrl ? headerUrl : options.optimizer_url, true));
 
                         setSettingsProgress(100);
-                       
-
                         //  console.log('✅ Settings fetch completed');
-
                     } catch (error: any) {
                        
                         setDiagnosticError(error?.message || "Failed to run settings");
@@ -444,22 +445,15 @@ const Optimizations = ({ }) => {
                 // Server Info Check
                 (async () => {
                     try {
-                        
                         simulateProgress(setServerInfoProgress, 25, 90);
-                      // setServerInfoProgress(25);
                         
-
                         const api = new ApiService(options);
                         const data = await api.post('rapidload_server_info');
                         setServerDetails(data)
    
                         setServerInfoProgress(100);
-
-                       
-                        
                         // console.log('✅ Server info check completed');
                     } catch (error: any) {
-                      
                         setDiagnosticError(error?.message || "Failed to run server info");
                         throw error;
                     }
@@ -468,21 +462,18 @@ const Optimizations = ({ }) => {
                 // New Page Speed
                 (async () => {
                     try {
-                      
+                       // abortControllerRef.current = new AbortController();
                         simulateProgress(setPageSpeedProgress, 25, 90);
-                        // setPageSpeedProgress(25);
 
+                       // await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true, abortControllerRef.current));
                         await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
 
                         setPageSpeedProgress(100);
-                        
-                        if(!aiLoading){
-                            dispatch(setCommonState('diagnosticLoading', false));
-                        }
+                       // abortControllerRef.current = null; 
                         // console.log('✅ PageSpeed fetch completed');
                     } catch (error: any) {
-                        
-                         setDiagnosticError(error?.message || "Failed to run page speed");               
+                        setPageSpeedProgress(0);
+                        setDiagnosticError(error?.message || "Failed to run page speed");               
                         throw error;
                     }
                 })()
@@ -510,19 +501,29 @@ const Optimizations = ({ }) => {
     };
 
 
-    
+    // useEffect(() => {
+    //     return () => {
+    //         if (abortControllerRef.current) {
+    //             abortControllerRef.current.abort();
+    //         }
+    //     };
+    // }, []);
     
 
    useEffect(() => {
-    if(diagnosticError?.length){
-        resetDiagnosticResults();
-        console.log('settingsProgress: ', settingsProgress, 'serverInfoProgress: ', serverInfoProgress, 'pageSpeedProgress: ', pageSpeedProgress)
-      
+    if(diagnosticError?.length && (pageSpeedProgress === 100 || pageSpeedProgress === 0 || isFlushingProgress === 0)){
+        resetDiagnosticResults(); 
+        
+        // if (abortControllerRef.current) {
+        //     abortControllerRef.current.abort();
+        //     abortControllerRef.current = null; // Reset controller
+        //     resetDiagnosticResults();
+        //     console.log('abortController aborted');
+        // }
+        
     }
-   }, [diagnosticError])
+   }, [diagnosticError, pageSpeedProgress])
 
-   const [test, setTest] = useState(false);
-   
 
     return (
         <AnimatePresence>
@@ -532,7 +533,6 @@ const Optimizations = ({ }) => {
                 transition={{ duration: 0.2, delay: 0.05 }}
                 className='bg-[#F0F0F1] dark:bg-brand-800'
             >
-                {/* <button onClick={() => setTest(prev => !prev)}>Test</button> */}
 
                 
                 <div className={cn('px-6 py-6 bg-white z-50 relative', aiLoading && !aiResponding ? 'rounded-t-3xl' : 'rounded-3xl')}>
@@ -554,6 +554,8 @@ const Optimizations = ({ }) => {
                                         {currentStep === 3 && "Running comprehensive PageSpeed diagnostics..."}
                                         {currentStep === 4 && (loadingText ? loadingText : "Processing data through AI for insights...")}
                                     </>
+                                ) :  !privacyPolicy ? (
+                                    "Privacy Policy"
                                 ) : (
                                     "Do you need any AI assistance?"
                                 )}
@@ -563,6 +565,11 @@ const Optimizations = ({ }) => {
                                     remainingTime === 0 ?
                                         "It's taking a bit longer than expected, hang tight..." :
                                         `Looks like I'll need to wait ${remainingTime}s more...`
+                                ) : !privacyPolicy ? (
+                                    <div className="flex flex-col">
+                                    <span>At RapidLoad, we collect, use, and protect your personal information. By clicking 'Accept and Continue', you agree to our 
+                                    <a href="https://rapidload.io/privacy-policy/" target="_blank" className="text-purple-750 underline cursor-pointer font-semibold px-1">Privacy Policy</a></span>
+                                    </div>
                                 ) : (
                                     object?.AnalysisSummary ?
                                         object.AnalysisSummary :
@@ -574,28 +581,34 @@ const Optimizations = ({ }) => {
 
                         {/* Button Column */}
                         {!aiLoading &&
-                            <div className="flex justify-end items-center mt-2">
+                        <TooltipText text={loading ? "Please wait while applying optimizations" : null }>
+                            <div className={cn('flex justify-end items-center mt-2')}>
                                 <AppButton
                                     disabled={aiLoading}
-                                    className="rounded-xl px-8 py-6 whitespace-nowrap"
+                                    className={cn("rounded-xl px-8 py-6 whitespace-nowrap", loading && 'cursor-not-allowed opacity-60 pointer-events-none')}
                                     onClick={() => {
                                     
                                         setDiagnosticError(null);
                                         dispatch(setCommonState('diagnosticLoading', true));
                                         setAiLoading(true);
                                         handleFlushCache();
+
+                                        if(!privacyPolicy){
+                                            localStorage.setItem('rapidload_privacy_policy', "true");
+                                        }
                                        
                                     }}
                                 >
                                     {/* {diagnosticsLoading && <LoaderIcon className="h-4 w-4 text-white animate-spin" />} */}
-                                    {diagnosticResults?.AnalysisSummary?.length ? 'Run Diagnostics Test Again' : 'Run Diagnostics Test '}
+                                    {diagnosticResults?.AnalysisSummary?.length ? 'Run Diagnostics Test Again' : !privacyPolicy ? 'Accept and Continue' : 'Run Diagnostics Test '}
                                     
                                 </AppButton>
                             </div>
+                        </TooltipText>
                         }
                     </div>
 
-                    {diagnosticError?.length && handleDiagnosticError(diagnosticError)} 
+                    {diagnosticError?.length && (pageSpeedProgress === 100 || pageSpeedProgress === 0 || isFlushingProgress === 0) && handleDiagnosticError(diagnosticError)} 
                     
                      {/* diagnosticsLoading */}
                      
@@ -651,7 +664,7 @@ const Optimizations = ({ }) => {
                                 </div>
                                 <iframe
                                     src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
-                                  //  src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
+                                   // src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                 />

@@ -117,7 +117,7 @@ const CDNSummary = () => {
     return (
         <Card data-tour="license-widget" className="border flex flex-col">
             <div className="p-6">
-                <SectionHeader title="CD and Image Summary" tooltip="Comprehensive breakdown of CDN and Image CDN usage allocated through RapidLoad." />
+                <SectionHeader title="CDN and Image Summary" tooltip="Comprehensive breakdown of CDN and Image CDN usage allocated through RapidLoad." />
 
                 <UsageBar label="CDN" usage={cdnUsage.used_gb} allowedUsage={cdnUsage.allowed_gb} note={`Limits will be updated on ${nextBillingDate}`} used_gb_formatted={cdnUsage.used_gb_formatted}/>
                 {cdnUsage.additional_usage_gb > 0 &&
