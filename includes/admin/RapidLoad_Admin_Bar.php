@@ -94,6 +94,12 @@ class RapidLoad_Admin_Bar {
             }
         }
 
+        $rapidload_license_data = get_option('rapidload_license_data', null);   
+
+        if($rapidload_license_data){
+            $rapidload_license_data = unserialize($rapidload_license_data);
+        }
+
         $data = array(
             'titan_stylesheet_url' => $package .  $indexCSS,
             'load_optimizer' => true,
@@ -142,6 +148,7 @@ class RapidLoad_Admin_Bar {
             'uucss_disable_error_tracking' => boolval(isset($options['uucss_disable_error_tracking']) && $options['uucss_disable_error_tracking'] == "1"),
             'test_mode' => boolval(isset($options['rapidload_test_mode']) && $options['rapidload_test_mode'] == "1"),
             'rapidload_titan_gear' => get_option('rapidload_titan_gear', 'trurboMax'),
+            'rapidload_license_data' => $rapidload_license_data,
         );
 
         wp_localize_script( 'rapidload_page_optimizer', 'rapidload_optimizer', $data );
