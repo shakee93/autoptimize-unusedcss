@@ -488,21 +488,28 @@ export const fetchPosts = (options: WordPressOptions): ThunkAction<void, RootSta
     };
 };
 
-export const fetchReport = (options: WordPressOptions, url: string, reload = false, abortController?: AbortController): ThunkAction<void, RootState, unknown, AnyAction> => {
+export const fetchReport = (options: WordPressOptions, url: string, reload = false,  fetchBoth?: boolean, abortController?: AbortController): ThunkAction<void, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
     return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState) => {
         try {
             const currentState = getState(); // Access the current state
-            const activeReport = currentState.app.activeReport;
-            const activeReportData = currentState.app.report[activeReport]
+            //const activeReport = currentState.app.activeReport;
+           // const activeReportData = currentState.app.report[activeReport]
 
+           // If `fetchBoth` is true, fetch for both `mobile` and `desktop`
+           const reportTypes: ReportType[] = fetchBoth ? ['mobile', 'desktop'] : [currentState.app.activeReport];
+
+          
             // TODO: don't let people bam on keyboard while waiting to laod the page speed
             // if(activeReportData.loading && activeReportData.data ) {
             //     console.log('don\'t bam the mouse! we are loading your page speed details 😉');
             //     return;
             // }
+            for (const reportType of reportTypes) {
+
+                const activeReportData = currentState.app.report[reportType];
 
             if (activeReportData.loading) {
                 return;
@@ -512,21 +519,22 @@ export const fetchReport = (options: WordPressOptions, url: string, reload = fal
                 return;
             }
 
-            dispatch({ type: FETCH_REPORT_REQUEST, activeReport });
+            dispatch({ type: FETCH_REPORT_REQUEST, activeReport: reportType  });
 
             const response = await api.fetchPageSpeed(
                 url,
-                activeReport,
+                reportType,
                 reload,
                 abortController
             );
 
             dispatch({
                 type: FETCH_REPORT_SUCCESS, payload: {
-                    activeReport,
+                    activeReport: reportType ,
                     data: transformReport(response)
                 }
             });
+        }
 
 
         } catch (error) {

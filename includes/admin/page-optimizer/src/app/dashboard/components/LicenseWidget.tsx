@@ -22,6 +22,7 @@ const LicenseWidget = () => {
     const { license } = useSelector(optimizerData);
     const { options } = useAppContext();
     const { dispatch } = useCommonDispatch();
+    const storedLicense = localStorage.getItem('rapidLoadLicense');
 
     useEffect(() => setLicenseMessage(""), [inputLicense]);
 
@@ -44,7 +45,7 @@ const LicenseWidget = () => {
 
     useEffect(() => {
 
-        const storedLicense = localStorage.getItem('rapidLoadLicense');
+       // const storedLicense = localStorage.getItem('rapidLoadLicense');
         if (storedLicense) {
             try {
                 setLicenseInfo(JSON.parse(storedLicense));
@@ -56,6 +57,12 @@ const LicenseWidget = () => {
         }
 
     }, [license]);
+
+    useEffect(() => {
+        if(storedLicense){
+            setLicenseInfo(JSON.parse(storedLicense));
+        }
+    }, [storedLicense]);
 
     const toggleVisibility = () => setIsVisible(!isVisible);
 
