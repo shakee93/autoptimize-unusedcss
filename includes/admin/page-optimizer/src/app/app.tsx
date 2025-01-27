@@ -199,7 +199,7 @@ const App = ({ popup, _showOptimizer = false }: {
         { title: "Dashboard", id: "/", component: <Dashboard /> },
         { title: "Optimize", id: "/optimize", component: <PageOptimizer /> },
         { title: "Onboard", id: "/onboard", component: <Onboard /> },
-        { title: "Hermes AI", id: "/hermes-ai", component: <HermesAIBot /> },
+        { title: "Rapidload AI", id: "/rapidload-ai", component: <HermesAIBot /> },
     ]);
 
     // Effect to listen for hash changes
@@ -323,7 +323,7 @@ const App = ({ popup, _showOptimizer = false }: {
                                             </div>
 
                                             {routes.map((route, i) => {
-                                                if (route.id === '/onboard' || route.id === '/hermes-ai') {
+                                                if (route.id === '/onboard' || route.id === '/rapidload-ai') {
                                                     return null;
                                                 }
                                                 return (

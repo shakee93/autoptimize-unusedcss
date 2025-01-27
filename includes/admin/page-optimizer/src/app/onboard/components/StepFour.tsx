@@ -220,7 +220,7 @@ const StepFour = () => {
                             alt='RapidLoad - #1 to unlock breakneck page speed' />
                     </div>
                     <div className='flex flex-col gap-2 text-center'>
-                        <h1 className='text-4xl font-bold'>{aiMessage ? 'Hermes AI Analyzed Your site' : 'Your Site is FAST!'}</h1>
+                        <h1 className='text-4xl font-bold'>{aiMessage ? 'Rapidload AI Analyzed Your site' : 'Your Site is FAST!'}</h1>
                         <span className='font-medium text-base text-zinc-600 dark:text-brand-300'>
                             We have analyzed your entire site and this is the current results
                         </span>

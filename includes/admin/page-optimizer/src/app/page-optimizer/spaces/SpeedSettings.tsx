@@ -26,7 +26,7 @@ import {
     JavascriptDelivery,
     PageCache,
 } from "app/page-optimizer/components/icons/category-icons";
-import { cn } from "lib/utils";
+import { cn, isDev } from "lib/utils";
 import { setCommonState } from "../../../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import { BoltIcon, CheckCircleIcon, ChevronRightIcon, ChevronDownIcon, ChevronUpIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/solid";
@@ -266,7 +266,7 @@ const SpeedSettings = ({ }) => {
             return;
         }
         console.log(activeGear, baseMode)
-        if(activeGear !== 'custom' && activeGear !== baseMode){
+        if(activeGear !== 'custom' && activeGear !== baseMode && !isDev){
             setBaseMode(tempMode);
             submitSettings(true);
         }

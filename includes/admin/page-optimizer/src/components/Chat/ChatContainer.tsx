@@ -11,7 +11,7 @@ const ChatContainer: React.FC = () => {
     return (
         <Card className="flex flex-col h-full">
             <CardHeader>
-                <CardTitle>Chat with Hermes AI</CardTitle>
+                <CardTitle>Chat with Rapidload AI</CardTitle>
             </CardHeader>
             <CardContent className="flex-grow overflow-hidden">
                 <MessageList messages={messages} />
