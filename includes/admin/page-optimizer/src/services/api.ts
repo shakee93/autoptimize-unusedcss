@@ -309,6 +309,28 @@ class ApiService {
         }
     }
 
+    async updateDiagnosticResults(url: string, activeReport: string, data: any): Promise<any> {
+        try {
+            this.baseURL.searchParams.append('action', 'rapidload_diagnose_data');
+            this.baseURL.searchParams.append('url', url)
+            this.baseURL.searchParams.append('strategy', activeReport)
+
+            const response = await fetch(this.baseURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    data: data
+                })
+            });
+            return this.throwIfError(response);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
     async getTestMode(url: string, mode: string): Promise<any> {
         try {
             this.baseURL.searchParams.append('action', 'rapidload_switch_test_mode');

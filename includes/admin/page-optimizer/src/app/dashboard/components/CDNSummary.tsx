@@ -119,7 +119,7 @@ const CDNSummary = () => {
             <div className="p-6">
                 <SectionHeader title="CDN and Image Summary" tooltip="Comprehensive breakdown of CDN and Image CDN usage allocated through RapidLoad." />
 
-                <UsageBar label="CDN" usage={cdnUsage.used_gb} allowedUsage={cdnUsage.allowed_gb} note={`Limits will be updated on ${nextBillingDate}`} used_gb_formatted={cdnUsage.used_gb_formatted}/>
+                <UsageBar label="CDN" usage={cdnUsage.used_gb} allowedUsage={cdnUsage.allowed_gb} note={`Renews on ${nextBillingDate}`} used_gb_formatted={cdnUsage.used_gb_formatted}/>
                 {cdnUsage.additional_usage_gb > 0 &&
                     <UsageBar label="Additional Usage" usage={cdnUsage.additional_usage_gb} />
                 }
@@ -127,16 +127,16 @@ const CDNSummary = () => {
             <div className="relative mt-4 mb-2 before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white"/>
             <div
                 className="p-6 ">
-                <UsageBar label="Images" usage={imageUsage.used_gb} allowedUsage={imageUsage.allowed_gb} note={`Limits will be updated on ${nextBillingDate}`} used_gb_formatted={imageUsage.used_gb_formatted}/>
+                <UsageBar label="Images" usage={imageUsage.used_gb} allowedUsage={imageUsage.allowed_gb} note={`Renews on ${nextBillingDate}`} used_gb_formatted={imageUsage.used_gb_formatted}/>
                 {imageUsage.additional_usage_gb > 0 &&
                     <UsageBar label="Additional Usage" usage={imageUsage.additional_usage_gb}/>
                 }
             </div>
 
             <div className="flex justify-end p-6 pt-0 text-sm font-semibold">
-                <button className="cursor-pointer bg-brand-100/90 text-brand-950 py-1.5 px-4 rounded-lg">
+                {/* <button className="cursor-pointer bg-brand-100/90 text-brand-950 py-1.5 px-4 rounded-lg">
                     Manage usage
-                </button>
+                </button> */}
             </div>
         </Card>
 

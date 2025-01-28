@@ -46,6 +46,7 @@ export interface AuditComponentRef {
 export default function Dashboard() {
     const { data, loading, error } = useSelector(optimizerData);
     const { license } = useSelector(optimizerData);
+    
     const {
         options,
         savingData,

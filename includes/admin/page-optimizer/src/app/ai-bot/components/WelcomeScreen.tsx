@@ -1,16 +1,17 @@
 import { CpuIcon } from "lucide-react";
 import { HermesAIBotIcon, NoteBookIcon, StarLockIcon, WorldIcon } from "../icons/icon-svg";
+import { AnimatedLogo } from "components/animated-logo";
 
 export const WelcomeScreen = () => (
   <div className="flex flex-col items-center justify-center p-6 bg-white text-gray-800">
     <div className="flex items-center justify-center mb-4">
       <div className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-xl">
-        <HermesAIBotIcon className="w-8 h-8" />
+        <AnimatedLogo className="!opacity-100" size="lg" isPlaying={false}/>
       </div>
     </div>
 
     <h2 className="text-2xl text-gray-900 mb-3 font-normal">
-      <span className="font-bold">Rapidload AI</span> by RapidLoad
+      <span className="font-bold">Rapidload AI</span>
     </h2>
 
     <p className="text-base font-normal select-none text-center text-gray-500 max-w-xl mb-6 leading-relaxed">
@@ -21,7 +22,7 @@ export const WelcomeScreen = () => (
     </p>
 
     <FeaturesList />
-    <DeliveryTags />
+    {/* <DeliveryTags /> */}
   </div>
 );
 

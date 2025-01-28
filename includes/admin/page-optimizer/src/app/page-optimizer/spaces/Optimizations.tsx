@@ -4,7 +4,7 @@ import { AccordionItem, AccordionTrigger, AccordionContent } from "../../../comp
 import { useCompletion, experimental_useObject as useObject } from 'ai/react'
 import { AnimatePresence, m, motion } from "framer-motion"
 import useCommonDispatch from "hooks/useCommonDispatch";
-import { changeGear, fetchReport, fetchSettings, setDiagnosticResults, setDiagnosticProgress } from '../../../store/app/appActions';
+import { changeGear, fetchReport, fetchSettings, setDiagnosticResults, setDiagnosticProgress, updateDiagnosticResults } from '../../../store/app/appActions';
 import { LoaderIcon, ChevronDown, GaugeCircle, RefreshCw, Sparkles } from "lucide-react";
 import { useSelector } from "react-redux";
 import { optimizerData } from "../../../store/app/appSelector";
@@ -162,7 +162,7 @@ const Optimizations = ({ }) => {
     useEffect(() => {
         if (object?.AnalysisSummary && object.AnalysisSummary.length) {
             dispatch(setDiagnosticResults(object as DiagnosticResults));
-           
+            
         }
     }, [object]);
 
@@ -174,6 +174,8 @@ const Optimizations = ({ }) => {
         resetDiagnosticResults();
         setAiLoading(false);
         setAiResponding(false);
+        saveDiagnosticResults();
+       
        // dispatch(setCommonState('diagnosticLoading', false));
     };
 
@@ -191,6 +193,19 @@ const Optimizations = ({ }) => {
         dispatch(setCommonState('diagnosticLoading', false));
     }
 
+
+    const saveDiagnosticResults = () => {
+        console.log("saveDiagnosticResults", diagnosticResults);
+       if(!diagnosticResults){
+        return;
+       }
+        
+        try {
+            dispatch(updateDiagnosticResults(options, headerUrl ? headerUrl : optimizerUrl, diagnosticResults));
+        } catch (error: any) {
+            console.error('Error on updating Diagnostic Results:', error);
+        }
+    }
 
 
     const handleDiagnosticError = (error: string) => {
@@ -448,7 +463,7 @@ const Optimizations = ({ }) => {
                         simulateProgress(setServerInfoProgress, 25, 90);
                         
                         const api = new ApiService(options);
-                        const data = await api.post('rapidload_server_info1');
+                        const data = await api.post('rapidload_server_info');
                         setServerDetails(data)
    
                         setServerInfoProgress(100);

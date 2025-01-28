@@ -134,7 +134,7 @@ const App = ({ popup, _showOptimizer = false }: {
             }
         };
         updateLicenseAndStore();
-
+        
     }, [dispatch]);
 
 
@@ -146,7 +146,7 @@ const App = ({ popup, _showOptimizer = false }: {
         if(storedLicense){
            setShowStepTwo(false)
         }
-
+       
     }, [license]);
 
     const renderStepTwo = () => {

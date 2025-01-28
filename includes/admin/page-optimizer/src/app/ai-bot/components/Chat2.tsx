@@ -49,9 +49,9 @@ export default function Chat({ apiEndpoint = "https://ai.rapidload.io/api/suppor
   } = useChatHistory(messages, setMessages);
 
   // Scroll to bottom when messages change
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  // useEffect(() => {
+  //   messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  // }, [messages]);
 
   // Initialize system message
   useEffect(() => {
@@ -125,7 +125,7 @@ const handleClose = () => {
 
 
   return (
-    <div className="chat-container flex container mx-auto h-[calc(100vh-4rem)] max-h-[750px] py-4 bg-white my-8 rounded-2xl">
+    <div className="chat-container flex container mx-auto h-[calc(100vh-4rem)] max-h-[750px] py-4 bg-white my-4 rounded-2xl">
       <ChatHistoryPanel 
         conversations={conversations}
         onSelectConversation={handleSelectConversation}

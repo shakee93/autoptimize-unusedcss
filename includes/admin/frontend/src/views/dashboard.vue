@@ -494,15 +494,24 @@ export default {
 
     const rapidLoadLicense = JSON.parse(localStorage.getItem("rapidLoadLicense"));
 
-    if (rapidLoadLicense) {
-      Object.keys(rapidLoadLicense).forEach((a) => {
-        const data = rapidLoadLicense[a];
-        this.license_information.name = data.name
-        this.license_information.exp_date = new Date(data.next_billing * 1000)
-        this.license_information.license = data.plan
-        this.license_information.licensed_domain = data.licensedDomain
-      })
-      this.update_license();
+    // if (rapidLoadLicense) {
+     // Object.keys(rapidLoadLicense).forEach((a) => {
+      //  const data = rapidLoadLicense[a];
+      //  this.license_information.name = data.name
+      //  this.license_information.exp_date = new Date(data.next_billing * 1000)
+      //  this.license_information.license = data.plan
+      //  this.license_information.licensed_domain = data.licensedDomain
+      //})
+
+      if (rapidLoadLicense) {
+        // Map the object properties to license information
+        this.license_information = {
+        name: rapidLoadLicense.name,
+        exp_date: new Date(rapidLoadLicense.next_billing * 1000),
+        license: rapidLoadLicense.plan,
+        licensed_domain: rapidLoadLicense.licensedDomain,
+      };
+     // this.update_license();
 
       const lastExecutionDate = localStorage.getItem('RapidLoadDashboardPopupModellastExecutionDate');
       const currentDate = new Date().toLocaleDateString();
@@ -513,7 +522,7 @@ export default {
 
 
     }else{
-      this.update_license()
+    //  this.update_license()
     }
 
     const activeModules = [];

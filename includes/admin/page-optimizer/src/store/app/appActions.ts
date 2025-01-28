@@ -735,6 +735,38 @@ export const setDiagnosticResults = (results: DiagnosticResults) => (
 }
 
 
+export const updateDiagnosticResults = (options: WordPressOptions, url: string, data: any): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+
+    const api = new ApiService(options);
+
+    return async (dispatch: ThunkDispatch<RootState, unknown, AppAction>, getState): Promise<{ success: boolean, error?: string }> => {
+
+        const currentState = getState(); // Access the current state
+        const activeReport = currentState?.app?.activeReport;
+
+        try {
+            const updateDiagnosticResults = await api.updateDiagnosticResults(url, activeReport, data);
+            console.log("updateDiagnosticResults", updateDiagnosticResults);
+            return { success: true };
+
+        } catch (error: any) {
+            console.error('Error on updating Diagnostic Results:', error);
+            let errorMessage: string;
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            } else if (typeof error === 'string') {
+                errorMessage = error;
+            } else {
+                errorMessage = 'An unknown error occurred';
+            }
+            return { success: false, error: errorMessage };
+        }
+
+
+    };
+};
+
+
 // export const setDiagnosticProgress = (
 //    progress: DiagnosticProgress
 // ): ThunkAction<void, RootState, unknown, AnyAction> => {

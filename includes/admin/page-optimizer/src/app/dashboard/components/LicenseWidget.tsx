@@ -14,6 +14,9 @@ type InputChangeHandler = React.ChangeEventHandler<HTMLInputElement>;
 
 const LicenseWidget = () => {
     const [isVisible, setIsVisible] = useState(true);
+   
+    // const storedLicense = localStorage.getItem('rapidLoadLicense');
+    // const parsedStoredLicense = storedLicense ? JSON.parse(storedLicense) : null;
     const [licenseInfo, setLicenseInfo] = useState<License | null>(null);
     const [inputLicense, setInputLicense] = useState("");
     const [showInput, setShowInput] = useState(false);
@@ -22,7 +25,7 @@ const LicenseWidget = () => {
     const { license } = useSelector(optimizerData);
     const { options } = useAppContext();
     const { dispatch } = useCommonDispatch();
-    const storedLicense = localStorage.getItem('rapidLoadLicense');
+    
 
     useEffect(() => setLicenseMessage(""), [inputLicense]);
 
@@ -45,7 +48,7 @@ const LicenseWidget = () => {
 
     useEffect(() => {
 
-       // const storedLicense = localStorage.getItem('rapidLoadLicense');
+        const storedLicense = localStorage.getItem('rapidLoadLicense');
         if (storedLicense) {
             try {
                 setLicenseInfo(JSON.parse(storedLicense));
@@ -55,14 +58,11 @@ const LicenseWidget = () => {
         }else if(license){
             setLicenseInfo(license);
         }
-
+     // console.log("licenseInfo", license);
+   
     }, [license]);
 
-    useEffect(() => {
-        if(storedLicense){
-            setLicenseInfo(JSON.parse(storedLicense));
-        }
-    }, [storedLicense]);
+
 
     const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -110,7 +110,7 @@ const LicenseWidget = () => {
             {licenseFields.map(({ label, value }, index) => (
                 <div 
                     key={label} 
-                    className="flex gap-4 items-center text-sm"
+                    className="flex gap-2 items-center text-sm"
                 >
                     <span className="text-brand-850">{label} :</span>
                     <span className="font-medium text-brand-950">
@@ -171,6 +171,11 @@ const LicenseWidget = () => {
                 </div>
 
                     <div className="grid gap-4 px-8 text-sm relative">
+                        {/* Stored License:
+                        {JSON.stringify(parsedStoredLicense?.licensedDomain)}
+                        <div className="h-1 bg-brand-950 border-b border-brand-950 border-2" />
+                        License Info:
+                        {JSON.stringify(licenseInfo?.licensedDomain)} */}
                         {!licenseInfo?.licensedDomain ? (
                             <>
                                 <span>Slow load times are the #1 reason for high bounce rates and one of the root causes of poor Google Rankings.</span>
