@@ -1542,12 +1542,6 @@ class RapidLoad_Admin
             wp_send_json_success(true);
         }
 
-        $rapidload_license_data = get_option('rapidload_license_data', null);
-
-        if($rapidload_license_data){
-            wp_send_json_success(unserialize($rapidload_license_data));
-        }
-
         $data = $api->get( 'license', [
             'url' => $this->transform_url(get_site_url()),
             'version' => UUCSS_VERSION,
