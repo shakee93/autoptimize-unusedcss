@@ -1219,6 +1219,8 @@ class RapidLoad_Admin
 
     public function ajax_deactivate() {
 
+        self::verify_nonce();
+
         $options = RapidLoad_Base::get_option( 'autoptimize_uucss_settings' );
 
         $cache_key = 'pand-' . md5( 'first-uucss-job' );
@@ -1540,12 +1542,6 @@ class RapidLoad_Admin
             do_action('rapidload/vanish');
 
             wp_send_json_success(true);
-        }
-
-        $rapidload_license_data = get_option('rapidload_license_data', null);
-
-        if($rapidload_license_data){
-            wp_send_json_success(unserialize($rapidload_license_data));
         }
 
         $data = $api->get( 'license', [

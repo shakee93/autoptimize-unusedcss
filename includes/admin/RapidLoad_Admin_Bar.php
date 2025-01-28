@@ -149,6 +149,7 @@ class RapidLoad_Admin_Bar {
             'test_mode' => boolval(isset($options['rapidload_test_mode']) && $options['rapidload_test_mode'] == "1"),
             'rapidload_titan_gear' => get_option('rapidload_titan_gear', 'trurboMax'),
             'rapidload_license_data' => $rapidload_license_data,
+            'rapidload_privacy_policy_accepted' => get_option('rapidload_privacy_policy_accepted', false),
         );
 
         wp_localize_script( 'rapidload_page_optimizer', 'rapidload_optimizer', $data );

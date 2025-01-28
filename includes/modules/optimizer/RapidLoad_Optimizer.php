@@ -61,6 +61,7 @@ class RapidLoad_Optimizer
             'rapidload_get_active_plugins' => 'rapidload_get_active_plugins',
             'rapidload_diagnose_data' => 'rapidload_diagnose_data',
             'rapidload_server_info' => 'rapidload_server_info',
+            'rapidload_privacy_policy_acceptance' => 'rapidload_privacy_policy_acceptance',
         ];
 
         foreach ($actions as $action => $method) {
@@ -70,6 +71,13 @@ class RapidLoad_Optimizer
                 add_action("wp_ajax_nopriv_$action", [$this, $method]);
             }
         }
+    }
+
+    public function rapidload_privacy_policy_acceptance(){
+        self::verify_nonce();
+        $accepted = isset($_REQUEST['accepted']) && $_REQUEST['accepted'] ? true : false;
+        update_option('rapidload_privacy_policy_accepted', $accepted);
+        wp_send_json_success('success');
     }
 
     public function rapidload_server_info(){
