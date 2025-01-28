@@ -106,7 +106,7 @@ const App = ({ popup, _showOptimizer = false }: {
         dispatch(setCommonState('headerUrl', optimizeUrl));
 
         // load initial data
-        dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, false));
+        dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, false, true));
         //console.log(activeRoute)
         if(!uucssGlobal?.on_board_complete && !isDev){
             return;

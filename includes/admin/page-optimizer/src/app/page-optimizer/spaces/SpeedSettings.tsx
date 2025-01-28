@@ -266,7 +266,7 @@ const SpeedSettings = ({ }) => {
             return;
         }
         console.log(activeGear, baseMode)
-        if(activeGear !== 'custom' && activeGear !== baseMode && !isDev){
+        if(activeGear !== 'custom' && activeGear !== baseMode ){
             setBaseMode(tempMode);
             submitSettings(true);
         }

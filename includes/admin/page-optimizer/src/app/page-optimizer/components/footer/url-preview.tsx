@@ -62,11 +62,11 @@ const UrlPreview = () => {
                                 </>
                             }
 
-                            {activeReport === 'mobile' && desktop?.data?.performance &&
+                            {activeReport === 'mobile' && mobile?.data?.performance &&
                                 <>
                                     <Dot className='w-6 text-brand-400' />
                                     <div className='flex gap-1 items-center'>
-                                        {Number(desktop?.data?.performance).toFixed(0)} Desktop
+                                        {Number(mobile?.data?.performance).toFixed(0)} Mobile
                                     </div>
                                 </>
                             }
@@ -76,7 +76,7 @@ const UrlPreview = () => {
                                 <>
                                     <Dot className='w-6 text-brand-400' />
                                     <div className='flex gap-1 items-center'>
-                                        {Number(mobile?.data?.performance).toFixed(0)}  Mobile
+                                        {Number(desktop?.data?.performance).toFixed(0)}  Desktop
                                     </div>
                                 </>
                             }
