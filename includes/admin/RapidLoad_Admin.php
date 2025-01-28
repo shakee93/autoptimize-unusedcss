@@ -1219,6 +1219,8 @@ class RapidLoad_Admin
 
     public function ajax_deactivate() {
 
+        self::verify_nonce();
+
         $options = RapidLoad_Base::get_option( 'autoptimize_uucss_settings' );
 
         $cache_key = 'pand-' . md5( 'first-uucss-job' );
