@@ -105,7 +105,7 @@ class RapidLoad_Job{
             }
         }
 
-        if(RapidLoad_DB::$current_version < 1.8){
+        if(RapidLoad_DB::$current_version < 1.9){
             if(isset($data['diagnose_data'])){
                 unset($data['diagnose_data']);
             }
