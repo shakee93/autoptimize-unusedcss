@@ -163,8 +163,11 @@ class RapidLoad_Optimizer
         self::verify_nonce();
 
         $url = isset($_REQUEST['url']) && $_REQUEST['url'] ? $_REQUEST['url'] : $this->transform_url(site_url());
-        $data = isset($_REQUEST['data']) && $_REQUEST['data'] ? $_REQUEST['data'] : null;
         $strategy = isset($_REQUEST['strategy']) && $_REQUEST['strategy'] ? $_REQUEST['strategy'] : 'desktop';
+
+        $body = file_get_contents('php://input');
+
+        $data = ($body) ? json_decode($body) : null;
 
         $job = new RapidLoad_Job([
             'url' => $url
@@ -175,7 +178,7 @@ class RapidLoad_Optimizer
         }
 
         if($data){
-            $diagnose_data = $this->get_diagnose_data();
+            $diagnose_data = $job->get_diagnose_data();
             if($strategy == 'desktop'){
                 $diagnose_data['desktop_data'] = $data;
                 $job->set_diagnose_data($diagnose_data);
