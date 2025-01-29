@@ -112,9 +112,9 @@ const Optimizations = ({ }) => {
         }
       }, [privacyPolicy]);
 
-    useEffect(() => {
-        console.log('diagnosticLoading', diagnosticLoading)
-    }, [diagnosticLoading])
+    // useEffect(() => {
+    //     console.log('diagnosticLoading', diagnosticLoading)
+    // }, [diagnosticLoading])
     
 
     const relatedAudits = useMemo(() => {
@@ -162,7 +162,6 @@ const Optimizations = ({ }) => {
     useEffect(() => {
         if (object?.AnalysisSummary && object.AnalysisSummary.length) {
             dispatch(setDiagnosticResults(object as DiagnosticResults));
-            
         }
     }, [object]);
 
@@ -174,8 +173,7 @@ const Optimizations = ({ }) => {
         resetDiagnosticResults();
         setAiLoading(false);
         setAiResponding(false);
-        saveDiagnosticResults();
-       
+        
        // dispatch(setCommonState('diagnosticLoading', false));
     };
 
@@ -193,10 +191,13 @@ const Optimizations = ({ }) => {
         dispatch(setCommonState('diagnosticLoading', false));
     }
 
+    useEffect(() => {
+        saveDiagnosticResults();
+    }, [diagnosticComplete]);
 
     const saveDiagnosticResults = () => {
-        console.log("saveDiagnosticResults", diagnosticResults);
-       if(!diagnosticResults){
+        
+       if(!diagnosticResults && !diagnosticComplete){
         return;
        }
         
@@ -205,7 +206,7 @@ const Optimizations = ({ }) => {
         } catch (error: any) {
             console.error('Error on updating Diagnostic Results:', error);
         }
-    }
+    };
 
 
     const handleDiagnosticError = (error: string) => {
@@ -678,8 +679,8 @@ const Optimizations = ({ }) => {
                                     </button>
                                 </div>
                                 <iframe
-                                    src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
-                                   // src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
+                                   // src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
+                                    src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                 />

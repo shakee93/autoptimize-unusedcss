@@ -743,9 +743,14 @@ export const updateDiagnosticResults = (options: WordPressOptions, url: string, 
 
         const currentState = getState(); // Access the current state
         const activeReport = currentState?.app?.activeReport;
+        
 
         try {
             const updateDiagnosticResults = await api.updateDiagnosticResults(url, activeReport, data);
+            dispatch({
+                type: SET_DIAGNOSTIC_RESULTS,
+                payload: data? data : updateDiagnosticResults,
+            });
             console.log("updateDiagnosticResults", updateDiagnosticResults);
             return { success: true };
 
