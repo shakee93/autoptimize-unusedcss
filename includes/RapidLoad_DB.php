@@ -6,7 +6,7 @@ abstract class RapidLoad_DB
 {
     use RapidLoad_Utils;
 
-    static $db_version = "1.8";
+    static $db_version = "1.9";
     static $db_option = "rapidload_migration";
     static $current_version = "1.4";
     static $map_key = 'uucss_map';
