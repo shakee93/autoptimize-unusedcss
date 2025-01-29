@@ -264,8 +264,8 @@ class RapidLoad_Job{
             return unserialize($this->diagnose_data);
         }
         return [
-            'mobile_data' => null,
-            'desktop_data' => null,
+            'mobile' => null,
+            'desktop' => null,
         ];
     }   
 

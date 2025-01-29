@@ -180,10 +180,10 @@ class RapidLoad_Optimizer
         if($data){
             $diagnose_data = $job->get_diagnose_data();
             if($strategy == 'desktop'){
-                $diagnose_data['desktop_data'] = $data;
+                $diagnose_data['desktop'] = $data;
                 $job->set_diagnose_data($diagnose_data);
             }else{
-                $diagnose_data['mobile_data'] = $data;
+                $diagnose_data['mobile'] = $data;
                 $job->set_diagnose_data($diagnose_data);
             }
             $job->save();
