@@ -30,7 +30,7 @@ interface SectionHeaderProps {
     tooltip: string;
 }
 
-const CacheSummary = () => {
+const CacheSummary = ({className}: {className: string}) => {
 
     const {dispatch} = useCommonDispatch();
     const {options} = useAppContext();
@@ -199,7 +199,7 @@ const CacheSummary = () => {
     };
 
     return (
-        <Card data-tour="license-widget" className="border flex flex-col">
+        <Card data-tour="license-widget" className={cn("border flex flex-col", className)}>
             <div className="flex flex-col px-6 py-6 gap-4">
             <SectionHeader title="Cache summary" tooltip="Detailed overview of the total files cached and served by RapidLoad." />
                 

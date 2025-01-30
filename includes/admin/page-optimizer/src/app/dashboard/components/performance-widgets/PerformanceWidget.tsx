@@ -13,7 +13,11 @@ import {useAppContext} from "../../../../context/app";
 import {useSelector} from "react-redux";
 import {optimizerData} from "../../../../store/app/appSelector";
 
-const PerformanceWidget: React.FC = () => {
+interface PerformanceWidgetProps {
+    className: string;
+}
+
+const PerformanceWidget: React.FC<PerformanceWidgetProps> = ({ className }) => {
 
     const { homePerformance } = useSelector(optimizerData);
     const performanceScore = homePerformance.last_entry;
@@ -35,7 +39,7 @@ const PerformanceWidget: React.FC = () => {
 
     return (
 
-        <div className="flex flex-col gap-2">
+        <div className={cn("flex flex-col gap-2", className)}>
             {/*<h4 className="text-md font-semibold ml-4 flex gap-2 items-center">*/}
             {/*    Performance <GaugeCircle className="w-5 h-5"/>*/}
             {/*</h4>*/}

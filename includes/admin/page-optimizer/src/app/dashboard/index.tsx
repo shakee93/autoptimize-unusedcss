@@ -119,7 +119,7 @@ export default function Dashboard() {
 
                     {/* border-b border-brand-950 */}
                     
-                    <div className="flex justify-between gap-4">
+                    {/* <div className="flex justify-between gap-4">
                         <div className="flex flex-col w-full gap-4">
                             <div className={!license?.licensedDomain ? "pointer-events-auto z-50" : ""}>
                                 <LicenseWidget/>
@@ -127,7 +127,7 @@ export default function Dashboard() {
                             <AIBot/>
                         </div>
                         <div className="flex flex-col w-full gap-4">
-                            {/*<PageSpeedCoach/>*/}
+                           
                             <CacheSummary />
                             <CDNSummary />
                         </div>
@@ -135,9 +135,29 @@ export default function Dashboard() {
                             <PerformanceWidget />
                             <PerformanceGears />
                         </div>
-                    </div>
+                    </div> */}
 
-                   
+                    <div className="flex justify-between gap-4 h-full">
+                        {/* Left Column */}
+                        <div className="flex flex-col w-full gap-4">
+                            <div className={!license?.licensedDomain ? "pointer-events-auto z-50" : ""}>
+                                <LicenseWidget />
+                            </div>
+                            <AIBot className="flex-grow" />
+                        </div>
+
+                        {/* Middle Column */}
+                        <div className="flex flex-col w-full gap-4">
+                            <CacheSummary className="flex-grow" />
+                            <CDNSummary className="flex-grow" />
+                        </div>
+
+                        {/* Right Column */}
+                        <div className="">
+                            <PerformanceWidget className="flex-grow" />
+                            <PerformanceGears className="flex-grow" />
+                        </div>
+                    </div>
 
                 </section>
             </div>

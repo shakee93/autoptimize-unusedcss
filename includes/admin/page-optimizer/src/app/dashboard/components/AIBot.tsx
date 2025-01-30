@@ -11,8 +11,9 @@ import {
 } from "components/ui/dialog";
 import { MessagesSquare } from "lucide-react";
 import { AnimatedLogo } from "components/animated-logo";
+import { cn } from 'lib/utils';
 
-const AIBot = () => {
+const AIBot = ({className}: {className: string}) => {
     const [open, setOpen] = useState(false);
     const [conversations, setConversations] = useState(() => {
         const saved = localStorage.getItem('chat-conversations');
@@ -33,7 +34,7 @@ const AIBot = () => {
     ];
 
     return(
-        <div className='w-full flex flex-col gap-4'>
+        <div className={cn("w-full flex flex-col gap-4", className)}>
             <Card data-tour='AIBot' className="border flex flex-col gap-4">
                 <div className="flex flex-col items-center p-6 gap-2 relative">
                     <button
