@@ -309,7 +309,7 @@ class ApiService {
         }
     }
 
-    async updateDiagnosticResults(url: string, activeReport: string, data: any): Promise<any> {
+    async updateDiagnosticResults(url: string, activeReport: string, data?: any): Promise<any> {
         try {
             this.baseURL.searchParams.append('action', 'rapidload_diagnose_data');
             this.baseURL.searchParams.append('url', url)
@@ -320,9 +320,11 @@ class ApiService {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    data: data
-                })
+                ...(data ? {
+                    body: JSON.stringify({
+                        data: data
+                    })
+                } : {})
             });
             return this.throwIfError(response);
         } catch (error) {

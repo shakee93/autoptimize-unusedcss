@@ -149,7 +149,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
             <div
                 key={level}
                 className={cn(
-                    'relative hover:bg-brand-100/50 flex flex-col gap-3.5 font-normal w-[166px] h-[166px] cursor-pointer rounded-3xl items-center justify-center',
+                    'relative bg-brand-0 flex flex-col gap-3.5 font-normal w-[166px] h-[166px] cursor-pointer rounded-3xl items-center justify-center',
                     isActive ? 'text-brand-600 border-[3px] border-[#592d8d]' : 'border border-transparent border-[3px] outline outline-1 outline-brand-200 dark:outline-brand-700',
                     isTurboMax && 'gap-1 pt-4',
                 )}
@@ -214,7 +214,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
     return (
         <div
             className="w-full flex flex-col gap-4 transition-all">
-            <div className="bg-brand-0 flex flex-col gap-8 p-16 items-center rounded-3xl">
+            <div className="flex flex-col gap-8 p-16 items-center rounded-3xl">
                 <div className="px-2">
                     <img
                         className="w-22"

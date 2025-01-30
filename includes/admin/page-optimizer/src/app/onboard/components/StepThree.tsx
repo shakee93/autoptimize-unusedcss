@@ -161,7 +161,7 @@ const StepThree: React.FC<StepThreeProps> = ({ onNext }) => {
 
     return (
         <div className='w-full flex flex-col gap-4'>
-            <div className="bg-brand-0 flex flex-col gap-8 p-16 items-center rounded-3xl">
+            <div className="flex flex-col gap-8 p-16 items-center rounded-3xl">
                 <div className='px-2'>
                     <img className='w-22'
                          src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/logo.svg`) : '/logo.svg'}
@@ -195,11 +195,11 @@ const StepThree: React.FC<StepThreeProps> = ({ onNext }) => {
                     <div className="flex items-center w-64">
                         {[0, 1, 2].map(step => (
                             currentStep > step ? (
-                                <div key={step} className="h-2 flex-grow bg-purple-600 rounded-lg mr-2"/>
+                                <div key={step} className="h-2 flex-grow bg-[#673B9B] rounded-lg mr-2"/>
                             ) : step === currentStep ? (
                                 <Skeleton
                                     key={step}
-                                    className="h-2 flex-grow bg-purple-950/30 rounded-lg mr-2"
+                                    className="h-2 flex-grow bg-[#673B9B]/30 rounded-lg mr-2"
                                 />
                             ) : (
                                 <div key={step} className="h-2 flex-grow bg-gray-300 rounded-lg mr-2" />

@@ -297,6 +297,7 @@ interface TestMode {
 interface DiagnosticResults {
     AnalysisSummary: any;
     CriticalIssues: any;
+    timeStamp: number;
 }
 
 interface HomePerformance {

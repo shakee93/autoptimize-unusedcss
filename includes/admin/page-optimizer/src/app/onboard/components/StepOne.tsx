@@ -106,7 +106,7 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
 
     return (
         <div className='w-full flex flex-col gap-4'>
-            <div className="bg-brand-0 flex flex-col gap-8 p-16 items-center rounded-3xl">
+            <div className="flex flex-col gap-8 p-16 items-center rounded-3xl">
                 <div className='px-2'>
                     <img className='w-22'
                         src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/rapidload-logo.svg`) : '/rapidload-logo.svg'}
@@ -167,7 +167,7 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                 </>
                 ):(
                 <>
-                    <div className='bg-brand-100/30 border rounded-3xl p-2'>
+                    <div className='bg-brand-0 border rounded-3xl p-2'>
                         <div
                             className="flex items-center justify-center text-md gap-2 overflow-hidden relative">
                             {/* <div className="flex justify-center px-4 py-2 max-w-xl mx-auto w-full relative"> */}

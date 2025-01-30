@@ -139,7 +139,7 @@ const StepFour = () => {
 
     const renderMetricsTable = () => (
         <div className="w-full overflow-x-auto">
-            <table className="w-full border-separate border-spacing-0 border border-brand-200 rounded-2xl overflow-hidden">
+            <table className="w-full border-separate border-spacing-0 border border-brand-200 rounded-2xl overflow-hidden bg-brand-0 ">
                 <thead>
                     <tr className="">
                         <th className="text-left p-4 font-semibold border-b border-brand-200">Key Metrics</th>
@@ -212,7 +212,7 @@ const StepFour = () => {
             animate={{ opacity: isFadingOut ? 0 : 1 }}
             transition={{ duration: 0.3 }}
             className='w-full flex flex-col gap-4'>
-            <div className="bg-brand-0 flex flex-col gap-8 p-16 items-center rounded-3xl">
+            <div className="flex flex-col gap-8 p-16 items-center rounded-3xl">
                 <>
                     <div className='px-2'>
                         <img className='w-22'
@@ -242,7 +242,7 @@ const StepFour = () => {
                                 ) : (
                                     <>
                                         <div className="text-lg font-semibold flex items-center gap-2"><AIButtonIcon /> AI Analysis</div>
-                                        <div className="flex flex-col gap-4 w-full border border-brand-200 rounded-2xl">
+                                        <div className="flex flex-col gap-4 w-full border border-brand-200 rounded-2xl bg-brand-0 ">
                                             {/* Opportunities Section - Only show if length > 0 */}
                                             {data?.grouped?.opportunities?.length > 0 && (
                                                 <div className="flex flex-col gap-2">
@@ -351,8 +351,8 @@ const StepFour = () => {
                         )}
                     </div>
                     {!aiMessage && (
-                                <div className="flex justify-center p-4 mx-auto w-full relative items-center gap-4">
-                                    <div className="w-full max-w-2xl">
+                                <div className="flex justify-center p-4 mx-auto w-full relative items-center gap-4 ">
+                                    <div className="w-full max-w-2xl ">
                                     {renderMetricsTable()}
                                     
                                     </div>

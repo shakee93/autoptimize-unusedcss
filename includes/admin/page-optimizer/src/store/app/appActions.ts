@@ -724,18 +724,18 @@ export const updateFileAction = (
     }
 }
 
-export const setDiagnosticResults = (results: DiagnosticResults) => (
-    dispatch: ThunkDispatch<RootState, unknown, AppAction>,
-    getState: () => RootState
-) => {
-    dispatch({
-        type: SET_DIAGNOSTIC_RESULTS,
-        payload: results,
-    });
-}
+// export const setDiagnosticResults = (results: DiagnosticResults) => (
+//     dispatch: ThunkDispatch<RootState, unknown, AppAction>,
+//     getState: () => RootState
+// ) => {
+//     dispatch({
+//         type: SET_DIAGNOSTIC_RESULTS,
+//         payload: results,
+//     });
+// }
 
 
-export const updateDiagnosticResults = (options: WordPressOptions, url: string, data: any): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
+export const updateDiagnosticResults = (options: WordPressOptions, url: string, data?: any): ThunkAction<Promise<{ success: boolean, error?: string }>, RootState, unknown, AnyAction> => {
 
     const api = new ApiService(options);
 
@@ -743,15 +743,16 @@ export const updateDiagnosticResults = (options: WordPressOptions, url: string, 
 
         const currentState = getState(); // Access the current state
         const activeReport = currentState?.app?.activeReport;
-        
 
         try {
             const updateDiagnosticResults = await api.updateDiagnosticResults(url, activeReport, data);
+            const diagnosticData = data || updateDiagnosticResults.data.diagnose_data[activeReport].data;
+
             dispatch({
                 type: SET_DIAGNOSTIC_RESULTS,
-                payload: data? data : updateDiagnosticResults,
+                payload: diagnosticData ,
             });
-            console.log("updateDiagnosticResults", updateDiagnosticResults);
+            
             return { success: true };
 
         } catch (error: any) {
