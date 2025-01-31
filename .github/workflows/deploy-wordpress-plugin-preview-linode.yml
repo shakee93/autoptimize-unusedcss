@@ -16,21 +16,6 @@ jobs:
         run: |
           echo "Branch name: ${{ github.head_ref }}"
 
-      - name: Check for merge conflicts
-        run: |
-          git fetch origin
-          git checkout ${{ github.head_ref }}
-          git merge origin/${{ github.base_ref }} --no-commit --no-ff || echo "::set-output name=conflict::true"
-        id: merge_check
-
-      - name: Comment on PR if there are merge conflicts
-        if: steps.merge_check.outputs.conflict == 'true'
-        run: |
-          curl -X POST -H "Authorization: token ${{ secrets.SSH_GITHUB_TOKEN }}" \
-            -d "{\"body\": \"There are merge conflicts in this pull request. Please resolve the conflicts before merging.\"}" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments"
-        continue-on-error: true
-
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh
