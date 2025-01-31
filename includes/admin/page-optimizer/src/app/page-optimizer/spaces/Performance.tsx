@@ -15,10 +15,10 @@ import ScaleUp from "components/animation/ScaleUp";
 import { BoltIcon, MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
 import AuditList from "app/page-optimizer/components/AuditList";
 import SpeedSettings from "app/page-optimizer/spaces/SpeedSettings";
-import { OptimizationsIcon } from "../components/icons/icon-svg";
+import { AIStarIcon, OptimizationsIcon } from "../components/icons/icon-svg";
 import Optimizations from "./Optimizations";
 import PageSpeedInsights from "./PageSpeedInsights";
-import { MainSettingsLine, SettingsLine } from "../components/icons/line-icons";
+import { SettingsLine } from "../components/icons/line-icons";
 
 
 
@@ -155,7 +155,7 @@ const Performance = () => {
                         diagnosticLoading && 'cursor-not-allowed opacity-90 pointer-events-none',
                         activeTab === 'optimizations' ? "font-medium bg-brand-0" : "dark:hover:text-brand-300"
                     )}
-                    data-tour="optimizations"> <GaugeCircle className='w-4' />  AI Diagnostic </div>
+                    data-tour="optimizations"> <AIStarIcon className='w-4' />  AI Diagnostic </div>
 
 
             </div>
