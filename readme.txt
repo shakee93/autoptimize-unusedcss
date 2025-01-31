@@ -865,3 +865,4 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 = 1.0.5.1 =
  * Rebranding with name RapidLoad
  * Animated logo added
+
