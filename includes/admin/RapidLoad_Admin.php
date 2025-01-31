@@ -106,6 +106,8 @@ class RapidLoad_Admin
 
     public function rapidload_switch_test_mode(){
 
+        self::verify_nonce();
+
         $options = RapidLoad_Base::fetch_options();
 
         if(!isset($_REQUEST['test_mode']) || empty($_REQUEST['test_mode'])){
@@ -1009,6 +1011,8 @@ class RapidLoad_Admin
     }
 
     public function ajax_deactivate() {
+
+        self::verify_nonce();
 
         $options = RapidLoad_Base::get_option( 'autoptimize_uucss_settings' );
 
