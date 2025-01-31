@@ -155,7 +155,7 @@ const Performance = () => {
                         diagnosticLoading && 'cursor-not-allowed opacity-90 pointer-events-none',
                         activeTab === 'optimizations' ? "font-medium bg-brand-0" : "dark:hover:text-brand-300"
                     )}
-                    data-tour="optimizations"> <AIStarIcon className='w-4' />  AI Diagnostic </div>
+                    data-tour="optimizations"> <AIStarIcon cls='w-4' />  AI Diagnostic </div>
 
 
             </div>
