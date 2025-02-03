@@ -54,7 +54,7 @@ const UrlPreview = () => {
                     className='flex h-4 items-center text-xxs leading-relaxed text-brand-500 cursor-default'>
                     {!data ?
                         <div
-                            className='w-64 bg-brand-300 dark:bg-brand-600 animate-pulse h-2.5 rounded-sm mt-1'></div> :
+                            className='w-52 bg-brand-300 dark:bg-brand-600 animate-pulse h-2.5 rounded-sm mt-1'></div> :
                         <>
                             {data?.loadingExperience?.timestamp &&
                                 <>
