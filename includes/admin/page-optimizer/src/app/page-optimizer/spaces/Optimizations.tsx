@@ -151,7 +151,7 @@ const Optimizations = ({ }) => {
     }, [data?.grouped]);
 
 
-    const { object, submit, isLoading} = useObject({
+    const { object, submit, isLoading } = useObject({
         api: `${AIBaseURL}/diagnosis`,
         schema: DiagnosticSchema,
         onFinish: (diagnostic: any) => {
@@ -195,7 +195,7 @@ const Optimizations = ({ }) => {
     }, [diagnosticResults]);
 
     const aiResultsComplete = () => {
-      //  setLoadingText(null)
+        //  setLoadingText(null)
         setDiagnosticComplete(true)
         updateProgressState({ diagnosticsProgress: 100 });
         resetDiagnosticResults();
@@ -216,7 +216,7 @@ const Optimizations = ({ }) => {
         setAiResponding(false);
         setLoadingText(null)
         dispatch(setCommonState('diagnosticLoading', false));
-       
+
     }
 
     useEffect(() => {
@@ -263,7 +263,7 @@ const Optimizations = ({ }) => {
         // const plugins = await api.getActivePlugins();
         // const server_data = await api.post('rapidload_server_info');
         let plugins, server_data;
-        
+
         try {
             plugins = await api.getActivePlugins();
             server_data = await api.post('rapidload_server_info');
@@ -404,7 +404,7 @@ const Optimizations = ({ }) => {
 
     };
 
-  
+
 
 
 
@@ -581,13 +581,13 @@ const Optimizations = ({ }) => {
     //         }
     //     };
     // }, []);
-    
-   useEffect(() => {
-   
-    if(error){
-        setDiagnosticError(error)
-    }
-   }, [error])
+
+    useEffect(() => {
+
+        if (error) {
+            setDiagnosticError(error)
+        }
+    }, [error])
 
     const handleIframeError = (error: React.SyntheticEvent<HTMLIFrameElement, Event>) => {
         setDiagnosticError("Failed to load preview page. Please check if the page is accessible.");
@@ -597,20 +597,20 @@ const Optimizations = ({ }) => {
         console.log("iframe loaded")
     };
 
-   useEffect(() => {
-   
-    if(diagnosticError?.length && (progressState.pageSpeedProgress === 100 || progressState.pageSpeedProgress === 0 || progressState.isFlushingProgress === 0)){
-        resetDiagnosticResults(); 
-        
-        // if (abortControllerRef.current) {
-        //     abortControllerRef.current.abort();
-        //     abortControllerRef.current = null; // Reset controller
-        //     resetDiagnosticResults();
-        //     console.log('abortController aborted');
-        // }
-        
-    }
-   }, [diagnosticError, progressState.pageSpeedProgress, progressState.isFlushingProgress])
+    useEffect(() => {
+
+        if (diagnosticError?.length && (progressState.pageSpeedProgress === 100 || progressState.pageSpeedProgress === 0 || progressState.isFlushingProgress === 0)) {
+            resetDiagnosticResults();
+
+            // if (abortControllerRef.current) {
+            //     abortControllerRef.current.abort();
+            //     abortControllerRef.current = null; // Reset controller
+            //     resetDiagnosticResults();
+            //     console.log('abortController aborted');
+            // }
+
+        }
+    }, [diagnosticError, progressState.pageSpeedProgress, progressState.isFlushingProgress])
 
 
     return (
@@ -661,92 +661,106 @@ const Optimizations = ({ }) => {
                         </div>
 
                         {/* Button Column */}
+                        {/* Button Column */}
                         {!aiLoading &&
 
-                        <Dialog open={showDialog} onOpenChange={setShowDialog}>
-                            <DialogTrigger asChild>
-                            <TooltipText text={loading ? "Please wait while applying optimizations" : null }>
-                            <div className={cn('flex justify-end items-center mt-2')}>
-                                <AppButton
-                                    disabled={aiLoading}
-                                    className={cn("rounded-xl px-8 py-6 whitespace-nowrap", loading && 'cursor-not-allowed opacity-60 pointer-events-none')}
-                                    onClick={() => {
-                                    
-                                        if (!privacyPolicy) {
-                                            setShowDialog(true);
-                                            return;
-                                        }
-                                        setDiagnosticError(null);
-                                        dispatch(setCommonState('diagnosticLoading', true));
-                                        setAiLoading(true);
-                                        handleFlushCache();
-                                    }}
-                                >
-                                    {diagnosticData?.AnalysisSummary?.length ? 'Run Diagnostics Test Again' : 'Run Diagnostics Test '}
-                                    
-                                </AppButton>
-                            </div>
-                        </TooltipText>
-                        </DialogTrigger>
-                        <DialogTitle></DialogTitle>
-                        <DialogContent className="sm:max-w-[650px]">
-                            <DialogHeader className='border-b px-6 py-4 mt-1'>
-                                <DialogTitle>Privacy Policy</DialogTitle>
-                            </DialogHeader>
-                                    <div className="py-2 px-6">
-                                        <div className="flex ">
-                                            <span>At RapidLoad, we collect, use, and protect your personal information. By clicking 'Accept and Continue'.
-                                            </span>
-                                        </div>
-                                        <div className="flex gap-2 font-medium text-base w-full justify-between mt-2 items-center">
-                                            <div className="flex gap-2 items-center py-1 ">
-                                                <Checkbox
-                                                    checked={privacyPolicy}
-                                                    onCheckedChange={(checked) => {
-                                                        setPrivacyPolicy(checked as boolean);
-                                                    }}
-                                                />
-                                                <div className="flex flex-col">
-                                                    {/* <div className="select-none cursor-pointer">Privacy Policy</div> */}
-                                                    <span className="text-sm font-normal select-none">I agree to the <a href="https://rapidload.io/privacy-policy/" target="_blank" className="text-purple-750 underline cursor-pointer">Privacy Policy</a></span>
-                                                </div>
-                                            </div>
-                                            <Button
+                            <Dialog open={showDialog} onOpenChange={setShowDialog}>
+                                <DialogTrigger asChild>
+                                    <TooltipText text={loading ? "Please wait while applying optimizations" : null}>
+                                        <div className={cn('flex justify-end items-center mt-2')}>
+                                            <AppButton
+                                                disabled={aiLoading}
+                                                className={cn("rounded-xl px-8 py-6 whitespace-nowrap", loading && 'cursor-not-allowed opacity-60 pointer-events-none')}
                                                 onClick={() => {
+
                                                     if (!privacyPolicy) {
-                                                        localStorage.setItem("rapidload_privacy_policy", "true");
-                                                        setShowDialog(false);
-
-                                                        setDiagnosticError(null);
-                                                        dispatch(setCommonState('diagnosticLoading', true));
-                                                        setAiLoading(true);
-                                                        handleFlushCache();
+                                                        setShowDialog(true);
+                                                        return;
                                                     }
+
+                                                    setDiagnosticError(null);
+                                                    dispatch(setCommonState('diagnosticLoading', true));
+                                                    setAiLoading(true);
+                                                    handleFlushCache();
                                                 }}
                                             >
-                                                Opt-in & Improve
-                                            </Button>
+                                                {diagnosticData?.AnalysisSummary?.length ? 'Run Diagnostics Test Again' : 'Run Diagnostics Test '}
 
-                                            <Button
-                                                variant="outline"
-                                                onClick={() => {
-                                                    if (privacyPolicy) {
-                                                        localStorage.setItem("rapidload_privacy_policy", "false");
-                                                        setShowDialog(false);
-                                                    }
-                                                }}
-                                            >
-                                                Cancel
-                                            </Button>
+                                            </AppButton>
                                         </div>
-                                    </div>
+                                    </TooltipText>
+                                </DialogTrigger>
+                                <DialogTitle></DialogTitle>
+                                <DialogContent className="sm:max-w-[650px]">
+                                    <DialogHeader className='border-b px-6 py-4 mt-1'>
+                                        <DialogTitle>To Work Best, RapidLoad Needs These Insights</DialogTitle>
+                                    </DialogHeader>
+                                    <div className="py-2 px-6">
+                                        <div className="flex text-sm">
+                                            <span>To provide the best AI-driven performance optimization, RapidLoad requires certain website details. By sharing this data, our AI can analyze and enhance your page speed more effectively.</span>
+                                        </div>
 
-                               
+                                        <Collapsible className="w-full mt-2">
+                                            <CollapsibleTrigger className="flex text-sm w-full items-center justify-between py-2 font-medium hover:underline">
+                                                <span>What data do we collect and send?</span>
+                                                <ChevronDown className="h-4 w-4 transition-transform duration-200" />
+                                            </CollapsibleTrigger>
+                                            <CollapsibleContent className="text-sm text-muted-foreground">
+                                                <ul className="list-disc pl-4 space-y-2 py-2">
+                                                    <li>Active plugin list</li>
+                                                    <li>Page Speed Report</li>
+                                                    <li>Server type details</li>
+                                                    <li>RapidLoad Settings information</li>
+                                                </ul>
+
+                                            </CollapsibleContent>
+                                        </Collapsible>
+
+                                        <div className="mt-2 text-sm">
+                                            <p className="mt-2">
+                                                <Lock className="w-4 h-4 inline-block text-green-700 mr-0.5 -mt-0.5" /> <span className="font-medium">Privacy First:</span>  We never collect or store personal data, credentials, or sensitive information. Your privacy remains our top priority.
+                                            </p>
+                                        </div>
+
+                                        <div className="flex gap-2 font-medium text-base w-full justify-between mt-6 items-center">
+                                            <div></div>
+                                            <div className="flex gap-2">
+                                                <Button
+                                                    onClick={() => {
+                                                        if (!privacyPolicy) {
+                                                            localStorage.setItem("rapidload_privacy_policy", "true");
+                                                            setShowDialog(false);
+
+                                                            setDiagnosticError(null);
+                                                            dispatch(setCommonState('diagnosticLoading', true));
+                                                            setAiLoading(true);
+                                                            handleFlushCache();
+                                                        }
+                                                    }}
+                                                >
+                                                    Opt-in & Improve
+                                                </Button>
+
+                                                <Button
+                                                    variant="outline"
+                                                    onClick={() => {
+                                                        if (privacyPolicy) {
+                                                            localStorage.setItem("rapidload_privacy_policy", "false");
+                                                            setShowDialog(false);
+                                                        }
+                                                    }}
+                                                >
+                                                    Cancel
+                                                </Button>
+                                            </div>
+                                        </div>
+
+                                    </div>
 
                                     <DialogDescription>
                                         {/* Additional description if needed */}
                                     </DialogDescription>
-                                                    
+
                                 </DialogContent>
                             </Dialog>
 
@@ -784,7 +798,7 @@ const Optimizations = ({ }) => {
                                 </div>
                                 <iframe
                                     src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
-                                  //  src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
+                                    //  src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                     onError={handleIframeError}
