@@ -46,7 +46,7 @@ export interface AuditComponentRef {
 export default function Dashboard() {
     const { data, loading, error } = useSelector(optimizerData);
     const { license } = useSelector(optimizerData);
-    
+
     const {
         options,
         savingData,
@@ -118,7 +118,7 @@ export default function Dashboard() {
                     {/*)}*/}
 
                     {/* border-b border-brand-950 */}
-                    
+
                     {/* <div className="flex justify-between gap-4">
                         <div className="flex flex-col w-full gap-4">
                             <div className={!license?.licensedDomain ? "pointer-events-auto z-50" : ""}>
@@ -143,7 +143,9 @@ export default function Dashboard() {
                             <div className={!license?.licensedDomain ? "pointer-events-auto z-50" : ""}>
                                 <LicenseWidget />
                             </div>
-                            <AIBot className="flex-grow" />
+                            <div className="flex-shrink-0">
+                                <AIBot className="flex-grow" />
+                            </div>
                         </div>
 
                         {/* Middle Column */}

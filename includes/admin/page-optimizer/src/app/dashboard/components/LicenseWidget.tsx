@@ -8,13 +8,13 @@ import { updateLicense } from "../../../store/app/appActions";
 import { useAppContext } from "../../../context/app";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import { AnimatePresence, motion } from 'framer-motion';
-import {Loader} from "lucide-react";
+import { Loader } from "lucide-react";
 
 type InputChangeHandler = React.ChangeEventHandler<HTMLInputElement>;
 
 const LicenseWidget = () => {
     const [isVisible, setIsVisible] = useState(true);
-   
+
     // const storedLicense = localStorage.getItem('rapidLoadLicense');
     // const parsedStoredLicense = storedLicense ? JSON.parse(storedLicense) : null;
     const [licenseInfo, setLicenseInfo] = useState<License | null>(null);
@@ -25,7 +25,7 @@ const LicenseWidget = () => {
     const { license } = useSelector(optimizerData);
     const { options } = useAppContext();
     const { dispatch } = useCommonDispatch();
-    
+
 
     useEffect(() => setLicenseMessage(""), [inputLicense]);
 
@@ -55,11 +55,11 @@ const LicenseWidget = () => {
             } catch (error) {
                 console.error("Error parsing license data", error);
             }
-        }else if(license){
+        } else if (license) {
             setLicenseInfo(license);
         }
-     // console.log("licenseInfo", license);
-   
+        // console.log("licenseInfo", license);
+
     }, [license]);
 
 
@@ -82,15 +82,15 @@ const LicenseWidget = () => {
     };
 
     const licenseFields = [
-        { label: 'Email ID', value: licenseInfo?.email },
-        { 
-            label: 'Exp. date', 
-            value: licenseInfo?.next_billing 
-                ? new Date(licenseInfo.next_billing * 1000).toLocaleDateString() 
-                : '' 
+        { label: 'Email', value: licenseInfo?.email },
+        {
+            label: 'Next Billing',
+            value: licenseInfo?.next_billing
+                ? new Date(licenseInfo.next_billing * 1000).toLocaleDateString()
+                : ''
         },
-        { label: 'License', value: licenseInfo?.plan },
-        { label: 'Connected Domain', value: licenseInfo?.licensedDomain }
+        { label: 'Plan', value: licenseInfo?.plan },
+        { label: 'Active Domain', value: licenseInfo?.licensedDomain }
     ];
 
     const renderLicenseDetails = () => (
@@ -108,14 +108,14 @@ const LicenseWidget = () => {
             </button> */}
 
             {licenseFields.map(({ label, value }, index) => (
-                <div 
-                    key={label} 
+                <div
+                    key={label}
                     className="flex gap-2 items-center text-sm"
                 >
-                    <span className="text-brand-850">{label} :</span>
-                    <span className="font-medium text-brand-950">
-                        {isVisible 
-                            ? value 
+                    <span className="font-medium text-brand-950 dark:text-brand-200">{label}:</span>
+                    <span className="text-brand-850 dark:text-brand-200">
+                        {isVisible
+                            ? value
                             : '•'.repeat((value || '').toString().length)}
                     </span>
                 </div>
@@ -151,24 +151,24 @@ const LicenseWidget = () => {
             className="flex gap-2 items-center cursor-pointer bg-brand-100/90 text-brand-950 px-4 rounded-lg"
             onClick={() => (showInput ? connectRapidloadLicense() : window.open('https://app.rapidload.io/', '_blank'))}
         >
-            {loading && <Loader className='w-4 animate-spin'/> } Connect
+            {loading && <Loader className='w-4 animate-spin' />} Connect
         </button>
     );
 
     return (
         <AnimatePresence mode="wait">
-        <div className="w-full flex flex-col gap-4">
-            <Card data-tour="license-widget" className="border flex flex-col gap-4">
-                <div className="flex flex-col p-6 pb-0 gap-2">
-                    <div className="text-lg font-bold">
-                        {licenseInfo?.licensedDomain ? (
-                            <span className="text-brand-400/50 dark:text-brand-300">Welcome back, <span className="text-brand-950">{licenseInfo?.name}</span></span>
-                        ) : (
-                            <span className="text-brand-400/90 dark:text-brand-300">Connect your license</span>
-                        )}
+            <div className="w-full flex flex-col gap-4">
+                <Card data-tour="license-widget" className="border flex flex-col gap-4">
+                    <div className="flex flex-col p-6 pb-0 gap-2">
+                        <div className="text-lg font-bold">
+                            {licenseInfo?.licensedDomain ? (
+                                <span className="text-brand-400/50 dark:text-brand-300">Welcome back, <span className="text-brand-950">{licenseInfo?.name}</span></span>
+                            ) : (
+                                <span className="text-brand-400/90 dark:text-brand-300">Connect your license</span>
+                            )}
+                        </div>
+                        <div className="bg-purple-800/10 px-2.5 py-1.5 rounded-xl w-fit">{renderLicenseStatus()}</div>
                     </div>
-                    <div className="bg-purple-800/10 px-2.5 py-1.5 rounded-xl w-fit">{renderLicenseStatus()}</div>
-                </div>
 
                     <div className="grid gap-4 px-8 text-sm relative">
                         {/* Stored License:
@@ -182,10 +182,10 @@ const LicenseWidget = () => {
                                 {showInput ? renderLicenseInput() : (
                                     <motion.div
                                         key="getRapidloadButton"
-                                        initial={{opacity: 0, y: -20}}
-                                        animate={{opacity: 1, y: 0}}
-                                        exit={{opacity: 0, y: -20}}
-                                        transition={{duration: 0.2}}
+                                        initial={{ opacity: 0, y: -20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -20 }}
+                                        transition={{ duration: 0.2 }}
                                         className="flex flex-col items-center"
                                     >
                                         <button
@@ -201,39 +201,39 @@ const LicenseWidget = () => {
                         ) : renderLicenseDetails()}
                     </div>
 
-                <div className="flex flex-col gap-2">
-                    <div
-                        className="flex gap-6 justify-end p-6 text-sm font-semibold relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white">
-                        {licenseInfo?.licensedDomain ? (
-                            <>
-                                <button className="cursor-pointer text-brand-500 py-1.5" onClick={() => window.open('https://app.rapidload.io/', 'blank')}>View My Account</button>
-                                <button className="cursor-pointer bg-brand-100/90 text-brand-950 py-1.5 px-4 rounded-lg" onClick={() => window.open('https://app.rapidload.io/subscription', 'blank')}>Upgrade</button>
-                            </>
-                        ) : (
-                            <>
-                                {/*<button className="cursor-pointer text-brand-500 py-1.5" onClick={() => setShowInput(!showInput)}>{showInput ? "Cancel" : "Connect with License key"}</button>*/}
-                                <button
-                                    className="cursor-pointer text-brand-500 py-1.5"
-                                    onClick={() => setShowInput(!showInput)}
-                                >
+                    <div className="flex flex-col gap-2">
+                        <div
+                            className="flex gap-6 justify-end p-6 text-sm font-semibold relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white">
+                            {licenseInfo?.licensedDomain ? (
+                                <>
+                                    <button className="cursor-pointer text-brand-500 py-1.5" onClick={() => window.open('https://app.rapidload.io/', 'blank')}>View My Account</button>
+                                    <button className="cursor-pointer bg-brand-100/90 text-brand-950 py-1.5 px-4 rounded-lg" onClick={() => window.open('https://app.rapidload.io/subscription', 'blank')}>Upgrade</button>
+                                </>
+                            ) : (
+                                <>
+                                    {/*<button className="cursor-pointer text-brand-500 py-1.5" onClick={() => setShowInput(!showInput)}>{showInput ? "Cancel" : "Connect with License key"}</button>*/}
+                                    <button
+                                        className="cursor-pointer text-brand-500 py-1.5"
+                                        onClick={() => setShowInput(!showInput)}
+                                    >
                                         <motion.span
                                             key={showInput.toString()}
-                                            initial={{opacity: 0, y: 10}}
-                                            animate={{opacity: 1, y: 0}}
-                                            exit={{opacity: 0, y: -10}}
-                                            transition={{duration: 0.3}}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -10 }}
+                                            transition={{ duration: 0.3 }}
                                             className="inline-block"
                                         >
                                             {showInput ? "Cancel" : "Connect with License key"}
                                         </motion.span>
-                                </button>
-                                {renderConnectButton()}
-                            </>
-                        )}
+                                    </button>
+                                    {renderConnectButton()}
+                                </>
+                            )}
+                        </div>
                     </div>
-                </div>
-            </Card>
-        </div>
+                </Card>
+            </div>
         </AnimatePresence>
     );
 };
