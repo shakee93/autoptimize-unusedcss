@@ -185,7 +185,7 @@ export const getCSSStatus = (options: WordPressOptions, url: string, types: stri
             return cssJobStatusResult?.data;
 
         } catch (error) {
-            console.error('Error fetching CSS job status:', error);
+           // console.error('Error fetching CSS job status:', error);
         }
 
 
@@ -207,7 +207,7 @@ export const getTestModeStatus = (options: WordPressOptions, url: string, mode?:
             })
             return { success: true };
         } catch (error: any) {
-            console.error('Error on Test Mode:', error);
+           // console.error('Error on Test Mode:', error);
             let errorMessage: string;
             if (error instanceof Error) {
                 errorMessage = error.message;
@@ -239,7 +239,7 @@ export const getSummary = (options: WordPressOptions, action: string): ThunkActi
 
             return { success: true };
         } catch (error: any) {
-            console.error('Error on Test Mode:', error);
+           // console.error('Error on Test Mode:', error);
             let errorMessage: string;
             if (error instanceof Error) {
                 errorMessage = error.message;
@@ -272,7 +272,7 @@ export const getTitanOptimizationData = (options: WordPressOptions, startFrom: n
             // console.log(fetchOptimizationData )
             return { success: true, hasMoreData: hasMoreData };
         } catch (error: any) {
-            console.error('Error on fetchOptimizationData:', error);
+          //  console.error('Error on fetchOptimizationData:', error);
             let errorMessage: string;
             if (error instanceof Error) {
                 errorMessage = error.message;
@@ -354,7 +354,7 @@ export const saveGeneralSettings = (options: WordPressOptions, data: any): Thunk
             const saveGeneralSettings = await api.saveGeneralSettings(data);
             return { success: true };
         } catch (error: any) {
-            console.error('Error on saving General Settings:', error);
+           // console.error('Error on saving General Settings:', error);
             let errorMessage: string;
             if (error instanceof Error) {
                 errorMessage = error.message;
@@ -388,7 +388,7 @@ export const updateLicense = (options: WordPressOptions, data?: any): ThunkActio
                 return { success: false, error: connectLicense.data || "License update failed" };
             }
         } catch (error: any) {
-            console.error('Error on connecting:', error);
+           // console.error('Error on connecting:', error);
             // Fallback error message handling
             const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
             return { success: false, error: errorMessage };
@@ -410,7 +410,7 @@ export const getHomePagePerformance = (options: WordPressOptions, data?: any): T
             });
             return { success: true };
         } catch (error: any) {
-            console.error('Error on fetching:', error);
+          //  console.error('Error on fetching:', error);
             // Fallback error message handling
             const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
             return { success: false, error: errorMessage };
@@ -449,7 +449,7 @@ export const getAiPrediction = (options: WordPressOptions, url: string, score: n
                 data: aiPredictionResult?.data
             };
         } catch (error: any) {
-            console.error('Error on AI Prediction:', error);
+           // console.error('Error on AI Prediction:', error);
             let errorMessage: string;
             if (error instanceof Error) {
                 errorMessage = error.message;
@@ -482,7 +482,7 @@ export const fetchPosts = (options: WordPressOptions): ThunkAction<void, RootSta
             } else {
                 errorMessage = 'An unknown error occurred';
             }
-            console.error(errorMessage);
+           // console.error(errorMessage);
 
         }
     };
@@ -756,7 +756,7 @@ export const updateDiagnosticResults = (options: WordPressOptions, url: string, 
             return { success: true };
 
         } catch (error: any) {
-            console.error('Error on updating Diagnostic Results:', error);
+            //console.error('Error on updating Diagnostic Results:', error);
             let errorMessage: string;
             if (error instanceof Error) {
                 errorMessage = error.message;

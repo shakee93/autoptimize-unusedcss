@@ -31,6 +31,7 @@ import TimeAgo from "components/TimeAgo";
 import { Dialog, DialogDescription, DialogHeader, DialogContent, DialogTitle, DialogTrigger } from "components/ui/dialog";
 import { Checkbox } from "components/ui/checkbox";
 
+
 const DiagnosticSchema = z.object({
     // active_settings_inputs: z.array(z.object({
     //     name: z.string(),
@@ -99,7 +100,7 @@ interface ProgressState {
 const AIBaseURL = window.rapidload_optimizer.ai_root || "https://ai.rapidload.io/api"
 
 const Optimizations = ({ }) => {
-    const { settings, data, activeReport, diagnosticResults, diagnosticProgress, loading } = useSelector(optimizerData);
+    const { settings, data, activeReport, diagnosticResults, diagnosticProgress, loading, error } = useSelector(optimizerData);
     const [diagnosticComplete, setDiagnosticComplete] = useState(false);
     const [loadingText, setLoadingText] = useState<string | null>(null);
     const [aiLoading, setAiLoading] = useState(false);
@@ -150,7 +151,7 @@ const Optimizations = ({ }) => {
     }, [data?.grouped]);
 
 
-    const { object, submit, isLoading, error } = useObject({
+    const { object, submit, isLoading} = useObject({
         api: `${AIBaseURL}/diagnosis`,
         schema: DiagnosticSchema,
         onFinish: (diagnostic: any) => {
@@ -194,7 +195,7 @@ const Optimizations = ({ }) => {
     }, [diagnosticResults]);
     
     const aiResultsComplete = () => {
-        setLoadingText(null)
+      //  setLoadingText(null)
         setDiagnosticComplete(true)
         updateProgressState({ diagnosticsProgress: 100 });
         resetDiagnosticResults();
@@ -213,7 +214,9 @@ const Optimizations = ({ }) => {
         updateProgressState({ isFlushingProgress: 0 });
         setAiLoading(false);
         setAiResponding(false);
+        setLoadingText(null)
         dispatch(setCommonState('diagnosticLoading', false));
+       
     }
 
     useEffect(() => {
@@ -257,8 +260,17 @@ const Optimizations = ({ }) => {
     const doAnalysis = useCallback(async (diagnostics: any) => {
         setLoadingText('Collecting active plugins...')
         const api = new ApiService(options);
-        const plugins = await api.getActivePlugins();
-        const server_data = await api.post('rapidload_server_info');
+        // const plugins = await api.getActivePlugins();
+        // const server_data = await api.post('rapidload_server_info');
+        let plugins, server_data;
+        
+        try {
+            plugins = await api.getActivePlugins();
+            server_data = await api.post('rapidload_server_info');
+        } catch (error: any) {
+            setDiagnosticError(error?.message || "Failed to fetch plugins or server info");
+            return; // Exit early if API calls fail
+        }
 
 
         const _diagnostics = Object.entries(diagnostics).map(([key, value]) => value)
@@ -342,6 +354,8 @@ const Optimizations = ({ }) => {
             if (event.data.type === "RAPIDLOAD_CHECK_RESULTS") {
                 setLoadingText('Collected data from your page...')
                 doAnalysis(event.data.data)
+            } else if (event.data.type === "RAPIDLOAD_DIAGNOSTIC_PAGE_LOAD_ERROR") {
+                setDiagnosticError(event.data.data)
             }
         };
 
@@ -371,6 +385,7 @@ const Optimizations = ({ }) => {
             } else {
                 setLoadingText('Collecting Diagnostics from your page...')
                 setShowIframe(true)
+                // i want to handle the iframe onload error here
             }
 
             
@@ -388,6 +403,9 @@ const Optimizations = ({ }) => {
         }
         
     };
+
+  
+
 
 
     const preloadPage = async (previewUrl: string) => {
@@ -564,8 +582,23 @@ const Optimizations = ({ }) => {
     //     };
     // }, []);
     
+   useEffect(() => {
+   
+    if(error){
+        setDiagnosticError(error)
+    }
+   }, [error])
+
+    const handleIframeError = (error: React.SyntheticEvent<HTMLIFrameElement, Event>) => {
+        setDiagnosticError("Failed to load preview page. Please check if the page is accessible.");
+    };
+
+    const handleIframeLoad = () => {
+        console.log("iframe loaded")
+    };
 
    useEffect(() => {
+   
     if(diagnosticError?.length && (progressState.pageSpeedProgress === 100 || progressState.pageSpeedProgress === 0 || progressState.isFlushingProgress === 0)){
         resetDiagnosticResults(); 
         
@@ -675,7 +708,7 @@ const Optimizations = ({ }) => {
                                             />
                                             <div className="flex flex-col">
                                                 {/* <div className="select-none cursor-pointer">Privacy Policy</div> */}
-                                                <p className="text-sm font-normal select-none">I agree to the <a href="https://rapidload.io/privacy-policy/" target="_blank" className="text-purple-750 underline cursor-pointer">Privacy Policy</a></p>
+                                                <span className="text-sm font-normal select-none">I agree to the <a href="https://rapidload.io/privacy-policy/" target="_blank" className="text-purple-750 underline cursor-pointer">Privacy Policy</a></span>
                                             </div>
                                             </div>
                                             <Button
@@ -733,10 +766,12 @@ const Optimizations = ({ }) => {
                                     </button>
                                 </div>
                                 <iframe
-                                  //  src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
-                                    src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
+                                    src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
+                                  //  src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
+                                    onError={handleIframeError}
+                                    onLoad={handleIframeLoad}
                                 />
                             </div>
                         </div>

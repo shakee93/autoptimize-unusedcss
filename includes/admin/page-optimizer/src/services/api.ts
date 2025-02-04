@@ -195,7 +195,7 @@ class ApiService {
             return responseData
 
         } catch (error) {
-            console.error(error);
+            //console.error(error);
             toast({
                 description: 'Failed to fetch RapidLoad settings!',
                 variant: 'destructive',
@@ -206,7 +206,7 @@ class ApiService {
 
     async analyzeViaAPI(url: string, strategy: string, abortController?: AbortController) {
 
-        console.log('analyzeViaAPI', abortController);
+       // console.log('analyzeViaAPI', abortController);
 
         try {
 
