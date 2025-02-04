@@ -2,7 +2,7 @@
 import { useChat } from "ai/react";
 import { useEffect, useRef } from "react";
 import Markdown from "react-markdown";
-import { MessagesSquare } from "lucide-react";
+import { Loader2, MessagesSquare } from "lucide-react";
 import { ArrowUpIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { HermesAIBotIcon, NoteBookIcon, StarLockIcon, WorldIcon } from "app/ai-bot/icons/icon-svg";
 import { useSelector } from "react-redux";
@@ -18,25 +18,33 @@ import { AnimatedLogo } from "components/animated-logo";
 interface ChatProps {
   apiEndpoint?: string;
 }
+const aiRoot = window.rapidload_optimizer.ai_root || "https://ai.rapidload.io";
 
-export default function Chat({ apiEndpoint = "https://ai.rapidload.io/api/support" }: ChatProps) {
+export default function Chat({ apiEndpoint = `${aiRoot}/support` }: ChatProps) {
 
-  const { options} = useAppContext();
-  
-  const { messages, input, handleInputChange, handleSubmit, setMessages } = useChat({
+  const { options } = useAppContext();
+
+  const { messages, input, handleInputChange, handleSubmit, setMessages, isLoading } = useChat({
     api: apiEndpoint,
     headers: {
-      'Authorization': `Bearer ${ isDev ? 'f86e8df144f1469eacca8becd12a6e7f' : options.license_key!}`
+      'Authorization': `Bearer ${isDev ? 'f86e8df144f1469eacca8becd12a6e7f' : options.license_key!}`
     },
+
+    onError: (error) => {
+      console.error(error);
+    },
+    onFinish: (message, options) => {
+      console.log(message, options);
+    }
   });
 
-  const { 
-    data, 
-    settings, 
+  const {
+    data,
+    settings,
     activeReport,
     activeGear,
     testMode,
-    license 
+    license
   } = useSelector(optimizerData);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -72,21 +80,21 @@ export default function Chat({ apiEndpoint = "https://ai.rapidload.io/api/suppor
         createdAt: new Date(),
       },
     ]);
-    
+
   }, [data, settings, license, activeReport, activeGear, testMode, setMessages]);
 
   // Handle URL parameters for conversation selection
   useEffect(() => {
     const params = new URLSearchParams(window.location.hash.split('?')[1]);
     const conversationId = params.get('conv');
-  
+
     if (conversationId) {
       const conversation = conversations.find(conv => conv.id === conversationId);
       if (conversation) {
         handleSelectConversation(conversationId);
       }
     }
-    else{
+    else {
       handleNewChat(true);
       // Initialize system message first
       const systemMessage = formatSystemMessage({
@@ -106,27 +114,27 @@ export default function Chat({ apiEndpoint = "https://ai.rapidload.io/api/suppor
           createdAt: new Date(),
         },
       ]);
-      
-    
-     
+
+
+
     }
   }, []);
 
   // Add this new function
-const handleClose = () => {
-  // Remove empty conversations before closing
-  conversations.forEach(conv => {
-    if (conv.messages.length <= 1) { // Only has system message or is empty
-      handleDeleteConversation(conv.id);
-    }
-  });
-  window.location.hash = '#/';
-};
+  const handleClose = () => {
+    // Remove empty conversations before closing
+    conversations.forEach(conv => {
+      if (conv.messages.length <= 1) { // Only has system message or is empty
+        handleDeleteConversation(conv.id);
+      }
+    });
+    window.location.hash = '#/';
+  };
 
 
   return (
     <div className="chat-container flex container mx-auto h-[calc(100vh-4rem)] max-h-[750px] py-4 bg-white my-4 rounded-2xl">
-      <ChatHistoryPanel 
+      <ChatHistoryPanel
         conversations={conversations}
         onSelectConversation={handleSelectConversation}
         onNewChat={() => handleNewChat(false)}
@@ -153,11 +161,33 @@ const handleClose = () => {
           <div ref={messagesEndRef} />
         </div>
 
-        <ChatInput 
-          input={input} 
-          handleInputChange={handleInputChange} 
-          handleSubmit={handleSubmit} 
-        />
+        {isLoading && <div className="px-4 pb-2 flex justify-end">
+          <div className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+            <Loader2 className="h-4 w-4 animate-spin" />
+          </div>
+        </div>
+        }
+
+
+        <form
+          onSubmit={handleSubmit}
+          className="input-container flex items-center px-2 py-1 border-t border-gray-200 bg-brand-100 mx-6 rounded-xl"
+        >
+          <input
+            className="flex-1 p-2 bg-brand-100 rounded-lg focus:outline-none focus:border-transparent"
+            value={input}
+            placeholder="Ask Rapidload AI..."
+            onChange={handleInputChange}
+          />
+          <button
+            type="submit"
+            disabled={input.trim() === ""}
+            className="ml-2 bg-brand-950 text-white p-2 rounded-lg hover:bg-brand-950 disabled:opacity-50 transition-colors"
+          >
+            <ArrowUpIcon className="h-4 w-4 text-brand-0" />
+          </button>
+        </form>
+
       </div>
     </div>
   );
@@ -178,12 +208,13 @@ const handleClose = () => {
 
 const ChatMessages = ({ messages }: { messages: any[] }) => (
   <>
+
     {Array.isArray(messages) && messages
       .filter((msg) => msg && typeof msg === 'object' && msg?.role !== "system")
       .map((message) => message && (
-        <ChatMessage 
-          key={message.id || Math.random().toString()} 
-          message={message} 
+        <ChatMessage
+          key={message.id || Math.random().toString()}
+          message={message}
         />
       ))}
   </>
@@ -217,24 +248,25 @@ const ChatMessages = ({ messages }: { messages: any[] }) => (
 
 const ChatMessage = ({ message }: { message: any }) => {
   if (!message) return null;
-  
+
   return (
     <div className={`message my-2 flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
       {message.role === "assistant" && (
         <div className="flex mt-2 mr-2">
           <AnimatedLogo className="!opacity-100" size="sm" isPlaying={false} />
         </div>
-       
+
       )}
       <div
-        className={`max-w-lg px-4 py-2 rounded-lg ${
-          message.role === "user"
-            ? "bg-gray-100 text-brand-950"
-            : "text-brand-950"
-        }`}
+        className={`max-w-lg px-4 py-2 rounded-lg ${message.role === "user"
+          ? "bg-gray-100 text-brand-950"
+          : "text-brand-950"
+          }`}
       >
         {message.content && message.content.length > 0 ? (
-          <Markdown>{message.content}</Markdown>
+          <div className="prose prose-sm prose-p:m-0 prose-p:p-0 prose-p:text-sm prose-p:text-brand-950">
+            <Markdown>{message.content}</Markdown>
+          </div>
         ) : (
           <span className="italic font-light">
             {"calling tool: " + message?.toolInvocations?.[0]?.toolName}

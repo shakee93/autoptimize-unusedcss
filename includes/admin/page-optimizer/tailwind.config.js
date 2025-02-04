@@ -202,5 +202,6 @@ module.exports = {
 			addVariant('kids', '&>*')
 		}),
 		require("tailwindcss-animate"),
+		require('@tailwindcss/typography'),
 	],
 }
