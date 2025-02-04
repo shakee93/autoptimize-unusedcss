@@ -268,6 +268,7 @@ const Optimizations = ({ }) => {
             plugins = await api.getActivePlugins();
             server_data = await api.post('rapidload_server_info');
         } catch (error: any) {
+          //  console.log("plugins error", error?.message)
             setDiagnosticError(error?.message || "Failed to fetch plugins or server info");
             return; // Exit early if API calls fail
         }
@@ -331,7 +332,7 @@ const Optimizations = ({ }) => {
             updateProgressState({ diagnosticsProgress: 95 });
 
         } catch (error: any) {
-            console.error('AI Diagnosis Error:', error);
+           // console.error('AI Diagnosis Error:', error);
             dispatch(setCommonState('diagnosticLoading', false));
             setAiLoading(false);
             setLoadingText(null);
@@ -539,7 +540,7 @@ const Optimizations = ({ }) => {
                         simulateProgress('pageSpeedProgress', 25, 90);
 
                         // await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true, abortControllerRef.current));
-                        // await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
+                         await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
 
                         updateProgressState({ pageSpeedProgress: 100 });
                         // abortControllerRef.current = null; 
@@ -598,10 +599,10 @@ const Optimizations = ({ }) => {
     };
 
    useEffect(() => {
-   
+
     if(diagnosticError?.length && (progressState.pageSpeedProgress === 100 || progressState.pageSpeedProgress === 0 || progressState.isFlushingProgress === 0)){
         resetDiagnosticResults(); 
-        
+       
         // if (abortControllerRef.current) {
         //     abortControllerRef.current.abort();
         //     abortControllerRef.current = null; // Reset controller
@@ -783,8 +784,8 @@ const Optimizations = ({ }) => {
                                     </button>
                                 </div>
                                 <iframe
-                                    src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
-                                  //  src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
+                                  //  src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
+                                    src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                     onError={handleIframeError}

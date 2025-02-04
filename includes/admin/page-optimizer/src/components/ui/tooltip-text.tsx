@@ -1,6 +1,6 @@
 import {Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "components/ui/tooltip";
 import {Undo2} from "lucide-react";
-import {ReactNode, MouseEvent} from "react";
+import {ReactNode, MouseEvent, forwardRef} from "react";
 import {cn} from "lib/utils";
 import {TooltipPortal} from "@radix-ui/react-tooltip";
 
@@ -13,12 +13,13 @@ interface TooltipTextProps {
     delay?: number
 }
 
-const TooltipText = ({ text, children, onClick, className, asChild = false, delay = 500} : TooltipTextProps) => {
+const TooltipText = forwardRef<HTMLButtonElement, TooltipTextProps>(
+    ({ text, children, onClick, className, asChild = false, delay = 500}, ref) => {
     return (
         text != null ? (
         <TooltipProvider disableHoverableContent={false} delayDuration={delay}>
-            <Tooltip  >
-                <TooltipTrigger asChild={asChild} onClick={e => onClick && onClick()} className={cn(
+            <Tooltip>
+                <TooltipTrigger ref={ref} asChild={asChild} onClick={e => onClick && onClick()} className={cn(
                     'flex items-center',
                 )}>
                     {children}
@@ -28,6 +29,8 @@ const TooltipText = ({ text, children, onClick, className, asChild = false, dela
         </TooltipProvider>
     ):(children)
     )
-}
+});
+
+TooltipText.displayName = 'TooltipText';
 
 export default TooltipText

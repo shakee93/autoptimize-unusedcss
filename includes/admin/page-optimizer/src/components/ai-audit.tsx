@@ -188,7 +188,7 @@ export const AiAudit = ({ issue, index, openItems, toggleAccordion, input }: AiA
                         <div className="border-t px-6 pb-6 pt-4">
 
                             {/* Solutions section */}
-                            <div>
+                            <div key={index}>
                                 <div className="flex gap-2 mb-4 w-full justify-between">
                                     <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200 flex gap-2 items-center">
                                         <div className="flex items-center relative gap-2 pl-7 justify-center">
