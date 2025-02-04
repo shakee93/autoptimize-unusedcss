@@ -693,60 +693,60 @@ const Optimizations = ({ }) => {
                             <DialogHeader className='border-b px-6 py-4 mt-1'>
                                 <DialogTitle>Privacy Policy</DialogTitle>
                             </DialogHeader>
-                            <div className="py-2 px-6">
-                            <div className="flex ">
-                                    <span>At RapidLoad, we collect, use, and protect your personal information. By clicking 'Accept and Continue'.
-                                    </span>
-                                    </div>
+                                    <div className="py-2 px-6">
+                                        <div className="flex ">
+                                            <span>At RapidLoad, we collect, use, and protect your personal information. By clicking 'Accept and Continue'.
+                                            </span>
+                                        </div>
                                         <div className="flex gap-2 font-medium text-base w-full justify-between mt-2 items-center">
                                             <div className="flex gap-2 items-center py-1 ">
-                                            <Checkbox
-                                                checked={privacyPolicy}
-                                                onCheckedChange={(checked) => {
-                                                    setPrivacyPolicy(checked as boolean);
-                                                }}
-                                            />
-                                            <div className="flex flex-col">
-                                                {/* <div className="select-none cursor-pointer">Privacy Policy</div> */}
-                                                <span className="text-sm font-normal select-none">I agree to the <a href="https://rapidload.io/privacy-policy/" target="_blank" className="text-purple-750 underline cursor-pointer">Privacy Policy</a></span>
-                                            </div>
+                                                <Checkbox
+                                                    checked={privacyPolicy}
+                                                    onCheckedChange={(checked) => {
+                                                        setPrivacyPolicy(checked as boolean);
+                                                    }}
+                                                />
+                                                <div className="flex flex-col">
+                                                    {/* <div className="select-none cursor-pointer">Privacy Policy</div> */}
+                                                    <span className="text-sm font-normal select-none">I agree to the <a href="https://rapidload.io/privacy-policy/" target="_blank" className="text-purple-750 underline cursor-pointer">Privacy Policy</a></span>
+                                                </div>
                                             </div>
                                             <Button
-                                                    onClick={() => {
-                                                        if (!privacyPolicy) {
-                                                            localStorage.setItem("rapidload_privacy_policy", "true");
-                                                            setShowDialog(false);
+                                                onClick={() => {
+                                                    if (!privacyPolicy) {
+                                                        localStorage.setItem("rapidload_privacy_policy", "true");
+                                                        setShowDialog(false);
 
-                                                            setDiagnosticError(null);
-                                                            dispatch(setCommonState('diagnosticLoading', true));
-                                                            setAiLoading(true);
-                                                            handleFlushCache();
-                                                        }
-                                                    }}
-                                                >
-                                                    Opt-in & Improve
-                                                </Button>
+                                                        setDiagnosticError(null);
+                                                        dispatch(setCommonState('diagnosticLoading', true));
+                                                        setAiLoading(true);
+                                                        handleFlushCache();
+                                                    }
+                                                }}
+                                            >
+                                                Opt-in & Improve
+                                            </Button>
 
-                                                <Button
-                                                    variant="outline"
-                                                    onClick={() => {
-                                                        if (privacyPolicy) {
-                                                            localStorage.setItem("rapidload_privacy_policy", "false");
-                                                            setShowDialog(false);
-                                                        }
-                                                    }}
-                                                >
-                                                    Cancel
-                                                </Button>
-                                            </div>
+                                            <Button
+                                                variant="outline"
+                                                onClick={() => {
+                                                    if (privacyPolicy) {
+                                                        localStorage.setItem("rapidload_privacy_policy", "false");
+                                                        setShowDialog(false);
+                                                    }
+                                                }}
+                                            >
+                                                Cancel
+                                            </Button>
                                         </div>
-
                                     </div>
+
+                               
 
                                     <DialogDescription>
                                         {/* Additional description if needed */}
                                     </DialogDescription>
-
+                                                    
                                 </DialogContent>
                             </Dialog>
 
