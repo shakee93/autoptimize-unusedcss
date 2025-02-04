@@ -5,7 +5,7 @@ import { useCompletion, experimental_useObject as useObject } from 'ai/react'
 import { AnimatePresence, m, motion } from "framer-motion"
 import useCommonDispatch from "hooks/useCommonDispatch";
 import { changeGear, fetchReport, fetchSettings, setDiagnosticProgress, updateDiagnosticResults } from '../../../store/app/appActions';
-import { LoaderIcon, ChevronDown, GaugeCircle, RefreshCw, Sparkles } from "lucide-react";
+import { LoaderIcon, ChevronDown, GaugeCircle, RefreshCw, Sparkles, Lock } from "lucide-react";
 import { useSelector } from "react-redux";
 import { optimizerData } from "../../../store/app/appSelector";
 import { CheckCircleIcon, Cog6ToothIcon } from '@heroicons/react/24/solid';
@@ -92,7 +92,7 @@ interface ProgressState {
     serverInfoProgress: number;
     diagnosticsProgress: number;
     currentStep: number;
-  }
+}
 
 // TODO: create an env variable for this
 // const AIBaseURL = "http://localhost:3000/api"
@@ -115,7 +115,7 @@ const Optimizations = ({ }) => {
         diagnosticsProgress: 0,
         currentStep: 0
     });
-    
+
     const { headerUrl, diagnosticLoading } = useCommonDispatch();
     const [remainingTime, setRemainingTime] = useState(0);
     const [serverDetails, setServerDetails] = useState(null);
@@ -132,13 +132,13 @@ const Optimizations = ({ }) => {
         if (storedValue === "true") {
             setPrivacyPolicy(true);
         }
-      }, [privacyPolicy]);
+    }, [privacyPolicy]);
 
-   // Helper functions to update grouped state
+    // Helper functions to update grouped state
     const updateProgressState = (updates: Partial<ProgressState>) => {
         setProgressState(prev => ({ ...prev, ...updates }));
     };
-    
+
 
     const relatedAudits = useMemo(() => {
         if (!data?.grouped) return [];
@@ -189,10 +189,10 @@ const Optimizations = ({ }) => {
     }, [object]);
 
     useEffect(() => {
-       setLastDiagnosticData(diagnosticResults);
-       console.log("lastDiagnosticData", diagnosticResults)
+        setLastDiagnosticData(diagnosticResults);
+        console.log("lastDiagnosticData", diagnosticResults)
     }, [diagnosticResults]);
-    
+
     const aiResultsComplete = () => {
         setLoadingText(null)
         setDiagnosticComplete(true)
@@ -217,17 +217,17 @@ const Optimizations = ({ }) => {
     }
 
     useEffect(() => {
-      //  console.log("diagnosticComplete", diagnosticComplete);
+        //  console.log("diagnosticComplete", diagnosticComplete);
         saveDiagnosticResults();
     }, [diagnosticComplete]);
 
     const saveDiagnosticResults = () => {
-        
-       if(!diagnosticData || !diagnosticComplete){
-        return;
-       }
-        
-       const data = {...diagnosticData, timeStamp: Date.now()}
+
+        if (!diagnosticData || !diagnosticComplete) {
+            return;
+        }
+
+        const data = { ...diagnosticData, timeStamp: Date.now() }
         try {
             dispatch(updateDiagnosticResults(options, headerUrl ? headerUrl : optimizerUrl, data));
         } catch (error: any) {
@@ -237,17 +237,17 @@ const Optimizations = ({ }) => {
 
 
     const handleDiagnosticError = (error: string) => {
-       
+
         return <div className="flex gap-8 items-center mt-8">
             <div className='border-2 border-red-500 rounded-xl flex items-start gap-4 p-4'>
                 <div className='p-2 bg-red-200/30 rounded-lg'>
                     <ExclamationTriangleIcon className='w-10 h-10 text-red-500' />
                 </div>
                 <div className='flex flex-col gap-1'>
-                <span className='font-medium text-md '>Oops! Something went wrong</span>
-                <span className='text-sm text-brand-700 dark:text-brand-300'>Run Diagnostics Test Again</span>
-                <div className='text-sm text-brand-500 dark:text-brand-200 border-t mt-2 pt-2 max-w-[350px]'>
-                <span className='font-medium text-brand-800 dark:text-brand-400'>Details:</span> {error}</div>
+                    <span className='font-medium text-md '>Oops! Something went wrong</span>
+                    <span className='text-sm text-brand-700 dark:text-brand-300'>Run Diagnostics Test Again</span>
+                    <div className='text-sm text-brand-500 dark:text-brand-200 border-t mt-2 pt-2 max-w-[350px]'>
+                        <span className='font-medium text-brand-800 dark:text-brand-400'>Details:</span> {error}</div>
                 </div>
             </div>
         </div>
@@ -314,7 +314,7 @@ const Optimizations = ({ }) => {
 
         try {
 
-           // setInput(input)
+            // setInput(input)
             submit(input)
             updateProgressState({ diagnosticsProgress: 95 });
 
@@ -324,7 +324,7 @@ const Optimizations = ({ }) => {
             setAiLoading(false);
             setLoadingText(null);
             setDiagnosticError(error?.message || "Failed to complete AI analysis. Please try again.");
-            
+
             // Show error toast
             toast({
                 title: "AI Diagnostic Failed",
@@ -373,7 +373,7 @@ const Optimizations = ({ }) => {
                 setShowIframe(true)
             }
 
-            
+
             updateProgressState({ diagnosticsProgress: 50 });
 
         } catch (error: any) {
@@ -386,7 +386,7 @@ const Optimizations = ({ }) => {
             //     variant: "destructive",
             // });
         }
-        
+
     };
 
 
@@ -418,13 +418,13 @@ const Optimizations = ({ }) => {
     };
 
     const handleFlushCache = async () => {
-        
+
         const api = new ApiService(options);
         const previewUrl = optimizerUrl + '?rapidload_preview'
 
         try {
             updateProgressState({ isFlushingProgress: 10 });
-           
+
             await api.post('clear_page_cache', {
                 url: optimizerUrl
             });
@@ -436,7 +436,7 @@ const Optimizations = ({ }) => {
             updateProgressState({ isFlushingProgress: 100 });
             setCurrentStep(1);
             runParallelSteps();
-           
+
             // toast({
             //     title: "Cache Flushed",
             //     description: "Page cache has been cleared successfully.",
@@ -444,7 +444,7 @@ const Optimizations = ({ }) => {
             // });
 
         } catch (error: any) {
-            updateProgressState({ isFlushingProgress: 0 }); 
+            updateProgressState({ isFlushingProgress: 0 });
             setDiagnosticError(error.message || "Failed to clear page cache");
             // console.error('❌ Flushing cache failed:', error);
             // toast({
@@ -452,12 +452,12 @@ const Optimizations = ({ }) => {
             //     description: error.message || "Failed to clear page cache",
             //     variant: "destructive",
             // });
-        } 
+        }
     };
 
     // const simulateProgress = (setter: React.Dispatch<React.SetStateAction<number>>, start: number, end: number) => {
     //     if (start >= end) return;
-    
+
     //     setTimeout(() => {
     //         setter(start + 5); 
     //         simulateProgress(setter, start + 5, end); 
@@ -469,17 +469,17 @@ const Optimizations = ({ }) => {
         end: number
     ) => {
         if (start >= end) return;
-        
+
         setTimeout(() => {
             updateProgressState({ [progressKey]: start + 5 });
             simulateProgress(progressKey, start + 5, end);
         }, 100);
     };
-    
+
     const runParallelSteps = async () => {
-        
+
         try {
-          
+
             await Promise.all([
                 // Fetch Settings
                 (async () => {
@@ -491,7 +491,7 @@ const Optimizations = ({ }) => {
                         updateProgressState({ settingsProgress: 100 });
                         //  console.log('✅ Settings fetch completed');
                     } catch (error: any) {
-                       
+
                         setDiagnosticError(error?.message || "Failed to run settings");
                         throw error;
                     }
@@ -501,11 +501,11 @@ const Optimizations = ({ }) => {
                 (async () => {
                     try {
                         simulateProgress('serverInfoProgress', 25, 90);
-                        
+
                         const api = new ApiService(options);
                         const data = await api.post('rapidload_server_info');
                         setServerDetails(data)
-   
+
                         updateProgressState({ serverInfoProgress: 100 });
                         // console.log('✅ Server info check completed');
                     } catch (error: any) {
@@ -517,18 +517,18 @@ const Optimizations = ({ }) => {
                 // New Page Speed
                 (async () => {
                     try {
-                       // abortControllerRef.current = new AbortController();
+                        // abortControllerRef.current = new AbortController();
                         simulateProgress('pageSpeedProgress', 25, 90);
 
-                       // await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true, abortControllerRef.current));
-                        await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
+                        // await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true, abortControllerRef.current));
+                        // await dispatch(fetchReport(options, headerUrl ? headerUrl : options.optimizer_url, true));
 
                         updateProgressState({ pageSpeedProgress: 100 });
-                       // abortControllerRef.current = null; 
+                        // abortControllerRef.current = null; 
                         // console.log('✅ PageSpeed fetch completed');
                     } catch (error: any) {
                         updateProgressState({ pageSpeedProgress: 0 });
-                        setDiagnosticError(error?.message || "Failed to run page speed");               
+                        setDiagnosticError(error?.message || "Failed to run page speed");
                         throw error;
                     }
                 })()
@@ -544,14 +544,14 @@ const Optimizations = ({ }) => {
             setTimeout(async () => {
                 setCurrentStep(4);
                 startDiagnostics();
-    
+
             }, 1000);
 
-            
-           
+
+
         } catch (error: any) {
             setDiagnosticError(error?.message || "One or more steps failed to complete");
-           
+
         }
     };
 
@@ -563,21 +563,21 @@ const Optimizations = ({ }) => {
     //         }
     //     };
     // }, []);
-    
 
-   useEffect(() => {
-    if(diagnosticError?.length && (progressState.pageSpeedProgress === 100 || progressState.pageSpeedProgress === 0 || progressState.isFlushingProgress === 0)){
-        resetDiagnosticResults(); 
-        
-        // if (abortControllerRef.current) {
-        //     abortControllerRef.current.abort();
-        //     abortControllerRef.current = null; // Reset controller
-        //     resetDiagnosticResults();
-        //     console.log('abortController aborted');
-        // }
-        
-    }
-   }, [diagnosticError, progressState.pageSpeedProgress, progressState.isFlushingProgress])
+
+    useEffect(() => {
+        if (diagnosticError?.length && (progressState.pageSpeedProgress === 100 || progressState.pageSpeedProgress === 0 || progressState.isFlushingProgress === 0)) {
+            resetDiagnosticResults();
+
+            // if (abortControllerRef.current) {
+            //     abortControllerRef.current.abort();
+            //     abortControllerRef.current = null; // Reset controller
+            //     resetDiagnosticResults();
+            //     console.log('abortController aborted');
+            // }
+
+        }
+    }, [diagnosticError, progressState.pageSpeedProgress, progressState.isFlushingProgress])
 
 
     return (
@@ -589,13 +589,13 @@ const Optimizations = ({ }) => {
                 className='bg-[#F0F0F1] dark:bg-brand-800'
             >
 
-                
+
                 <div className={cn('px-6 py-6 bg-white z-50 relative', aiLoading && !aiResponding ? 'rounded-t-3xl' : 'rounded-3xl')}>
                     <div className="flex gap-4 w-full items-start">
                         {/* Logo Column */}
                         <div className="flex justify-start items-center gap-2 w-10">
-                            
-                        <AnimatedLogo size="lg" isPlaying={aiLoading} animationType={aiResponding ? "path" : "moving"} />
+
+                            <AnimatedLogo size="lg" isPlaying={aiLoading} animationType={aiResponding ? "path" : "moving"} />
                         </div>
 
                         {/* Content Column */}
@@ -630,81 +630,111 @@ const Optimizations = ({ }) => {
                         {/* Button Column */}
                         {!aiLoading &&
 
-                        <Dialog open={showDialog} onOpenChange={setShowDialog}>
-                            <DialogTrigger asChild>
-                            <TooltipText text={loading ? "Please wait while applying optimizations" : null }>
-                            <div className={cn('flex justify-end items-center mt-2')}>
-                                <AppButton
-                                    disabled={aiLoading}
-                                    className={cn("rounded-xl px-8 py-6 whitespace-nowrap", loading && 'cursor-not-allowed opacity-60 pointer-events-none')}
-                                    onClick={() => {
-                                    
-                                        if (!privacyPolicy) {
-                                            setShowDialog(true);
-                                            return;
-                                        }
-                                        setDiagnosticError(null);
-                                        dispatch(setCommonState('diagnosticLoading', true));
-                                        setAiLoading(true);
-                                        handleFlushCache();
-                                    }}
-                                >
-                                    {diagnosticData?.AnalysisSummary?.length ? 'Run Diagnostics Test Again' : 'Run Diagnostics Test '}
-                                    
-                                </AppButton>
-                            </div>
-                        </TooltipText>
-                        </DialogTrigger>
-                        <DialogTitle></DialogTitle>
-                        <DialogContent className="sm:max-w-[650px]">
-                            <DialogHeader className='border-b px-6 py-4 mt-1'>
-                                <DialogTitle>Privacy Policy</DialogTitle>
-                            </DialogHeader>
-                            <div className="py-2 px-6">
-                            <div className="flex ">
-                                    <span>At RapidLoad, we collect, use, and protect your personal information. By clicking 'Accept and Continue'.
-                                    </span>
-                                    </div>
-                                        <div className="flex gap-2 font-medium text-base w-full justify-between mt-2 items-center">
-                                            <div className="flex gap-2 items-center py-1 ">
-                                            <Checkbox
-                                                checked={privacyPolicy}
-                                                onCheckedChange={(checked) => {
-                                                    setPrivacyPolicy(checked as boolean);
+                            <Dialog open={showDialog} onOpenChange={setShowDialog}>
+                                <DialogTrigger asChild>
+                                    <TooltipText text={loading ? "Please wait while applying optimizations" : null}>
+                                        <div className={cn('flex justify-end items-center mt-2')}>
+                                            <AppButton
+                                                disabled={aiLoading}
+                                                className={cn("rounded-xl px-8 py-6 whitespace-nowrap", loading && 'cursor-not-allowed opacity-60 pointer-events-none')}
+                                                onClick={() => {
+
+                                                    if (!privacyPolicy) {
+                                                        setShowDialog(true);
+                                                        return;
+                                                    }
+
+                                                    setDiagnosticError(null);
+                                                    dispatch(setCommonState('diagnosticLoading', true));
+                                                    setAiLoading(true);
+                                                    handleFlushCache();
                                                 }}
-                                            />
-                                            <div className="flex flex-col">
-                                                {/* <div className="select-none cursor-pointer">Privacy Policy</div> */}
-                                                <p className="text-sm font-normal select-none">I agree to the <a href="https://rapidload.io/privacy-policy/" target="_blank" className="text-purple-750 underline cursor-pointer">Privacy Policy</a></p>
-                                            </div>
-                                            </div>
-                                            <Button
+                                            >
+                                                {diagnosticData?.AnalysisSummary?.length ? 'Run Diagnostics Test Again' : 'Run Diagnostics Test '}
+
+                                            </AppButton>
+                                        </div>
+                                    </TooltipText>
+                                </DialogTrigger>
+                                <DialogTitle></DialogTitle>
+                                <DialogContent className="sm:max-w-[650px]">
+                                    <DialogHeader className='border-b px-6 py-4 mt-1'>
+                                        <DialogTitle>To Work Best, RapidLoad Needs These Insights</DialogTitle>
+                                    </DialogHeader>
+                                    <div className="py-2 px-6">
+                                        <div className="flex text-sm">
+                                            <span>To provide the best AI-driven performance optimization, RapidLoad requires certain website details. By sharing this data, our AI can analyze and enhance your page speed more effectively.</span>
+                                        </div>
+
+                                        <Collapsible className="w-full mt-2">
+                                            <CollapsibleTrigger className="flex text-sm w-full items-center justify-between py-2 font-medium hover:underline">
+                                                <span>What data do we collect and send?</span>
+                                                <ChevronDown className="h-4 w-4 transition-transform duration-200" />
+                                            </CollapsibleTrigger>
+                                            <CollapsibleContent className="text-sm text-muted-foreground">
+                                                <ul className="list-disc pl-4 space-y-2 py-2">
+                                                    <li>Active plugin list</li>
+                                                    <li>Page Speed Report</li>
+                                                    <li>Server type details</li>
+                                                    <li>RapidLoad Settings information</li>
+                                                </ul>
+
+                                            </CollapsibleContent>
+                                        </Collapsible>
+
+                                        <div className="mt-2 text-sm">
+                                            <p className="mt-2">
+                                                <Lock className="w-4 h-4 inline-block text-green-700 mr-0.5 -mt-0.5" /> <span className="font-medium">Privacy First:</span>  We never collect or store personal data, credentials, or sensitive information. Your privacy remains our top priority.
+                                            </p>
+                                        </div>
+
+                                        <div className="flex gap-2 font-medium text-base w-full justify-between mt-6 items-center">
+                                            <div></div>
+                                            <div className="flex gap-2">
+                                                <Button
+                                                    onClick={() => {
+                                                        if (!privacyPolicy) {
+                                                            localStorage.setItem("rapidload_privacy_policy", "true");
+                                                            setShowDialog(false);
+
+                                                            setDiagnosticError(null);
+                                                            dispatch(setCommonState('diagnosticLoading', true));
+                                                            setAiLoading(true);
+                                                            handleFlushCache();
+                                                        }
+                                                    }}
+                                                >
+                                                    Opt-in & Improve
+                                                </Button>
+
+                                                <Button
+                                                    variant="outline"
                                                     onClick={() => {
                                                         if (privacyPolicy) {
-                                                            localStorage.setItem("rapidload_privacy_policy", "true");
+                                                            localStorage.setItem("rapidload_privacy_policy", "false");
                                                             setShowDialog(false);
                                                         }
                                                     }}
-                                                    disabled={!privacyPolicy}
                                                 >
-                                                   Continue
+                                                    Cancel
                                                 </Button>
+                                            </div>
                                         </div>
 
                                     </div>
-                            
-                            <DialogDescription>
-                                {/* Additional description if needed */}
-                            </DialogDescription>
 
-                            </DialogContent>
-                        </Dialog>
-                        
+                                    <DialogDescription>
+                                        {/* Additional description if needed */}
+                                    </DialogDescription>
+
+                                </DialogContent>
+                            </Dialog>
+
                         }
                     </div>
 
-                    {diagnosticError?.length && (progressState.pageSpeedProgress === 100 || progressState.pageSpeedProgress === 0 || progressState.isFlushingProgress === 0) && handleDiagnosticError(diagnosticError)} 
-                    
+                    {diagnosticError?.length && (progressState.pageSpeedProgress === 100 || progressState.pageSpeedProgress === 0 || progressState.isFlushingProgress === 0) && handleDiagnosticError(diagnosticError)}
+
 
                     {/* {object?.AnalysisSummary?.length &&
                         <div className="grid grid-cols-5 gap-4 mb-6">
@@ -733,8 +763,8 @@ const Optimizations = ({ }) => {
                                     </button>
                                 </div>
                                 <iframe
-                                    src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
-                                   // src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
+                                    // src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
+                                    src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                 />
@@ -742,35 +772,34 @@ const Optimizations = ({ }) => {
                         </div>
                     )}
                 </div>
-               
-                        <m.div
-                        initial={{ y: -50, opacity: 0, height: 0 }}
-                        animate={{ 
-                            y: aiLoading && !aiResponding ? 0 : -50, 
-                            opacity: aiLoading && !aiResponding ? 1 : 0, 
-                            height: aiLoading && !aiResponding ? 'auto' : 0 
-                        }}
-                        transition={{
-                            type: "spring",
-                            duration: 0.5,
-                            bounce: 0.2
-                        }}
- 
-                        className="bg-white rounded-b-3xl border-t border-zinc-200 dark:border-zinc-800 overflow-hidden"
-                        >
-                            {/* <ProgressTracker steps={progressSteps} currentStep={0} /> */}
 
-                            <div className="flex flex-col gap-4 p-6">
-                                <ProgressTracker
-                                    steps={progressSteps}
-                                    currentStep={currentStep}
-                                    onTimeUpdate={handleRemainingTimeUpdate}
-                                />
-                            </div>
-                          
-                        </m.div>
-                    
-        
+                <m.div
+                    initial={{ y: -50, opacity: 0, height: 0 }}
+                    animate={{
+                        y: aiLoading && !aiResponding ? 0 : -50,
+                        opacity: aiLoading && !aiResponding ? 1 : 0,
+                        height: aiLoading && !aiResponding ? 'auto' : 0
+                    }}
+                    transition={{
+                        type: "spring",
+                        duration: 0.5,
+                        bounce: 0.2
+                    }}
+
+                    className="bg-white rounded-b-3xl border-t border-zinc-200 dark:border-zinc-800 overflow-hidden"
+                >
+                    {/* <ProgressTracker steps={progressSteps} currentStep={0} /> */}
+
+                    <div className="flex flex-col gap-4 p-6">
+                        <ProgressTracker
+                            steps={progressSteps}
+                            currentStep={currentStep}
+                            onTimeUpdate={handleRemainingTimeUpdate}
+                        />
+                    </div>
+
+                </m.div>
+
 
                 {diagnosticData?.AnalysisSummary?.length &&
                     <AnalysisResults
@@ -781,16 +810,21 @@ const Optimizations = ({ }) => {
                 }
 
                 {lastDiagnosticData?.AnalysisSummary?.length && !diagnosticData?.AnalysisSummary?.length &&
-                <div className="mt-6">
-                    <div className='border-t border-zinc-300 dark:border-zinc-800'/>
-                    
-                    <div className="text-xs font-normal text-brand-450 dark:text-brand-300 mt-4">Last Diagnostics <TimeAgo timestamp={lastDiagnosticData.timeStamp} /></div>
-                    <AnalysisResults
-                        object={lastDiagnosticData}
-                        relatedAudits={relatedAudits}
-                        input={input}
-                    />
-                </div>
+                    <div className={lastDiagnosticData.timeStamp ? 'mt-6' : 'mt-0'}>
+
+                        {lastDiagnosticData.timeStamp &&
+                            <>
+                                <div className='border-t border-zinc-300 dark:border-zinc-800' />
+                                <div className="text-xs font-normal text-brand-450 dark:text-brand-300 mt-4">Last Diagnostics <TimeAgo timestamp={lastDiagnosticData.timeStamp} /></div>
+                            </>
+                        }
+
+                        <AnalysisResults
+                            object={lastDiagnosticData}
+                            relatedAudits={relatedAudits}
+                            input={input}
+                        />
+                    </div>
                 }
             </m.div>
         </AnimatePresence>
