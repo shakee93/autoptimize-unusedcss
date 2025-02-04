@@ -269,9 +269,14 @@ const ChatMessage = ({ message }: { message: any }) => {
           </div>
         ) : (
           <span className="italic font-light">
-            {"calling tool: " + message?.toolInvocations?.[0]?.toolName}
+            {message?.toolInvocations?.[0]?.toolName === 'accessKnowledge' && (
+              <div>
+                Accessing knowledge base...
+              </div>
+            )}
           </span>
         )}
+
         <MessageTimestamp createdAt={message.createdAt} />
       </div>
     </div>
