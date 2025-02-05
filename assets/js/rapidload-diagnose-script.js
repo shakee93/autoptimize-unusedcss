@@ -187,6 +187,32 @@
                     }
                 }
             }
+
+            // Track console errors
+            window.diagnose_data.console_errors = [];
+            
+            window.onerror = function(msg, url, lineNo, columnNo, error) {
+                window.diagnose_data.console_errors.push({
+                    message: msg,
+                    url: url,
+                    line: lineNo,
+                    column: columnNo,
+                    error: error ? error.stack : null
+                });
+                return false;
+            };
+
+            // Also capture console.error calls
+            const originalError = console.error;
+            console.error = function(...args) {
+                window.diagnose_data.console_errors.push({
+                    message: args.join(' '),
+                    timestamp: new Date().toISOString()
+                });
+                originalError.apply(console, args);
+            };
+
+            console.log(window.diagnose_data.console_errors);
         }
 
         setTimeout(() => {
