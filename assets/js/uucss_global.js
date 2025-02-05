@@ -278,6 +278,16 @@
             }
             e.preventDefault();
 
+            function displayError(){
+                var $error = $('.notice-action-rapidload-db-update .notice-icon-content');
+                $error.find('h2').text('RapidLoad - Data update failed !');
+                $error.find('p').text('Database update failed');
+                $('.notice-action-rapidload-db-update').css('border-left-color','#dc3232');
+                $target.text('Failed : Contact Support');
+                $target.attr('href', 'https://rapidload.zendesk.com/hc/en-us/requests/new');
+                $target.attr('target', '_blank');
+            }
+
             $target.text('Updating...');
             $target.removeAttr('href');
             $.ajax({
@@ -291,14 +301,11 @@
                     if(response.success){
                         window.location.reload();
                     }else{
-                        var $error = $('.notice-action-rapidload-db-update .notice-icon-content');
-                        $error.find('h2').text('RapidLoad - Data update failed !');
-                        $error.find('p').text('Database update failed');
-                        $('.notice-action-rapidload-db-update').css('border-left-color','#dc3232');
-                        $target.text('Failed : Contact Support');
-                        $target.attr('href', 'https://rapidload.zendesk.com/hc/en-us/requests/new');
-                        $target.attr('target', '_blank');
+                        displayError();
                     }
+                },
+                error: function(xhr, status, error) {
+                    displayError();
                 }
             })
         })
