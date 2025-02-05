@@ -17,7 +17,18 @@ const LicenseWidget = () => {
 
     // const storedLicense = localStorage.getItem('rapidLoadLicense');
     // const parsedStoredLicense = storedLicense ? JSON.parse(storedLicense) : null;
-    const [licenseInfo, setLicenseInfo] = useState<License | null>(null);
+    const [licenseInfo, setLicenseInfo] = useState<License | null>(() => {
+        const storedLicense = localStorage.getItem('rapidLoadLicense');
+        if (storedLicense) {
+            try {
+                return JSON.parse(storedLicense);
+            } catch (error) {
+                console.error("Error parsing license data", error);
+                return null;
+            }
+        }
+        return null;
+    });
     const [inputLicense, setInputLicense] = useState("");
     const [showInput, setShowInput] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -47,22 +58,10 @@ const LicenseWidget = () => {
     };
 
     useEffect(() => {
-
-        const storedLicense = localStorage.getItem('rapidLoadLicense');
-        if (storedLicense) {
-            try {
-                setLicenseInfo(JSON.parse(storedLicense));
-            } catch (error) {
-                console.error("Error parsing license data", error);
-            }
-        } else if (license) {
+        if (license && !licenseInfo) {
             setLicenseInfo(license);
         }
-        // console.log("licenseInfo", license);
-
     }, [license]);
-
-
 
     const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -106,6 +105,8 @@ const LicenseWidget = () => {
                     <EyeSlashIcon className="h-4 w-4 text-violet-400" />
                 )}
             </button> */}
+
+           
 
             {licenseFields.map(({ label, value }, index) => (
                 <div
@@ -159,6 +160,7 @@ const LicenseWidget = () => {
         <AnimatePresence mode="wait">
             <div className="w-full flex flex-col gap-4">
                 <Card data-tour="license-widget" className="border flex flex-col gap-4">
+               
                     <div className="flex flex-col p-6 pb-0 gap-2">
                         <div className="text-lg font-bold">
                             {licenseInfo?.licensedDomain ? (
