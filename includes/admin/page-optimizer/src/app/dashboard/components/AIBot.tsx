@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Card from "components/ui/card";
-import {ArrowRightIcon, CheckBadgeIcon, InboxIcon, InformationCircleIcon} from "@heroicons/react/24/outline";
-import {AIBotIcon, BotIcon} from "app/dashboard/components/icons/icon-svg";
-import {ArrowUpCircleIcon} from "@heroicons/react/24/solid";
+import { ArrowRightIcon, CheckBadgeIcon, InboxIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
+import { AIBotIcon, BotIcon } from "app/dashboard/components/icons/icon-svg";
+import { ArrowUpCircleIcon } from "@heroicons/react/24/solid";
 import {
     Dialog,
     DialogContent,
@@ -11,8 +11,9 @@ import {
 } from "components/ui/dialog";
 import { MessagesSquare } from "lucide-react";
 import { AnimatedLogo } from "components/animated-logo";
+import { cn } from 'lib/utils';
 
-const AIBot = () => {
+const AIBot = ({ className }: { className: string }) => {
     const [open, setOpen] = useState(false);
     const [conversations, setConversations] = useState(() => {
         const saved = localStorage.getItem('chat-conversations');
@@ -32,16 +33,16 @@ const AIBot = () => {
         'CDN Delivery?',
     ];
 
-    return(
-        <div className='w-full flex flex-col gap-4'>
+    return (
+        <div className={cn("w-full flex flex-col gap-4", className)}>
             <Card data-tour='AIBot' className="border flex flex-col gap-4">
                 <div className="flex flex-col items-center p-6 gap-2 relative">
                     <button
                         onClick={() => setOpen(true)}
                         className="flex gap-1 m-6 my-0 right-0 absolute cursor-pointer border text-brand-950 py-1.5 px-2 rounded-lg text-xs font-medium hover:bg-gray-100">
-                        <InboxIcon className="h-4 w-4 text-brand-950"/>
+                        <InboxIcon className="h-4 w-4 text-brand-950" />
                     </button>
-                    
+
                     <Dialog open={open} onOpenChange={setOpen}>
                         <DialogContent className="sm:max-w-[425px] p-6">
                             <DialogHeader>
@@ -67,14 +68,14 @@ const AIBot = () => {
                             </div>
                         </DialogContent>
                     </Dialog>
-                    
-                    <div className="flex flex-col items-center gap-2 py-[92px]">  
-                    {/* <AIBotIcon/> */}
-                    <AnimatedLogo className="!opacity-100" size="lg" isPlaying={false} />
-                    <div className="dark:text-brand-300 text-center flex flex-col">
-                        <h2 className="text-base font-semibold">Chat with Rapidload AI</h2>
-                        <p className="text-sm text-brand-500">An intelligent, responsive chatbot for PageSpeed</p>
-                    </div>
+
+                    <div className="flex flex-col items-center gap-2 py-[83px]">
+                        {/* <AIBotIcon/> */}
+                        <AnimatedLogo className="!opacity-100" size="lg" isPlaying={false} />
+                        <div className="dark:text-brand-300 text-center flex flex-col">
+                            <h2 className="text-base font-semibold">Chat with Rapidload AI</h2>
+                            <p className="text-sm text-brand-500">Understands your page speed and website issues to help you improve speed</p>
+                        </div>
                     </div>
                 </div>
                 <div className="w-full max-w-md mx-auto p-6 pt-0">
@@ -91,17 +92,17 @@ const AIBot = () => {
                         ))}
                     </div> */}
                     <div className="relative">
-                                    <input
-                                        type="text"
-                                        onClick={() => (window.location.hash = '#/rapidload-ai')}
-                                        placeholder="Ask about anything..."
-                                        className="w-full p-2 border border-brand-300 rounded-full focus:outline-none focus:border-black bg-brand-100 pr-10 pl-4"
-                                    />
-                                    <ArrowUpCircleIcon
-                                        className="cursor-pointer h-10 w-10 text-brand-950 absolute right-0 top-1/2 transform -translate-y-1/2 "/>
-                                </div>
+                        <input
+                            type="text"
+                            onClick={() => (window.location.hash = '#/rapidload-ai')}
+                            placeholder="Ask about anything..."
+                            className="w-full p-2 border border-brand-300 rounded-full focus:outline-none focus:border-black bg-brand-100 pr-10 pl-4"
+                        />
+                        <ArrowUpCircleIcon
+                            className="cursor-pointer h-10 w-10 text-brand-950 absolute right-0 top-1/2 transform -translate-y-1/2 " />
+                    </div>
 
-                    
+
                 </div>
             </Card>
         </div>

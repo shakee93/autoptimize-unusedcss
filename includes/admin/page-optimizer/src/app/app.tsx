@@ -7,7 +7,7 @@ import { useAppContext } from "../context/app";
 import { ThunkDispatch } from "redux-thunk";
 import { useDispatch, useSelector } from "react-redux";
 import { AppAction, RootState } from "../store/app/appTypes";
-import {fetchPosts, fetchReport, fetchSettings, getTestModeStatus, updateLicense} from "../store/app/appActions";
+import {fetchPosts, fetchReport, fetchSettings, getTestModeStatus, updateDiagnosticResults, updateLicense} from "../store/app/appActions";
 import { Toaster } from "components/ui/toaster";
 import {AnimatePresence, m, motion} from "framer-motion";
 import { useRootContext } from "../context/root";
@@ -115,6 +115,7 @@ const App = ({ popup, _showOptimizer = false }: {
         dispatch(fetchSettings(options, headerUrl ? headerUrl : options.optimizer_url, false));
         dispatch(setCommonState('testModeStatus', initialTestMode));
         dispatch(fetchPosts(options));
+        dispatch(updateDiagnosticResults(options, headerUrl ? headerUrl : options.optimizer_url));
     }, [dispatch, activeReport]);
 
     const [showStepTwo, setShowStepTwo] = useState(false);

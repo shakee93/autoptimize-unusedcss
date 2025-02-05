@@ -182,6 +182,7 @@ class RapidLoad_Admin_Bar {
                 #wp-admin-bar-rapidload .rl-node-wrapper {
                     display: flex;
                     gap: 6px;
+                    z-index: 9999;
                 }
 
                 #wp-admin-bar-rapidload .rl-icon {
@@ -207,7 +208,8 @@ class RapidLoad_Admin_Bar {
                 }
 
                 #rapidload-page-optimizer{
-                    margin-left: -20px
+                    margin-left: -20px;
+                    margin-top: 1px;
                 }
 
                 /*.rl-page-optimizer-loaded #wp-admin-bar-rapidload *,*/

@@ -68,7 +68,11 @@ const GEAR_FEATURES: Record<PerformanceGear, string[]> = {
     ],
 };
 
-const PerformanceGears: React.FC = () => {
+interface PerformanceGearsProps {
+    className: string;
+}
+
+const PerformanceGears: React.FC<PerformanceGearsProps> = ({className}) => {
     const { activeGear, settings } = useSelector(optimizerData);
     const [activeLevel, setActiveLevel] = useState<PerformanceGear>(activeGear || 'accelerate');
     const [isAccordionOpen, setIsAccordionOpen] = useState(true);
@@ -272,7 +276,7 @@ const PerformanceGears: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-between">
+        <div className={cn("flex flex-col items-center justify-between", className)}>
             <div className="flex flex-col p-6 pb-0 text-md gap-4 bg-white border-b-0 border-t-0 border w-full overflow-hidden relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white">
                 <h4 className={cn("text-base font-semibold flex gap-1", activeGear === 'custom' ? 'text-purple-900' : 'text-brand-400')}>
                     You’ve activated <span className="capitalize text-brand-950 ">{activeGear} {activeGear === 'custom' ? 'Settings' : 'Gear'}</span>

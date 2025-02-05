@@ -79,6 +79,7 @@ export const HOME_PAGE_PERFORMANCE = 'HOME_PAGE_PERFORMANCE';
 export const SET_DIAGNOSTIC_RESULTS = 'SET_DIAGNOSTIC_RESULTS';
 export const SET_DIAGNOSTIC_PROGRESS = 'SET_DIAGNOSTIC_PROGRESS';
 
+
 interface SetDiagnosticProgress {
     type: typeof SET_DIAGNOSTIC_PROGRESS,
     payload : DiagnosticProgress,

@@ -29,7 +29,7 @@ interface UsageBarProps {
     used_gb_formatted?: string;
 }
 
-const CDNSummary = () => {
+const CDNSummary = ({className}: {className: string}) => {
 
     const {dispatch} = useCommonDispatch();
     const {options} = useAppContext();
@@ -76,7 +76,7 @@ const CDNSummary = () => {
     const progressWidth = allowedUsage ? `${(usage / allowedUsage) * 100}` : "0";
 
     return (
-        <div className="flex flex-col gap-2.5 py-2">
+        <div className={cn("flex flex-col gap-2.5 py-2", className)}>
 
             <div className="flex items-center text-sm dark:text-brand-300 justify-between">
                 <div className="flex gap-2 items-baseline">

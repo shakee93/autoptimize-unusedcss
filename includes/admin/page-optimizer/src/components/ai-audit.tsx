@@ -188,7 +188,7 @@ export const AiAudit = ({ issue, index, openItems, toggleAccordion, input }: AiA
                         <div className="border-t px-6 pb-6 pt-4">
 
                             {/* Solutions section */}
-                            <div>
+                            <div key={index}>
                                 <div className="flex gap-2 mb-4 w-full justify-between">
                                     <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200 flex gap-2 items-center">
                                         <div className="flex items-center relative gap-2 pl-7 justify-center">
@@ -228,12 +228,14 @@ export const AiAudit = ({ issue, index, openItems, toggleAccordion, input }: AiA
                                                                     {issue?.solutions?.solutions_reasoning.map((item, index) => (
                                                                         <div key={index} className="px-4 last:border-0 border-b py-3 border-brand-200 dark:border-brand-800">
                                                                             <div className="space-y-1">
-                                                                                <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+                                                                                <div className="text-sm font-medium text-zinc-800 dark:text-zinc-200 flex gap-2 items-center">
                                                                                     {item?.thought}
-                                                                                </p>
-                                                                                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                                                                                    <span className="text-xs font-normal bg-brand-200/50 dark:bg-brand-800 rounded-md px-2 py-1">{item?.block_type}</span>
+                                                                                </div>
+                                                                                <div className="text-xs text-zinc-500 dark:text-zinc-400">
                                                                                     {item?.reasoning}
-                                                                                </p>
+                                                                                </div>
+
                                                                             </div>
                                                                         </div>
                                                                     ))}
