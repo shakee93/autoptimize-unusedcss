@@ -1,8 +1,8 @@
 "use client";
 import { useChat } from "ai/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Markdown from "react-markdown";
-import { Loader2, MessagesSquare } from "lucide-react";
+import { Loader2, MessagesSquare, PanelLeftClose, PanelRightClose } from "lucide-react";
 import { ArrowUpIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { HermesAIBotIcon, NoteBookIcon, StarLockIcon, WorldIcon } from "app/ai-bot/icons/icon-svg";
 import { useSelector } from "react-redux";
@@ -18,23 +18,30 @@ import { AnimatedLogo } from "components/animated-logo";
 interface ChatProps {
   apiEndpoint?: string;
 }
-const aiRoot = window.rapidload_optimizer.ai_root || "https://ai.rapidload.io";
+const aiRoot = window.rapidload_optimizer.ai_root || "https://ai.rapidload.io/api";
 
 export default function Chat({ apiEndpoint = `${aiRoot}/support` }: ChatProps) {
 
   const { options } = useAppContext();
+  const [showHistory, setShowHistory] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
 
   const { messages, input, handleInputChange, handleSubmit, setMessages, isLoading } = useChat({
     api: apiEndpoint,
     headers: {
-      'Authorization': `Bearer ${isDev ? 'f86e8df144f1469eacca8becd12a6e7f' : options.license_key!}`
+      'Authorization': `Bearer ${isDev ? import.meta.env.VITE_KEY : options.license_key!}`
     },
 
     onError: (error) => {
       console.error(error);
+      const lastUserMessage = [...messages].reverse().find(msg => msg.role === 'user');
+    // Use a fallback ID if no user message exists
+    const errorId = lastUserMessage?.id || 'system';
+    setError(`${errorId}:${error?.message}`);
     },
     onFinish: (message, options) => {
-      console.log(message, options);
+     // console.log(message, options);
     }
   });
 
@@ -95,25 +102,25 @@ export default function Chat({ apiEndpoint = `${aiRoot}/support` }: ChatProps) {
       }
     }
     else {
-      handleNewChat(true);
-      // Initialize system message first
-      const systemMessage = formatSystemMessage({
-        data,
-        settings,
-        license,
-        activeReport,
-        activeGear: activeGear as string,
-        testMode: testMode as boolean,
-      });
+      // handleNewChat(true);
+      // // Initialize system message first
+      // const systemMessage = formatSystemMessage({
+      //   data,
+      //   settings,
+      //   license,
+      //   activeReport,
+      //   activeGear: activeGear as string,
+      //   testMode: testMode as boolean,
+      // });
 
-      setMessages([
-        {
-          id: "1",
-          role: "system",
-          content: systemMessage,
-          createdAt: new Date(),
-        },
-      ]);
+      // setMessages([
+      //   {
+      //     id: "1",
+      //     role: "system",
+      //     content: systemMessage,
+      //     createdAt: new Date(),
+      //   },
+      // ]);
 
 
 
@@ -131,21 +138,52 @@ export default function Chat({ apiEndpoint = `${aiRoot}/support` }: ChatProps) {
     window.location.hash = '#/';
   };
 
+   // Add this new function to handle form submission
+   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null);
+   // Prevent multiple submissions while processing
+  if (isLoading) return;
+    
+    // If there are no messages except system message, create a new chat
+    if (messages.length <= 1) {
+      await handleNewChat(true);
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    
+    handleSubmit(e);
+  };
 
   return (
-    <div className="chat-container flex container mx-auto h-[calc(100vh-4rem)] max-h-[750px] py-4 bg-white my-4 rounded-2xl">
-      <ChatHistoryPanel
-        conversations={conversations}
-        onSelectConversation={handleSelectConversation}
-        onNewChat={() => handleNewChat(false)}
-        onDeleteConversation={handleDeleteConversation}
-      />
+    <div className="chat-container relative flex container mx-auto h-[calc(100vh-4rem)] max-h-[750px] py-4 bg-white my-4 rounded-2xl overflow-hidden">
+      <div className={`
+        w-42 transform transition-all duration-300 ease-in-out
+        ${showHistory 
+          ? 'translate-x-0 opacity-100 visible' 
+          : '-translate-x-full opacity-0 invisible absolute'
+        }
+      `}>
+        <ChatHistoryPanel
+          conversations={conversations}
+          onSelectConversation={handleSelectConversation}
+          onNewChat={() => handleNewChat(false)}
+          onDeleteConversation={handleDeleteConversation}
+        />
+      </div>
 
-      <div className="flex-1 flex flex-col">
-        <div className="px-4 pb-2 flex justify-end">
+      <div className={`flex-1 flex flex-col `}>
+        <div className="px-4 pb-2 flex justify-between">
+          <button
+            onClick={() => setShowHistory(!showHistory)}
+            className="p-2 mt-4 hover:bg-gray-100 rounded-lg transition-colors"
+            aria-label="Toggle history"
+          >
+           {showHistory ? <PanelLeftClose className="h-6 w-6 text-gray-500" /> : <PanelRightClose className="h-6 w-6 text-gray-500" />} 
+          </button>
+          
           <button
             onClick={handleClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 mt-4 hover:bg-gray-100 rounded-lg transition-colors"
             aria-label="Close chat"
           >
             <XMarkIcon className="h-6 w-6 text-gray-500" />
@@ -156,21 +194,14 @@ export default function Chat({ apiEndpoint = `${aiRoot}/support` }: ChatProps) {
           {messages.length === 1 ? (
             <WelcomeScreen />
           ) : (
-            <ChatMessages messages={messages} />
+            <ChatMessages messages={messages} loading={isLoading} error={error} />
           )}
           <div ref={messagesEndRef} />
         </div>
 
-        {isLoading && <div className="px-4 pb-2 flex justify-end">
-          <div className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-            <Loader2 className="h-4 w-4 animate-spin" />
-          </div>
-        </div>
-        }
-
-
         <form
-          onSubmit={handleSubmit}
+          // onSubmit={handleSubmit}
+          onSubmit={handleFormSubmit}
           className="input-container flex items-center px-2 py-1 border-t border-gray-200 bg-brand-100 mx-6 rounded-xl"
         >
           <input
@@ -206,47 +237,118 @@ export default function Chat({ apiEndpoint = `${aiRoot}/support` }: ChatProps) {
 
 
 
-const ChatMessages = ({ messages }: { messages: any[] }) => (
-  <>
+// const ChatMessages = ({ messages, loading, error }: { messages: any[], loading: boolean, error: string | null }) => (
+//   <>
 
-    {Array.isArray(messages) && messages
-      .filter((msg) => msg && typeof msg === 'object' && msg?.role !== "system")
-      .map((message) => message && (
-        <ChatMessage
-          key={message.id || Math.random().toString()}
-          message={message}
-        />
-      ))}
-  </>
-);
-
-// const ChatMessage = ({ message }: { message: any }) => (
-//   <div className={`message my-2 flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-//     {message.role === "assistant" && (
-//       <div className="w-8 h-8 rounded-full bg-violet-900 flex items-center justify-center mr-2">
-//         <MessagesSquare size={16} className="text-white" />
-//       </div>
-//     )}
-//     <div
-//       className={`max-w-lg px-4 py-2 rounded-lg shadow ${
-//         message.role === "user"
-//           ? "bg-violet-900 text-white"
-//           : "bg-gray-100 text-gray-800"
-//       }`}
-//     >
-//       {message.content.length > 0 ? (
-//         <Markdown>{message.content}</Markdown>
-//       ) : (
-//         <span className="italic font-light">
-//           {"calling tool: " + message?.toolInvocations?.[0]?.toolName}
-//         </span>
-//       )}
-//       <MessageTimestamp createdAt={message.createdAt} />
-//     </div>
-//   </div>
+//     {Array.isArray(messages) && messages
+//       .filter((msg) => msg && typeof msg === 'object' && msg?.role !== "system")
+//       .map((message, index) => message && (
+//         <div key={message.id || Math.random().toString()}>
+          
+//           <ChatMessage
+//             message={message}
+//             loading={loading}
+//             error={error}
+//           />
+//           {index === messages.length - 2 && loading && (
+//             <div className="flex justify-start my-2">
+//               <div className="flex mt-2 mr-2">
+//                 <AnimatedLogo className="!opacity-100" size="sm" isPlaying={true} />
+//               </div>
+//               <div className="max-w-lg px-4 py-2 rounded-lg text-brand-950">
+//                 <span className="italic font-light">Thinking...</span>
+//               </div>
+//             </div>
+//           )}
+           
+//         </div>
+//       ))}
+//   </>
 // );
 
-const ChatMessage = ({ message }: { message: any }) => {
+
+// working with erro chat
+// const ChatMessages = ({ messages, loading, error }: { messages: any[], loading: boolean, error: string | null }) => {
+//   const filteredMessages = messages.filter((msg) => msg && typeof msg === 'object' && msg?.role !== "system");
+  
+//   // Parse error to get message ID and error text
+//   const [errorMessageId, errorText] = error ? error.split(':') : [null, null];
+  
+//   return (
+//     <>
+//       {Array.isArray(messages) && filteredMessages.map((message, index) => message && (
+//         <div key={message.id || Math.random().toString()}>
+//           <ChatMessage
+//             message={message}
+//             loading={loading}
+//             // Only pass error if this message ID matches the error message ID
+//             error={message.id === errorMessageId ? errorText : null}
+//           />
+//           {index === filteredMessages.length - 2 && loading && (
+//             <div className="flex justify-start my-2">
+//               <div className="flex mt-2 mr-2">
+//                 <AnimatedLogo className="!opacity-100" size="sm" isPlaying={true} />
+//               </div>
+//               <div className="max-w-lg px-4 py-2 rounded-lg text-brand-950">
+//                 <span className="italic font-light">Thinking...</span>
+//               </div>
+//             </div>
+//           )}
+//         </div>
+//       ))}
+//     </>
+//   );
+// };
+
+const ChatMessages = ({ messages, loading, error }: { messages: any[], loading: boolean, error: string | null }) => {
+  const filteredMessages = messages.filter((msg) => msg && typeof msg === 'object' && msg?.role !== "system");
+  const [errorMessageId, errorText] = error ? error.split(':') : [null, null];
+  console.log(errorMessageId, errorText);
+  
+  return (
+    <>
+      {Array.isArray(messages) && filteredMessages.map((message, index) => {
+        const isErrorMessage = message.id === errorMessageId || (errorMessageId === 'system' && index === 0);
+        const nextMessage = filteredMessages[index + 1];
+       
+
+        return (
+          <div key={message.id || Math.random().toString()}>
+            <ChatMessage message={message} loading={loading} />
+   
+            {/* Show loading state */}
+            {index === filteredMessages.length - 1 && loading && (
+              <div className="flex justify-start my-2">
+                <div className="flex mt-2 mr-2">
+                  <AnimatedLogo className="!opacity-100" size="sm" isPlaying={true} />
+                </div>
+                <div className="max-w-lg px-4 py-2 rounded-lg text-brand-950">
+                  <span className="italic font-light">Thinking...</span>
+                </div>
+              </div>
+            )}
+
+            {/* Show error after the user message that triggered it */}
+            {isErrorMessage && error && !loading && (
+              <div className="flex justify-start my-2 gap-4">
+                <div className="flex mt-2 mr-2">
+                  <AnimatedLogo className="!opacity-100" size="sm" isPlaying={false} />
+                </div>
+                <div className="max-w-lg px-4 py-2 rounded-lg bg-red-50 border border-red-100">
+                  <span className="text-red-500">{errorText}</span>
+                </div>
+              </div>
+            )}
+
+
+          </div>
+        );
+      })}
+    </>
+  );
+};
+
+const ChatMessage = ({ message, loading }: { message: any, loading: boolean }) => {
   if (!message) return null;
 
   return (
@@ -255,7 +357,7 @@ const ChatMessage = ({ message }: { message: any }) => {
         <div className="flex mt-2 mr-2">
           <AnimatedLogo className="!opacity-100" size="sm" isPlaying={false} />
         </div>
-
+        
       )}
       <div
         className={`max-w-lg px-4 py-2 rounded-lg ${message.role === "user"
@@ -279,6 +381,12 @@ const ChatMessage = ({ message }: { message: any }) => {
 
         <MessageTimestamp createdAt={message.createdAt} />
       </div>
+       {/* Show error message if this is the last message */}
+       {/* {error && message.role === "user" && (
+        <div className="text-red-500 bg-red-50 p-3 rounded-lg absolute right-0 mt-16 shadow-sm border border-red-100">
+          {error}
+        </div>
+      )} */}
     </div>
   );
 };

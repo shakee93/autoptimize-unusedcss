@@ -191,7 +191,7 @@ const Optimizations = ({ }) => {
 
     useEffect(() => {
         setLastDiagnosticData(diagnosticResults);
-        console.log("lastDiagnosticData", diagnosticResults)
+       // console.log("lastDiagnosticData", diagnosticResults)
     }, [diagnosticResults]);
 
     const aiResultsComplete = () => {
@@ -595,7 +595,7 @@ const Optimizations = ({ }) => {
     };
 
     const handleIframeLoad = () => {
-        console.log("iframe loaded")
+       // console.log("iframe loaded")
     };
 
    useEffect(() => {
