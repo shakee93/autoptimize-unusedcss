@@ -47,9 +47,7 @@ export interface AuditComponentRef {
 export default function Dashboard() {
     const { data, loading, error } = useSelector(optimizerData);
     const { license } = useSelector(optimizerData);
-    const [open, setOpen] = useState({
-        dbUpdate: true,
-    });
+    
 
     const {
         options,
@@ -58,6 +56,10 @@ export default function Dashboard() {
         optimizerContainer,
         invalidatingCache
     } = useAppContext()
+
+    const [open, setOpen] = useState({
+        dbUpdate: options?.db_to_be_updated === '1',
+    });
 
     let url = options?.optimizer_url;
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
