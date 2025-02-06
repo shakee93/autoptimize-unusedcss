@@ -38,6 +38,7 @@ import PerformanceGears from "./components/performance-widgets/PerformanceGears"
 import PerformanceWidget from './components/performance-widgets/PerformanceWidget';
 import PageSpeedCoach from './components/performance-widgets/PageSpeedCoach';
 import AIBot from "./components/AIBot";
+import DbUpdate from "./components/DbUpdate";
 
 export interface AuditComponentRef {
     notifyHeightChange: () => void;
@@ -46,6 +47,9 @@ export interface AuditComponentRef {
 export default function Dashboard() {
     const { data, loading, error } = useSelector(optimizerData);
     const { license } = useSelector(optimizerData);
+    const [open, setOpen] = useState({
+        dbUpdate: true,
+    });
 
     const {
         options,
@@ -68,6 +72,12 @@ export default function Dashboard() {
 
     }, [savingData])
 
+    const handleOpenChange = (key: string, isOpen: boolean) => {
+        setOpen(prev => ({
+            ...prev,
+            [key]: isOpen
+        }));
+    };
 
     return <>
         {/*{!license?.licensedDomain && (*/}
@@ -160,6 +170,8 @@ export default function Dashboard() {
                             <PerformanceGears className="flex-grow" />
                         </div>
                     </div>
+
+                    <DbUpdate open={open.dbUpdate} onOpenChange={(isOpen) => handleOpenChange("dbUpdate", isOpen)} />
 
                 </section>
             </div>

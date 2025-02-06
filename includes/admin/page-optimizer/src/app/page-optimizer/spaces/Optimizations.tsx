@@ -161,7 +161,7 @@ const Optimizations = ({ }) => {
             toast({
                 title: "AI Diagnostic Complete",
                 description: "AI analysis of your page has been completed successfully.",
-                variant: "default",
+                // variant: "default",
             });
         }
     });
@@ -342,7 +342,7 @@ const Optimizations = ({ }) => {
             toast({
                 title: "AI Diagnostic Failed",
                 description: error?.message || "Failed to complete AI analysis. Please try again.",
-                variant: "destructive",
+                // variant: "destructive",
             });
 
             // Show error in loading area
