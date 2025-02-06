@@ -150,7 +150,7 @@ class RapidLoad_Admin_Bar {
             'rapidload_titan_gear' => get_option('rapidload_titan_gear', 'trurboMax'),
             'rapidload_license_data' => $rapidload_license_data,
             'rapidload_privacy_policy_accepted' => get_option('rapidload_privacy_policy_accepted', false),
-            'db_to_be_updated' => RapidLoad_DB::$current_version != RapidLoad_DB::$db_version(),
+            'db_to_be_updated' => RapidLoad_DB::$current_version != RapidLoad_DB::$db_version,
         );
 
         wp_localize_script( 'rapidload_page_optimizer', 'rapidload_optimizer', $data );
