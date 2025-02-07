@@ -199,7 +199,8 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
                     <Button  
                         className='flex gap-2' 
                         onClick={() => {
-                            window.location.href = '/wp-admin/admin.php?page=rapidload-legacy-dashboard#/';
+                            // window.location.href = '/wp-admin/admin.php?page=rapidload-legacy-dashboard#/';
+                            window.location.href = '/wp-admin/options-general.php?page=uucss_legacy&uucss_jobs';
                         }}
                         variant='outline'>
                         Legacy Dashboard

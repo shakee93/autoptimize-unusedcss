@@ -262,11 +262,11 @@ const Content = ({ dashboard = false }) => {
                                     <GaugeCircle className='w-5'/>
                                 </a>
                             </TooltipText>
-                            <TooltipText text='Switch theme'>
+                            {/* <TooltipText text='Switch theme'>
                                 <div className='hover:dark:text-brand-100'>
                                     <ThemeSwitcher></ThemeSwitcher>
                                 </div>
-                            </TooltipText>
+                            </TooltipText> */}
                         </div>
                     </div>
                     {error ?
@@ -299,7 +299,7 @@ const Content = ({ dashboard = false }) => {
                         {/*<a href={`${options.dashboard_url}#/optimize`}>*/}
                             <a href={newUrl}>
                             <AppButton>
-                                <BoltIcon className='w-4 text-white dark:text-brand-900 rounded-[15px]'/> Titan Optimizer
+                                <BoltIcon className='w-4 text-white dark:text-brand-900 rounded-[15px]'/> Optimizer
                             </AppButton>
                         </a>
 

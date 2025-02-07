@@ -76,7 +76,7 @@ const PerformanceWidget: React.FC<PerformanceWidgetProps> = ({ className }) => {
                     </div>
 
 
-                    {homePerformance.last_entry ? <>
+                    {homePerformance.last_entry && homePerformance.last_entry < homePerformance.first_entry ? <>
                         {/* Divider with BoltIcon */}
                         <div className={`absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 p-2 rounded-full text-white z-10`}
                             style={{ background: `linear-gradient(to right, ${progressbarColor}, ${lighterColor})` }}
