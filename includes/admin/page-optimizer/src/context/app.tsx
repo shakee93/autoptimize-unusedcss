@@ -65,6 +65,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
             rapidload_version: '2.2.0',
             rest_url: 'https://rapidload.local/wp-json/rapidload/v1',
             rapidload_titan_gear: 'turboMax',
+            db_to_be_updated: '',
             ...(
                 window.rapidload_optimizer ? window.rapidload_optimizer : {}
             ),

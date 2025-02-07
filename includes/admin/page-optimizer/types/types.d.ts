@@ -23,6 +23,7 @@ interface WordPressOptions {
     test_mode?: boolean
     rapidload_titan_gear?: string
     ai_root?: string
+    db_to_be_updated?: string
 }
 
 type RapidLoadOptimizerModes = 'normal' | 'onboard' | 'preview'

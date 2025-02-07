@@ -161,7 +161,7 @@ const Optimizations = ({ }) => {
             toast({
                 title: "AI Diagnostic Complete",
                 description: "AI analysis of your page has been completed successfully.",
-                variant: "default",
+                // variant: "default",
             });
         }
     });
@@ -342,7 +342,7 @@ const Optimizations = ({ }) => {
             toast({
                 title: "AI Diagnostic Failed",
                 description: error?.message || "Failed to complete AI analysis. Please try again.",
-                variant: "destructive",
+                // variant: "destructive",
             });
 
             // Show error in loading area
@@ -798,8 +798,8 @@ const Optimizations = ({ }) => {
                                     </button>
                                 </div>
                                 <iframe
-                                  //  src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
-                                    src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
+                                    src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
+                                   // src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                     onError={handleIframeError}
