@@ -25,6 +25,7 @@ class CriticalCSS
         $this->file_system = new RapidLoad_FileSystem();
 
         add_action('wp_ajax_cpcss_purge_url', [$this, 'cpcss_purge_url']);
+        add_action('wp_ajax_nopriv_cpcss_purge_url', [$this, 'cpcss_purge_url']);
 
         self::$cpcss_other_plugins = apply_filters('cpcss/other-plugins', []);
 
@@ -245,8 +246,10 @@ class CriticalCSS
 
                 if($count == 0){
 
-                    $this->file_system->delete( self::$base_dir . '/' .  $job_data->data);
-                    if(isset($this->options['uucss_enable_cpcss_mobile']) && $this->options['uucss_enable_cpcss_mobile'] == "1"){
+                    if($this->file_system->exists(self::$base_dir . '/' .  $job_data->data)){
+                        $this->file_system->delete( self::$base_dir . '/' .  $job_data->data);
+                    }
+                    if($this->file_system->exists(self::$base_dir . '/' .  str_replace(".css","-mobile.css", $job_data->data))){
                         $this->file_system->delete( self::$base_dir . '/' .  str_replace(".css","-mobile.css", $job_data->data));
                     }
 

@@ -9,7 +9,8 @@ import "@fontsource-variable/inter";
 import {createRoot} from 'react-dom/client';
 import ShadowRoot from "components/shadow-dom";
 import SpeedPopover from "app/speed-popover";
-import {isDev, disableDebugReport} from "lib/utils";
+import {isDev, isAdminPage} from "lib/utils";
+import {disableDebugReport} from "lib/utils";
 import Providers from "./Providers";
 
 import Bugsnag from '@bugsnag/js'
@@ -49,7 +50,6 @@ const logError = (error: Error, info: { componentStack: string }) => {
 const ApplicationCrashed = () => {
 
     const containerStyles = {
-        background: 'white',
         bottom: 0,
         position: 'absolute' as 'absolute',
         left: '50%',
@@ -74,7 +74,7 @@ const ApplicationCrashed = () => {
     return (
         <div className='rpo-app-crashed' style={containerStyles}>
             <div className='rpo-error'>
-                RapidLoad Titan Optimizer crashed :( <button style={errorStyle}
+                RapidLoad Optimizer crashed :( <button style={errorStyle}
                                                              onClick={e => window.location.reload()}>Reload</button>
             </div>
         </div>
@@ -95,7 +95,6 @@ const ApplicationErrorBoundary = ({fallback, onError, children}: ApplicationErro
 
     return ErrorBoundary ? <ErrorBoundary FallbackComponent={ApplicationCrashed} >{children}</ErrorBoundary> : children
 }
-
 export class RapidLoadOptimizer {
     constructor({
                     mode = 'normal',
@@ -120,11 +119,12 @@ export class RapidLoadOptimizer {
                            <ShadowRoot disabled={!shadowRoot} node={popup} styles={stylesUrl}>
                                <SpeedPopover/>
                            </ShadowRoot>
+
                        )}
 
-                       <ShadowRoot disabled={!shadowRoot} styles={stylesUrl}>
-                           <App _showOptimizer={showOptimizer} popup={popup}/>
-                       </ShadowRoot>
+                           <ShadowRoot disabled={!shadowRoot} styles={stylesUrl}>
+                               <App _showOptimizer={showOptimizer} popup={popup}/>
+                           </ShadowRoot>
                    </Providers>
 
                </ApplicationErrorBoundary>
@@ -156,12 +156,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const container = document.getElementById('rapidload-page-optimizer') as HTMLDivElement;
 
         // see if admin bar node is there get popup container
+        //let popup = null
+        // if(!isAdminPage){
+        //     popup = replaceParentWithDiv(document.getElementById('rl-node-wrapper') as HTMLDivElement)
+        // }
         let popup = replaceParentWithDiv(document.getElementById('rl-node-wrapper') as HTMLDivElement)
-
 
         new RapidLoadOptimizer({
             container,
             popup,
+            showOptimizer: true,
             mode: 'normal'
         });
     }

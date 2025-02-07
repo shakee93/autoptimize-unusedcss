@@ -300,7 +300,6 @@ class RapidLoad_Module
                     'critical_css' => [
                         'status' => isset($options['uucss_enable_cpcss']) && $options['uucss_enable_cpcss'] == "1" ? "on" : "off",
                         'options' => [
-                            'uucss_enable_cpcss_mobile' =>  isset($options['uucss_enable_cpcss_mobile']) && $options['uucss_enable_cpcss_mobile'] == "1" ? true : false,
                             'remove_cpcss_on_user_interaction' =>  isset($options['remove_cpcss_on_user_interaction']) && $options['remove_cpcss_on_user_interaction'] == "1" ? true : false,
                             'uucss_additional_css' => isset($options['uucss_additional_css']) ? stripslashes($options['uucss_additional_css']) : null,
                         ]
@@ -356,6 +355,7 @@ class RapidLoad_Module
                     'uucss_generate_blurry_place_holder' => isset($options['uucss_generate_blurry_place_holder']) && $options['uucss_generate_blurry_place_holder'] == "1" ? true : false,
                     'uucss_adaptive_image_delivery' => isset($options['uucss_adaptive_image_delivery']) && $options['uucss_adaptive_image_delivery'] == "1" ? true : false,
                     'uucss_lazy_load_iframes' => isset($options['uucss_lazy_load_iframes']) && $options['uucss_lazy_load_iframes'] == "1" ? true : false,
+                    'uucss_exclude_iframes_from_lazy_load' => isset($options['uucss_exclude_iframes_from_lazy_load']) ? $options['uucss_exclude_iframes_from_lazy_load'] : '',
                     'uucss_set_width_and_height' => isset($options['uucss_set_width_and_height']) && $options['uucss_set_width_and_height'] == "1" ? true : false,
                     'uucss_exclude_images_from_set_width_and_height' => isset($options['uucss_exclude_images_from_set_width_and_height']) ? $options['uucss_exclude_images_from_set_width_and_height'] : '',
                 ]

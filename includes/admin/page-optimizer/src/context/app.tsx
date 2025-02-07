@@ -18,6 +18,7 @@ interface OptimizerContextProps {
     showOptimizer: boolean;
     setShowOptimizer: Dispatch<SetStateAction<boolean>>;
     options: WordPressOptions,
+    uucssGlobal: uucssGlobal,
     version: string,
     mode: RapidLoadOptimizerModes
     modeData?: RapidLoadOptimizerModeData
@@ -40,7 +41,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
     mode: RapidLoadOptimizerModes
     modeData?: RapidLoadOptimizerModeData
     initShowOptimizerValue?: boolean,
-    global: boolean
+    global: boolean,
 }) => {
     const isAdminBar = document.getElementById('wpadminbar');
 
@@ -49,6 +50,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
     const [mounted, setMounted] = useState<boolean>(false);
     const [sheetsHidden, setSheetsHidden]= useState(false)
     const [openAudits, setOpenAudits] = useState<string[]>([]);
+
     const [options, setOptions] = useState((
         {
             optimizer_url: 'https://rapidload.io/',
@@ -62,9 +64,34 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
             load_optimizer: false,
             rapidload_version: '2.2.0',
             rest_url: 'https://rapidload.local/wp-json/rapidload/v1',
+            rapidload_titan_gear: 'turboMax',
+            db_to_be_updated: '',
             ...(
                 window.rapidload_optimizer ? window.rapidload_optimizer : {}
             ),
+        }
+    ))
+
+    const [uucssGlobal, setUucssGlobal] = useState((
+        {
+            active_modules: {
+                general: {
+                    options: {
+                        uucss_excluded_links: [],
+                        rapidload_minify_html: false,
+                        uucss_query_string: false,
+                        preload_internal_links: false,
+                        uucss_enable_debug: false,
+                        uucss_jobs_per_queue: 0,
+                        uucss_queue_interval: 0,
+                        uucss_disable_add_to_queue: false,
+                        uucss_disable_add_to_re_queue: false
+                    }
+                }
+            },
+            ...(
+                window.uucss_global ? window.uucss_global : {}
+            )
         }
     ))
     const [type, setType] = useState<ReportType>('desktop');
@@ -132,6 +159,7 @@ export const AppProvider = ({ children, initShowOptimizerValue, global, mode, mo
             showOptimizer,
             setShowOptimizer : _setShowOptimizer,
             options,
+            uucssGlobal,
             openAudits,
             setOpenAudits,
             version: __OPTIMIZER_VERSION__,

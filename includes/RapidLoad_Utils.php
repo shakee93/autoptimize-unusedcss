@@ -30,13 +30,11 @@ trait RapidLoad_Utils {
 	    global $wp;
 
 	    if ( $wp ) {
-
-            return home_url(add_query_arg(array($_GET), $wp->request));
-
+            return urldecode(home_url(add_query_arg(array(), $wp->request)));
 	    }
 
         if(isset($_SERVER['REQUEST_URI'])){
-            return home_url(add_query_arg(array(), $_SERVER['REQUEST_URI']));
+            return urldecode(home_url(add_query_arg(array(), $_SERVER['REQUEST_URI'])));
         }
 
 	    return null;
@@ -534,7 +532,9 @@ trait RapidLoad_Utils {
     }
 
     public function is_valid_url($url){
-        return filter_var($url, FILTER_VALIDATE_URL);
+        $pattern = "/\b(?:https?|ftp):\/\/(?:www\.)?[a-zA-Z0-9-]+(?:\.[a-zA-Z]{2,})+(?:\/[^\s]*)?\b/";
+        $url = urldecode($url);
+        return preg_match($pattern, $url);
     }
 
     public function is_url_allowed($url = null, $args = null)
@@ -804,6 +804,58 @@ trait RapidLoad_Utils {
             return wp_create_nonce( $nonce_name );
         }
         return '';
+    }
+
+     public static function get_active_plugins() {
+        $plugins = (array) get_option('active_plugins', []);
+        $plugin_details = [];
+
+        foreach ($plugins as $plugin) {
+            $plugin_data = get_plugin_data(WP_PLUGIN_DIR . '/' . $plugin);
+            $plugin_details[] = [
+                'name' => $plugin_data['Name'],
+                'source' => $plugin_data['PluginURI'] ?? 'Unknown'
+            ];
+        }
+
+        if (is_multisite()) {
+            $sitewide_plugins = array_keys((array) get_site_option('active_sitewide_plugins', []));
+            foreach ($sitewide_plugins as $plugin) {
+                $plugin_data = get_plugin_data(WP_PLUGIN_DIR . '/' . $plugin);
+                $plugin_details[] = [
+                    'name' => $plugin_data['Name'],
+                    'source' => $plugin_data['PluginURI'] ?? 'Unknown'
+                ];
+            }
+        }
+
+        return array_column($plugin_details, 'name');
+    }
+
+    public function get_cron_spawn() {
+
+        $doing_wp_cron = sprintf( '%.22F', microtime( true ) );
+
+        $cron_request_array = array(
+            'url'  => site_url( 'wp-cron.php?doing_wp_cron=' . $doing_wp_cron ),
+            'key'  => $doing_wp_cron,
+            'args' => array(
+                'timeout'   => 3,
+                'blocking'  => true,
+                // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Calling native WordPress hook.
+                'sslverify' => apply_filters( 'https_local_ssl_verify', true ),
+            ),
+        );
+
+        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Calling native WordPress hook.
+        $cron_request = apply_filters( 'cron_request', $cron_request_array );
+
+        # Enforce a blocking request in case something that's hooked onto the 'cron_request' filter sets it to false
+        $cron_request['args']['blocking'] = true;
+
+        $result = wp_remote_post( $cron_request['url'], $cron_request['args'] );
+
+        return $result;
     }
     
 }

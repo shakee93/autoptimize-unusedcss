@@ -131,7 +131,7 @@ const Fields = ({ input, updates, update }: AdditionalInputsProps) => {
                 if (response?.data) {
                     if (action.action_response_mutates) {
                         action.action_response_mutates.forEach((item: string) => {
-                            console.log(item, response.data[item]);
+                            //console.log(item, response.data[item]);
                             update(response.data[item], item, true);
                         });
                     }

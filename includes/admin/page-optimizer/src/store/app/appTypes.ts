@@ -4,6 +4,7 @@ import { LucideIcon } from "lucide-react";
 export interface RootState {
     app: AppState;
     common: CommonState
+    chat: ChatState
 }
 
 interface Report {
@@ -26,6 +27,8 @@ export interface AppState {
     activeReport: ReportType,
     cssStatus: CSSStatusResponse | null;
     testMode: TestMode | null;
+    optimizationData: OptimizeTable[];
+    allPosts: posts | null;
     report: {
         mobile: Report,
         desktop: Report,
@@ -41,10 +44,17 @@ export interface AppState {
         },
         general: {
             test_mode: boolean | TestMode
-            performance_gear: PerformanceGear
+            performance_gear: PerformanceGear | null
         },
         actions: AuditSettingInput[]
     },
+    cdnUsage: cdnUsage;
+    imageUsage: imageUsage;
+    cacheUsage: cacheUsage[] | null;
+    license: License | null;
+    homePerformance: HomePerformance;
+    diagnosticResults: DiagnosticResults | null;
+    diagnosticProgress: DiagnosticProgress | null;
 }
 
 export const FETCH_REPORT_REQUEST = 'FETCH_REPORT_REQUEST';
@@ -59,6 +69,60 @@ export const CHANGE_REPORT_TYPE = 'CHANGE_REPORT_TYPE';
 export const UPDATE_FILE_ACTION = 'UPDATE_FILE_ACTION';
 export const GET_CSS_STATUS_SUCCESS = 'GET_CSS_STATUS_SUCCESS';
 export const UPDATE_TEST_MODE = 'UPDATE_TEST_MODE';
+export const UPDATE_OPTIMIZE_TABLE = 'UPDATE_OPTIMIZE_TABLE';
+export const FETCH_POSTS = 'FETCH_POSTS';
+export const GET_CDN_USAGE = 'GET_CDN_USAGE';
+export const GET_IMAGE_USAGE = 'GET_IMAGE_USAGE';
+export const GET_CACHE_USAGE = 'GET_CACHE_USAGE';
+export const LICENSE_INFORMATION = 'LICENSE_INFORMATION';
+export const HOME_PAGE_PERFORMANCE = 'HOME_PAGE_PERFORMANCE';
+export const SET_DIAGNOSTIC_RESULTS = 'SET_DIAGNOSTIC_RESULTS';
+export const SET_DIAGNOSTIC_PROGRESS = 'SET_DIAGNOSTIC_PROGRESS';
+
+
+interface SetDiagnosticProgress {
+    type: typeof SET_DIAGNOSTIC_PROGRESS,
+    payload : DiagnosticProgress,
+}
+
+interface SetDiagnosticResults {
+    type: typeof SET_DIAGNOSTIC_RESULTS,
+    payload : DiagnosticResults,
+}
+
+interface homePagePerformance {
+    type: typeof HOME_PAGE_PERFORMANCE,
+    payload : HomePerformance,
+}
+
+interface LicenseInformation {
+    type: typeof LICENSE_INFORMATION,
+    payload : License,
+}
+interface CacheUsage {
+    type: typeof GET_CACHE_USAGE,
+    payload : cacheUsage,
+}
+interface ImageUsage {
+    type: typeof GET_IMAGE_USAGE,
+    payload : imageUsage,
+}
+interface GetCDNUsage {
+    type: typeof GET_CDN_USAGE,
+    payload : cdnUsage,
+}
+
+
+interface FetchPosts {
+    type: typeof FETCH_POSTS,
+    payload : posts,
+}
+
+interface UpdateOptimizeTable {
+    type: typeof UPDATE_OPTIMIZE_TABLE,
+    payload : OptimizeTable[],
+
+}
 
 interface GetCSSStatusSuccess {
     type: typeof GET_CSS_STATUS_SUCCESS,
@@ -143,5 +207,5 @@ interface UpdateFileActionAction {
 // Define the combined action type
 export type AppAction = FetchDataRequestAction | FetchDataSuccessAction | FetchDataFailureAction |
     FetchSettingsRequestAction | FetchSettingsSuccessAction | FetchSettingsFailureAction | ChangeGearAction|
-    UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode;
+    UpdateSettingsAction | ChangeReportTypeAction | UpdateFileActionAction | GetCSSStatusSuccess | UpdateTestMode | UpdateOptimizeTable | FetchPosts | GetCDNUsage | ImageUsage | CacheUsage | LicenseInformation | homePagePerformance | SetDiagnosticResults | SetDiagnosticProgress;
 

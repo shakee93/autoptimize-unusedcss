@@ -4,7 +4,7 @@ Donate link:
 Tags: unusedcss, criticalcss, rapidload, image optimization, minify js
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 2.4.4
+Stable tag: 2.4.5
 Requires PHP: 5.4
 License: GPLv3
 License URI: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
@@ -154,6 +154,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 3. RapidLoad Dashboard.
 
 == Changelog ==
+
+= 2.4.5 - 31/01/2025 =
+ * fix: critical security issues
 
 = 2.4.4 - 06/12/2024 =
  * feat: add option to disable Bugsnag debug
@@ -862,3 +865,4 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 = 1.0.5.1 =
  * Rebranding with name RapidLoad
  * Animated logo added
+

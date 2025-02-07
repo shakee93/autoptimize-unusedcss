@@ -12,7 +12,12 @@ import {
     GET_CSS_STATUS_SUCCESS,
     UPDATE_FILE_ACTION,
     UPDATE_SETTINGS,
-    UPDATE_TEST_MODE
+    UPDATE_TEST_MODE,
+    UPDATE_OPTIMIZE_TABLE,
+    FETCH_POSTS,
+    GET_CDN_USAGE,
+    GET_IMAGE_USAGE,
+    GET_CACHE_USAGE, LICENSE_INFORMATION, HOME_PAGE_PERFORMANCE, SET_DIAGNOSTIC_RESULTS, SET_DIAGNOSTIC_PROGRESS
 } from "./appTypes";
 
 const blankReport =  {
@@ -33,6 +38,17 @@ const initialState: AppState = {
     activeReport: 'desktop',
     cssStatus: null,
     testMode: null,
+    optimizationData: [],
+    allPosts: null,
+    diagnosticResults: null,
+    diagnosticProgress: {
+        currentStep: 0,
+        isFlushingProgress: 0,
+        settingsProgress: 0,
+        serverInfoProgress: 0,
+        pageSpeedProgress: 0,
+        diagnosticsProgress: 0
+    },
     report: {
         mobile: blankReport,
         desktop: blankReport,
@@ -53,16 +69,84 @@ const initialState: AppState = {
             }
         },
         general: {
-            test_mode: true,
-            performance_gear: 'accelerate'
+            test_mode: false,
+            performance_gear: null,
         },
         actions: []
+    },
+    cdnUsage: {
+        additional_usage_gb: 0,
+        allowed_gb: 0,
+        used_gb: 0,
+        cdn_url: '',
+        origin: '',
+        zone_id: '',
+    },
+    imageUsage: {
+        additional_usage_gb: 0,
+        allowed_gb: 0,
+        used_gb: 0,
+        host: '',
+    },
+    cacheUsage: null,
+    license: null,
+    homePerformance: {
+        first_entry: 0,
+        last_entry: 0,
+        first_response_time: '0ms',
+        last_response_time: '0ms'
     }
 };
 
 const appReducer = (state = initialState, action: AppAction): AppState => {
 
     switch (action.type) {
+        case SET_DIAGNOSTIC_PROGRESS:
+            return {
+                ...state,
+                diagnosticProgress: {
+                    ...state.diagnosticProgress,
+                    ...action.payload,
+                }
+            };
+        case SET_DIAGNOSTIC_RESULTS:
+            return {
+                ...state,
+                diagnosticResults: action.payload
+            };
+        case HOME_PAGE_PERFORMANCE:
+            return {
+                ...state,
+                homePerformance: action.payload
+            };
+        case LICENSE_INFORMATION:
+            return {
+                ...state,
+                license: action.payload
+            };
+        case GET_CDN_USAGE:
+            return {
+                ...state,
+                cdnUsage: action.payload
+            };
+        case GET_IMAGE_USAGE:
+            return {
+                ...state, imageUsage: action.payload
+            };
+        case GET_CACHE_USAGE:
+            return {
+                ...state, cacheUsage: action.payload
+            };
+        case FETCH_POSTS:
+            return {
+                ...state,
+                allPosts: action.payload,
+            };
+        case UPDATE_OPTIMIZE_TABLE:
+            return {
+                ...state,
+                optimizationData: action.payload,
+            };
         case GET_CSS_STATUS_SUCCESS:
             return {
                 ...state,

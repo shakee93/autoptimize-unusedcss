@@ -38,6 +38,13 @@ export function transformFileType(audit: Audit, type?: string) {
 }
 
 export const isDev = import.meta.env.DEV
+export const isAdminPage = window.location.href.includes('/wp-admin');
+
+export const getOptimizeUrl = () => {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  return urlParams.get('optimize-url');
+};
 
 export const disableDebugReport = window.rapidload_optimizer && window.rapidload_optimizer.uucss_disable_error_tracking == '1';
 
@@ -134,4 +141,36 @@ export function timeAgo(timestamp: number) {
 
 export function toBoolean(value: any): boolean {
   return value === true || value === 1 || value === '1' || value === 'true';
+}
+
+export function calculatePercentage(oldValue: number, newValue: number) {
+  if (oldValue === 0) return 0;
+  if (oldValue == null || newValue == null) {
+    return '-';
+  }
+  const percentage = ((newValue - oldValue) / oldValue) * 100;
+  return percentage.toFixed(2);
+}
+
+
+export const saveToLocalStorage = (key: any, value: any) => {
+  try {
+    localStorage.setItem(key, value);
+  } catch (error) {
+    console.error(`Error saving ${key} to localStorage`, error);
+  }
+};
+
+export const getFromLocalStorage = (key) => {
+  try {
+    return localStorage.getItem(key);
+  } catch (error) {
+    console.error(`Error retrieving ${key} from localStorage`, error);
+    return null;
+  }
+};
+
+export function hasQueryParam(param: string) {
+  const params = new URLSearchParams(window.location.search);
+  return params.has(param);
 }

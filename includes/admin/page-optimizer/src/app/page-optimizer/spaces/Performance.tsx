@@ -1,32 +1,36 @@
 import Card from "components/ui/card";
-import {AnimatePresence, m} from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import Audit from "app/page-optimizer/components/audit/Audit";
-import React, {useEffect, useRef, useState, useMemo} from "react";
-import {useSelector} from "react-redux";
-import {optimizerData} from "../../../store/app/appSelector";
-import {useAppContext} from "../../../context/app";
-import {cn} from "lib/utils";
+import React, { useEffect, useRef, useState, useMemo } from "react";
+import { useSelector } from "react-redux";
+import { optimizerData } from "../../../store/app/appSelector";
+import { useAppContext } from "../../../context/app";
+import { cn } from "lib/utils";
 import TogglePerformance from "components/toggle-performance";
 import useCommonDispatch from "hooks/useCommonDispatch";
-import {setCommonState} from "../../../store/common/commonActions";
-import {CopyMinus, FoldVertical, Layers, Loader, SplitSquareVertical} from "lucide-react";
+import { setCommonState } from "../../../store/common/commonActions";
+import { CopyMinus, FoldVertical, GaugeCircle, Layers, Loader, SplitSquareVertical } from "lucide-react";
 import TooltipText from "components/ui/tooltip-text";
 import ScaleUp from "components/animation/ScaleUp";
-import {BoltIcon, MinusCircleIcon, PlusCircleIcon} from "@heroicons/react/24/solid";
+import { BoltIcon, MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
 import AuditList from "app/page-optimizer/components/AuditList";
 import SpeedSettings from "app/page-optimizer/spaces/SpeedSettings";
+import { AIStarIcon, OptimizationsIcon } from "../components/icons/icon-svg";
+import Optimizations from "./Optimizations";
+import PageSpeedInsights from "./PageSpeedInsights";
+import { SettingsLine } from "../components/icons/line-icons";
 
 
 
 const welcomePopupKey = 'new-titan-prompt'
 const Performance = () => {
-    const {data, loading, reanalyze, settings, error} = useSelector(optimizerData);
+    const { data, loading, reanalyze, settings, error } = useSelector(optimizerData);
 
-    const { dispatch ,  activeTab, openAudits, storePassedAudits, settingsMode} = useCommonDispatch()
+    const { dispatch, activeTab, openAudits, storePassedAudits, settingsMode, diagnosticLoading } = useCommonDispatch()
     const [isSticky, setIsSticky] = useState(false);
     const navbarRef = useRef(null);
     const [open, setOpen] = React.useState(false);
-    const [showNewTitanModelPopup, setShowNewTitanModelPopup]= useState( !!localStorage.getItem(welcomePopupKey));
+    const [showNewTitanModelPopup, setShowNewTitanModelPopup] = useState(!!localStorage.getItem(welcomePopupKey));
     const {
         options,
         setOpenAudits,
@@ -69,16 +73,16 @@ const Performance = () => {
 
     const isOnboardMode = !['onboard', 'preview'].includes(mode);
 
-    useEffect(() =>{
+    useEffect(() => {
 
         setTimeout(() => {
-            if(isOnboardMode && !showNewTitanModelPopup){
+            if (isOnboardMode && !showNewTitanModelPopup) {
                 setShowNewTitanModelPopup(true);
                 setOpen(true);
             }
         }, 1000)
 
-    },[]);
+    }, []);
 
     const [isCheckedPopup, setIsCheckedPopup] = useState(false);
     const saveNewTitanModelPopup = (open: boolean) => {
@@ -86,128 +90,123 @@ const Performance = () => {
         if (isCheckedPopup) {
             localStorage.setItem(welcomePopupKey, 'true');
         }
-        if(!open){
+        if (!open) {
             setOpen(false);
         }
-        
+
+    };
+
+    const getWidthForActiveTab = (activeTab: string) => {
+        switch (activeTab) {
+            case 'configurations':
+                return 100;
+            case 'optimizations':
+                return 480;
+            case 'opportunities':
+                return 285;
+            case 'diagnostics':
+                return 285;
+            case 'passed_audits':
+                return 285;
+            default:
+                return 285;
+        }
     };
 
 
     return (
 
-        <div data-tour='audits'>
-            <h2 className="text-lg ml-5 mb-4 flex gap-2 font-normal items-center">
-                {!togglePerformance && <TogglePerformance/>}
-                Fix Performance Issues</h2>
+        <div data-tour='nav-bar'>
+            {/* <h2 className="text-lg ml-5 mb-4 flex gap-2 font-normal items-center">
+                {!togglePerformance && <TogglePerformance />}
+                Fix Performance Issues</h2> */}
             <div ref={navbarRef} style={{ height: '1px' }}></div>
             <div className={cn(
-                'tabs flex sticky gap-2 -top-1 z-10',
+                'tabs flex sticky -top-1 dark:bg-brand-800/40 bg-brand-200 px-2 py-2 rounded-3xl gap-2 w-fit',
             )}>
                 <div
 
                     onClick={() => dispatch(setCommonState('activeTab', 'configurations'))}
                     className={cn(
 
-                        `whitespace-nowrap dark:bg-brand-930/90 bg-brand-0 border-2 border-transparent rounded-[20px] cursor-pointer w-[200px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
-
-                        activeTab === 'configurations' ? "font-medium " : "text-brand-500 dark:hover:text-brand-300"
+                        `whitespace-nowrap dark:bg-brand-930/90 border-r rounded-[20px] cursor-pointer w-[170px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+                        activeTab === 'configurations' ? "font-medium bg-brand-0" : "dark:hover:text-brand-300",
+                        diagnosticLoading && 'cursor-not-allowed opacity-90 pointer-events-none'
                     )}
-                    data-tour="speed-settings"> <BoltIcon className='w-4 rounded-[15px]'/>  Speed Settings</div>
+                    data-tour="speed-settings"> <BoltIcon className='w-4 rounded-[15px]' />  Speed Settings</div>
 
-                <Card data-tour='audit-groups'
-                      className={cn(
-                          'dark:bg-brand-930/90 bg-brand-0 flex justify-between items-center select-none p-0 pl-6 pr-3 rounded-[20px]',
-                          isSticky && 'rounded-b-xl rounded-t-none shadow-lg'
-                      )}
+                      <div
 
-                >
-                   <div className='flex'>
-                       {tabs.map((tab) => {
-                           return (
-                               <div
-                                   onClick={() => dispatch(setCommonState('activeTab', tab.key))}
-                                   className={cn(
-                                       `cursor-pointer flex items-center gap-2 px-4 py-3 text-sm font-medium`,
-                                       isSticky && 'py-3',
-                                       activeTab === tab.key ? "font-medium " : "text-brand-500 dark:hover:text-brand-300"
-                                   )}
-                                   key={tab.key}
-                               >
-                                   {tab.name}
-                                   {(tab.key !== 'configurations') && (
-                                       <div className={
-                                           cn(
-                                               'flex  text-xxs items-center justify-center rounded-full w-6 h-6 border-2',
-                                               isSticky && 'w-5 h-5 border',
-                                               (loading && !reanalyze) ? 'bg-zinc-200 border-zinc-300/30 text-zinc-300/30' : cn(
-                                                   tab.color,
-                                                   (activeTab === tab.key) && tab.activeColor,
-                                               )
-                                           )}>
-                                           <div className={cn(
-                                               activeTab === tab.key && ' text-white dark:text-brand-900'
-                                           )}>
-                                               {data?.grouped[`${tab.key}`].length || '-'}
-                                           </div>
-                                       </div>
-                                   )}
+                    onClick={() => dispatch(setCommonState('activeTab', 'insights'))}
+                    className={cn(
 
-                               </div>
-                           )
-                       })}
-                   </div>
+                        `whitespace-nowrap dark:bg-brand-930/90 border-r rounded-[20px] cursor-pointer w-[200px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+                        diagnosticLoading && 'cursor-not-allowed opacity-90 pointer-events-none',
+                        activeTab === 'insights' || activeTab === 'opportunities'  || activeTab === 'diagnostics' || activeTab === 'passed_audits' ? "font-medium bg-brand-0" : "dark:hover:text-brand-300"
+                    )}
+                    data-tour="page-speed-insights"> <GaugeCircle className='w-4' />  Page Speed Insights </div>
 
-                    <div className='flex items-center'>
-                        <AnimatePresence>
-                            {openAudits.length > 1 &&
-                                <ScaleUp>
-                                    <div
-                                        onClick={e => dispatch(setCommonState('openAudits', []))}
-                                        className='dark:hover:bg-brand-700 hover:bg-brand-100 w-9 h-9 rounded-full flex items-center justify-center'>
-                                        <TooltipText text='Collpase all Audits'>
-                                            <FoldVertical className='w-5 text-brand-500 dark:text-brand-200'/>
-                                        </TooltipText>
-                                    </div>
-                                </ScaleUp>
-                            }
-                        </AnimatePresence>
+                    <div
 
-                    </div>
-                </Card>
+                    onClick={() => dispatch(setCommonState('activeTab', 'optimizations'))}
+                    className={cn(
+
+                        `whitespace-nowrap dark:bg-brand-930/90 border-r rounded-[20px] cursor-pointer w-[160px]  flex items-center gap-2 px-5 py-3 text-sm font-medium`,
+                        diagnosticLoading && 'cursor-not-allowed opacity-90 pointer-events-none',
+                        activeTab === 'optimizations' ? "font-medium bg-brand-0" : "dark:hover:text-brand-300"
+                    )}
+                    data-tour="optimizations"> <AIStarIcon cls='w-4' />  AI Diagnostic </div>
+
+
             </div>
-
-            <div className="audits pt-6 flex mb-24">
-                <div className='w-full flex flex-col gap-2.5'>
+            <div className={cn("flex")}>
+  <div
+    className={cn(
+      "py-3 relative scale-y-[-1] ml-6"
+    )}
+  >      <SettingsLine width={getWidthForActiveTab(activeTab) || 220} flip={true}/>
+                {/* <SettingsLine width={300} /> */}
+            </div>
+            </div>
+           
+            <div className="audits flex mb-24 dark:bg-brand-800/40 bg-brand-200 rounded-3xl">
+                <div className='w-full flex flex-col'>
 
                     <AnimatePresence initial={false}>
                         <div key='performance' className='grid grid-cols-12 gap-6 w-full relative '>
-                            <div className='col-span-12 flex flex-col gap-4'>
+                            <div className='col-span-12 flex flex-col gap-2'>
                                 {activeTab === 'configurations' ?
-                                   <>
-                                       {/*<SetupChecklist/>*/}
-                                       <SpeedSettings/>
-                                   </>
+                                    <>
+                                        {/*<SetupChecklist/>*/}
+                                        <SpeedSettings />
+                                    </>
                                     :
-                                    <AuditList activeTab={activeTab}/>
+                                    activeTab === 'optimizations' ?
+                                    <Optimizations />
+                                    :  <>
+                                    <PageSpeedInsights />
+                                    <div className=" px-4 py-4 pt-0"><AuditList activeTab={activeTab} /></div>
+                                    </>
+
                                 }
                             </div>
                         </div>
                         <div key='audit-blank'>
-                            {(activeTab !== 'configurations' && (!data?.grouped[activeTab] || data?.grouped[activeTab].length <= 0)) && (
+                            {(activeTab !== 'configurations' && activeTab!== 'optimizations' && activeTab !== 'insights' && (!data?.grouped[activeTab] || data?.grouped[activeTab].length <= 0)) && (
                                 <m.div
-                                    initial={{opacity: 0, y: 10}}
-                                    animate={{opacity: 1, y: 0}}
-                                    exit={{opacity: 0, y: -20}}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -20 }}
                                     className='flex flex-col gap-8 items-center px-8 pt-40 w-full'>
 
                                     <div>
                                         <img alt='Good Job!' className='w-64'
-                                             src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>
+                                            src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'} />
                                     </div>
 
                                     <span className='flex gap-2'>
-                                    Brilliantly done! It's clear you've mastered this.
-                                </span>
+                                        Brilliantly done! It's clear you've mastered this.
+                                    </span>
                                 </m.div>
 
                             )}

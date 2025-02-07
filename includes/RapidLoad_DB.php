@@ -6,7 +6,7 @@ abstract class RapidLoad_DB
 {
     use RapidLoad_Utils;
 
-    static $db_version = "1.6";
+    static $db_version = "1.9";
     static $db_option = "rapidload_migration";
     static $current_version = "1.4";
     static $map_key = 'uucss_map';
@@ -113,6 +113,7 @@ abstract class RapidLoad_DB
 		regex longtext NOT NULL,
 		desktop_options longtext NULL,
 		mobile_options longtext NULL,
+        diagnose_data longtext NULL,
 		rule_id INT NULL,
 		rule_note longtext NULL,
 		status varchar(15) NULL,
@@ -223,7 +224,7 @@ abstract class RapidLoad_DB
 
     }
 
-    static function update_db(){error_log("dsadad");
+    static function update_db(){
 
         if(!self::is_wp_cli()){
             self::verify_nonce();
@@ -575,9 +576,18 @@ abstract class RapidLoad_DB
 
     static function get_merged_data($start_from = 0, $limit = 10, $where = '', $order_by = 'id DESC') {
 
-        $status_column = "CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE uucss.status END AS status,";
+        $status_column = "CASE 
+            WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based'
+            WHEN uucss.status IS NULL THEN 'queued'  
+            ELSE uucss.status 
+        END AS status,";
+
         if (defined('RAPIDLOAD_CPCSS_ENABLED') && RAPIDLOAD_CPCSS_ENABLED) {
-            $status_column = "CASE WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based' ELSE cpcss.status END AS status,";
+            $status_column = "CASE 
+                WHEN job.rule = 'is_url' AND job.rule_id IS NOT NULL THEN 'rule-based'
+                WHEN cpcss.status IS NULL THEN 'queued'
+                ELSE cpcss.status 
+            END AS status,";
         }
 
         global $wpdb;
@@ -640,7 +650,7 @@ abstract class RapidLoad_DB
         $data['applied_successful_links'] = isset( $link->applied_successful_links ) ? $link->applied_successful_links : 0;
         $data['applied_links'] = isset( $link->applied_successful_links ) ? $link->applied_successful_links : 0;
         $data['time'] = isset( $link->created_at ) ? strtotime( $link->created_at ) * 1000 : null;
-
+        $data['status'] = isset( $link->status ) ? $link->status : null;
         if(isset($data['rule_id'])){
             $job_url = RapidLoad_Job::find_or_fail($data['rule_id']);
             $data['base'] = $job_url->url;
@@ -847,7 +857,6 @@ abstract class RapidLoad_DB
 
         $options_to_delete = [
             'autoptimize_uucss_settings',
-            'rapidload_migration',
             'rapidload_cache',
             'rapidload_module_cache',
             'rapidload_module_cdn',

@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect} from "react";
 import ApiService from "../services/api";
 import {CheckCircleIcon, XCircleIcon} from "@heroicons/react/24/solid";
-import {fetchReport} from "../store/app/appActions";
+import {fetchReport, fetchSettings} from "../store/app/appActions";
 import {useAppContext} from "../context/app";
 import {useToast} from "components/ui/use-toast";
 import {useDispatch, useSelector} from "react-redux";
@@ -28,7 +28,7 @@ const useSubmitSettings = () => {
 
 
     const dispatch: ThunkDispatch<RootState, unknown, AppAction> = useDispatch();
-    const { settingsMode } = useCommonDispatch()
+    const { settingsMode, headerUrl } = useCommonDispatch()
 
     const {
         fresh,
@@ -47,7 +47,7 @@ const useSubmitSettings = () => {
         settingsMode: settingsMode,
     };
 
-    const url = options?.optimizer_url;
+    const url = headerUrl? headerUrl : options?.optimizer_url;
     const { toast } = useToast()
 
 
@@ -122,12 +122,13 @@ const useSubmitSettings = () => {
                 }
 
                 dispatch(fetchReport(options, url, true));
+                
 
             }else if(!analyze){
-
+               
             }
 
-
+            dispatch(fetchSettings(options, url, true))
 
         } catch (error: any) {
             toast({

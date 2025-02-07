@@ -47,6 +47,14 @@ export const optimizerData = createSelector(
         const activeGear = state.settings.general.performance_gear
         const actions = state.settings.actions
         const testMode = state.settings.general.test_mode
+        const cdnUsage = state.cdnUsage
+        const imageUsage = state.imageUsage
+        const cacheUsage = state.cacheUsage
+        const license = state.license
+        const homePerformance = state.homePerformance
+        const cssStatus = state.cssStatus
+        const diagnosticResults = state.diagnosticResults
+        const diagnosticProgress = state.diagnosticProgress
 
         return {
             ...report,
@@ -57,6 +65,14 @@ export const optimizerData = createSelector(
             actions,
             activeGear,
             testMode,
+            cdnUsage,
+            imageUsage,
+            cacheUsage,
+            license,
+            homePerformance,
+            cssStatus,
+            diagnosticResults,
+            diagnosticProgress,
             touched: !equal(settings.original, settings.state) || !!optimizeChangesFiles(report.changes).find(i => i?.changed),
             fresh : report?.state?.fresh,
             reanalyze: report.data !== null && report.loading

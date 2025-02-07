@@ -107,25 +107,6 @@
             </div>
 
             <div :class="!onData.critical_css.status? 'pointer-events-none opacity-50' : ''" class="pl-6 main-border">
-              <div class="flex mt-5">
-                <div class="pr-1">
-                  <div class="flex items-center mr-4 mt-3">
-                    <div @click="onData.critical_css.mobile_critical_css = !onData.critical_css.mobile_critical_css"
-                         :class="onData.critical_css.mobile_critical_css? 'bg-purple':''"
-                         class="border-purple border-2 rounded p-1 w-5 h-5 transition-all duration-200 cursor-pointer">
-                      <svg v-if="onData.critical_css.mobile_critical_css" xmlns="http://www.w3.org/2000/svg"
-                           viewBox="0 0 24 24" fill="white" class="transform scale-125">
-                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-                      </svg>
-                    </div>
-
-                  </div>
-                </div>
-                <div>
-                  <h1 @click="onData.critical_css.mobile_critical_css = !onData.critical_css.mobile_critical_css" class="font-normal text-base text-black-font cursor-pointer">Mobile Critical CSS</h1>
-                  <p class="text-sm text-gray-font">Extract critical CSS for mobile screens.</p>
-                </div>
-              </div>
 
               <div class="mt-5">
                 <h1 class="font-normal text-base text-black-font">Above-the-fold CSS</h1>
@@ -323,7 +304,6 @@ export default {
           const option = this.css_config[key].options;
           //console.log(option)
           this.onData.critical_css.status = option.critical_css.status === 'on';
-          this.onData.critical_css.mobile_critical_css = option.critical_css.options.uucss_enable_cpcss_mobile;
           this.onData.critical_css.remove_cpcss_on_user_interaction = option.critical_css.options.remove_cpcss_on_user_interaction;
           this.onData.critical_css.additional_critical_css = option.critical_css.options.uucss_additional_css;
           this.onData.uucss_excluded_files = option.unused_css.options.uucss_excluded_files?.split(",").join("\r\n");
@@ -379,7 +359,6 @@ export default {
 
       const data = {
         uucss_additional_css: this.onData.critical_css.additional_critical_css,
-        uucss_enable_cpcss_mobile: this.onData.critical_css.mobile_critical_css,
         remove_cpcss_on_user_interaction: this.onData.critical_css.remove_cpcss_on_user_interaction,
         uucss_excluded_files: this.onData.uucss_excluded_files,
         uucss_enable_cpcss: this.onData.critical_css.status,
@@ -488,7 +467,6 @@ export default {
       uucss_excluded_files: '',
       critical_css: {
         status: false,
-        mobile_critical_css: false,
         remove_cpcss_on_user_interaction: false,
         additional_critical_css: [],
       },

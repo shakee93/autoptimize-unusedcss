@@ -122,17 +122,34 @@
 .selectionBar {
   stroke-dasharray: 1000;
   stroke-dashoffset: 1000;
-  animation: draw 2s ease-in-out alternate forwards;
 }
 
 @keyframes draw {
   from {
-    stroke-dashoffset: 1000;
+    stroke-dashoffset: 1000; /* Start from left */
   }
   to {
-    stroke-dashoffset: 0;
+    stroke-dashoffset: 0; /* End at right */
   }
 }
+
+@keyframes reverse-draw {
+  from {
+    stroke-dashoffset: -1000; /* Start from right */
+  }
+  to {
+    stroke-dashoffset: 0; /* End at left */
+  }
+}
+
+.draw {
+  animation: draw 2s ease-in-out alternate forwards;
+}
+
+.reverse-draw {
+  animation: reverse-draw 2s ease-in-out alternate forwards;
+}
+
 
 .optimizer-show-button-fade-in {
   animation: fadeIn 0.5s ease-in-out;
@@ -166,4 +183,117 @@
 
 
 
+@keyframes wave {
+  0% {
+    transform: scale(0.3);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
 
+.wave-animation {
+  animation: wave 4s infinite ease-out;
+}
+
+
+.blinking {
+  animation: blink-animation 5s infinite;
+}
+
+@keyframes blink-animation {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 52% {
+    opacity: 0;
+  }
+  53%, 100% {
+    opacity: 1;
+  }
+}
+
+
+.draw-aibot {
+  stroke-dasharray: 67.1428;
+  stroke-dashoffset: 67.1428;
+  animation: draw 2s infinite, reset 10s infinite;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes reset {
+  0% {
+    stroke-dashoffset: 67.1428;
+  }
+  30% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+
+#wpbody-content {
+  display: none !important;
+}
+
+
+@keyframes slideInFromCenter {
+  0% { 
+      opacity: 0;
+      transform: translateX(-50%);
+  }
+  50% { 
+    opacity: 0;
+    transform: translateX(-25%);
+  }
+  100% {
+      opacity: 1;
+      transform: translateX(0);
+  }
+}
+
+.slide-in-from-center {
+  animation: slideInFromCenter 0.5s ease-out forwards;
+}
+
+@keyframes slideOutFromCenter {
+  0% { 
+      transform: translateX(50%);
+  }
+  100% {
+      transform: translateX(0%);
+  }
+}
+
+.slide-out-from-center {
+  animation: slideOutFromCenter 0.5s ease-out forwards;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: white; }
+}
+
+.typing-text {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid transparent;
+}
+
+.typing-text.animate {
+  animation: typing 1s steps(11, end), step-end infinite;
+}

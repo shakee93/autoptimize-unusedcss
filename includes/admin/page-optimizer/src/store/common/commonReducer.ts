@@ -4,12 +4,15 @@ const initialState: CommonState = {
     optimizerRoot: null,
     mode: "normal",
     isTourOpen: false,
+    onboardCompleted: false,
+    aiPredictionResult: null,
     mobile: {
         activeTab: 'configurations',
         openAudits: [],
         hoveredMetric: null,
         activeMetric: null,
         settingsMode: null
+       
     },
     desktop: {
         activeTab: 'configurations',
@@ -17,6 +20,7 @@ const initialState: CommonState = {
         hoveredMetric: null,
         activeMetric: null,
         settingsMode: null
+        
     }
 };
 

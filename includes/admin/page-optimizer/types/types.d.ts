@@ -1,12 +1,13 @@
 
 interface Window {
     rapidload_optimizer: WordPressOptions;
+    uucss_global: uucssGlobal;
 }
 interface WordPressOptions {
     ajax_url: string
     optimizer_url: string
     page_optimizer_base: string
-    page_optimizer_package_base : string
+    page_optimizer_package_base: string
     plugin_url: string
     dashboard_url?: string
     nonce?: string
@@ -20,9 +21,12 @@ interface WordPressOptions {
     rest_url: string
     license_key?: string
     test_mode?: boolean
+    rapidload_titan_gear?: string
+    ai_root?: string
+    db_to_be_updated?: string
 }
 
-type RapidLoadOptimizerModes ='normal' | 'onboard' | 'preview'
+type RapidLoadOptimizerModes = 'normal' | 'onboard' | 'preview'
 
 interface RapidLoadOptimizerModeData {
     connect_url: string
@@ -43,12 +47,46 @@ interface Tab {
     activeColor: string
 }
 
-interface Help{
+interface Help {
     help: boolean,
-    title : string,
+    title: string,
     content: string,
+}
+
+
+interface GeneralSettings {
+    uucss_excluded_links: string[];
+    rapidload_minify_html: boolean;
+    uucss_query_string: boolean;
+    preload_internal_links: boolean;
+    uucss_enable_debug: boolean;
+    uucss_jobs_per_queue: number;
+    uucss_queue_interval: number;
+    uucss_disable_add_to_queue: boolean;
+    uucss_disable_add_to_re_queue: boolean;
+}
+
+interface Message {
+    role: string;
+    content: string;
+}
+
+interface Conversation {
+    id: string;
+    title: string;
+    active: boolean;
+    messages: Message[];
+}
+
+interface DiagnosticProgress {
+    currentStep: number;
+    isFlushingProgress: number;
+    settingsProgress: number;
+    serverInfoProgress: number;
+    pageSpeedProgress: number;
+    diagnosticsProgress: number;
 }
 
 type SettingsCategory = 'cache' | 'cdn' | 'image' | 'javascript' | 'js' | 'font' | 'css';
 
-declare const __OPTIMIZER_VERSION__ : string
+declare const __OPTIMIZER_VERSION__: string

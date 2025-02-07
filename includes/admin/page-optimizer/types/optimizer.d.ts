@@ -1,6 +1,4 @@
-
-
-interface OptimizerResults  {
+interface OptimizerResults {
     performance: number
     job_id?: string;
     audits: Audit[]
@@ -15,7 +13,7 @@ interface OptimizerResults  {
         attention_required: Audit[],
     }
     meta: {
-        controls : {
+        controls: {
             dropdown_options: {
                 type: string
                 options: string[]
@@ -42,9 +40,9 @@ interface LoadingExperience {
     }
 }
 
-type AuditTypes = keyof OptimizerResults['grouped'] | 'configurations'
+type AuditTypes = keyof OptimizerResults['grouped'] | 'configurations' | 'optimizations' | 'insights'
 
-interface AuditFileBase  {
+interface AuditFileBase {
     overallSavingsBytes: number;
     type: 'list' | 'table' | 'opportunity' | 'criticalrequestchain';
     headings?: AuditHeadings[];
@@ -66,9 +64,9 @@ interface TableItems extends AuditFileBase {
 interface CriticalRequestChainItems extends AuditFileBase {
     type: 'criticalrequestchain'
     chains: {
-        [key: string] : CriticalChainTreeNodeType
+        [key: string]: CriticalChainTreeNodeType
     };
-    longestChain : {
+    longestChain: {
         transferSize: number
         duration: number
         length: number
@@ -78,8 +76,8 @@ interface CriticalRequestChainItems extends AuditFileBase {
 }
 
 interface GroupedAuditResource {
- type: string;
- items: AuditTableResource[]
+    type: string;
+    items: AuditTableResource[]
 }
 
 type FileTypes = 'css' | 'js' | 'image' | 'font' | string
@@ -171,7 +169,7 @@ interface AuditSetting {
 
 interface AuditSettingInput {
     control_type: ControlTypes;
-    control_values:  ControlValue[] | string [] ;
+    control_values: ControlValue[] | string[];
     control_payload: string;
     control_label: string;
     control_icon: string;
@@ -239,8 +237,85 @@ interface CSSStatusResponse {
     cpcss: CSSJobStatus;
 }
 
+interface OptimizeTable {
+    id: string
+    created_at: string;
+    first_data: { performance: number };
+    last_data: { performance: number };
+    job_id: string;
+    strategy: string
+    url: string;
+}
+
+interface Link {
+    title: string;
+    permalink: string;
+}
+
+interface posts {
+    post_type: string;
+    links: Link[];
+}
+
+interface cdnUsage {
+    additional_usage_gb: number;
+    allowed_gb: number;
+    used_gb: number;
+    used_gb_formatted: string;
+    cdn_url: string;
+    origin: string;
+    zone_id: string;
+}
+
+interface imageUsage {
+    additional_usage_gb: number;
+    allowed_gb: number;
+    used_gb: number;
+    used_gb_formatted: string;
+    host: string;
+}
+
+interface cacheSize {
+    folder_name: string;
+    size: string;
+}
+
+interface cacheUsage {
+    key: string;
+    label: string;
+    size: cacheSize;
+    action: {
+        label: string;
+        href: string;
+    }
+}
+
 interface TestMode {
     status: boolean;
+}
+
+interface DiagnosticResults {
+    AnalysisSummary: any;
+    CriticalIssues: any;
+    timeStamp: number;
+}
+
+interface HomePerformance {
+    first_entry: number;
+    last_entry: number;
+    first_response_time: string;
+    last_response_time: string;
+    first_entry_metrics: Metric[];
+    last_entry_metrics: Metric[];
+}
+
+interface License {
+    email: string;
+    licensedDomain: string;
+    name: string;
+    plan: string;
+    next_billing: number;
+    siteUrl: string;
 }
 
 interface Revision {
@@ -278,4 +353,28 @@ type CssErrorKeys = 'Critical CSS' | 'Unused CSS';
 
 
 type BasePerformanceGear = 'starter' | 'accelerate' | 'turboMax';
-type PerformanceGear = BasePerformanceGear | 'custom' ;
+type PerformanceGear = BasePerformanceGear | 'custom';
+
+interface uucssGlobal {
+    activation_url?: string;
+    on_board_complete?: string;
+    active_modules: {
+        general: {
+            options: GeneralSettings;
+        };
+    };
+}
+
+interface Solution {
+    step: string;
+    description: string;
+    type: "rapidload_fix" | "wordpress_fix" | "theme_fix" | "plugin_fix" | "code_fix" | "server_config_fix" | "server_upgrade_fix";
+    sub_type?: string[];
+    rapidload_setting_input?: { name: string; };
+}
+
+interface SolutionResponse {
+    solutions: Solution[];
+    status: 'success' | 'error';
+    message?: string;
+}

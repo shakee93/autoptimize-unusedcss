@@ -33,6 +33,10 @@ class RapidLoad_Admin
             add_action('wp_ajax_rapidload_titan_feedback', [$this, 'rapidload_titan_feedback']);
             add_action('wp_ajax_rapidload_enable_cdn_metering', [$this, 'rapidload_enable_cdn_metering']);
             add_action('wp_ajax_rapidload_enable_cdn_metering', [$this, 'rapidload_enable_image_metering']);
+            add_action('wp_ajax_rapidload_delete_titan_optimizations', [$this, 'rapidload_delete_titan_optimizations']);
+            add_action('wp_ajax_rapidload_titan_optimizations_data', [$this, 'rapidload_titan_optimizations_data']);
+            add_action('wp_ajax_rapidload_fetch_post_types_with_links', [$this, 'rapidload_fetch_post_types_with_links']);
+            add_action('wp_ajax_rapidload_fetch_post_search_by_title_or_permalink', [$this, 'rapidload_fetch_post_search_by_title_or_permalink']);
 
 
             add_action('wp_ajax_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
@@ -40,17 +44,27 @@ class RapidLoad_Admin
             add_action('wp_ajax_titan_checklist_plugins', [$this, 'titan_checklist_plugins']);
             add_action('wp_ajax_titan_checklist_status', [$this, 'titan_checklist_status']);
             add_action('wp_ajax_rapidload_switch_test_mode', [$this, 'rapidload_switch_test_mode']);
+            
 
             if (defined('RAPIDLOAD_DEV_MODE')) {
+                add_action('wp_ajax_nopriv_uucss_license', [ $this, 'uucss_license' ] );
+                add_action('wp_ajax_nopriv_uucss_connect', [ $this, 'uucss_connect' ] );
                 add_action('wp_ajax_nopriv_rapidload_switch_test_mode', [$this, 'rapidload_switch_test_mode']);
                 add_action('wp_ajax_nopriv_titan_checklist_crawler', [$this, 'titan_checklist_crawler']);
                 add_action('wp_ajax_nopriv_clear_page_cache', [$this, 'clear_page_cache']);
                 add_action('wp_ajax_nopriv_titan_checklist_cron', [$this, 'titan_checklist_cron']);
                 add_action('wp_ajax_nopriv_titan_checklist_plugins', [$this, 'titan_checklist_plugins']);
                 add_action('wp_ajax_nopriv_titan_checklist_status', [$this, 'titan_checklist_status']);
+                add_action('wp_ajax_nopriv_rapidload_delete_titan_optimizations', [$this, 'rapidload_delete_titan_optimizations']);
+                add_action('wp_ajax_nopriv_rapidload_titan_optimizations_data', [$this, 'rapidload_titan_optimizations_data']);
+                add_action('wp_ajax_nopriv_rapidload_fetch_post_types_with_links', [$this, 'rapidload_fetch_post_types_with_links']);
+                add_action('wp_ajax_nopriv_rapidload_fetch_post_search_by_title_or_permalink', [$this, 'rapidload_fetch_post_search_by_title_or_permalink']);
             }
 
         }
+
+        add_action('wp_ajax_rapidload_image_optimization_status', [ $this, 'rapidload_image_optimization_status' ] );
+        add_action('wp_ajax_nopriv_rapidload_image_optimization_status', [ $this, 'rapidload_image_optimization_status' ] );
 
         add_action('cron_check_rapidload', function (){
             update_option('cron_check_rapidload_success',"1");
@@ -60,6 +74,223 @@ class RapidLoad_Admin
         add_filter('uucss/rules', [$this, 'rapidload_rule_types'], 90 , 1);
         add_action('add_sitemap_to_jobs', [$this, 'add_sitemap_to_jobs'], 10, 1);
 
+    }
+
+    function rapidload_image_optimization_status(){
+
+        self::verify_nonce();
+
+        if (!isset($_REQUEST['image_urls'])) {
+            wp_send_json_error('No image URLs provided');
+        }
+
+        $image_url_status = [];
+
+        $image_urls = json_decode(stripslashes($_REQUEST['image_urls']), true);
+
+        if (!is_array($image_urls)) {
+            wp_send_json_error('Invalid image URLs format');
+        }
+
+        foreach ($image_urls as $url) {
+
+            $response = wp_remote_head($url);
+            
+            if (is_wp_error($response)) {
+                $image_url_status[] = [
+                    'url' => $url,
+                    'status' => 0,
+                    'redirected' => false,
+                    'error' => $response->get_error_message()
+                ];
+                continue;
+            }
+    
+            $status_code = wp_remote_retrieve_response_code($response);
+            $is_redirected = wp_remote_retrieve_header($response, 'location') ? true : false;
+
+            $image_url_status[] = [
+                'url' => $url,
+                'status' => $status_code,
+                'redirected' => $is_redirected
+            ];
+
+        }
+
+        wp_send_json_success($image_url_status);
+    }
+
+    function rapidload_fetch_post_types_with_links() {
+        $data = [];
+
+        if ( class_exists( 'WooCommerce' ) ) {
+            $cart_page_id = wc_get_page_id( 'cart' );
+            $checkout_page_id = wc_get_page_id( 'checkout' );
+        } else {
+            $cart_page_id = $checkout_page_id = 0;
+        }
+
+        $post_types = get_post_types( ['public' => true], 'names' );
+
+        foreach ( $post_types as $post_type ) {
+
+            $query = new WP_Query([
+                'post_type'      => $post_type,
+                'posts_per_page' => 10,
+                'orderby'        => 'post_modified',
+                'order'          => 'DESC',
+                'no_found_rows'  => true
+            ]);
+
+            if ( $query->have_posts() ) {
+                $posts_data = [];
+                $unique_urls = [];
+
+                foreach ( $query->posts as $post ) {
+
+                    $post_id = $post->ID;
+
+                    if ( $post_type === 'page' && ( $post_id == $cart_page_id || $post_id == $checkout_page_id ) ) {
+                        continue;
+                    }
+
+                    $permalink = get_permalink( $post_id );
+
+                    $parsed_url = wp_parse_url( $permalink );
+                    $base_url = isset( $parsed_url['scheme'] ) && isset( $parsed_url['host'] )
+                        ? $parsed_url['scheme'] . '://' . $parsed_url['host'] . $parsed_url['path']
+                        : $permalink;
+
+                    if ( !in_array( $base_url, $unique_urls ) ) {
+                        $unique_urls[] = $base_url;
+                        $posts_data[] = [
+                            'title'     => get_the_title( $post_id ),
+                            'permalink' => $permalink,
+                        ];
+                    }
+                }
+
+                $data[] = [
+                    'post_type' => $post_type,
+                    'links'     => $posts_data
+                ];
+            }
+        }
+
+        wp_send_json_success($data);
+    }
+
+    function rapidload_fetch_post_search_by_title_or_permalink() {
+
+        if ( !isset( $_REQUEST['s'] ) ) {
+            wp_send_json_error( 'Search key not found' );
+        }
+
+        $search_term = sanitize_text_field( $_REQUEST['s'] );
+        $search_term_lower = strtolower( $search_term );
+
+        if ( strlen( $search_term ) < 3 ) {
+            wp_send_json_error( 'Search term must be at least 3 characters long' );
+        }
+
+        if ( class_exists( 'WooCommerce' ) ) {
+            $cart_page_id = wc_get_page_id( 'cart' );
+            $checkout_page_id = wc_get_page_id( 'checkout' );
+        } else {
+            $cart_page_id = $checkout_page_id = 0;
+        }
+
+        $post_type = isset( $_REQUEST['post_type'] ) ? sanitize_text_field( $_REQUEST['post_type'] ) : 'any';
+        $posts_per_page = 10;
+        $paged = 1;
+        $data = [];
+
+        do {
+            $args = [
+                'posts_per_page'   => $posts_per_page,
+                'post_type'        => $post_type,
+                'post_status'      => 'publish',
+                'paged'            => $paged,
+                'fields'           => 'ids'
+            ];
+
+            $query = new WP_Query( $args );
+
+            if ( $query->have_posts() ) {
+                foreach ( $query->posts as $post_id ) {
+
+                    if ( $post_type === 'page' && ( $post_id == $cart_page_id || $post_id == $checkout_page_id ) ) {
+                        continue;
+                    }
+
+                    $permalink = get_permalink( $post_id );
+                    $permalink_lower = strtolower( $permalink );
+
+                    if ( stripos( $permalink_lower, $search_term_lower ) !== false || stripos( strtolower( get_the_title( $post_id ) ), $search_term_lower ) !== false ) {
+                        $data[] = [
+                            'id'        => $post_id,
+                            'post_type' => get_post_type( $post_id ),
+                            'title'     => get_the_title( $post_id ),
+                            'permalink' => $permalink,
+                        ];
+                    }
+                }
+            }
+
+            $paged++;
+        } while ( $query->found_posts > count( $data ) && $query->max_num_pages >= $paged );
+
+        if ( empty( $data ) ) {
+            wp_send_json_error( 'No results found' );
+        }
+
+        wp_send_json_success( $data );
+    }
+
+    public function rapidload_titan_optimizations_data(){
+
+        $start_from = 0;
+        $limit = 10;
+        $s = null;
+
+        if(isset($_REQUEST['start_from'])){
+            $start_from = $_REQUEST['start_from'];
+        }
+        if(isset($_REQUEST['limit'])){
+            $limit = $_REQUEST['limit'];
+        }
+        if(isset($_REQUEST['s']) && !empty($_REQUEST['s'])){
+            $s = $_REQUEST['s'];
+        }
+
+        wp_send_json_success(RapidLoad_Job::get_all_optimizations_data_for('desktop', $start_from, $limit, $s));
+
+    }
+
+    public function rapidload_delete_titan_optimizations(){
+
+        if(!isset($_REQUEST['url'])){
+            wp_send_json_error('url required');
+        }
+
+        $url = $this->transform_url($_REQUEST['url']);
+
+        if($url == $this->transform_url(site_url())){
+            wp_send_json_error('cannot delete home page optimizations');
+        }
+
+        $job = new RapidLoad_Job(['url' => $url]);
+
+        if(!isset($job->id)){
+            wp_send_json_error('job not found');
+        }
+
+        $job->delete_all_revisions();
+        $job->set_desktop_options(null);
+        $job->set_mobile_options(null);
+        $job->save();
+
+        wp_send_json_success('successfully deleted all optimizations data');
     }
 
     public function rapidload_enable_cdn_metering(){
@@ -105,6 +336,8 @@ class RapidLoad_Admin
     }
 
     public function rapidload_switch_test_mode(){
+
+        self::verify_nonce();
 
         $options = RapidLoad_Base::fetch_options();
 
@@ -194,69 +427,48 @@ class RapidLoad_Admin
 
         self::verify_nonce();
 
+        // Create server array first
+        $server_info = array(
+            'software' => $_SERVER['SERVER_SOFTWARE'],
+            'php_version' => PHP_VERSION,
+            'cron_status' => 0
+        );
+
         if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
-            wp_send_json_error( 'The DISABLE_WP_CRON constant is set to true. WP-Cron spawning is disabled.' );
+            wp_send_json_error( [
+                'cron_message' => 'The DISABLE_WP_CRON constant is set to true. WP-Cron spawning is disabled.',
+                'server' => $server_info
+            ] );
         }
 
         if ( defined( 'ALTERNATE_WP_CRON' ) && ALTERNATE_WP_CRON ) {
-            wp_send_json_error( 'The ALTERNATE_WP_CRON constant is set to true. WP-Cron spawning is not asynchronous.' );
+            wp_send_json_error( [
+                'cron_message' => 'The ALTERNATE_WP_CRON constant is set to true. WP-Cron spawning is not asynchronous.',
+                'server' => $server_info
+            ] );
         }
 
-        $spawn = self::get_cron_spawn();
+        $spawn = $this->get_cron_spawn();
 
         if ( is_wp_error( $spawn ) ) {
-            wp_send_json_error( sprintf( 'WP-Cron spawn failed with error: %s', $spawn->get_error_message() ) );
+            wp_send_json_error( [
+                'cron_message' => sprintf( 'WP-Cron spawn failed with error: %s', $spawn->get_error_message() ),
+                'server' => $server_info
+            ] );
         }
 
-        $code    = wp_remote_retrieve_response_code( $spawn );
+        $code = wp_remote_retrieve_response_code( $spawn );
         $message = wp_remote_retrieve_response_message( $spawn );
-
-        if ( 200 === $code ) {
-            wp_send_json_success( 'WP-Cron spawning is working as expected.' );
-        } else {
-            wp_send_json_error( sprintf( 'WP-Cron spawn returned HTTP status code: %1$s %2$s', $code, $message ) );
-        }
-
-        /*$status = get_option("cron_check_rapidload_success","0");
-
-        if($status != "1"){
-
-            if ( ! wp_next_scheduled( 'cron_check_rapidload' )) {
-                wp_schedule_single_event(time()+1, 'cron_check_rapidload');
-            }
-
-            wp_send_json_error(false);
-
-        }
-
-        wp_send_json_success(true);*/
-
-    }
-
-    public function get_cron_spawn() {
-
-        $doing_wp_cron = sprintf( '%.22F', microtime( true ) );
-
-        $cron_request_array = array(
-            'url'  => site_url( 'wp-cron.php?doing_wp_cron=' . $doing_wp_cron ),
-            'key'  => $doing_wp_cron,
-            'args' => array(
-                'timeout'   => 3,
-                'blocking'  => true,
-                // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Calling native WordPress hook.
-                'sslverify' => apply_filters( 'https_local_ssl_verify', true ),
-            ),
+        
+        // Update cron status with actual code
+        $server_info['cron_status'] = $code;
+        
+        $response = array(
+            'cron_message' => $code === 200 ? 'WP-Cron spawning is working as expected.' : sprintf( 'WP-Cron spawn returned HTTP status code: %1$s %2$s', $code, $message ),
+            'server' => $server_info
         );
 
-        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Calling native WordPress hook.
-        $cron_request = apply_filters( 'cron_request', $cron_request_array );
-
-        # Enforce a blocking request in case something that's hooked onto the 'cron_request' filter sets it to false
-        $cron_request['args']['blocking'] = true;
-
-        $result = wp_remote_post( $cron_request['url'], $cron_request['args'] );
-
-        return $result;
+        wp_send_json_success($response);
     }
 
     public function rapidload_titan_feedback(){
@@ -333,12 +545,6 @@ class RapidLoad_Admin
         if(isset($_REQUEST['uucss_enable_cpcss'])){
 
             $options['uucss_enable_cpcss'] = ($_REQUEST['uucss_enable_cpcss'] == 'true' ? "1" : null);
-
-            if(isset($_REQUEST['uucss_enable_cpcss_mobile'])){
-
-                $options['uucss_enable_cpcss_mobile'] = ($_REQUEST['uucss_enable_cpcss_mobile'] == 'true' ? "1" : null);
-
-            }
 
             if(isset($_REQUEST['remove_cpcss_on_user_interaction'])){
 
@@ -968,6 +1174,11 @@ class RapidLoad_Admin
             }
         }
 
+        $options['uucss_api_key_verified'] = 1;
+        $options['uucss_api_key']          = $license_key;
+
+        RapidLoad_Base::update_option( 'autoptimize_uucss_settings', $options );
+
         wp_send_json_success([
             'success' => true,
             'message' => 'License Key verification success',
@@ -1009,6 +1220,8 @@ class RapidLoad_Admin
     }
 
     public function ajax_deactivate() {
+
+        self::verify_nonce();
 
         $options = RapidLoad_Base::get_option( 'autoptimize_uucss_settings' );
 
@@ -1351,6 +1564,8 @@ class RapidLoad_Admin
             }
 
             do_action( 'uucss/license-verified' );
+
+            update_option('rapidload_license_data', serialize($data->data));
 
             wp_send_json_success( $data->data );
         }

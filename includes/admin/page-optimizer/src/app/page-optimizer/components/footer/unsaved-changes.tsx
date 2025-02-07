@@ -35,7 +35,10 @@ const UnsavedChanges = ({children , onClick, title, description, action = 'Save 
     const { touched, fresh, settings, settingsOriginal } = useSelector(optimizerData)
     const { submitSettings } = useSubmitSettings()
 
+    // console.log(settings[0].inputs[0].value, settingsOriginal[0].inputs[0].value);
+    // console.log(touched, fresh)
     if(!performanceGear){
+        
         if (!(fresh ? true : touched)) {
             return <div onClick={e => onClick()} >
                 {children}

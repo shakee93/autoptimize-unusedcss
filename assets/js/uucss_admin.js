@@ -1469,7 +1469,7 @@
                             return
                         }
 
-                        if (rowData.status === 'success' && (!rowData.meta.warnings || !rowData.meta.warnings.length)) {
+                        if (rowData.status === 'success' && (!rowData.meta?.warnings || !rowData.meta?.warnings?.length)) {
                             var hits = rowData.meta && rowData.meta.stats && rowData.meta.stats.success_count > 0 || Number(rowData.success_count) > 0 ? 'hits-success' : '';
                             stat.find('span').append('<span class="dashicons dashicons-yes-alt '+ hits +'"></span>');
                             tippy(stat.find('span')[0], tippyOptions);

@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { optimizerData } from "../../../store/app/appSelector";
 import React, { ReactNode, useCallback, useEffect, useMemo, useState, useRef, MouseEventHandler } from "react";
 import {
-    Starter, Accelerate, TurboMax
+    Starter, Accelerate, TurboMax, GearLoading
 } from "app/page-optimizer/components/icons/gear-icons";
 
 import {
@@ -26,7 +26,7 @@ import {
     JavascriptDelivery,
     PageCache,
 } from "app/page-optimizer/components/icons/category-icons";
-import { cn } from "lib/utils";
+import { cn, isDev } from "lib/utils";
 import { setCommonState } from "../../../store/common/commonActions";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import { BoltIcon, CheckCircleIcon, ChevronRightIcon, ChevronDownIcon, ChevronUpIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/solid";
@@ -40,7 +40,11 @@ import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { useToast } from "components/ui/use-toast";
 import { RootState } from "../../../store/app/appTypes"; // Import the new component
 import { useTestModeUtils } from 'hooks/testModeUtils';
-
+import SaveChanges from "app/page-optimizer/components/footer/save-changes";
+import useSubmitSettings from "hooks/useSubmitSettings";
+import { Loader } from "lucide-react";
+import { buildStyles, CircularProgressbarWithChildren } from "react-circular-progressbar";
+import TooltipText from "components/ui/tooltip-text";
 const capitalizeCategory = (category: string) => {
     if (category === 'css' || category === 'cdn') {
         return category.toUpperCase();
@@ -75,7 +79,7 @@ const SpeedSettings = ({ }) => {
     const { settings, data,
         activeReport,
         settingsLoading,
-        activeGear, revisions } = useSelector(optimizerData);
+        activeGear, revisions, loading } = useSelector(optimizerData);
     const [activeCategory, setActiveCategory] = useState<SettingsCategory>('css')
     const [groupedSettings, setGroupedSettings] = useState<GroupedSettings>({});
     const { dispatch, openCategory,
@@ -85,14 +89,16 @@ const SpeedSettings = ({ }) => {
     const modes: PerformanceGear[] = ['starter', 'accelerate', 'turboMax'];
 
     const customUnsavedChanges = useRef<HTMLDivElement>(null);
-    const [tempMode, setTempMode] = useState<PerformanceGear>('custom');
+    const { options, savingData, invalidatingCache } = useAppContext()
+    const [tempMode, setTempMode] = useState<PerformanceGear>((options.rapidload_titan_gear as PerformanceGear) || 'custom');
     const [customMode, setCustomMode] = useState(false);
+    const [baseMode, setBaseMode] = useState<PerformanceGear>((options.rapidload_titan_gear as PerformanceGear) || 'custom');
 
     const [mouseOnSettingsGear, setMouseOnSettingsGear] = useState('');
     const { toast } = useToast();
     const { testMode } = useSelector(optimizerData);
     const { handleTestModeSwitchChange } = useTestModeUtils();
-    const { options } = useAppContext()
+   
 
     const icons: {
         [key in SettingsCategory]: React.ReactElement;
@@ -181,7 +187,7 @@ const SpeedSettings = ({ }) => {
     const [passedAudits, setPassedAudits] = useState<AuditSetting[]>([]);
     const [notPassedAudits, setNotPassedAudits] = useState<AuditSetting[]>([]);
     const isInitialRender = useRef(true);
-
+    const { submitSettings } = useSubmitSettings()
 
     useEffect(() => {
 
@@ -234,6 +240,7 @@ const SpeedSettings = ({ }) => {
 
     const settingsModeOnChange = (mode: PerformanceGear, activate?: boolean) => {
         handleTestModeSettingsChange(mode);
+        setTempMode(mode);
 
         if (activeGear === 'custom' && !activate) {
             customUnsavedChanges.current?.click();
@@ -243,11 +250,28 @@ const SpeedSettings = ({ }) => {
                 mode as BasePerformanceGear
             ))
 
+          //  submitSettings(true);
+
             if (!notPassedAudits) {
                 return;
             }
         }
     };
+
+    const firstRender = useRef(true);
+
+    useEffect(() => {
+        if (firstRender.current) {
+            firstRender.current = false;
+            return;
+        }
+        console.log(activeGear, baseMode)
+        if(activeGear !== 'custom' && activeGear !== baseMode ){
+            setBaseMode(tempMode);
+            submitSettings(true);
+        }
+        // submitSettings(true);
+    }, [activeGear]);
 
     const handleTestModeSettingsChange = (gearSettingsMode: string,) => {
         let toastInstance: ReturnType<typeof toast> | undefined;
@@ -296,9 +320,9 @@ const SpeedSettings = ({ }) => {
     }, [settings]);
 
     useEffect(() => {
-        if (revisions?.length == 0 && !activeGear) {
-            dispatch(changeGear('accelerate'));
-        }
+        // if (revisions?.length == 0 && !activeGear) {
+        //     dispatch(changeGear('accelerate'));
+        // }
     }, [settings])
 
 
@@ -357,6 +381,7 @@ const SpeedSettings = ({ }) => {
     const [enableFlags, setEnableFlags] = useState({ cpcss: false, uucss: false, cpcssuucss: false });
 
     const updateEnableFlags = useCallback(() => {
+        if(!settings) return;
         const cpcssEnabled = settings.some(item => item.inputs.find(input => input.key === 'uucss_enable_cpcss')?.value);
         const uucssEnabled = settings.some(item => item.inputs.find(input => input.key === 'uucss_enable_uucss')?.value);
         const cpcssuucssEnabled = settings.some(item => item.inputs.find(input => input.key === 'enable_uucss_on_cpcss')?.value);
@@ -372,183 +397,225 @@ const SpeedSettings = ({ }) => {
         dispatch(setCommonState('uucssError', enableFlags.cpcss && enableFlags.uucss && enableFlags.cpcssuucss));
     }, [enableFlags, dispatch]);
 
-
-
-    return <div className='dark:bg-brand-800/40 bg-brand-200 px-9 py-8 mt-2 rounded-3xl'>
-        <SettingsStraightLine />
-        <div className="pb-4">
-            {/*{settingsLoading &&*/}
-            {/*    <div>loading...</div>*/}
-            {/*}*/}
-            <h3 className="font-semibold text-lg">Performance Gears</h3>
-            <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
-        </div>
-
-        <div className="flex gap-4" data-tour="settings-gear">
-            {modes.map((mode, index) => (
-                <div
-                    key={index}
-                    className={`cursor-pointer transition-all flex px-4 py-4 min-w-[166px] min-h-[166px] items-center justify-center w-fit rounded-3xl dark:bg-brand-950 bg-brand-0 dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px]  ${mode === activeGear ? ' border-purple-700 dark:border-purple-700' : ''}`}
-                    onClick={e => {
-                        setTempMode(mode);
-                        settingsModeOnChange(mode);
-
-                    }}
-                    onMouseEnter={() => setMouseOnSettingsGear(mode)}
-                    onMouseLeave={() => setMouseOnSettingsGear('')}
-                >
-
-                    <div className={`flex flex-col gap-1 items-center text-center ${mode === 'turboMax' ? ' pt-1.5' : ''}`}>
-
-                        {['starter', 'accelerate', 'turboMax'].includes(mode) && activeGear === mode && (
-                            <div className="absolute ml-28 -mt-4">
-                                <CheckCircleIcon className="w-6 h-6 text-purple-800" />
-                            </div>
-                        )}
-
-
-                        {mode === 'starter' && <Starter cls={'px-2 py-2'} />}
-                        {mode === 'accelerate' && <Accelerate cls={'px-2 py-2'} />}
-                        {mode === 'turboMax' && <TurboMax cls={'px-2 py-2'} />}
-                        <div>
-                            <p className="font-semibold capitalize">{mode}</p>
-                            {mode === 'turboMax' && <p className="font-normal text-[10px] leading-none">Test Mode Recommended</p>}
-                        </div>
-
-                    </div>
+    return <AnimatePresence>
+        <m.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2, delay: 0.05 }}
+            className=''
+        >
+            <div className='border-b border-brand-300 px-11 py-4'>
+                <div className="pb-4">
+                    {settingsLoading &&
+                        <div>Loading...</div>
+                    }
+                    <h3 className="font-semibold text-lg">Performance Gears</h3>
+                    <span className="font-normal text-sm text-zinc-600 dark:text-brand-300">Select your Performance Mode: Starter, Accelerate, TurboMax, or Customize, to fine-tune your site's speed.</span>
                 </div>
-            ))}
-        </div>
+
+                
+                
+                <div className={`flex gap-4 `} data-tour="settings-gear">
+                    {modes.map((mode, index) => (
+                        <TooltipText key={`tooltip-${mode}`} text={loading ? "Analyzing your site performance" : savingData || invalidatingCache ? "Please wait while applying optimizations" : null }>
+                        <div
+                            key={index}
+                            className={`${(savingData || invalidatingCache || loading) && 'cursor-not-allowed opacity-90 pointer-events-none'} cursor-pointer transition-all flex px-4 py-4 min-w-[166px] min-h-[166px] items-center justify-center w-fit rounded-3xl dark:bg-brand-950 bg-brand-0 dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px]  ${mode === (activeGear || tempMode) ? ' border-purple-700 dark:border-purple-700' : ''}`}
+                            onClick={e => {
+                                settingsModeOnChange(mode);
+                            }}
+                            onMouseEnter={() => setMouseOnSettingsGear(mode)}
+                            onMouseLeave={() => setMouseOnSettingsGear('')}
+                        >
+
+                            <div
+                                className={`flex flex-col gap-1 items-center text-center ${mode === 'turboMax' ? ' pt-1.5' : ''}`}>
+
+                                {['starter', 'accelerate', 'turboMax'].includes(mode) && activeGear === mode && (
+                                    <div className="absolute ml-28 -mt-4">
+                                        {(savingData || invalidatingCache) ? (
+                                            // <Loader className='w-24 animate-spin'/>
+                                            <></>
+                                        ) : (
+                                            <CheckCircleIcon className="w-6 h-6 text-purple-800" />
+                                        )}
+
+                                    </div>
+                                )}
+
+                                {activeGear === mode && (savingData || invalidatingCache) ? (
+                                        <div className="w-16 h-16 border-4 border-t-transparent border-[#7E22CE] rounded-full animate-spin"></div>
+                                    ) : (
+                                    <>
+                                {mode === 'starter' && <Starter cls={'px-2 py-2'} />}
+                                        {mode === 'accelerate' && <Accelerate cls={'px-2 py-2'} />}
+                                        {mode === 'turboMax' && <TurboMax cls={'px-2 py-2'} />}
+                                    </>
+                                )}
 
 
-        <UnsavedChanges
-            title='Modified Customize Settings changes'
-            description="Switching to Performance Modes will result in the loss of any customized settings."
-            action='Activate'
-            performanceGear={true}
-            cancel='Cancel'
-            onClick={() => {
-                settingsModeOnChange(tempMode, true);
+                                <div>
+                                    {activeGear === mode && (savingData || invalidatingCache) ? (
+                                        <p className="font-semibold capitalize z-[110000] mt-2"
 
-            }} >
-            <div ref={customUnsavedChanges}></div>
-        </UnsavedChanges>
+                                        >Applying...</p>
+                                    ) : (
+                                        <>
+                                            <p className="font-semibold capitalize"
+                                            >{mode}</p>
+                                            {mode === 'turboMax' && (
+                                                <p className="font-normal text-[10px] leading-none">Test Mode Recommended</p>
+                                            )}
+                                        </>
+                                    )}
 
+                                </div>
 
-        <div className="py-4 ">
-            {mouseOnSettingsGear ? (
-                <h3 className="font-semibold dark:text-brand-300 capitalize">{mouseOnSettingsGear} {activeGear === mouseOnSettingsGear && 'Activated'}</h3>
-            ) : (
-                <h3 className="font-semibold dark:text-brand-300 capitalize">{activeGear} Activated</h3>
-            )}
-            <span
-                className="font-normal text-sm text-zinc-600 dark:text-brand-300">{settingsDescriptions[currentMode]}</span>
-        </div>
+                            </div>
+                        </div>
+                        </TooltipText>
+                    ))}
+                </div>
+                
 
-        <div>
-            {settingsLoading ?
-                <div className='w-48 animate-pulse h-10 select-none transition-all rounded-2xl cursor-pointer
-          flex items-center gap-2 px-4 py-2 -ml-1 text-sm font-medium dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px] dark:hover:bg-brand-950 bg-brand-0 dark:bg-brand-950'>
-                </div> :
-                <div
+                <UnsavedChanges
+                    title='Modified Customize Settings changes'
+                    description="Switching to Performance Modes will result in the loss of any customized settings."
+                    action='Activate'
+                    performanceGear={true}
+                    cancel='Cancel'
                     onClick={() => {
-                        setTempMode('custom');
-                        setCustomMode(prevMode => !prevMode);
-                    }}
-                    onMouseEnter={() => setMouseOnSettingsGear('custom')}
-                    onMouseLeave={() => setMouseOnSettingsGear('')}
-                    className={cn(
-                        `select-none w-fit transition-all rounded-2xl cursor-pointer  
-          flex items-center gap-2 px-4 py-2 -ml-1 text-sm font-medium dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px] dark:hover:bg-brand-950 bg-brand-0 dark:bg-brand-950 `,
-                        activeGear === 'custom' && 'border-purple-700'
+                        settingsModeOnChange(tempMode, true);
+                        setCustomMode(false);
+                    }}>
+                    <div ref={customUnsavedChanges}></div>
+                </UnsavedChanges>
+
+
+                <div className="py-4 ">
+                    {mouseOnSettingsGear ? (
+                        <h3 className="font-semibold dark:text-brand-300 capitalize">{mouseOnSettingsGear} {activeGear === mouseOnSettingsGear && 'Activated'}</h3>
+                    ) : (
+                        <h3 className="font-semibold dark:text-brand-300 capitalize">{activeGear} Activated</h3>
                     )}
-                    data-tour="customize-settings"
-                >
-                    {activeGear === 'custom' &&
-                        <div className="">
-                            <CheckCircleIcon className="w-6 h-6 text-purple-800" />
+                    <span
+                        className="font-normal text-sm text-zinc-600 dark:text-brand-300">{settingsDescriptions[currentMode]}</span>
+                </div>
+            </div>
+
+
+            <div className='px-11 py-8'>
+                <div>
+                    {settingsLoading ?
+                        <div className='w-48 animate-pulse h-10 select-none transition-all rounded-2xl cursor-pointer
+          flex items-center gap-2 px-4 py-2 -ml-1 text-sm font-medium dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px] dark:hover:bg-brand-950 bg-brand-0 dark:bg-brand-950'>
+                        </div> :
+                        <div
+                            onClick={() => {
+                                setTempMode('custom');
+                                setCustomMode(prevMode => !prevMode);
+                            }}
+                            onMouseEnter={() => setMouseOnSettingsGear('custom')}
+                            onMouseLeave={() => setMouseOnSettingsGear('')}
+                            className={cn(
+                                `select-none w-fit transition-all rounded-2xl cursor-pointer  
+          flex items-center gap-2 px-4 py-2 -ml-1 text-sm font-medium dark:hover:border-purple-700 dark:border-brand-700/70 hover:border-purple-700 border border-brand-200 border-[3px] dark:hover:bg-brand-950 bg-brand-0 dark:bg-brand-950 `,
+                                activeGear === 'custom' && 'border-purple-700',
+                                (savingData || invalidatingCache || loading) && 'cursor-not-allowed opacity-90 pointer-events-none'
+                            )}
+                            data-tour="customize-settings"
+                        >
+                            {activeGear === 'custom' &&
+                                <div className="">
+                                    <CheckCircleIcon className="w-6 h-6 text-purple-800" />
+                                </div>
+                            }
+
+                            Customize Settings <ChevronDownIcon className={cn(
+                                'w-4 rounded-[15px] transition-transform',
+                                customMode && '-rotate-180'
+                            )} />
+
                         </div>
                     }
 
-                    Customize Settings <ChevronDownIcon className={cn(
-                        'w-4 rounded-[15px] transition-transform',
-                        customMode && '-rotate-180'
-                    )} />
-
-                </div>
-            }
-
-
-        </div>
-
-        {customMode &&
-            <>
-                <div className="py-3 relative">
-                    <SettingsLine width={getWidthForCategory(activeCategory) || 220} category={activeCategory} />
 
                 </div>
 
-                <ul className='flex gap-3 ml-12'>
-                    {categoryOrder.map((category: SettingsCategory, index) => (
-                        <li key={index} onClick={e => {
-                            // setSortedStatus(true);
-                            setActiveCategory(category);
-                            dispatch(setCommonState('openCategory', category));
-                        }}>
-                            <m.div
-                                id={category}
-                                transition={{ duration: 0.5 }} className={cn(
-                                    'cursor-pointer select-none flex gap-2 transition-all items-center border border-transparent py-[6px] pr-3 pl-[7px] rounded-2xl w-fit mb-4 hover:bg-brand-50' +
-                                    ' dark:bg-brand-950/60 dark:hover:bg-brand-950 bg-brand-0 hover:shadow-md',
-                                    activeCategory === category && 'dark:bg-brand-950 shadow-md transition-all'
-                                )}>
-                                <div>
-                                    {activeCategory === category ? <>{icons[category]}</> : <>{iconsDuotone[category]}</>}
-                                </div>
-                                <span className='font-medium tracking-wide'>
-                                    {capitalizeCategory(category)}
-                                </span>
+                {customMode &&
+                    <>
+                        <div className="py-3 relative">
+                            <SettingsLine width={getWidthForCategory(activeCategory) || 220} category={activeCategory} />
 
-                            </m.div>
-                        </li>
-                    ))}
-                </ul>
+                        </div>
 
-                <div className={cn(
-                    data ? 'min-h-[380px]' : 'min-h-[280px]'
-                )}>
-                    <ul>
+                        <ul className='flex gap-3 ml-12'>
+                            {categoryOrder.map((category: SettingsCategory, index) => (
+                                <li key={index} onClick={e => {
+                                    // setSortedStatus(true);
+                                    setActiveCategory(category);
+                                    dispatch(setCommonState('openCategory', category));
+                                }}>
+                                    <m.div
+                                        id={category}
+                                        transition={{ duration: 0.5 }} className={cn(
+                                            'cursor-pointer select-none flex gap-2 transition-all items-center border border-transparent py-[6px] pr-3 pl-[7px] rounded-2xl w-fit mb-4 hover:bg-brand-50' +
+                                            ' dark:bg-brand-950/60 dark:hover:bg-brand-950 bg-brand-0 hover:shadow-md',
+                                            activeCategory === category && 'dark:bg-brand-950 shadow-md transition-all'
+                                        )}>
+                                        <div>
+                                            {activeCategory === category ? <>{icons[category]}</> : <>{iconsDuotone[category]}</>}
+                                        </div>
+                                        <span className='font-medium tracking-wide'>
+                                            {capitalizeCategory(category)}
+                                        </span>
 
-                        {groupedSettings[activeCategory]?.map((item: AuditSetting, itemIndex) => (
-                            <li key={`${item.category}-${itemIndex}`}>
-                                <m.div initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.3, delay: itemIndex ? 0.05 * itemIndex : 0 }}
-                                >
-                                    <AuditSettingsItem key={`${item.category}-${itemIndex}`} item={item}
-                                        itemIndex={itemIndex} updateValue={updateValue}
-                                        actionRequired={true} />
-                                </m.div>
-                            </li>
-                        ))}
+                                    </m.div>
+                                </li>
+                            ))}
+                        </ul>
 
-                        {(groupedSettings[activeCategory]?.length <= 2) && <m.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            className='flex flex-col gap-2 items-center px-2 mt-12 w-full mb-6'>
-                            <div>
-                                <img alt='Good Job!' className='w-60 -ml-6'
-                                    src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'} />
-                            </div>
-                            <span className='flex text-sm mt-4 gap-2'>You're so close to perfection! One more fix and it's flawless!"</span>
-                        </m.div>
-                        }
-                    </ul>
-                </div>
-            </>
-        }
-    </div>
+                        <div className={cn(
+                            data ? '' : ''
+                        )}>
+                            <ul>
+
+                                {groupedSettings[activeCategory]?.map((item: AuditSetting, itemIndex) => (
+                                    <li key={`${item.category}-${itemIndex}`}>
+                                        <m.div initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.3, delay: itemIndex ? 0.05 * itemIndex : 0 }}
+                                        >
+                                            <AuditSettingsItem key={`${item.category}-${itemIndex}`} item={item}
+                                                itemIndex={itemIndex} updateValue={updateValue}
+                                                actionRequired={true} />
+                                        </m.div>
+                                    </li>
+                                ))}
+
+                                {/*{(groupedSettings[activeCategory]?.length <= 2) && <m.div*/}
+                                {/*    initial={{opacity: 0, y: 10}}*/}
+                                {/*    animate={{opacity: 1, y: 0}}*/}
+                                {/*    exit={{opacity: 0, y: -20}}*/}
+                                {/*    className='flex flex-col gap-2 items-center px-2 mt-12 w-full mb-6'>*/}
+                                {/*    <div>*/}
+                                {/*        <img alt='Good Job!' className='w-60 -ml-6'*/}
+                                {/*             src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/success.svg`) : '/success.svg'}/>*/}
+                                {/*    </div>*/}
+                                {/*    <span className='flex text-sm mt-4 gap-2'>You're so close to perfection! One more fix and it's flawless!"</span>*/}
+                                {/*</m.div>*/}
+                                {/*}*/}
+                            </ul>
+                        </div>
+                        <div className="flex justify-end mt-6">
+                            <SaveChanges />
+                        </div>
+
+                    </>
+                }
+            </div>
+        </m.div>
+    </AnimatePresence>
 }
 
 export default SpeedSettings

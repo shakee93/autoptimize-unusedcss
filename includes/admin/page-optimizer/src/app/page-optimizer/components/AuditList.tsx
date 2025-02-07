@@ -13,7 +13,7 @@ interface Props {
 
 const AuditList =({ activeTab }: Props) => {
     const {data, loading, reanalyze, error} = useSelector(optimizerData);
-
+    // console.log("data", (data?.grouped as Record<AuditTypes, Audit[] | undefined>)[activeTab] || []);
 
     const activeData = useMemo(() => {
         // return data?.grouped[activeTab] || []
@@ -34,7 +34,7 @@ const AuditList =({ activeTab }: Props) => {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration:0.2, delay: i * 0.05 }}
-                    className='relative'
+                    className='relative py-2'
                 >
                     <AuditSkeleton key={i}/>
                 </m.div>
@@ -45,7 +45,7 @@ const AuditList =({ activeTab }: Props) => {
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.005 }}
-                    className='relative'
+                    className='relative py-2'
                 >
                     <AuditComponent index={index} audit={audit} />
                 </m.div>

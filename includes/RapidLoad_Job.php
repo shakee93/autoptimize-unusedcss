@@ -54,6 +54,7 @@ class RapidLoad_Job{
             $this->created_at = $exist->created_at;
             $this->desktop_options = isset($exist->desktop_options) ? $exist->desktop_options : null;
             $this->mobile_options = isset($exist->mobile_options) ? $exist->mobile_options : null;
+            $this->diagnose_data = isset($exist->diagnose_data) ? $exist->diagnose_data : null;
 
             if(isset($this->rule_id) && $this->rule_id != $this->id && $this->rule == 'is_url'){
                 $this->parent = RapidLoad_Job::find_or_fail($this->rule_id);
@@ -101,6 +102,12 @@ class RapidLoad_Job{
             }
             if(isset($data['mobile_options'])){
                 unset($data['mobile_options']);
+            }
+        }
+
+        if(RapidLoad_DB::$current_version < 1.9){
+            if(isset($data['diagnose_data'])){
+                unset($data['diagnose_data']);
             }
         }
 
@@ -252,6 +259,16 @@ class RapidLoad_Job{
         return [];
     }
 
+    function get_diagnose_data(){
+        if(isset($this->diagnose_data) && !empty($this->diagnose_data)){
+            return unserialize($this->diagnose_data);
+        }
+        return [
+            'mobile' => null,
+            'desktop' => null,
+        ];
+    }   
+
     function set_desktop_options($options){
 
         if(isset($options) && is_array($options) && !empty($options)){
@@ -267,6 +284,17 @@ class RapidLoad_Job{
             $this->mobile_options = serialize($options);
         }else{
             $this->mobile_options = null;
+        }
+    }
+
+    function set_diagnose_data($data){
+        if(isset($data) && is_array($data) && !empty($data)){
+            $this->diagnose_data = serialize($data);
+        }else{
+            $this->diagnose_data = serialize([
+                'mobile_data' => null,
+                'desktop_data' => null,
+            ]);
         }
     }
 
@@ -366,6 +394,12 @@ class RapidLoad_Job{
         return $wpdb->get_results($query, ARRAY_N);
     }
 
+    function delete_all_revisions(){
+        global $wpdb;
+        $id = $this->id;
+        $wpdb->query("DELETE FROM {$wpdb->prefix}rapidload_job_optimizations WHERE job_id = $id");
+    }
+
     function transform_individual_file_actions($options){
 
         $files = [];
@@ -455,5 +489,126 @@ class RapidLoad_Job{
 
         return $regexPattern;
     }
+
+    public static function get_all_optimizations_data_for($strategy, $start_from, $limit = 10, $s = null){
+
+        global $wpdb;
+        $data = [];
+
+        $query = "
+        SELECT t1.id, t1.job_id, t3.url, t1.strategy, t1.data AS last_data, 
+               IF(t1.id != t2.id, t2.data, NULL) AS first_data, 
+               t1.created_at 
+        FROM  {$wpdb->prefix}rapidload_job_optimizations t1 
+        LEFT JOIN  {$wpdb->prefix}rapidload_job_optimizations t2 
+        ON t1.job_id = t2.job_id 
+        AND t2.id = (SELECT MIN(id) FROM  {$wpdb->prefix}rapidload_job_optimizations WHERE strategy = %s AND job_id = t1.job_id) 
+        LEFT JOIN {$wpdb->prefix}rapidload_job t3 
+        ON t1.job_id = t3.id 
+        WHERE t1.strategy = %s";
+
+        if ($s !== null) {
+            $query .= " AND t3.url LIKE %s";
+        }
+
+        $query .= " AND (t1.job_id, t1.created_at) IN (
+                    SELECT job_id, MAX(created_at) 
+                    FROM  {$wpdb->prefix}rapidload_job_optimizations 
+                    WHERE strategy = %s 
+                    GROUP BY job_id
+                ) 
+                ORDER BY t1.id DESC 
+                LIMIT %d, %d;";
+
+        if ($s !== null) {
+            $query = $wpdb->prepare($query, $strategy, $strategy, '%' . $wpdb->esc_like($s) . '%', $strategy, $start_from, $limit);
+        } else {
+            $query = $wpdb->prepare($query, $strategy, $strategy, $strategy, $start_from, $limit);
+        }
+
+        $result = $wpdb->get_results($query, OBJECT);
+
+        foreach ($result as $value) {
+
+            $first_data = [];
+            $last_data = [];
+
+            if (isset($value->first_data)) {
+                $value->first_data = json_decode($value->first_data);
+                $first_data = [
+                    'performance' => $value->first_data->performance,
+                ];
+            }
+
+            if (isset($value->last_data)) {
+                $value->last_data = json_decode($value->last_data);
+                $last_data = [
+                    'performance' => $value->last_data->performance,
+                ];
+            }
+
+            array_push($data, [
+                'id' => $value->id,
+                'job_id' => $value->job_id,
+                'url' => $value->url,
+                'strategy' => $value->strategy,
+                'last_data' => $last_data,
+                'first_data' => $first_data,
+                'created_at' => $value->created_at,
+            ]);
+        }
+
+        return $data;
+    }
+
+    public static function get_first_and_last_optimization_score($url, $strategy) {
+        global $wpdb;
+
+        $job_id = $wpdb->get_var("SELECT id FROM {$wpdb->prefix}rapidload_job WHERE url = '" . esc_sql($url) . "' LIMIT 1");
+
+        if (!$job_id) {
+            return (object)[
+                'first_entry' => 0,
+                'last_entry' => 0,
+                'first_response_time' => 0,
+                'last_response_time' => 0
+            ];
+        }
+
+        $first_data = $wpdb->get_results("SELECT id, data FROM {$wpdb->prefix}rapidload_job_optimizations 
+                                  WHERE strategy = '" . esc_sql($strategy) . "' 
+                                  AND job_id = " . intval($job_id) . " 
+                                  ORDER BY id ASC LIMIT 1", OBJECT);
+
+        $last_data = $wpdb->get_results("SELECT id, data FROM {$wpdb->prefix}rapidload_job_optimizations 
+                                 WHERE strategy = '" . esc_sql($strategy) . "' 
+                                 AND job_id = " . intval($job_id) . " 
+                                 ORDER BY id DESC LIMIT 1", OBJECT);
+
+        $first_entry = isset($first_data[0]) ? $first_data[0] : false;
+        $last_entry = isset($last_data[0]) && $first_entry && $first_data[0]->id != $last_data[0]->id ? $last_data[0] : false;
+
+        $get_response_time = function ($data) {
+            $decoded_data = json_decode($data);
+            if (isset($decoded_data->metrics)) {
+                foreach ($decoded_data->metrics as $metric) {
+                    if (isset($metric->id) && $metric->id === 'speed-index') {
+                        return isset($metric->displayValue) ? $metric->displayValue : "0 ms";
+                    }
+                }
+            }
+            return 0;
+        };
+
+        return (object)[
+            'first_entry' => $first_entry ? json_decode($first_entry->data)->performance : 0,
+            'last_entry' => $last_entry ? json_decode($last_entry->data)->performance : 0,
+            'first_response_time' => $first_entry ? $get_response_time($first_entry->data) : 0,
+            'last_response_time' => $last_entry ? $get_response_time($last_entry->data) : 0,
+            'first_entry_metrics' => $first_entry ? json_decode($first_entry->data)->metrics : [],
+            'last_entry_metrics' => $last_entry ? json_decode($last_entry->data)->metrics : [],
+        ];
+    }
+
 
 }

@@ -162,6 +162,34 @@ class RapidLoad_Base
 
         add_action( 'admin_init', array( 'PAnD', 'init' ) );
 
+        $this->enqueue_diagnose_script();
+
+    }
+
+    public function enqueue_diagnose_script(){
+        
+        $diagnose_script_file = plugin_dir_path(UUCSS_PLUGIN_FILE) . 'assets/js/rapidload-diagnose-script.js';
+
+        if (defined('RAPIDLOAD_DEV_MODE') && RAPIDLOAD_DEV_MODE && file_exists($diagnose_script_file)) {
+            $diagnose_script_content = file_get_contents($diagnose_script_file);
+        } else {
+            $diagnose_script_content = '(function(){window.diagnose_data={cache:{status:false,key:"uucss_enable_cache",name:"Page Cache"},cpcss:{status:false,key:"uucss_enable_cpcss",name:"Critical CSS"},uucss:{non_optimized_css:[],key:"uucss_enable_uucss",name:"Remove Unused CSS"},css_minify:{non_minified_css:[],key:"uucss_minify",name:"Minify CSS"},js_minify:{non_minified_js:[],key:"minify_js",name:"Minify Javascript"},js_defer:{non_deferred_js:[],key:"uucss_load_js_method",name:"Defer Javascript"},js_delay:{non_delayed_js:[],key:"delay_javascript",name:"Delay Javascript"},cdn:{status:false,key:"uucss_enable_cdn",name:"RapidLoad CDN"},images:{optimized_images:[],redirected_images:[],non_handled_images:[],key:"uucss_support_next_gen_formats",name:"Serve next-gen Images (AVIF, WEBP)"}};function is_rapidload_preview(){const urlParams=new URLSearchParams(window.location.search);const params=[];urlParams.forEach(((value,key)=>{params.push(key)}));return params.includes("rapidload_preview")}document.addEventListener("DOMContentLoaded",(function(){if(is_rapidload_preview()){const rapidload_cache_status_div_content=document.querySelector("#rapidload-cache-status");if(rapidload_cache_status_div_content){window.diagnose_data.cache.status=true}else{window.diagnose_data.cache.status=false}const rapidload_cpcss_style_content=document.querySelector("#rapidload-critical-css");if(rapidload_cpcss_style_content){window.diagnose_data.cpcss.status=true}else{window.diagnose_data.cpcss.status=false}const allStylesheets=document.querySelectorAll("link[type=\'text/css\']");const nonOptimizedStylesheets=Array.from(allStylesheets).filter((sheet=>!sheet.hasAttribute("data-rpd-uucss")));if(nonOptimizedStylesheets.length>0){window.diagnose_data.uucss.non_optimized_css=nonOptimizedStylesheets.map((sheet=>sheet.href))}else{window.diagnose_data.uucss.non_optimized_css=[]}const nonMinifiedStylesheets=Array.from(allStylesheets).filter((sheet=>{const href=sheet.href||"";return!sheet.hasAttribute("data-rpd-minify")&&!href.toString().includes(".min.css")}));if(nonMinifiedStylesheets.length>0){window.diagnose_data.css_minify.non_minified_css=nonMinifiedStylesheets.map((sheet=>sheet.href))}else{window.diagnose_data.css_minify.non_minified_css=[]}const allScripts=document.querySelectorAll("script[src]");const nonMinifiedScripts=Array.from(allScripts).filter((script=>{const src=script.src||"";return!script.hasAttribute("data-rpd-minify-js")&&!src.toString().includes(".min.js")}));if(nonMinifiedScripts.length>0){window.diagnose_data.js_minify.non_minified_js=nonMinifiedScripts.map((script=>script.src))}else{window.diagnose_data.js_minify.non_minified_js=[]}const nonDeferredScripts=Array.from(allScripts).filter((script=>!script.hasAttribute("data-rpd-strategy")&&!script.hasAttribute("defer")));if(nonDeferredScripts.length>0){window.diagnose_data.js_defer.non_deferred_js=nonDeferredScripts.map((script=>script.src))}else{window.diagnose_data.js_defer.non_deferred_js=[]}const nonDelayedScripts=Array.from(allScripts).filter((script=>!script.hasAttribute("data-rpd-strategy")||script.getAttribute("data-rpd-strategy")!=="delay"));if(nonDelayedScripts.length>0){window.diagnose_data.js_delay.non_delayed_js=nonDelayedScripts.map((script=>script.src))}else{window.diagnose_data.js_delay.non_delayed_js=[]}const preconnectLink=document.querySelector("link[rel=\'preconnect\'][crossorigin][href*=\'.rapidload-cdn.io\']");if(preconnectLink){window.diagnose_data.cdn.status=true}else{window.diagnose_data.cdn.status=false}const imageObserver=new PerformanceObserver((list=>{list.getEntries().forEach((entry=>{console.log(entry.name);if(entry.initiatorType==="img"){processImage(entry.name.toString())}else if(entry.initiatorType==="css"&&entry.name.match(/\.(jpg|jpeg|png|gif|webp)$/i)){processImage(entry.name.toString())}}))}));imageObserver.observe({entryTypes:["resource"]});function processImage(img){const imageUrl=img;if(window.diagnose_data.images.non_handled_images.includes(imageUrl)||window.diagnose_data.images.optimized_images.includes(imageUrl)){return}if(!imageUrl.includes("images.rapidload-cdn.io")){if(!window.diagnose_data.images.non_handled_images.includes(imageUrl)){window.diagnose_data.images.non_handled_images.push(imageUrl)}}else{if(!window.diagnose_data.images.optimized_images.includes(imageUrl)){window.diagnose_data.images.optimized_images.push(imageUrl)}}}}setTimeout((()=>{if(window.diagnose_data.images.optimized_images.length>0){fetch(rapidload_diagnose_tool.ajaxurl,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams({action:"rapidload_image_optimization_status",image_urls:JSON.stringify(window.diagnose_data.images.optimized_images),_ajax_nonce:rapidload_diagnose_tool.nonce})}).then((response=>response.json())).then((response=>{if(response.success&&response.data){response.data.forEach((image=>{if(image.redirected&&image.status===307){const index=window.diagnose_data.images.optimized_images.indexOf(image.url);if(index>-1){window.diagnose_data.images.optimized_images.splice(index,1);window.diagnose_data.images.redirected_images.push(image.url)}}}))}})).finally((()=>{window.parent.postMessage({type:"RAPIDLOAD_CHECK_RESULTS",data:diagnose_data},"*")}))}else{window.parent.postMessage({type:"RAPIDLOAD_CHECK_RESULTS",data:diagnose_data},"*")}}),5e3)}))})();';
+        }
+
+        add_action('wp_enqueue_scripts', function() use ($diagnose_script_content) {
+            if (isset($_REQUEST['rapidload_preview'])) {
+                wp_register_script('rapidload-diagnose-script', '', [], '');
+                wp_enqueue_script('rapidload-diagnose-script');
+
+                wp_add_inline_script('rapidload-diagnose-script', $diagnose_script_content);
+
+                wp_localize_script('rapidload-diagnose-script', 'rapidload_diagnose_tool', array(
+                    'ajaxurl' => admin_url('admin-ajax.php'),
+                    'nonce' => wp_create_nonce('uucss_nonce'),
+                ));
+            }
+        });
+
     }
 
     public static function get_license_key(){
@@ -372,7 +400,7 @@ class RapidLoad_Base
             $data = array(
                 'ajax_url'          => admin_url( 'admin-ajax.php' ),
                 'setting_url'       => admin_url( 'options-general.php?page=uucss_legacy' ),
-                'on_board_complete' => apply_filters('uucss/on-board/complete', false),
+                'on_board_complete' => apply_filters('uucss/on-board/complete', RapidLoad_Onboard::on_board_completed()),
                 'home_url' => home_url(),
                 'api_url' => RapidLoad_Api::get_key(),
                 'nonce' => self::create_nonce( 'uucss_nonce' ),
@@ -540,7 +568,6 @@ class RapidLoad_Base
         }
         if(isset($_REQUEST['rapidload_enable_cpcss']) && $_REQUEST['rapidload_enable_cpcss'] == "1"){
             self::$paged_options['uucss_enable_cpcss'] = "1";
-            self::$paged_options['uucss_enable_cpcss_mobile'] = "1";
             self::$paged_options['uucss_enable_css'] = "1";
         }
 
@@ -598,26 +625,25 @@ class RapidLoad_Base
             'uucss_fontface' => "1",
             'uucss_keyframes' => "1",
             'uucss_variables' => "1",
-            'uucss_enable_uucss' => "1",
-            'uucss_enable_cpcss' => "0",
-            'uucss_enable_cpcss_mobile' => "1",
+            'uucss_enable_uucss' => "0",
+            'uucss_enable_cpcss' => "1",
             'uucss_minify' => "1",
-            'uucss_support_next_gen_formats' => "0",
+            'uucss_support_next_gen_formats' => "1",
             'uucss_set_width_and_height' => "1",
             'uucss_self_host_google_fonts' => "1",
             'uucss_image_optimize_level' => "lossless",
             'uucss_exclude_above_the_fold_image_count' => 3,
             'uucss_enable_page_optimizer' => "1",
-            'rapidload_test_mode' => "1",
+            'rapidload_test_mode' => "0",
             'rapidload_cpcss_file_character_length' => 0,
             'uucss_adaptive_image_delivery' => "1",
             'uucss_load_js_method' => "1",
             'uucss_lazy_load_images' => "1",
             'minify_js' => "1",
-            'uucss_enable_cache' => "1",
-            'uucss_enable_cdn' => "1",
+            'uucss_enable_cache' => "0",
+            'uucss_enable_cdn' => "0",
             'update_htaccess_file' => "0",
-            'uucss_lazy_load_iframes' => "1"
+            'uucss_lazy_load_iframes' => "0"
 
         ];
     }
