@@ -105,16 +105,6 @@ class RapidLoad_Module
             'global' => 'cache'
         ];
 
-        $this->modules['page-optimizer'] = [
-            'id' => 'page-optimizer',
-            'title' => 'Page Optimizer',
-            'description' => 'Page Optimizer',
-            'group' => 'optimize',
-            'status' => 'on',
-            'class' => RapidLoad_Optimizer::class,
-            'global' => 'optimizer'
-        ];
-
     }
 
     function get_module_instance($id){
@@ -140,6 +130,7 @@ class RapidLoad_Module
 
         }
 
+        new RapidLoad_Optimizer();
         new RapidLoad_HTML_Minifier();
         new RapidLoad_CSS_Aggregator();
         new RapidLoad_Link_Preload();
@@ -392,7 +383,7 @@ class RapidLoad_Module
             ],
             'page-optimizer' => [
                 'id' => 'page-optimizer',
-                'status' => isset($options['uucss_enable_page_optimizer']) && $options['uucss_enable_page_optimizer'] == "1" ? "on" : "off",
+                'status' => "on",
             ]
         ];
 
