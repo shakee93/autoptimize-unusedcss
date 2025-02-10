@@ -293,8 +293,27 @@ const App = ({ popup, _showOptimizer = false }: {
                     {/*{testMode &&*/}
                     {/*    <TestModeNotification/>*/}
                     {/*}*/}
+                    
                     <div className='dark:text-brand-300 text-brand-800 dark:bg-brand-900 bg-[#F0F0F1] '>
-
+                     {/* New Banner Component */}
+                     <div className="bg-gradient-to-r from-[#332247] to-[#441C74] text-white py-3">
+                            <div className="container mx-auto px-4 text-center">
+                                <p className="text-sm font-medium">
+                                    RapidLoad 3.0 is Here!{' '}
+                                    <span className="opacity-90">
+                                        Get all the details in the official RapidLoad 3.0 guide.{' '}
+                                    </span>
+                                    <a 
+                                        href="https://docs.rapidload.io/rapidload-3-migration"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="underline hover:text-white/90 font-semibold"
+                                    >
+                                        Learn more
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
                         <Suspense>
                             <AppTour isDark={isDark}>
                                 <InitTour mode={mode} />
