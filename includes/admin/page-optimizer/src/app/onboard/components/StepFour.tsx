@@ -21,6 +21,7 @@ interface MetricWithAudits extends Metric {
 }
 import { getHomePagePerformance } from '../../../store/app/appActions';
 import { GearIcon } from '@radix-ui/react-icons';
+import TooltipText from 'components/ui/tooltip-text';
 
 interface Metric {
     name: string;
@@ -137,6 +138,23 @@ const StepFour = () => {
         }
     };
 
+    const getTooltipText = (id: string) => {
+        switch (id) {
+            case 'first-contentful-paint':
+                return 'How long it takes to display the first visible element of the page';
+            case 'speed-index':
+                return 'Time until the page is fully functional for the user';
+            case 'total-blocking-time':
+                return 'Measures the delay before the page becomes usable';
+            case 'largest-contentful-paint':
+                return 'Primary content display speed';
+            case 'cumulative-layout-shift':
+                return 'The visual stability measure of a page during loading';
+            default:
+                return '';
+        }
+    };
+
     const renderMetricsTable = () => (
         <div className="w-full overflow-x-auto">
             <table className="w-full border-separate border-spacing-0 border border-brand-200 rounded-2xl overflow-hidden bg-brand-0 ">
@@ -148,12 +166,12 @@ const StepFour = () => {
                         <th className="text-center p-4 font-semibold border-b border-brand-200 w-1/4">Boosted</th>
                     </tr>
                 </thead>
-                <tbody>
+                {/* <tbody>
                     {metrics.map((metric, index) => (
                         <tr key={metric.id}>
                             <td className="p-4 border-b border-brand-200 gap-2 items-center flex">
                                 <span>{getIcon(metric.id)}</span>
-                                {metric.title} {getShortName(metric.id)} <span><InfoIcon className='w-3 h-3 hover:cursor-pointer'/></span>
+                                {metric.title} {getShortName(metric.id)} <span><TooltipText text={getTooltipText(metric.id)}><InfoIcon className='w-3 h-3 hover:cursor-pointer'/></TooltipText></span>
                             </td>
                             <td className="text-center border-b border-brand-200">
                                 {metric.before}
@@ -166,6 +184,30 @@ const StepFour = () => {
                             </td>
                         </tr>
                     ))}
+                </tbody> */}
+                <tbody>
+                    {metrics.map((metric, index) => {
+                        // Skip rendering if after is greater than before
+                        if (parseFloat(metric.after) > parseFloat(metric.before)) return null;
+
+                        return (
+                            <tr key={metric.id}>
+                                <td className="p-4 border-b border-brand-200 gap-2 items-center flex">
+                                    <span>{getIcon(metric.id)}</span>
+                                    {metric.title} {getShortName(metric.id)} <span><TooltipText text={getTooltipText(metric.id)}><InfoIcon className='w-3 h-3 hover:cursor-pointer' /></TooltipText></span>
+                                </td>
+                                <td className="text-center border-b border-brand-200">
+                                    {metric.before}
+                                </td>
+                                <td className="text-center border-b border-brand-200">
+                                    {metric.after}
+                                </td>
+                                <td className="text-center border-b border-brand-200 font-medium">
+                                    {calculateBoost(parseFloat(metric.before), parseFloat(metric.after))}
+                                </td>
+                            </tr>
+                        );
+                    })}
                 </tbody>
             </table>
         </div>
