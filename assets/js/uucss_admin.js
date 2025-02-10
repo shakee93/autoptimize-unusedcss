@@ -787,8 +787,8 @@
                             tippyOptions.onHide = function () {
                             }
 
-                            var code = (rowData.meta.error && rowData.meta.error.code) ? rowData.meta.error.code : 500;
-                            var message = (rowData.meta.error && rowData.meta.error.message) ? rowData.meta.error.message : 'Unknown Error Occurred';
+                            var code = (rowData.meta && rowData.meta.error && rowData.meta.error.code) ? rowData.meta.error.code : 500;
+                            var message = (rowData.meta && rowData.meta.error && rowData.meta.error.message) ? rowData.meta.error.message : 'Unknown Error Occurred';
                             tippyOptions.content = '<div class="error-tooltip"><h5>Error</h5> <span><strong>CODE :</strong> ' + code + '</span> <br><span>' + message + '</span></div>';
 
                             //tippyOptions.triggerTarget = $(td).closest('tr')[0]
