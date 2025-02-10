@@ -359,7 +359,7 @@ class RapidLoad_Optimizer
 
     public function isOptimizerEnabled()
     {
-        return isset(self::$global_options['uucss_enable_page_optimizer']) && self::$global_options['uucss_enable_page_optimizer'] == "1" && RapidLoad_DB::$current_version >= 1.6;
+        return RapidLoad_DB::$current_version >= 1.6;
     }
 
     public function initializeOptimizers()
