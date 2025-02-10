@@ -1,5 +1,5 @@
 import { AccordionItem, AccordionTrigger, AccordionContent } from "./ui/accordion";
-import { Sparkles, MicroscopeIcon, LightbulbIcon, FileCodeIcon } from "lucide-react";
+import { Sparkles, MicroscopeIcon, LightbulbIcon, FileCodeIcon, Headset } from "lucide-react";
 import { PlusCircleIcon, MinusCircleIcon, CheckCircleIcon } from "@heroicons/react/24/solid";
 import AppButton from "components/ui/app-button";
 import { cn } from "lib/utils";
@@ -13,6 +13,7 @@ import FileTable from "app/page-optimizer/components/audit/content/table";
 import { Fail } from "app/page-optimizer/components/icons/icon-svg";
 import FAQSection from "./faq-section";
 import { AiAudit } from "./ai-audit";
+
 
 interface AnalysisResultsProps {
     object: PartialObject<{
@@ -49,9 +50,10 @@ interface AnalysisResultsProps {
     }>;
     relatedAudits: Audit[];
     input: any;
+    loading?: boolean;
 }
 
-export const AnalysisResults = ({ object, relatedAudits, input }: AnalysisResultsProps) => {
+export const AnalysisResults = ({ object, relatedAudits, input, loading }: AnalysisResultsProps) => {
     const [openItems, setOpenItems] = useState<string[]>(["0"]);
 
     const toggleAccordion = (id: string) => {
@@ -77,6 +79,8 @@ export const AnalysisResults = ({ object, relatedAudits, input }: AnalysisResult
                                     openItems={openItems}
                                     toggleAccordion={toggleAccordion}
                                     input={input}
+                                    loading={loading}
+                                    isLatestAudit={object?.CriticalIssues?.length}
                                 />
                             ))}
 
@@ -115,6 +119,32 @@ export const AnalysisResults = ({ object, relatedAudits, input }: AnalysisResult
                                     </div>
                                 </Card>
                             )}
+                            
+                            {/* AI Disclaimer and Support Section */}
+                            <div className="overflow-hidden w-full flex justify-center flex-col items-center p-6 rounded-3xl">
+                            <div className="text-center text-zinc-600 dark:text-zinc-400">
+                                    <p className="text-sm">RapidLoad AI can make mistakes</p>
+                                </div>
+                                <hr className="w-full border-zinc-300 dark:border-zinc-800 my-4" />
+                                <div className='flex gap-4'>
+                                <div className="text-left mb-6">
+                                    <p className="text-base text-zinc-700 dark:text-zinc-300">
+                                        Having trouble implementing these changes? Our support team is here to help guide you through the optimization process.
+                                    </p>
+                                </div>
+                                <AppButton
+                                    onClick={() => {
+                                        window.open('https://rapidload.io/support', '_blank');
+                                    }}
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white whitespace-nowrap"
+                                >
+                                    <Headset className="w-4 h-4" />
+                                    Contact Support
+                                </AppButton>
+                                </div>
+                               
+                            </div>
                         </div>
                     </div>
                 </div>
