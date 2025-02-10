@@ -1567,7 +1567,11 @@ class RapidLoad_Admin
 
             update_option('rapidload_license_data', serialize($data->data));
 
-            wp_send_json_success( $data->data );
+            if(isset($data->data)){
+                wp_send_json_success( $data->data );
+            }
+
+            wp_send_json_error( 'unknown error occurred' );
         }
 
         wp_send_json_error( 'unknown error occurred' );

@@ -27,9 +27,9 @@
                 <input type="radio" name="uucss-deactivate-option" id="uucss_feedback4">
                 <label for="uucss_feedback4">
                     I am not willing to pay for this plugin<br>
-                    <a href="https://rapidload.io/referral-free-month/?utm_source=rapidload_plugin&utm_medium=plugin-feedback" target="_blank" style="font-size: 10px" id="rapidload-free-month-link">
+                    <!-- <a href="https://rapidload.io/referral-free-month/?utm_source=rapidload_plugin&utm_medium=plugin-feedback" target="_blank" style="font-size: 10px" id="rapidload-free-month-link">
                         Get a <strong style="display: inline;font-size: 11px">FREE</strong> month of <strong style="display: inline;font-size: 11px">RapidLoad</strong>
-                    </a>
+                    </a> -->
                 </label>
             </li>
             <li uucss-option-id="5">
