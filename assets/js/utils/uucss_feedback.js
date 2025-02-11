@@ -1,11 +1,11 @@
 (function ($) {
     $(document).ready(function () {
-        var targetElement = 'tr[data-slug="unusedcss"] span.deactivate a';
+        var targetElement = 'tr[data-slug="rapidload-ai-optimize-web-vitals-automatically"] span.deactivate a';
         var redirectUrl = $(targetElement).attr('href');
         if ($('.uucss-feedback-overlay').length === 0) {
             $('body').prepend('<div class="uucss-feedback-overlay"></div>');
         }
-        $('#uucss_uninstall_feedback_popup').appendTo($(targetElement).parent());
+        $('#uucss_uninstall_feedback_popup').appendTo($(targetElement));
 
         $(targetElement).on('click', function (e) {
             e.preventDefault();
