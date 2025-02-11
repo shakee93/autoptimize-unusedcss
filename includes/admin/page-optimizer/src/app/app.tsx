@@ -308,10 +308,10 @@ const App = ({ popup, _showOptimizer = false }: {
                     {/*    <TestModeNotification/>*/}
                     {/*}*/}
                     
-                    <div className='dark:text-brand-300 text-brand-800 dark:bg-brand-900 bg-[#F0F0F1] mt-[-1px]'>
+                    <div className='dark:text-brand-300 text-brand-800 dark:bg-brand-900 bg-[#F0F0F1]'>
                      {/* New Banner Component */}
                      {showBanner && (
-                            <div className="bg-gradient-to-r from-[#332247] to-[#441C74] text-white py-3 relative">
+                            <div className="bg-gradient-to-r from-[#332247] to-[#441C74] text-white py-3 relative  mt-[-1px]">
                                 <div className="container mx-auto px-4 text-center">
                                     <p className="text-sm font-medium">
                                         RapidLoad 3.0 is Here!{' '}
