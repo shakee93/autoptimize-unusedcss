@@ -193,19 +193,28 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
 
                 </div>
 
-                {renderTextarea('Exclude URLs', 'URLs that need to be excluded from RapidLoad optimization.', 'uucss_excluded_links')}
-
-                <div className="flex m-2 ml-0 text-left w-full">
+                <div className="text-left flex w-fit gap-2 mt-2">
                     <Button  
                         className='flex gap-2' 
                         onClick={() => {
-                            // window.location.href = '/wp-admin/admin.php?page=rapidload-legacy-dashboard#/';
                             window.location.href = '/wp-admin/options-general.php?page=uucss_legacy&uucss_jobs';
                         }}
                         variant='outline'>
-                        Legacy Dashboard
+                        CSS Job Optimizations Table
+                    </Button>
+                    <Button  
+                        className='flex gap-2' 
+                        onClick={() => {
+                            window.location.href = '/wp-admin/admin.php?page=rapidload-legacy-dashboard#/';
+                        }}
+                        variant='outline'>
+                        Dashboard 2.0
                     </Button>
                 </div>
+
+                {renderTextarea('Exclude URLs', 'URLs that need to be excluded from RapidLoad optimization.', 'uucss_excluded_links')}
+
+                
             </div>
             <div className="border-t flex justify-end mt-4 px-4 pt-4 gap-2">
                 <AppButton
