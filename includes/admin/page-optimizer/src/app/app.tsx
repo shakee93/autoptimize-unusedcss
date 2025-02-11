@@ -282,6 +282,20 @@ const App = ({ popup, _showOptimizer = false }: {
             [key]: isOpen
         }));
     };
+
+    const [showBanner, setShowBanner] = useState(true);
+
+    // Check local storage on component mount
+    useEffect(() => {
+        const isBannerClosed = localStorage.getItem('rapidload-new-banner') === 'hidden';
+        setShowBanner(!isBannerClosed);
+    }, []);
+
+    // Handle banner close
+    const handleCloseBanner = () => {
+        setShowBanner(false);
+        localStorage.setItem('rapidload-new-banner', 'hidden');
+    };
     
 
     return (
@@ -294,26 +308,37 @@ const App = ({ popup, _showOptimizer = false }: {
                     {/*    <TestModeNotification/>*/}
                     {/*}*/}
                     
-                    <div className='dark:text-brand-300 text-brand-800 dark:bg-brand-900 bg-[#F0F0F1] '>
+                    <div className='dark:text-brand-300 text-brand-800 dark:bg-brand-900 bg-[#F0F0F1] mt-[-1px]'>
                      {/* New Banner Component */}
-                     <div className="bg-gradient-to-r from-[#332247] to-[#441C74] text-white py-3">
-                            <div className="container mx-auto px-4 text-center">
-                                <p className="text-sm font-medium">
-                                    RapidLoad 3.0 is Here!{' '}
-                                    <span className="opacity-90">
-                                        Get all the details in the official RapidLoad 3.0 guide.{' '}
-                                    </span>
-                                    <a 
-                                        href="https://docs.rapidload.io/rapidload-3-migration"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="underline hover:text-white/90 font-semibold"
+                     {showBanner && (
+                            <div className="bg-gradient-to-r from-[#332247] to-[#441C74] text-white py-3 relative">
+                                <div className="container mx-auto px-4 text-center">
+                                    <p className="text-sm font-medium">
+                                        RapidLoad 3.0 is Here!{' '}
+                                        <span className="opacity-90">
+                                            Get all the details in the official guide.{' '}
+                                        </span>
+                                        <a 
+                                            href="https://docs.rapidload.io/rapidload-3-migration"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="underline hover:text-white/90 font-semibold"
+                                        >
+                                            Learn more
+                                        </a>
+                                    </p>
+                                    <button 
+                                        onClick={handleCloseBanner}
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white p-1"
+                                        aria-label="Close banner"
                                     >
-                                        Learn more
-                                    </a>
-                                </p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        )}
                         <Suspense>
                             <AppTour isDark={isDark}>
                                 <InitTour mode={mode} />
