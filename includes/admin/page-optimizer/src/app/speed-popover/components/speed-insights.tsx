@@ -299,7 +299,7 @@ const Content = ({ dashboard = false }) => {
                         {/*<a href={`${options.dashboard_url}#/optimize`}>*/}
                             <a href={newUrl}>
                             <AppButton>
-                                <BoltIcon className='w-4 text-white dark:text-brand-900 rounded-[15px]'/> Optimizer
+                                <BoltIcon className='w-4 text-white dark:text-brand-900 rounded-[15px]'/> Open Optimizer
                             </AppButton>
                         </a>
 
