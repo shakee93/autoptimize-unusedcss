@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: RapidLoad - Optimize Web Vitals Automatically
+Plugin Name: RapidLoad AI - Optimize Web Vitals Automatically
 Plugin URI:  https://rapidload.io/
-Description: Makes your site even faster and lighter by automatically removing Unused CSS from your website.
-Version:     2.4.5
+Description: Supercharge your website with RapidLoad AI, featuring cutting-edge AI to automate optimizing CSS, JavaScript, images, fonts, and caching.
+Version:     3.0.0
 Author:      RapidLoad
 Author URI:  https://rapidload.io/
 */
