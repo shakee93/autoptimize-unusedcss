@@ -16,7 +16,11 @@ export default function Onboard() {
         const hasNonce = hasQueryParam("nonce");
         if (hasNonce) {
             setCurrentStep(2);
-            removeQueryParam("nonce");
+            //removeQueryParam("nonce");
+            const url = new URL(window.location.href);
+            const page = url.searchParams.get('page');
+            url.search = page ? `?page=${page}` : '';
+            window.history.replaceState({}, '', url.toString());
         } 
     }, []);
 
