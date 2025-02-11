@@ -1,4 +1,4 @@
-import { Sparkles, MicroscopeIcon, LightbulbIcon, FileCodeIcon, Loader2, Brain, ChevronDown } from "lucide-react";
+import { Sparkles, MicroscopeIcon, LightbulbIcon, FileCodeIcon, Loader2, Brain, ChevronDown, Loader } from "lucide-react";
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/solid";
 import AppButton from "components/ui/app-button";
 import { cn } from "lib/utils";
@@ -68,13 +68,15 @@ interface AiAuditProps {
     openItems: string[];
     toggleAccordion: (id: string) => void;
     input: any;
+    loading?: boolean;
+    isLatestAudit?: number;
 }
 
-export const AiAudit = ({ issue, index, openItems, toggleAccordion, input }: AiAuditProps) => {
+export const AiAudit = ({ issue, index, openItems, toggleAccordion, input, loading, isLatestAudit }: AiAuditProps) => {
     const [solutionError, setSolutionError] = useState<string | null>(null);
     const [isThinking, setIsThinking] = useState(false);
     const [thinkingTime, setThinkingTime] = useState(0);
-    const [showThoughts, setShowThoughts] = useState(false);
+    const [showThoughts, setShowThoughts] = useState(index === 0);
     const [thoughtsComplete, setThoughtsComplete] = useState(false);
     const [openSteps, setOpenSteps] = useState<Record<string, boolean>>({});
 
@@ -134,7 +136,13 @@ export const AiAudit = ({ issue, index, openItems, toggleAccordion, input }: AiA
                         <div className="flex gap-3.5 items-center text-zinc-800 dark:text-zinc-200">
                             <div
                                 className={`inline-flex items-center justify-center w-7 h-7 rounded-full dark:bg-brand-700 bg-brand-200/50`}>
+                                {/* {JSON.stringify((isLatestAudit ?? 0) - 1)}{JSON.stringify(index)} */}
+                                {(loading && index === (isLatestAudit ?? 0) - 1) ? (
+                                  <Loader className="w-4 h-4 animate-spin opacity-50" />
+                                
+                            ) : (
                                 <Fail />
+                            )}
                             </div>
                             {issue?.issue}
                             {issue?.pagespeed_insight_metrics?.map((metric: string) => (

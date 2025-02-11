@@ -22,6 +22,7 @@ const ComparisonDialog: React.FC<ComparisonDialogProps> = ({ open, setOpen }) =>
         {/*        Compare performance gears*/}
         {/*    </button>*/}
         {/*</DialogTrigger>*/}
+        <DialogTitle></DialogTitle>
         <DialogContent className="sm:max-w-[650px] sm:rounded-3xl gap-0">
             <DialogHeader className='px-10 pt-6'>
                 <DialogTitle>Compare Performance Gears</DialogTitle>

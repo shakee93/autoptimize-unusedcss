@@ -1,5 +1,5 @@
 import React from "react";
-import { Dialog, DialogContent, DialogFooter, DialogTitle } from "components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "components/ui/dialog";
 import { ContentSelector } from "components/ui/content-selector";
 import AppButton from "components/ui/app-button";
 
@@ -11,8 +11,14 @@ interface OptimzePagesTriggerProps {
 
 const OptimzePagesTrigger: React.FC<OptimzePagesTriggerProps> = ({ open, onOpenChange, data }) => (
     <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogTitle />
+        <DialogTitle></DialogTitle>
         <DialogContent className="sm:max-w-[650px]">
+        <DialogHeader className='border-b px-6 py-4 mt-1'>
+                    <DialogTitle></DialogTitle>
+                </DialogHeader>
+                <DialogDescription>
+                    {/* Additional description if needed */}
+                </DialogDescription>
             <div className="py-2">
                 <ContentSelector data={data} onOpenChange={onOpenChange} />
             </div>

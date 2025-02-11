@@ -221,7 +221,7 @@ const OptimizerPagesTable: React.FC<OptimizerPagesTableProps> = ({ settings, onO
                                         <PlusIcon className="w-5 h-5" /> Add
                                     </button>
                                 </DialogTrigger>
-                                <DialogTitle />
+                                <DialogTitle></DialogTitle>
                                 <DialogContent className="sm:max-w-[650px]">
                                     <div className="py-2">
                                         <ContentSelector data={allPosts} onOpenChange={setOpen} />

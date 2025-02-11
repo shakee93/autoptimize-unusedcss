@@ -17,9 +17,7 @@ const TableSkeleton: React.FC<TableSkeletonProps> = ({ rows, columns }) => {
         </tr>
     ));
 
-    return (
-        <> {skeletonRows} </>
-    );
+    return <>{skeletonRows}</>;
 };
 
 export default TableSkeleton;

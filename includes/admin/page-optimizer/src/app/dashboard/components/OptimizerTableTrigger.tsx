@@ -1,5 +1,5 @@
 import React from "react";
-import { Dialog, DialogContent, DialogFooter, DialogTitle } from "components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "components/ui/dialog";
 import AppButton from "components/ui/app-button";
 import OptimizerPagesTable from "app/dashboard/components/OptimizerPagesTable";
 
@@ -13,6 +13,12 @@ const OptimizerTableTrigger: React.FC<OptimizerTableTriggerProps> = ({ open, onO
     <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogTitle />
         <DialogContent className="sm:min-w-[950px] bg-brand-100/90 p-6 pt-12 sm:rounded-3xl">
+        <DialogHeader className='border-b px-6 py-4 mt-1'>
+                    <DialogTitle></DialogTitle>
+                </DialogHeader>
+                <DialogDescription>
+                    {/* Additional description if needed */}
+                </DialogDescription>
             <div className="">
                 <OptimizerPagesTable settings={settings} onOpenChange={onOpenChange} />
             </div>

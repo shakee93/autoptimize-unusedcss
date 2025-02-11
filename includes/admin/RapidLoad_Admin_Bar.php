@@ -210,7 +210,7 @@ class RapidLoad_Admin_Bar {
 
                 #rapidload-page-optimizer{
                     margin-left: -20px;
-                    margin-top: 1px;
+                    /* margin-top: 1px; */
                 }
 
                 /*.rl-page-optimizer-loaded #wp-admin-bar-rapidload *,*/

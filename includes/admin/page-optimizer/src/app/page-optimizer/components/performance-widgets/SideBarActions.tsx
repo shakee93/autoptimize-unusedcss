@@ -1,7 +1,7 @@
 import Mode from "app/page-optimizer/components/Mode";
 import {Popover, PopoverContent, PopoverTrigger} from "components/ui/popover";
 import TooltipText from "components/ui/tooltip-text";
-import {GraduationCapIcon, History} from "lucide-react";
+import {BookOpenIcon, GraduationCapIcon, History} from "lucide-react";
 import {cn, timeAgo} from "lib/utils";
 import PerformanceProgressBar from "components/performance-progress-bar";
 import ThemeSwitcher from "components/ui/theme-switcher";
@@ -51,7 +51,7 @@ const SideBarActions = () => {
                 {/*    }*/}
                 {/*</AnimatePresence>*/}
 
-                <AppButton data-tour='analyze'
+                {/* <AppButton data-tour='analyze'
                            onClick={() => {
                                dispatch(setCommonRootState('isTourOpen', true))
                                setTourPrompt(false)
@@ -62,6 +62,20 @@ const SideBarActions = () => {
                             'w-5',
                         )}/>
                         <span className='text-xxs font-normal text-brand-500'>Get Started</span>
+                    </div>
+
+
+                </AppButton> */}
+                 <AppButton data-tour='documentation'
+                            onClick={() => {
+                                window.open('https://docs.rapidload.io/', '_blank');
+                            }}
+                           className='transition-none h-12 px-3 rounded-2xl border-none bg-transparent' variant='outline'>
+                    <div className='flex flex-col gap-1 items-center'>
+                        <BookOpenIcon className={cn(
+                            'w-5',
+                        )}/>
+                        <span className='text-xxs font-normal text-brand-500'>Documentation</span>
                     </div>
 
 

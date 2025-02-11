@@ -683,6 +683,7 @@ const Optimizations = ({ }) => {
                                                     dispatch(setCommonState('diagnosticLoading', true));
                                                     setAiLoading(true);
                                                     handleFlushCache();
+                                                    setDiagnosticData(null);
                                                 }}
                                             >
                                                 {diagnosticData?.AnalysisSummary?.length ? 'Run Diagnostics Test Again' : 'Run Diagnostics Test '}
@@ -691,7 +692,7 @@ const Optimizations = ({ }) => {
                                         </div>
                                     </TooltipText>
                                 </DialogTrigger>
-                                <DialogTitle></DialogTitle>
+                               
                                 <DialogContent className="sm:max-w-[650px]">
                                     <DialogHeader className='border-b px-6 py-4 mt-1'>
                                         <DialogTitle>To Work Best, RapidLoad Needs These Insights</DialogTitle>
@@ -798,8 +799,10 @@ const Optimizations = ({ }) => {
                                     </button>
                                 </div>
                                 <iframe
+                                    
+                                 //   src={showIframe ? `${optimizerUrl.endsWith('/') ? `${optimizerUrl}?` : `${optimizerUrl}/?`}rapidload_preview` : ''}
                                     src={showIframe ? `${optimizerUrl}/?rapidload_preview` : ''}
-                                   // src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
+                                  //  src={showIframe ? 'http://rapidload.local/?rapidload_preview' : ''}
                                     className="w-full h-[600px] border-0"
                                     title="Optimization Test"
                                     onError={handleIframeError}
@@ -843,6 +846,7 @@ const Optimizations = ({ }) => {
                         object={diagnosticData}
                         relatedAudits={relatedAudits}
                         input={input}
+                        loading={!diagnosticComplete && aiResponding }
                     />
                 }
 
