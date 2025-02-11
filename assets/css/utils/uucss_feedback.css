@@ -1,9 +1,9 @@
 
-tr[data-slug="unusedcss"] span.deactivate{
+tr[data-slug="rapidload-ai-optimize-web-vitals-automatically"] span.deactivate{
     position: relative;
 }
 
-tr[data-slug="unusedcss"] .row-actions img{
+tr[data-slug="rapidload-ai-optimize-web-vitals-automatically"] .row-actions img{
     float: none;
 }
 
@@ -140,7 +140,7 @@ tr[data-slug="unusedcss"] .row-actions img{
     position: absolute;
     white-space: normal;
     width: 400px;
-    left: 100%;
+    left: 120%;
     top: -15px;
 }
 
