@@ -2,7 +2,7 @@
 
 Contributors: shakee93, futtta
 Donate link:
-Tags: ai, page-speed, speed, performance, critical-css, unused-css, cache, cdn, image-optimization, minify-js
+Tags: ai, cache, speed, performance, images
 Requires at least: 5.0
 Tested up to: 6.7
 Stable tag: 3.0.0
