@@ -1,102 +1,90 @@
-=== RapidLoad - Optimize Web Vitals Automatically ===
+=== RapidLoad AI - Optimize Web Vitals Automatically === 
+
 Contributors: shakee93, futtta
 Donate link:
-Tags: unusedcss, criticalcss, rapidload, image optimization, minify js
+Tags: ai, page-speed, speed, performance, critical-css, unused-css, cache, cdn, image-optimization, minify-js
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 2.4.5
+Stable tag: 3.0.0
 Requires PHP: 5.4
 License: GPLv3
 License URI: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
 
-Makes your site even faster and lighter by automatically removing Unused CSS from your website.
+Supercharge your website with RapidLoad AI, featuring cutting-edge AI to automate optimizing CSS, JavaScript, images, fonts, and caching.
 
 == Description ==
 
-**Auto-optimize images, CDN, remove Unused CSS, generate Critical CSS, and optimize JS. Auto Adaptive Optimization for instant results!**
+**RapidLoad AI is not FREE this is a PREMIUM plugin to provide high level optimization for top level businesses.**
 
-RapidLoad is a tool that can greatly improve your website's performance and user experience. It offers easy installation and onboarding, optimizing various elements like CSS, JavaScript, and images. With a global content delivery network(CDN) with Page Caching techniques, your site will load quickly for users worldwide. Plus, it includes the TITAN OPTIMIZER feature for page speed optimization.
+RapidLoad AI is a next-generation optimization tool designed to bring your site's performance to 90+ effortlessly. With AI diagnostics, AI Support chat, automated Unused CSS removal, Critical CSS generation, adaptive JavaScript optimization, on-the-fly image optimization, and an enterprise-level CDN, RapidLoad ensures your site achieves peak loading speeds and exceptional user experience.
 
 
-### Unlock the speed monster in you with these features
+### Why choose RapidLoad AI?
 
-- **Titan Optimizer**
-    - Built-in Google Page Insight Reports
-    - Recommended Actions for Audits
-    - No more back and forth switching between websites
-    - See all optimization status in one place
-- **RapidLoad CDN**
-    - Tier 1 Global Network
-    - 121 Edge Locations
-    - 24 ms Average Worldwide Latency
-    - NVMe+ SSD Servers
-- **Image Delivery**
-    - Automatic on-the-fly Image Optimization
-    - Modern WEBP, AVIF Support
-    - Built in Image CDN
-    - Adaptive Responsive Images
-    - Automatic width height setup
-    - Automatic LCP image prioritization
-    - Lazy Load Images
-- **CSS Delivery**
-    - Unused CSS Removal
-    - Critical CSS Generation
-    - Minify
-- **Javascript Delivery**
-    - Defer Javascript
-    - Delay non-critical Javascript
-    - Minify
-- **Font Delivery**
-   - Self-Host Google Fonts
-   - Preload Fonts
-- **Page Cache**
-    - Automatic Page Cache
-    - Cache Preloading
-    - Cache Purging
+- **Top Rated Support**
+   - Expert Support team to help non-technical users get their best performance. (Read Reviews) 
+- **AI Diagnostics**
+   - Analyzes your website bottlenecks and provides actionable insights to get your business perform at the top level.
+- **AI Support Chat**
+   - Understands your website and your business to provide technical and non-technical advice to boost your business.
+- **Intelligent Image Optimization**
+   - Auto-resize, compress, and deliver next-gen formats (WEBP/AVIF) using a FAST global image CDN.
+- **Automated Critical CSS**
+   - Ensures above-the-fold content loads instantly.
+- **Smart Unused CSS Removal**
+   - Removes CSS that's not in use dynamically.
+- **Adaptive JS Optimization**
+   - Defer and delay non-essential scripts automatically.
+- **Global CDN with Edge Caching**
+   - 121 edge locations with ultra-low latency (under 20ms).
+- **Page Caching & Preloading**
+   - Speed up your WordPress pages instantly.
+- **Google Fonts Optimization**
+   - Preload, self-host, and reduce external dependencies.
 
-## More about what's in RapidLoad
+# Key Features Breakdown
 
-**<img src="https://ps.w.org/unusedcss/assets/ttan.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />TITAN OPTIMIZER**
+## 🚀 RapidLoad AI
 
-Introducing Titan Optimizer, the ultimate tool for boosting your WordPress website's speed and performance. In today's digital world, having a fast, user-friendly site is crucial. Titan comes with an inbuilt Google PageSpeed Insights report generator, saving you the hassle of using external tools. It provides a thorough analysis of your site's performance, covering everything from audits to diagnostics, all within your content management system (CMS).
+**RapidLoad AI understands your page speed**  
+You can chat with RapidLoad AI to unlock new possibilities.  
+RapidLoad AI diagnoses your website with real-time data to provide actionable solutions to improve your performance.
 
-But Titan doesn't stop at analysis; it offers practical solutions to improve identified issues. It not only diagnoses problems but also gives you clear steps to fix them. With Titan, you'll not only understand your site's performance but also have a roadmap for making it better.
+## 📡 Global RapidLoad CDN
 
-If you want an all-in-one solution to supercharge your WordPress site's speed and user experience, Titan Optimizer is your answer. Say goodbye to the confusion of multiple tools and hello to streamlined web optimization with Titan.
+- Tier 1 Network Infrastructure with 121 Edge Locations.
+- Ultra-low latency with NVMe SSD-powered servers.
+- Automatic asset compression and delivery acceleration.
 
-<img src="https://ps.w.org/unusedcss/assets/titan_screenshot.png" alt="Titan Optimizer" style="width: 100%;margin-top:15px;margin-bottom:15px;" />
+## 📷 Advanced Image Optimization
 
-**<img src="https://ps.w.org/unusedcss/assets/css.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />CSS DELIVERY**
+- Adaptive responsive images with automatic resizing.
+- WEBP & AVIF next-gen format support.
+- Lazy Loading with priority LCP image preloading.
+- Auto width & height assignment for layout stability.
 
-RapidLoad is a specialized CSS optimization tool for WordPress websites. It improves site performance through several key features. First, it identifies and removes unused CSS, resulting in faster loading times and better user experiences. Second, it generates Critical CSS, ensuring above-the-fold content loads instantly. Additionally, RapidLoad minimizes CSS code by eliminating unnecessary characters, further speeding up loading times. It offers various other CSS optimization features, making it a comprehensive solution for enhancing website speed and user satisfaction. This optimization not only improves user experience but can also positively impact search engine rankings, making it a valuable tool for website owners.
+## 🎨 CSS Optimization
 
-**<img src="https://ps.w.org/unusedcss/assets/image-delivery.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />IMAGE DELIVERY**
+- Smart Unused CSS Removal to cut down unnecessary styles.
+- Critical CSS generation for near-instant page rendering.
+- CSS minification to reduce file size and speed up loads.
 
-RapidLoad offers powerful image optimization to enhance your website's visual appeal and performance. It balances faster load times with maintaining stunning image quality. With advanced compression techniques – lossy, glossy, and lossless – you can choose the right balance between speed and quality. Lossy achieves the highest compression rate, glossy retains image authenticity, and lossless preserves the original quality, making it ideal for various image types.
+## 🖥️ JavaScript Optimization
 
-RapidLoad also introduces efficient lazy-loading for images and iframes, reducing initial page load times and improving user experience. Plus, the Priority LCP Images feature prioritizes and preloads above-the-fold images, ensuring a seamless browsing experience from the moment your site loads, keeping users engaged and satisfied. It's a comprehensive solution to captivate visitors with visually stunning and high-performing web content.
+- Defer non-critical JS to prevent blocking rendering.
+- Delay JavaScript execution until user interaction.
+- JS minification for leaner, faster scripts.
 
-**<img src="https://ps.w.org/unusedcss/assets/cdn.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />CDN DELIVERY**
+## 🔡 Font Optimization
 
-RapidLoad utilizes a global Content Delivery Network (CDN) with 112 strategically located edge servers worldwide to efficiently distribute website content. With a remarkable 27ms latency, it ensures rapid access to resources, resulting in faster page loading and an exceptional user experience. RapidLoad's CDN accelerates content delivery, making slow loading times a thing of the past, ultimately delighting your audience with seamless browsing and faster website performance.
+- Self-host Google Fonts for better control and performance.
+- Font preloading to enhance user experience.
 
-**<img src="https://ps.w.org/unusedcss/assets/js.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />JS DELIVERY**
+## ⚡ Page Caching & Preloading
 
-RapidLoad offers top-tier tools to optimize JavaScript for superior performance and user experiences. With its JavaScript minification, you can shrink file sizes and streamline code, resulting in faster load times, increased user engagement, and higher conversions. RapidLoad also excels in JavaScript deferring, intelligently delaying non-critical script loading for quicker initial page loads. Moreover, you can enhance user interaction by postponing JavaScript until needed, ensuring a seamless and immersive browsing experience while preventing slowdowns during the initial page load.
-
-**<img src="https://ps.w.org/unusedcss/assets/font.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />FONT DELIVERY**
-
-Fonts play a crucial role in a website's character, and RapidLoad's font delivery enhances this aspect. It offers self-hosted Google Fonts, allowing you to store and serve fonts from your server, giving you more control over your website's voice and reducing reliance on external resources. Additionally, you can improve speed with font URL preloading, downloading font files before they're needed, reducing page load times, ensuring faster font rendering, and enhancing user experience, making your content more accessible and visible.
-
-**<img src="https://ps.w.org/unusedcss/assets/page_cache.svg" alt="Icon" style="float: left; margin-right: 10px; width: 25px;" />PAGE CACHE**
-
-Page Cache is the "memory" of a website, storing previously accessed data or resources to be quickly retrieved, reducing server load, and enhancing page loading speed for a greater user experience.
-
-RapidLoad empowers your website with a cutting-edge page cache, resembling a powerful memory bank that stores previously accessed data and resources. By quickly retrieving cached content, RapidLoad significantly reduces server load and supercharges page loading speed. Providing seamless browsing, reduced latency, and delighted users with RapidLoad's advanced page cache.
-
-RapidLoad goes the extra mile to optimize your website's mobile experience. Our innovative mobile cache ensures lightning-fast loading times and a seamless browsing experience for your mobile users. Benefit from reduced latency minimized data usage, and enhanced mobile performance with RapidLoad's dedicated mobile cache.
-
-Elevate your mobile website's speed with RapidLoad cache and let your users get the best website experience from any device.
+- Automatic page cache for faster repeat visits.
+- Cache preloading to ensure instant access.
+- Seamless integration with major caching plugins.
 
 == Installation ==
 
@@ -154,6 +142,13 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 3. RapidLoad Dashboard.
 
 == Changelog ==
+
+= 3.0.0 - 11/02/2025 =
+ * feat: add AI support chat
+ * feat: add AI diagnostics
+ * feat: unified dashboard
+ * feat: unified settings   
+ * feat: view cdn and image usage   
 
 = 2.4.5 - 31/01/2025 =
  * fix: critical security issues
