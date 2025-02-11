@@ -134,7 +134,7 @@ export const AnalysisResults = ({ object, relatedAudits, input, loading }: Analy
                                 </div>
                                 <AppButton
                                     onClick={() => {
-                                        window.open('https://rapidload.io/support', '_blank');
+                                        window.open('https://rapidload.zendesk.com/hc/en-us/requests/new', '_blank');
                                     }}
                                     rel="noopener noreferrer"
                                     className="flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white whitespace-nowrap"
