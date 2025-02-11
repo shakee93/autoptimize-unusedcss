@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { m } from "framer-motion";
-import {cn, hasQueryParam} from "lib/utils";
+import {cn, hasQueryParam, removeQueryParam} from "lib/utils";
 import StepOne from "app/onboard/components/StepOne";
 import StepTwo from "app/onboard/components/StepTwo";
 import StepThree from "app/onboard/components/StepThree";
@@ -16,12 +16,10 @@ export default function Onboard() {
         const hasNonce = hasQueryParam("nonce");
         if (hasNonce) {
             setCurrentStep(2);
-        }
+            removeQueryParam("nonce");
+        } 
     }, []);
 
-    if(uucssGlobal?.on_board_complete == '1'){
-        window.location.hash = "#/";
-    }
 
     const steps = [
         { component: <StepOne onNext={() => setCurrentStep(1)} />, key: "stepOne" },
