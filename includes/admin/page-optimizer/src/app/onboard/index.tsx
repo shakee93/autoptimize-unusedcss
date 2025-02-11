@@ -6,10 +6,11 @@ import StepTwo from "app/onboard/components/StepTwo";
 import StepThree from "app/onboard/components/StepThree";
 import StepFour from "app/onboard/components/StepFour";
 import { AnimatePresence, motion } from "framer-motion";
-
+import { useAppContext } from "../../context/app";
 
 export default function Onboard() {
     const [currentStep, setCurrentStep] = useState(0);
+    const { uucssGlobal } = useAppContext();
 
     useEffect(() => {
         const hasNonce = hasQueryParam("nonce");
@@ -17,6 +18,10 @@ export default function Onboard() {
             setCurrentStep(2);
         }
     }, []);
+
+    if(uucssGlobal?.on_board_complete == '1'){
+        window.location.hash = "#/";
+    }
 
     const steps = [
         { component: <StepOne onNext={() => setCurrentStep(1)} />, key: "stepOne" },

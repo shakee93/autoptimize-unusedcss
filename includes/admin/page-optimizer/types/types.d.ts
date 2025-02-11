@@ -24,6 +24,7 @@ interface WordPressOptions {
     rapidload_titan_gear?: string
     ai_root?: string
     db_to_be_updated?: string
+    rapidload_license_data?: License
 }
 
 type RapidLoadOptimizerModes = 'normal' | 'onboard' | 'preview'

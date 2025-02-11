@@ -15,26 +15,15 @@ type InputChangeHandler = React.ChangeEventHandler<HTMLInputElement>;
 const LicenseWidget = () => {
     const [isVisible, setIsVisible] = useState(true);
 
-    // const storedLicense = localStorage.getItem('rapidLoadLicense');
-    // const parsedStoredLicense = storedLicense ? JSON.parse(storedLicense) : null;
-    const [licenseInfo, setLicenseInfo] = useState<License | null>(() => {
-        const storedLicense = localStorage.getItem('rapidLoadLicense');
-        if (storedLicense) {
-            try {
-                return JSON.parse(storedLicense);
-            } catch (error) {
-                console.error("Error parsing license data", error);
-                return null;
-            }
-        }
-        return null;
-    });
-    const [inputLicense, setInputLicense] = useState("");
-    const [showInput, setShowInput] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [licenseMessage, setLicenseMessage] = useState("");
     const { license } = useSelector(optimizerData);
     const { options } = useAppContext();
+
+    const [licenseInfo, setLicenseInfo] = useState<License | null>(() => options.rapidload_license_data || null);
+    const [inputLicense, setInputLicense] = useState("");
+    const [showInput, setShowInput] = useState(false);
+    const [loading, setLoading] = useState(false);
+   
     const { dispatch } = useCommonDispatch();
 
 
