@@ -174,3 +174,9 @@ export function hasQueryParam(param: string) {
   const params = new URLSearchParams(window.location.search);
   return params.has(param);
 }
+
+export function removeQueryParam(param: string) {
+  const params = new URLSearchParams(window.location.search);
+  params.delete(param);
+  window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
+}

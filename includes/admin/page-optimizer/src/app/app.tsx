@@ -265,6 +265,10 @@ const App = ({ popup, _showOptimizer = false }: {
             window.location.hash = "#/onboard";
             setActiveRoute( "/onboard");
             return;
+        }else if(uucssGlobal?.on_board_complete == '1' && !hasNonce){
+            window.location.hash = "#/";
+            setActiveRoute( "/");
+            return;
         }
         window.location.hash = activeRoute;
     }, [activeRoute, onboardCompleted]);
