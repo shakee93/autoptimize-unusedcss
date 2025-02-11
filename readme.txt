@@ -143,6 +143,13 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 
 == Changelog ==
 
+= 3.0.1 - 11/02/2025 =
+ * feat: add AI support chat
+ * feat: add AI diagnostics
+ * feat: unified dashboard
+ * feat: unified settings   
+ * feat: view cdn and image usage  
+
 = 3.0.0 - 11/02/2025 =
  * feat: add AI support chat
  * feat: add AI diagnostics
