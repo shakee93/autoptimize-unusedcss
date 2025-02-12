@@ -5,7 +5,7 @@ Donate link:
 Tags: ai, cache, speed, performance, images
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 3.0.1
+Stable tag: 3.0.2
 Requires PHP: 5.4
 License: GPLv3
 License URI: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
@@ -142,6 +142,9 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 3. RapidLoad Dashboard.
 
 == Changelog ==
+
+= 3.0.2 - 12/02/2025 =
+ * fix: license key nonce issue preventing users from accessing dashboard optimizer
 
 = 3.0.1 - 11/02/2025 =
  * feat: add AI support chat
@@ -813,7 +816,7 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
  * feat: load original css on user interaction
  * feat: show job warnings
  * feat: only clear cache if required
- * feat: don’t clear cache on options update, requeue instead
+ * feat: don't clear cache on options update, requeue instead
  * feat: show queue status of jobs
  * feat: limit failed job retries to 5
  * feat: deactivate without redirecting to the app
