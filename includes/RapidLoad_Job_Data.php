@@ -129,9 +129,13 @@ class RapidLoad_Job_Data{
         $this->clearFiles();
     }
 
-    public function mark_as_success($data, $stats, $warnings, $status = 'success'){
+    public function mark_as_success($data, $stats, $warnings, $status = 'success', $job_type = 'uucss'){
         $this->data = isset($data) ? is_string($data) ? $data : serialize($data) : null;
-        $this->status = isset($data) && (isset($data['mobile']) && !empty($data['mobile']) || isset($data['desktop']) && !empty($data['desktop'])) ? 'success' : 'failed';
+        if($job_type == 'uucss'){
+            $this->status = $status;
+        }else{
+            $this->status = isset($data) && (isset($data['mobile']) && !empty($data['mobile']) || isset($data['desktop']) && !empty($data['desktop'])) ? 'success' : 'failed';
+        }
         $this->hits = 0;
         $this->stats = isset($stats) ? serialize($stats) : null;
         $this->warnings = isset($warnings) && count($warnings) > 0 ? $warnings : null;
