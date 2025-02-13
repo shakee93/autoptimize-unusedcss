@@ -1,3 +1,19 @@
+# Overview
 page optimizer location: ./includes/admin/page-optimizer
 build new components in ./includes/admin/page-optimizer/src/components
 use tailwind for styles
+
+## Release Instructions
+When asked to release the plugin, follow these steps:
+
+Note: plugin version and page-optimizer version are different. We only release the plugin when we have a new version of the plugin.
+
+1. update version in ./constants.php
+2. update the version comment in ./unusedcss.php
+3. update the version in ./readme.txt
+4. update ./readme.txt changelog section with changes (read the git commit messages for the changes or ask me what changed before you proceed)
+5. cd to ./includes/admin/page-optimizer
+6. run `npm run build`
+7. bump page-optimizer version in ./includes/admin/page-optimizer/package.json
+8. Create a git tag for the new version
+9. push the new tag to github
