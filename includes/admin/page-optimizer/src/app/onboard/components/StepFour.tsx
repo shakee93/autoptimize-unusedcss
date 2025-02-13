@@ -239,12 +239,11 @@ const StepFour = () => {
     }, []);
 
    
-
     const calculateImprovement = () => {
-        if (performance.first_entry === 0 || performance.last_entry === 0) {
+        if (HomePerformance_dummy.first_entry === 0 || HomePerformance_dummy.last_entry === 0) {
             return 50; // Default value when entries are 0
         }
-        const improvement = ((performance.last_entry - performance.first_entry) / performance.first_entry) * 100;
+        const improvement = ((HomePerformance_dummy.last_entry - HomePerformance_dummy.first_entry) / HomePerformance_dummy.first_entry) * 100;
         return Math.round(improvement);
     };
 
