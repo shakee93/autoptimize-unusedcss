@@ -20,6 +20,7 @@ export type CommonState = {
         uucssError: boolean;
         headerUrl: string;
         diagnosticLoading: boolean;
+        HomePerformance_dummy: HomePerformance;
         
     }
     desktop : {
@@ -37,8 +38,10 @@ export type CommonState = {
         uucssError: boolean;
         headerUrl: string;
         diagnosticLoading: boolean;
-    
+        HomePerformance_dummy: HomePerformance;
     }
+
+    rapidload_license_data_dummy: License ;
 
 };
 

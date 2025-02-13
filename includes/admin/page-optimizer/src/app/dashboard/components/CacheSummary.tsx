@@ -226,7 +226,7 @@ const CacheSummary = ({className}: {className: string}) => {
                 <div className="flex justify-end text-sm font-semibold">
                     <button 
                         onClick={handleClearAllCache}
-                        className="h-8 bg-brand-100/90 text-brand-950 py-1.5 px-4 rounded-lg flex items-center gap-1"
+                        className="h-8 bg-brand-100/90 text-brand-950 dark:hover:bg-brand-800/50 dark:text-brand-300 dark:text-brand-300 dark:bg-brand-800/40 py-1.5 px-4 rounded-lg flex items-center gap-1"
                     >
                         {clearAllLoading ? (
                             <Loader className='w-4 h-4 animate-spin' />

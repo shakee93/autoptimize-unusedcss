@@ -63,7 +63,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
     const [performance, setPerformance] = useState<number>(0)
     const [on, setOn] = useState<boolean>(false)
 
-    const { dispatch, hoveredMetric, activeMetric, diagnosticLoading } = useCommonDispatch()
+    const { dispatch, hoveredMetric, activeMetric, diagnosticLoading, HomePerformance_dummy } = useCommonDispatch()
     const {
         dispatch: commonDispatch
     } = useCommonDispatch()
@@ -273,9 +273,9 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                                         ) : (
                                             <PerformanceProgressBar
                                                 loading={reanalyze && !diagnosticLoading}
-                                                performance={(data?.performance && gain && metric) ?
-                                                    (data.performance + gain >= 99) ? 99 :
-                                                        data.performance + gain : data?.performance}>
+                                                performance={(HomePerformance_dummy.last_entry && gain && metric) ?
+                                                    (HomePerformance_dummy.last_entry + gain >= 99) ? 99 :
+                                                        HomePerformance_dummy.last_entry + gain : HomePerformance_dummy.last_entry}>
                                                 {!!(metric && gain) && (
                                                     <div className='flex gap-1 flex-col text-xxs font-normal'>
                                                         <span>

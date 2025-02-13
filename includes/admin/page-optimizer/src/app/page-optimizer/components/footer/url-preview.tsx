@@ -17,7 +17,7 @@ const UrlPreview = () => {
     const { data, loading, error, activeReport } = useSelector(optimizerData);
     const { report } = useSelector((state: RootState) => state.app);
     const { mobile, desktop } = report
-    const { headerUrl } = useCommonDispatch();
+    const { headerUrl, HomePerformance_dummy, rapidload_license_data_dummy } = useCommonDispatch();
 
     const {
         togglePerformance,
@@ -42,9 +42,9 @@ const UrlPreview = () => {
         <div className='flex flex-col items-center justify-center'>
             <div
                 className='text-sm items-center cursor-default text-ellipsis truncate md:max-w-sm lg:max-w-xl '>
-                    <TooltipText text={finalUrl}>
+                    <TooltipText text={rapidload_license_data_dummy.siteUrl}>
                     {
-                        truncateUrl(finalUrl)
+                        truncateUrl(rapidload_license_data_dummy.siteUrl)
                     }
                     </TooltipText>
             </div>

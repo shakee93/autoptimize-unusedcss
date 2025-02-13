@@ -6,6 +6,7 @@ define('RAPIDLOAD_ASSET_MAP', [
     'assets/inter-greek-wght-normal.woff2' => 'assets/inter-greek-wght-normal.woff2',
     'assets/inter-vietnamese-wght-normal.woff2' => 'assets/inter-vietnamese-wght-normal.woff2',
     'assets/inter-latin-wght-normal.woff2' => 'assets/inter-latin-wght-normal.woff2',
+
     'assets/inter-latin-ext-wght-normal.woff2' => 'assets/inter-latin-ext-wght-normal.woff2',
     'assets/index.css' => 'assets/index.gkUZYDgM.css',
     'assets/index.js' => 'assets/index.Do2pDQEM.js',
@@ -13,4 +14,5 @@ define('RAPIDLOAD_ASSET_MAP', [
     'assets/animations.js' => 'assets/animations.CVpoelRy.js',
     'assets/core-vendor.js' => 'assets/core-vendor.V80Ff32-.js',
     'assets/vendor.js' => 'assets/vendor.T3CYoFTJ.js'
+
 ]);

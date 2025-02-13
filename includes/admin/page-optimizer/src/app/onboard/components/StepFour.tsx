@@ -37,7 +37,7 @@ const StepFour = () => {
     const beforeColor = usePerformanceColors(performance.first_entry);
     const afterColor = usePerformanceColors(performance.last_entry);
     const [isFadingOut, setIsFadingOut] = useState(false);
-    const { dispatch, aiPredictionResult } = useCommonDispatch()
+    const { dispatch, aiPredictionResult, HomePerformance_dummy } = useCommonDispatch()
     const [aiMessage, setAiMessage] = useState(false)
 
     // const metrics: Metric[] = useMemo(() => [
@@ -228,7 +228,7 @@ const StepFour = () => {
 
     useEffect(() => {
         if (homePerformance.last_entry < homePerformance.first_entry || homePerformance.last_entry < 1) {
-            setAiMessage(true)
+            setAiMessage(false)
            // console.log(aiPredictionResult)
         } else {
             setPerformance(homePerformance)
@@ -239,12 +239,11 @@ const StepFour = () => {
     }, []);
 
    
-
     const calculateImprovement = () => {
-        if (performance.first_entry === 0 || performance.last_entry === 0) {
+        if (HomePerformance_dummy.first_entry === 0 || HomePerformance_dummy.last_entry === 0) {
             return 50; // Default value when entries are 0
         }
-        const improvement = ((performance.last_entry - performance.first_entry) / performance.first_entry) * 100;
+        const improvement = ((HomePerformance_dummy.last_entry - HomePerformance_dummy.first_entry) / HomePerformance_dummy.first_entry) * 100;
         return Math.round(improvement);
     };
 
@@ -339,7 +338,7 @@ const StepFour = () => {
                                             background={false}
                                             stroke={6}
                                             loading={performance.first_entry < 1}
-                                            performance={performance.first_entry > 1 ? performance.first_entry : 80}
+                                            performance={HomePerformance_dummy.first_entry}
                                            // performance={50}
                                         />
                                     </div>
@@ -375,7 +374,7 @@ const StepFour = () => {
                                             background={false}
                                             stroke={6}
                                             loading={performance.last_entry < 1}
-                                            performance={performance.last_entry > 1 ? performance.last_entry : 80}
+                                            performance={HomePerformance_dummy.last_entry}
                                            // performance={90}
                                         />
                                     </div>

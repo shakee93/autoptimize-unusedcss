@@ -1,11 +1,15 @@
 <?php
 define('RAPIDLOAD_ASSET_MAP', [
+
     'assets/inter-greek-ext-wght-normal.woff2' => 'assets/inter-greek-ext-wght-normal.woff2',
     'assets/inter-greek-wght-normal.woff2' => 'assets/inter-greek-wght-normal.woff2',
     'assets/inter-cyrillic-ext-wght-normal.woff2' => 'assets/inter-cyrillic-ext-wght-normal.woff2',
     'assets/inter-cyrillic-wght-normal.woff2' => 'assets/inter-cyrillic-wght-normal.woff2',
+
     'assets/inter-vietnamese-wght-normal.woff2' => 'assets/inter-vietnamese-wght-normal.woff2',
+    'assets/inter-greek-wght-normal.woff2' => 'assets/inter-greek-wght-normal.woff2',
     'assets/inter-latin-ext-wght-normal.woff2' => 'assets/inter-latin-ext-wght-normal.woff2',
+
     'assets/inter-latin-wght-normal.woff2' => 'assets/inter-latin-wght-normal.woff2',
     'assets/index.css' => 'assets/index.gkUZYDgM.css',
     'assets/index.js' => 'assets/index.Do2pDQEM.js',
@@ -20,4 +24,5 @@ define('RAPIDLOAD_ASSET_MAP', [
     'assets/animations.CVpoelRy.map' => 'assets/animations.CVpoelRy.js.map',
     'assets/vendor.T3CYoFTJ.map' => 'assets/vendor.T3CYoFTJ.js.map',
     'assets/index.Do2pDQEM.map' => 'assets/index.Do2pDQEM.js.map'
+
 ]);

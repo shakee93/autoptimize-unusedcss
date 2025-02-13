@@ -22,7 +22,7 @@ export default function ChatHistoryPanel({
     <div className="w-64 h-full border-r border-gray-200 p-4 flex flex-col">
       <button
         onClick={onNewChat}
-        className="w-full mb-4 flex items-center justify-center gap-2 px-4 py-2 bg-brand-950 text-white rounded-lg hover:bg-brand-900 transition-colors"
+        className="w-full mb-4 flex items-center justify-center dark:bg-brand-800/40 dark:text-brand-300 dark:hover:bg-brand-800/50 gap-2 px-4 py-2 bg-brand-950 text-white rounded-lg hover:bg-brand-900 transition-colors"
       >
         <MessagesSquare size={16} />
         New Chat
@@ -38,8 +38,8 @@ export default function ChatHistoryPanel({
               onClick={() => onSelectConversation(conv.id)}
               className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
                 conv.active 
-                  ? 'bg-brand-100 text-brand-950' 
-                  : 'hover:bg-gray-100 text-gray-700'
+                  ? 'bg-brand-100 text-brand-950 dark:bg-brand-800/40 dark:text-brand-300' 
+                  : 'hover:bg-gray-100 text-gray-700 dark:hover:bg-brand-800/40 dark:text-brand-300'
               }`}
             >
               <div className="flex items-center gap-2">
