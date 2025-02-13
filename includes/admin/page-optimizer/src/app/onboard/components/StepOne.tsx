@@ -30,7 +30,7 @@ interface AIPredictionResult {
 
 const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
     const { options } = useAppContext()
-    const { dispatch, HomePerformance_dummy } = useCommonDispatch()
+    const { dispatch, HomePerformance_dummy, rapidload_license_data_dummy } = useCommonDispatch()
     const { activeReport, data, error, loading } = useSelector(optimizerData);
     const [predictedLoading, setPredictedLoading] = useState(true)
     const [aiPredictionResult, setAiPredictionResult] = useState<AIPredictionResult | null>(null)
@@ -125,7 +125,7 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                         <InformationCircleIcon className='w-10 h-10 text-purple-700/90' />
                     </div>
                     <span className='font-medium text-xs text-zinc-600 dark:text-brand-300'>
-                        Your website ({options?.optimizer_url}) uses caching. We bypass it to <br /> reveal the unoptimized performance, showing RapidLoad's full <br /> impact.
+                        Your website ({rapidload_license_data_dummy.siteUrl}) uses caching. We bypass it to <br /> reveal the unoptimized performance, showing RapidLoad's full <br /> impact.
                     </span>
                 </div>
                 
