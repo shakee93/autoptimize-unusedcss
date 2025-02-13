@@ -30,7 +30,7 @@ const initialState: CommonState = {
         HomePerformance_dummy: {
             first_entry: 45,
             last_entry: 100,
-            first_response_time: "1.23s",
+            first_response_time: "5.23s",
             last_response_time: "1.23s",
             first_entry_metrics: [],
             last_entry_metrics: [],
