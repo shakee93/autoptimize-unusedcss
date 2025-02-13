@@ -306,7 +306,7 @@ class Javascript_Enqueue
         }
 
         if(preg_match('/\.min\.js/', $filename)){
-            return;
+            //return;
         }
 
         if($this->str_contains($filename, ".min.js")){
