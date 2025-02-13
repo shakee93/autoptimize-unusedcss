@@ -18,13 +18,14 @@ const LicenseWidget = () => {
     const [licenseMessage, setLicenseMessage] = useState("");
     const { license } = useSelector(optimizerData);
     const { options } = useAppContext();
+    const { dispatch, rapidload_license_data_dummy } = useCommonDispatch();
 
-    const [licenseInfo, setLicenseInfo] = useState<License | null>(() => options.rapidload_license_data || null);
+    const [licenseInfo, setLicenseInfo] = useState<License | null>(() => rapidload_license_data_dummy);
     const [inputLicense, setInputLicense] = useState("");
     const [showInput, setShowInput] = useState(false);
     const [loading, setLoading] = useState(false);
    
-    const { dispatch } = useCommonDispatch();
+   
 
 
     useEffect(() => setLicenseMessage(""), [inputLicense]);

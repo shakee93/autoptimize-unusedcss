@@ -19,11 +19,13 @@ interface PerformanceWidgetProps {
 
 const PerformanceWidget: React.FC<PerformanceWidgetProps> = ({ className }) => {
 
-    const { homePerformance } = useSelector(optimizerData);
+    // const { homePerformance } = useSelector(optimizerData);
+    const { dispatch, HomePerformance_dummy } = useCommonDispatch()
+    const homePerformance = HomePerformance_dummy;
     const performanceScore = homePerformance.last_entry;
     const [performanceIcon, progressbarColor, progressbarBg] = usePerformanceColors(performanceScore);
     const lighterColor = tinycolor(progressbarBg).lighten(10).toString();
-    const { dispatch } = useCommonDispatch()
+   
     const { options } = useAppContext();
 
 

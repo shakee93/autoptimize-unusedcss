@@ -30,7 +30,7 @@ interface AIPredictionResult {
 
 const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
     const { options } = useAppContext()
-    const { dispatch } = useCommonDispatch()
+    const { dispatch, HomePerformance_dummy } = useCommonDispatch()
     const { activeReport, data, error, loading } = useSelector(optimizerData);
     const [predictedLoading, setPredictedLoading] = useState(true)
     const [aiPredictionResult, setAiPredictionResult] = useState<AIPredictionResult | null>(null)
@@ -189,7 +189,7 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                                         :
                                         <PerformanceProgressBar
                                             className={cn('max-h-44')}
-                                            performance={data ? data?.performance : 90}
+                                            performance={HomePerformance_dummy.first_entry}
                                             loading={loading}
                                         />
                                     }

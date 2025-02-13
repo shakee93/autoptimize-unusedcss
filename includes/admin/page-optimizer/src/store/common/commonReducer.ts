@@ -11,17 +11,44 @@ const initialState: CommonState = {
         openAudits: [],
         hoveredMetric: null,
         activeMetric: null,
-        settingsMode: null
-       
+        settingsMode: null,
+        HomePerformance_dummy: {
+            first_entry: 45,
+            last_entry: 100,
+            first_response_time: "1.23s",
+            last_response_time: "1.23s",
+            first_entry_metrics: [],
+            last_entry_metrics: [],
+        }
     },
     desktop: {
         activeTab: 'configurations',
         openAudits: [],
         hoveredMetric: null,
         activeMetric: null,
-        settingsMode: null
+        settingsMode: null,
+        HomePerformance_dummy: {
+            first_entry: 45,
+            last_entry: 100,
+            first_response_time: "1.23s",
+            last_response_time: "1.23s",
+            first_entry_metrics: [],
+            last_entry_metrics: [],
+        }
         
+    },
+  
+   
+
+    rapidload_license_data_dummy: {
+        email: "jonathankelly@gmail.com",
+        licensedDomain: "https://jonathankelly.co",
+        name: "Jonathan Kelly",
+        next_billing: 1739419559,
+        plan: "Professional",
+        siteUrl: "https://jonathankelly.co"
     }
+
 };
 
 const commonReducer = (state = initialState, action: CommonAction): CommonState => {
