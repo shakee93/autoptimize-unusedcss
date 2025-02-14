@@ -50,7 +50,7 @@ const PageSpeedInsights = ({ }) => {
 
     return (
         <div className={cn(
-            'tabs flex sticky -top-1 dark:bg-brand-800/40 bg-brand-200 px-4 py-4 pb-4 rounded-t-3xl border-b-2 border-brand-300',
+            'tabs flex sticky -top-1 dark:bg-brand-800/40 bg-brand-200 px-4 py-4 pb-4 rounded-t-3xl border-b-2 border-brand-300 dark:border-brand-600/40',
         )}>
         <div data-tour='audit-groups'
                     className={cn(

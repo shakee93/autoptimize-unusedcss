@@ -436,7 +436,7 @@ const Fields = ({ input, updates, update }: AdditionalInputsProps) => {
 
                 <Label
                     htmlFor="name"
-                    className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60"
+                    className="flex flex-col text-left w-full dark:text-brand-300 dark:bg-brand-800/40 dark:border-brand-800/80 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60"
                 >
                     <div className="flex items-center justify-between">
                         <div className="flex flex-col">
@@ -444,19 +444,19 @@ const Fields = ({ input, updates, update }: AdditionalInputsProps) => {
                             {input?.control_values_description?.length ? (
                                 input.control_values_description.map(
                                     (control_value: any) => control_value.value === value && (
-                                        <span key={control_value.value} className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[335px]">
+                                        <span key={control_value.value} className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[335px] dark:text-brand-300">
                                             {control_value.description}
                                         </span>
                                     )
                                 )
                             ) : (
-                                <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[335px]">
+                                <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[335px] dark:text-brand-300">
                                     {input.control_description}
                                 </span>
                             )}
                         </div>
                         <ToggleGroup
-                            className="inline-flex bg-mauve6 rounded border border-1 space-x-px "
+                            className="inline-flex bg-mauve6 rounded border border-1 space-x-px dark:bg-brand-800/40"
                             type="single"
                             value={String(value)}
                             onValueChange={(v) => update(v, input.key)}
