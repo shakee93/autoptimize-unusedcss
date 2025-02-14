@@ -205,18 +205,18 @@ const Fields = ({ input, updates, update }: AdditionalInputsProps) => {
     }
 
     return (
-        <div className='flex flex-col justify-start items-center gap-3 normal-case' >
+        <div className='flex flex-col justify-start items-center gap-3 normal-case dark:text-brand-300' >
 
             {input?.control_type === 'checkbox' &&
 
                 <Label
                     htmlFor="name"
-                    className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60"
+                    className="flex flex-col text-left w-full dark:text-brand-300 dark:bg-brand-800/40 dark:border-brand-800/80 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60"
                 >
                     <div className="flex items-center justify-between">
                         <div className="flex flex-col">
                             <span>{input.control_label}</span>
-                            <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[335px]">
+                            <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[335px] dark:text-brand-300 ">
                                 {input.control_description}
                             </span>
                         </div>
@@ -233,10 +233,10 @@ const Fields = ({ input, updates, update }: AdditionalInputsProps) => {
 
                 <Label
                     htmlFor="name"
-                    className="flex flex-col text-left w-full bg-brand-100/30 dark:text-brand-300 rounded-xl py-4 px-4 border border-brand-200/60"
+                    className="flex flex-col text-left w-full bg-brand-100/30 dark:text-brand-300 dark:bg-brand-800/40 dark:border-brand-800/80 rounded-xl py-4 px-4 border border-brand-200/60"
                 >
                     <span>{input.control_label}</span>
-                    <span className="pt-2 text-sm font-normal text-gray-600">
+                    <span className="pt-2 text-sm font-normal text-gray-600 dark:text-brand-300">
                         {input.control_description}
                     </span>
                     <Textarea id={input.key}
@@ -254,7 +254,7 @@ const Fields = ({ input, updates, update }: AdditionalInputsProps) => {
                     className="flex flex-col text-left w-full bg-brand-100/30 dark:text-brand-300 rounded-xl py-4 px-4 border border-brand-200/60"
                 >
                     <span>{input.control_label}</span>
-                    <span className="pt-2 text-sm font-normal text-gray-600">
+                    <span className="pt-2 text-sm font-normal text-gray-600 dark:text-brand-300">
                         {input.control_description}
                     </span>
                     <div className="flex w-full items-center gap-2 mt-2">
@@ -317,17 +317,17 @@ const Fields = ({ input, updates, update }: AdditionalInputsProps) => {
             {input.control_type === 'options' &&
                 <Label
                     htmlFor="name"
-                    className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60"
+                    className="flex flex-col text-left w-full dark:text-brand-300 dark:bg-brand-800/40 dark:border-brand-800/80 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60"
                 >
                     <div className="flex items-center justify-between">
                         <div className="flex flex-col">
                             <span>{input.control_label}</span>
-                            <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[335px]">
+                            <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[335px] dark:text-brand-300">
                                 {input.control_description}
                             </span>
                         </div>
                         <Select value={value} onValueChange={v => update(v, input.key)}>
-                            <SelectTrigger className="w-[130px] capitalize bg-brand-0">
+                            <SelectTrigger className="w-[130px] capitalize bg-brand-0 dark:bg-brand-800/40">
                                 <SelectValue placeholder="Select action" />
                             </SelectTrigger>
                             <SelectContent className="z-[100001]">
@@ -354,16 +354,16 @@ const Fields = ({ input, updates, update }: AdditionalInputsProps) => {
             {input.control_type === 'number-range' &&
 
                 <Label htmlFor="name"
-                    className="flex flex-col gap-4 text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60">
+                    className="flex flex-col gap-4 text-left w-full dark:text-brand-300 dark:bg-brand-800/40 dark:border-brand-800/80 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60">
                     <div className="flex items-center justify-between">
                         <div className="flex flex-col">
                             <span>{input.control_label}</span>
-                            <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[335px]">
+                            <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[335px] dark:text-brand-300">
                                 {input.control_description}
                             </span>
                         </div>
                         <ToggleGroup
-                            className="inline-flex bg-mauve6 rounded border border-1 space-x-px "
+                            className="inline-flex bg-mauve6 rounded border border-1 space-x-px dark:bg-brand-800/40"
                             type="single"
                             value={String(value)} // this has been set to string because sometimes the data value returns as number
                             onValueChange={(v) => update(v, input.key)}
@@ -389,14 +389,14 @@ const Fields = ({ input, updates, update }: AdditionalInputsProps) => {
 
                 <Label
                     htmlFor="name"
-                    className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60"
+                    className="flex flex-col text-left w-full dark:text-brand-300 dark:bg-brand-800/40 dark:border-brand-800/80 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60"
                 >
                     <div className="flex items-center justify-between cursor-pointer " onClick={toggleIsOpen} >
                         <div className="flex flex-col">
                             <span>
                                 Misc Options
                             </span>
-                            <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[425px]">
+                            <span className="pt-2 text-sm font-normal text-gray-600 sm:max-w-[425px] dark:text-brand-300">
                                 This base page optimization will be used on all the other pages in the selected group.
                             </span>
                         </div>
@@ -417,7 +417,7 @@ const Fields = ({ input, updates, update }: AdditionalInputsProps) => {
                                 />
                                 <div className="flex flex-col">
                                     <span className="cursor-pointer">{childInput.control_label}</span>
-                                    <span className="text-sm font-normal text-gray-600 sm:max-w-[425px]">
+                                    <span className="text-sm font-normal text-gray-600 sm:max-w-[425px] dark:text-brand-300">
                                         {childInput.control_description}
                                     </span>
                                 </div>

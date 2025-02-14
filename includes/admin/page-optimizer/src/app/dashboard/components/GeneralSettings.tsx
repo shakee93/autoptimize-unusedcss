@@ -71,7 +71,7 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
     const renderCheckbox = (label: string, description: string, key: keyof GeneralSettings) => {
         const isChecked = typeof settingsData[key] === 'boolean' ? settingsData[key] : false;
         return (
-            <div className="relative flex gap-2 font-medium text-base w-fit items-center py-1">
+            <div className="relative flex gap-2 font-medium text-base w-fit items-center py-1 dark:text-brand-300">
                 <Checkbox
                     checked={isChecked}
                     onCheckedChange={() => handleCheckboxChange(key)}
@@ -119,13 +119,13 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
                 {renderCheckbox('Debug Mode', 'Enable debug logs for RapidLoad.', 'uucss_enable_debug')}
 
                 
-                <div className="flex flex-col text-left w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60 my-2">
+                <div className="flex flex-col text-left dark:bg-brand-800/40 w-full dark:text-brand-300 bg-brand-100/30 rounded-xl py-4 px-4 border border-brand-200/60 my-2">
                     <div className="flex items-center justify-between cursor-pointer " onClick={toggleIsOpen} >
                         <div className="flex flex-col">
                             <span>
                             Queue Options
                             </span>
-                            <span className="text-sm font-normal text-gray-600 sm:max-w-[425px]">
+                            <span className="text-sm font-normal text-gray-600 sm:max-w-[425px] dark:text-brand-300">
                             More advanced options for pro users.
                         </span>
                         </div>
@@ -141,9 +141,9 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
                         {/* Queue Dropdowns */}
                         <div className="flex items-center space-x-4 mb-1">
                             <div className="flex items-center gap-2">
-                                <label className="text-sm font-medium text-gray-700">Run</label>
+                                <label className="text-sm font-medium text-gray-700 dark:text-brand-300">Run</label>
                                 <Select value={jobCount} onValueChange={(v) => setJobCount(v)}>
-                                    <SelectTrigger className="w-[130px] capitalize bg-brand-0">
+                                    <SelectTrigger className="w-[130px] capitalize bg-brand-0 dark:text-brand-300 dark:bg-brand-950">
                                         <SelectValue placeholder="1 Job" />
                                     </SelectTrigger>
                                     <SelectContent className="z-[100001]">
@@ -164,9 +164,9 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
                             </div>
 
                             <div className="flex items-center gap-2">
-                                <label className="text-sm font-medium text-gray-700">Per</label>
+                                <label className="text-sm font-medium text-gray-700 dark:text-brand-300">Per</label>
                                 <Select value={timeInterval} onValueChange={(v) => setTimeInterval(v)}>
-                                    <SelectTrigger className="w-[130px] capitalize bg-brand-0">
+                                    <SelectTrigger className="w-[130px] capitalize bg-brand-0 dark:text-brand-300 dark:bg-brand-950">
                                         <SelectValue placeholder="10 Minutes" />
                                     </SelectTrigger>
                                     <SelectContent className="z-[100001]">
@@ -195,7 +195,7 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
 
                 <div className="text-left flex w-fit gap-2 mt-2">
                     <Button  
-                        className='flex gap-2' 
+                        className='flex gap-2 dark:bg-brand-800/40 dark:text-brand-300 dark:hover:bg-brand-800/50' 
                         onClick={() => {
                             window.location.href = '/wp-admin/options-general.php?page=uucss_legacy&uucss_jobs';
                         }}
@@ -203,7 +203,7 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
                         CSS Job Optimizations Table
                     </Button>
                     <Button  
-                        className='flex gap-2' 
+                        className='flex gap-2 dark:bg-brand-800/40 dark:text-brand-300 dark:hover:bg-brand-800/50' 
                         onClick={() => {
                             window.location.href = '/wp-admin/admin.php?page=rapidload-legacy-dashboard#/';
                         }}
@@ -219,12 +219,12 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
             <div className="border-t flex justify-end mt-4 px-4 pt-4 gap-2">
                 <AppButton
                     onClick={handleSaveSettings}
-                    className="text-sm font-semibold text-white py-1.5 px-4 rounded-lg"
+                    className="text-sm font-semibold text-white py-1.5 px-4 rounded-lg dark:bg-brand-800/40 dark:text-brand-300 dark:hover:bg-brand-800/50"
                 >
                     {loading && <Loader className='w-4 animate-spin '/> } Save Changes
                 </AppButton>
                 <AppButton onClick={() => onClose(false)}
-                           className='mr-2 text-sm text-gray-500 bg-brand-0 hover:bg-accent border border-input'>
+                           className='mr-2 text-sm text-gray-500 bg-brand-0 hover:bg-accent border border-input dark:bg-brand-800/40 dark:text-brand-300 dark:hover:bg-brand-800/50'>
                     Close
                 </AppButton>
 

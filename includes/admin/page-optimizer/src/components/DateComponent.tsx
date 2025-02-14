@@ -14,7 +14,7 @@ const DateComponent =  ({ data }: DateProps) => {
     });
 
     return (
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-gray-600 dark:text-brand-300">
             {formattedDate}
         </div>
     );
