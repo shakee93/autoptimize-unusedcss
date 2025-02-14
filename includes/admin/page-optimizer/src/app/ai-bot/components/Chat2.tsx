@@ -155,7 +155,7 @@ export default function Chat({ apiEndpoint = `${aiRoot}/support` }: ChatProps) {
   };
 
   return (
-    <div className="chat-container relative flex container mx-auto h-[calc(100vh-4rem)] max-h-[750px] py-4 bg-white my-4 rounded-2xl overflow-hidden">
+    <div className="chat-container relative flex container mx-auto dark:bg-brand-950 h-[calc(100vh-4rem)] max-h-[750px] py-4 bg-white my-4 rounded-2xl overflow-hidden">
       <div className={`
         w-42 transform transition-all duration-300 ease-in-out
         ${showHistory 
@@ -190,7 +190,7 @@ export default function Chat({ apiEndpoint = `${aiRoot}/support` }: ChatProps) {
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-4 bg-white">
+        <div className="flex-1 overflow-y-auto px-4 bg-white dark:bg-brand-950">
           {messages.length === 1 ? (
             <WelcomeScreen />
           ) : (
@@ -202,10 +202,10 @@ export default function Chat({ apiEndpoint = `${aiRoot}/support` }: ChatProps) {
         <form
           // onSubmit={handleSubmit}
           onSubmit={handleFormSubmit}
-          className="input-container flex items-center px-2 py-1 border-t border-gray-200 bg-brand-100 mx-6 rounded-xl"
+          className="input-container flex items-center px-2 py-1 border-t border-gray-200 bg-brand-100 mx-6 rounded-xl dark:bg-brand-800/40 dark:text-brand-300 dark:border-brand-700"
         >
           <input
-            className="flex-1 p-2 bg-brand-100 rounded-lg focus:outline-none focus:border-transparent"
+            className="flex-1 p-2 bg-brand-100 rounded-lg focus:outline-none focus:border-transparent dark:bg-brand-800/10 dark:text-brand-300 dark:border-brand-700"
             value={input}
             placeholder="Ask Rapidload AI..."
             onChange={handleInputChange}
@@ -213,9 +213,9 @@ export default function Chat({ apiEndpoint = `${aiRoot}/support` }: ChatProps) {
           <button
             type="submit"
             disabled={input.trim() === ""}
-            className="ml-2 bg-brand-950 text-white p-2 rounded-lg hover:bg-brand-950 disabled:opacity-50 transition-colors"
+            className="ml-2 bg-brand-950 text-white p-2 rounded-lg hover:bg-brand-950 disabled:opacity-50 transition-colors dark:bg-brand-500 dark:hover:bg-brand-400 dark:text-brand-950 dark:hover:text-brand-950 hover:cursor-pointer"
           >
-            <ArrowUpIcon className="h-4 w-4 text-brand-0" />
+            <ArrowUpIcon className="h-4 w-4 text-brand-0 dark:text-brand-950" />
           </button>
         </form>
 
@@ -366,7 +366,7 @@ const ChatMessage = ({ message, loading }: { message: any, loading: boolean }) =
           }`}
       >
         {message.content && message.content.length > 0 ? (
-          <div className="prose prose-sm prose-p:m-0 prose-p:p-0 prose-p:text-sm prose-p:text-brand-950">
+          <div className="prose prose-sm prose-p:m-0 prose-p:p-0 prose-p:text-sm prose-p:text-brand-950 dark:prose-p:text-brand-300">
             <Markdown>{message.content}</Markdown>
           </div>
         ) : (

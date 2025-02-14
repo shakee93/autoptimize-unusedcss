@@ -404,7 +404,7 @@ const SpeedSettings = ({ }) => {
             transition={{ duration: 0.2, delay: 0.05 }}
             className=''
         >
-            <div className='border-b border-brand-300 px-11 py-4'>
+            <div className='border-b border-brand-300 px-11 py-4 dark:border-brand-600/40'>
                 <div className="pb-4">
                     {settingsLoading &&
                         <div>Loading...</div>

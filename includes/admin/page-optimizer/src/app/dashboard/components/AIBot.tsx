@@ -96,7 +96,7 @@ const AIBot = ({ className }: { className: string }) => {
                             type="text"
                             onClick={() => (window.location.hash = '#/rapidload-ai')}
                             placeholder="Ask about anything..."
-                            className="w-full p-2 border border-brand-300 rounded-full focus:outline-none focus:border-black bg-brand-100 pr-10 pl-4"
+                            className="w-full p-2 border border-brand-200 dark:bg-brand-800/40 dark:text-brand-300 dark:border-brand-700 rounded-full focus:outline-none focus:border-black bg-brand-100 pr-10 pl-4"
                         />
                         <ArrowUpCircleIcon
                             className="cursor-pointer h-10 w-10 text-brand-950 absolute right-0 top-1/2 transform -translate-y-1/2 " />

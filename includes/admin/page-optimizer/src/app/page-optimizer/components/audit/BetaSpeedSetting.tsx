@@ -381,7 +381,7 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
                                                     </TooltipText>
                                                 </div>
                                             </DialogTrigger>
-                                            <DialogContent asChild className={`${settings.name === "Delay Javascript" ? 'sm:max-w-[650px] bg-brand-100' : 'sm:max-w-[600px]'} cursor-auto`}>
+                                            <DialogContent asChild className={`${settings.name === "Delay Javascript" ? 'sm:max-w-[650px] bg-brand-100 dark:bg-brand-950' : 'sm:max-w-[600px]'} cursor-auto`}>
 
                                                 <DialogHeader className='border-b px-6 py-8 mt-1'>
                                                     <DialogTitle>{settings.name} Settings</DialogTitle>
