@@ -44,7 +44,7 @@ class RapidLoad_CDN_Enqueue
 
         foreach ($links as $link){
 
-            if(isset($link->rel) && $link->rel == "canonical"){
+            if(isset($link->rel) && !in_array($link->rel, ['stylesheet', 'preload'])){
                 continue;
             }
 
@@ -80,7 +80,7 @@ class RapidLoad_CDN_Enqueue
 
         $images = $this->dom->find( 'img' );
 
-        foreach ($images as $image){
+        /*foreach ($images as $image){
 
             if($this->str_contains($image->src, RapidLoad_Image::$image_indpoint)){
                 continue;
@@ -94,15 +94,15 @@ class RapidLoad_CDN_Enqueue
 
             }
 
-        }
+        }*/
 
-        $inline_styles = $this->dom->find( 'style' );
+        /*$inline_styles = $this->dom->find( 'style' );
 
         foreach ($inline_styles as $inline_style){
 
             $inline_style->__set('innertext',$this->replace_font_urls_with_cdn($inline_style->innertext));
 
-        }
+        }*/
 
         $head = $this->dom->find('head', 0);
         $preconnect = '<link href="' . $this->options['uucss_cdn_url'] . '" rel="preconnect" crossorigin>';

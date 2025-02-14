@@ -179,7 +179,7 @@ class CriticalCSS_Store
         }
 
         if ($this->job_data) {
-            $this->job_data->mark_as_success($data, null, $warnings);
+            $this->job_data->mark_as_success($data, null, $warnings, 'success', 'cpcss');
             $this->job_data->save();
             $this->cpcss_cached($this->job_data->job->url);
         }
