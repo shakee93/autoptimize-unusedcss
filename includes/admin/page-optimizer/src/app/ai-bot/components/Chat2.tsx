@@ -317,12 +317,12 @@ const ChatMessages = ({ messages, loading, error }: { messages: any[], loading: 
             <ChatMessage message={message} loading={loading} />
    
             {/* Show loading state */}
-            {index === filteredMessages.length - 1 && loading && (
+            {index === filteredMessages.length - 1 && loading && message.role === 'user' &&  (
               <div className="flex justify-start my-2">
                 <div className="flex mt-2 mr-2">
                   <AnimatedLogo className="!opacity-100" size="sm" isPlaying={true} />
                 </div>
-                <div className="max-w-lg px-4 py-2 rounded-lg text-brand-950">
+                <div className="max-w-lg px-4 py-2 rounded-lg text-brand-950 dark:text-brand-300">
                   <span className="italic font-light">Thinking...</span>
                 </div>
               </div>
@@ -334,8 +334,8 @@ const ChatMessages = ({ messages, loading, error }: { messages: any[], loading: 
                 <div className="flex mt-2 mr-2">
                   <AnimatedLogo className="!opacity-100" size="sm" isPlaying={false} />
                 </div>
-                <div className="max-w-lg px-4 py-2 rounded-lg bg-red-50 border border-red-100">
-                  <span className="text-red-500">{errorText}</span>
+                <div className="max-w-lg px-4 py-2 rounded-lg bg-red-50 border border-red-100 dark:bg-red-950 dark:border-red-800">
+                  <span className="text-red-500 dark:text-red-400">{errorText}</span>
                 </div>
               </div>
             )}
@@ -361,8 +361,8 @@ const ChatMessage = ({ message, loading }: { message: any, loading: boolean }) =
       )}
       <div
         className={`max-w-lg px-4 py-2 rounded-lg ${message.role === "user"
-          ? "bg-gray-100 text-brand-950"
-          : "text-brand-950"
+          ? "bg-gray-100 text-brand-950 dark:bg-brand-800/40 dark:text-brand-300"
+          : "text-brand-950 dark:text-brand-300"
           }`}
       >
         {message.content && message.content.length > 0 ? (
