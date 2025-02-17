@@ -70,7 +70,7 @@ const SideBarActions = () => {
                             onClick={() => {
                                 window.open('https://docs.rapidload.io/', '_blank');
                             }}
-                           className='transition-none h-12 px-3 rounded-2xl border-none bg-transparent' variant='outline'>
+                           className='transition-none h-12 px-3 rounded-2xl border-none bg-transparent dark:bg-brand-950' variant='outline'>
                     <div className='flex flex-col gap-1 items-center'>
                         <BookOpenIcon className={cn(
                             'w-5',

@@ -45,6 +45,7 @@ import useSubmitSettings from "hooks/useSubmitSettings";
 import { Loader } from "lucide-react";
 import { buildStyles, CircularProgressbarWithChildren } from "react-circular-progressbar";
 import TooltipText from "components/ui/tooltip-text";
+import { useRootContext } from "../../../context/root";
 const capitalizeCategory = (category: string) => {
     if (category === 'css' || category === 'cdn') {
         return category.toUpperCase();
@@ -98,7 +99,7 @@ const SpeedSettings = ({ }) => {
     const { toast } = useToast();
     const { testMode } = useSelector(optimizerData);
     const { handleTestModeSwitchChange } = useTestModeUtils();
-   
+    const { isDark } = useRootContext()
 
     const icons: {
         [key in SettingsCategory]: React.ReactElement;
@@ -183,7 +184,7 @@ const SpeedSettings = ({ }) => {
         ));
     }, []);
 
-
+    
     const [passedAudits, setPassedAudits] = useState<AuditSetting[]>([]);
     const [notPassedAudits, setNotPassedAudits] = useState<AuditSetting[]>([]);
     const isInitialRender = useRef(true);
@@ -447,9 +448,9 @@ const SpeedSettings = ({ }) => {
                                         <div className="w-16 h-16 border-4 border-t-transparent border-[#7E22CE] rounded-full animate-spin"></div>
                                     ) : (
                                     <>
-                                {mode === 'starter' && <Starter cls={'px-2 py-2'} />}
-                                        {mode === 'accelerate' && <Accelerate cls={'px-2 py-2'} />}
-                                        {mode === 'turboMax' && <TurboMax cls={'px-2 py-2'} />}
+                                {mode === 'starter' && <Starter cls={'px-2 py-2'} isDark={isDark}/>}
+                                        {mode === 'accelerate' && <Accelerate cls={'px-2 py-2'} isDark={isDark}/>}
+                                        {mode === 'turboMax' && <TurboMax cls={'px-2 py-2'} isDark={isDark}/>}
                                     </>
                                 )}
 

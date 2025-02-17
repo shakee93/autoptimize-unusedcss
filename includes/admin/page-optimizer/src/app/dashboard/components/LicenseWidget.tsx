@@ -158,7 +158,7 @@ const LicenseWidget = () => {
                                 <span className="text-brand-400/90 dark:text-brand-300">Connect your license</span>
                             )}
                         </div>
-                        <div className="bg-purple-800/10 px-2.5 py-1.5 rounded-xl w-fit dark:bg-brand-700">{renderLicenseStatus()}</div>
+                        <div className="bg-purple-800/10 px-2.5 py-1.5 rounded-xl w-fit dark:bg-brand-800/40">{renderLicenseStatus()}</div>
                     </div>
 
                     <div className="grid gap-4 px-8 text-sm relative">

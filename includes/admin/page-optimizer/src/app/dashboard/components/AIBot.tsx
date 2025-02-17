@@ -39,8 +39,8 @@ const AIBot = ({ className }: { className: string }) => {
                 <div className="flex flex-col items-center p-6 gap-2 relative">
                     <button
                         onClick={() => setOpen(true)}
-                        className="flex gap-1 m-6 my-0 right-0 absolute cursor-pointer border text-brand-950 py-1.5 px-2 rounded-lg text-xs font-medium hover:bg-gray-100">
-                        <InboxIcon className="h-4 w-4 text-brand-950" />
+                        className="flex gap-1 m-6 dark:bg-brand-800/40 dark:text-brand-300 dark:hover:bg-brand-800/50 my-0 right-0 absolute cursor-pointer border text-brand-950 py-1.5 px-2 rounded-lg text-xs font-medium hover:bg-gray-100">
+                        <InboxIcon className="h-4 w-4 text-brand-950 dark:text-brand-300" />
                     </button>
 
                     <Dialog open={open} onOpenChange={setOpen}>
@@ -58,9 +58,9 @@ const AIBot = ({ className }: { className: string }) => {
                                         <div
                                             key={conv.id}
                                             onClick={() => handleConversationSelect(conv)}
-                                            className="flex items-center gap-2 p-3 border rounded-lg hover:bg-gray-100 cursor-pointer"
+                                            className="flex items-center gap-2 p-3 border rounded-lg hover:bg-gray-100 cursor-pointer dark:bg-brand-800/40 dark:text-brand-300 dark:hover:bg-brand-800/50"
                                         >
-                                            <MessagesSquare className="h-4 w-4 text-brand-950" />
+                                            <MessagesSquare className="h-4 w-4 text-brand-950 dark:text-brand-300" />
                                             <span className="text-sm truncate">{conv.title}</span>
                                         </div>
                                     ))

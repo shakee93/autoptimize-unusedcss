@@ -353,20 +353,23 @@ const App = ({ popup, _showOptimizer = false }: {
                         {activeRoute !== "/onboard" && !showStepTwo && (
                         <div className='justify-center flex container'>
                             <header
-                                className={cn('container px-2 py-2 flex gap-3 mt-4 justify-between dark:bg-brand-930/80  bg-brand-0 rounded-2xl', testMode && 'ring-2 ring-[#f7b250] ring-offset-0')}>
+                                className={cn('container px-2 py-2 flex gap-3 mt-4 justify-between dark:bg-brand-950 bg-brand-0 rounded-2xl', testMode && 'ring-2 ring-[#f7b250] ring-offset-0')}>
                                 <div className='flex items-center'>
                                     <div className='relative px-2'>
                                         <img className='w-10'
-                                            src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/new-logo.svg`) : '/new-logo.svg'}
+                                            // src={options?.page_optimizer_base ? (options?.page_optimizer_base + `/new-logo.svg`) : '/new-logo.svg'}
+                                            src={options?.page_optimizer_base ? 
+                                                (options?.page_optimizer_base + `/${isDark ? 'dark_mode_logo.svg' : 'new-logo.svg'}`) 
+                                                : `/${isDark ? 'dark_mode_logo.svg' : 'new-logo.svg'}`}
                                             alt='RapidLoad - #1 to unlock breakneck page speed' />
                                     </div>
                                     <div className='flex'>
                                         <div
                                             data-tour='app-switch'
-                                            className='select-none relative flex dark:bg-brand-800 py-0.5 pl-[2px] pr-[8px] rounded-2xl overflow-hidden'
+                                            className='select-none relative flex dark:bg-brand-800/40 py-0.5 pl-[2px] pr-[8px] rounded-2xl overflow-hidden'
                                         >
                                             <div
-                                                className={`absolute top-1 bottom-1 left-1 bg-brand-200/60 border dark:bg-brand-700 rounded-xl transition-all duration-300 ease-in-out transform ${activeRoute === routes[1].id ? "translate-x-[115%] w-[45%]" : "translate-x-0 w-[55%]"
+                                                className={`absolute top-1 bottom-1 left-1 bg-brand-200/60 border dark:bg-brand-950 rounded-xl transition-all duration-300 ease-in-out transform ${activeRoute === routes[1].id ? "translate-x-[115%] w-[45%]" : "translate-x-0 w-[55%]"
                                                     }`}
                                             >
 
@@ -383,7 +386,7 @@ const App = ({ popup, _showOptimizer = false }: {
                                                         className={cn(
                                                             'flex h-10 text-sm z-10 font-medium items-center px-3 gap-2 cursor-pointer',
                                                             diagnosticLoading && 'cursor-not-allowed opacity-90 pointer-events-none',
-                                                            activeRoute === route.id ? 'text-black dark:text-white' : 'text-gray-500'
+                                                            activeRoute === route.id ? 'text-black dark:text-white  dark:text-brand-300' : 'text-gray-500'
                                                         )}
                                                     >
                                                         <Circle
