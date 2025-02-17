@@ -220,7 +220,7 @@ class UnusedCSS_Store
 
         if($this->job_data){
 
-            $this->job_data->mark_as_success($files, $stats, $warnings);
+            $this->job_data->mark_as_success($files, $stats, $warnings, 'success', 'uucss');
             $this->job_data->save();
             $this->uucss_cached($this->job_data->job->url);
 
