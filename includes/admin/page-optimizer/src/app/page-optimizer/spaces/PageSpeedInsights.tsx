@@ -54,7 +54,7 @@ const PageSpeedInsights = ({ }) => {
         )}>
         <div data-tour='audit-groups'
                     className={cn(
-                        'dark:bg-brand-930/90 flex justify-between items-center select-none rounded-[20px] w-full',
+                        'flex justify-between items-center select-none rounded-[20px] w-full',
                         isSticky && 'rounded-b-xl rounded-t-none shadow-lg'
                     )}
 
@@ -67,7 +67,7 @@ const PageSpeedInsights = ({ }) => {
                                     className={cn(
                                         `cursor-pointer flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-2xl`,
                                         isSticky && 'py-3',
-                                        activeTab === tab.key ? "font-medium bg-brand-0 " : "dark:hover:text-brand-300"
+                                        activeTab === tab.key ? "font-medium bg-brand-0 dark:bg-brand-950" : "dark:hover:text-brand-300"
                                     )}
                                     key={tab.key}
                                 >
