@@ -30,6 +30,7 @@ import TooltipText from "components/ui/tooltip-text";
 import TimeAgo from "components/TimeAgo";
 import { Dialog, DialogDescription, DialogHeader, DialogContent, DialogTitle, DialogTrigger } from "components/ui/dialog";
 import { Checkbox } from "components/ui/checkbox";
+import { isDev } from "lib/utils";
 
 
 const DiagnosticSchema = z.object({
@@ -127,6 +128,8 @@ const Optimizations = ({ }) => {
     const [privacyPolicy, setPrivacyPolicy] = useState(false);
     const [diagnosticData, setDiagnosticData] = useState<DiagnosticResults | null>(null);
     const [lastDiagnosticData, setLastDiagnosticData] = useState<DiagnosticResults | null>(null);
+    const { options } = useAppContext();
+    
 
     useEffect(() => {
         const storedValue = localStorage.getItem("rapidload_privacy_policy");
@@ -154,6 +157,9 @@ const Optimizations = ({ }) => {
     const { object, submit, isLoading } = useObject({
         api: `${AIBaseURL}/diagnosis`,
         schema: DiagnosticSchema,
+        headers: {
+            'Authorization': `Bearer ${isDev ? import.meta.env.VITE_KEY : options.license_key!}`
+        },
         onFinish: (diagnostic: any) => {
             //console.log(diagnostic)
             aiResultsComplete();
@@ -167,7 +173,6 @@ const Optimizations = ({ }) => {
     });
 
     const { dispatch } = useCommonDispatch()
-    const { options } = useAppContext()
     const optimizerUrl = options?.optimizer_url;
     const [showIframe, setShowIframe] = useState(false);
 
