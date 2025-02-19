@@ -44,7 +44,7 @@ const PerformanceWidget: React.FC<PerformanceWidgetProps> = ({ className }) => {
             {/*    Performance <GaugeCircle className="w-5 h-5"/>*/}
             {/*</h4>*/}
             <div
-                className="flex items-center justify-center text-md gap-2 bg-white dark:bg-brand-950 rounded-t-3xl border border-b-0 w-full overflow-hidden relative">
+                className="flex items-center justify-center text-md gap-2 bg-white dark:bg-brand-800 rounded-t-3xl border border-b-0 w-full overflow-hidden relative">
                 <div className="flex justify-center p-4 max-w-xl mx-auto w-full relative ">
                     {/* Before Results */}
 

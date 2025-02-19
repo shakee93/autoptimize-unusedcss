@@ -624,7 +624,7 @@ const Optimizations = ({ }) => {
             >
 
 
-                <div className={cn('px-6 py-6 bg-white z-50 relative', aiLoading && !aiResponding ? 'rounded-t-3xl dark:bg-brand-950' : 'rounded-3xl dark:bg-brand-950')}>
+                <div className={cn('px-6 py-6 bg-white z-50 relative', aiLoading && !aiResponding ? 'rounded-t-3xl dark:bg-brand-800' : 'rounded-3xl dark:bg-brand-800')}>
                     <div className="flex gap-4 w-full items-start">
                         {/* Logo Column */}
                         <div className="flex justify-start items-center gap-2 w-10">
@@ -671,7 +671,7 @@ const Optimizations = ({ }) => {
                                         <div className={cn('flex justify-end items-center mt-2')}>
                                             <AppButton
                                                 disabled={aiLoading}
-                                                className={cn("rounded-xl px-8 py-6 whitespace-nowrap", loading && 'cursor-not-allowed opacity-60 pointer-events-none')}
+                                                className={cn("rounded-xl px-8 py-6 whitespace-nowrap dark:bg-brand-950 dark:hover:bg-brand-900 dark:text-brand-300", loading && 'cursor-not-allowed opacity-60 pointer-events-none')}
                                                 onClick={() => {
 
                                                     if (!privacyPolicy) {

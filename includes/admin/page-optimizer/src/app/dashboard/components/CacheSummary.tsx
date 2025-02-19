@@ -155,7 +155,7 @@ const CacheSummary = ({className}: {className: string}) => {
     }, [cacheUsage]);
     const CacheItem = ({ label, size, action }: CacheUsageItem) => (
         <div className="flex justify-between items-center py-1.5 font-medium">
-            <div className="text-sm dark:text-brand-300 text-brand-500">{label}</div>
+            <div className="text-sm dark:text-brand-300/80 text-brand-500">{label}</div>
             <div className="flex gap-1">
                 <div className="text-sm dark:text-brand-300">{size.size}</div>
                 {action ? (
@@ -208,8 +208,8 @@ const CacheSummary = ({className}: {className: string}) => {
             <DoughnutChart data={chartData} options={chartOptions} />
         </div> */}
 
-                <div className="p-6 py-14 border rounded-3xl text-center">
-                    <div className="text-sm dark:text-brand-300 text-brand-400">Total cache size</div>
+                <div className="p-6 py-14 border dark:border-brand-600 rounded-3xl text-center">
+                    <div className="text-sm dark:text-brand-300/80 text-brand-400">Total cache size</div>
                     <div className="text-[27px] font-bold">{totalCacheSize}</div>
                 </div>
 
@@ -226,7 +226,7 @@ const CacheSummary = ({className}: {className: string}) => {
                 <div className="flex justify-end text-sm font-semibold">
                     <button 
                         onClick={handleClearAllCache}
-                        className="h-8 bg-brand-100/90 text-brand-950 dark:hover:bg-brand-800/50 dark:text-brand-300 dark:text-brand-300 dark:bg-brand-800/40 py-1.5 px-4 rounded-lg flex items-center gap-1"
+                        className="h-8 bg-brand-100/90 text-brand-950 dark:bg-brand-800 dark:border-brand-600 dark:border dark:hover:bg-brand-600/40 dark:text-brand-300 py-1.5 px-4 rounded-lg flex items-center gap-1"
                     >
                         {clearAllLoading ? (
                             <Loader className='w-4 h-4 animate-spin' />

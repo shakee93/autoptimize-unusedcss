@@ -22,6 +22,7 @@ import {PlusIcon} from "@heroicons/react/24/outline";
 import ComparisonTable from "components/ui/compare-table";
 import AppButton from "components/ui/app-button";
 import ComparisonDialog from '../ComparisonDialog';
+import { useRootContext } from "../../../../context/root";
 
 const boosterLevels: PerformanceGear[] = ['starter', 'accelerate', 'turboMax'];
 
@@ -81,6 +82,7 @@ const PerformanceGears: React.FC<PerformanceGearsProps> = ({className}) => {
     const [OptimizationSteps, setOptimizationSteps] = useState(Steps);
     const { dispatch} = useCommonDispatch()
     const [open, setOpen] = useState(false);
+    const { isDark } = useRootContext()
 
     useEffect(() => {
         //console.log(activeGear)
@@ -148,10 +150,10 @@ const PerformanceGears: React.FC<PerformanceGearsProps> = ({className}) => {
             cls: `w-12 h-12 ${activeGear === level ? 'text-purple-600' : 'text-gray-400'}`
         };
         switch (level) {
-            case 'starter': return <Starter {...iconProps} />;
-            case 'accelerate': return <Accelerate {...iconProps} />;
-            case 'turboMax': return <TurboMax {...iconProps} />;
-            case 'custom': return <Custom {...iconProps} />;
+            case 'starter': return <Starter {...iconProps} isDark={isDark} />;
+            case 'accelerate': return <Accelerate {...iconProps} isDark={isDark} />;
+            case 'turboMax': return <TurboMax {...iconProps} isDark={isDark} />;
+            case 'custom': return <Custom {...iconProps} isDark={isDark} />;
         }
     }, [activeGear]);
 
@@ -173,12 +175,12 @@ const PerformanceGears: React.FC<PerformanceGearsProps> = ({className}) => {
             key={level}
             className={cn(
                 'relative flex flex-col gap-3 font-normal cursor-pointer w-[135px] h-[135px] rounded-3xl items-center justify-center',
-                'hover:bg-brand-100/50 bg-brand-0 dark:bg-brand-800/40 dark:hover:bg-brand-800/50 dark:text-brand-300',
+                'hover:bg-brand-100/50 bg-brand-0 dark:bg-brand-950 dark:hover:bg-brand-800/50 dark:text-brand-300',
                 // index !== 0 && '-ml-11',
                 // activeGear === level ? 'z-50' : `z-[${boosterLevels.length - index}]`,
                 activeGear === level 
                     ? 'text-brand-600 border-[3px] border-[#592d8d]' 
-                    : 'border border-brand-200 dark:border-brand-700'
+                    : 'border border-brand-200 dark:border-brand-950'
             )}
             >
                 <div className={cn('flex flex-col items-center justify-center', activeGear === level ? 'opacity-100' : 'opacity-20')}>
@@ -248,16 +250,16 @@ const PerformanceGears: React.FC<PerformanceGearsProps> = ({className}) => {
                 <ul className="space-y-1 py-2 text-sm font-medium">
                     {displayFeatures.slice(0, isExpanded ? displayFeatures.length : initialDisplayCount).map((feature, index) => (
                         <li key={index} className="flex items-center gap-2">
-                            <CustomCheckIcon className="h-3 w-3 text-brand-600" />
+                            <CustomCheckIcon className="h-3 w-3 text-brand-600" isDark={isDark}/>
                             {feature}
                         </li>
                     ))}
                 </ul>
                 {shouldShowSeeMore && (
-                    <div className={cn('w-full ' , isExpanded ? 'py-1' : 'py-4 absolute bg-gradient-to-b from-transparent to-brand-0 -mt-10 dark:bg-gradient-to-b dark:from-transparent dark:to-brand-950')}>
+                    <div className={cn('w-full ' , isExpanded ? 'py-1' : 'py-4 absolute bg-gradient-to-b from-transparent to-brand-0 -mt-10 dark:bg-gradient-to-b dark:from-transparent dark:to-brand-800')}>
                         <button
                             onClick={handleSeeMoreClick}
-                            className="text-brand-950 text-sm mx-auto block underline dark:text-white"
+                            className="text-brand-950 text-sm mx-auto block underline dark:text-white pl-10"
                         >
                             <ChevronDown 
                                 className={cn("w-4 h-4 transition-transform",isExpanded ? "rotate-180" : "")}
@@ -277,7 +279,7 @@ const PerformanceGears: React.FC<PerformanceGearsProps> = ({className}) => {
 
     return (
         <div className={cn("flex flex-col items-center justify-between", className)}>
-            <div className="flex flex-col p-6 pb-0 text-md gap-4 bg-white dark:bg-brand-950 border-b-0 border-t-0 border w-full overflow-hidden relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white dark:before:bg-gradient-to-r dark:before:from-brand-950 dark:before:via-brand-900 dark:before:to-brand-950">
+            <div className="flex flex-col p-6 pb-0 text-md gap-4 bg-white dark:bg-brand-800 border-b-0 border-t-0 border w-full overflow-hidden relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white dark:before:bg-gradient-to-r dark:before:from-brand-800 dark:before:via-brand-900 dark:before:to-brand-800">
                 <h4 className={cn("text-base font-semibold flex gap-1 dark:text-brand-300", activeGear === 'custom' ? 'text-purple-900' : 'text-brand-400')}>
                     You’ve activated <span className="capitalize text-brand-950 dark:text-brand-300">{activeGear} {activeGear === 'custom' ? 'Settings' : 'Gear'}</span>
                 </h4>
@@ -358,7 +360,7 @@ const PerformanceGears: React.FC<PerformanceGearsProps> = ({className}) => {
                 {/*    </AnimatePresence>*/}
                 {/*</div>*/}
             </div>
-            <div className="flex flex-col p-6 text-md gap-4 bg-white dark:bg-brand-950 rounded-b-3xl border border-t-0 w-full overflow-hidden relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white dark:before:bg-gradient-to-r dark:before:from-brand-950 dark:before:via-brand-900 dark:before:to-brand-950">
+            <div className="flex flex-col p-6 text-md gap-4 bg-white dark:bg-brand-800 rounded-b-3xl border border-t-0 w-full overflow-hidden relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white dark:before:bg-gradient-to-r dark:before:from-brand-800 dark:before:via-brand-900 dark:before:to-brand-800">
                 <div className="flex gap-6 justify-end">
                     <button
                         className="cursor-pointer transition duration-300 text-sm font-semibold text-brand-500 py-1.5"
@@ -369,7 +371,7 @@ const PerformanceGears: React.FC<PerformanceGearsProps> = ({className}) => {
                     <ComparisonDialog open={open} setOpen={setOpen} />
                     
                     <button onClick={() => (window.location.hash = '#/optimize')}
-                            className="cursor-pointer transition duration-300 bg-brand-100/90 text-sm font-semibold py-1.5 px-4 rounded-lg text-brand-950 dark:text-brand-300 dark:bg-brand-800/40 dark:hover:bg-brand-800/50">
+                            className="cursor-pointer transition duration-300 bg-brand-100/90 text-sm font-semibold py-1.5 px-4 rounded-lg text-brand-950 dark:bg-brand-800 dark:border-brand-600 dark:border dark:hover:bg-brand-600/40 dark:text-brand-300">
                         Change Gear
                     </button>
                 </div>

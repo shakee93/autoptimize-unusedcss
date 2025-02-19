@@ -122,7 +122,7 @@ const Performance = () => {
                 Fix Performance Issues</h2> */}
             <div ref={navbarRef} style={{ height: '1px' }}></div>
             <div className={cn(
-                'tabs flex sticky -top-1 dark:bg-brand-800/40 bg-brand-200 px-2 py-2 rounded-3xl gap-2 w-fit',
+                'tabs flex sticky -top-1 dark:bg-brand-800 bg-brand-200 px-2 py-2 rounded-3xl gap-2 w-fit',
             )}>
                 <div
 
@@ -169,7 +169,7 @@ const Performance = () => {
             </div>
             </div>
            
-            <div className="audits flex mb-24 dark:bg-brand-800/40 bg-brand-200 rounded-3xl">
+            <div className="audits flex mb-24 dark:bg-brand-800 bg-brand-200 rounded-3xl">
                 <div className='w-full flex flex-col'>
 
                     <AnimatePresence initial={false}>

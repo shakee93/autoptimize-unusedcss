@@ -158,14 +158,14 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
             {/*<TestModeSwitcher />*/}
             <Card data-tour='speed-insights'
                 className={cn(
-                    'overflow-hidden border border-transparent flex flex-col sm:flex-row lg:flex-col justify-around',
+                    'overflow-hidden border border-transparent flex flex-col sm:flex-row lg:flex-col justify-around dark:bg-brand-800',
                     expanded && 'border-brand-200 dark:border-brand-800'
                 )}>
                 {/*Report Switch*/}
                 <div
                     className="flex px-2 py-2 justify-between ">
                     <div data-tour='switch-report-strategy'
-                        className='select-none relative flex dark:bg-brand-800/40 py-0.5 bg-[#E8E8E8] rounded-2xl cursor-pointer'>
+                        className='select-none relative flex dark:bg-brand-600/40 py-0.5 bg-[#E8E8E8] rounded-2xl cursor-pointer'>
                         <div className={cn(
                             'absolute shadow-md translate-x-0 left-0.5 w-[48px] rounded-[15px] -z-1 duration-300 h-10 text-sm flex flex-column gap-2 px-4 py-3 font-medium dark:bg-brand-950 bg-brand-0',
                             activeReport === 'desktop' && 'w-[51px] -translate-x-1 left-1/2'
@@ -190,7 +190,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
 
                     <div className="pl-2 pr-2 content-center">
                         <div className="flex overflow-hidden ">
-                            <div className='hover:bg-brand-0 rounded-xl transition-all delay-100 dark:hover:dark:bg-brand-950' data-tour="current-url">
+                            <div className=' rounded-xl transition-all delay-100' data-tour="current-url">
                                 <UnsavedChanges
                                     title='Analyze without applying optimization?'
                                     description="Your changes are not saved yet. If you analyze now, your recent edits won't be included."
@@ -213,8 +213,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                                         <AppButton asChild={true} data-tour='analyze'
 
                                             className={cn(
-                                                'transition-none rounded-none h-8 px-3 pr-3 dark:bg-brand-950' +
-                                                'border-r-0 border-l-0 border-t-0 border-b-0 bg-transparent hover:bg-transparent dark:hover:dark:bg-brand-950 dark:border-r-0',
+                                                'transition-none rounded-none h-8 px-3 pr-3 border-r-0 border-l-0 border-t-0 border-b-0 dark:border-r-0 dark:bg-brand-800 dark:hover:bg-brand-800 hover:bg-transparent' ,
                                             )}
                                             variant='outline'>
                                             <div className={`flex flex-col gap-[1px] items-center dark:text-brand-300/90`}>
@@ -228,7 +227,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                                     </TooltipText>
                                 </UnsavedChanges>
                             </div>
-                            <div className='hover:bg-brand-0 rounded-xl transition-all delay-100' data-tour="preview-button">
+                            <div className='rounded-xl transition-all delay-100' data-tour="preview-button">
                                 <TooltipText text="Preview" className="dark:bg-brand-930/90 ">
                                     <div
                                         onClick={() => {
@@ -238,7 +237,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                                             }
 
                                         }}
-                                        className={`flex items-center text-sm h-8 hover:bg-transparent px-3 dark:bg-brand-950`}
+                                        className={`flex items-center text-sm h-8 px-3`}
                                     >
                                         <ArrowTopRightOnSquareIcon className='w-4' />
                                     </div>
@@ -324,7 +323,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                             onClick={e => !loading && setExpanded(p => !p)}
                             variant='outline'
                             className={cn(
-                                'select-none border-b border-l-0 border-t-0 border-r-0 rounded-none bg-transparent dark:bg-brand-950 hover:bg-transparent text-center text-xs text-brand-600 py-2',
+                                'select-none border-b border-l-0 border-t-0 border-r-0 rounded-none dark:bg-brand-800 text-center text-xs text-brand-600 py-2',
                                 expanded && 'border-b-0'
                             )}
                             data-tour="expand-metrics">
@@ -341,7 +340,7 @@ const PageSpeedScore = ({ pagespeed, priority = true }: PageSpeedScoreProps) => 
                                             onMouseEnter={() => dispatch(setCommonState('hoveredMetric', metric))}
 
                                             className='text-xs text-center flex flex-col
-                             gap-0.5 px-2 py-2 bg-brand-100/20 hover:bg-brand-100 cursor-default rounded-[14px] dark:bg-brand-950 dark:text-brand-300 dark:hover:bg-brand-800/50'>
+                             gap-0.5 px-2 py-2 bg-brand-100/20 hover:bg-brand-100 cursor-default rounded-[14px] dark:bg-brand-800 dark:text-brand-300 dark:hover:bg-brand-950'>
                                             <div className='font-medium tracking-wider '>{metric.refs.acronym}</div>
                                             <MetricValue metric={metric} />
                                         </div>

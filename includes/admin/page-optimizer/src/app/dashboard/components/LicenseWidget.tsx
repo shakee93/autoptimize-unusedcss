@@ -102,7 +102,7 @@ const LicenseWidget = () => {
                     key={label}
                     className="flex gap-2 items-center text-sm"
                 >
-                    <span className="font-medium text-brand-950 dark:text-brand-300">{label}:</span>
+                    <span className="font-medium text-brand-950 dark:text-brand-300/80">{label}:</span>
                     <span className="text-brand-850 dark:text-brand-300">
                         {isVisible
                             ? value
@@ -153,12 +153,12 @@ const LicenseWidget = () => {
                     <div className="flex flex-col p-6 pb-0 gap-2">
                         <div className="text-lg font-bold">
                             {licenseInfo ? (
-                                <span className="text-brand-400/50 dark:text-brand-300">Welcome back, <span className="text-brand-950">{licenseInfo?.name}</span></span>
+                                <span className="text-brand-400/50 dark:text-brand-300/80">Welcome back, <span className="text-brand-950 dark:text-brand-300">{licenseInfo?.name}</span></span>
                             ) : (
                                 <span className="text-brand-400/90 dark:text-brand-300">Connect your license</span>
                             )}
                         </div>
-                        <div className="bg-purple-800/10 px-2.5 py-1.5 rounded-xl w-fit dark:bg-brand-800/40">{renderLicenseStatus()}</div>
+                        <div className="bg-purple-800/10 px-2.5 py-1.5 rounded-xl w-fit dark:bg-brand-800 dark:border-brand-600 dark:border">{renderLicenseStatus()}</div>
                     </div>
 
                     <div className="grid gap-4 px-8 text-sm relative">
@@ -194,11 +194,11 @@ const LicenseWidget = () => {
 
                     <div className="flex flex-col gap-2">
                         <div
-                            className="flex gap-6 justify-end p-6 text-sm font-semibold relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white dark:before:bg-gradient-to-r dark:before:from-brand-950 dark:before:via-brand-900 dark:before:to-brand-950">
+                            className="flex gap-6 justify-end p-6 text-sm font-semibold relative before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white dark:before:bg-gradient-to-r dark:before:from-brand-800 dark:before:via-brand-900 dark:before:to-brand-800">
                             {licenseInfo ? (
                                 <>
                                     <button className="cursor-pointer text-brand-500 py-1.5" onClick={() => window.open('https://app.rapidload.io/', 'blank')}>View My Account</button>
-                                    <button className="cursor-pointer bg-brand-100/90 text-brand-950 py-1.5 px-4 rounded-lg dark:text-brand-300 dark:bg-brand-800/40 dark:hover:bg-brand-800/50" onClick={() => window.open('https://app.rapidload.io/subscription', 'blank')}>Upgrade</button>
+                                    <button className="cursor-pointer bg-brand-100/90 text-brand-950 py-1.5 px-4 rounded-lg dark:text-brand-300 dark:bg-brand-800 dark:border-brand-600 dark:border dark:hover:bg-brand-600/40 transition-all" onClick={() => window.open('https://app.rapidload.io/subscription', 'blank')}>Upgrade</button>
                                 </>
                             ) : (
                                 <>

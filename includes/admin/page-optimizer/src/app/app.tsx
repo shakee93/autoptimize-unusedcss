@@ -353,7 +353,7 @@ const App = ({ popup, _showOptimizer = false }: {
                         {activeRoute !== "/onboard" && !showStepTwo && (
                         <div className='justify-center flex container'>
                             <header
-                                className={cn('container px-2 py-2 flex gap-3 mt-4 justify-between dark:bg-brand-950 bg-brand-0 rounded-2xl', testMode && 'ring-2 ring-[#f7b250] ring-offset-0')}>
+                                className={cn('container px-2 py-2 flex gap-3 mt-4 justify-between dark:bg-brand-800 bg-brand-0 rounded-2xl', testMode && 'ring-2 ring-[#f7b250] ring-offset-0')}>
                                 <div className='flex items-center'>
                                     <div className='relative px-2'>
                                         <img className='w-10'

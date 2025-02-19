@@ -91,7 +91,7 @@ const RapidLoadActions: React.FC = () => {
                     key={action.control_icon}
                     disabled={action.loading}
                     onClick={e => triggerAction(action)}
-                    className='rounded-[15px] h-12 px-3 dark:bg-brand-950 dark:hover:bg-brand-950' variant='ghost'>
+                    className='rounded-[15px] h-12 px-3 dark:bg-brand-800 dark:hover:bg-brand-950' variant='ghost'>
                     <div className='flex flex-col gap-1 items-center'>
                         {action.loading ?
                             <span>
