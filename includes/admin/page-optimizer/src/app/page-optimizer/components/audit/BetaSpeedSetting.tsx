@@ -64,7 +64,7 @@ interface SettingItemProps {
     actionRequired: boolean;
 }
 
-export const Status = React.memo(({ status }: { status: AuditSetting['status'] }) => {
+export const Status = React.memo(({ status, mainInput, activeReport }: { status: AuditSetting['status'], mainInput: AuditSettingInput, activeReport: ReportType }) => {
 
     if (!status) {
         return <></>
@@ -128,7 +128,7 @@ export const Status = React.memo(({ status }: { status: AuditSetting['status'] }
         )
     }
 
-    if (status.status === 'success' || status.status === 'Hit') {
+    if (status.status === 'success' || status.status === 'Hit' || mainInput.key === 'uucss_enable_cpcss' && status.meta?.activeReport === activeReport) {
         return (
             <>
                 <div className=' flex gap-1.5 items-center text-xs w-fit rounded-lg'>
@@ -155,6 +155,11 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
     const { mode, options } = useAppContext()
     const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = useState(false)
+    const { activeReport } = useSelector(optimizerData)
+
+    // useEffect(() => {
+    //     console.log(activeReport)
+    // }, [activeReport])
 
 
     const [mainInput, ...additionalInputs] = useMemo(() => settings.inputs, [settings])
@@ -280,7 +285,7 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
     
         if (!settings.status || !mainInput.value) return;
 
-        const isStatusValid = ['processing', 'queued', 'success'].includes(settings.status.status);
+        const isStatusValid = ['processing', 'queued', 'success'].includes(settings.status.status as string);
         const cssStatusKey = {
             'Critical CSS': 'cpcss',
             'Remove Unused CSS': 'uucss',
@@ -409,7 +414,7 @@ const Setting = ({ updateValue, settings, index, hideActions, showIcons = true, 
                                 {showStatus && (
                                     <div className='px-1'>
                                         {!(mainInput.key === 'uucss_enable_uucss' && uucssError) && (
-                                            <Status status={settingsStatus} />
+                                            <Status status={settingsStatus} mainInput={mainInput} activeReport={activeReport}/>
                                         )}
                                     </div>
                                 )}

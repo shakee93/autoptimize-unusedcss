@@ -164,6 +164,9 @@ interface AuditSetting {
         warnings: []
         error: any
         message: string
+        meta?: {
+            activeReport?: ReportType
+        }
     }
 }
 
