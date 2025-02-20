@@ -8,9 +8,9 @@ define('RAPIDLOAD_ASSET_MAP', [
     'assets/inter-latin-ext-wght-normal.woff2' => 'assets/inter-latin-ext-wght-normal.woff2',
     'assets/inter-latin-wght-normal.woff2' => 'assets/inter-latin-wght-normal.woff2',
     'assets/index.css' => 'assets/index.BM-bCu16.css',
-    'assets/index.js' => 'assets/index.C6MRsewv.js',
-    'assets/animations.js' => 'assets/animations.CVpoelRy.js',
-    'assets/vendor.js' => 'assets/vendor.T3CYoFTJ.js',
     'assets/core-vendor.js' => 'assets/core-vendor.V80Ff32-.js',
-    'assets/InitTour.js' => 'assets/InitTour.BoAvCti5.js'
+    'assets/index.js' => 'assets/index.BY4rEe6u.js',
+    'assets/animations.js' => 'assets/animations.CVpoelRy.js',
+    'assets/InitTour.js' => 'assets/InitTour.ZwFtlceP.js',
+    'assets/vendor.js' => 'assets/vendor.T3CYoFTJ.js'
 ]);
