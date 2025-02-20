@@ -219,7 +219,7 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
             <div className="border-t flex justify-end mt-4 px-4 pt-4 gap-2">
                 <AppButton
                     onClick={handleSaveSettings}
-                    className="text-sm font-semibold text-white py-1.5 px-4 rounded-lg dark:bg-brand-800/40 dark:text-brand-300 dark:hover:bg-brand-800/50"
+                    className="text-sm font-semibold text-white py-1.5 px-4 rounded-lg bg-primary hover:bg-primary/90 dark:text-brand-950"
                 >
                     {loading && <Loader className='w-4 animate-spin '/> } Save Changes
                 </AppButton>

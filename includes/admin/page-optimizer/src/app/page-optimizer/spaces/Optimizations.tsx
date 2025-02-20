@@ -620,7 +620,7 @@ const Optimizations = ({ }) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.2, delay: 0.05 }}
-                className='dark:bg-brand-900'
+                className='dark:bg-brand-900 bg-[#F0F0F1]'
             >
 
 
