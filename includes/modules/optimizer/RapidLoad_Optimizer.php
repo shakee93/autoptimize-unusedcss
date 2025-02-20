@@ -830,6 +830,7 @@ class RapidLoad_Optimizer
             'delay_javascript_callback',
             'uucss_excluded_js_files',
             'uucss_dynamic_js_exclusion_list',
+            'uucss_load_scripts_on_user_interaction',
             //image
             'uucss_enable_image_delivery',
             'uucss_support_next_gen_formats',
