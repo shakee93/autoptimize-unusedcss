@@ -107,7 +107,7 @@ export default function Dashboard() {
                 id='rapidload-page-optimizer-content'
                 className={cn(
                     'overflow-y-auto w-full pb-20 min-h-[780px] flex items-center',
-                    'dark:bg-brand-900',
+                    
                     // 'dark:bg-brand-930 bg-brand-50 min-h-screen',
                     savingData && 'relative overflow-hidden'
                 )}>
