@@ -128,7 +128,7 @@ export const Status = React.memo(({ status, mainInput, activeReport }: { status:
         )
     }
 
-    if (status.status === 'success' || status.status === 'Hit' || mainInput.key === 'uucss_enable_cpcss' && status.meta?.activeReport === activeReport) {
+    if (status.status === 'success' || status.status === 'Hit' || mainInput.key === 'uucss_enable_cpcss' && status.meta?.[activeReport] === activeReport) {
         return (
             <>
                 <div className=' flex gap-1.5 items-center text-xs w-fit rounded-lg'>

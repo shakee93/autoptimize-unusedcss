@@ -165,7 +165,8 @@ interface AuditSetting {
         error: any
         message: string
         meta?: {
-            activeReport?: ReportType
+            mobile?: string
+            desktop?: string
         }
     }
 }
