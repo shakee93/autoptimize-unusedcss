@@ -17,18 +17,48 @@ import { Loader } from 'lucide-react';
 interface GeneralSettingsProps {
     onClose: (open: boolean) => void;
 }
+
+interface QueueOption {
+    value: string;
+    label: string;
+}
+
+const JOB_OPTIONS: QueueOption[] = [
+    { value: '1', label: '1 Job' },
+    { value: '2', label: '2 Jobs' },
+    { value: '3', label: '3 Jobs' },
+];
+
+const TIME_INTERVAL_OPTIONS: QueueOption[] = [
+    { value: '60', label: '1 Minute' },
+    { value: '300', label: '5 Minutes' },
+    { value: '600', label: '10 Minutes' },
+    { value: '1800', label: '30 Minutes' },
+    { value: '3600', label: '1 Hour' },
+];
+
 const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
     const { dispatch } = useCommonDispatch();
     const { options, uucssGlobal } = useAppContext();
-    const [settingsData, setSettingsData] = useState<GeneralSettings>(    (uucssGlobal as Required<typeof uucssGlobal>).active_modules.general.options);
-    const [jobCount, setJobCount] = useState('1 Job');
-    const [timeInterval, setTimeInterval] = useState('10 Minutes');
+    const [settingsData, setSettingsData] = useState<GeneralSettings>((uucssGlobal as Required<typeof uucssGlobal>).active_modules.general.options);
+    const [jobCount, setJobCount] = useState(() => {
+        const savedJobs = settingsData.uucss_jobs_per_queue?.toString() || '1';
+        return JOB_OPTIONS.find(opt => opt.value === savedJobs)?.value || JOB_OPTIONS[0].value;
+    });
+    const [timeInterval, setTimeInterval] = useState(() => {
+        const savedInterval = settingsData.uucss_queue_interval?.toString() || '600';
+        return TIME_INTERVAL_OPTIONS.find(opt => opt.value === savedInterval)?.value || TIME_INTERVAL_OPTIONS[2].value;
+    });
     const { toast } = useToast();
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-       //console.log(uucssGlobal)
-    }, [uucssGlobal]);
+        if (settingsData) {
+            setJobCount(settingsData.uucss_jobs_per_queue?.toString() || '1');
+            setTimeInterval(settingsData.uucss_queue_interval?.toString() || '600');
+        }
+    }, [settingsData]);
+
     const handleCheckboxChange = (key: keyof GeneralSettings) => {
         setSettingsData(prev => ({ ...prev, [key]: !prev[key] }));
     };
@@ -36,7 +66,12 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
     const handleSaveSettings = async () => {
         setLoading(true);
         try {
-            const response = await dispatch(saveGeneralSettings(options, settingsData));
+            const updatedSettings = {
+                ...settingsData,
+                uucss_jobs_per_queue: parseInt(jobCount),
+                uucss_queue_interval: parseInt(timeInterval)
+            };
+            const response = await dispatch(saveGeneralSettings(options, updatedSettings));
             
             if (response.success) {
                 toast({
@@ -149,13 +184,13 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
                                     <SelectContent className="z-[100001]">
                                         <SelectGroup>
                                             <SelectLabel>Jobs</SelectLabel>
-                                            {['1 Job', '2 Jobs', '3 Jobs'].map((value, index) => (
+                                            {JOB_OPTIONS.map((option, index) => (
                                                 <SelectItem
                                                     className="capitalize cursor-pointer"
                                                     key={index}
-                                                    value={value}
+                                                    value={option.value}
                                                 >
-                                                    {value}
+                                                    {option.label}
                                                 </SelectItem>
                                             ))}
                                         </SelectGroup>
@@ -172,13 +207,13 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
                                     <SelectContent className="z-[100001]">
                                         <SelectGroup>
                                             <SelectLabel>Time Interval</SelectLabel>
-                                            {['1 Minute', '5 Minutes', '10 Minutes', '30 Minutes', '1 Hour'].map((value, index) => (
+                                            {TIME_INTERVAL_OPTIONS.map((option, index) => (
                                                 <SelectItem
                                                     className="capitalize cursor-pointer"
                                                     key={index}
-                                                    value={value}
+                                                    value={option.value}
                                                 >
-                                                    {value}
+                                                    {option.label}
                                                 </SelectItem>
                                             ))}
                                         </SelectGroup>
@@ -197,7 +232,7 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({ onClose }) => {
                     <Button  
                         className='flex gap-2 dark:bg-brand-800/40 dark:text-brand-300 dark:hover:bg-brand-800/50' 
                         onClick={() => {
-                            window.location.href = '/wp-admin/options-general.php?page=uucss_legacy&uucss_jobs';
+                            window.open('/wp-admin/options-general.php?page=uucss_legacy&uucss_jobs', '_blank');
                         }}
                         variant='outline'>
                         CSS Job Optimizations Table

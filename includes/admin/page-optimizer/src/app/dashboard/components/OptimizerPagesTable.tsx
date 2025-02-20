@@ -270,25 +270,27 @@ const OptimizerPagesTable: React.FC<OptimizerPagesTableProps> = ({ settings, onO
                                         ) : (
                                             tempOptimizationData.length > 0 ? (
                                                 tempOptimizationData.map((item, idx) => (
-                                                    <tr key={idx} className={idx % 2 === 0 ? 'bg-gray-100/30 dark:bg-brand-950' : 'bg-white dark:bg-brand-900'}>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-brand-300">
-                                                            {item.url}
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                                            <PercentageIndicator percentage={calculatePercentage(item.first_data?.performance, item.last_data?.performance)} />
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-brand-300">
-                                                            <DateComponent data={item.created_at} />
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center gap-2">
+                                                    item.url ? (
+                                                        <tr key={idx} className={idx % 2 === 0 ? 'bg-gray-100/30 dark:bg-brand-950' : 'bg-white dark:bg-brand-900'}>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-brand-300">
+                                                                {item.url}
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                                                <PercentageIndicator percentage={calculatePercentage(item.first_data?.performance, item.last_data?.performance)} />
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-brand-300">
+                                                                <DateComponent data={item.created_at} />
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center gap-2">
                                                                 <span
                                                                     className="bg-gray-100 px-3 py-1.5 rounded-xl flex w-fit gap-2 items-center cursor-pointer dark:bg-brand-800/40 dark:text-brand-300 dark:hover:bg-brand-800/50"
                                                                     onClick={() => handleOptimizeClick(item.url)}>
                                                                     <PencilSquareIcon className="w-4 h-4" /> Optimize
                                                                 </span>
-                                                            <TrashIcon onClick={() => deleteOptimizationData(item.url)} className="w-4 h-4 cursor-pointer" />
-                                                        </td>
-                                                    </tr>
+                                                                <TrashIcon onClick={() => deleteOptimizationData(item.url)} className="w-4 h-4 cursor-pointer" />
+                                                            </td>
+                                                        </tr>
+                                                    ) : null
                                                 ))
                                             ) : (
                                                 <tr>
