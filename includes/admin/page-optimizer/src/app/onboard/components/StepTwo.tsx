@@ -213,7 +213,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
 
     return (
         <div
-            className="w-full flex flex-col gap-4 transition-all">
+            className="w-full flex flex-col gap-4 transition-all h-screen">
             <div className="flex flex-col gap-8 p-16 items-center rounded-3xl">
                 <div className="px-2">
                     <img
