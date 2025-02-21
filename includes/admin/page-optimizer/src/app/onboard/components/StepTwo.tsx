@@ -291,14 +291,14 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
                                         )}
                                     <div className='flex gap-2 '>
                                         <button
-                                            className={cn('flex items-center bg-brand-200 text-brand-950 hover:shadow-[inset_0_0_0_2px_rgba(0,0,0,1)] font-medium py-2 px-4 rounded-lg hover:bg-transparent transition-all gap-1',
+                                            className={cn('flex items-center bg-brand-200 text-brand-950 hover:shadow-[inset_0_0_0_2px_rgba(0,0,0,1)] font-medium py-2 px-4 rounded-lg hover:bg-transparent transition-all gap-1 dark:bg-brand-800 dark:border-brand-600 dark:border dark:hover:bg-brand-600/40 dark:text-brand-300',
                                             loading && 'pointer-events-none cursor-default opacity-30')}
                                             onClick={() => setShowInput(false)}
                                         >
                                             <ChevronLeftIcon className="h-4 w-4 text-brand-60"/> Back
                                         </button>
                                         <button
-                                            className={cn('flex items-center hover:bg-gradient-to-br hover:from-[rgba(94,92,92,0.55)]  hover:to-brand-900/90 bg-brand-900/90  text-white font-medium py-2 px-4 rounded-lg transition-all gap-1',
+                                            className={cn('flex items-center hover:bg-gradient-to-br hover:from-[rgba(94,92,92,0.55)]  hover:to-brand-900/90 bg-brand-900/90  text-white font-medium py-2 px-4 rounded-lg transition-all gap-1 dark:bg-brand-800 dark:border-brand-600 dark:border dark:hover:bg-brand-600/40 dark:text-brand-300',
                                             loading && 'pointer-events-none cursor-default opacity-30')}
                                             onClick={connectRapidloadLicense}
                                         >
@@ -325,7 +325,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
                                 className="flex gap-4 items-center"
                             >
                                 <button
-                                    className="items-center bg-brand-200 text-brand-950 hover:shadow-[inset_0_0_0_2px_rgba(0,0,0,1)] font-medium py-2 px-4 rounded-lg hover:bg-transparent transition-all gap-2"
+                                    className="items-center bg-brand-200 text-brand-950 hover:shadow-[inset_0_0_0_2px_rgba(0,0,0,1)] font-medium py-2 px-4 rounded-lg hover:bg-transparent transition-all gap-2 dark:bg-brand-800 dark:border-brand-600 dark:border dark:hover:bg-brand-600/40 dark:text-brand-300"
                                     onClick={() => {
                                         setShowInput(true)
                                         if (localStorage.getItem('rapidLoadGear')) {
@@ -337,7 +337,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
                                 </button>
                                 <span className="font-semibold">or</span>
                                 <button
-                                    className="items-center hover:bg-gradient-to-br hover:from-[rgba(94,92,92,0.55)]  hover:to-brand-900/90 bg-brand-900/90  text-white font-medium py-2 px-4 rounded-lg transition-all gap-2"
+                                    className="items-center hover:bg-gradient-to-br hover:from-[rgba(94,92,92,0.55)]  hover:to-brand-900/90 bg-brand-900/90  text-white font-medium py-2 px-4 rounded-lg transition-all gap-2 dark:bg-brand-800 dark:border-brand-600 dark:border dark:hover:bg-brand-600/40 dark:text-brand-300"
                                     onClick={() => {
                                         localStorage.setItem('rapidLoadGear', activeLevel);
                                         window.location.href = uucssGlobal?.activation_url
