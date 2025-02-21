@@ -119,8 +119,8 @@ const Audit = forwardRef<AuditComponentRef, AuditProps>(({audit, index, actions 
 
                             spreader={(!!audit?.files?.items?.length) && !toggleFiles}
                             className={cn(
-                                `overflow-hidden w-full flex justify-center flex-col items-center p-0`,
-                                toggleFiles ? 'shadow-lg dark:shadow-brand-800/30' : 'dark:hover:border-brand-700/70 hover:border-brand-400/60'
+                                `overflow-hidden w-full flex justify-center flex-col items-center p-0 dark:bg-brand-950`,
+                                toggleFiles ? 'shadow-lg dark:shadow-brand-950/30' : 'dark:hover:border-brand-700/70 hover:border-brand-400/60'
                             )}
                         >
                             <div className={cn(

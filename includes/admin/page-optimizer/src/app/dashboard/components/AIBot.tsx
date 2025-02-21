@@ -39,8 +39,8 @@ const AIBot = ({ className }: { className: string }) => {
                 <div className="flex flex-col items-center p-6 gap-2 relative">
                     <button
                         onClick={() => setOpen(true)}
-                        className="flex gap-1 m-6 my-0 right-0 absolute cursor-pointer border text-brand-950 py-1.5 px-2 rounded-lg text-xs font-medium hover:bg-gray-100">
-                        <InboxIcon className="h-4 w-4 text-brand-950" />
+                        className="flex gap-1 m-6 dark:bg-brand-800 dark:border-brand-600 dark:border dark:hover:bg-brand-600/40 my-0 right-0 absolute cursor-pointer border text-brand-950 py-1.5 px-2 rounded-lg text-xs font-medium hover:bg-gray-100">
+                        <InboxIcon className="h-4 w-4 text-brand-950 dark:text-brand-300" />
                     </button>
 
                     <Dialog open={open} onOpenChange={setOpen}>
@@ -58,9 +58,9 @@ const AIBot = ({ className }: { className: string }) => {
                                         <div
                                             key={conv.id}
                                             onClick={() => handleConversationSelect(conv)}
-                                            className="flex items-center gap-2 p-3 border rounded-lg hover:bg-gray-100 cursor-pointer"
+                                            className="flex items-center gap-2 p-3 border rounded-lg hover:bg-gray-100 cursor-pointer dark:bg-brand-800/40 dark:text-brand-300 dark:hover:bg-brand-800/50"
                                         >
-                                            <MessagesSquare className="h-4 w-4 text-brand-950" />
+                                            <MessagesSquare className="h-4 w-4 text-brand-950 dark:text-brand-300" />
                                             <span className="text-sm truncate">{conv.title}</span>
                                         </div>
                                     ))
@@ -74,7 +74,7 @@ const AIBot = ({ className }: { className: string }) => {
                         <AnimatedLogo className="!opacity-100" size="lg" isPlaying={false} />
                         <div className="dark:text-brand-300 text-center flex flex-col">
                             <h2 className="text-base font-semibold">Chat with Rapidload AI</h2>
-                            <p className="text-sm text-brand-500">Understands your page speed and website issues to help you improve speed</p>
+                            <p className="text-sm text-brand-500 dark:text-brand-300/80">Understands your page speed and website issues to help you improve speed</p>
                         </div>
                     </div>
                 </div>
@@ -96,10 +96,10 @@ const AIBot = ({ className }: { className: string }) => {
                             type="text"
                             onClick={() => (window.location.hash = '#/rapidload-ai')}
                             placeholder="Ask about anything..."
-                            className="w-full p-2 border border-brand-300 rounded-full focus:outline-none focus:border-black bg-brand-100 pr-10 pl-4"
+                            className="w-full p-2 border border-brand-200 dark:bg-brand-600/40 dark:text-brand-300 dark:border-brand-700 rounded-full focus:outline-none focus:border-black bg-brand-100 pr-10 pl-4"
                         />
                         <ArrowUpCircleIcon
-                            className="cursor-pointer h-10 w-10 text-brand-950 absolute right-0 top-1/2 transform -translate-y-1/2 " />
+                            className="cursor-pointer h-10 w-10 text-brand-950 absolute right-0 top-1/2 transform -translate-y-1/2 dark:text-brand-300" />
                     </div>
 
 

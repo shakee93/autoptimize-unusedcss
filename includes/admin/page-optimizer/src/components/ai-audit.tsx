@@ -126,7 +126,7 @@ export const AiAudit = ({ issue, index, openItems, toggleAccordion, input, loadi
             spreader={!openItems.includes(index.toString())}
             key={index}
             className={cn(
-                'overflow-hidden w-full flex justify-center flex-col items-center p-0 rounded-3xl',
+                'overflow-hidden w-full flex justify-center flex-col items-center p-0 rounded-3xl dark:bg-brand-950',
                 openItems.includes(index.toString()) ? 'shadow-lg dark:shadow-brand-800/30' : 'dark:hover:border-brand-700/70 hover:border-brand-400/60'
             )}
         >

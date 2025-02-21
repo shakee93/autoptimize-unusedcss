@@ -137,7 +137,7 @@ export const AnalysisResults = ({ object, relatedAudits, input, loading }: Analy
                                         window.open('https://rapidload.zendesk.com/hc/en-us/requests/new', '_blank');
                                     }}
                                     rel="noopener noreferrer"
-                                    className="flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white whitespace-nowrap"
+                                    className="flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white whitespace-nowrap dark:bg-brand-800"
                                 >
                                     <Headset className="w-4 h-4" />
                                     Contact Support

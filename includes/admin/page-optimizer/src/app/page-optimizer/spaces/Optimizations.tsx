@@ -620,11 +620,11 @@ const Optimizations = ({ }) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.2, delay: 0.05 }}
-                className='bg-[#F0F0F1] dark:bg-brand-800'
+                className='dark:bg-brand-900 bg-[#F0F0F1]'
             >
 
 
-                <div className={cn('px-6 py-6 bg-white z-50 relative', aiLoading && !aiResponding ? 'rounded-t-3xl' : 'rounded-3xl')}>
+                <div className={cn('px-6 py-6 bg-white z-50 relative', aiLoading && !aiResponding ? 'rounded-t-3xl dark:bg-brand-800' : 'rounded-3xl dark:bg-brand-800')}>
                     <div className="flex gap-4 w-full items-start">
                         {/* Logo Column */}
                         <div className="flex justify-start items-center gap-2 w-10">
@@ -671,7 +671,7 @@ const Optimizations = ({ }) => {
                                         <div className={cn('flex justify-end items-center mt-2')}>
                                             <AppButton
                                                 disabled={aiLoading}
-                                                className={cn("rounded-xl px-8 py-6 whitespace-nowrap", loading && 'cursor-not-allowed opacity-60 pointer-events-none')}
+                                                className={cn("rounded-xl px-8 py-6 whitespace-nowrap dark:bg-brand-950 dark:hover:bg-brand-900 dark:text-brand-300", loading && 'cursor-not-allowed opacity-60 pointer-events-none')}
                                                 onClick={() => {
 
                                                     if (!privacyPolicy) {
@@ -830,7 +830,7 @@ const Optimizations = ({ }) => {
                 >
                     {/* <ProgressTracker steps={progressSteps} currentStep={0} /> */}
 
-                    <div className="flex flex-col gap-4 p-6">
+                    <div className="flex flex-col gap-4 p-6 dark:bg-brand-950 dark:text-brand-300">
                         <ProgressTracker
                             steps={progressSteps}
                             currentStep={currentStep}

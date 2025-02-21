@@ -108,7 +108,7 @@ const PageSpeedWidget = ({ pagespeed, priority = true, dashboardMode = false }: 
         <div className={cn('w-full flex flex-col gap-4 ', dashboardMode ? 'w-min min-w-[350px]' : '')}>
             <Card data-tour='speed-insights'
                 className={cn(
-                    'overflow-hidden  border-transparent flex flex-col sm:flex-row lg:flex-col justify-around',
+                    'overflow-hidden  border-transparent flex flex-col sm:flex-row lg:flex-col justify-around dark:bg-brand-800',
                     expanded && 'border-brand-200 dark:border-brand-800',
                     dashboardMode ? '' : 'border'
                 )}>

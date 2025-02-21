@@ -190,7 +190,7 @@ const OptimizerPagesTable: React.FC<OptimizerPagesTableProps> = ({ settings, onO
 
     return (
         <div className='w-full flex flex-col gap-4'>
-            <Card className={cn('rounded-xl px-3 py-3 overflow-hidden border border-transparent flex flex-col sm:flex-row lg:flex-col justify-around border-brand-200 dark:border-brand-800')}>
+            <Card className={cn('rounded-xl px-3 py-3 overflow-hidden border border-transparent dark:border-brand-800 flex flex-col sm:flex-row lg:flex-col justify-around border-brand-200 dark:border-brand-800')}>
                 <div className="content flex w-full sm:w-1/2 lg:w-full flex-col px-3 py-3">
                     <div className='flex gap-2 items-center justify-between'>
                         <div className='grid dark:text-brand-300 select-none'>
@@ -205,7 +205,7 @@ const OptimizerPagesTable: React.FC<OptimizerPagesTableProps> = ({ settings, onO
                                 <input
                                     type="text"
                                     placeholder="Search"
-                                    className="w-full pl-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400"
+                                    className="w-full pl-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400 dark:text-brand-300 dark:bg-brand-950 dark:border-brand-800/80 dark:focus:border-brand-600/40"
                                     value={searchInput}
                                     onChange={handleInputChange}
                                 />
@@ -217,7 +217,7 @@ const OptimizerPagesTable: React.FC<OptimizerPagesTableProps> = ({ settings, onO
                             {/*</button>*/}
                             <Dialog open={open} onOpenChange={setOpen}>
                                 <DialogTrigger asChild>
-                                    <button className="rounded-lg flex gap-2 items-center cursor-pointer bg-black text-brand-0 py-1 px-[11px] pr-[15px]">
+                                    <button className="rounded-lg flex gap-2 items-center cursor-pointer bg-black text-brand-0 py-1 px-[11px] pr-[15px] dark:bg-brand-800/40 dark:text-brand-300 dark:hover:bg-brand-800/50">
                                         <PlusIcon className="w-5 h-5" /> Add
                                     </button>
                                 </DialogTrigger>
@@ -239,7 +239,7 @@ const OptimizerPagesTable: React.FC<OptimizerPagesTableProps> = ({ settings, onO
                         <div className="-m-1.5 overflow-x-auto">
                             <div className=' p-1.5 min-w-full inline-block align-middle'>
                                 <div ref={tableContainerRef}  className="max-h-[600px] overflow-y-auto border rounded-[10px] overflow-hidden">
-                                    <table className="min-w-full divide-y divide-gray-200 dark:divide-brand-950">
+                                    <table className="min-w-full divide-y divide-gray-200 dark:divide-brand-950 dark:text-brand-300">
                                         <thead className="dark:bg-brand-900 sticky top-0 z-10 bg-brand-0">
                                         <tr>
                                             <th scope="col" className="px-6 py-4 text-start text-xs font-medium uppercase">
@@ -249,12 +249,12 @@ const OptimizerPagesTable: React.FC<OptimizerPagesTableProps> = ({ settings, onO
                                             </th>
                                             <th scope="col" className="px-6 py-4 text-start text-xs font-medium uppercase">
                                                 <div className="flex items-center gap-2">
-                                                    <ScoreIcon className="h-4 w-4" /> Page Score
+                                                    <ScoreIcon className="h-4 w-4 dark:text-brand-300" /> Page Score
                                                 </div>
                                             </th>
                                             <th scope="col" className="px-6 py-4 text-start text-xs font-medium uppercase">
                                                 <div className="flex items-center gap-2">
-                                                    <CalendarIcon className="h-4 w-4" /> Update Date
+                                                    <CalendarIcon className="h-4 w-4 dark:text-brand-300" /> Update Date
                                                 </div>
                                             </th>
                                             <th scope="col" className="px-6 py-4 text-start text-xs font-medium uppercase">
@@ -270,25 +270,27 @@ const OptimizerPagesTable: React.FC<OptimizerPagesTableProps> = ({ settings, onO
                                         ) : (
                                             tempOptimizationData.length > 0 ? (
                                                 tempOptimizationData.map((item, idx) => (
-                                                    <tr key={idx} className={idx % 2 === 0 ? 'bg-gray-100/30 dark:bg-brand-950' : 'bg-white dark:bg-brand-900'}>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-brand-300">
-                                                            {item.url}
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                                            <PercentageIndicator percentage={calculatePercentage(item.first_data?.performance, item.last_data?.performance)} />
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-brand-300">
-                                                            <DateComponent data={item.created_at} />
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center gap-2">
+                                                    item.url ? (
+                                                        <tr key={idx} className={idx % 2 === 0 ? 'bg-gray-100/30 dark:bg-brand-950' : 'bg-white dark:bg-brand-900'}>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-brand-300">
+                                                                {item.url}
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                                                <PercentageIndicator percentage={calculatePercentage(item.first_data?.performance, item.last_data?.performance)} />
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-brand-300">
+                                                                <DateComponent data={item.created_at} />
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center gap-2">
                                                                 <span
-                                                                    className="dark:text-brand-950 bg-gray-100 px-3 py-1.5 rounded-xl flex w-fit gap-2 items-center cursor-pointer"
+                                                                    className="bg-gray-100 px-3 py-1.5 rounded-xl flex w-fit gap-2 items-center cursor-pointer dark:bg-brand-800/40 dark:text-brand-300 dark:hover:bg-brand-800/50"
                                                                     onClick={() => handleOptimizeClick(item.url)}>
                                                                     <PencilSquareIcon className="w-4 h-4" /> Optimize
                                                                 </span>
-                                                            <TrashIcon onClick={() => deleteOptimizationData(item.url)} className="w-4 h-4 cursor-pointer" />
-                                                        </td>
-                                                    </tr>
+                                                                <TrashIcon onClick={() => deleteOptimizationData(item.url)} className="w-4 h-4 cursor-pointer" />
+                                                            </td>
+                                                        </tr>
+                                                    ) : null
                                                 ))
                                             ) : (
                                                 <tr>

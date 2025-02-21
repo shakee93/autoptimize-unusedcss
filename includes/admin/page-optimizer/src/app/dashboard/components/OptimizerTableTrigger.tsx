@@ -12,8 +12,8 @@ interface OptimizerTableTriggerProps {
 const OptimizerTableTrigger: React.FC<OptimizerTableTriggerProps> = ({ open, onOpenChange, settings }) => (
     <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogTitle />
-        <DialogContent className="sm:min-w-[950px] bg-brand-100/90 p-6 pt-12 sm:rounded-3xl">
-        <DialogHeader className='border-b px-6 py-4 mt-1'>
+        <DialogContent className="sm:min-w-[950px] bg-brand-100/90 p-6 pt-12 sm:rounded-3xl dark:bg-brand-950/90">
+        <DialogHeader className='border-b px-6 py-4 mt-1 hidden'>
                     <DialogTitle></DialogTitle>
                 </DialogHeader>
                 <DialogDescription>

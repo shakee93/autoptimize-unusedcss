@@ -88,11 +88,12 @@ const CDNSummary = ({className}: {className: string}) => {
                     {note}
                 </div>
             </div>
+            
             <div
-                className="relative w-full h-2.5 bg-brand-100 overflow-hidden rounded outline outline-1 outline-brand-200">
+                className="relative w-full h-2.5 bg-brand-100 overflow-hidden rounded outline outline-1 outline-brand-200 dark:bg-brand-600/40 dark:outline-brand-600/40">
                 <div
-                    className="absolute h-2.5 bg-brand-950 rounded"
-                    style={{width: progressWidth}}
+                    className="absolute h-2.5 bg-brand-950 rounded dark:bg-brand-300"
+                    style={{width: `${Number(progressWidth)}%`}}
                 ></div>
             </div>
 
@@ -124,7 +125,7 @@ const CDNSummary = ({className}: {className: string}) => {
                     <UsageBar label="Additional Usage" usage={cdnUsage.additional_usage_gb} />
                 }
             </div>
-            <div className="relative mt-4 mb-2 before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white"/>
+            <div className="relative mt-4 mb-2 before:absolute before:left-0 before:right-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-white before:via-brand-200 before:to-white dark:before:bg-gradient-to-r dark:before:from-brand-800 dark:before:via-brand-900 dark:before:to-brand-800"/>
             <div
                 className="p-6 ">
                 <UsageBar label="Images" usage={imageUsage.used_gb} allowedUsage={imageUsage.allowed_gb} note={`Renews on ${nextBillingDate}`} used_gb_formatted={imageUsage.used_gb_formatted}/>

@@ -73,14 +73,14 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ steps, currentStep = 
   //console.log("Total time across all steps:", totalRemainingTime, "seconds");
 
   return (
-    <div className="grid grid-cols-5 gap-4 w-full">
+    <div className="grid grid-cols-5 gap-4 w-full dark:text-brand-300">
       
       {/* Main step */}
       <div className="col-span-1">
-        <h3 className="text-sm font-medium text-gray-700 mb-2">1. Preparing</h3>
+        <h3 className="text-sm font-medium text-gray-700 mb-2 dark:text-brand-300">1. Preparing</h3>
         <div className="relative p-0.5">
         {currentStep === 0 && <LoadingGradient/>}
-        <div className="border relative rounded-[10px] bg-white">
+        <div className="border relative rounded-[10px] bg-white dark:bg-brand-900">
         
           {/* {currentStep === 0 && <LoadingGradient/>} */}
           <ProgressItem
@@ -97,10 +97,10 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = ({ steps, currentStep = 
 
       {/* Secondary steps */}
       <div className="col-span-4">
-        <h3 className={cn("text-sm font-medium text-gray-700 mb-2", currentStep > 0 ? 'opacity-100' : 'opacity-40')}>2. Collecting required data to diagnose</h3>
+        <h3 className={cn("text-sm font-medium text-gray-700 mb-2 dark:text-brand-300", currentStep > 0 ? 'opacity-100' : 'opacity-40')}>2. Collecting required data to diagnose</h3>
         <div className="relative p-0.5">
         {currentStep > 0 && <LoadingGradient/>}
-        <div className="border rounded-[10px] relative bg-white ">
+        <div className="border rounded-[10px] relative bg-white dark:bg-brand-900">
         {/* {currentStep > 0 && <LoadingGradient/>} */}
           <div className="grid grid-cols-4 [&>div:first-child>div]:rounded-l-xl [&>div:last-child>div]:rounded-r-xl">
             {remainingSteps.map((step, index) => (
@@ -164,8 +164,8 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ duration, label, progress, 
   }, [isActive, countdown]);
 
   return (
-    <div className={cn("flex flex-col relative bg-white p-4 ", rounded ? 'rounded-xl ' : isLast ? '' : 'border-r', progress > 0 || currentStep > 0 ? 'opacity-100' : 'opacity-40')}>
-      <div className="w-full bg-gray-200 rounded-full h-2 relative">
+    <div className={cn("flex flex-col relative bg-white p-4 dark:bg-brand-800/40", rounded ? 'rounded-xl ' : isLast ? '' : 'border-r', progress > 0 || currentStep > 0 ? 'opacity-100' : 'opacity-40')}>
+      <div className="w-full bg-gray-200 rounded-full h-2 relative dark:bg-brand-600/40">
         <div
           className={`absolute left-0 top-0 h-2 rounded-full transition-all duration-300 ${
             progress === 100 || isActive ? 'bg-black' : 'bg-gray-300'
@@ -173,17 +173,17 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ duration, label, progress, 
           style={{ width: `${progress}%` }}
         />
       </div>
-      <div className={cn ("text-xs text-gray-600 mt-2 flex gap-1 items-center ")}>
+      <div className={cn ("text-xs text-gray-600 mt-2 flex gap-1 items-center dark:text-brand-300")}>
         {progress === 100 ? (
-          <>Completed <CheckIcon className="h-4 w-4 text-brand-950" /></>
+          <>Completed <CheckIcon className="h-4 w-4 text-brand-950 dark:text-brand-300" /></>
         ) : showHangTight ? (
-          <>Hang tight... {isActive && <LoaderIcon className="h-4 w-4 animate-spin" />}</>
+          <>Hang tight... {isActive && <LoaderIcon className="h-4 w-4 animate-spin dark:text-brand-300" />}</>
         ) : (
-          <span className='flex gap-1' data-countdown>{countdown}s {isActive && <LoaderIcon className="h-4 w-4 animate-spin" />}</span>
+          <span className='flex gap-1' data-countdown>{countdown}s {isActive && <LoaderIcon className="h-4 w-4 animate-spin dark:text-brand-300" />}</span>
         )}
       </div>
-      <span className="text-xs text-gray-600 border-b border-gray-200 my-2 -mx-4"/>
-      <span className="text-sm font-semibold text-gray-800">{label}</span>
+      <span className="text-xs text-gray-600 border-b border-gray-200 my-2 -mx-4 dark:border-brand-600/40"/>
+      <span className="text-sm font-semibold text-gray-800 dark:text-brand-300">{label}</span>
     </div>
   );
 };
