@@ -462,13 +462,16 @@ class RapidLoad_Optimizer
                 }
                 case 'cpcss' :{
                     $job_data_cpcss = new RapidLoad_Job_Data($job,'cpcss');
+                    $cpcss_data = $job_data_cpcss->get_cpcss_data();
                     $response[$type] = [
                         'status' => isset($job_data_cpcss->id) ? $job_data_cpcss->status : 'queued',
                         'error' => isset($job_data_cpcss->id) && isset($job_data_cpcss->error) ? unserialize($job_data_cpcss->error) : null,
                         'meta' => [
                             'warnings' => isset($job_data_cpcss->id) && isset($job_data_cpcss->warnings) ? unserialize($job_data_cpcss->warnings) : null,
-                            'stats' => isset($job_data_cpcss->id) && isset($job_data_cpcss->stats) ? unserialize($job_data_cpcss->stats) : null
-                        ]   
+                            'stats' => isset($job_data_cpcss->id) && isset($job_data_cpcss->stats) ? unserialize($job_data_cpcss->stats) : null,
+                            'desktop' => isset($job_data_cpcss->id) && isset($cpcss_data['desktop']) && !empty($cpcss_data['desktop']) ? $cpcss_data['desktop'] : null,
+                            'mobile' => isset($job_data_cpcss->id) && isset($cpcss_data['mobile']) && !empty($cpcss_data['mobile']) ? $cpcss_data['mobile'] : null,
+                        ], 
                     ];
                     break;
                 }

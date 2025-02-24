@@ -94,7 +94,7 @@ const StepFour = () => {
     }, [metrics, data])
 
     const calculateBoost = (before: number, after: number): JSX.Element => {
-        if (before === 0 || before < after) return <span className='text-brand-900'>-</span>;
+        if (before === 0 || before < after) return <span className='text-brand-900 dark:text-brand-300'>-</span>;
         const boost = before / after;
         if(boost > 99) {
            return <div className='flex flex-col text-sm'>More than <div><span className='text-purple-600 font-bold'>100 X</span> Faster</div></div>
@@ -157,13 +157,13 @@ const StepFour = () => {
 
     const renderMetricsTable = () => (
         <div className="w-full overflow-x-auto">
-            <table className="w-full border-separate border-spacing-0 border border-brand-200 rounded-2xl overflow-hidden bg-brand-0 ">
+            <table className="w-full border-separate border-spacing-0 border border-brand-200 rounded-2xl overflow-hidden bg-brand-0 dark:bg-brand-800">
                 <thead>
                     <tr className="">
-                        <th className="text-left p-4 font-semibold border-b border-brand-200">Key Metrics</th>
-                        <th className="text-center p-4 font-semibold border-b border-brand-200">Before</th>
-                        <th className="text-center p-4 font-semibold border-b border-brand-200">After</th>
-                        <th className="text-center p-4 font-semibold border-b border-brand-200 w-1/4">Boosted</th>
+                        <th className="text-left p-4 font-semibold border-b border-brand-200 dark:text-brand-300">Key Metrics</th>
+                        <th className="text-center p-4 font-semibold border-b border-brand-200 dark:text-brand-300">Before</th>
+                        <th className="text-center p-4 font-semibold border-b border-brand-200 dark:text-brand-300">After</th>
+                        <th className="text-center p-4 font-semibold border-b border-brand-200 dark:text-brand-300 w-1/4">Boosted</th>
                     </tr>
                 </thead>
                 {/* <tbody>
@@ -192,17 +192,17 @@ const StepFour = () => {
 
                         return (
                             <tr key={metric.id}>
-                                <td className="p-4 border-b border-brand-200 gap-2 items-center flex">
+                                <td className="p-4 border-b border-brand-200 dark:border-brand-600 gap-2 items-center flex">
                                     <span>{getIcon(metric.id)}</span>
                                     {metric.title} {getShortName(metric.id)} <span><TooltipText text={getTooltipText(metric.id)}><InfoIcon className='w-3 h-3 hover:cursor-pointer' /></TooltipText></span>
                                 </td>
-                                <td className="text-center border-b border-brand-200">
+                                <td className="text-center border-b border-brand-200 dark:border-brand-600">
                                     {metric.before}
                                 </td>
-                                <td className="text-center border-b border-brand-200">
+                                <td className="text-center border-b border-brand-200 dark:border-brand-600">
                                     {metric.after}
                                 </td>
-                                <td className="text-center border-b border-brand-200 font-medium">
+                                <td className="text-center border-b border-brand-200 dark:border-brand-600 font-medium">
                                     {calculateBoost(parseFloat(metric.before), parseFloat(metric.after))}
                                 </td>
                             </tr>
@@ -268,6 +268,7 @@ const StepFour = () => {
                         </span>
                     </div>
                     <div className="flex justify-center p-4 mx-auto w-full relative items-center gap-4">
+                    
                         {aiMessage ? (
                             <div className='flex flex-col items-center gap-2 px-10 py-4 rounded-2xl min-w-[550px] '>
 
@@ -284,19 +285,19 @@ const StepFour = () => {
                                 ) : (
                                     <>
                                         <div className="text-lg font-semibold flex items-center gap-2"><AIButtonIcon /> AI Analysis</div>
-                                        <div className="flex flex-col gap-4 w-full border border-brand-200 rounded-2xl bg-brand-0 ">
+                                        <div className="flex flex-col gap-4 w-full border border-brand-200 rounded-2xl bg-brand-0 dark:bg-brand-800">
                                             {/* Opportunities Section - Only show if length > 0 */}
                                             {data?.grouped?.opportunities?.length > 0 && (
                                                 <div className="flex flex-col gap-2">
-                                                    <div className="flex items-center gap-4 text-sm font-semibold text-brand-900 border-b border-brand-200 px-6 py-2">
+                                                    <div className="flex items-center gap-4 text-sm font-semibold text-brand-900 dark:text-brand-300 border-b border-brand-200 px-6 py-2">
                                                         <span>Opportunities</span>
-                                                        <span className="flex text-xxs items-center text-brand-0 justify-center rounded-full w-6 h-6 border-2 border-orange-400 bg-orange-400">
+                                                        <span className="flex text-xxs items-center text-brand-0 dark:text-brand-900 justify-center rounded-full w-6 h-6 border-2 border-orange-400 bg-orange-400">
                                                             {data?.grouped?.opportunities?.length || 0}
                                                         </span>
                                                     </div>
                                                     <div className='p-6 py-2'>
                                                         {data?.grouped?.opportunities?.map((audit: Audit, index: number) => (
-                                                            <div key={index} className="text-xs text-brand-600 flex justify-between py-0.5">
+                                                            <div key={index} className="text-xs text-brand-600 dark:text-brand-300 flex justify-between py-0.5">
                                                                 <span>{audit.name}</span>
                                                                 <span className="font-medium">{audit.displayValue}</span>
                                                             </div>
@@ -308,15 +309,15 @@ const StepFour = () => {
                                             {/* Diagnostics Section - Only show if length > 0 */}
                                             {data?.grouped?.diagnostics?.length > 0 && (
                                                 <div className="flex flex-col gap-2">
-                                                    <div className="flex items-center gap-4 text-sm font-semibold text-brand-900 border-b border-brand-200 px-6 py-2">
+                                                    <div className="flex items-center gap-4 text-sm font-semibold text-brand-900 dark:text-brand-300 border-b border-brand-200 px-6 py-2">
                                                         <span>Diagnostics</span>
-                                                        <span className="flex text-xxs items-center text-brand-0 justify-center rounded-full w-6 h-6 border-2 border-yellow-400 bg-yellow-400">
+                                                        <span className="flex text-xxs items-center text-brand-0 dark:text-brand-900 justify-center rounded-full w-6 h-6 border-2 border-yellow-400 bg-yellow-400">
                                                             {data?.grouped?.diagnostics?.length || 0}
                                                         </span>
                                                     </div>
                                                     <div className='p-6 pt-2'>
                                                         {data?.grouped?.diagnostics?.map((audit: Audit, index: number) => (
-                                                            <div key={index} className="text-xs text-brand-600 flex justify-between py-0.5">
+                                                            <div key={index} className="text-xs text-brand-600 dark:text-brand-300 flex justify-between py-0.5">
                                                                 <span>{audit.name}</span>
                                                                 <span className="font-medium">{audit.displayValue}</span>
                                                             </div>
@@ -355,23 +356,23 @@ const StepFour = () => {
                                 {/* Divider with BoltIcon */}
                                 {/* <ArrowLongRightIcon className="w-6 h-6" /> */}
                                 <div className='flex items-center gap-2 relative'>
-                                    <PerformanceArrowIcon className='text-brand-900' fill={beforeColor[1]}/>
-                                    <div className='text-brand-900 font-bold text-2xl text-center'>
-                                        <span className='absolute -top-8 left-0 right-0 text-brand-900 font-normal text-xl'>
+                                    <PerformanceArrowIcon className='text-brand-900 dark:text-brand-300' fill={beforeColor[1]}/>
+                                    <div className='text-brand-900 dark:text-brand-300 font-bold text-2xl text-center'>
+                                        <span className='absolute -top-8 left-0 right-0 text-brand-900 dark:text-brand-300 font-normal text-xl'>
                                             Boosted with 
                                         </span>
                                         {calculateImprovement()}%
                                     </div>
-                                    <PerformanceArrowIcon className='text-brand-900' fill={afterColor[1]}/>
+                                    <PerformanceArrowIcon className='text-brand-900 dark:text-brand-300' fill={afterColor[1]}/>
                                 </div>
 
                                 <div
                                     className="flex flex-col items-center gap-4">
-                                    <div className="text-lg font-semibold">Current Score</div>
+                                    <div className="text-lg font-semibold dark:text-brand-300">Current Score</div>
                                     <div className="">
                                         <PerformanceProgressBar
                                             className={cn('max-h-[180px]')}
-                                            scoreClassName={"text-brand-950"}
+                                            scoreClassName={"text-brand-950 dark:text-brand-300"}
                                             background={false}
                                             stroke={6}
                                             loading={performance.last_entry < 1}
@@ -392,6 +393,7 @@ const StepFour = () => {
                             </>
                         )}
                     </div>
+                    
                     {!aiMessage && (
                                 <div className="flex justify-center p-4 mx-auto w-full relative items-center gap-4 ">
                                     <div className="w-full max-w-2xl ">
@@ -413,7 +415,7 @@ const StepFour = () => {
                         </button>
                     </div> */}
                     <button
-                        className="flex items-center bg-gradient-to-r from-brand-900/90 to-brand-950 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2 "
+                        className="flex items-center bg-gradient-to-r from-brand-900/90 to-brand-950 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2 dark:bg-brand-800 dark:text-brand-300 dark:border-brand-600 dark:border"
                         onClick={gotoDashbaord}
                     >
                         Go to Dashboard
