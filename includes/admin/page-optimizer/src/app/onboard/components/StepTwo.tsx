@@ -149,21 +149,21 @@ const StepTwo: React.FC<StepTwoProps> = ({ reconnect, onNext }) => {
             <div
                 key={level}
                 className={cn(
-                    'relative bg-brand-0 flex flex-col gap-3.5 font-normal w-[166px] h-[166px] cursor-pointer rounded-3xl items-center justify-center',
-                    isActive ? 'text-brand-600 border-[3px] border-[#592d8d]' : 'border border-transparent border-[3px] outline outline-1 outline-brand-200 dark:outline-brand-700',
+                    'relative bg-brand-0 flex flex-col gap-3.5 font-normal w-[166px] h-[166px] cursor-pointer rounded-3xl items-center justify-center dark:bg-brand-800 ',
+                    isActive ? 'text-brand-600 border-[3px] border-[#592d8d] dark:border-purple-700' : 'border border-transparent border-[3px] outline outline-1 outline-brand-200 dark:outline-brand-700',
                     isTurboMax && 'gap-1 pt-4',
                 )}
                 onClick={() => settingsModeOnChange(level)}
             >
                 <div>
                     {getIcon(level)}
-                    <div className={cn("absolute w-7 h-7 justify-center", level === "turboMax" ? "top-1 right-1.5 gap-1 text-[10px] items-center font-semibold rounded-3xl p-1 flex bg-brand-0 border border-brand-200 min-w-[150px]	" : "top-2.5 right-2.5 ")}>
+                    <div className={cn("absolute w-7 h-7 justify-center dark:bg-brand-800 dark:text-brand-300", level === "turboMax" ? "top-1 right-1.5 gap-1 text-[10px] items-center font-semibold rounded-3xl p-1 flex bg-brand-0 border border-brand-200 min-w-[150px]	" : "top-2.5 right-2.5", isTurboMax && 'dark:border-brand-600 dark:border')}>
                             {level === 'turboMax' && (<><AIButtonIcon />  AI Recommended </>)}
                            {isActive && <CheckCircleIcon className={`w-6 h-6 text-purple-800 `} />}
                     </div>
                 </div>
                 <div className="items-center flex flex-col">
-                    <span className="capitalize font-semibold">{level}</span>
+                    <span className="capitalize font-semibold dark:text-brand-300">{level}</span>
                     {/* {level === 'turboMax' && (
                         <span className="font-normal text-[10px] leading-none">Test Mode Recommended</span>)} */}
                 </div>
