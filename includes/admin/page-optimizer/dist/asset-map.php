@@ -1,25 +1,16 @@
 <?php
 define('RAPIDLOAD_ASSET_MAP', [
-    'assets/inter-cyrillic-ext-wght-normal.woff2' => 'assets/inter-cyrillic-ext-wght-normal.woff2',
-    'assets/inter-cyrillic-wght-normal.woff2' => 'assets/inter-cyrillic-wght-normal.woff2',
     'assets/inter-vietnamese-wght-normal.woff2' => 'assets/inter-vietnamese-wght-normal.woff2',
-<<<<<<< HEAD
+    'assets/inter-cyrillic-wght-normal.woff2' => 'assets/inter-cyrillic-wght-normal.woff2',
+    'assets/inter-cyrillic-ext-wght-normal.woff2' => 'assets/inter-cyrillic-ext-wght-normal.woff2',
+    'assets/inter-latin-ext-wght-normal.woff2' => 'assets/inter-latin-ext-wght-normal.woff2',
     'assets/inter-greek-wght-normal.woff2' => 'assets/inter-greek-wght-normal.woff2',
-    'assets/inter-latin-wght-normal.woff2' => 'assets/inter-latin-wght-normal.woff2',
     'assets/inter-greek-ext-wght-normal.woff2' => 'assets/inter-greek-ext-wght-normal.woff2',
-    'assets/inter-latin-ext-wght-normal.woff2' => 'assets/inter-latin-ext-wght-normal.woff2',
-    'assets/index.css' => 'assets/index.gkUZYDgM.css',
-    'assets/index.js' => 'assets/index.ChkapXfW.js',
-    'assets/InitTour.js' => 'assets/InitTour.CoJdOlXb.js',
-=======
-    'assets/inter-latin-ext-wght-normal.woff2' => 'assets/inter-latin-ext-wght-normal.woff2',
     'assets/inter-latin-wght-normal.woff2' => 'assets/inter-latin-wght-normal.woff2',
     'assets/index.css' => 'assets/index.BDbSOTDf.css',
-    'assets/index.js' => 'assets/index.yVvPVLF9.js',
-    'assets/InitTour.js' => 'assets/InitTour.rM5zNGv2.js',
+    'assets/index.js' => 'assets/index.2CdNWG2R.js',
+    'assets/InitTour.js' => 'assets/InitTour.BsBIQAf0.js',
     'assets/animations.js' => 'assets/animations.CVpoelRy.js',
->>>>>>> v3.0/darkmode
     'assets/core-vendor.js' => 'assets/core-vendor.V80Ff32-.js',
-    'assets/animations.js' => 'assets/animations.CVpoelRy.js',
     'assets/vendor.js' => 'assets/vendor.T3CYoFTJ.js'
 ]);
