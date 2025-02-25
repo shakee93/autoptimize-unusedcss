@@ -155,7 +155,7 @@ const PerformanceGears: React.FC<PerformanceGearsProps> = ({className}) => {
             case 'turboMax': return <TurboMax {...iconProps} isDark={isDark} />;
             case 'custom': return <Custom {...iconProps} isDark={isDark} />;
         }
-    }, [activeGear]);
+    }, [activeGear, isDark]);
 
     // const getTriggerText = useMemo(() => () => {
     //     if (isAccordionOpen) return 'Optimization Progress';
