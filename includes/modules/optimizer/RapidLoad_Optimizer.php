@@ -462,13 +462,16 @@ class RapidLoad_Optimizer
                 }
                 case 'cpcss' :{
                     $job_data_cpcss = new RapidLoad_Job_Data($job,'cpcss');
+                    $cpcss_data = $job_data_cpcss->get_cpcss_data();
                     $response[$type] = [
                         'status' => isset($job_data_cpcss->id) ? $job_data_cpcss->status : 'queued',
                         'error' => isset($job_data_cpcss->id) && isset($job_data_cpcss->error) ? unserialize($job_data_cpcss->error) : null,
                         'meta' => [
                             'warnings' => isset($job_data_cpcss->id) && isset($job_data_cpcss->warnings) ? unserialize($job_data_cpcss->warnings) : null,
-                            'stats' => isset($job_data_cpcss->id) && isset($job_data_cpcss->stats) ? unserialize($job_data_cpcss->stats) : null
-                        ]   
+                            'stats' => isset($job_data_cpcss->id) && isset($job_data_cpcss->stats) ? unserialize($job_data_cpcss->stats) : null,
+                            'desktop' => isset($job_data_cpcss->id) && isset($cpcss_data['desktop']) && !empty($cpcss_data['desktop']) ? $cpcss_data['desktop'] : null,
+                            'mobile' => isset($job_data_cpcss->id) && isset($cpcss_data['mobile']) && !empty($cpcss_data['mobile']) ? $cpcss_data['mobile'] : null,
+                        ], 
                     ];
                     break;
                 }
@@ -747,7 +750,6 @@ class RapidLoad_Optimizer
                     case 'uucss_support_next_gen_formats':
                     case 'uucss_set_width_and_height':
                     case 'uucss_lazy_load_images':
-                    case 'uucss_exclude_above_the_fold_image_count':
                     case 'uucss_lazy_load_iframes':
                     case 'uucss_exclude_above_the_fold_images':
                         self::$options['uucss_enable_image_delivery'] = "1";
@@ -1749,6 +1751,7 @@ class RapidLoad_Optimizer
             }
         }else{
             unset(self::$options['uucss_enable_image_delivery']);
+            RapidLoad_Base::update_option('rapidload_module_image',"0");
         }
 
         if(isset(self::$options['uucss_self_host_google_fonts']) && self::$options['uucss_self_host_google_fonts'] == "1"){

@@ -13,7 +13,7 @@ export default function ChatPage() {
         ease: 'linear',
         duration: 0.04,
       }}
-      id='rapidload-page-optimizer-wrapper' className="flex justify-center items-center container">
+      id='rapidload-page-optimizer-wrapper' className="flex justify-center items-center container ">
       <Chat />
     </m.div>
   );

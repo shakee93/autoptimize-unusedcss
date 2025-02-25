@@ -164,6 +164,10 @@ interface AuditSetting {
         warnings: []
         error: any
         message: string
+        meta?: {
+            mobile?: string
+            desktop?: string
+        }
     }
 }
 

@@ -13,7 +13,7 @@ const OptimzePagesTrigger: React.FC<OptimzePagesTriggerProps> = ({ open, onOpenC
     <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogTitle></DialogTitle>
         <DialogContent className="sm:max-w-[650px]">
-        <DialogHeader className='border-b px-6 py-4 mt-1'>
+        <DialogHeader className='border-b px-6 py-4 mt-1 hidden'>
                     <DialogTitle></DialogTitle>
                 </DialogHeader>
                 <DialogDescription>
@@ -23,7 +23,7 @@ const OptimzePagesTrigger: React.FC<OptimzePagesTriggerProps> = ({ open, onOpenC
                 <ContentSelector data={data} onOpenChange={onOpenChange} />
             </div>
             <DialogFooter className="px-6 py-3 border-t">
-                <AppButton onClick={() => onOpenChange(false)} variant='outline' className='text-sm'>
+                <AppButton onClick={() => onOpenChange(false)} variant='outline' className='text-sm dark:bg-brand-800/40 dark:text-brand-300 dark:hover:bg-brand-800/50'>
                     Close
                 </AppButton>
             </DialogFooter>

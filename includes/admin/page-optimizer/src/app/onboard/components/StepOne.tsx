@@ -121,8 +121,8 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
 
 
                 <div className='border rounded-xl p-2 flex items-center gap-4'>
-                    <div className='p-2 bg-brand-200/60 rounded-lg'>
-                        <InformationCircleIcon className='w-10 h-10 text-purple-700/90' />
+                    <div className='p-2 bg-brand-200/60 rounded-lg dark:bg-brand-800'>
+                        <InformationCircleIcon className='w-10 h-10 text-purple-700/90 dark:text-brand-300' />
                     </div>
                     <span className='font-medium text-xs text-zinc-600 dark:text-brand-300'>
                         Your website ({options?.optimizer_url}) uses caching. We bypass it to <br /> reveal the unoptimized performance, showing RapidLoad's full <br /> impact.
@@ -167,7 +167,7 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                 </>
                 ):(
                 <>
-                    <div className='bg-brand-0 border rounded-3xl p-2'>
+                    <div className='bg-brand-0 border rounded-3xl p-2 dark:bg-brand-800'>
                         <div
                             className="flex items-center justify-center text-md gap-2 overflow-hidden relative">
                             {/* <div className="flex justify-center px-4 py-2 max-w-xl mx-auto w-full relative"> */}
@@ -195,7 +195,7 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                                     }
 
                                 </div>
-                                <div className="text-sm font-semibold border rounded-3xl p-2 py-1">Your Current Score
+                                <div className="text-sm font-semibold border rounded-3xl p-2 py-1 dark:border-brand-600 dark:border">Your Current Score
                                 </div>
                             </div>
 
@@ -213,10 +213,10 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
 
 
                                         <div
-                                            className="bg-gradient-to-r from-purple-100 via-purple-60 to-purple-100/10 relative flex items-center justify-center w-44 h-44 rounded-full"
+                                            className="bg-gradient-to-r from-purple-100 via-purple-60 to-purple-100/10 dark:bg-gradient-to-r dark:from-brand-900/90 dark:via-brand-900/90 dark:to-brand-900/90 relative flex items-center justify-center w-44 h-44 rounded-full"
                                         >
                                             <div
-                                                className="flex flex-col items-center justify-center text-center text-brand-950">
+                                                className="flex flex-col items-center justify-center text-center text-brand-950 dark:text-brand-300">
                                                 <AnimatedLogo size="xl" isPlaying={predictedLoading} />
                                                 <div className='text-[10px] bg-[#7F54B3] px-1.5 py-[2px] rounded-[5px] mt-4 tracking-widest text-white uppercase'>
                                                 <p className={`typing-text ${animate ? 'animate' : ''}`}>
@@ -240,7 +240,7 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
 
                                 </div>
                                 <div
-                                    className="items-center gap-1 text-sm font-semibold bg-brand-200/60 rounded-3xl p-2 py-1 flex">
+                                    className="items-center gap-1 text-sm font-semibold bg-brand-200/60 rounded-3xl p-2 py-1 flex dark:bg-brand-800 dark:border-brand-600 dark:border">
                                     {predictedLoading || error || loading ?
                                         (
                                             <><Loader className='w-4 animate-spin' /> Hold on tight</>
@@ -262,7 +262,7 @@ const StepOne: React.FC<StepOneProps> = ({ onNext }) => {
                     </div>
 
                     <button
-                                className={cn('flex items-center bg-gradient-to-r from-brand-900/90 to-brand-950 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2 hover:bg-gradient-to-br hover:from-[rgba(94,92,92,0.55)]  hover:to-brand-900/90 bg-brand-900/90',
+                                className={cn('flex items-center bg-gradient-to-r from-brand-900/90 to-brand-950 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition-all gap-2 hover:bg-gradient-to-br hover:from-[rgba(94,92,92,0.55)]  hover:to-brand-900/90 bg-brand-900/90 dark:bg-brand-800 dark:border-brand-600 dark:border dark:hover:bg-brand-600/40 dark:text-brand-300',
                                 predictedLoading  && 'pointer-events-none cursor-default opacity-30')}
                                 onClick={onNext}
                             >

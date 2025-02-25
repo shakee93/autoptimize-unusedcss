@@ -118,13 +118,13 @@ const ContentSelector: React.FC<ContentSelectorProps> = ({ data, onOpenChange })
     return (
         <>
             {/* Header Section */}
-            <div className="flex items-center px-6 py-3">
+            <div className="flex items-center px-6 py-3 ">
                 {selectedContent && (
                     <button onClick={handleBackClick} className="mr-3">
-                        <ArrowLeftIcon className="h-6 w-6 text-gray-500" />
+                        <ArrowLeftIcon className="h-6 w-6 text-gray-500 dark:text-brand-300" />
                     </button>
                 )}
-                <div className="text-gray-900 font-medium text-lg">
+                <div className="text-gray-900 font-medium text-lg dark:text-brand-300">
                     {selectedContent
                         ? `Select ${selectedContent.charAt(0).toUpperCase() + selectedContent.slice(1)}`
                         : 'Select a content to Optimize'}
@@ -138,7 +138,7 @@ const ContentSelector: React.FC<ContentSelectorProps> = ({ data, onOpenChange })
                     placeholder={selectedContent ? `Search ${selectedContent}` : 'Search content types'}
                     value={searchTerm}
                     onChange={handleSearchChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400 dark:text-brand-300 dark:bg-brand-950 dark:border-brand-800/80 dark:focus:border-brand-600/40"
                 />
 
                 {/* Content list changes dynamically based on `selectedContent` */}
@@ -150,20 +150,20 @@ const ContentSelector: React.FC<ContentSelectorProps> = ({ data, onOpenChange })
                             filteredContent.map(content => (
                                 <li
                                     key={content.post_type}
-                                    className="py-4 cursor-pointer hover:bg-gray-50 rounded-xl"
+                                    className="py-4 cursor-pointer hover:bg-gray-50 rounded-xl dark:hover:bg-brand-800/40"
                                     onClick={() => handleContentClick(content.post_type)}
                                 >
-                                    <div className="flex mx-6 justify-between items-center">
+                                    <div className="flex mx-6 justify-between items-center dark:text-brand-300">
                                         <div className="flex gap-4">
                                             <div
-                                                className="text-gray-900 font-medium capitalize">{content.post_type}</div>
+                                                className="text-gray-900 font-medium capitalize dark:text-brand-300">{content.post_type}</div>
                                             <span
-                                                className="text-gray-500 text-xs border border-0.5 rounded-lg px-2 py-0.5 bg-brand-0">
+                                                className="text-gray-500 text-xs border border-0.5 rounded-lg px-2 py-0.5 bg-brand-0 dark:text-brand-300 dark:bg-brand-800/40">
                                              {content.links.length} {content.post_type}
                                         </span>
                                         </div>
 
-                                        <ArrowRightIcon className="h-6 w-6 text-gray-500"/>
+                                        <ArrowRightIcon className="h-6 w-6 text-gray-500 dark:text-brand-300"/>
                                     </div>
                                 </li>
                             ))
@@ -173,12 +173,12 @@ const ContentSelector: React.FC<ContentSelectorProps> = ({ data, onOpenChange })
                                 searchResults.map(link => (
                                     <li
                                         key={link.permalink}
-                                        className="py-4 cursor-pointer hover:bg-gray-50 rounded-xl"
+                                        className="py-4 cursor-pointer hover:bg-gray-50 rounded-xl dark:hover:bg-brand-800/40"
                                         onClick={() => handleItemClick(link)}
                                     >
-                                        <div className="flex mx-6 justify-between items-center">
-                                            <div className="text-gray-900 font-medium">{link.title}</div>
-                                            <PlusIcon className="h-6 w-6 text-gray-500"/>
+                                        <div className="flex mx-6 justify-between items-center dark:text-brand-300">
+                                            <div className="text-gray-900 font-medium dark:text-brand-300">{link.title}</div>
+                                            <PlusIcon className="h-6 w-6 text-gray-500 dark:text-brand-300"/>
                                         </div>
                                     </li>
                                 ))
@@ -188,12 +188,12 @@ const ContentSelector: React.FC<ContentSelectorProps> = ({ data, onOpenChange })
                                 filteredSelectedList.map(link => (
                                     <li
                                         key={link.permalink}
-                                        className="py-4 cursor-pointer hover:bg-gray-50 rounded-xl"
+                                        className="py-4 cursor-pointer hover:bg-gray-50 rounded-xl dark:hover:bg-brand-800/40"
                                         onClick={() => handleItemClick(link)}
                                     >
-                                        <div className="flex mx-6 justify-between items-center">
-                                            <div className="text-gray-900 font-medium">{link.title}</div>
-                                            <PlusIcon className="h-6 w-6 text-gray-500"/>
+                                        <div className="flex mx-6 justify-between items-center dark:text-brand-300">
+                                            <div className="text-gray-900 font-medium dark:text-brand-300">{link.title}</div>
+                                            <PlusIcon className="h-6 w-6 text-gray-500 dark:text-brand-300"/>
                                         </div>
                                     </li>
                                 ))

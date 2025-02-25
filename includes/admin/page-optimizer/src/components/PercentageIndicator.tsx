@@ -9,8 +9,8 @@ interface PercentageIndicatorProps {
 
 const PercentageIndicator: React.FC<PercentageIndicatorProps> = ({ percentage, className }) => {
     const isPositive = percentage > 0;
-    const bgColor = isPositive ? 'bg-green-200/40' : 'bg-red-200/40';
-    const textColor = isPositive ? 'text-green-700' : 'text-red-700';
+    const bgColor = isPositive ? 'bg-green-200/40 dark:bg-green-900/40' : 'bg-red-200/40 dark:bg-red-900/40';
+    const textColor = isPositive ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300';
     const Icon = isPositive ? ArrowTrendingUpIcon : ArrowTrendingDownIcon;
 
     return (

@@ -184,25 +184,25 @@ const StepThree: React.FC<StepThreeProps> = ({ onNext }) => {
                 </div>
 
                 <div className="flex flex-col items-center justify-center gap-2">
-                    <div className="text-gray-600/50 font-bold"><CountdownTimer timerOnly={true}/></div>
+                    <div className="text-gray-600/50 font-bold dark:text-brand-300"><CountdownTimer timerOnly={true}/></div>
                     <h4 className="text-xl font-bold capitalize text-center">
                         {currentStepData.description}
                     </h4>
-                    <p className="text-gray-600 mb-2 text-center">
+                    <p className="text-gray-600 mb-2 text-center dark:text-brand-300">
                         {currentStepData.details[currentDetailIndex]}
                     </p>
                     {/* Progress bar */}
                     <div className="flex items-center w-64">
                         {[0, 1, 2].map(step => (
                             currentStep > step ? (
-                                <div key={step} className="h-2 flex-grow bg-[#673B9B] rounded-lg mr-2"/>
+                                <div key={step} className="h-2 flex-grow bg-[#673B9B] rounded-lg mr-2 dark:bg-brand-300"/>
                             ) : step === currentStep ? (
                                 <Skeleton
                                     key={step}
                                     className="h-2 flex-grow bg-[#673B9B]/30 rounded-lg mr-2"
                                 />
                             ) : (
-                                <div key={step} className="h-2 flex-grow bg-gray-300 rounded-lg mr-2" />
+                                <div key={step} className="h-2 flex-grow bg-gray-300 rounded-lg mr-2 dark:bg-brand-300" />
                             )
                         ))}
                     </div>
