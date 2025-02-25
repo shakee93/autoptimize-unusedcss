@@ -32,6 +32,9 @@ export default function Chat({ apiEndpoint = `${aiRoot}/support` }: ChatProps) {
     headers: {
       'Authorization': `Bearer ${isDev ? import.meta.env.VITE_KEY : options.license_key!}`
     },
+    body: {
+      'url': options?.optimizer_url || ''
+    },
 
     onError: (error) => {
       console.error(error);
