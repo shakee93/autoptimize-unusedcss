@@ -366,7 +366,21 @@ const ChatMessage = ({ message, loading }: { message: any, loading: boolean }) =
           }`}
       >
         {message.content && message.content.length > 0 ? (
-          <div className="prose prose-sm prose-p:m-0 prose-p:p-0 prose-p:text-sm prose-p:text-brand-950 dark:prose-p:text-brand-300 prose-strong:text-brand-950 dark:prose-strong:text-brand-300">
+          <div className="prose prose-sm 
+            prose-p:m-0 prose-p:p-0 prose-p:text-sm 
+            prose-p:text-brand-950 dark:prose-p:text-brand-300
+            prose-strong:text-brand-950 dark:prose-strong:text-brand-300
+            prose-li:text-brand-950 dark:prose-li:text-brand-300
+            prose-a:text-brand-950 dark:prose-a:text-brand-300
+            prose-ul:text-brand-950 dark:prose-ul:text-brand-300
+            prose-ol:text-brand-950 dark:prose-ol:text-brand-300
+            prose-blockquote:text-brand-950 dark:prose-blockquote:text-brand-300
+            prose-code:text-brand-950 dark:prose-code:text-brand-300
+            prose-pre:text-brand-950 dark:prose-pre:text-brand-300
+            prose-h1:text-brand-950 dark:prose-h1:text-brand-300
+            prose-h2:text-brand-950 dark:prose-h2:text-brand-300
+            prose-h3:text-brand-950 dark:prose-h3:text-brand-300
+            prose-h4:text-brand-950 dark:prose-h4:text-brand-300">
             <Markdown>{message.content}</Markdown>
           </div>
         ) : (
