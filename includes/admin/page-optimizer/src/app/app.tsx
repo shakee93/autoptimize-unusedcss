@@ -313,7 +313,7 @@ const App = ({ popup, _showOptimizer = false }: {
                     {/*    <TestModeNotification/>*/}
                     {/*}*/}
                     
-                    <div className='dark:text-brand-300 text-brand-800 dark:bg-brand-900 bg-[#F0F0F1]'>
+                    <div className={`dark:text-brand-300 text-brand-800 dark:bg-brand-900 bg-[#F0F0F1]`}>
                      {/* New Banner Component */}
                      {showBanner && (
                             <div className="bg-gradient-to-r from-[#332247] to-[#441C74] text-white py-3 relative  mt-[-1px]">
@@ -495,8 +495,14 @@ const App = ({ popup, _showOptimizer = false }: {
 
                         )}
                     </div>
+
+                {!isDev && (
+                    <div className="dark:bg-brand-900 absolute bottom-0 left-0 right-0 h-[8%] bg-[#F0F0F1]" />
+                )}
                 </>
             }
+            
+            
         </AnimatePresence>
     );
 }

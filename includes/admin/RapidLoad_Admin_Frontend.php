@@ -1152,7 +1152,7 @@ class RapidLoad_Admin_Frontend
             #wpcontent {
                 padding-left: 0 !important;
             }
-
+           
             .notice {
                 display: none !important;
             }

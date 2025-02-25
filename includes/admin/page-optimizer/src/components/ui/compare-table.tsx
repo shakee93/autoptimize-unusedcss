@@ -1,7 +1,10 @@
 import React from 'react';
 import {CustomCheckIcon} from "app/dashboard/components/icons/icon-svg";
+import { useRootContext } from '../../context/root';
 
 const ComparisonTable = () => {
+    const { isDark } = useRootContext()
+
     const data = [
         { feature: 'Unused CSS generation', starter: true, accelerate: true, turboMax: true },
         { feature: 'Minifying CSS', starter: true, accelerate: true, turboMax: true },
@@ -17,7 +20,7 @@ const ComparisonTable = () => {
     ];
 
     return (
-        <div className="overflow-x-auto px-10">
+        <div className="overflow-x-auto px-10 dark:text-brand-300">
             <table className="min-w-full ">
                 <thead>
                 <tr className="text-sm font-semibold dark:text-brand-300">
@@ -30,21 +33,21 @@ const ComparisonTable = () => {
                 <tbody>
                 {data.map((row, index) => (
                     <tr key={index} className="text-center text-sm item-center">
-                        <td className="p-2 pl-6 border-b border-t border-gray-200 text-left">{row.feature}</td>
-                        <td className="p-2 border-b border-t border-gray-200 ">
+                        <td className="p-2 pl-6 border-b border-t border-gray-200 text-left dark:border-brand-600">{row.feature}</td>
+                        <td className="p-2 border-b border-t border-gray-200 dark:border-brand-600">
                             <div className="flex items-center justify-center h-full">
-                                {row.starter && <CustomCheckIcon className="h-3 w-3 text-brand-600"/>}
+                                {row.starter && <CustomCheckIcon isDark={isDark} className="h-3 w-3 text-brand-600"/>}
                             </div>
                         </td>
-                        <td className="p-2 border-b border-t border-gray-200">
+                        <td className="p-2 border-b border-t border-gray-200 dark:border-brand-600">
                             <div className="flex items-center justify-center h-full">
-                                {row.accelerate && <CustomCheckIcon className="h-3 w-3 text-brand-600"/>}
+                                {row.accelerate && <CustomCheckIcon isDark={isDark} className="h-3 w-3 text-brand-600"/>}
                             </div>
 
                         </td>
-                        <td className="p-2 border-b border-t border-gray-200">
+                        <td className="p-2 border-b border-t border-gray-200 dark:border-brand-600">
                             <div className="flex items-center justify-center h-full">
-                                {row.turboMax && <CustomCheckIcon className="h-3 w-3 text-brand-600"/>}
+                                {row.turboMax && <CustomCheckIcon isDark={isDark} className="h-3 w-3 text-brand-600"/>}
                             </div>
 
                         </td>
