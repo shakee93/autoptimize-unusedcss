@@ -366,7 +366,7 @@ const ChatMessage = ({ message, loading }: { message: any, loading: boolean }) =
           }`}
       >
         {message.content && message.content.length > 0 ? (
-          <div className="prose prose-sm prose-p:m-0 prose-p:p-0 prose-p:text-sm prose-p:text-brand-950 dark:prose-p:text-brand-300">
+          <div className="prose prose-sm prose-p:m-0 prose-p:p-0 prose-p:text-sm prose-p:text-brand-950 dark:prose-p:text-brand-300 prose-strong:text-brand-950 dark:prose-strong:text-brand-300">
             <Markdown>{message.content}</Markdown>
           </div>
         ) : (
