@@ -750,7 +750,6 @@ class RapidLoad_Optimizer
                     case 'uucss_support_next_gen_formats':
                     case 'uucss_set_width_and_height':
                     case 'uucss_lazy_load_images':
-                    case 'uucss_exclude_above_the_fold_image_count':
                     case 'uucss_lazy_load_iframes':
                     case 'uucss_exclude_above_the_fold_images':
                         self::$options['uucss_enable_image_delivery'] = "1";
@@ -1751,6 +1750,7 @@ class RapidLoad_Optimizer
             }
         }else{
             unset(self::$options['uucss_enable_image_delivery']);
+            RapidLoad_Base::update_option('rapidload_module_image',"0");
         }
 
         if(isset(self::$options['uucss_self_host_google_fonts']) && self::$options['uucss_self_host_google_fonts'] == "1"){
