@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: RapidLoad AI - Optimize Web Vitals Automatically
-Plugin URI:  https://rapidload.io/
+Plugin URI:  https://rapidload.ai/
 Description: Supercharge your website with RapidLoad AI, featuring cutting-edge AI to automate optimizing CSS, JavaScript, images, fonts, and caching.
 Version:     3.0.5
 Author:      RapidLoad
-Author URI:  https://rapidload.io/
+Author URI:  https://rapidload.ai/
 */
 
 
