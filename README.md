@@ -27,6 +27,7 @@
 <p align="center">
   <a href="https://rapidload.ai">Website</a> •
   <a href="https://docs.rapidload.ai/">Documentation</a> •
+  <a href="https://wordpress.org/plugins/unusedcss/">Install</a> •
   <a href="https://rapidload.zendesk.com/hc/en-us/requests/new">Support</a> 
 </p>
 
