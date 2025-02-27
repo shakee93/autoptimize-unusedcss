@@ -175,20 +175,20 @@ class RapidLoad_Enqueue {
                 }
             }
 
-            $domains = array_unique($domains);
+            if(apply_filters('rapidload/enqueue/dns-prefetch/enabled', true)){
+                $domains = array_unique($domains);
 
-            if(gettype($dom) != "string"){
-                foreach ($domains as $domain){
-                    if(!$this->str_contains(site_url(), $domain)){
-                        $head = $dom->find('head', 0);
-                        $preconnect = '<link href="//' . $domain . '" rel="dns-prefetch" crossorigin>';
-                        $first_child = $head->first_child();
-                        $first_child->__set('outertext', $preconnect . $first_child->outertext);
+                if(gettype($dom) != "string"){
+                    foreach ($domains as $domain){
+                        if(!$this->str_contains(site_url(), $domain)){
+                            $head = $dom->find('head', 0);
+                            $preconnect = '<link href="//' . $domain . '" rel="dns-prefetch" crossorigin>';
+                            $first_child = $head->first_child();
+                            $first_child->__set('outertext', $preconnect . $first_child->outertext);
+                        }
                     }
                 }
             }
-
-
 
             if (gettype($dom) == "string") {
                 $html = $dom;
