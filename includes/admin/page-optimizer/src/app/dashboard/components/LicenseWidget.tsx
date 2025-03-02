@@ -8,22 +8,23 @@ import { updateLicense } from "../../../store/app/appActions";
 import { useAppContext } from "../../../context/app";
 import useCommonDispatch from "hooks/useCommonDispatch";
 import { AnimatePresence, motion } from 'framer-motion';
-import { Loader } from "lucide-react";
+import { Loader, PlugIcon } from "lucide-react";
+import { Button } from 'components/ui/button';
+import AppButton from 'components/ui/app-button';
 
 type InputChangeHandler = React.ChangeEventHandler<HTMLInputElement>;
 
 const LicenseWidget = () => {
     const [isVisible, setIsVisible] = useState(true);
-
     const [licenseMessage, setLicenseMessage] = useState("");
     const { license } = useSelector(optimizerData);
-    const { options } = useAppContext();
+    const { options, uucssGlobal } = useAppContext();
 
     const [licenseInfo, setLicenseInfo] = useState<License | null>(() => options.rapidload_license_data || null);
     const [inputLicense, setInputLicense] = useState("");
     const [showInput, setShowInput] = useState(false);
     const [loading, setLoading] = useState(false);
-   
+
     const { dispatch } = useCommonDispatch();
 
 
@@ -57,12 +58,12 @@ const LicenseWidget = () => {
     const renderLicenseStatus = () => {
         const isActivated = !!licenseInfo;
         const Icon = isActivated ? CheckBadgeIcon : XCircleIcon;
-        const textColor = isActivated ? "text-purple-900/90  dark:text-brand-300" : "text-red-600  dark:text-brand-300";
-        const bgColor = isActivated ? "text-purple-900/80 dark:text-brand-300" : "text-red-600  dark:text-brand-300";
-        const statusText = isActivated ? "Rapidload Activated" : "Rapidload Deactivated";
+        const textColor = isActivated ? "text-purple-900/90  dark:text-brand-300" : "text-purple-600  dark:text-brand-300";
+        const bgColor = isActivated ? "text-purple-900/80 dark:text-brand-300" : "text-purple-600  dark:text-brand-300";
+        const statusText = isActivated ? "Rapidload Activated" : "You are using RapidLoad AI FREE";
 
         return (
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-1 items-center">
                 <Icon className={`h-4 w-4 ${bgColor}`} />
                 <span className={`text-xs ${textColor}`}>{statusText}</span>
             </div>
@@ -78,7 +79,7 @@ const LicenseWidget = () => {
                 : ''
         },
         { label: 'Plan', value: licenseInfo?.plan },
-        { label: 'Active Domain', value: licenseInfo?.licensedDomain? licenseInfo?.licensedDomain : options.optimizer_url}
+        { label: 'Active Domain', value: licenseInfo?.licensedDomain ? licenseInfo?.licensedDomain : options.optimizer_url }
     ];
 
     const renderLicenseDetails = () => (
@@ -95,7 +96,7 @@ const LicenseWidget = () => {
                 )}
             </button> */}
 
-           
+
 
             {licenseFields.map(({ label, value }, index) => (
                 <div
@@ -136,26 +137,17 @@ const LicenseWidget = () => {
         </motion.div>
     );
 
-    const renderConnectButton = () => (
-        <button
-            className="flex gap-2 items-center cursor-pointer bg-brand-100/90 text-brand-950 px-4 rounded-lg"
-            onClick={() => (showInput ? connectRapidloadLicense() : window.open('https://app.rapidload.io/', '_blank'))}
-        >
-            {loading && <Loader className='w-4 animate-spin' />} Connect
-        </button>
-    );
-
     return (
         <AnimatePresence mode="wait">
             <div className="w-full flex flex-col gap-4">
                 <Card data-tour="license-widget" className="border flex flex-col gap-4">
-               
+
                     <div className="flex flex-col p-6 pb-0 gap-2">
                         <div className="text-lg font-bold">
                             {licenseInfo ? (
                                 <span className="text-brand-400/50 dark:text-brand-300/80">Welcome back, <span className="text-brand-950 dark:text-brand-300">{licenseInfo?.name}</span></span>
                             ) : (
-                                <span className="text-brand-400/90 dark:text-brand-300">Connect your license</span>
+                                <span className="text-base font-semibold dark:text-brand-300">Connect your license</span>
                             )}
                         </div>
                         <div className="bg-purple-800/10 px-2.5 py-1.5 rounded-xl w-fit dark:bg-brand-800 dark:border-brand-600 dark:border">{renderLicenseStatus()}</div>
@@ -169,25 +161,8 @@ const LicenseWidget = () => {
                         {JSON.stringify(licenseInfo?.licensedDomain)} */}
                         {!licenseInfo ? (
                             <>
-                                <span>Slow load times are the #1 reason for high bounce rates and one of the root causes of poor Google Rankings.</span>
-                                {showInput ? renderLicenseInput() : (
-                                    <motion.div
-                                        key="getRapidloadButton"
-                                        initial={{ opacity: 0, y: -20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -20 }}
-                                        transition={{ duration: 0.2 }}
-                                        className="flex flex-col items-center"
-                                    >
-                                        <button
-                                            className="text-sm font-semibold cursor-pointer bg-brand-100/90 text-brand-950 py-1.5 px-4 rounded-lg"
-                                            onClick={() => window.open('https://rapidload.io/', 'blank')}
-                                        >
-                                            Get Rapidload
-                                        </button>
-                                    </motion.div>
-
-                                )}
+                                <span>You're currently using just 30% of RapidLoad AI’s potential. While the free version speeds up your site, the real power unlocks at 100%—with advanced optimizations like CriticalCSS injection, real-time image compression, and a high-speed global CDN.
+                                </span>
                             </>
                         ) : renderLicenseDetails()}
                     </div>
@@ -203,7 +178,7 @@ const LicenseWidget = () => {
                             ) : (
                                 <>
                                     {/*<button className="cursor-pointer text-brand-500 py-1.5" onClick={() => setShowInput(!showInput)}>{showInput ? "Cancel" : "Connect with License key"}</button>*/}
-                                    <button
+                                    {/* <button
                                         className="cursor-pointer text-brand-500 py-1.5"
                                         onClick={() => setShowInput(!showInput)}
                                     >
@@ -217,8 +192,15 @@ const LicenseWidget = () => {
                                         >
                                             {showInput ? "Cancel" : "Connect with License key"}
                                         </motion.span>
-                                    </button>
-                                    {renderConnectButton()}
+                                    </button> */}
+
+                                    <AppButton
+                                        className="bg-[#09090b] w-full flex gap-2 items-center cursor-pointer px-4 rounded-lg"
+                                        onClick={() => (showInput ? connectRapidloadLicense() : window.open('https://rapidload.ai/', '_blank'))}
+                                    >
+                                        <PlugIcon className="w-4 h-4" />
+                                        {loading && <Loader className='w-4 animate-spin' />} Connect to Boost
+                                    </AppButton>
                                 </>
                             )}
                         </div>
