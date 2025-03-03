@@ -104,10 +104,6 @@ class Javascript_Enqueue
                 continue;
             }
 
-            if(isset($this->options['minify_js']) && $this->options['minify_js'] == "1"){
-                $this->minify_js($link);
-            }
-
             $this->optimize_js_delivery($link);
 
             // legacy delay starts here
@@ -121,6 +117,10 @@ class Javascript_Enqueue
             }
 
             // legacy delay ended
+
+            if(isset($this->options['minify_js']) && $this->options['minify_js'] == "1"){
+                $this->minify_js($link);
+            }
 
             do_action('rapidload/enqueue/optimize-js', $link, $this->job, $this->strategy, $this->options);
 
