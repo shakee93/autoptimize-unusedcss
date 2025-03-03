@@ -15,7 +15,7 @@
         </div>
 
         <div class="mt-4 text-center">
-          <img src="../assets/titan-access-3.gif" alt="Welcome" class="w-[490px]	mx-auto rounded-md xl:w-[490px] lg:w-[365px]">
+          <!-- <img src="../assets/titan-access-3.gif" alt="Welcome" class="w-[490px]	mx-auto rounded-md xl:w-[490px] lg:w-[365px]"> -->
         </div>
 
         <div class="mt-4 text-left pl-4 pr-4">

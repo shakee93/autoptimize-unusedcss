@@ -15,7 +15,7 @@
         </div>
 
         <div class="mt-4 mb-2 text-center">
-          <img src="../assets/titan-optimizer.svg" alt="Welcome" class="w-52 h-52	mx-auto rounded-lg">
+          <!-- <img src="../assets/titan-optimizer.svg" alt="Welcome" class="w-52 h-52	mx-auto rounded-lg"> -->
         </div>
 
         <div class="mt-4 text-left text-base">

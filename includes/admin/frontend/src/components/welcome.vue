@@ -15,7 +15,7 @@
         </div>
 
         <div class="mt-4 mb-2 text-center">
-          <img src="../assets/welcome.svg" alt="Welcome" class="w-52 h-52	mx-auto rounded-full">
+          <!-- <img src="../assets/welcome.svg" alt="Welcome" class="w-52 h-52	mx-auto rounded-full"> -->
         </div>
 
         <div class="mt-4 text-left text-base">
