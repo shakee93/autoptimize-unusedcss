@@ -234,8 +234,13 @@ class RapidLoad_Enqueue {
         }
 
         if ( isset( $this->options['uucss_excluded_links'] ) && ! empty( $this->options['uucss_excluded_links'] ) ) {
-            $exploded = explode( ',', $this->options['uucss_excluded_links'] );
-
+            
+            if(is_string($this->options['uucss_excluded_links'])){
+                $exploded = explode( ',', $this->options['uucss_excluded_links'] );
+            }else{
+                $exploded = $this->options['uucss_excluded_links'];
+            }
+            
             foreach ( $exploded as $pattern ) {
 
                 if ( filter_var( $pattern, FILTER_VALIDATE_URL ) ) {
