@@ -24,5 +24,17 @@ jobs:
         run: |
           PLUGIN_NAME="unusedcss"
           zip -r "${PLUGIN_NAME}-${{ env.VERSION }}.zip" . -x "*.git*" -x "*.github*"
+
+      - name: Upload Plugin ZIP to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_BUCKET_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          SOURCE_DIR: "."
+          DEST_DIR: "plugins/unusedcss/"
       
-      
+
