@@ -39,6 +39,7 @@ jobs:
 
       - name: Generate Update JSON
         run: |
+          mkdir -p plugin-update-check
           cat <<EOF > plugin-update-check/update.json
           {
             "version": "${{ env.VERSION }}",
