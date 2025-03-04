@@ -39,7 +39,7 @@ jobs:
 
       - name: Generate Update JSON
         run: |
-          cat <<EOF > update.json
+          cat <<EOF > plugin-update-check/update.json
           {
             "version": "${{ env.VERSION }}",
             "download_url": "https://${{ secrets.AWS_BUCKET_NAME }}.s3.${{ secrets.AWS_REGION }}.amazonaws.com/plugins/unusedcss/${{ env.VERSION }}/unusedcss-${{ env.VERSION }}.zip",
@@ -58,7 +58,8 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-          SOURCE_DIR: "./update.json"
+          SOURCE_DIR: "./plugin-update-check"
           DEST_DIR: "plugins/unusedcss/"
       
+
 
