@@ -18,4 +18,4 @@ jobs:
         id: version
         run: |
           echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-          echo "Version: ${GITHUB_REF#refs/tags/}"
+          echo "Version: ${GITHUB_ENV}"
