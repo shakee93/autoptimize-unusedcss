@@ -36,5 +36,29 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           SOURCE_DIR: "."
           DEST_DIR: "plugins/unusedcss/${{ env.VERSION }}"
+
+      - name: Generate Update JSON
+        run: |
+          cat <<EOF > update.json
+          {
+            "version": "${{ env.VERSION }}",
+            "download_url": "https://${{ secrets.AWS_BUCKET_NAME }}.s3.${{ secrets.AWS_REGION }}.amazonaws.com/plugins/unusedcss/${{ env.VERSION }}/unusedcss-${{ env.VERSION }}.zip",
+            "requires": "5.0",
+            "tested": "6.4",
+            "slug": "unusedcss"
+          }
+          EOF
+
+      - name: Upload Update JSON to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_BUCKET_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          SOURCE_DIR: "."
+          DEST_DIR: "updates/unusedcss/"
       
 
