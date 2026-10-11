@@ -124,6 +124,54 @@ class RapidLoad_Job_Data{
         $this->clearFiles();
     }
 
+    /**
+     * Maximum number of API attempts for one job before it is marked as failed.
+     * Override with the RAPIDLOAD_JOB_MAX_ATTEMPTS constant or the
+     * 'rapidload/job/max_attempts' filter.
+     */
+    public static function max_attempts(){
+        $max = defined('RAPIDLOAD_JOB_MAX_ATTEMPTS') ? (int) RAPIDLOAD_JOB_MAX_ATTEMPTS : 3;
+        $max = (int) apply_filters('rapidload/job/max_attempts', $max);
+        return $max > 0 ? $max : 1;
+    }
+
+    /**
+     * Exponential backoff (seconds) before a failed attempt may be retried:
+     * 120s, 240s, 480s ... capped at one hour.
+     */
+    public static function retry_delay($attempts){
+        $attempts = max(1, min((int) $attempts, 10));
+        $delay = (int) apply_filters('rapidload/job/retry_base_delay', 120) * pow(2, $attempts - 1);
+        return min($delay, 3600);
+    }
+
+    /**
+     * Counts one failed attempt. Requeues the job (not eligible for the queue
+     * until the backoff has elapsed) while attempts are left, otherwise marks
+     * it as failed with $error.
+     *
+     * The backoff is stored as a future created_at; the queue only picks up
+     * rows with attempts > 0 once created_at <= now (see the *_DB
+     * get_current_queued_tasks_job_ids methods).
+     *
+     * @return bool true when requeued, false when marked as failed
+     */
+    public function retry_or_fail($error){
+
+        $attempts = (int) $this->attempts + 1;
+
+        if($attempts >= self::max_attempts()){
+            $this->mark_as_failed($error);
+            $this->attempts = $attempts;
+            return false;
+        }
+
+        $this->requeue($attempts);
+        $this->created_at = gmdate( "Y-m-d H:i:s", time() + self::retry_delay($attempts) );
+
+        return true;
+    }
+
     public function clearFiles(){
 
     }

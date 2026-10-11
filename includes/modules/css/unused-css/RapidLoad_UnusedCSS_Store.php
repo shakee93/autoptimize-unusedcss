@@ -250,12 +250,19 @@ class RapidLoad_UnusedCSS_Store
 
             if(isset($error['message']) && ($error['message'] === 'Job processing failed in queue' || $error['message'] === 'Error')){
 
+                $requeued = $this->job_data->retry_or_fail($error);
+
                 self::log([
-                    'log' =>  'requeue-> uucss job processing failed in queue',
+                    'log' =>  ($requeued ? 'requeue-> ' : 'giving up-> ') . 'uucss job processing failed in queue (attempt ' . $this->job_data->attempts . ')',
                     'url' => $this->job_data->job->url,
                 ]);
-                $this->job_data->requeue();
                 $this->job_data->save();
+
+                if(!$requeued){
+                    do_action( 'uucss/cache_cleared', [
+                        'url' => $this->job_data->job->url
+                    ]);
+                }
 
                 return;
             }

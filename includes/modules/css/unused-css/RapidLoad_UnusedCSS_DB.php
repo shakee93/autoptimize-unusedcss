@@ -149,8 +149,9 @@ class RapidLoad_UnusedCSS_DB extends RapidLoad_DB{
 
         $job_ids = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT job_id FROM {$wpdb->prefix}rapidload_job_data WHERE status = 'queued' AND job_type = %s ORDER BY id DESC LIMIT %d",  
+                "SELECT job_id FROM {$wpdb->prefix}rapidload_job_data WHERE status = 'queued' AND job_type = %s AND (attempts IS NULL OR attempts < 1 OR created_at <= %s) ORDER BY id DESC LIMIT %d",
                 'uucss',
+                gmdate( 'Y-m-d H:i:s', time() ),
                 $limit
             ),
             OBJECT
