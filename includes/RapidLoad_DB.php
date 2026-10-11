@@ -705,7 +705,8 @@ abstract class RapidLoad_DB
         global $wpdb;
 
         // explicit requeue: clear retry state and any backoff
-        $reset = $status === 'queued' ? ", attempts = 0, created_at = '" . gmdate( 'Y-m-d H:i:s' ) . "'" : '';
+        $reset = $status === 'queued' ? ', attempts = 0, created_at = %s' : '';
+        $reset_args = $status === 'queued' ? [ gmdate( 'Y-m-d H:i:s' ) ] : [];
 
         if (!empty($ids)) {
             $ids = implode(",", array_map('intval', $ids));
@@ -715,12 +716,12 @@ abstract class RapidLoad_DB
         }
 
         if (empty($wherStatus)) {
-            $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s{$reset} WHERE job_id IN (%d)", $status, $ids));
+            $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d)", array_merge( [ $status ], $reset_args, [ $ids ] ) ) );
         } else {
             if($wherStatus === "success"){
-                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s{$reset} WHERE job_id IN (%d) AND status = %s AND warnings IS NOT NULL", $status, $ids, $wherStatus));
+                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d) AND status = %s AND warnings IS NOT NULL", array_merge( [ $status ], $reset_args, [ $ids, $wherStatus ] ) ) );
             }else{
-                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s{$reset} WHERE job_id IN (%d) AND status = %s", $status, $ids, $wherStatus));
+                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d) AND status = %s", array_merge( [ $status ], $reset_args, [ $ids, $wherStatus ] ) ) );
             }
         }
 
@@ -738,7 +739,8 @@ abstract class RapidLoad_DB
         global $wpdb;
 
         // explicit requeue: clear retry state and any backoff
-        $reset = $status === 'queued' ? ", attempts = 0, created_at = '" . gmdate( 'Y-m-d H:i:s' ) . "'" : '';
+        $reset = $status === 'queued' ? ', attempts = 0, created_at = %s' : '';
+        $reset_args = $status === 'queued' ? [ gmdate( 'Y-m-d H:i:s' ) ] : [];
 
         if (!empty($ids)) {
             $ids = implode(",", array_map('intval', $ids));
@@ -748,12 +750,12 @@ abstract class RapidLoad_DB
         }
 
         if (empty($wherStatus)) {
-            $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s{$reset} WHERE job_id IN (%d)", $status, $ids));
+            $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d)", array_merge( [ $status ], $reset_args, [ $ids ] ) ) );
         } else {
             if($wherStatus === "success"){
-                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s{$reset} WHERE job_id IN (%d) AND status = %s AND warnings IS NOT NULL", $status, $ids, $wherStatus));
+                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d) AND status = %s AND warnings IS NOT NULL", array_merge( [ $status ], $reset_args, [ $ids, $wherStatus ] ) ) );
             }else{
-                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s{$reset} WHERE job_id IN (%d) AND status = %s", $status, $ids, $wherStatus));
+                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d) AND status = %s", array_merge( [ $status ], $reset_args, [ $ids, $wherStatus ] ) ) );
             }
         }
 
