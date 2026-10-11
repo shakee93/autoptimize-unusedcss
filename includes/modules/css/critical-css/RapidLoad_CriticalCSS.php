@@ -478,7 +478,7 @@ class RapidLoad_CriticalCSS
 
     public function cleanCacheFiles(){
 
-        $data = RapidLoad_CriticalCSS_DB::get_success_data();
+        $data = RapidLoad_CriticalCSS_DB::get_success_data(0);
 
         $used_files = [];
 

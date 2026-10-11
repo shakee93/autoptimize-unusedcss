@@ -140,12 +140,15 @@ class RapidLoad_CriticalCSS_DB extends RapidLoad_DB{
     public static function get_success_data($limit = 1) {
         global $wpdb;
 
+        // $limit = 0 (or negative) returns every successful row.
+        $limit = (int) $limit;
+        $limit_sql = $limit > 0 ? $wpdb->prepare( ' LIMIT %d', $limit ) : '';
+
         $data = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT data FROM {$wpdb->prefix}rapidload_job_data WHERE status = 'success' AND job_type = %s ORDER BY id DESC LIMIT %d",
-                'cpcss',
-                $limit
-            ),
+                "SELECT data FROM {$wpdb->prefix}rapidload_job_data WHERE status = 'success' AND job_type = %s ORDER BY id DESC",
+                'cpcss'
+            ) . $limit_sql,
             OBJECT
         );
 
