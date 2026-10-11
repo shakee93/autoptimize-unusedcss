@@ -35,7 +35,7 @@ class RapidLoad_CriticalCSS_Store
 
             $discontinue = false;
 
-            if(!isset($this->args['titan']) && ($this->job_data->status === 'waiting' || $this->job_data->status === 'processing' || $this->job_data->status === 'success')){
+            if(!isset($this->args['titan']) && ($this->job_data->status === 'waiting' || $this->job_data->status === 'processing' || $this->job_data->status === 'submitting' || $this->job_data->status === 'success')){
                 return;
             }
 
@@ -125,7 +125,15 @@ class RapidLoad_CriticalCSS_Store
 
             if($uucss_api->is_error($result)){
 
-                $this->job_data->mark_as_failed($uucss_api->extract_error( $result ));
+                $error = $uucss_api->extract_error( $result );
+
+                // timeouts / transport errors / 5xx / 429 are retried with backoff,
+                // definitive API errors fail at once
+                if(RapidLoad_Job_Data::is_transient_error($result, $error)){
+                    $this->job_data->retry_or_fail($error);
+                }else{
+                    $this->job_data->mark_as_failed($error);
+                }
                 $this->job_data->save();
 
                 $this->log( [
