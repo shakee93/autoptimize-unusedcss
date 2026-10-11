@@ -716,12 +716,12 @@ abstract class RapidLoad_DB
         }
 
         if (empty($wherStatus)) {
-            $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d)", array_merge( [ $status ], $reset_args, [ $ids ] ) ) );
+            $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d)", array_merge( [ $status ], $reset_args, [ $ids ] ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $reset is a fixed literal fragment
         } else {
             if($wherStatus === "success"){
-                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d) AND status = %s AND warnings IS NOT NULL", array_merge( [ $status ], $reset_args, [ $ids, $wherStatus ] ) ) );
+                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d) AND status = %s AND warnings IS NOT NULL", array_merge( [ $status ], $reset_args, [ $ids, $wherStatus ] ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $reset is a fixed literal fragment
             }else{
-                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d) AND status = %s", array_merge( [ $status ], $reset_args, [ $ids, $wherStatus ] ) ) );
+                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d) AND status = %s", array_merge( [ $status ], $reset_args, [ $ids, $wherStatus ] ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $reset is a fixed literal fragment
             }
         }
 
@@ -750,12 +750,12 @@ abstract class RapidLoad_DB
         }
 
         if (empty($wherStatus)) {
-            $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d)", array_merge( [ $status ], $reset_args, [ $ids ] ) ) );
+            $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d)", array_merge( [ $status ], $reset_args, [ $ids ] ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $reset is a fixed literal fragment
         } else {
             if($wherStatus === "success"){
-                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d) AND status = %s AND warnings IS NOT NULL", array_merge( [ $status ], $reset_args, [ $ids, $wherStatus ] ) ) );
+                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d) AND status = %s AND warnings IS NOT NULL", array_merge( [ $status ], $reset_args, [ $ids, $wherStatus ] ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $reset is a fixed literal fragment
             }else{
-                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d) AND status = %s", array_merge( [ $status ], $reset_args, [ $ids, $wherStatus ] ) ) );
+                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d) AND status = %s", array_merge( [ $status ], $reset_args, [ $ids, $wherStatus ] ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $reset is a fixed literal fragment
             }
         }
 
