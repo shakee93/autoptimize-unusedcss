@@ -144,13 +144,15 @@ class RapidLoad_Job_Data{
             $this->status = isset($data) && (isset($data['mobile']) && !empty($data['mobile']) || isset($data['desktop']) && !empty($data['desktop'])) ? 'success' : 'failed';
         }
         $this->hits = 0;
+        // A genuine API success ends the retry cycle. (Page views must not reset
+        // attempts, see mark_as_successful_hit, or the retry cap is defeated.)
+        $this->attempts = 0;
         $this->stats = isset($stats) ? serialize($stats) : null;
         $this->warnings = isset($warnings) && count($warnings) > 0 ? $warnings : null;
         $this->error = null;
     }
 
     public function mark_as_successful_hit(){
-        $this->attempts = 0;
         $this->hits++;
         $this->error = NULL;
     }
