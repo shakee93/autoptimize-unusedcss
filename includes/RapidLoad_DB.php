@@ -656,7 +656,7 @@ abstract class RapidLoad_DB
         $data['applied_successful_links'] = isset( $link->applied_successful_links ) ? $link->applied_successful_links : 0;
         $data['applied_links'] = isset( $link->applied_successful_links ) ? $link->applied_successful_links : 0;
         $data['time'] = isset( $link->created_at ) ? strtotime( $link->created_at ) * 1000 : null;
-        $data['status'] = isset( $link->status ) ? $link->status : null;
+        $data['status'] = isset( $link->status ) ? RapidLoad_Job_Data::display_status($link->status) : null;
         if(isset($data['rule_id'])){
             $job_url = RapidLoad_Job::find_or_fail($data['rule_id']);
             $data['base'] = $job_url->url;
@@ -689,7 +689,7 @@ abstract class RapidLoad_DB
 
         global $wpdb;
 
-        $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s WHERE job_id = %d", 'queued', $id ) );
+        $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, attempts = 0, created_at = %s WHERE job_id = %d", 'queued', gmdate( 'Y-m-d H:i:s' ), $id ) );
 
         $error = $wpdb->last_error;
 
@@ -704,6 +704,9 @@ abstract class RapidLoad_DB
 
         global $wpdb;
 
+        // explicit requeue: clear retry state and any backoff
+        $reset = $status === 'queued' ? ", attempts = 0, created_at = '" . gmdate( 'Y-m-d H:i:s' ) . "'" : '';
+
         if (!empty($ids)) {
             $ids = implode(",", array_map('intval', $ids));
         } else {
@@ -712,12 +715,12 @@ abstract class RapidLoad_DB
         }
 
         if (empty($wherStatus)) {
-            $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s WHERE job_id IN (%d)", $status, $ids));
+            $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s{$reset} WHERE job_id IN (%d)", $status, $ids));
         } else {
             if($wherStatus === "success"){
-                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s WHERE job_id IN (%d) AND status = %s AND warnings IS NOT NULL", $status, $ids, $wherStatus));
+                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s{$reset} WHERE job_id IN (%d) AND status = %s AND warnings IS NOT NULL", $status, $ids, $wherStatus));
             }else{
-                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s WHERE job_id IN (%d) AND status = %s", $status, $ids, $wherStatus));
+                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s{$reset} WHERE job_id IN (%d) AND status = %s", $status, $ids, $wherStatus));
             }
         }
 
@@ -734,6 +737,9 @@ abstract class RapidLoad_DB
 
         global $wpdb;
 
+        // explicit requeue: clear retry state and any backoff
+        $reset = $status === 'queued' ? ", attempts = 0, created_at = '" . gmdate( 'Y-m-d H:i:s' ) . "'" : '';
+
         if (!empty($ids)) {
             $ids = implode(",", array_map('intval', $ids));
         } else {
@@ -742,12 +748,12 @@ abstract class RapidLoad_DB
         }
 
         if (empty($wherStatus)) {
-            $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s WHERE job_id IN (%d)", $status, $ids));
+            $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s{$reset} WHERE job_id IN (%d)", $status, $ids));
         } else {
             if($wherStatus === "success"){
-                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s WHERE job_id IN (%d) AND status = %s AND warnings IS NOT NULL", $status, $ids, $wherStatus));
+                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s{$reset} WHERE job_id IN (%d) AND status = %s AND warnings IS NOT NULL", $status, $ids, $wherStatus));
             }else{
-                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s WHERE job_id IN (%d) AND status = %s", $status, $ids, $wherStatus));
+                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s{$reset} WHERE job_id IN (%d) AND status = %s", $status, $ids, $wherStatus));
             }
         }
 

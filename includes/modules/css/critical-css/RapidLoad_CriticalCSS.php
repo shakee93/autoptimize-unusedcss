@@ -222,7 +222,7 @@ class RapidLoad_CriticalCSS
                     'log' =>  'requeue-> cpcss clear cache by id manually',
                     'url' => $job_data->job->url,
                 ]);
-                $job_data->requeue();
+                $job_data->requeue(0);
                 $job_data->save();
 
             }
@@ -334,7 +334,7 @@ class RapidLoad_CriticalCSS
                         'id' => $job_data->id,
                         'job_id' => $job_data->job->id,
                         'queue_job_id' => $job_data->queue_job_id,
-                        'status' => $job_data->status,
+                        'status' => RapidLoad_Job_Data::display_status($job_data->status),
                         'job' => (array) $job_data->job,
                     ];
                     $link['meta'] = [
@@ -344,7 +344,7 @@ class RapidLoad_CriticalCSS
                     ];
                     $link['attempts'] = $job_data->attempts;
                     if($job->rule !== 'is_url'){
-                        $link['rule_status'] = $job_data->status;
+                        $link['rule_status'] = RapidLoad_Job_Data::display_status($job_data->status);
                         $link['rule_hits'] = $job_data->hits;
                         $link['applied_links'] = count($job->get_urls());
                     }
@@ -382,12 +382,16 @@ class RapidLoad_CriticalCSS
             return false;
         }
 
-        if(!in_array($this->job_data->status, ['success', 'waiting', 'processing','queued']) || isset( $args['immediate']) || isset( $args['requeue'])){
+        if($this->job_data->status !== 'submitting' && (!in_array($this->job_data->status, ['success', 'waiting', 'processing','queued']) || isset( $args['immediate']) || isset( $args['requeue']))){
             self::log([
                 'log' =>  'requeue-> cpcss requeue manually',
                 'url' => $this->job_data->job->url,
             ]);
-            $this->job_data->requeue(isset( $args['immediate']) || isset( $args['requeue']) ? 1 : -1);
+            if(isset( $args['immediate']) || isset( $args['requeue'])){
+                $this->job_data->requeue(0);
+            }else{
+                $this->job_data->requeue_delayed();
+            }
             $this->job_data->save();
         }
 

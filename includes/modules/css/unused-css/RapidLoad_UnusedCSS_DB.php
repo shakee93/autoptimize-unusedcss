@@ -11,21 +11,21 @@ class RapidLoad_UnusedCSS_DB extends RapidLoad_DB{
         if(empty($status)){
             $wpdb->query(
                 $wpdb->prepare(
-                    "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, queue_job_id = NULL, data = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0 WHERE job_type='uucss'",
+                    "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, queue_job_id = NULL, data = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0, attempts = 0, created_at = '" . gmdate( 'Y-m-d H:i:s' ) . "' WHERE job_type='uucss'",
                     'queued'
                 )
             );
         }else if($status === 'success'){
             $wpdb->query(
                 $wpdb->prepare(
-                    "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, queue_job_id = NULL, data = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0 WHERE job_type='uucss' AND status = 'success' AND warnings IS NOT NULL",
+                    "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, queue_job_id = NULL, data = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0, attempts = 0, created_at = '" . gmdate( 'Y-m-d H:i:s' ) . "' WHERE job_type='uucss' AND status = 'success' AND warnings IS NOT NULL",
                     'queued'
                 )
             );
         }else{
             $wpdb->query(
                 $wpdb->prepare(
-                    "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, queue_job_id = NULL, data = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0 WHERE job_type='uucss' AND status = %s",
+                    "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, queue_job_id = NULL, data = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0, attempts = 0, created_at = '" . gmdate( 'Y-m-d H:i:s' ) . "' WHERE job_type='uucss' AND status = %s",
                     'queued',
                     $status
                 )
@@ -44,7 +44,7 @@ class RapidLoad_UnusedCSS_DB extends RapidLoad_DB{
         global $wpdb;
 
         if($soft){
-            $wpdb->query( $wpdb->prepare("UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, queue_job_id = NULL, data = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0 WHERE job_type = %s", 'queued', 'uucss'));
+            $wpdb->query( $wpdb->prepare("UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, queue_job_id = NULL, data = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0, attempts = 0, created_at = '" . gmdate( 'Y-m-d H:i:s' ) . "' WHERE job_type = %s", 'queued', 'uucss'));
         }else{
             $wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->prefix}rapidload_job_data WHERE job_type = %s", 'uucss'));
         }

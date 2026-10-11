@@ -166,10 +166,45 @@ class RapidLoad_Job_Data{
             return false;
         }
 
-        $this->requeue($attempts);
-        $this->created_at = gmdate( "Y-m-d H:i:s", time() + self::retry_delay($attempts) );
+        $this->requeue_delayed();
 
         return true;
+    }
+
+    /**
+     * Requeue that keeps counting attempts and waits for the exponential
+     * backoff before the queue may pick the row up again. Use for automatic
+     * (page view / retry) requeues. Explicit user or content-change requeues
+     * should call requeue(0) instead, which resets attempts and is eligible
+     * immediately.
+     */
+    public function requeue_delayed(){
+        $attempts = (int) $this->attempts + 1;
+        $this->requeue($attempts);
+        $this->created_at = gmdate( "Y-m-d H:i:s", time() + self::retry_delay($attempts) );
+    }
+
+    /**
+     * True for failures worth retrying (timeouts, transport errors, 5xx, 429);
+     * false for definitive API errors (auth, validation) which fail at once.
+     */
+    public static function is_transient_error($result, $error){
+
+        if(!isset($result) || is_string($result)){
+            return true;
+        }
+
+        $code = isset($error['code']) ? (int) $error['code'] : 0;
+
+        return $code >= 500 || $code === 429;
+    }
+
+    /**
+     * Status exposed to the admin UI: the internal 'submitting' claim state is
+     * shown as 'waiting'.
+     */
+    public static function display_status($status){
+        return $status === 'submitting' ? 'waiting' : $status;
     }
 
     /**
@@ -279,9 +314,6 @@ class RapidLoad_Job_Data{
             $this->status = isset($data) && (isset($data['mobile']) && !empty($data['mobile']) || isset($data['desktop']) && !empty($data['desktop'])) ? 'success' : 'failed';
         }
         $this->hits = 0;
-        // A genuine API success ends the retry cycle. (Page views must not reset
-        // attempts, see mark_as_successful_hit, or the retry cap is defeated.)
-        $this->attempts = 0;
         $this->stats = isset($stats) ? serialize($stats) : null;
         $this->warnings = isset($warnings) && count($warnings) > 0 ? $warnings : null;
         $this->error = null;

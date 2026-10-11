@@ -90,7 +90,7 @@ class RapidLoad_CriticalCSS_Enqueue
                 'log' =>  'requeue-> critical css file not found and attempts less than two or last generated days more than one',
                 'url' => $this->job_data->job->url,
             ]);
-            $this->job_data->requeue();
+            $this->job_data->requeue_delayed();
             $this->job_data->save();
             //$this->inject->successfully_injected = false;
             return [

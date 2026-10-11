@@ -205,13 +205,13 @@ class RapidLoad_UnusedCSS
                 if(isset($job_data->id)){
 
                     if($job->rule !== 'is_url'){
-                        //$link['rule_status'] = $job_data->status;
+                        //$link['rule_status'] = RapidLoad_Job_Data::display_status($job_data->status);
                        // $link['rule_hits'] = $job_data->hits;
                         //$link['applied_links'] = count($job->get_urls());
                     }
 
                     if(!isset($link['status'])){
-                        $link['status'] = $job_data->status;
+                        $link['status'] = RapidLoad_Job_Data::display_status($job_data->status);
                     }
                     $link['success_count'] = $job_data->hits;
                     $link['files'] = $job_data->get_files();
@@ -219,7 +219,7 @@ class RapidLoad_UnusedCSS
                     $link['meta']['warnings'] = $job_data->get_warnings();
                     $link['meta']['stats'] = isset($job_data->stats) ? unserialize($job_data->stats) : null;
                     $link['meta']['error'] = isset($job_data->error) ? unserialize($job_data->error) : null;
-                    $link['meta']['status'] = isset( $job_data->status ) ? $job_data->status : null;
+                    $link['meta']['status'] = isset( $job_data->status ) ? RapidLoad_Job_Data::display_status($job_data->status) : null;
                     $link['time'] = isset( $job_data->created_at ) ? strtotime( $job_data->created_at ) : null;
                     $link['attempts'] = isset( $job_data->attempts ) ? $job_data->attempts : null;
                     $link['rule'] = $job_data->job->rule;
@@ -339,12 +339,16 @@ class RapidLoad_UnusedCSS
             return false;
         }
 
-        if(!in_array($this->job_data->status, ['success', 'waiting', 'processing','queued']) || isset( $args['immediate']) || isset( $args['requeue'])){
+        if($this->job_data->status !== 'submitting' && (!in_array($this->job_data->status, ['success', 'waiting', 'processing','queued']) || isset( $args['immediate']) || isset( $args['requeue']))){
             self::log([
                 'log' =>  'requeue-> uucss requeue manually',
                 'url' => $this->job_data->job->url,
             ]);
-            $this->job_data->requeue(isset( $args['immediate']) || isset( $args['requeue']) ? 1 : -1);
+            if(isset( $args['immediate']) || isset( $args['requeue'])){
+                $this->job_data->requeue(0);
+            }else{
+                $this->job_data->requeue_delayed();
+            }
             if(isset( $args['immediate'])){
                 $this->job_data->status = 'processing';
             }
@@ -486,7 +490,7 @@ class RapidLoad_UnusedCSS
                     'log' =>  'requeue-> clear cache by job id manually',
                     'url' => $job_data->job->url,
                 ]);
-                $job_data->requeue();
+                $job_data->requeue(0);
                 $job_data->save();
 
             }
