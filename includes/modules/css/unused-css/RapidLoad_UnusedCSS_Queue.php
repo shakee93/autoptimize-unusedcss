@@ -34,6 +34,8 @@ class RapidLoad_UnusedCSS_Queue
 
             foreach ($links as $link){
 
+                RapidLoad_Queue::touch_lock();
+
                 $job = RapidLoad_Job::find_or_fail($link->job_id);
 
                 if($job){
@@ -62,6 +64,8 @@ class RapidLoad_UnusedCSS_Queue
         if(!empty($links)){
 
             foreach ($links as $link){
+
+                RapidLoad_Queue::touch_lock();
 
                 $job = RapidLoad_Job::find_or_fail($link->job_id);
 

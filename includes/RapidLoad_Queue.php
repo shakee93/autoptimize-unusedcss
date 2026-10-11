@@ -109,11 +109,15 @@ class RapidLoad_Queue
     const LOCK_OPTION = 'rapidload_queue_lock';
 
     /**
-     * A crashed run leaves its lock behind; it is considered dead after this
-     * many seconds (the claim of any row it held is recovered separately by
-     * RapidLoad_Job_Data::release_stale_claims).
+     * Seconds without a refresh after which a lock is considered abandoned
+     * (crashed run). A live run refreshes the lock before every job (touch_lock)
+     * and each job is bounded by the 360s API timeout, so a legitimate run
+     * never goes this long without a refresh. Rows claimed by a dead run are
+     * recovered separately by RapidLoad_Job_Data::release_stale_claims.
      */
     const LOCK_TTL = 600;
+
+    private static $lock_token = null;
 
     /**
      * Runs the queue task unless another run (WP-Cron or the system cron script)
@@ -127,12 +131,10 @@ class RapidLoad_Queue
             return false;
         }
 
-        try{
-            do_action('uucss/queue/task');
-        }catch (Exception $e){
-            self::release_lock();
-            throw $e;
-        }
+        // also released on fatals / Errors / exit(); a no-op once released
+        register_shutdown_function([__CLASS__, 'release_lock']);
+
+        do_action('uucss/queue/task');
 
         self::release_lock();
 
@@ -140,13 +142,16 @@ class RapidLoad_Queue
     }
 
     /**
-     * Atomic lock: INSERT IGNORE on the unique option_name succeeds for exactly
-     * one caller. An expired lock (crashed run) is taken over with a conditional
-     * DELETE so two callers cannot both steal it.
+     * Lock value is "<token>|<unix time>". INSERT IGNORE on the unique
+     * option_name succeeds for exactly one caller. An expired lock is taken over
+     * with a DELETE conditional on the exact stale value, so two callers cannot
+     * both steal it, and only the holder's token can refresh or release it.
      */
     public static function acquire_lock(){
 
         global $wpdb;
+
+        $token = uniqid('', true);
 
         for ($i = 0; $i < 2; $i++) {
 
@@ -154,11 +159,12 @@ class RapidLoad_Queue
                 $wpdb->prepare(
                     "INSERT IGNORE INTO `$wpdb->options` (`option_name`, `option_value`, `autoload`) VALUES (%s, %s, 'no')",
                     self::LOCK_OPTION,
-                    (string) time()
+                    $token . '|' . time()
                 )
             );
 
             if($locked){
+                self::$lock_token = $token;
                 return true;
             }
 
@@ -169,32 +175,69 @@ class RapidLoad_Queue
                 )
             );
 
-            if($current !== null && (time() - (int) $current) < self::LOCK_TTL){
-                return false;
-            }
+            if($current !== null){
 
-            $wpdb->query(
-                $wpdb->prepare(
-                    "DELETE FROM `$wpdb->options` WHERE option_name = %s AND option_value = %s",
-                    self::LOCK_OPTION,
-                    (string) $current
-                )
-            );
+                $parts = explode('|', $current);
+                $since = isset($parts[1]) ? (int) $parts[1] : 0;
+
+                if((time() - $since) < self::LOCK_TTL){
+                    return false;
+                }
+
+                $wpdb->query(
+                    $wpdb->prepare(
+                        "DELETE FROM `$wpdb->options` WHERE option_name = %s AND option_value = %s",
+                        self::LOCK_OPTION,
+                        $current
+                    )
+                );
+            }
         }
 
         return false;
     }
 
-    public static function release_lock(){
+    /**
+     * Refresh the lock timestamp; call between long jobs.
+     */
+    public static function touch_lock(){
+
+        if(self::$lock_token === null){
+            return;
+        }
 
         global $wpdb;
 
         $wpdb->query(
             $wpdb->prepare(
-                "DELETE FROM `$wpdb->options` WHERE option_name = %s",
-                self::LOCK_OPTION
+                "UPDATE `$wpdb->options` SET option_value = %s WHERE option_name = %s AND option_value LIKE %s",
+                self::$lock_token . '|' . time(),
+                self::LOCK_OPTION,
+                $wpdb->esc_like(self::$lock_token . '|') . '%'
             )
         );
+    }
+
+    /**
+     * Releases only the lock this process holds.
+     */
+    public static function release_lock(){
+
+        if(self::$lock_token === null){
+            return;
+        }
+
+        global $wpdb;
+
+        $wpdb->query(
+            $wpdb->prepare(
+                "DELETE FROM `$wpdb->options` WHERE option_name = %s AND option_value LIKE %s",
+                self::LOCK_OPTION,
+                $wpdb->esc_like(self::$lock_token . '|') . '%'
+            )
+        );
+
+        self::$lock_token = null;
     }
 
     function uucss_process_queue_schedule($schedules){

@@ -33,6 +33,8 @@ class RapidLoad_CriticalCSS_Queue
 
             foreach ($links as $link){
 
+                RapidLoad_Queue::touch_lock();
+
                 $job = RapidLoad_Job::find_or_fail($link->job_id);
 
                 if($job){
@@ -61,6 +63,8 @@ class RapidLoad_CriticalCSS_Queue
         if(!empty($links)){
 
             foreach ($links as $link){
+
+                RapidLoad_Queue::touch_lock();
 
                 $job = RapidLoad_Job::find_or_fail($link->job_id);
 
