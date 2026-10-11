@@ -704,26 +704,37 @@ abstract class RapidLoad_DB
 
         global $wpdb;
 
-        // explicit requeue: clear retry state and any backoff
-        $reset = $status === 'queued' ? ', attempts = 0, created_at = %s' : '';
-        $reset_args = $status === 'queued' ? [ gmdate( 'Y-m-d H:i:s' ) ] : [];
-
         if (!empty($ids)) {
-            $ids = implode(",", array_map('intval', $ids));
+            $ids = array_map('intval', (array) $ids);
         } else {
-            $ids = $wpdb->get_col($wpdb->prepare("SELECT id FROM {$wpdb->prefix}rapidload_job WHERE rule = %s", 'is_url'));
-            $ids = implode(',', array_map('intval', $ids));
+            $ids = array_map('intval', $wpdb->get_col($wpdb->prepare("SELECT id FROM {$wpdb->prefix}rapidload_job WHERE rule = %s", 'is_url')));
         }
 
-        if (empty($wherStatus)) {
-            $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d)", array_merge( [ $status ], $reset_args, [ $ids ] ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $reset is a fixed literal fragment
-        } else {
-            if($wherStatus === "success"){
-                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d) AND status = %s AND warnings IS NOT NULL", array_merge( [ $status ], $reset_args, [ $ids, $wherStatus ] ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $reset is a fixed literal fragment
-            }else{
-                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d) AND status = %s", array_merge( [ $status ], $reset_args, [ $ids, $wherStatus ] ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $reset is a fixed literal fragment
+        if (empty($ids)) {
+            return true;
+        }
+
+        // explicit requeue: clear retry state and any backoff
+        $set = 'status = %s';
+        $args = [ $status ];
+        if ($status === 'queued') {
+            $set .= ', attempts = 0, created_at = %s';
+            $args[] = gmdate( 'Y-m-d H:i:s' );
+        }
+
+        $where = 'job_id IN (' . implode(',', array_fill(0, count($ids), '%d')) . ')';
+        $args = array_merge($args, $ids);
+
+        if (!empty($wherStatus)) {
+            $where .= ' AND status = %s';
+            $args[] = $wherStatus;
+            if ($wherStatus === "success") {
+                $where .= ' AND warnings IS NOT NULL';
             }
         }
+
+        // $set and $where are built only from fixed fragments and %s/%d placeholders
+        $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET $set WHERE $where", $args ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 
         $error = $wpdb->last_error;
 
@@ -738,26 +749,37 @@ abstract class RapidLoad_DB
 
         global $wpdb;
 
-        // explicit requeue: clear retry state and any backoff
-        $reset = $status === 'queued' ? ', attempts = 0, created_at = %s' : '';
-        $reset_args = $status === 'queued' ? [ gmdate( 'Y-m-d H:i:s' ) ] : [];
-
         if (!empty($ids)) {
-            $ids = implode(",", array_map('intval', $ids));
+            $ids = array_map('intval', (array) $ids);
         } else {
-            $ids = $wpdb->get_col($wpdb->prepare("SELECT id FROM {$wpdb->prefix}rapidload_job WHERE rule != %s", 'is_url'));
-            $ids = implode(',', array_map('intval', $ids));
+            $ids = array_map('intval', $wpdb->get_col($wpdb->prepare("SELECT id FROM {$wpdb->prefix}rapidload_job WHERE rule != %s", 'is_url')));
         }
 
-        if (empty($wherStatus)) {
-            $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d)", array_merge( [ $status ], $reset_args, [ $ids ] ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $reset is a fixed literal fragment
-        } else {
-            if($wherStatus === "success"){
-                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d) AND status = %s AND warnings IS NOT NULL", array_merge( [ $status ], $reset_args, [ $ids, $wherStatus ] ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $reset is a fixed literal fragment
-            }else{
-                $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s" . $reset . " WHERE job_id IN (%d) AND status = %s", array_merge( [ $status ], $reset_args, [ $ids, $wherStatus ] ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $reset is a fixed literal fragment
+        if (empty($ids)) {
+            return true;
+        }
+
+        // explicit requeue: clear retry state and any backoff
+        $set = 'status = %s';
+        $args = [ $status ];
+        if ($status === 'queued') {
+            $set .= ', attempts = 0, created_at = %s';
+            $args[] = gmdate( 'Y-m-d H:i:s' );
+        }
+
+        $where = 'job_id IN (' . implode(',', array_fill(0, count($ids), '%d')) . ')';
+        $args = array_merge($args, $ids);
+
+        if (!empty($wherStatus)) {
+            $where .= ' AND status = %s';
+            $args[] = $wherStatus;
+            if ($wherStatus === "success") {
+                $where .= ' AND warnings IS NOT NULL';
             }
         }
+
+        // $set and $where are built only from fixed fragments and %s/%d placeholders
+        $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET $set WHERE $where", $args ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
 
         $error = $wpdb->last_error;
 
