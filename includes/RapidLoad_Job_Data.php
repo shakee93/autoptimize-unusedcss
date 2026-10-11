@@ -294,6 +294,27 @@ class RapidLoad_Job_Data{
         }
     }
 
+    /**
+     * Minimum seconds between save_post-driven requeues of the same URL
+     * (default 10 minutes, filter rapidload/job/save_post_min_interval, in minutes).
+     */
+    public static function save_post_min_interval(){
+        $minutes = (int) apply_filters('rapidload/job/save_post_min_interval', 10);
+        return max(0, $minutes) * 60;
+    }
+
+    /**
+     * True when the row was (re)queued or claimed less than $seconds ago.
+     * created_at is refreshed by requeue() and claim(); a future value
+     * (backoff pending) also counts as recent.
+     */
+    public function queued_within($seconds){
+        if($seconds <= 0 || empty($this->created_at)){
+            return false;
+        }
+        return (time() - strtotime($this->created_at)) < $seconds;
+    }
+
     public function clearFiles(){
 
     }

@@ -178,7 +178,8 @@ class RapidLoad_CriticalCSS
 
             if(isset($job->id)){
 
-                $this->clear_cache($job);
+                // content-change path: throttled, see clear_cache()
+                $this->clear_cache($job, ['throttle' => true]);
 
             }
         }
@@ -216,6 +217,27 @@ class RapidLoad_CriticalCSS
             $job_data = new RapidLoad_Job_Data($job, 'cpcss');
 
             if(isset($job_data->id) && (!isset($job_data->job->rule_id) && $job_data->job->rule === "is_url" || $job_data->job->rule !== "is_url")){
+
+                if($job_data->status === 'submitting'){
+                    // A submit is in flight; requeueing now would let a second runner
+                    // claim the row and send a duplicate. Skip: the in-flight result
+                    // lands normally and the next change/purge requeues as usual.
+                    self::log([
+                        'log' =>  'skip requeue-> cpcss clear cache while submitting',
+                        'url' => $job_data->job->url,
+                    ]);
+                    return;
+                }
+
+                if(!empty($args['throttle']) && $job_data->queued_within(RapidLoad_Job_Data::save_post_min_interval())){
+                    // save_post / importer storms: at most one requeue per interval per URL.
+                    // Files are kept (no clear_files) and the current job stays as is.
+                    self::log([
+                        'log' =>  'skip requeue-> cpcss clear cache throttled',
+                        'url' => $job_data->job->url,
+                    ]);
+                    return;
+                }
 
                 $this->clear_files($job_data);
                 self::log([
