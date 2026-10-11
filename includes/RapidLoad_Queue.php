@@ -102,8 +102,99 @@ class RapidLoad_Queue
 
     function uucss_process_queue(){
 
-        do_action('uucss/queue/task');
+        self::run_task();
 
+    }
+
+    const LOCK_OPTION = 'rapidload_queue_lock';
+
+    /**
+     * A crashed run leaves its lock behind; it is considered dead after this
+     * many seconds (the claim of any row it held is recovered separately by
+     * RapidLoad_Job_Data::release_stale_claims).
+     */
+    const LOCK_TTL = 600;
+
+    /**
+     * Runs the queue task unless another run (WP-Cron or the system cron script)
+     * holds the lock. Shared by both entry points.
+     *
+     * @return bool false when skipped because another run is active
+     */
+    public static function run_task(){
+
+        if(!self::acquire_lock()){
+            return false;
+        }
+
+        try{
+            do_action('uucss/queue/task');
+        }catch (Exception $e){
+            self::release_lock();
+            throw $e;
+        }
+
+        self::release_lock();
+
+        return true;
+    }
+
+    /**
+     * Atomic lock: INSERT IGNORE on the unique option_name succeeds for exactly
+     * one caller. An expired lock (crashed run) is taken over with a conditional
+     * DELETE so two callers cannot both steal it.
+     */
+    public static function acquire_lock(){
+
+        global $wpdb;
+
+        for ($i = 0; $i < 2; $i++) {
+
+            $locked = $wpdb->query(
+                $wpdb->prepare(
+                    "INSERT IGNORE INTO `$wpdb->options` (`option_name`, `option_value`, `autoload`) VALUES (%s, %s, 'no')",
+                    self::LOCK_OPTION,
+                    (string) time()
+                )
+            );
+
+            if($locked){
+                return true;
+            }
+
+            $current = $wpdb->get_var(
+                $wpdb->prepare(
+                    "SELECT option_value FROM `$wpdb->options` WHERE option_name = %s",
+                    self::LOCK_OPTION
+                )
+            );
+
+            if($current !== null && (time() - (int) $current) < self::LOCK_TTL){
+                return false;
+            }
+
+            $wpdb->query(
+                $wpdb->prepare(
+                    "DELETE FROM `$wpdb->options` WHERE option_name = %s AND option_value = %s",
+                    self::LOCK_OPTION,
+                    (string) $current
+                )
+            );
+        }
+
+        return false;
+    }
+
+    public static function release_lock(){
+
+        global $wpdb;
+
+        $wpdb->query(
+            $wpdb->prepare(
+                "DELETE FROM `$wpdb->options` WHERE option_name = %s",
+                self::LOCK_OPTION
+            )
+        );
     }
 
     function uucss_process_queue_schedule($schedules){

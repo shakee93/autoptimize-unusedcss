@@ -18,6 +18,8 @@ class RapidLoad_UnusedCSS_Queue
 
     function fetch_job_id(){
 
+        RapidLoad_Job_Data::release_stale_claims('uucss');
+
         $current_waiting = RapidLoad_UnusedCSS_DB::get_current_waiting_tasks_count();
 
         if( (RapidLoad_Queue::$job_count - $current_waiting) <= 0 ){

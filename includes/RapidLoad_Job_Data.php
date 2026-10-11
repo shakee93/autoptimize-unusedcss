@@ -172,6 +172,93 @@ class RapidLoad_Job_Data{
         return true;
     }
 
+    /**
+     * Seconds after which a claimed ('submitting') row is considered abandoned.
+     * Longer than the 360s API request timeout.
+     */
+    const CLAIM_TIMEOUT = 600;
+
+    /**
+     * Atomically moves this row out of 'queued' so only one queue run submits it.
+     * created_at is set to now and doubles as the claim time.
+     *
+     * @return bool true when this process won the claim
+     */
+    public function claim(){
+
+        if(!isset($this->id)){
+            return true;
+        }
+
+        global $wpdb;
+
+        $now = gmdate( "Y-m-d H:i:s", time() );
+
+        $affected = $wpdb->query(
+            $wpdb->prepare(
+                "UPDATE {$wpdb->prefix}rapidload_job_data SET status = 'submitting', created_at = %s WHERE id = %d AND status = 'queued'",
+                $now,
+                $this->id
+            )
+        );
+
+        if($affected === 1){
+            $this->status = 'submitting';
+            $this->created_at = $now;
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Recovers rows claimed by a run that died (fatal, timeout, killed) before
+     * the API answered. After CLAIM_TIMEOUT the claim counts as a failed attempt:
+     * the row returns to 'queued' (with the usual backoff) or, once the attempt
+     * cap is reached, is marked failed. A row can therefore never stay in
+     * 'submitting' forever, and a request that crashes PHP cannot loop forever.
+     */
+    public static function release_stale_claims($job_type){
+
+        global $wpdb;
+
+        $cutoff = gmdate( "Y-m-d H:i:s", time() - self::CLAIM_TIMEOUT );
+
+        $rows = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT job_id FROM {$wpdb->prefix}rapidload_job_data WHERE status = 'submitting' AND job_type = %s AND created_at <= %s LIMIT 50",
+                $job_type,
+                $cutoff
+            )
+        );
+
+        if(empty($rows)){
+            return;
+        }
+
+        foreach ($rows as $row){
+
+            $job = RapidLoad_Job::find_or_fail($row->job_id);
+
+            if(!$job){
+                continue;
+            }
+
+            $job_data = new RapidLoad_Job_Data($job, $job_type);
+
+            // re-check on the loaded object in case another run already recovered it
+            if($job_data->status !== 'submitting'){
+                continue;
+            }
+
+            $job_data->retry_or_fail([
+                'code' => 524,
+                'message' => 'Request was interrupted before the API responded'
+            ]);
+            $job_data->save();
+        }
+    }
+
     public function clearFiles(){
 
     }

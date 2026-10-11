@@ -89,6 +89,11 @@ class RapidLoad_UnusedCSS_Store
 
             $uucss_config = apply_filters('uucss/purge/config', $api_options);
 
+            if(!$this->job_data->claim()){
+                // another queue run already took this job
+                return;
+            }
+
             $result = $uucss_api->post( 's/unusedcss',
                 array_merge( $uucss_config,
                     [

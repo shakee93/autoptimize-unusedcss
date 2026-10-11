@@ -70,7 +70,13 @@ try {
     rapidload_cron_log('WordPress loaded from: ' . ABSPATH);
 
     // Trigger the optimization process
-    do_action('uucss/queue/task');
+    if (class_exists('RapidLoad_Queue')) {
+        if (!RapidLoad_Queue::run_task()) {
+            rapidload_cron_log('Another RapidLoad queue run is active, skipping');
+        }
+    } else {
+        do_action('uucss/queue/task');
+    }
 
     // Log completion
     rapidload_cron_log('RapidLoad optimization process completed successfully');

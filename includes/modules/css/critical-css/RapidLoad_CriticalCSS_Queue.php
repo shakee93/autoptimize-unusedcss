@@ -17,6 +17,8 @@ class RapidLoad_CriticalCSS_Queue
 
     function fetch_job_id(){
 
+        RapidLoad_Job_Data::release_stale_claims('cpcss');
+
         $current_waiting = RapidLoad_CriticalCSS_DB::get_current_waiting_tasks_count();
 
         if( (RapidLoad_Queue::$job_count - $current_waiting) <= 0 ){

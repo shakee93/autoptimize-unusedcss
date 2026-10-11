@@ -103,6 +103,11 @@ class RapidLoad_CriticalCSS_Store
 
             $cpcss_config = apply_filters('cpcss/purge/config', ( isset( $this->args['options'] ) ) ? $this->args['options'] : []);
 
+            if(!$this->job_data->claim()){
+                // another queue run already took this job
+                return;
+            }
+
             $result = $uucss_api->post( 's/criticalcss',
                 array_merge( $cpcss_config,
                     [
