@@ -120,13 +120,39 @@ class RapidLoad_UnusedCSS_Store
                 $this->job_data->status = 'waiting';
                 $this->job_data->save();
 
-            }else if($result->completed){
+            }else if(is_object($result) && !empty($result->completed)){
 
                 $this->result       = $result;
                 $this->purged_css = $result->data;
 
                 $this->cache_files($this->purged_css);
                 $this->uucss_cached($this->job_data->job->url);
+
+            }else{
+
+                // Neither a queued job id nor a completed result: count the attempt
+                // instead of silently leaving the row 'queued' to be resent every tick.
+                $error = [
+                    'code' => 500,
+                    'message' => is_object($result) && isset($result->message) && is_string($result->message)
+                        ? $result->message
+                        : 'Unexpected response from RapidLoad API'
+                ];
+
+                $requeued = $this->job_data->retry_or_fail($error);
+                $this->job_data->save();
+
+                $this->log( [
+                    'log' => ($requeued ? 'requeue-> ' : 'giving up-> ') . 'unexpected response from api (attempt ' . $this->job_data->attempts . ')',
+                    'url' => $this->job_data->job->url,
+                    'type' => 'uucss-cron'
+                ] );
+
+                if(!$requeued){
+                    do_action( 'uucss/cache_cleared', [
+                        'url' => $this->job_data->job->url
+                    ]);
+                }
 
             }
 
