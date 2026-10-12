@@ -5,7 +5,7 @@ Donate link:
 Tags: ai, cache, speed, performance, images
 Requires at least: 5.0
 Tested up to: 6.8
-Stable tag: 3.1.19
+Stable tag: 3.1.20
 Requires PHP: 5.4
 License: GPLv3
 License URI: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
@@ -142,6 +142,14 @@ RapidLoad accepts both broad and star(*) expressions and regular expression excl
 3. RapidLoad Dashboard.
 
 == Changelog ==
+
+= 3.1.20 - 12/10/2026 =
+ * fix: stop critical/unused CSS jobs from being resubmitted in a loop (retry cap with exponential backoff, atomic job claim and queue lock)
+ * fix: respect API rate limits (429 Retry-After) instead of retrying immediately
+ * fix: throttle content-change regeneration to once per hour per URL; the latest change is always regenerated afterwards
+ * fix: cleanup no longer deletes critical CSS files of other pages
+ * fix: job timestamps used the month instead of minutes
+ * fix: bulk requeue only updated the first selected item
 
 = 3.1.19 - 06/04/2026 =
  * fix: PHP 8.2+ compatibility for bundled simplehtmldom (declare HtmlDocument optional_closing_array property to prevent dynamic property deprecation notices in logs)
