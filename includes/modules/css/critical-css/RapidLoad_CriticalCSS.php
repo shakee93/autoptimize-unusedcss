@@ -53,6 +53,8 @@ class RapidLoad_CriticalCSS
 
         add_action('rapidload/job/purge', [$this, 'cache_cpcss'], 10, 2);
 
+        add_action(RapidLoad_Job_Data::DEFERRED_REQUEUE_HOOK, [$this, 'handle_deferred_requeue'], 10, 2);
+
         add_action('rapidload/job/handle', [$this, 'cache_cpcss'], 10, 2);
 
         add_action('rapidload/job/handle', [$this, 'enqueue_cpcss'], 20, 2);
@@ -162,6 +164,23 @@ class RapidLoad_CriticalCSS
         $this->cache_cpcss( $job, $args );
     }
 
+    /**
+     * Replays a content change that was throttled or arrived while a submit
+     * was in flight (see RapidLoad_Job_Data::schedule_deferred_requeue()).
+     */
+    public function handle_deferred_requeue($job_type, $job_id){
+
+        if($job_type !== 'cpcss'){
+            return;
+        }
+
+        $job = RapidLoad_Job::find_or_fail($job_id);
+
+        if($job){
+            $this->clear_cache($job, ['throttle' => true]);
+        }
+    }
+
     public function clear_on_actions($post_id)
     {
         if(!$post_id){
@@ -178,7 +197,8 @@ class RapidLoad_CriticalCSS
 
             if(isset($job->id)){
 
-                $this->clear_cache($job);
+                // content-change path: throttled, see clear_cache()
+                $this->clear_cache($job, ['throttle' => true]);
 
             }
         }
@@ -217,12 +237,36 @@ class RapidLoad_CriticalCSS
 
             if(isset($job_data->id) && (!isset($job_data->job->rule_id) && $job_data->job->rule === "is_url" || $job_data->job->rule !== "is_url")){
 
+                if($job_data->status === 'submitting'){
+                    // A submit is in flight; requeueing now would let a second runner
+                    // claim the row and send a duplicate. Replay the change once the
+                    // submit is over instead of dropping it.
+                    $job_data->schedule_deferred_requeue();
+                    self::log([
+                        'log' =>  'skip requeue-> cpcss clear cache while submitting',
+                        'url' => $job_data->job->url,
+                    ]);
+                    return;
+                }
+
+                if(!empty($args['throttle']) && $job_data->queued_within(RapidLoad_Job_Data::save_post_min_interval())){
+                    // save_post / importer storms: at most one requeue per interval per URL.
+                    // Files are kept (no clear_files) and the current job stays as is;
+                    // a single deferred requeue picks up the latest content afterwards.
+                    $job_data->schedule_deferred_requeue();
+                    self::log([
+                        'log' =>  'skip requeue-> cpcss clear cache throttled',
+                        'url' => $job_data->job->url,
+                    ]);
+                    return;
+                }
+
                 $this->clear_files($job_data);
                 self::log([
                     'log' =>  'requeue-> cpcss clear cache by id manually',
                     'url' => $job_data->job->url,
                 ]);
-                $job_data->requeue();
+                $job_data->requeue(0);
                 $job_data->save();
 
             }
@@ -334,7 +378,7 @@ class RapidLoad_CriticalCSS
                         'id' => $job_data->id,
                         'job_id' => $job_data->job->id,
                         'queue_job_id' => $job_data->queue_job_id,
-                        'status' => $job_data->status,
+                        'status' => RapidLoad_Job_Data::display_status($job_data->status),
                         'job' => (array) $job_data->job,
                     ];
                     $link['meta'] = [
@@ -344,7 +388,7 @@ class RapidLoad_CriticalCSS
                     ];
                     $link['attempts'] = $job_data->attempts;
                     if($job->rule !== 'is_url'){
-                        $link['rule_status'] = $job_data->status;
+                        $link['rule_status'] = RapidLoad_Job_Data::display_status($job_data->status);
                         $link['rule_hits'] = $job_data->hits;
                         $link['applied_links'] = count($job->get_urls());
                     }
@@ -382,12 +426,16 @@ class RapidLoad_CriticalCSS
             return false;
         }
 
-        if(!in_array($this->job_data->status, ['success', 'waiting', 'processing','queued']) || isset( $args['immediate']) || isset( $args['requeue'])){
+        if($this->job_data->status !== 'submitting' && (!in_array($this->job_data->status, ['success', 'waiting', 'processing','queued']) || isset( $args['immediate']) || isset( $args['requeue']))){
             self::log([
                 'log' =>  'requeue-> cpcss requeue manually',
                 'url' => $this->job_data->job->url,
             ]);
-            $this->job_data->requeue(isset( $args['immediate']) || isset( $args['requeue']) ? 1 : -1);
+            if(isset( $args['immediate']) || isset( $args['requeue'])){
+                $this->job_data->requeue(0);
+            }else{
+                $this->job_data->requeue_delayed();
+            }
             $this->job_data->save();
         }
 
@@ -478,7 +526,7 @@ class RapidLoad_CriticalCSS
 
     public function cleanCacheFiles(){
 
-        $data = RapidLoad_CriticalCSS_DB::get_success_data();
+        $data = RapidLoad_CriticalCSS_DB::get_success_data(0);
 
         $used_files = [];
 

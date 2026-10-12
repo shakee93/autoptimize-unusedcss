@@ -63,7 +63,7 @@ class RapidLoad_Job{
 
         }else{
 
-            $this->created_at = gmdate( "Y-m-d H:m:s", time() );
+            $this->created_at = gmdate( "Y-m-d H:i:s", time() );
         }
 
     }

@@ -453,7 +453,7 @@ class RapidLoad_Optimizer
                 case 'uucss' :{
                     $job_data_uucss = new RapidLoad_Job_Data($job,'uucss');
                     $response[$type] = [
-                        'status' => isset($job_data_uucss->id) ? $job_data_uucss->status : 'queued',
+                        'status' => isset($job_data_uucss->id) ? RapidLoad_Job_Data::display_status($job_data_uucss->status) : 'queued',
                         'error' => isset($job_data_uucss->id) && isset($job_data_uucss->error) ? unserialize($job_data_uucss->error) : null,
                         'meta' => [
                             'warnings' => isset($job_data_uucss->id) && isset($job_data_uucss->warnings) ? unserialize($job_data_uucss->warnings) : null,
@@ -466,7 +466,7 @@ class RapidLoad_Optimizer
                     $job_data_cpcss = new RapidLoad_Job_Data($job,'cpcss');
                     $cpcss_data = $job_data_cpcss->get_cpcss_data();
                     $response[$type] = [
-                        'status' => isset($job_data_cpcss->id) ? $job_data_cpcss->status : 'queued',
+                        'status' => isset($job_data_cpcss->id) ? RapidLoad_Job_Data::display_status($job_data_cpcss->status) : 'queued',
                         'error' => isset($job_data_cpcss->id) && isset($job_data_cpcss->error) ? unserialize($job_data_cpcss->error) : null,
                         'meta' => [
                             'warnings' => isset($job_data_cpcss->id) && isset($job_data_cpcss->warnings) ? unserialize($job_data_cpcss->warnings) : null,
@@ -1501,7 +1501,7 @@ class RapidLoad_Optimizer
                 }else if($input['key'] === "uucss_enable_uucss"){
                     $data = new RapidLoad_Job_Data(self::$job, 'uucss');
                     $settings['status'] =  isset($options[$input['key']]) && $options[$input['key']] === "1" ? [
-                        'status' => isset($data->id) ? $data->status : 'queued',
+                        'status' => isset($data->id) ? RapidLoad_Job_Data::display_status($data->status) : 'queued',
                         'error' =>  isset($data->id) ? $data->get_error() : null,
                         'meta' => [
                             'stats' =>  isset($data->id) ? $data->get_stats() : null,
@@ -1515,7 +1515,7 @@ class RapidLoad_Optimizer
                     $data = new RapidLoad_Job_Data(self::$job, 'cpcss');
                     $cpcss_data = $data->get_cpcss_data();
                     $settings['status'] = isset($options[$input['key']]) && $options[$input['key']] === "1" ? [
-                        'status' => isset($data->id) ? $data->status : 'queued',
+                        'status' => isset($data->id) ? RapidLoad_Job_Data::display_status($data->status) : 'queued',
                         'error' => isset($data->id) ? $data->get_error() : null,
                         'meta' => [
                             'desktop' => isset($data->id) && isset($cpcss_data['desktop']) && !empty($cpcss_data['desktop']) ? $cpcss_data['desktop'] : null,

@@ -42,6 +42,8 @@ class RapidLoad_UnusedCSS
 
         add_action('rapidload/job/purge', [$this, 'cache_uucss'], 10, 2);
 
+        add_action(RapidLoad_Job_Data::DEFERRED_REQUEUE_HOOK, [$this, 'handle_deferred_requeue'], 10, 2);
+
         add_action('uucss_async_queue', [$this, 'init_async_store'], 10, 2);
 
         if(apply_filters('uucss/enable/notfound_fallback', true)){
@@ -205,13 +207,13 @@ class RapidLoad_UnusedCSS
                 if(isset($job_data->id)){
 
                     if($job->rule !== 'is_url'){
-                        //$link['rule_status'] = $job_data->status;
+                        //$link['rule_status'] = RapidLoad_Job_Data::display_status($job_data->status);
                        // $link['rule_hits'] = $job_data->hits;
                         //$link['applied_links'] = count($job->get_urls());
                     }
 
                     if(!isset($link['status'])){
-                        $link['status'] = $job_data->status;
+                        $link['status'] = RapidLoad_Job_Data::display_status($job_data->status);
                     }
                     $link['success_count'] = $job_data->hits;
                     $link['files'] = $job_data->get_files();
@@ -219,7 +221,7 @@ class RapidLoad_UnusedCSS
                     $link['meta']['warnings'] = $job_data->get_warnings();
                     $link['meta']['stats'] = isset($job_data->stats) ? unserialize($job_data->stats) : null;
                     $link['meta']['error'] = isset($job_data->error) ? unserialize($job_data->error) : null;
-                    $link['meta']['status'] = isset( $job_data->status ) ? $job_data->status : null;
+                    $link['meta']['status'] = isset( $job_data->status ) ? RapidLoad_Job_Data::display_status($job_data->status) : null;
                     $link['time'] = isset( $job_data->created_at ) ? strtotime( $job_data->created_at ) : null;
                     $link['attempts'] = isset( $job_data->attempts ) ? $job_data->attempts : null;
                     $link['rule'] = $job_data->job->rule;
@@ -339,12 +341,16 @@ class RapidLoad_UnusedCSS
             return false;
         }
 
-        if(!in_array($this->job_data->status, ['success', 'waiting', 'processing','queued']) || isset( $args['immediate']) || isset( $args['requeue'])){
+        if($this->job_data->status !== 'submitting' && (!in_array($this->job_data->status, ['success', 'waiting', 'processing','queued']) || isset( $args['immediate']) || isset( $args['requeue']))){
             self::log([
                 'log' =>  'requeue-> uucss requeue manually',
                 'url' => $this->job_data->job->url,
             ]);
-            $this->job_data->requeue(isset( $args['immediate']) || isset( $args['requeue']) ? 1 : -1);
+            if(isset( $args['immediate']) || isset( $args['requeue'])){
+                $this->job_data->requeue(0);
+            }else{
+                $this->job_data->requeue_delayed();
+            }
             if(isset( $args['immediate'])){
                 $this->job_data->status = 'processing';
             }
@@ -451,6 +457,23 @@ class RapidLoad_UnusedCSS
 
     }
 
+    /**
+     * Replays a content change that was throttled or arrived while a submit
+     * was in flight (see RapidLoad_Job_Data::schedule_deferred_requeue()).
+     */
+    public function handle_deferred_requeue($job_type, $job_id){
+
+        if($job_type !== 'uucss'){
+            return;
+        }
+
+        $job = RapidLoad_Job::find_or_fail($job_id);
+
+        if($job){
+            $this->clear_cache($job, ['throttle' => true]);
+        }
+    }
+
     public function clear_on_actions($post_id)
     {
         if(!$post_id){
@@ -467,7 +490,8 @@ class RapidLoad_UnusedCSS
 
             if(isset($job->id)){
 
-                $this->clear_cache($job);
+                // content-change path: throttled, see clear_cache()
+                $this->clear_cache($job, ['throttle' => true]);
 
             }
         }
@@ -481,12 +505,36 @@ class RapidLoad_UnusedCSS
 
             if(isset($job_data->id) && (!isset($job_data->job->rule_id) && $job_data->job->rule === "is_url" || $job_data->job->rule !== "is_url")){
 
+                if($job_data->status === 'submitting'){
+                    // A submit is in flight; requeueing now would let a second runner
+                    // claim the row and send a duplicate. Replay the change once the
+                    // submit is over instead of dropping it.
+                    $job_data->schedule_deferred_requeue();
+                    self::log([
+                        'log' =>  'skip requeue-> uucss clear cache while submitting',
+                        'url' => $job_data->job->url,
+                    ]);
+                    return;
+                }
+
+                if(!empty($args['throttle']) && $job_data->queued_within(RapidLoad_Job_Data::save_post_min_interval())){
+                    // save_post / importer storms: at most one requeue per interval per URL.
+                    // Files are kept (no clear_files) and the current job stays as is;
+                    // a single deferred requeue picks up the latest content afterwards.
+                    $job_data->schedule_deferred_requeue();
+                    self::log([
+                        'log' =>  'skip requeue-> uucss clear cache throttled',
+                        'url' => $job_data->job->url,
+                    ]);
+                    return;
+                }
+
                 $this->clear_files($job_data);
                 self::log([
                     'log' =>  'requeue-> clear cache by job id manually',
                     'url' => $job_data->job->url,
                 ]);
-                $job_data->requeue();
+                $job_data->requeue(0);
                 $job_data->save();
 
             }

@@ -9,7 +9,7 @@ class RapidLoad_CriticalCSS_DB extends RapidLoad_DB{
         global $wpdb;
 
         if($soft){
-            $wpdb->query( $wpdb->prepare("UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, queue_job_id = NULL, data = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0 WHERE job_type = %s", 'queued', 'cpcss'));
+            $wpdb->query( $wpdb->prepare("UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, queue_job_id = NULL, data = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0, attempts = 0, created_at = %s WHERE job_type = %s AND status <> 'submitting'", 'queued', gmdate( 'Y-m-d H:i:s' ), 'cpcss'));
         }else{
             $wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->prefix}rapidload_job_data WHERE job_type = %s", 'cpcss'));
         }
@@ -28,22 +28,25 @@ class RapidLoad_CriticalCSS_DB extends RapidLoad_DB{
         if(empty($status)){
             $wpdb->query(
                 $wpdb->prepare(
-                    "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, queue_job_id = NULL, data = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0 WHERE job_type='cpcss'",
-                    'queued'
+                    "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, queue_job_id = NULL, data = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0, attempts = 0, created_at = %s WHERE job_type='cpcss' AND status <> 'submitting'",
+                    'queued',
+                    gmdate( 'Y-m-d H:i:s' )
                 )
             );
         }else if($status === 'success'){
             $wpdb->query(
                 $wpdb->prepare(
-                    "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, queue_job_id = NULL, data = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0 WHERE job_type='cpcss' AND status = 'success' AND warnings IS NOT NULL",
-                    'queued'
+                    "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, queue_job_id = NULL, data = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0, attempts = 0, created_at = %s WHERE job_type='cpcss' AND status = 'success' AND warnings IS NOT NULL",
+                    'queued',
+                    gmdate( 'Y-m-d H:i:s' )
                 )
             );
         }else{
             $wpdb->query(
                 $wpdb->prepare(
-                    "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, queue_job_id = NULL, data = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0 WHERE job_type='cpcss' AND status = %s",
+                    "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, queue_job_id = NULL, data = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0, attempts = 0, created_at = %s WHERE job_type='cpcss' AND status = %s",
                     'queued',
+                    gmdate( 'Y-m-d H:i:s' ),
                     $status
                 )
             );
@@ -100,8 +103,9 @@ class RapidLoad_CriticalCSS_DB extends RapidLoad_DB{
 
         $job_ids = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT job_id FROM {$wpdb->prefix}rapidload_job_data WHERE status = 'queued' AND job_type = %s ORDER BY id DESC LIMIT %d",  
+                "SELECT job_id FROM {$wpdb->prefix}rapidload_job_data WHERE status = 'queued' AND job_type = %s AND (attempts IS NULL OR attempts < 1 OR created_at <= %s) ORDER BY id DESC LIMIT %d",
                 'cpcss',
+                gmdate( 'Y-m-d H:i:s', time() ),
                 $limit
             ),
             OBJECT
@@ -140,12 +144,15 @@ class RapidLoad_CriticalCSS_DB extends RapidLoad_DB{
     public static function get_success_data($limit = 1) {
         global $wpdb;
 
+        // $limit = 0 (or negative) returns every successful row.
+        $limit = (int) $limit;
+        $limit_sql = $limit > 0 ? $wpdb->prepare( ' LIMIT %d', $limit ) : '';
+
         $data = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT data FROM {$wpdb->prefix}rapidload_job_data WHERE status = 'success' AND job_type = %s ORDER BY id DESC LIMIT %d",
-                'cpcss',
-                $limit
-            ),
+                "SELECT data FROM {$wpdb->prefix}rapidload_job_data WHERE status = 'success' AND job_type = %s ORDER BY id DESC",
+                'cpcss'
+            ) . $limit_sql,
             OBJECT
         );
 

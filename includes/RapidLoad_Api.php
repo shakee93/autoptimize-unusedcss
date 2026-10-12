@@ -11,6 +11,11 @@ class RapidLoad_Api
 
     public $apiKey = null;
 
+    /**
+     * Retry-After (seconds) of the last response, 0 when absent.
+     */
+    public $retry_after = 0;
+
 
     /**
      * RapidLoad_Api constructor.
@@ -73,7 +78,11 @@ class RapidLoad_Api
 	 */
 	public function handle_response( $response , $data = null) {
 
+		$this->retry_after = 0;
+
 		if ( is_array( $response ) && ! is_wp_error( $response ) ) {
+
+			$this->retry_after = max( 0, (int) wp_remote_retrieve_header( $response, 'retry-after' ) );
 
 			if ( $response['response']['code'] === 200 ) {
 				$body = $response['body'];

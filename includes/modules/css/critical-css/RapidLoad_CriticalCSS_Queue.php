@@ -17,6 +17,8 @@ class RapidLoad_CriticalCSS_Queue
 
     function fetch_job_id(){
 
+        RapidLoad_Job_Data::release_stale_claims('cpcss');
+
         $current_waiting = RapidLoad_CriticalCSS_DB::get_current_waiting_tasks_count();
 
         if( (RapidLoad_Queue::$job_count - $current_waiting) <= 0 ){
@@ -30,6 +32,8 @@ class RapidLoad_CriticalCSS_Queue
         if(!empty($links)){
 
             foreach ($links as $link){
+
+                RapidLoad_Queue::touch_lock();
 
                 $job = RapidLoad_Job::find_or_fail($link->job_id);
 
@@ -59,6 +63,8 @@ class RapidLoad_CriticalCSS_Queue
         if(!empty($links)){
 
             foreach ($links as $link){
+
+                RapidLoad_Queue::touch_lock();
 
                 $job = RapidLoad_Job::find_or_fail($link->job_id);
 

@@ -33,7 +33,7 @@ class RapidLoad_UnusedCSS_Store
 
         if(isset($this->args['immediate']) || isset($this->args['titan'])){
 
-            if(isset($this->args['titan']) && ($this->job_data->status === 'waiting' || $this->job_data->status === 'processing' || $this->job_data->status === 'success')){
+            if(isset($this->args['titan']) && ($this->job_data->status === 'waiting' || $this->job_data->status === 'processing' || $this->job_data->status === 'submitting' || $this->job_data->status === 'success')){
                 return;
             }
 
@@ -89,6 +89,11 @@ class RapidLoad_UnusedCSS_Store
 
             $uucss_config = apply_filters('uucss/purge/config', $api_options);
 
+            if(!$this->job_data->claim()){
+                // another queue run already took this job
+                return;
+            }
+
             $result = $uucss_api->post( 's/unusedcss',
                 array_merge( $uucss_config,
                     [
@@ -102,11 +107,15 @@ class RapidLoad_UnusedCSS_Store
 
             if($uucss_api->is_error($result)){
 
-                $this->job_data->mark_as_failed($uucss_api->extract_error( $result ));
+                $error = $uucss_api->extract_error( $result );
+
+                // 429 + Retry-After waits for the API window, timeouts / transport
+                // errors / 5xx are retried with backoff, definitive API errors fail at once
+                $requeued = $this->job_data->handle_submit_error($result, $error, $uucss_api->retry_after);
                 $this->job_data->save();
 
                 $this->log( [
-                    'log' => 'fetched data stored status failed',
+                    'log' => $requeued ? 'submit failed, requeued (attempt ' . $this->job_data->attempts . ')' : 'fetched data stored status failed',
                     'url' => $this->job_data->job->url,
                     'type' => 'uucss-cron'
                 ] );
@@ -120,13 +129,39 @@ class RapidLoad_UnusedCSS_Store
                 $this->job_data->status = 'waiting';
                 $this->job_data->save();
 
-            }else if($result->completed){
+            }else if(is_object($result) && !empty($result->completed)){
 
                 $this->result       = $result;
                 $this->purged_css = $result->data;
 
                 $this->cache_files($this->purged_css);
                 $this->uucss_cached($this->job_data->job->url);
+
+            }else{
+
+                // Neither a queued job id nor a completed result: count the attempt
+                // instead of silently leaving the row 'queued' to be resent every tick.
+                $error = [
+                    'code' => 500,
+                    'message' => is_object($result) && isset($result->message) && is_string($result->message)
+                        ? $result->message
+                        : 'Unexpected response from RapidLoad API'
+                ];
+
+                $requeued = $this->job_data->retry_or_fail($error);
+                $this->job_data->save();
+
+                $this->log( [
+                    'log' => ($requeued ? 'requeue-> ' : 'giving up-> ') . 'unexpected response from api (attempt ' . $this->job_data->attempts . ')',
+                    'url' => $this->job_data->job->url,
+                    'type' => 'uucss-cron'
+                ] );
+
+                if(!$requeued){
+                    do_action( 'uucss/cache_cleared', [
+                        'url' => $this->job_data->job->url
+                    ]);
+                }
 
             }
 
@@ -250,12 +285,19 @@ class RapidLoad_UnusedCSS_Store
 
             if(isset($error['message']) && ($error['message'] === 'Job processing failed in queue' || $error['message'] === 'Error')){
 
+                $requeued = $this->job_data->retry_or_fail($error);
+
                 self::log([
-                    'log' =>  'requeue-> uucss job processing failed in queue',
+                    'log' =>  ($requeued ? 'requeue-> ' : 'giving up-> ') . 'uucss job processing failed in queue (attempt ' . $this->job_data->attempts . ')',
                     'url' => $this->job_data->job->url,
                 ]);
-                $this->job_data->requeue();
                 $this->job_data->save();
+
+                if(!$requeued){
+                    do_action( 'uucss/cache_cleared', [
+                        'url' => $this->job_data->job->url
+                    ]);
+                }
 
                 return;
             }

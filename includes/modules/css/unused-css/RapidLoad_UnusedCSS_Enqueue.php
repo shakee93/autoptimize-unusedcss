@@ -375,7 +375,7 @@ class RapidLoad_UnusedCSS_Enqueue
                 'log' =>  'requeue-> uucss requeue due to warnings',
                 'url' => $this->job_data->job->url,
             ]);
-            $this->job_data->requeue();
+            $this->job_data->requeue_delayed();
 
         }else{
 
