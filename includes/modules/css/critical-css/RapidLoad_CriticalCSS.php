@@ -53,6 +53,8 @@ class RapidLoad_CriticalCSS
 
         add_action('rapidload/job/purge', [$this, 'cache_cpcss'], 10, 2);
 
+        add_action(RapidLoad_Job_Data::DEFERRED_REQUEUE_HOOK, [$this, 'handle_deferred_requeue'], 10, 2);
+
         add_action('rapidload/job/handle', [$this, 'cache_cpcss'], 10, 2);
 
         add_action('rapidload/job/handle', [$this, 'enqueue_cpcss'], 20, 2);
@@ -162,6 +164,23 @@ class RapidLoad_CriticalCSS
         $this->cache_cpcss( $job, $args );
     }
 
+    /**
+     * Replays a content change that was throttled or arrived while a submit
+     * was in flight (see RapidLoad_Job_Data::schedule_deferred_requeue()).
+     */
+    public function handle_deferred_requeue($job_type, $job_id){
+
+        if($job_type !== 'cpcss'){
+            return;
+        }
+
+        $job = RapidLoad_Job::find_or_fail($job_id);
+
+        if($job){
+            $this->clear_cache($job, ['throttle' => true]);
+        }
+    }
+
     public function clear_on_actions($post_id)
     {
         if(!$post_id){
@@ -220,8 +239,9 @@ class RapidLoad_CriticalCSS
 
                 if($job_data->status === 'submitting'){
                     // A submit is in flight; requeueing now would let a second runner
-                    // claim the row and send a duplicate. Skip: the in-flight result
-                    // lands normally and the next change/purge requeues as usual.
+                    // claim the row and send a duplicate. Replay the change once the
+                    // submit is over instead of dropping it.
+                    $job_data->schedule_deferred_requeue();
                     self::log([
                         'log' =>  'skip requeue-> cpcss clear cache while submitting',
                         'url' => $job_data->job->url,
@@ -231,7 +251,9 @@ class RapidLoad_CriticalCSS
 
                 if(!empty($args['throttle']) && $job_data->queued_within(RapidLoad_Job_Data::save_post_min_interval())){
                     // save_post / importer storms: at most one requeue per interval per URL.
-                    // Files are kept (no clear_files) and the current job stays as is.
+                    // Files are kept (no clear_files) and the current job stays as is;
+                    // a single deferred requeue picks up the latest content afterwards.
+                    $job_data->schedule_deferred_requeue();
                     self::log([
                         'log' =>  'skip requeue-> cpcss clear cache throttled',
                         'url' => $job_data->job->url,

@@ -9,7 +9,7 @@ class RapidLoad_CriticalCSS_DB extends RapidLoad_DB{
         global $wpdb;
 
         if($soft){
-            $wpdb->query( $wpdb->prepare("UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, queue_job_id = NULL, data = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0, attempts = 0, created_at = %s WHERE job_type = %s", 'queued', gmdate( 'Y-m-d H:i:s' ), 'cpcss'));
+            $wpdb->query( $wpdb->prepare("UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, queue_job_id = NULL, data = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0, attempts = 0, created_at = %s WHERE job_type = %s AND status <> 'submitting'", 'queued', gmdate( 'Y-m-d H:i:s' ), 'cpcss'));
         }else{
             $wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->prefix}rapidload_job_data WHERE job_type = %s", 'cpcss'));
         }
@@ -28,7 +28,7 @@ class RapidLoad_CriticalCSS_DB extends RapidLoad_DB{
         if(empty($status)){
             $wpdb->query(
                 $wpdb->prepare(
-                    "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, queue_job_id = NULL, data = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0, attempts = 0, created_at = %s WHERE job_type='cpcss'",
+                    "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, queue_job_id = NULL, data = NULL, stats = NULL, warnings = NULL, error = NULL, hits = 0, attempts = 0, created_at = %s WHERE job_type='cpcss' AND status <> 'submitting'",
                     'queued',
                     gmdate( 'Y-m-d H:i:s' )
                 )

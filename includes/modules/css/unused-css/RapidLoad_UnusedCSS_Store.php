@@ -109,17 +109,13 @@ class RapidLoad_UnusedCSS_Store
 
                 $error = $uucss_api->extract_error( $result );
 
-                // timeouts / transport errors / 5xx / 429 are retried with backoff,
-                // definitive API errors fail at once
-                if(RapidLoad_Job_Data::is_transient_error($result, $error)){
-                    $this->job_data->retry_or_fail($error);
-                }else{
-                    $this->job_data->mark_as_failed($error);
-                }
+                // 429 + Retry-After waits for the API window, timeouts / transport
+                // errors / 5xx are retried with backoff, definitive API errors fail at once
+                $requeued = $this->job_data->handle_submit_error($result, $error, $uucss_api->retry_after);
                 $this->job_data->save();
 
                 $this->log( [
-                    'log' => 'fetched data stored status failed',
+                    'log' => $requeued ? 'submit failed, requeued (attempt ' . $this->job_data->attempts . ')' : 'fetched data stored status failed',
                     'url' => $this->job_data->job->url,
                     'type' => 'uucss-cron'
                 ] );

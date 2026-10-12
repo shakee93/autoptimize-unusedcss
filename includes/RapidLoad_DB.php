@@ -689,7 +689,7 @@ abstract class RapidLoad_DB
 
         global $wpdb;
 
-        $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, attempts = 0, created_at = %s WHERE job_id = %d", 'queued', gmdate( 'Y-m-d H:i:s' ), $id ) );
+        $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}rapidload_job_data SET status = %s, attempts = 0, created_at = %s WHERE job_id = %d AND status <> 'submitting'", 'queued', gmdate( 'Y-m-d H:i:s' ), $id ) );
 
         $error = $wpdb->last_error;
 
@@ -724,6 +724,11 @@ abstract class RapidLoad_DB
 
         $where = 'job_id IN (' . implode(',', array_fill(0, count($ids), '%d')) . ')';
         $args = array_merge($args, $ids);
+
+        if ($status === 'queued') {
+            // rows mid-submit keep their claim; the in-flight result lands normally
+            $where .= " AND status <> 'submitting'";
+        }
 
         if (!empty($wherStatus)) {
             $where .= ' AND status = %s';
@@ -769,6 +774,11 @@ abstract class RapidLoad_DB
 
         $where = 'job_id IN (' . implode(',', array_fill(0, count($ids), '%d')) . ')';
         $args = array_merge($args, $ids);
+
+        if ($status === 'queued') {
+            // rows mid-submit keep their claim; the in-flight result lands normally
+            $where .= " AND status <> 'submitting'";
+        }
 
         if (!empty($wherStatus)) {
             $where .= ' AND status = %s';
